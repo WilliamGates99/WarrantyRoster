@@ -2,8 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.xeniac.warrantyroster">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <!--TODO change backup attributes to true before release-->
     <application
+        android:name=".SubApplication"
         android:allowBackup="false"
         android:fullBackupContent="false"
         android:icon="@mipmap/ic_launcher"
@@ -12,11 +16,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.WarrantyRoster">
         <activity
-            android:name=".MainActivity"
-            android:exported="true">
+            android:name=".landingactivity.LandingActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.WarrantyRoster.Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

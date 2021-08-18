@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">WarrantyRoster</string>
+    <string name="app_name">Warranty Roster</string>
+
+    <!--Login Fragment-->
+    <string name="login_text_title">Login</string>
+
 </resources>

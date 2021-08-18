@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="windowBG">#FFFFFF</color>
-    <color name="white">#FFFFFF</color>
-    <color name="black">#000000</color>
+    <color name="windowBG">#000000</color>
+    <color name="white">#000000</color>
+    <color name="black">#FFFFFF</color>
     <color name="blue">#1C53F4</color>
     <color name="red">#FF3442</color>
     <color name="green">#00BD62</color>
-    <color name="grayLight">#F3F3F3</color>
+    <color name="grayLight">#959595</color>
     <color name="grayMedium">#E9E9E9</color>
-    <color name="grayDark">#959595</color>
+    <color name="grayDark">#F3F3F3</color>
 
 
     <color name="purple_200">#FFBB86FC</color>
