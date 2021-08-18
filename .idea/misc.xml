@@ -3,7 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/layout/activity_landing.xml" value="0.2609375" />
         <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/layout/activity_main.xml" value="0.246875" />
+        <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/layout/blank_fragment.xml" value="0.2609375" />
+        <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/layout/fragment_login.xml" value="0.2609375" />
       </map>
     </option>
   </component>

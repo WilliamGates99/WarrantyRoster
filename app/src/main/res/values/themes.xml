@@ -15,7 +15,7 @@
         <item name="android:windowBackground">@color/windowBG</item>
     </style>
 
-    <style name="Theme.WarrantyRoster.Login" parent="Theme.WarrantyRoster">
+    <style name="Theme.WarrantyRoster.Landing" parent="Theme.WarrantyRoster">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowBackground">@color/blue</item>

@@ -17,7 +17,5 @@ public class LandingActivity extends AppCompatActivity {
         landingBinding = ActivityLandingBinding.inflate(getLayoutInflater());
         View view = landingBinding.getRoot();
         setContentView(view);
-
-        landingBinding.tvMainTest.setText("test");
     }
 }
