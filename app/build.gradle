@@ -1,5 +1,6 @@
 plugins {
     id 'com.android.application'
+    id 'androidx.navigation.safeargs'
     id("com.apollographql.apollo").version("2.5.9")
 }
 

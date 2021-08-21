@@ -9,7 +9,7 @@ import com.xeniac.warrantyroster.databinding.ActivityLandingBinding;
 
 public class LandingActivity extends AppCompatActivity {
 
-    ActivityLandingBinding landingBinding;
+    private ActivityLandingBinding landingBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
