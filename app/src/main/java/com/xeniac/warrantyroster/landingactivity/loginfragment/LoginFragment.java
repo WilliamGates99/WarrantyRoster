@@ -81,7 +81,7 @@ public class LoginFragment extends Fragment {
 
     private void registerOnClick() {
         loginBinding.tvLoginRegister.setOnClickListener(view1 ->
-                navController.navigate(R.id.action_loginFragment_to_forgotPasswordFragment));
+                navController.navigate(R.id.action_loginFragment_to_registerFragment));
     }
 
     private void forgotPwOnClick() {
