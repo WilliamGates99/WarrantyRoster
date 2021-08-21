@@ -1,5 +1,8 @@
 package com.xeniac.warrantyroster.landingactivity.loginfragment;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,10 +16,14 @@ import androidx.navigation.Navigation;
 
 import com.xeniac.warrantyroster.R;
 import com.xeniac.warrantyroster.databinding.FragmentLoginBinding;
+import com.xeniac.warrantyroster.mainactivity.MainActivity;
 
 public class LoginFragment extends Fragment {
 
     private FragmentLoginBinding loginBinding;
+    private Activity activity;
+    private Context context;
+    private NavController navController;
 
     public LoginFragment() {
     }
@@ -37,9 +44,17 @@ public class LoginFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        activity = getActivity();
+        context = getContext();
+        navController = Navigation.findNavController(view);
 
-        NavController navController = Navigation.findNavController(view);
+        textInputBackground();
+        loginOnClick();
+        registerOnClick();
+        forgotPwOnClick();
+    }
 
+    private void textInputBackground() {
         loginBinding.tiLoginEditEmail.setOnFocusChangeListener((view1, focused) -> {
             if (focused) {
                 loginBinding.tiLoginLayoutEmail.setBoxBackgroundColorResource(R.color.background);
@@ -55,19 +70,22 @@ public class LoginFragment extends Fragment {
                 loginBinding.tiLoginLayoutPassword.setBoxBackgroundColorResource(R.color.grayLight);
             }
         });
+    }
 
-//        MaterialButton login = view.findViewById(R.id.btn_login_login);
-//        login.setOnClickListener(view12 -> {
-//            startActivity(new Intent(getContext(), MainActivity.class));
-//            getActivity().finish();
-//        });
-//
-//        MaterialButton register = view.findViewById(R.id.btn_login_register);
-//        register.setOnClickListener(view1 ->
-//                navController.navigate(R.id.action_loginFragment_to_forgotPasswordFragment));
-//
-//        MaterialButton forgot = view.findViewById(R.id.btn_login_forgot);
-//        forgot.setOnClickListener(view1 ->
-//                navController.navigate(R.id.action_loginFragment_to_forgotPasswordFragment));
+    private void loginOnClick() {
+        loginBinding.btnLoginLogin.setOnClickListener(view12 -> {
+            startActivity(new Intent(getContext(), MainActivity.class));
+            activity.finish();
+        });
+    }
+
+    private void registerOnClick() {
+        loginBinding.tvLoginRegister.setOnClickListener(view1 ->
+                navController.navigate(R.id.action_loginFragment_to_forgotPasswordFragment));
+    }
+
+    private void forgotPwOnClick() {
+        loginBinding.tvLoginForgotPw.setOnClickListener(view1 ->
+                navController.navigate(R.id.action_loginFragment_to_forgotPasswordFragment));
     }
 }
