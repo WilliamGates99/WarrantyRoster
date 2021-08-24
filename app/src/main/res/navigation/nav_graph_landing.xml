@@ -2,53 +2,54 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_graph"
+    android:id="@+id/nav_graph_landing"
     app:startDestination="@id/loginFragment">
 
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.xeniac.warrantyroster.landingactivity.loginfragment.LoginFragment"
-        android:label="LoginFragment">
+        android:label="LoginFragment"
+        tools:layout="@layout/fragment_login">
         <action
             android:id="@+id/action_loginFragment_to_registerFragment"
             app:destination="@id/registerFragment"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+            app:enterAnim="@anim/from_down"
+            app:exitAnim="@anim/to_up"
+            app:popEnterAnim="@anim/from_up"
+            app:popExitAnim="@anim/to_down" />
         <action
             android:id="@+id/action_loginFragment_to_forgotPasswordFragment"
             app:destination="@id/forgotPasswordFragment"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+            app:enterAnim="@anim/from_down"
+            app:exitAnim="@anim/to_up"
+            app:popEnterAnim="@anim/from_up"
+            app:popExitAnim="@anim/to_down" />
     </fragment>
+
     <fragment
         android:id="@+id/registerFragment"
         android:name="com.xeniac.warrantyroster.landingactivity.registerfragment.RegisterFragment"
-        android:label="RegisterFragment">
+        android:label="RegisterFragment"
+        tools:layout="@layout/fragment_register">
         <action
             android:id="@+id/action_registerFragment_to_loginFragment"
             app:destination="@id/loginFragment"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            app:enterAnim="@anim/from_up"
+            app:exitAnim="@anim/to_down"
             app:popUpTo="@id/loginFragment"
             app:popUpToInclusive="true" />
     </fragment>
+
     <fragment
         android:id="@+id/forgotPasswordFragment"
         android:name="com.xeniac.warrantyroster.landingactivity.forgotpasswordfragment.ForgotPasswordFragment"
-        android:label="ForgotPasswordFragment">
+        android:label="ForgotPasswordFragment"
+        tools:layout="@layout/fragment_forgot_password">
         <action
             android:id="@+id/action_forgotPasswordFragment_to_loginFragment"
             app:destination="@id/loginFragment"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim"
-            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            app:enterAnim="@anim/from_up"
+            app:exitAnim="@anim/to_down"
             app:popUpTo="@id/loginFragment"
             app:popUpToInclusive="true" />
     </fragment>

@@ -55,7 +55,7 @@ public class LoginFragment extends Fragment {
     }
 
     private void textInputBackground() {
-        loginBinding.tiLoginEditEmail.setOnFocusChangeListener((view1, focused) -> {
+        loginBinding.tiLoginEditEmail.setOnFocusChangeListener((view, focused) -> {
             if (focused) {
                 loginBinding.tiLoginLayoutEmail.setBoxBackgroundColorResource(R.color.background);
             } else {
@@ -63,7 +63,7 @@ public class LoginFragment extends Fragment {
             }
         });
 
-        loginBinding.tiLoginEditPassword.setOnFocusChangeListener((view1, focused) -> {
+        loginBinding.tiLoginEditPassword.setOnFocusChangeListener((view, focused) -> {
             if (focused) {
                 loginBinding.tiLoginLayoutPassword.setBoxBackgroundColorResource(R.color.background);
             } else {
@@ -72,20 +72,20 @@ public class LoginFragment extends Fragment {
         });
     }
 
+    private void forgotPwOnClick() {
+        loginBinding.tvLoginForgotPw.setOnClickListener(view ->
+                navController.navigate(R.id.action_loginFragment_to_forgotPasswordFragment));
+    }
+
     private void loginOnClick() {
-        loginBinding.btnLoginLogin.setOnClickListener(view12 -> {
-            startActivity(new Intent(getContext(), MainActivity.class));
+        loginBinding.btnLoginLogin.setOnClickListener(view -> {
+            startActivity(new Intent(context, MainActivity.class));
             activity.finish();
         });
     }
 
     private void registerOnClick() {
-        loginBinding.tvLoginRegister.setOnClickListener(view1 ->
+        loginBinding.tvLoginRegister.setOnClickListener(view ->
                 navController.navigate(R.id.action_loginFragment_to_registerFragment));
-    }
-
-    private void forgotPwOnClick() {
-        loginBinding.tvLoginForgotPw.setOnClickListener(view1 ->
-                navController.navigate(R.id.action_loginFragment_to_forgotPasswordFragment));
     }
 }

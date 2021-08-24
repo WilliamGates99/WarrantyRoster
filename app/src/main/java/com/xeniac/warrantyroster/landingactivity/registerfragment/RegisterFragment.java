@@ -11,8 +11,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 
 import com.xeniac.warrantyroster.R;
 import com.xeniac.warrantyroster.databinding.FragmentRegisterBinding;
@@ -23,7 +21,6 @@ public class RegisterFragment extends Fragment {
     private FragmentRegisterBinding registerBinding;
     private Activity activity;
     private Context context;
-    private NavController navController;
 
     public RegisterFragment() {
     }
@@ -46,7 +43,6 @@ public class RegisterFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         activity = getActivity();
         context = getContext();
-        navController = Navigation.findNavController(view);
 
         textInputBackground();
         registerOnClick();
@@ -81,13 +77,13 @@ public class RegisterFragment extends Fragment {
 
     private void registerOnClick() {
         registerBinding.btnRegisterLogin.setOnClickListener(view12 -> {
-            startActivity(new Intent(getContext(), MainActivity.class));
+            startActivity(new Intent(context, MainActivity.class));
             activity.finish();
         });
     }
 
     private void loginOnClick() {
         registerBinding.tvRegisterRegister.setOnClickListener(view1 ->
-                navController.navigate(R.id.action_registerFragment_to_loginFragment));
+                activity.onBackPressed());
     }
 }
