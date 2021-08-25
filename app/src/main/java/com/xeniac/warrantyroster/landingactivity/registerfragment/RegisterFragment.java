@@ -50,7 +50,7 @@ public class RegisterFragment extends Fragment {
     }
 
     private void textInputBackground() {
-        registerBinding.tiRegisterEditEmail.setOnFocusChangeListener((view1, focused) -> {
+        registerBinding.tiRegisterEditEmail.setOnFocusChangeListener((view, focused) -> {
             if (focused) {
                 registerBinding.tiRegisterLayoutEmail.setBoxBackgroundColorResource(R.color.background);
             } else {
@@ -58,7 +58,7 @@ public class RegisterFragment extends Fragment {
             }
         });
 
-        registerBinding.tiRegisterEditPassword.setOnFocusChangeListener((view1, focused) -> {
+        registerBinding.tiRegisterEditPassword.setOnFocusChangeListener((view, focused) -> {
             if (focused) {
                 registerBinding.tiRegisterLayoutPassword.setBoxBackgroundColorResource(R.color.background);
             } else {
@@ -66,7 +66,7 @@ public class RegisterFragment extends Fragment {
             }
         });
 
-        registerBinding.tiRegisterEditRetypePassword.setOnFocusChangeListener((view1, focused) -> {
+        registerBinding.tiRegisterEditRetypePassword.setOnFocusChangeListener((view, focused) -> {
             if (focused) {
                 registerBinding.tiRegisterLayoutRetypePassword.setBoxBackgroundColorResource(R.color.background);
             } else {
@@ -76,14 +76,14 @@ public class RegisterFragment extends Fragment {
     }
 
     private void registerOnClick() {
-        registerBinding.btnRegisterLogin.setOnClickListener(view12 -> {
+        registerBinding.btnRegisterLogin.setOnClickListener(view -> {
             startActivity(new Intent(context, MainActivity.class));
             activity.finish();
         });
     }
 
     private void loginOnClick() {
-        registerBinding.tvRegisterRegister.setOnClickListener(view1 ->
+        registerBinding.btnRegisterRegister.setOnClickListener(view ->
                 activity.onBackPressed());
     }
 }

@@ -40,4 +40,24 @@
     <!--        <item name="android:layout_marginTop">3dp</item>-->
     <!--    </style>-->
 
+    <style name="Theme.WarrantyRoster.Button" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+        <item name="shapeAppearance">@style/Theme.WarrantyRoster.Button.Appearance</item>
+        <item name="textAllCaps">false</item>
+    </style>
+
+    <style name="Theme.WarrantyRoster.Button.Appearance">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">12dp</item>
+    </style>
+
+    <style name="Theme.WarrantyRoster.TextButton" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="shapeAppearance">@style/Theme.WarrantyRoster.TextButton.Appearance</item>
+        <item name="textAllCaps">false</item>
+    </style>
+
+    <style name="Theme.WarrantyRoster.TextButton.Appearance">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">4dp</item>
+    </style>
+
 </resources>

@@ -119,20 +119,19 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <TextView
-            android:id="@+id/tv_login_forgot_pw"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_login_forgot_pw"
+            style="@style/Theme.WarrantyRoster.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="28dp"
-            android:layout_marginTop="3dp"
-            android:background="@drawable/state_pressed_ripple"
-            android:clickable="true"
-            android:focusable="true"
+            android:layout_marginHorizontal="27dp"
             android:fontFamily="@font/nunito_light"
             android:gravity="center"
             android:maxLines="1"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
             android:padding="5dp"
-            android:text="@string/login_text_forgot_pw"
+            android:text="@string/login_btn_forgot_pw"
             android:textAlignment="gravity"
             android:textColor="@color/red"
             android:textSize="12sp"
@@ -141,6 +140,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_login_login"
+            style="@style/Theme.WarrantyRoster.Button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="24dp"
@@ -150,10 +150,9 @@
             android:text="@string/login_btn_login"
             android:textColor="@android:color/white"
             android:textSize="16sp"
-            app:cornerRadius="12dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_login_forgot_pw" />
+            app:layout_constraintTop_toBottomOf="@+id/btn_login_forgot_pw" />
 
         <TextView
             android:id="@+id/tv_login_register_title"
@@ -166,26 +165,25 @@
             android:textAlignment="gravity"
             android:textColor="@color/black"
             android:textSize="14sp"
-            app:layout_constraintBaseline_toBaselineOf="@+id/tv_login_register"
-            app:layout_constraintEnd_toStartOf="@+id/tv_login_register"
+            app:layout_constraintBaseline_toBaselineOf="@+id/btn_login_register"
+            app:layout_constraintEnd_toStartOf="@+id/btn_login_register"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <TextView
-            android:id="@+id/tv_login_register"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_login_register"
+            style="@style/Theme.WarrantyRoster.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="76dp"
+            android:layout_marginTop="71dp"
             android:layout_marginEnd="4dp"
-            android:layout_marginBottom="24dp"
-            android:background="@drawable/state_pressed_ripple"
-            android:clickable="true"
-            android:focusable="true"
+            android:layout_marginBottom="19dp"
             android:fontFamily="@font/nunito_bold"
             android:gravity="center"
-            android:maxLines="1"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
             android:padding="5dp"
-            android:text="@string/login_text_register"
+            android:text="@string/login_btn_register"
             android:textAlignment="gravity"
             android:textColor="@color/blue"
             android:textSize="14sp"

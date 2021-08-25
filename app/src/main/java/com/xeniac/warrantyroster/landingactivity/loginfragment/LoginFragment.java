@@ -73,7 +73,7 @@ public class LoginFragment extends Fragment {
     }
 
     private void forgotPwOnClick() {
-        loginBinding.tvLoginForgotPw.setOnClickListener(view ->
+        loginBinding.btnLoginForgotPw.setOnClickListener(view ->
                 navController.navigate(R.id.action_loginFragment_to_forgotPasswordFragment));
     }
 
@@ -85,7 +85,7 @@ public class LoginFragment extends Fragment {
     }
 
     private void registerOnClick() {
-        loginBinding.tvLoginRegister.setOnClickListener(view ->
+        loginBinding.btnLoginRegister.setOnClickListener(view ->
                 navController.navigate(R.id.action_loginFragment_to_registerFragment));
     }
 }
