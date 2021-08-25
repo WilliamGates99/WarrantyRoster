@@ -2,8 +2,6 @@ package com.xeniac.warrantyroster.landingactivity.forgotpasswordfragment;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,10 +14,8 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import com.xeniac.warrantyroster.Constants;
 import com.xeniac.warrantyroster.R;
 import com.xeniac.warrantyroster.databinding.FragmentForgotPasswordBinding;
-import com.xeniac.warrantyroster.mainactivity.MainActivity;
 
 public class ForgotPasswordFragment extends Fragment {
 
