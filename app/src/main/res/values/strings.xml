@@ -8,10 +8,10 @@
     <string name="login_hint_email">Enter your email address</string>
     <string name="login_title_password">Password</string>
     <string name="login_hint_password">Enter your password</string>
-    <string name="login_text_forgot_pw">Forgot Password?</string>
+    <string name="login_btn_forgot_pw">Forgot Password?</string>
     <string name="login_btn_login">Login</string>
     <string name="login_text_register_title">Don’t have an account?</string>
-    <string name="login_text_register">Register</string>
+    <string name="login_btn_register">Register</string>
 
     <!--Register Fragment-->
     <string name="register_text_title">Register</string>
@@ -24,6 +24,14 @@
     <string name="register_hint_retype_password">Re-enter your password</string>
     <string name="register_btn_register">Register</string>
     <string name="register_text_login_title">Already have and account?</string>
-    <string name="register_text_login">Login</string>
+    <string name="register_btn_login">Login</string>
+
+    <!--Forgot Password Fragment-->
+    <string name="forgot_pw_text_title">Forgot\nYour\nPassword?</string>
+    <string name="forgot_pw_text_description">Enter your verified email to receive password reset instructions.</string>
+    <string name="forgot_pw_title_email">Email Address</string>
+    <string name="forgot_pw_hint_email">Enter your email address</string>
+    <string name="forgot_pw_btn_send">Send Email</string>
+    <string name="forgot_pw_btn_return">Return To Login</string>
 
 </resources>
