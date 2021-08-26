@@ -4,4 +4,7 @@
     <!--Forgot Password Fragment-->
     <string name="forgot_pw_text_title">Forgot Your Password?</string>
 
+    <!--Forgot Password Sent Fragment-->
+    <string name="forgot_pw_sent_text_title">Check Your Email</string>
+
 </resources>

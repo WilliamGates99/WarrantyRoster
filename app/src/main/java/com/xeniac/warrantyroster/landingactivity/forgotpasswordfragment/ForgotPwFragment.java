@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,29 +14,29 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.xeniac.warrantyroster.R;
-import com.xeniac.warrantyroster.databinding.FragmentForgotPasswordBinding;
+import com.xeniac.warrantyroster.databinding.FragmentForgotPwBinding;
 
-public class ForgotPasswordFragment extends Fragment {
+public class ForgotPwFragment extends Fragment {
 
-    private FragmentForgotPasswordBinding forgotPasswordBinding;
+    private FragmentForgotPwBinding forgotPwBinding;
     private Activity activity;
     private Context context;
     private NavController navController;
 
-    public ForgotPasswordFragment() {
+    public ForgotPwFragment() {
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        forgotPasswordBinding = FragmentForgotPasswordBinding.inflate(inflater, container, false);
-        return forgotPasswordBinding.getRoot();
+        forgotPwBinding = FragmentForgotPwBinding.inflate(inflater, container, false);
+        return forgotPwBinding.getRoot();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        forgotPasswordBinding = null;
+        forgotPwBinding = null;
     }
 
     @Override
@@ -53,24 +52,22 @@ public class ForgotPasswordFragment extends Fragment {
     }
 
     private void textInputBackground() {
-        forgotPasswordBinding.tiForgotPwEditEmail.setOnFocusChangeListener((view, focused) -> {
+        forgotPwBinding.tiForgotPwEditEmail.setOnFocusChangeListener((view, focused) -> {
             if (focused) {
-                forgotPasswordBinding.tiForgotPwLayoutEmail.setBoxBackgroundColorResource(R.color.background);
+                forgotPwBinding.tiForgotPwLayoutEmail.setBoxBackgroundColorResource(R.color.background);
             } else {
-                forgotPasswordBinding.tiForgotPwLayoutEmail.setBoxBackgroundColorResource(R.color.grayLight);
+                forgotPwBinding.tiForgotPwLayoutEmail.setBoxBackgroundColorResource(R.color.grayLight);
             }
         });
     }
 
     private void sendOnClick() {
-        forgotPasswordBinding.btnForgotPwSend.setOnClickListener(view -> {
-            Toast.makeText(context, "clicked", Toast.LENGTH_SHORT).show();
-//                navController.navigate(R.id.action_loginFragment_to_forgotPasswordFragment);
-        });
+        forgotPwBinding.btnForgotPwSend.setOnClickListener(view ->
+                navController.navigate(R.id.action_forgotPasswordFragment_to_forgotPwSentFragment));
     }
 
     private void returnOnClick() {
-        forgotPasswordBinding.btnForgotPwReturn.setOnClickListener(view ->
+        forgotPwBinding.btnForgotPwReturn.setOnClickListener(view ->
                 activity.onBackPressed());
     }
 }

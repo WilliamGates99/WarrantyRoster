@@ -34,8 +34,10 @@ public class LandingActivity extends AppCompatActivity {
                         landingBinding.tvLandingTitle.setText(getString(R.string.login_text_title));
                     } else if (destination.getLabel().equals("RegisterFragment")) {
                         landingBinding.tvLandingTitle.setText(getString(R.string.register_text_title));
-                    } else if (destination.getLabel().equals("ForgotPasswordFragment")) {
+                    } else if (destination.getLabel().equals("ForgotPwFragment")) {
                         landingBinding.tvLandingTitle.setText(getString(R.string.forgot_pw_text_title));
+                    } else if (destination.getLabel().equals("ForgotPwSentFragment")) {
+                        landingBinding.tvLandingTitle.setText(getString(R.string.forgot_pw_sent_text_title));
                     }
                 }
             });

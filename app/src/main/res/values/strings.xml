@@ -34,4 +34,7 @@
     <string name="forgot_pw_btn_send">Send Email</string>
     <string name="forgot_pw_btn_return">Return To Login</string>
 
+    <!--Forgot Password Sent Fragment-->
+    <string name="forgot_pw_sent_text_title">Check\nYour\nEmail</string>
+
 </resources>
