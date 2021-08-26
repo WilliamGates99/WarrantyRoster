@@ -5,7 +5,6 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
 import android.os.Bundle;
-import android.view.View;
 
 import com.xeniac.warrantyroster.R;
 import com.xeniac.warrantyroster.databinding.ActivityLandingBinding;
@@ -18,8 +17,7 @@ public class LandingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         landingBinding = ActivityLandingBinding.inflate(getLayoutInflater());
-        View view = landingBinding.getRoot();
-        setContentView(view);
+        setContentView(landingBinding.getRoot());
         setTitle();
     }
 
