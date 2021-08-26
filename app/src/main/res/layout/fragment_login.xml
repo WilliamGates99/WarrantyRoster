@@ -150,6 +150,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_login_forgot_pw" />
 
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/cpi_login"
+            style="@style/Theme.WarrantyRoster.LoadingProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/btn_login_login"
+            app:layout_constraintEnd_toEndOf="@+id/btn_login_login"
+            app:layout_constraintStart_toStartOf="@+id/btn_login_login"
+            app:layout_constraintTop_toTopOf="@+id/btn_login_login" />
+
         <TextView
             android:id="@+id/tv_login_register_title"
             android:layout_width="wrap_content"
