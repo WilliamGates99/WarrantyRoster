@@ -43,7 +43,8 @@
             app:enterAnim="@anim/from_down"
             app:exitAnim="@anim/to_up"
             app:popEnterAnim="@anim/from_up"
-            app:popExitAnim="@anim/to_down" />
+            app:popExitAnim="@anim/to_down"
+            app:popUpTo="@id/loginFragment" />
     </fragment>
 
     <fragment
