@@ -42,7 +42,9 @@ public class ForgotPwSentFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        countDownTimer.cancel();
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+        }
         forgotPwSentBinding = null;
     }
 
