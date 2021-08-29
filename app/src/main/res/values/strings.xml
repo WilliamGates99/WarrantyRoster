@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">Warranty Roster</string>
+    <string name="network_error_connection">Unable to connect to the internet.</string>
+    <string name="network_error_failure">You\'re having network issues. Please try again later.</string>
+    <string name="network_error_retry">Retry</string>
 
     <!--Login Fragment-->
     <string name="login_text_title">Login</string>
@@ -12,6 +15,8 @@
     <string name="login_btn_login">Login</string>
     <string name="login_text_register_title">Don’t have an account?</string>
     <string name="login_btn_register">Register</string>
+    <string name="login_error_email">Invalid Email Address!</string>
+    <string name="login_error_credentials">The provided credentials are incorrect.</string>
 
     <!--Register Fragment-->
     <string name="register_text_title">Register</string>
