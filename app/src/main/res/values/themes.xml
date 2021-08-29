@@ -33,12 +33,10 @@
         <item name="errorIconDrawable">@null</item>
     </style>
 
-    <!--    <style name="Theme.WarrantyRoster.TextInputLayout.Error" parent="Widget.MaterialComponents.TextView">-->
-    <!--        <item name="android:fontFamily">@font/nunito_semi_bold</item>-->
-    <!--        <item name="android:textSize">12sp</item>-->
-    <!--        <item name="android:letterSpacing">-0.06</item>-->
-    <!--        <item name="android:layout_marginTop">3dp</item>-->
-    <!--    </style>-->
+    <style name="Theme.WarrantyRoster.TextInputLayout.Error" parent="Widget.MaterialComponents.TextView">
+        <item name="android:fontFamily">@font/nunito_semi_bold</item>
+        <item name="android:textSize">12sp</item>
+    </style>
 
     <style name="Theme.WarrantyRoster.LoadingProgressBar" parent="Widget.MaterialComponents.CircularProgressIndicator.Small">
         <item name="android:indeterminate">true</item>
