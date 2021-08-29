@@ -7,7 +7,7 @@
     <color name="blue">#1C53F4</color>
     <color name="red">#FF3442</color>
     <color name="green">#00BD62</color>
-    <color name="grayLight">#141414</color>
-    <color name="grayMedium">#1F1F1F</color>
-    <color name="grayDark">#4E4E4E</color>
+    <color name="grayLight">#191919</color>
+    <color name="grayMedium">#282828</color>
+    <color name="grayDark">#7A7A7A</color>
 </resources>
