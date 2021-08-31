@@ -12,6 +12,13 @@
         <item name="android:windowBackground">@color/background</item>
     </style>
 
+    <style name="Theme.WarrantyRoster.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/blue</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
+        <item name="postSplashScreenTheme">@style/Theme.WarrantyRoster.Landing</item>
+        <!--        <item name="android:windowSplashScreenBrandingImage" tools:targetApi="s">@drawable/ic_logo_xeniac</item>-->
+    </style>
+
     <style name="Theme.WarrantyRoster.Landing" parent="Theme.WarrantyRoster">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

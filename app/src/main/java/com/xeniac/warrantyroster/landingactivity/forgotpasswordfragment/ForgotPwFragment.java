@@ -46,12 +46,12 @@ public class ForgotPwFragment extends Fragment {
         context = getContext();
         navController = Navigation.findNavController(view);
 
-        textInputBackground();
+        textInputsBackgroundColor();
         sendOnClick();
         returnOnClick();
     }
 
-    private void textInputBackground() {
+    private void textInputsBackgroundColor() {
         forgotPwBinding.tiForgotPwEditEmail.setOnFocusChangeListener((view, focused) -> {
             if (focused) {
                 forgotPwBinding.tiForgotPwLayoutEmail.setBoxBackgroundColorResource(R.color.background);

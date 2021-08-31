@@ -19,7 +19,7 @@
             android:name=".landingactivity.LandingActivity"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.WarrantyRoster.Landing">
+            android:theme="@style/Theme.WarrantyRoster.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

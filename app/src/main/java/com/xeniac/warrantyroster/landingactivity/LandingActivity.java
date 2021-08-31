@@ -1,13 +1,18 @@
 package com.xeniac.warrantyroster.landingactivity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.splashscreen.SplashScreen;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import com.xeniac.warrantyroster.Constants;
 import com.xeniac.warrantyroster.R;
 import com.xeniac.warrantyroster.databinding.ActivityLandingBinding;
+import com.xeniac.warrantyroster.mainactivity.MainActivity;
 
 public class LandingActivity extends AppCompatActivity {
 
@@ -16,9 +21,23 @@ public class LandingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        landingBinding = ActivityLandingBinding.inflate(getLayoutInflater());
-        setContentView(landingBinding.getRoot());
+        splashScreen();
         setTitle();
+    }
+
+    private void splashScreen() {
+        SplashScreen.installSplashScreen(this);
+
+        SharedPreferences loginPrefs = getSharedPreferences(Constants.PREFERENCE_LOGIN, MODE_PRIVATE);
+        boolean isLoggedIn = loginPrefs.getBoolean(Constants.PREFERENCE_IS_LOGGED_IN_KEY, false);
+
+        if (isLoggedIn) {
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+        } else {
+            landingBinding = ActivityLandingBinding.inflate(getLayoutInflater());
+            setContentView(landingBinding.getRoot());
+        }
     }
 
     private void setTitle() {
