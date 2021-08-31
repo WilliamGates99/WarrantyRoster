@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.xeniac.warrantyroster.Constants;
+import com.xeniac.warrantyroster.LocaleModifier;
 import com.xeniac.warrantyroster.R;
 import com.xeniac.warrantyroster.databinding.ActivityLandingBinding;
 import com.xeniac.warrantyroster.mainactivity.MainActivity;
@@ -35,9 +36,16 @@ public class LandingActivity extends AppCompatActivity {
             startActivity(new Intent(this, MainActivity.class));
             finish();
         } else {
-            landingBinding = ActivityLandingBinding.inflate(getLayoutInflater());
-            setContentView(landingBinding.getRoot());
+            landingInit();
         }
+    }
+
+    private void landingInit() {
+        landingBinding = ActivityLandingBinding.inflate(getLayoutInflater());
+        setContentView(landingBinding.getRoot());
+
+        LocaleModifier localeModifier = new LocaleModifier(this);
+        localeModifier.setLocale();
     }
 
     private void setTitle() {
