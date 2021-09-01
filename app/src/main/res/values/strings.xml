@@ -30,6 +30,9 @@
     <string name="register_btn_register">Register</string>
     <string name="register_text_login_title">Already have and account?</string>
     <string name="register_btn_login">Login</string>
+    <string name="register_error_email">Email address is not valid!</string>
+    <string name="register_error_password">Your password and retype password do not match!</string>
+    <string name="register_error_account_exists">An account with the provided email already exists.</string>
 
     <!--Forgot Password Fragment-->
     <string name="forgot_pw_text_title">Forgot\nYour\nPassword?</string>
