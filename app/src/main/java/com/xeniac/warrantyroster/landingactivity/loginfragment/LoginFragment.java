@@ -189,7 +189,7 @@ public class LoginFragment extends Fragment {
             loginBinding.tiLoginLayoutEmail.setBoxStrokeColor(context.getResources().getColor(R.color.red));
         } else if (TextUtils.isEmpty(loginBinding.tiLoginEditPassword.getText())) {
             loginBinding.tiLoginLayoutPassword.requestFocus();
-            loginBinding.tiLoginLayoutEmail.setBoxStrokeColor(context.getResources().getColor(R.color.red));
+            loginBinding.tiLoginLayoutPassword.setBoxStrokeColor(context.getResources().getColor(R.color.red));
         } else {
             email = loginBinding.tiLoginEditEmail.getText().toString().trim().toLowerCase();
             password = loginBinding.tiLoginEditPassword.getText().toString().trim();
