@@ -123,7 +123,6 @@ public class LoginFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence inputEmail, int start, int before, int count) {
-                loginBinding.tiLoginLayoutPassword.setErrorEnabled(false);
                 loginBinding.tiLoginLayoutPassword.setBoxStrokeColor(context.getResources().getColor(R.color.blue));
             }
 
