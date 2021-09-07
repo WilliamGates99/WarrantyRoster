@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
@@ -35,6 +36,7 @@ import com.xeniac.warrantyroster.databinding.FragmentRegisterBinding;
 import com.xeniac.warrantyroster.mainactivity.MainActivity;
 
 import java.util.Arrays;
+import java.util.regex.Pattern;
 
 public class RegisterFragment extends Fragment {
 
@@ -76,7 +78,7 @@ public class RegisterFragment extends Fragment {
     private void textInputsBackgroundColor() {
         registerBinding.tiRegisterEditEmail.setOnFocusChangeListener((view, focused) -> {
             if (focused) {
-                registerBinding.tiRegisterLayoutEmail.setBoxBackgroundColorResource(R.color.background);
+                registerBinding.tiRegisterLayoutEmail.setBoxBackgroundColorResource(R.color.windowBG);
             } else {
                 registerBinding.tiRegisterLayoutEmail.setBoxBackgroundColorResource(R.color.grayLight);
             }
@@ -84,15 +86,16 @@ public class RegisterFragment extends Fragment {
 
         registerBinding.tiRegisterEditPassword.setOnFocusChangeListener((view, focused) -> {
             if (focused) {
-                registerBinding.tiRegisterLayoutPassword.setBoxBackgroundColorResource(R.color.background);
+                registerBinding.tiRegisterLayoutPassword.setBoxBackgroundColorResource(R.color.windowBG);
             } else {
                 registerBinding.tiRegisterLayoutPassword.setBoxBackgroundColorResource(R.color.grayLight);
+                registerBinding.tiRegisterLayoutPassword.setHelperTextEnabled(false);
             }
         });
 
         registerBinding.tiRegisterEditRetypePassword.setOnFocusChangeListener((view, focused) -> {
             if (focused) {
-                registerBinding.tiRegisterLayoutRetypePassword.setBoxBackgroundColorResource(R.color.background);
+                registerBinding.tiRegisterLayoutRetypePassword.setBoxBackgroundColorResource(R.color.windowBG);
             } else {
                 registerBinding.tiRegisterLayoutRetypePassword.setBoxBackgroundColorResource(R.color.grayLight);
             }
@@ -125,9 +128,26 @@ public class RegisterFragment extends Fragment {
             }
 
             @Override
-            public void onTextChanged(CharSequence inputEmail, int start, int before, int count) {
-                registerBinding.tiRegisterLayoutPassword.setErrorEnabled(false);
-                registerBinding.tiRegisterLayoutPassword.setBoxStrokeColor(context.getResources().getColor(R.color.blue));
+            public void onTextChanged(CharSequence inputPassword, int start, int before, int count) {
+                if (registerBinding.tiRegisterLayoutPassword.hasFocus()) {
+                    switch (passwordStrength(inputPassword.toString())) {
+                        case -1:
+                            registerBinding.tiRegisterLayoutPassword.setHelperText(context.getResources().getString(R.string.register_helper_password_weak));
+                            registerBinding.tiRegisterLayoutPassword.setHelperTextColor(ColorStateList.valueOf(context.getResources().getColor(R.color.red)));
+                            registerBinding.tiRegisterLayoutPassword.setBoxStrokeColor(context.getResources().getColor(R.color.red));
+                            break;
+                        case 0:
+                            registerBinding.tiRegisterLayoutPassword.setHelperText(context.getResources().getString(R.string.register_helper_password_mediocre));
+                            registerBinding.tiRegisterLayoutPassword.setHelperTextColor(ColorStateList.valueOf(context.getResources().getColor(R.color.orange)));
+                            registerBinding.tiRegisterLayoutPassword.setBoxStrokeColor(context.getResources().getColor(R.color.orange));
+                            break;
+                        case 1:
+                            registerBinding.tiRegisterLayoutPassword.setHelperText(context.getResources().getString(R.string.register_helper_password_strong));
+                            registerBinding.tiRegisterLayoutPassword.setHelperTextColor(ColorStateList.valueOf(context.getResources().getColor(R.color.green)));
+                            registerBinding.tiRegisterLayoutPassword.setBoxStrokeColor(context.getResources().getColor(R.color.green));
+                            break;
+                    }
+                }
             }
 
             @Override
@@ -143,7 +163,7 @@ public class RegisterFragment extends Fragment {
             }
 
             @Override
-            public void onTextChanged(CharSequence inputEmail, int start, int before, int count) {
+            public void onTextChanged(CharSequence inputRetypePassword, int start, int before, int count) {
                 registerBinding.tiRegisterLayoutRetypePassword.setErrorEnabled(false);
                 registerBinding.tiRegisterLayoutRetypePassword.setBoxStrokeColor(context.getResources().getColor(R.color.blue));
             }
@@ -218,7 +238,7 @@ public class RegisterFragment extends Fragment {
             if (!isEmailValid(email)) {
                 registerBinding.tiRegisterLayoutEmail.requestFocus();
                 registerBinding.tiRegisterLayoutEmail.setError(context.getResources().getString(R.string.register_error_email));
-            } else if (!isPasswordValid(password, retypePassword)) {
+            } else if (!isRetypePasswordValid(password, retypePassword)) {
                 registerBinding.tiRegisterLayoutRetypePassword.requestFocus();
                 registerBinding.tiRegisterLayoutRetypePassword.setError(context.getResources().getString(R.string.register_error_password));
             } else {
@@ -302,11 +322,27 @@ public class RegisterFragment extends Fragment {
         registerBinding.btnRegisterRegister.setText(context.getResources().getString(R.string.register_btn_register));
     }
 
+    private byte passwordStrength(String password) {
+        Pattern PASSWORD = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=(.*[\\W])*).{8,}$");
+
+        if (password.length() < 4) {
+            return -1;
+        } else if (password.length() < 8) {
+            return 0;
+        } else {
+            if (PASSWORD.matcher(password).matches()) {
+                return 1;
+            } else {
+                return 0;
+            }
+        }
+    }
+
     private boolean isEmailValid(String email) {
         return Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
-    private boolean isPasswordValid(String password, String retypePassword) {
+    private boolean isRetypePasswordValid(String password, String retypePassword) {
         return password.equals(retypePassword);
     }
 }
