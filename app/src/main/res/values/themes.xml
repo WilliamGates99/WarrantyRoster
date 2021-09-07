@@ -1,15 +1,11 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+
     <style name="Theme.WarrantyRoster" parent="Theme.MaterialComponents.DayNight">
-        <!-- Primary brand color. -->
+        <item name="android:windowBackground">@color/windowBG</item>
         <item name="colorPrimary">@color/blue</item>
-        <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/blue</item>
-        <!-- Status bar color. -->
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
-        <!-- Customize your theme here. -->
-        <item name="android:windowBackground">@color/background</item>
     </style>
 
     <style name="Theme.WarrantyRoster.Splash" parent="Theme.SplashScreen">
@@ -40,9 +36,16 @@
         <item name="boxStrokeErrorColor">@color/red</item>
         <item name="errorTextColor">@color/red</item>
         <item name="errorIconDrawable">@null</item>
+        <item name="errorTextAppearance">@style/Theme.WarrantyRoster.TextInputLayout.Error</item>
+        <item name="helperTextTextAppearance">@style/Theme.WarrantyRoster.TextInputLayout.Helper</item>
     </style>
 
     <style name="Theme.WarrantyRoster.TextInputLayout.Error" parent="Widget.MaterialComponents.TextView">
+        <item name="android:fontFamily">@font/nunito_semi_bold</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="Theme.WarrantyRoster.TextInputLayout.Helper" parent="Widget.MaterialComponents.TextView">
         <item name="android:fontFamily">@font/nunito_semi_bold</item>
         <item name="android:textSize">12sp</item>
     </style>

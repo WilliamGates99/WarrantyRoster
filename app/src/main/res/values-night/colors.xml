@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="background">#101010</color>
-    <color name="ripple">#1A000000</color>
+    <color name="windowBG">#101010</color>
+    <color name="cardBG">#131313</color>
     <color name="white">#000000</color>
     <color name="black">#FFFFFF</color>
+    <color name="navyBlue">#DEF4FD</color>
     <color name="blue">#1C53F4</color>
-    <color name="red">#FF3442</color>
     <color name="green">#00BD62</color>
+    <color name="red">#FF3442</color>
+    <color name="orange">#FF9100</color>
     <color name="grayLight">#191919</color>
     <color name="grayMedium">#282828</color>
     <color name="grayDark">#7A7A7A</color>

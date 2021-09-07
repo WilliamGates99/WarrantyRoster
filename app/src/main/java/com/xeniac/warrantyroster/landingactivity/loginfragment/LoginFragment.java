@@ -81,7 +81,7 @@ public class LoginFragment extends Fragment {
     private void textInputsBackgroundColor() {
         loginBinding.tiLoginEditEmail.setOnFocusChangeListener((view, focused) -> {
             if (focused) {
-                loginBinding.tiLoginLayoutEmail.setBoxBackgroundColorResource(R.color.background);
+                loginBinding.tiLoginLayoutEmail.setBoxBackgroundColorResource(R.color.windowBG);
             } else {
                 loginBinding.tiLoginLayoutEmail.setBoxBackgroundColorResource(R.color.grayLight);
             }
@@ -89,7 +89,7 @@ public class LoginFragment extends Fragment {
 
         loginBinding.tiLoginEditPassword.setOnFocusChangeListener((view, focused) -> {
             if (focused) {
-                loginBinding.tiLoginLayoutPassword.setBoxBackgroundColorResource(R.color.background);
+                loginBinding.tiLoginLayoutPassword.setBoxBackgroundColorResource(R.color.windowBG);
             } else {
                 loginBinding.tiLoginLayoutPassword.setBoxBackgroundColorResource(R.color.grayLight);
             }

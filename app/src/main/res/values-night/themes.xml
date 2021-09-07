@@ -1,15 +1,11 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+
     <style name="Theme.WarrantyRoster" parent="Theme.MaterialComponents.DayNight">
-        <!-- Primary brand color. -->
+        <item name="android:windowBackground">@color/windowBG</item>
         <item name="colorPrimary">@color/blue</item>
-        <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/blue</item>
-        <!-- Status bar color. -->
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
-        <!-- Customize your theme here. -->
-        <item name="android:windowBackground">@color/background</item>
     </style>
 
     <style name="Theme.WarrantyRoster.Landing" parent="Theme.WarrantyRoster">

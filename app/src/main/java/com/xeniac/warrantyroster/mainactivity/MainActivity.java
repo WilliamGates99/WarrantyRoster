@@ -5,7 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.xeniac.warrantyroster.R;
+import com.xeniac.warrantyroster.LocaleModifier;
 import com.xeniac.warrantyroster.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
@@ -17,5 +17,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mainBinding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(mainBinding.getRoot());
+    }
+
+    private void mainInit() {
+        LocaleModifier localeModifier = new LocaleModifier(this);
+        localeModifier.setLocale();
     }
 }
