@@ -23,7 +23,6 @@ public class LandingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         splashScreen();
-        setTitle();
     }
 
     private void splashScreen() {
@@ -46,6 +45,8 @@ public class LandingActivity extends AppCompatActivity {
 
         LocaleModifier localeModifier = new LocaleModifier(this);
         localeModifier.setLocale();
+
+        setTitle();
     }
 
     private void setTitle() {
