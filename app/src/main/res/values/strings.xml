@@ -52,4 +52,8 @@
     <string name="forgot_pw_sent_btn_resend">Resend</string>
     <string name="forgot_pw_sent_text_resent">A new email has been sent.</string>
 
+    <!--Main Activity-->
+    <string name="main_menu_title_warranties">Warranties</string>
+    <string name="main_menu_title_more">More</string>
+
 </resources>

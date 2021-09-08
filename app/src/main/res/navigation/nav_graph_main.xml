@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_main"
+    app:startDestination="@id/warrantiesFragment">
+
+    <fragment
+        android:id="@+id/warrantiesFragment"
+        android:name="com.xeniac.warrantyroster.mainactivity.warrantiesfragment.WarrantiesFragment"
+        android:label="WarrantiesFragment"
+        tools:layout="@layout/fragment_warranties" />
+
+    <fragment
+        android:id="@+id/moreFragment"
+        android:name="com.xeniac.warrantyroster.mainactivity.morefragment.MoreFragment"
+        android:label="MoreFragment"
+        tools:layout="@layout/fragment_more" />
+
+</navigation>
