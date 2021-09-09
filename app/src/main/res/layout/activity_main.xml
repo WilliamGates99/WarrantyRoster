@@ -21,7 +21,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        app:backgroundTint="@color/cardBG"
         app:contentInsetEnd="16dp"
         app:contentInsetStart="16dp"
         app:fabCradleMargin="8dp"
@@ -46,7 +45,6 @@
         android:contentDescription="Main FAB"
         android:src="@drawable/ic_fab_add"
         app:layout_anchor="@id/appbar_main"
-        app:tint="@android:color/white"
         tools:ignore="HardcodedText" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
