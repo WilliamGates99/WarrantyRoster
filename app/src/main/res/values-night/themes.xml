@@ -2,7 +2,6 @@
 
     <style name="Theme.WarrantyRoster" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:colorBackground">@color/background</item>
-        <item name="colorSurface">@color/surface</item>
         <item name="colorPrimary">@color/blue</item>
         <item name="colorPrimaryVariant">@color/navyBlue</item>
         <item name="colorOnPrimary">@android:color/white</item>

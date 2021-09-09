@@ -2,7 +2,6 @@
 
     <style name="Theme.WarrantyRoster" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:colorBackground">@color/background</item>
-        <item name="colorSurface">@color/surface</item>
         <item name="colorPrimary">@color/blue</item>
         <item name="colorPrimaryVariant">@color/navyBlue</item>
         <item name="colorOnPrimary">@android:color/white</item>
@@ -97,6 +96,17 @@
     <style name="Theme.WarrantyRoster.BottomNavigationView.Text" parent="Widget.MaterialComponents.TextView">
         <item name="android:fontFamily">@font/nunito_regular</item>
         <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="Theme.WarrantyRoster.ToolBar" parent="Widget.MaterialComponents.Toolbar">
+        <item name="titleTextAppearance">@style/Theme.WarrantyRoster.ToolBar.Title</item>
+        <item name="android:background">@color/background</item>
+    </style>
+
+    <style name="Theme.WarrantyRoster.ToolBar.Title" parent="Widget.MaterialComponents.TextView">
+        <item name="android:fontFamily">@font/nunito_extra_bold</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 
 </resources>
