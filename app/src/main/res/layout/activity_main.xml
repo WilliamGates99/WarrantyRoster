@@ -31,6 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:itemIconTint="@color/color_bottom_nav"
+            app:itemRippleColor="@color/grayLight"
             app:itemTextAppearanceActive="@style/Theme.WarrantyRoster.BottomNavigationView.Text"
             app:itemTextColor="@color/color_bottom_nav"
             app:labelVisibilityMode="selected"
