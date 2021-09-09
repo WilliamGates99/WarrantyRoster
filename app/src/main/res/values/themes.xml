@@ -1,9 +1,14 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="Theme.WarrantyRoster" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="android:windowBackground">@color/windowBG</item>
+        <item name="android:colorBackground">@color/background</item>
+        <item name="colorSurface">@color/surface</item>
         <item name="colorPrimary">@color/blue</item>
+        <item name="colorPrimaryVariant">@color/navyBlue</item>
+        <item name="colorOnPrimary">@android:color/white</item>
         <item name="colorSecondary">@color/blue</item>
+        <item name="colorSecondaryVariant">@color/navyBlue</item>
+        <item name="colorOnSecondary">@android:color/white</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
     </style>
@@ -18,7 +23,7 @@
     </style>
 
     <style name="Theme.WarrantyRoster.Landing" parent="Theme.WarrantyRoster">
-        <item name="android:windowBackground">@color/blue</item>
+        <item name="android:colorBackground">@color/blue</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
     </style>
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="windowBG">#101010</color>
-    <color name="cardBG">#191919</color>
+    <color name="background">#101010</color>
+    <color name="surface">#191919</color>
     <color name="white">#000000</color>
     <color name="black">#FFFFFF</color>
     <color name="navyBlue">#DEF4FD</color>
