@@ -4,16 +4,19 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.xeniac.warrantyroster.R;
 import com.xeniac.warrantyroster.databinding.FragmentWarrantiesBinding;
 
 public class WarrantiesFragment extends Fragment implements WarrantyListClickInterface {
@@ -57,6 +60,7 @@ public class WarrantiesFragment extends Fragment implements WarrantyListClickInt
             warrantiesBinding.groupWarrantiesEmptyList.setVisibility(View.GONE);
             warrantiesBinding.rvWarranties.setVisibility(View.VISIBLE);
             showWarrantyList();
+            search();
         }
     }
 
@@ -69,5 +73,33 @@ public class WarrantiesFragment extends Fragment implements WarrantyListClickInt
     public void onItemClick(int position) {
         Toast.makeText(context, WarrantyDataProvider.warrantyList.get(position).getTitle() + " clicked.",
                 Toast.LENGTH_SHORT).show();
+    }
+
+    private void search() {
+        warrantiesBinding.searchWarranties.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if (hasFocus) {
+                    warrantiesBinding.toolbarWarranties.setTitle(null);
+                } else {
+                    warrantiesBinding.toolbarWarranties.setTitle(context.getResources().getString(R.string.warranties_text_title));
+                }
+            }
+        });
+
+        warrantiesBinding.searchWarranties.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Toast.makeText(context, "onQueryTextSubmit", Toast.LENGTH_SHORT).show();
+                warrantiesBinding.searchWarranties.onActionViewCollapsed();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                Toast.makeText(context, newText, Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        });
     }
 }

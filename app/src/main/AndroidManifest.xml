@@ -29,7 +29,8 @@
             android:name=".mainactivity.MainActivity"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.WarrantyRoster" />
+            android:theme="@style/Theme.WarrantyRoster"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
     </application>
 
 </manifest>
