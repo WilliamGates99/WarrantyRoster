@@ -98,15 +98,22 @@
         <item name="android:textSize">12sp</item>
     </style>
 
-    <style name="Theme.WarrantyRoster.ToolBar" parent="Widget.MaterialComponents.Toolbar">
-        <item name="titleTextAppearance">@style/Theme.WarrantyRoster.ToolBar.Title</item>
+    <style name="Theme.WarrantyRoster.Toolbar" parent="Widget.MaterialComponents.Toolbar">
+        <item name="titleTextAppearance">@style/Theme.WarrantyRoster.Toolbar.Title</item>
         <item name="android:background">@color/background</item>
+        <item name="android:elevation">1dp</item>
+        <item name="titleCentered">true</item>
     </style>
 
-    <style name="Theme.WarrantyRoster.ToolBar.Title" parent="Widget.MaterialComponents.TextView">
+    <style name="Theme.WarrantyRoster.Toolbar.Title" parent="Widget.MaterialComponents.TextView">
         <item name="android:fontFamily">@font/nunito_extra_bold</item>
         <item name="android:textSize">20sp</item>
         <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="Theme.WarrantyRoster.ImageViewShapeAppearance">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">12dp</item>
     </style>
 
 </resources>

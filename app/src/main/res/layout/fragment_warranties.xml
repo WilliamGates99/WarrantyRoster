@@ -4,15 +4,72 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/tv_warranties_text"
-        android:layout_width="wrap_content"
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar_warranties"
+        style="@style/Theme.WarrantyRoster.Toolbar"
+        android:layout_width="0dp"
+        android:layout_height="?attr/actionBarSize"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="@string/warranties_text_title" />
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lav_warranties"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_marginHorizontal="4dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintBottom_toTopOf="@+id/tv_warranties_empty_list"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_warranties"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="false"
+        app:lottie_rawRes="@raw/anim_empty_list"
+        app:lottie_speed="1.10" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_warranties_empty_list"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Warranties"
-        android:textSize="24dp"
+        android:layout_marginHorizontal="28sp"
+        android:layout_marginBottom="4dp"
+        android:fontFamily="@font/nunito_bold"
+        android:gravity="center"
+        android:text="@string/warranties_text_empty_list"
+        android:textAlignment="gravity"
+        android:textColor="@color/grayDark"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lav_warranties" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_warranties"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:overScrollMode="never"
+        android:paddingTop="4dp"
+        android:paddingBottom="60dp"
+        android:scrollbars="none"
+        android:visibility="gone"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_warranties" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_warranties_empty_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:constraint_referenced_ids="tv_warranties_empty_list,lav_warranties" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

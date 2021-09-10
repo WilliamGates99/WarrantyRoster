@@ -56,4 +56,14 @@
     <string name="main_menu_title_warranties">Warranties</string>
     <string name="main_menu_title_more">More</string>
 
+    <!--Warranties Fragment-->
+    <string name="warranties_text_title">Warranty List</string>
+    <string name="warranties_menu_title_search">Search</string>
+    <string name="warranties_menu_hint_search">Search by title…</string>
+    <string name="warranties_text_empty_list">There is currently no warranty on your list. You can add a warranty by clicking on the <font fgcolor="#1C53F4">Add Button</font>.</string>
+    <string name="warranties_list_expiry_title">Expiry Date:</string>
+    <string name="warranties_list_status_valid">Valid</string>
+    <string name="warranties_list_status_soon">Soon</string>
+    <string name="warranties_list_status_expired">Expired</string>
+
 </resources>
