@@ -54,7 +54,7 @@ public class ForgotPwFragment extends Fragment {
     private void textInputsBackgroundColor() {
         forgotPwBinding.tiForgotPwEditEmail.setOnFocusChangeListener((view, focused) -> {
             if (focused) {
-                forgotPwBinding.tiForgotPwLayoutEmail.setBoxBackgroundColorResource(R.color.windowBG);
+                forgotPwBinding.tiForgotPwLayoutEmail.setBoxBackgroundColorResource(R.color.background);
             } else {
                 forgotPwBinding.tiForgotPwLayoutEmail.setBoxBackgroundColorResource(R.color.grayLight);
             }

@@ -78,7 +78,7 @@ public class RegisterFragment extends Fragment {
     private void textInputsBackgroundColor() {
         registerBinding.tiRegisterEditEmail.setOnFocusChangeListener((view, focused) -> {
             if (focused) {
-                registerBinding.tiRegisterLayoutEmail.setBoxBackgroundColorResource(R.color.windowBG);
+                registerBinding.tiRegisterLayoutEmail.setBoxBackgroundColorResource(R.color.background);
             } else {
                 registerBinding.tiRegisterLayoutEmail.setBoxBackgroundColorResource(R.color.grayLight);
             }
@@ -86,7 +86,7 @@ public class RegisterFragment extends Fragment {
 
         registerBinding.tiRegisterEditPassword.setOnFocusChangeListener((view, focused) -> {
             if (focused) {
-                registerBinding.tiRegisterLayoutPassword.setBoxBackgroundColorResource(R.color.windowBG);
+                registerBinding.tiRegisterLayoutPassword.setBoxBackgroundColorResource(R.color.background);
             } else {
                 registerBinding.tiRegisterLayoutPassword.setBoxBackgroundColorResource(R.color.grayLight);
                 registerBinding.tiRegisterLayoutPassword.setHelperTextEnabled(false);
@@ -95,7 +95,7 @@ public class RegisterFragment extends Fragment {
 
         registerBinding.tiRegisterEditRetypePassword.setOnFocusChangeListener((view, focused) -> {
             if (focused) {
-                registerBinding.tiRegisterLayoutRetypePassword.setBoxBackgroundColorResource(R.color.windowBG);
+                registerBinding.tiRegisterLayoutRetypePassword.setBoxBackgroundColorResource(R.color.background);
             } else {
                 registerBinding.tiRegisterLayoutRetypePassword.setBoxBackgroundColorResource(R.color.grayLight);
             }
