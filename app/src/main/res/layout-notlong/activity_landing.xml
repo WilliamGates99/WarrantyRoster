@@ -22,7 +22,7 @@
         app:tint="@color/blue"
         tools:ignore="HardcodedText" />
 
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_landing_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
