@@ -8,7 +8,7 @@
         <item name="colorSecondary">@color/blue</item>
         <item name="colorSecondaryVariant">@color/navyBlue</item>
         <item name="colorOnSecondary">@android:color/white</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor">@color/surface</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
     </style>
 
@@ -100,8 +100,8 @@
 
     <style name="Theme.WarrantyRoster.Toolbar" parent="Widget.MaterialComponents.Toolbar">
         <item name="titleTextAppearance">@style/Theme.WarrantyRoster.Toolbar.Title</item>
-        <item name="android:background">@color/background</item>
-        <item name="android:elevation">1dp</item>
+        <item name="android:background">@color/surface</item>
+        <item name="android:elevation">4dp</item>
         <item name="titleCentered">true</item>
     </style>
 

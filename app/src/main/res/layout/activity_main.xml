@@ -23,6 +23,7 @@
         android:backgroundTint="@color/surface"
         app:contentInsetEnd="16dp"
         app:contentInsetStart="16dp"
+        app:elevation="4dp"
         app:fabCradleMargin="8dp"
         app:fabCradleRoundedCornerRadius="20dp">
 

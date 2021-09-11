@@ -8,7 +8,7 @@
         <item name="colorSecondary">@color/blue</item>
         <item name="colorSecondaryVariant">@color/navyBlue</item>
         <item name="colorOnSecondary">@android:color/white</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor">@color/surface</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
     </style>
 

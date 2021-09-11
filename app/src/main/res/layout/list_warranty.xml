@@ -24,7 +24,7 @@
             android:layout_marginStart="12dp"
             android:layout_marginTop="12dp"
             android:layout_marginBottom="12dp"
-            android:background="@color/red"
+            android:background="@color/grayLight"
             android:src="@drawable/ic_category_accessories"
             app:contentPadding="8dp"
             app:layout_constraintBottom_toBottomOf="parent"

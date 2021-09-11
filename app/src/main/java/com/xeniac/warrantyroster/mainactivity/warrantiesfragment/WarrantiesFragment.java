@@ -3,6 +3,7 @@ package com.xeniac.warrantyroster.mainactivity.warrantiesfragment;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -90,14 +91,18 @@ public class WarrantiesFragment extends Fragment implements WarrantyListClickInt
         warrantiesBinding.searchWarranties.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Toast.makeText(context, "onQueryTextSubmit", Toast.LENGTH_SHORT).show();
-                warrantiesBinding.searchWarranties.onActionViewCollapsed();
+                if (!TextUtils.isEmpty(query)) {
+                    Toast.makeText(context, "onQueryTextSubmit", Toast.LENGTH_SHORT).show();
+                    warrantiesBinding.searchWarranties.onActionViewCollapsed();
+                }
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                Toast.makeText(context, newText, Toast.LENGTH_SHORT).show();
+                if (!TextUtils.isEmpty(newText)) {
+                    Toast.makeText(context, "Input: " + newText, Toast.LENGTH_SHORT).show();
+                }
                 return false;
             }
         });

@@ -59,17 +59,17 @@ public class WarrantyAdapter extends RecyclerView.Adapter<WarrantyAdapter.ViewHo
             warrantyBinding.ivListWarrantyIcon.setImageDrawable(ResourcesCompat.getDrawable(
                     context.getResources(), warrantyItem.getIcon(), context.getTheme()));
 
-            switch (warrantyItem.getStatus()) {
-                case "Valid":
-                    warrantyBinding.ivListWarrantyIcon.setBackgroundColor(context.getResources().getColor(R.color.green));
-                    break;
-                case "Soon":
-                    warrantyBinding.ivListWarrantyIcon.setBackgroundColor(context.getResources().getColor(R.color.orange));
-                    break;
-                case "Expired":
-                    warrantyBinding.ivListWarrantyIcon.setBackgroundColor(context.getResources().getColor(R.color.red));
-                    break;
-            }
+//            switch (warrantyItem.getStatus()) {
+//                case "Valid":
+//                    warrantyBinding.ivListWarrantyIcon.setBackgroundColor(context.getResources().getColor(R.color.green));
+//                    break;
+//                case "Soon":
+//                    warrantyBinding.ivListWarrantyIcon.setBackgroundColor(context.getResources().getColor(R.color.orange));
+//                    break;
+//                case "Expired":
+//                    warrantyBinding.ivListWarrantyIcon.setBackgroundColor(context.getResources().getColor(R.color.red));
+//                    break;
+//            }
 
             warrantyBinding.cvListWarranty.setOnClickListener(view ->
                     warrantyListClickInterface.onItemClick(getAdapterPosition()));
