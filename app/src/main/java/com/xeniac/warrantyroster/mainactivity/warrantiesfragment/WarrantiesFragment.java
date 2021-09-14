@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -55,9 +54,11 @@ public class WarrantiesFragment extends Fragment implements WarrantyListClickInt
         boolean isListEmpty = false;
         //Todo can use databinding
         if (isListEmpty) {
+            warrantiesBinding.searchWarranties.setVisibility(View.GONE);
             warrantiesBinding.rvWarranties.setVisibility(View.GONE);
             warrantiesBinding.groupWarrantiesEmptyList.setVisibility(View.VISIBLE);
         } else {
+            warrantiesBinding.searchWarranties.setVisibility(View.VISIBLE);
             warrantiesBinding.groupWarrantiesEmptyList.setVisibility(View.GONE);
             warrantiesBinding.rvWarranties.setVisibility(View.VISIBLE);
             showWarrantyList();

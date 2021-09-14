@@ -1,21 +1,25 @@
 package com.xeniac.warrantyroster.mainactivity.warrantiesfragment;
 
+import androidx.annotation.NonNull;
+
 public class WarrantyDataModel {
 
     private int id;
     private String title;
     private String expiryDate;
-    private String status;
+    private int status;
+    private String Category;
     private int icon;
 
     public WarrantyDataModel() {
     }
 
-    public WarrantyDataModel(int id, String title, String expiryDate, String status, int icon) {
+    public WarrantyDataModel(int id, String title, String expiryDate, int status, String category, int icon) {
         this.id = id;
         this.title = title;
         this.expiryDate = expiryDate;
         this.status = status;
+        Category = category;
         this.icon = icon;
     }
 
@@ -43,12 +47,20 @@ public class WarrantyDataModel {
         this.expiryDate = expiryDate;
     }
 
-    public String getStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(int status) {
         this.status = status;
+    }
+
+    public String getCategory() {
+        return Category;
+    }
+
+    public void setCategory(String category) {
+        Category = category;
     }
 
     public int getIcon() {
@@ -59,14 +71,16 @@ public class WarrantyDataModel {
         this.icon = icon;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "WarrantyDataModel{" +
                 "id=" + id +
                 ", title='" + title + '\'' +
                 ", expiryDate='" + expiryDate + '\'' +
-                ", status='" + status + '\'' +
-                ", icon='" + icon + '\'' +
+                ", status=" + status +
+                ", Category='" + Category + '\'' +
+                ", icon=" + icon +
                 '}';
     }
 }
