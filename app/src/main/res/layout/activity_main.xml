@@ -44,9 +44,8 @@
         android:id="@+id/fab_main"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:contentDescription="Main FAB"
+        android:contentDescription="@string/main_text_content_description"
         android:src="@drawable/ic_fab_add"
-        app:layout_anchor="@id/appbar_main"
-        tools:ignore="HardcodedText" />
+        app:layout_anchor="@id/appbar_main" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

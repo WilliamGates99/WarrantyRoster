@@ -12,15 +12,14 @@
         android:layout_height="100dp"
         android:adjustViewBounds="true"
         android:alpha="0.80"
-        android:contentDescription="Landing Header"
+        android:contentDescription="@string/landing_text_content_description"
         android:scaleType="centerCrop"
         android:src="@drawable/ic_landing_header"
         android:tintMode="multiply"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/blue"
-        tools:ignore="HardcodedText" />
+        app:tint="@color/blue" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_landing_title"

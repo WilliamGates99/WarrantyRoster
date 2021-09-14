@@ -4,6 +4,9 @@
     <string name="network_error_failure">You\'re having network issues. Please try again later.</string>
     <string name="network_error_retry">Retry</string>
 
+    <!--Lading Activity-->
+    <string name="landing_text_content_description">Header</string>
+
     <!--Login Fragment-->
     <string name="login_text_title">Login</string>
     <string name="login_text_description">Let’s log you in.</string>
@@ -55,13 +58,13 @@
     <!--Main Activity-->
     <string name="main_menu_title_warranties">Warranties</string>
     <string name="main_menu_title_more">More</string>
+    <string name="main_text_content_description">Add Warranty</string>
 
     <!--Warranties Fragment-->
     <string name="warranties_text_title">Warranty List</string>
     <string name="warranties_menu_title_search">Search</string>
     <string name="warranties_menu_hint_search">Search by title…</string>
     <string name="warranties_text_empty_list">There is currently no warranty on your list. You can add a warranty by clicking on the <font fgcolor="#1C53F4">Add Button</font>.</string>
-    <string name="warranties_list_expiry_title">Expiry Date:</string>
     <string name="warranties_list_status_valid">Valid</string>
     <string name="warranties_list_status_soon">Soon</string>
     <string name="warranties_list_status_expired">Expired</string>
