@@ -31,6 +31,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.WarrantyRoster"
             android:windowSoftInputMode="adjustPan|stateHidden" />
+        <activity
+            android:name=".addwarrantyactivity.AddWarrantyActivity"
+            android:exported="true"
+            android:parentActivityName=".mainactivity.MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.WarrantyRoster" />
     </application>
 
 </manifest>

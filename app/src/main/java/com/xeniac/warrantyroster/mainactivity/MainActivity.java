@@ -1,5 +1,6 @@
 package com.xeniac.warrantyroster.mainactivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -12,6 +13,7 @@ import com.google.android.material.shape.CornerFamily;
 import com.google.android.material.shape.MaterialShapeDrawable;
 import com.xeniac.warrantyroster.LocaleModifier;
 import com.xeniac.warrantyroster.R;
+import com.xeniac.warrantyroster.addwarrantyactivity.AddWarrantyActivity;
 import com.xeniac.warrantyroster.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
@@ -32,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
         bottomAppBarStyle();
         bottomNavActions();
+        fabAction();
     }
 
     private void bottomAppBarStyle() {
@@ -54,5 +57,10 @@ public class MainActivity extends AppCompatActivity {
             NavController navController = navHostFragment.getNavController();
             NavigationUI.setupWithNavController(mainBinding.bnvMain, navController);
         }
+    }
+
+    private void fabAction() {
+        mainBinding.fabMain.setOnClickListener(view ->
+                startActivity(new Intent(MainActivity.this, AddWarrantyActivity.class)));
     }
 }
