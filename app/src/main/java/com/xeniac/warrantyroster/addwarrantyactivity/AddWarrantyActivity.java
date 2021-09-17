@@ -40,12 +40,14 @@ public class AddWarrantyActivity extends AppCompatActivity {
         List<String> categoryList = new ArrayList<>();
         categoryList.add("Accessory");
         categoryList.add("Air Conditioner");
+        categoryList.add("Audio Device");
         categoryList.add("Camera");
         categoryList.add("Game Console");
         categoryList.add("Headset");
         categoryList.add("Healthcare");
         categoryList.add("Home Appliance");
         categoryList.add("Memory and Storage");
+        categoryList.add("Miscellaneous");
         categoryList.add("Monitor");
         categoryList.add("Musical Instrument");
         categoryList.add("Peripheral Device");
@@ -55,9 +57,8 @@ public class AddWarrantyActivity extends AppCompatActivity {
         categoryList.add("Smart Home");
         categoryList.add("Smart Watch");
         categoryList.add("Sport and Fitness");
-        categoryList.add("Tools");
+        categoryList.add("Tool");
         categoryList.add("Vehicle");
-        categoryList.add("Miscellaneous");
 
         addWarrantyBinding.tiAddWarrantyDdCategory.setAdapter(new ArrayAdapter<>(this, R.layout.dropdown_category, categoryList));
     }
