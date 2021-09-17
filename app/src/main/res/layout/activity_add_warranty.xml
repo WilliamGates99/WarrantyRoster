@@ -148,7 +148,7 @@
                         android:layout_marginEnd="16dp"
                         android:background="@color/grayLight"
                         android:elevation="8dp"
-                        android:src="@drawable/ic_category_accessories"
+                        android:src="@drawable/ic_category_accessory"
                         app:contentPadding="12dp"
                         app:layout_constraintBottom_toBottomOf="@+id/ti_add_warranty_layout_category"
                         app:layout_constraintEnd_toEndOf="parent"
