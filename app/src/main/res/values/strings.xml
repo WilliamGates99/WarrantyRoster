@@ -72,5 +72,19 @@
     <!--Add Warranty Activity-->
     <string name="add_warranty_text_title">Add Warranty</string>
     <string name="add_warranty_menu_title_add">Add Warranty</string>
+    <string name="add_warranty_title_title">Title</string>
+    <string name="add_warranty_hint_title">Enter the title</string>
+    <string name="add_warranty_title_category">Category</string>
+    <string name="add_warranty_hint_category">Select category</string>
+    <string name="add_warranty_title_brand">Device Brand</string>
+    <string name="add_warranty_hint_brand">Enter the device brand</string>
+    <string name="add_warranty_title_model">Device Model</string>
+    <string name="add_warranty_hint_model">Enter the device model</string>
+    <string name="add_warranty_title_serial">Serial Number</string>
+    <string name="add_warranty_hint_serial">Enter the serial number of the device</string>
+    <string name="add_warranty_title_date_starting">Starting Date</string>
+    <string name="add_warranty_title_date_expiry">Expiry Date</string>
+    <string name="add_warranty_title_description">Description</string>
+    <string name="add_warranty_hint_description">Enter description</string>
 
 </resources>
