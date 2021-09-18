@@ -148,7 +148,7 @@
                         android:layout_marginEnd="16dp"
                         android:background="@color/grayLight"
                         android:elevation="8dp"
-                        android:src="@drawable/ic_category_accessory"
+                        android:src="@drawable/ic_category_miscellaneous"
                         app:contentPadding="12dp"
                         app:layout_constraintBottom_toBottomOf="@+id/ti_add_warranty_layout_category"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -300,7 +300,7 @@
                             android:fontFamily="@font/nunito_regular"
                             android:gravity="center_vertical"
                             android:hint="@string/add_warranty_hint_serial"
-                            android:imeOptions="actionNext"
+                            android:imeOptions="actionDone"
                             android:inputType="textCapCharacters"
                             android:maxLines="1"
                             android:textColor="@color/black"
@@ -367,15 +367,13 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/nunito_regular"
                             android:gravity="center_vertical"
-                            android:hint="09/15/2021"
+                            android:hint="@string/add_warranty_hint_date"
                             android:imeOptions="actionNext"
-                            android:inputType="date"
-                            android:maxLength="10"
+                            android:inputType="none"
                             android:maxLines="1"
                             android:textColor="@color/black"
                             android:textColorHint="@color/grayDark"
-                            android:textSize="16sp"
-                            tools:ignore="HardcodedText" />
+                            android:textSize="16sp" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -416,15 +414,13 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/nunito_regular"
                             android:gravity="center_vertical"
-                            android:hint="09/15/2025"
+                            android:hint="@string/add_warranty_hint_date"
                             android:imeOptions="actionNext"
-                            android:inputType="date"
-                            android:maxLength="10"
+                            android:inputType="none"
                             android:maxLines="1"
                             android:textColor="@color/black"
                             android:textColorHint="@color/grayDark"
-                            android:textSize="16sp"
-                            tools:ignore="HardcodedText" />
+                            android:textSize="16sp" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
