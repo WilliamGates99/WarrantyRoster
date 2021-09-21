@@ -43,9 +43,7 @@ public class LandingActivity extends AppCompatActivity {
         landingBinding = ActivityLandingBinding.inflate(getLayoutInflater());
         setContentView(landingBinding.getRoot());
 
-        LocaleModifier localeModifier = new LocaleModifier(this);
-        localeModifier.setLocale();
-
+        LocaleModifier.setLocale(this);
         setTitle();
     }
 

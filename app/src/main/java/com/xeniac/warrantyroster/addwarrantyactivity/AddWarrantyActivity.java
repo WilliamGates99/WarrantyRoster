@@ -40,9 +40,7 @@ public class AddWarrantyActivity extends AppCompatActivity {
     }
 
     private void addWarrantyInit() {
-        LocaleModifier localeModifier = new LocaleModifier(this);
-        localeModifier.setLocale();
-
+        LocaleModifier.setLocale(this);
         textInputsBackgroundColor();
         categoryDropDown();
         categoryDropDownSelection();

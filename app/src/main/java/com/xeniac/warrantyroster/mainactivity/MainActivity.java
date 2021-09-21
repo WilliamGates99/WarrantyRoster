@@ -29,9 +29,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void mainInit() {
-        LocaleModifier localeModifier = new LocaleModifier(this);
-        localeModifier.setLocale();
-
+        LocaleModifier.setLocale(this);
         bottomAppBarStyle();
         bottomNavActions();
         fabAction();

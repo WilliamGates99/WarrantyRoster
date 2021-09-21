@@ -10,18 +10,12 @@ import java.util.Locale;
 
 public class LocaleModifier {
 
-    private final Context mContext;
-
-    public LocaleModifier(Context context) {
-        this.mContext = context;
-    }
-
-    public void setLocale() {
-        SharedPreferences localePrefs = mContext.getSharedPreferences(Constants.PREFERENCE_SETTINGS, Context.MODE_PRIVATE);
+    public static void setLocale(Context context) {
+        SharedPreferences localePrefs = context.getSharedPreferences(Constants.PREFERENCE_SETTINGS, Context.MODE_PRIVATE);
         String language = localePrefs.getString(Constants.PREFERENCE_LANGUAGE_KEY, "en");
         String country = localePrefs.getString(Constants.PREFERENCE_COUNTRY_KEY, "US");
 
-        Resources resources = mContext.getResources();
+        Resources resources = context.getResources();
         DisplayMetrics displayMetrics = resources.getDisplayMetrics();
         Configuration configuration = resources.getConfiguration();
         Locale newLocale = new Locale(language, country);

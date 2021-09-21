@@ -15,11 +15,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -162,19 +160,9 @@ public class LoginFragment extends Fragment {
             getLoginInputs();
         } else {
             hideLoadingAnimation();
-            Snackbar snackbar = Snackbar.make(view,
-                    context.getResources().getString(R.string.network_error_connection),
+            Snackbar.make(view, context.getResources().getString(R.string.network_error_connection),
                     BaseTransientBottomBar.LENGTH_INDEFINITE)
-                    .setAction(context.getResources().getString(R.string.network_error_retry), v -> loginViaEmail())
-                    .setBackgroundTint(context.getResources().getColor(R.color.red))
-                    .setTextColor(context.getResources().getColor(R.color.white))
-                    .setActionTextColor(context.getResources().getColor(R.color.white))
-                    .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE);
-            TextView snackText = (snackbar.getView()).findViewById(R.id.snackbar_text);
-            TextView snackAction = (snackbar.getView()).findViewById(R.id.snackbar_action);
-            snackText.setTypeface(ResourcesCompat.getFont(context, R.font.nunito_semi_bold));
-            snackAction.setTypeface(ResourcesCompat.getFont(context, R.font.nunito_bold));
-            snackbar.show();
+                    .setAction(context.getResources().getString(R.string.network_error_retry), v -> loginViaEmail()).show();
         }
     }
 
@@ -229,15 +217,8 @@ public class LoginFragment extends Fragment {
                             } else {
                                 Log.e("loginViaEmail", "Errors: " + response.getErrors());
                                 if (Arrays.toString(response.getErrors().get(0).getCustomAttributes().values().toArray()).contains("code=401")) {
-                                    Snackbar snackbar = Snackbar.make(view,
-                                            context.getResources().getString(R.string.login_error_credentials),
-                                            BaseTransientBottomBar.LENGTH_LONG)
-                                            .setBackgroundTint(context.getResources().getColor(R.color.red))
-                                            .setTextColor(context.getResources().getColor(R.color.white))
-                                            .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE);
-                                    TextView snackText = (snackbar.getView()).findViewById(R.id.snackbar_text);
-                                    snackText.setTypeface(ResourcesCompat.getFont(context, R.font.nunito_semi_bold));
-                                    snackbar.show();
+                                    Snackbar.make(view, context.getResources().getString(R.string.login_error_credentials),
+                                            BaseTransientBottomBar.LENGTH_LONG).show();
                                 }
                             }
                         });
@@ -247,15 +228,8 @@ public class LoginFragment extends Fragment {
                     public void onFailure(@NonNull ApolloException e) {
                         Log.e("loginViaEmail", "onFailure: " + e.getMessage());
                         activity.runOnUiThread(() -> {
-                            Snackbar snackbar = Snackbar.make(view,
-                                    context.getResources().getString(R.string.network_error_failure),
-                                    BaseTransientBottomBar.LENGTH_LONG)
-                                    .setBackgroundTint(context.getResources().getColor(R.color.red))
-                                    .setTextColor(context.getResources().getColor(R.color.white))
-                                    .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE);
-                            TextView snackText = (snackbar.getView()).findViewById(R.id.snackbar_text);
-                            snackText.setTypeface(ResourcesCompat.getFont(context, R.font.nunito_semi_bold));
-                            snackbar.show();
+                            Snackbar.make(view, context.getResources().getString(R.string.network_error_failure),
+                                    BaseTransientBottomBar.LENGTH_LONG).show();
                         });
                     }
                 });

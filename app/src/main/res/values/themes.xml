@@ -10,6 +10,9 @@
         <item name="colorOnSecondary">@android:color/white</item>
         <item name="android:statusBarColor">@color/surface</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+        <item name="snackbarStyle">@style/Theme.WarrantyRoster.Snackbar</item>
+        <item name="snackbarTextViewStyle">@style/Theme.WarrantyRoster.Snackbar.TextView</item>
+        <item name="snackbarButtonStyle">@style/Theme.WarrantyRoster.Snackbar.ActionButton</item>
     </style>
 
     <style name="Theme.WarrantyRoster.Splash" parent="Theme.SplashScreen">
@@ -25,6 +28,21 @@
         <item name="android:colorBackground">@color/blue</item>
         <item name="android:statusBarColor">@color/blue</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
+    </style>
+
+    <style name="Theme.WarrantyRoster.Snackbar" parent="Widget.MaterialComponents.Snackbar">
+        <item name="backgroundTint">@color/red</item>
+        <item name="animationMode">slide</item>
+    </style>
+
+    <style name="Theme.WarrantyRoster.Snackbar.TextView" parent="Widget.MaterialComponents.Snackbar.TextView">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:fontFamily">@font/nunito_semi_bold</item>
+    </style>
+
+    <style name="Theme.WarrantyRoster.Snackbar.ActionButton" parent="Widget.MaterialComponents.Button.TextButton.Snackbar">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:fontFamily">@font/nunito_bold</item>
     </style>
 
     <style name="Theme.WarrantyRoster.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
