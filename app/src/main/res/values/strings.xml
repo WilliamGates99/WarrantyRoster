@@ -87,5 +87,7 @@
     <string name="add_warranty_hint_date">dd/mm/yyyy</string>
     <string name="add_warranty_title_description">Description</string>
     <string name="add_warranty_hint_description">Enter description</string>
+    <string name="add_warranty_title_date_picker_starting">Select Starting Date</string>
+    <string name="add_warranty_title_date_picker_expiry">Select Expiry Date</string>
 
 </resources>

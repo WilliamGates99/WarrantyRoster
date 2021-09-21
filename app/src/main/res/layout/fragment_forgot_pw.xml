@@ -37,6 +37,7 @@
             android:layout_marginTop="76dp"
             android:fontFamily="@font/nunito_bold"
             android:gravity="start|center_vertical"
+            android:labelFor="@+id/ti_forgot_pw_layout_email"
             android:maxLines="1"
             android:text="@string/forgot_pw_title_email"
             android:textAlignment="gravity"

@@ -275,7 +275,7 @@ public class AddWarrantyActivity extends AppCompatActivity {
 
     private void openStartingDatePicker() {
         MaterialDatePicker<Long> startingDP = MaterialDatePicker.Builder.datePicker()
-                .setTitleText(getResources().getString(R.string.add_warranty_title_date_starting))
+                .setTitleText(getResources().getString(R.string.add_warranty_title_date_picker_starting))
                 .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
                 .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
                 .build();
@@ -300,7 +300,7 @@ public class AddWarrantyActivity extends AppCompatActivity {
 
     private void openExpiryDatePicker() {
         MaterialDatePicker<Long> expiryDP = MaterialDatePicker.Builder.datePicker()
-                .setTitleText(getResources().getString(R.string.add_warranty_title_date_starting))
+                .setTitleText(getResources().getString(R.string.add_warranty_title_date_picker_expiry))
                 .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
                 .build();
         expiryDP.show(getSupportFragmentManager(), Constants.FRAGMENT_TAG_ADD_CALENDAR_EXPIRY);
