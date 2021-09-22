@@ -2,8 +2,10 @@ package com.xeniac.warrantyroster.mainactivity.warrantiesfragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,8 +18,21 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.apollographql.apollo.ApolloCall;
+import com.apollographql.apollo.ApolloClient;
+import com.apollographql.apollo.api.Response;
+import com.apollographql.apollo.exception.ApolloException;
+import com.apollographql.apollo.request.RequestHeaders;
+import com.xeniac.warrantyroster.Constants;
+import com.xeniac.warrantyroster.NetworkHelper;
 import com.xeniac.warrantyroster.R;
+import com.xeniac.warrantyroster.database.CategoryDataModel;
+import com.xeniac.warrantyroster.database.CategoryDataProvider;
+import com.xeniac.warrantyroster.database.WarrantyRosterDatabase;
 import com.xeniac.warrantyroster.databinding.FragmentWarrantiesBinding;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class WarrantiesFragment extends Fragment implements WarrantyListClickInterface {
 
@@ -26,6 +41,8 @@ public class WarrantiesFragment extends Fragment implements WarrantyListClickInt
     private Activity activity;
     private Context context;
     private NavController navController;
+
+    private WarrantyRosterDatabase database;
 
     public WarrantiesFragment() {
     }
@@ -41,6 +58,7 @@ public class WarrantiesFragment extends Fragment implements WarrantyListClickInt
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        WarrantyRosterDatabase.destroyInstance();
         warrantiesBinding = null;
     }
 
@@ -50,42 +68,157 @@ public class WarrantiesFragment extends Fragment implements WarrantyListClickInt
         activity = getActivity();
         context = getContext();
         navController = Navigation.findNavController(view);
+        database = WarrantyRosterDatabase.getInstance(context);
 
-        boolean isListEmpty = false;
-        //Todo can use databinding
-        if (isListEmpty) {
-            warrantiesBinding.searchWarranties.setVisibility(View.GONE);
-            warrantiesBinding.rvWarranties.setVisibility(View.GONE);
-            warrantiesBinding.groupWarrantiesEmptyList.setVisibility(View.VISIBLE);
-        } else {
-            warrantiesBinding.searchWarranties.setVisibility(View.VISIBLE);
-            warrantiesBinding.groupWarrantiesEmptyList.setVisibility(View.GONE);
-            warrantiesBinding.rvWarranties.setVisibility(View.VISIBLE);
-            showWarrantyList();
-            search();
+        seedCategories();
+        getWarrantiesList();
+    }
+
+    private void seedCategories() {
+        int itemCount = database.categoryDAO().countItems();
+
+        if (itemCount >= 0 && itemCount < 21) {
+            List<CategoryDataModel> categoriesList = CategoryDataProvider.categoriesList;
+            database.categoryDAO().deleteAllCategories();
+            database.categoryDAO().insertAllCategories(categoriesList);
+            Log.i("seedCategories", "seedCategories: data inserted");
         }
     }
 
-    private void showWarrantyList() {
-        WarrantyAdapter warrantyAdapter = new WarrantyAdapter(context, WarrantyDataProvider.warrantyList, this);
+    private void getWarrantiesList() {
+        if (NetworkHelper.hasNetworkAccess(context)) {
+            getWarrantiesListQuery();
+        } else {
+            warrantiesBinding.tvWarrantiesNetworkError.setText(
+                    context.getResources().getString(R.string.network_error_failure));
+            showNetworkError();
+        }
+    }
+
+    private void getWarrantiesListQuery() {
+        showLoadingAnimation();
+
+        SharedPreferences loginPrefs = context.getSharedPreferences(Constants.PREFERENCE_LOGIN, Context.MODE_PRIVATE);
+        String userToken = loginPrefs.getString(Constants.PREFERENCE_USER_TOKEN_KEY, null);
+
+        ApolloClient apolloClient = ApolloClient.builder()
+                .serverUrl(Constants.URL_GRAPHQL)
+                .build();
+
+        apolloClient.query(new GetWarrantiesListQuery())
+                .toBuilder().requestHeaders(RequestHeaders.builder().addHeader("Authorization", "Bearer " + userToken).build())
+                .build()
+                .enqueue(new ApolloCall.Callback<GetWarrantiesListQuery.Data>() {
+                    @Override
+                    public void onResponse(@NonNull Response<GetWarrantiesListQuery.Data> response) {
+                        activity.runOnUiThread(() -> {
+                            hideLoadingAnimation();
+
+                            if (!response.hasErrors()) {
+                                Log.i("getWarrantiesList", "onResponse: " + response);
+
+                                int warrantiesListSize = response.getData().getAllWarranties().size();
+                                if (warrantiesListSize == 0) {
+                                    showWarrantiesEmptyList();
+                                } else {
+                                    List<WarrantyDataModel> warrantiesList = new ArrayList<>();
+
+                                    for (int i = 0; i < warrantiesListSize; i++) {
+                                        warrantiesList.add(new WarrantyDataModel(
+                                                response.getData().getAllWarranties().get(i).id(),
+                                                response.getData().getAllWarranties().get(i).title(),
+                                                response.getData().getAllWarranties().get(i).brand(),
+                                                response.getData().getAllWarranties().get(i).model(),
+                                                response.getData().getAllWarranties().get(i).serial_number(),
+                                                response.getData().getAllWarranties().get(i).starting_date().toString(),
+                                                response.getData().getAllWarranties().get(i).expiry_date().toString(),
+                                                response.getData().getAllWarranties().get(i).description(),
+                                                response.getData().getAllWarranties().get(i).category_id()
+                                        ));
+                                    }
+
+                                    showWarrantiesList(warrantiesList);
+                                }
+                            } else {
+                                Log.e("getWarrantiesList", "onResponse Errors: " + response.getErrors());
+                                activity.runOnUiThread(() -> {
+                                            warrantiesBinding.tvWarrantiesNetworkError.setText(
+                                                    context.getResources().getString(R.string.network_error_response));
+                                            showNetworkError();
+                                        }
+                                );
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull ApolloException e) {
+                        Log.e("getWarrantiesList", "onFailure: " + e.getMessage());
+                        activity.runOnUiThread(() -> {
+                            warrantiesBinding.tvWarrantiesNetworkError.setText(
+                                    context.getResources().getString(R.string.network_error_failure));
+                            showNetworkError();
+                        });
+                    }
+                });
+    }
+
+    private void showNetworkError() {
+        hideLoadingAnimation();
+        warrantiesBinding.groupWarrantiesEmptyList.setVisibility(View.GONE);
+        warrantiesBinding.rvWarranties.setVisibility(View.GONE);
+        warrantiesBinding.groupWarrantiesNetwork.setVisibility(View.VISIBLE);
+        retryNetworkBtn();
+    }
+
+    private void retryNetworkBtn() {
+        warrantiesBinding.btnWarrantiesNetworkRetry.setOnClickListener(view -> getWarrantiesList());
+    }
+
+    private void showLoadingAnimation() {
+        warrantiesBinding.searchWarranties.setVisibility(View.GONE);
+        warrantiesBinding.groupWarrantiesNetwork.setVisibility(View.GONE);
+        warrantiesBinding.groupWarrantiesEmptyList.setVisibility(View.GONE);
+        warrantiesBinding.rvWarranties.setVisibility(View.GONE);
+        warrantiesBinding.cpiWarranties.setVisibility(View.VISIBLE);
+    }
+
+    private void hideLoadingAnimation() {
+        warrantiesBinding.cpiWarranties.setVisibility(View.GONE);
+    }
+
+    private void showWarrantiesEmptyList() {
+        warrantiesBinding.searchWarranties.setVisibility(View.GONE);
+        warrantiesBinding.groupWarrantiesNetwork.setVisibility(View.GONE);
+        warrantiesBinding.rvWarranties.setVisibility(View.GONE);
+        warrantiesBinding.groupWarrantiesEmptyList.setVisibility(View.VISIBLE);
+    }
+
+    private void showWarrantiesList(List<WarrantyDataModel> warrantiesList) {
+        warrantiesBinding.groupWarrantiesNetwork.setVisibility(View.GONE);
+        warrantiesBinding.groupWarrantiesEmptyList.setVisibility(View.GONE);
+        warrantiesBinding.rvWarranties.setVisibility(View.VISIBLE);
+
+        WarrantyAdapter warrantyAdapter =
+                new WarrantyAdapter(context, database, warrantiesList, this);
         warrantiesBinding.rvWarranties.setAdapter(warrantyAdapter);
+
+//        searchWarrantiesList();
     }
 
     @Override
     public void onItemClick(int position) {
-        Toast.makeText(context, WarrantyDataProvider.warrantyList.get(position).getTitle() + " clicked.",
-                Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "clicked.", Toast.LENGTH_SHORT).show();
     }
 
-    private void search() {
-        warrantiesBinding.searchWarranties.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean hasFocus) {
-                if (hasFocus) {
-                    warrantiesBinding.toolbarWarranties.setTitle(null);
-                } else {
-                    warrantiesBinding.toolbarWarranties.setTitle(context.getResources().getString(R.string.warranties_text_title));
-                }
+    private void searchWarrantiesList() {
+        warrantiesBinding.searchWarranties.setVisibility(View.VISIBLE);
+
+        warrantiesBinding.searchWarranties.setOnQueryTextFocusChangeListener((view, hasFocus) -> {
+            if (hasFocus) {
+                warrantiesBinding.toolbarWarranties.setTitle(null);
+            } else {
+                warrantiesBinding.toolbarWarranties.setTitle(context.getResources().getString(R.string.warranties_text_title));
             }
         });
 

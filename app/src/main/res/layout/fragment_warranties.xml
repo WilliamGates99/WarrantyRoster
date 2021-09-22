@@ -63,6 +63,45 @@
         app:layout_constraintTop_toBottomOf="@+id/lav_warranties"
         app:layout_constraintVertical_bias="0.5" />
 
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_warranties_network_error"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="32sp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/nunito_semi_bold"
+        android:gravity="center"
+        android:text="@string/network_error_failure"
+        android:textAlignment="gravity"
+        android:textColor="@color/grayDark"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/btn_warranties_network_retry"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_warranties"
+        app:layout_constraintVertical_bias="0.5"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_warranties_network_retry"
+        style="@style/Theme.WarrantyRoster.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="27sp"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="3dp"
+        android:fontFamily="@font/nunito_bold"
+        android:gravity="center"
+        android:text="@string/network_error_retry"
+        android:textAlignment="gravity"
+        android:textColor="@color/blue"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_warranties_network_error"
+        app:layout_constraintVertical_bias="0.5" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_warranties"
         android:layout_width="0dp"
@@ -79,11 +118,29 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar_warranties" />
 
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/cpi_warranties"
+        style="@style/Theme.WarrantyRoster.LoadingProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_warranties" />
+
     <androidx.constraintlayout.widget.Group
         android:id="@+id/group_warranties_empty_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="visible"
+        android:visibility="gone"
         app:constraint_referenced_ids="tv_warranties_empty_list,lav_warranties" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_warranties_network"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="tv_warranties_network_error,btn_warranties_network_retry" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

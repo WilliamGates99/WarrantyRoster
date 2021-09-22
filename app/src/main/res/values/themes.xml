@@ -84,10 +84,18 @@
         <item name="android:textSize">12sp</item>
     </style>
 
-    <style name="Theme.WarrantyRoster.LoadingProgressBar" parent="Widget.MaterialComponents.CircularProgressIndicator.Small">
+    <style name="Theme.WarrantyRoster.LoadingProgressBar.Button" parent="Widget.MaterialComponents.CircularProgressIndicator.Small">
         <item name="android:indeterminate">true</item>
         <item name="hideAnimationBehavior">inward</item>
         <item name="indicatorColor">@android:color/white</item>
+        <item name="showAnimationBehavior">outward</item>
+        <item name="trackCornerRadius">12dp</item>
+    </style>
+
+    <style name="Theme.WarrantyRoster.LoadingProgressBar" parent="Widget.MaterialComponents.CircularProgressIndicator">
+        <item name="android:indeterminate">true</item>
+        <item name="hideAnimationBehavior">inward</item>
+        <item name="indicatorColor">@color/grayMedium</item>
         <item name="showAnimationBehavior">outward</item>
         <item name="trackCornerRadius">12dp</item>
     </style>

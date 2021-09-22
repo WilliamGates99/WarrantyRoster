@@ -11,6 +11,18 @@ import java.lang.Override;
 import java.lang.String;
 
 public enum CustomType implements ScalarType {
+    DATE {
+        @Override
+        public String typeName() {
+            return "Date";
+        }
+
+        @Override
+        public String className() {
+            return "java.lang.Object";
+        }
+    },
+
     ID {
         @Override
         public String typeName() {

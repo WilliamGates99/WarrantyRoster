@@ -46,7 +46,7 @@
             android:textColor="@color/navyBlue"
             android:textSize="16sp"
             app:layout_constraintBottom_toTopOf="@+id/tv_list_warranty_expiry_date"
-            app:layout_constraintEnd_toStartOf="@id/barrier_list_warranty"
+            app:layout_constraintEnd_toStartOf="@id/tv_list_warranty_status"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/iv_list_warranty_icon"
             app:layout_constraintTop_toTopOf="parent"
@@ -67,7 +67,7 @@
             android:textColor="@color/grayDark"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/barrier_list_warranty"
+            app:layout_constraintEnd_toStartOf="@+id/tv_list_warranty_category"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/iv_list_warranty_icon"
             app:layout_constraintTop_toBottomOf="@+id/tv_list_warranty_title"
@@ -120,13 +120,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_list_warranty_status"
             tools:ignore="HardcodedText,SmallSp" />
-
-        <androidx.constraintlayout.widget.Barrier
-            android:id="@+id/barrier_list_warranty"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:barrierDirection="start"
-            app:constraint_referenced_ids="tv_list_warranty_status,tv_list_warranty_category" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

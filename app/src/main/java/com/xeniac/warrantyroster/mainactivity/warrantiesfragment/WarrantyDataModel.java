@@ -4,30 +4,38 @@ import androidx.annotation.NonNull;
 
 public class WarrantyDataModel {
 
-    private int id;
+    private String id;
     private String title;
+    private String brand;
+    private String model;
+    private String serialNumber;
+    private String startingDate;
     private String expiryDate;
-    private int status;
-    private String Category;
-    private int icon;
+    private String description;
+    private String categoryId;
 
     public WarrantyDataModel() {
     }
 
-    public WarrantyDataModel(int id, String title, String expiryDate, int status, String category, int icon) {
+    public WarrantyDataModel(String id, String title, String brand, String model,
+                             String serialNumber, String startingDate, String expiryDate,
+                             String description, String categoryId) {
         this.id = id;
         this.title = title;
+        this.brand = brand;
+        this.model = model;
+        this.serialNumber = serialNumber;
+        this.startingDate = startingDate;
         this.expiryDate = expiryDate;
-        this.status = status;
-        Category = category;
-        this.icon = icon;
+        this.description = description;
+        this.categoryId = categoryId;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -39,6 +47,38 @@ public class WarrantyDataModel {
         this.title = title;
     }
 
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    public String getSerialNumber() {
+        return serialNumber;
+    }
+
+    public void setSerialNumber(String serialNumber) {
+        this.serialNumber = serialNumber;
+    }
+
+    public String getStartingDate() {
+        return startingDate;
+    }
+
+    public void setStartingDate(String startingDate) {
+        this.startingDate = startingDate;
+    }
+
     public String getExpiryDate() {
         return expiryDate;
     }
@@ -47,40 +87,35 @@ public class WarrantyDataModel {
         this.expiryDate = expiryDate;
     }
 
-    public int getStatus() {
-        return status;
+    public String getDescription() {
+        return description;
     }
 
-    public void setStatus(int status) {
-        this.status = status;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public String getCategory() {
-        return Category;
+    public String getCategoryId() {
+        return categoryId;
     }
 
-    public void setCategory(String category) {
-        Category = category;
-    }
-
-    public int getIcon() {
-        return icon;
-    }
-
-    public void setIcon(int icon) {
-        this.icon = icon;
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
     }
 
     @NonNull
     @Override
     public String toString() {
         return "WarrantyDataModel{" +
-                "id=" + id +
+                "id='" + id + '\'' +
                 ", title='" + title + '\'' +
+                ", brand='" + brand + '\'' +
+                ", model='" + model + '\'' +
+                ", serialNumber='" + serialNumber + '\'' +
+                ", startingDate='" + startingDate + '\'' +
                 ", expiryDate='" + expiryDate + '\'' +
-                ", status=" + status +
-                ", Category='" + Category + '\'' +
-                ", icon=" + icon +
+                ", description='" + description + '\'' +
+                ", categoryId='" + categoryId + '\'' +
                 '}';
     }
 }

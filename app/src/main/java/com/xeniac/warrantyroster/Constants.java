@@ -3,6 +3,8 @@ package com.xeniac.warrantyroster;
 public class Constants {
 
     public static final String URL_GRAPHQL = "https://warranty-roster.herokuapp.com/graphql";
+    public static final String DB_FILE_NAME = "warranty-roster";
+    public static final int DB_VERSION = 1;
 
     //SharedPreference Settings Constants
     public static final String PREFERENCE_SETTINGS = "preference_settings";
