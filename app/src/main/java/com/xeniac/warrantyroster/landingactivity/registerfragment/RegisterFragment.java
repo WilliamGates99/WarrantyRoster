@@ -260,7 +260,7 @@ public class RegisterFragment extends Fragment {
                                 startActivity(new Intent(context, MainActivity.class));
                                 activity.finish();
                             } else {
-                                Log.e("registerViaEmail", "Errors: " + response.getErrors());
+                                Log.e("registerViaEmail", "onResponse Errors: " + response.getErrors());
                                 if (Arrays.toString(response.getErrors().get(0).getCustomAttributes().values().toArray()).contains("code=400")) {
                                     Snackbar.make(view, context.getResources().getString(R.string.register_error_account_exists),
                                             BaseTransientBottomBar.LENGTH_INDEFINITE)

@@ -215,7 +215,7 @@ public class LoginFragment extends Fragment {
                                 startActivity(new Intent(context, MainActivity.class));
                                 activity.finish();
                             } else {
-                                Log.e("loginViaEmail", "Errors: " + response.getErrors());
+                                Log.e("loginViaEmail", "onResponse Errors: " + response.getErrors());
                                 if (Arrays.toString(response.getErrors().get(0).getCustomAttributes().values().toArray()).contains("code=401")) {
                                     Snackbar.make(view, context.getResources().getString(R.string.login_error_credentials),
                                             BaseTransientBottomBar.LENGTH_LONG).show();
