@@ -274,6 +274,7 @@ public class RegisterFragment extends Fragment {
                     public void onFailure(@NonNull ApolloException e) {
                         Log.e("registerViaEmail", "onFailure: " + e.getMessage());
                         activity.runOnUiThread(() -> {
+                            hideLoadingAnimation();
                             Snackbar.make(view, context.getResources().getString(R.string.network_error_failure),
                                     BaseTransientBottomBar.LENGTH_LONG).show();
                         });

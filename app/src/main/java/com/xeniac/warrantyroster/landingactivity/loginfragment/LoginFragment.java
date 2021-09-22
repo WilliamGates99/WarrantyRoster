@@ -228,6 +228,7 @@ public class LoginFragment extends Fragment {
                     public void onFailure(@NonNull ApolloException e) {
                         Log.e("loginViaEmail", "onFailure: " + e.getMessage());
                         activity.runOnUiThread(() -> {
+                            hideLoadingAnimation();
                             Snackbar.make(view, context.getResources().getString(R.string.network_error_failure),
                                     BaseTransientBottomBar.LENGTH_LONG).show();
                         });
