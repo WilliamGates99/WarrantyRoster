@@ -17,4 +17,28 @@
         android:label="MoreFragment"
         tools:layout="@layout/fragment_more" />
 
+    <fragment
+        android:id="@+id/addWarrantyFragment"
+        android:name="com.xeniac.warrantyroster.mainactivity.addwarrantyfragment.AddWarrantyFragment"
+        android:label="AddWarrantyFragment"
+        tools:layout="@layout/fragment_add_warranty">
+        <action
+            android:id="@+id/action_addWarrantyFragment_to_warrantiesFragment"
+            app:destination="@id/warrantiesFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            app:popUpTo="@id/warrantiesFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <action
+        android:id="@+id/action_mainActivity_to_addWarrantyFragment"
+        app:destination="@+id/addWarrantyFragment"
+        app:enterAnim="@anim/nav_default_enter_anim"
+        app:exitAnim="@anim/nav_default_exit_anim"
+        app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+        app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+
 </navigation>

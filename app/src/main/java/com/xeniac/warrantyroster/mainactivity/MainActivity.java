@@ -1,7 +1,7 @@
 package com.xeniac.warrantyroster.mainactivity;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,12 +13,12 @@ import com.google.android.material.shape.CornerFamily;
 import com.google.android.material.shape.MaterialShapeDrawable;
 import com.xeniac.warrantyroster.LocaleModifier;
 import com.xeniac.warrantyroster.R;
-import com.xeniac.warrantyroster.addwarrantyactivity.AddWarrantyActivity;
 import com.xeniac.warrantyroster.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding mainBinding;
+    private NavController navController;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,13 +52,23 @@ public class MainActivity extends AppCompatActivity {
                 .findFragmentById(R.id.fcv_main);
 
         if (navHostFragment != null) {
-            NavController navController = navHostFragment.getNavController();
+            navController = navHostFragment.getNavController();
             NavigationUI.setupWithNavController(mainBinding.bnvMain, navController);
         }
     }
 
     private void fabAction() {
         mainBinding.fabMain.setOnClickListener(view ->
-                startActivity(new Intent(MainActivity.this, AddWarrantyActivity.class)));
+                navController.navigate(R.id.action_mainActivity_to_addWarrantyFragment));
+    }
+
+    public void showNavBar() {
+        mainBinding.appbarMain.setVisibility(View.VISIBLE);
+        mainBinding.fabMain.setVisibility(View.VISIBLE);
+    }
+
+    public void hideNavBar() {
+        mainBinding.appbarMain.setVisibility(View.GONE);
+        mainBinding.fabMain.setVisibility(View.GONE);
     }
 }

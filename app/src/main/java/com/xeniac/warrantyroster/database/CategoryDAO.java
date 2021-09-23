@@ -25,8 +25,11 @@ public interface CategoryDAO {
     @Query("SELECT COUNT(*) FROM CategoryDataModel")
     int countItems();
 
-    @Query("SELECT * FROM CategoryDataModel ORDER BY id")
+    @Query("SELECT * FROM CategoryDataModel ORDER BY title")
     List<CategoryDataModel> getAllCategories();
+
+    @Query("SELECT title FROM CategoryDataModel ORDER BY title")
+    List<Integer> getAllCategoryTitles();
 
     @Query("SELECT * FROM categorydatamodel WHERE id = :categoryId")
     CategoryDataModel getCategoryById(String categoryId);

@@ -30,6 +30,7 @@ import com.xeniac.warrantyroster.database.CategoryDataModel;
 import com.xeniac.warrantyroster.database.CategoryDataProvider;
 import com.xeniac.warrantyroster.database.WarrantyRosterDatabase;
 import com.xeniac.warrantyroster.databinding.FragmentWarrantiesBinding;
+import com.xeniac.warrantyroster.mainactivity.MainActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +42,6 @@ public class WarrantiesFragment extends Fragment implements WarrantyListClickInt
     private Activity activity;
     private Context context;
     private NavController navController;
-
     private WarrantyRosterDatabase database;
 
     public WarrantiesFragment() {
@@ -69,6 +69,7 @@ public class WarrantiesFragment extends Fragment implements WarrantyListClickInt
         context = getContext();
         navController = Navigation.findNavController(view);
         database = WarrantyRosterDatabase.getInstance(context);
+        ((MainActivity) context).showNavBar();
 
         seedCategories();
         getWarrantiesList();

@@ -14,6 +14,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.xeniac.warrantyroster.databinding.FragmentMoreBinding;
+import com.xeniac.warrantyroster.mainactivity.MainActivity;
 
 public class MoreFragment extends Fragment {
 
@@ -46,5 +47,6 @@ public class MoreFragment extends Fragment {
         activity = getActivity();
         context = getContext();
         navController = Navigation.findNavController(view);
+        ((MainActivity) context).showNavBar();
     }
 }

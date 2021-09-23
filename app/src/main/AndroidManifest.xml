@@ -13,7 +13,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
+        android:supportsRtl="false"
         android:theme="@style/Theme.WarrantyRoster">
         <activity
             android:name=".landingactivity.LandingActivity"
@@ -31,12 +31,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.WarrantyRoster"
             android:windowSoftInputMode="adjustPan|stateHidden" />
-        <activity
-            android:name=".addwarrantyactivity.AddWarrantyActivity"
-            android:exported="true"
-            android:parentActivityName=".mainactivity.MainActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.WarrantyRoster" />
     </application>
 
 </manifest>
