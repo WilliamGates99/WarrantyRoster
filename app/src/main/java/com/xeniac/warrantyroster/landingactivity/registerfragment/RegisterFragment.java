@@ -246,38 +246,42 @@ public class RegisterFragment extends Fragment {
                 .enqueue(new ApolloCall.Callback<RegisterViaEmailMutation.Data>() {
                     @Override
                     public void onResponse(@NonNull Response<RegisterViaEmailMutation.Data> response) {
-                        activity.runOnUiThread(() -> {
-                            hideLoadingAnimation();
+                        if (registerBinding != null) {
+                            activity.runOnUiThread(() -> {
+                                hideLoadingAnimation();
 
-                            if (!response.hasErrors()) {
-                                Log.i("registerViaEmail", "onResponse: " + response);
+                                if (!response.hasErrors()) {
+                                    Log.i("registerViaEmail", "onResponse: " + response);
 
-                                SharedPreferences.Editor editor = context
-                                        .getSharedPreferences(Constants.PREFERENCE_LOGIN, Context.MODE_PRIVATE).edit();
-                                editor.putString(Constants.PREFERENCE_USER_TOKEN_KEY, response.getData().registerViaEmail().token()).apply();
-                                editor.putBoolean(Constants.PREFERENCE_IS_LOGGED_IN_KEY, true).apply();
+                                    SharedPreferences.Editor editor = context
+                                            .getSharedPreferences(Constants.PREFERENCE_LOGIN, Context.MODE_PRIVATE).edit();
+                                    editor.putString(Constants.PREFERENCE_USER_TOKEN_KEY, response.getData().registerViaEmail().token()).apply();
+                                    editor.putBoolean(Constants.PREFERENCE_IS_LOGGED_IN_KEY, true).apply();
 
-                                startActivity(new Intent(context, MainActivity.class));
-                                activity.finish();
-                            } else {
-                                Log.e("registerViaEmail", "onResponse Errors: " + response.getErrors());
-                                if (Arrays.toString(response.getErrors().get(0).getCustomAttributes().values().toArray()).contains("code=400")) {
-                                    Snackbar.make(view, context.getResources().getString(R.string.register_error_account_exists),
-                                            BaseTransientBottomBar.LENGTH_INDEFINITE)
-                                            .setAction(context.getResources().getString(R.string.register_btn_login), v -> activity.onBackPressed()).show();
+                                    startActivity(new Intent(context, MainActivity.class));
+                                    activity.finish();
+                                } else {
+                                    Log.e("registerViaEmail", "onResponse Errors: " + response.getErrors());
+                                    if (Arrays.toString(response.getErrors().get(0).getCustomAttributes().values().toArray()).contains("code=400")) {
+                                        Snackbar.make(view, context.getResources().getString(R.string.register_error_account_exists),
+                                                BaseTransientBottomBar.LENGTH_INDEFINITE)
+                                                .setAction(context.getResources().getString(R.string.register_btn_login), v -> activity.onBackPressed()).show();
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        }
                     }
 
                     @Override
                     public void onFailure(@NonNull ApolloException e) {
                         Log.e("registerViaEmail", "onFailure: " + e.getMessage());
-                        activity.runOnUiThread(() -> {
-                            hideLoadingAnimation();
-                            Snackbar.make(view, context.getResources().getString(R.string.network_error_failure),
-                                    BaseTransientBottomBar.LENGTH_LONG).show();
-                        });
+                        if (registerBinding != null) {
+                            activity.runOnUiThread(() -> {
+                                hideLoadingAnimation();
+                                Snackbar.make(view, context.getResources().getString(R.string.network_error_failure),
+                                        BaseTransientBottomBar.LENGTH_LONG).show();
+                            });
+                        }
                     }
                 });
     }

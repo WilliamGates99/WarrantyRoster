@@ -201,37 +201,41 @@ public class LoginFragment extends Fragment {
                 .enqueue(new ApolloCall.Callback<LoginViaEmailMutation.Data>() {
                     @Override
                     public void onResponse(@NonNull Response<LoginViaEmailMutation.Data> response) {
-                        activity.runOnUiThread(() -> {
-                            hideLoadingAnimation();
+                        if (loginBinding != null) {
+                            activity.runOnUiThread(() -> {
+                                hideLoadingAnimation();
 
-                            if (!response.hasErrors()) {
-                                Log.i("loginViaEmail", "onResponse: " + response);
+                                if (!response.hasErrors()) {
+                                    Log.i("loginViaEmail", "onResponse: " + response);
 
-                                SharedPreferences.Editor editor = context
-                                        .getSharedPreferences(Constants.PREFERENCE_LOGIN, Context.MODE_PRIVATE).edit();
-                                editor.putString(Constants.PREFERENCE_USER_TOKEN_KEY, response.getData().loginViaEmail().token()).apply();
-                                editor.putBoolean(Constants.PREFERENCE_IS_LOGGED_IN_KEY, true).apply();
+                                    SharedPreferences.Editor editor = context
+                                            .getSharedPreferences(Constants.PREFERENCE_LOGIN, Context.MODE_PRIVATE).edit();
+                                    editor.putString(Constants.PREFERENCE_USER_TOKEN_KEY, response.getData().loginViaEmail().token()).apply();
+                                    editor.putBoolean(Constants.PREFERENCE_IS_LOGGED_IN_KEY, true).apply();
 
-                                startActivity(new Intent(context, MainActivity.class));
-                                activity.finish();
-                            } else {
-                                Log.e("loginViaEmail", "onResponse Errors: " + response.getErrors());
-                                if (Arrays.toString(response.getErrors().get(0).getCustomAttributes().values().toArray()).contains("code=401")) {
-                                    Snackbar.make(view, context.getResources().getString(R.string.login_error_credentials),
-                                            BaseTransientBottomBar.LENGTH_LONG).show();
+                                    startActivity(new Intent(context, MainActivity.class));
+                                    activity.finish();
+                                } else {
+                                    Log.e("loginViaEmail", "onResponse Errors: " + response.getErrors());
+                                    if (Arrays.toString(response.getErrors().get(0).getCustomAttributes().values().toArray()).contains("code=401")) {
+                                        Snackbar.make(view, context.getResources().getString(R.string.login_error_credentials),
+                                                BaseTransientBottomBar.LENGTH_LONG).show();
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        }
                     }
 
                     @Override
                     public void onFailure(@NonNull ApolloException e) {
                         Log.e("loginViaEmail", "onFailure: " + e.getMessage());
-                        activity.runOnUiThread(() -> {
-                            hideLoadingAnimation();
-                            Snackbar.make(view, context.getResources().getString(R.string.network_error_failure),
-                                    BaseTransientBottomBar.LENGTH_LONG).show();
-                        });
+                        if (loginBinding != null) {
+                            activity.runOnUiThread(() -> {
+                                hideLoadingAnimation();
+                                Snackbar.make(view, context.getResources().getString(R.string.network_error_failure),
+                                        BaseTransientBottomBar.LENGTH_LONG).show();
+                            });
+                        }
                     }
                 });
     }

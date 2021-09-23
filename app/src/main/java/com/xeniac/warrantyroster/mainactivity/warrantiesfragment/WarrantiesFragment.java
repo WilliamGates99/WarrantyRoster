@@ -111,54 +111,58 @@ public class WarrantiesFragment extends Fragment implements WarrantyListClickInt
                 .enqueue(new ApolloCall.Callback<GetWarrantiesListQuery.Data>() {
                     @Override
                     public void onResponse(@NonNull Response<GetWarrantiesListQuery.Data> response) {
-                        activity.runOnUiThread(() -> {
-                            hideLoadingAnimation();
+                        if (warrantiesBinding != null) {
+                            activity.runOnUiThread(() -> {
+                                hideLoadingAnimation();
 
-                            if (!response.hasErrors()) {
-                                Log.i("getWarrantiesList", "onResponse: " + response);
+                                if (!response.hasErrors()) {
+                                    Log.i("getWarrantiesList", "onResponse: " + response);
 
-                                int warrantiesListSize = response.getData().getAllWarranties().size();
-                                if (warrantiesListSize == 0) {
-                                    showWarrantiesEmptyList();
-                                } else {
-                                    List<WarrantyDataModel> warrantiesList = new ArrayList<>();
+                                    int warrantiesListSize = response.getData().getAllWarranties().size();
+                                    if (warrantiesListSize == 0) {
+                                        showWarrantiesEmptyList();
+                                    } else {
+                                        List<WarrantyDataModel> warrantiesList = new ArrayList<>();
 
-                                    for (int i = 0; i < warrantiesListSize; i++) {
-                                        warrantiesList.add(new WarrantyDataModel(
-                                                response.getData().getAllWarranties().get(i).id(),
-                                                response.getData().getAllWarranties().get(i).title(),
-                                                response.getData().getAllWarranties().get(i).brand(),
-                                                response.getData().getAllWarranties().get(i).model(),
-                                                response.getData().getAllWarranties().get(i).serial_number(),
-                                                response.getData().getAllWarranties().get(i).starting_date().toString(),
-                                                response.getData().getAllWarranties().get(i).expiry_date().toString(),
-                                                response.getData().getAllWarranties().get(i).description(),
-                                                response.getData().getAllWarranties().get(i).category_id()
-                                        ));
-                                    }
-
-                                    showWarrantiesList(warrantiesList);
-                                }
-                            } else {
-                                Log.e("getWarrantiesList", "onResponse Errors: " + response.getErrors());
-                                activity.runOnUiThread(() -> {
-                                            warrantiesBinding.tvWarrantiesNetworkError.setText(
-                                                    context.getResources().getString(R.string.network_error_response));
-                                            showNetworkError();
+                                        for (int i = 0; i < warrantiesListSize; i++) {
+                                            warrantiesList.add(new WarrantyDataModel(
+                                                    response.getData().getAllWarranties().get(i).id(),
+                                                    response.getData().getAllWarranties().get(i).title(),
+                                                    response.getData().getAllWarranties().get(i).brand(),
+                                                    response.getData().getAllWarranties().get(i).model(),
+                                                    response.getData().getAllWarranties().get(i).serial_number(),
+                                                    response.getData().getAllWarranties().get(i).starting_date().toString(),
+                                                    response.getData().getAllWarranties().get(i).expiry_date().toString(),
+                                                    response.getData().getAllWarranties().get(i).description(),
+                                                    response.getData().getAllWarranties().get(i).category_id()
+                                            ));
                                         }
-                                );
-                            }
-                        });
+
+                                        showWarrantiesList(warrantiesList);
+                                    }
+                                } else {
+                                    Log.e("getWarrantiesList", "onResponse Errors: " + response.getErrors());
+                                    activity.runOnUiThread(() -> {
+                                                warrantiesBinding.tvWarrantiesNetworkError.setText(
+                                                        context.getResources().getString(R.string.network_error_response));
+                                                showNetworkError();
+                                            }
+                                    );
+                                }
+                            });
+                        }
                     }
 
                     @Override
                     public void onFailure(@NonNull ApolloException e) {
                         Log.e("getWarrantiesList", "onFailure: " + e.getMessage());
-                        activity.runOnUiThread(() -> {
-                            warrantiesBinding.tvWarrantiesNetworkError.setText(
-                                    context.getResources().getString(R.string.network_error_failure));
-                            showNetworkError();
-                        });
+                        if (warrantiesBinding != null) {
+                            activity.runOnUiThread(() -> {
+                                warrantiesBinding.tvWarrantiesNetworkError.setText(
+                                        context.getResources().getString(R.string.network_error_failure));
+                                showNetworkError();
+                            });
+                        }
                     }
                 });
     }
