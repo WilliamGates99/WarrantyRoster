@@ -82,7 +82,7 @@ public class WarrantyAdapter extends RecyclerView.Adapter<WarrantyAdapter.ViewHo
                         expiryCalendar.get(Calendar.YEAR)));
 
                 long daysUntilToday = getDaysUntilToday(expiryCalendar);
-                if (daysUntilToday <= 0) {
+                if (daysUntilToday < 0) {
                     warrantyBinding.tvListWarrantyStatus.setText(context.getResources().getString(R.string.warranties_list_status_expired));
                     warrantyBinding.tvListWarrantyStatus.setTextColor(context.getResources().getColor(R.color.red));
                     warrantyBinding.flListWarrantyStatus.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.red)));
