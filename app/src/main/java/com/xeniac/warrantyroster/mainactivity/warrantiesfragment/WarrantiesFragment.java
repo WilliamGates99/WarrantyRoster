@@ -91,7 +91,7 @@ public class WarrantiesFragment extends Fragment implements WarrantyListClickInt
             getWarrantiesListQuery();
         } else {
             warrantiesBinding.tvWarrantiesNetworkError.setText(
-                    context.getResources().getString(R.string.network_error_failure));
+                    context.getResources().getString(R.string.network_error_connection));
             showNetworkError();
         }
     }
