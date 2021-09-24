@@ -292,13 +292,19 @@ public class RegisterFragment extends Fragment {
     }
 
     private void showLoadingAnimation() {
-        registerBinding.btnRegisterRegister.setText(null);
+        registerBinding.tiRegisterEditEmail.setEnabled(false);
+        registerBinding.tiRegisterEditPassword.setEnabled(false);
+        registerBinding.tiRegisterEditRetypePassword.setEnabled(false);
         registerBinding.btnRegisterRegister.setClickable(false);
+        registerBinding.btnRegisterRegister.setText(null);
         registerBinding.cpiRegister.setVisibility(View.VISIBLE);
     }
 
     private void hideLoadingAnimation() {
         registerBinding.cpiRegister.setVisibility(View.GONE);
+        registerBinding.tiRegisterEditEmail.setEnabled(true);
+        registerBinding.tiRegisterEditPassword.setEnabled(true);
+        registerBinding.tiRegisterEditRetypePassword.setEnabled(true);
         registerBinding.btnRegisterRegister.setClickable(true);
         registerBinding.btnRegisterRegister.setText(context.getResources().getString(R.string.register_btn_register));
     }

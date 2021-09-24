@@ -246,13 +246,17 @@ public class LoginFragment extends Fragment {
     }
 
     private void showLoadingAnimation() {
-        loginBinding.btnLoginLogin.setText(null);
+        loginBinding.tiLoginEditEmail.setEnabled(false);
+        loginBinding.tiLoginEditPassword.setEnabled(false);
         loginBinding.btnLoginLogin.setClickable(false);
+        loginBinding.btnLoginLogin.setText(null);
         loginBinding.cpiLogin.setVisibility(View.VISIBLE);
     }
 
     private void hideLoadingAnimation() {
         loginBinding.cpiLogin.setVisibility(View.GONE);
+        loginBinding.tiLoginEditEmail.setEnabled(true);
+        loginBinding.tiLoginEditPassword.setEnabled(true);
         loginBinding.btnLoginLogin.setClickable(true);
         loginBinding.btnLoginLogin.setText(context.getResources().getString(R.string.login_btn_login));
     }
