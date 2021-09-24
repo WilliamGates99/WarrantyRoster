@@ -113,5 +113,6 @@
     <string name="add_warranty_hint_description">Enter description</string>
     <string name="add_warranty_title_date_picker_starting">Select Starting Date</string>
     <string name="add_warranty_title_date_picker_expiry">Select Expiry Date</string>
+    <string name="add_warranty_error_date">Starting Date can\'t be after the Expiry Date!</string>
 
 </resources>
