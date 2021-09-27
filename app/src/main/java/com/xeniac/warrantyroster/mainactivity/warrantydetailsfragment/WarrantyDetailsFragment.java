@@ -120,12 +120,12 @@ public class WarrantyDetailsFragment extends Fragment {
 
             warrantyDetailsBinding.tvWarrantyDetailsDateStarting.setText(String.format(("%s/%s/%s"),
                     decimalFormat.format(startingCalendar.get(Calendar.DAY_OF_MONTH)),
-                    decimalFormat.format(startingCalendar.get(Calendar.MONTH)),
+                    decimalFormat.format((startingCalendar.get(Calendar.MONTH)) + 1),
                     startingCalendar.get(Calendar.YEAR)));
 
             warrantyDetailsBinding.tvWarrantyDetailsDateExpiry.setText(String.format(("%s/%s/%s"),
                     decimalFormat.format(expiryCalendar.get(Calendar.DAY_OF_MONTH)),
-                    decimalFormat.format(expiryCalendar.get(Calendar.MONTH)),
+                    decimalFormat.format((expiryCalendar.get(Calendar.MONTH)) + 1),
                     expiryCalendar.get(Calendar.YEAR)));
 
             if (daysUntilExpiry < 0) {
