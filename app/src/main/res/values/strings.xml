@@ -115,4 +115,18 @@
     <string name="add_warranty_title_date_picker_expiry">Select Expiry Date</string>
     <string name="add_warranty_error_date">Starting Date can\'t be after the Expiry Date!</string>
 
+    <!--Warranty Details Fragment-->
+    <string name="warranty_details_fab_edit">Edit</string>
+    <string name="warranty_details_menu_title_remove">Remove Warranty</string>
+    <string name="warranty_details_title_date_starting">Starting Date</string>
+    <string name="warranty_details_title_date_expiry">Expiry Date</string>
+    <string name="warranty_details_title_device">Device Info</string>
+    <string name="warranty_details_title_device_brand">Brand</string>
+    <string name="warranty_details_title_device_model">Model</string>
+    <string name="warranty_details_title_device_serial">Serial Number</string>
+    <string name="warranty_details_title_description">Description</string>
+    <string name="warranty_details_status_valid">Warranty is valid</string>
+    <string name="warranty_details_status_soon">Warranty will expire soon</string>
+    <string name="warranty_details_status_expired">Warranty is expired</string>
+
 </resources>

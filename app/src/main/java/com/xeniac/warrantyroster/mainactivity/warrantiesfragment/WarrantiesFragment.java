@@ -205,12 +205,15 @@ public class WarrantiesFragment extends Fragment implements WarrantyListClickInt
                 new WarrantyAdapter(context, database, warrantiesList, this);
         warrantiesBinding.rvWarranties.setAdapter(warrantyAdapter);
 
+        //TODO remove comment after adding search function
 //        searchWarrantiesList();
     }
 
     @Override
-    public void onItemClick(int position) {
-        Toast.makeText(context, "clicked.", Toast.LENGTH_SHORT).show();
+    public void onItemClick(WarrantyDataModel warranty, long daysUntilExpiry) {
+        WarrantiesFragmentDirections.ActionWarrantiesFragmentToWarrantyDetailsFragment action =
+                WarrantiesFragmentDirections.actionWarrantiesFragmentToWarrantyDetailsFragment(warranty,daysUntilExpiry);
+        navController.navigate(action);
     }
 
     private void searchWarrantiesList() {

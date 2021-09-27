@@ -9,6 +9,9 @@
     <color name="green">#00BD62</color>
     <color name="red">#FF3442</color>
     <color name="orange">#FF9100</color>
+    <color name="green20">#3300BD62</color>
+    <color name="red20">#33FF3442</color>
+    <color name="orange20">#33FF9100</color>
     <color name="grayLight">#1F1F1F</color>
     <color name="grayMedium">#2E2E2E</color>
     <color name="grayDark">#808080</color>

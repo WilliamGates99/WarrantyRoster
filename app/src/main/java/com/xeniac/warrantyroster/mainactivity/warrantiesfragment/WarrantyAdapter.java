@@ -28,6 +28,7 @@ public class WarrantyAdapter extends RecyclerView.Adapter<WarrantyAdapter.ViewHo
     private final WarrantyRosterDatabase database;
     private final List<WarrantyDataModel> warrantyList;
     private final WarrantyListClickInterface warrantyListClickInterface;
+    private long daysUntilExpiry;
 
     public WarrantyAdapter(Context context, WarrantyRosterDatabase database,
                            List<WarrantyDataModel> warrantyList,
@@ -81,12 +82,12 @@ public class WarrantyAdapter extends RecyclerView.Adapter<WarrantyAdapter.ViewHo
                         getDayWithSuffix(expiryCalendar.get(Calendar.DAY_OF_MONTH)),
                         expiryCalendar.get(Calendar.YEAR)));
 
-                long daysUntilToday = getDaysUntilToday(expiryCalendar);
-                if (daysUntilToday < 0) {
+                daysUntilExpiry = getDaysUntilExpiry(expiryCalendar);
+                if (daysUntilExpiry < 0) {
                     warrantyBinding.tvListWarrantyStatus.setText(context.getResources().getString(R.string.warranties_list_status_expired));
                     warrantyBinding.tvListWarrantyStatus.setTextColor(context.getResources().getColor(R.color.red));
                     warrantyBinding.flListWarrantyStatus.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.red)));
-                } else if (daysUntilToday <= 30) {
+                } else if (daysUntilExpiry <= 30) {
                     warrantyBinding.tvListWarrantyStatus.setText(context.getResources().getString(R.string.warranties_list_status_soon));
                     warrantyBinding.tvListWarrantyStatus.setTextColor(context.getResources().getColor(R.color.orange));
                     warrantyBinding.flListWarrantyStatus.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.orange)));
@@ -101,7 +102,7 @@ public class WarrantyAdapter extends RecyclerView.Adapter<WarrantyAdapter.ViewHo
             }
 
             warrantyBinding.cvListWarranty.setOnClickListener(view ->
-                    warrantyListClickInterface.onItemClick(getAdapterPosition()));
+                    warrantyListClickInterface.onItemClick(warrantyItem, daysUntilExpiry));
         }
     }
 
@@ -122,7 +123,7 @@ public class WarrantyAdapter extends RecyclerView.Adapter<WarrantyAdapter.ViewHo
         }
     }
 
-    private long getDaysUntilToday(Calendar expiryCalendar) {
+    private long getDaysUntilExpiry(Calendar expiryCalendar) {
         Calendar todayCalendar = Calendar.getInstance();
         todayCalendar.set(Calendar.HOUR_OF_DAY, 0);
         todayCalendar.set(Calendar.MINUTE, 0);

@@ -1,8 +1,11 @@
 package com.xeniac.warrantyroster.mainactivity.warrantiesfragment;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 
-public class WarrantyDataModel {
+public class WarrantyDataModel implements Parcelable {
 
     private String id;
     private String title;
@@ -30,6 +33,30 @@ public class WarrantyDataModel {
         this.description = description;
         this.categoryId = categoryId;
     }
+
+    protected WarrantyDataModel(Parcel in) {
+        id = in.readString();
+        title = in.readString();
+        brand = in.readString();
+        model = in.readString();
+        serialNumber = in.readString();
+        startingDate = in.readString();
+        expiryDate = in.readString();
+        description = in.readString();
+        categoryId = in.readString();
+    }
+
+    public static final Creator<WarrantyDataModel> CREATOR = new Creator<WarrantyDataModel>() {
+        @Override
+        public WarrantyDataModel createFromParcel(Parcel in) {
+            return new WarrantyDataModel(in);
+        }
+
+        @Override
+        public WarrantyDataModel[] newArray(int size) {
+            return new WarrantyDataModel[size];
+        }
+    };
 
     public String getId() {
         return id;
@@ -117,5 +144,23 @@ public class WarrantyDataModel {
                 ", description='" + description + '\'' +
                 ", categoryId='" + categoryId + '\'' +
                 '}';
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(id);
+        parcel.writeString(title);
+        parcel.writeString(brand);
+        parcel.writeString(model);
+        parcel.writeString(serialNumber);
+        parcel.writeString(startingDate);
+        parcel.writeString(expiryDate);
+        parcel.writeString(description);
+        parcel.writeString(categoryId);
     }
 }

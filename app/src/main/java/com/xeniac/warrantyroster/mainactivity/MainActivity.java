@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         LocaleModifier.setLocale(this);
         bottomAppBarStyle();
         bottomNavActions();
-        fabAction();
+        fabOnClick();
     }
 
     private void bottomAppBarStyle() {
@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void fabAction() {
+    private void fabOnClick() {
         mainBinding.fabMain.setOnClickListener(view ->
                 navController.navigate(R.id.action_mainActivity_to_addWarrantyFragment));
     }
