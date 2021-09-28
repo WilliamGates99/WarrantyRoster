@@ -22,6 +22,7 @@ import com.xeniac.warrantyroster.R;
 import com.xeniac.warrantyroster.database.WarrantyRosterDatabase;
 import com.xeniac.warrantyroster.databinding.FragmentWarrantyDetailsBinding;
 import com.xeniac.warrantyroster.mainactivity.MainActivity;
+import com.xeniac.warrantyroster.mainactivity.warrantiesfragment.WarrantiesFragmentDirections;
 import com.xeniac.warrantyroster.mainactivity.warrantiesfragment.WarrantyDataModel;
 
 import java.text.DecimalFormat;
@@ -71,7 +72,7 @@ public class WarrantyDetailsFragment extends Fragment {
         returnToMainActivity();
         handleExtendedFAB();
         getWarranty();
-        fabOnClick();
+        editWarrantyOnClick();
         removeWarrantyOnClick();
     }
 
@@ -147,9 +148,12 @@ public class WarrantyDetailsFragment extends Fragment {
         }
     }
 
-    private void fabOnClick() {
-        warrantyDetailsBinding.fabWarrantyDetails.setOnClickListener(view ->
-                Toast.makeText(context, "Edit", Toast.LENGTH_SHORT).show());
+    private void editWarrantyOnClick() {
+        warrantyDetailsBinding.fabWarrantyDetails.setOnClickListener(view -> {
+            WarrantyDetailsFragmentDirections.ActionWarrantyDetailsFragmentToEditWarrantyFragment action =
+                    WarrantyDetailsFragmentDirections.actionWarrantyDetailsFragmentToEditWarrantyFragment(warranty);
+            navController.navigate(action);
+        });
     }
 
     private void removeWarrantyOnClick() {

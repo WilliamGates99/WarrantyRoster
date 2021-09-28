@@ -62,6 +62,32 @@
             android:name="daysUntilExpiry"
             app:argType="long"
             app:nullable="false" />
+        <action
+            android:id="@+id/action_warrantyDetailsFragment_to_editWarrantyFragment"
+            app:destination="@id/editWarrantyFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/editWarrantyFragment"
+        android:name="com.xeniac.warrantyroster.mainactivity.editwarrantyfragment.EditWarrantyFragment"
+        android:label="EditWarrantyFragment"
+        tools:layout="@layout/fragment_edit_warranty">
+        <argument
+            android:name="warranty"
+            app:argType="com.xeniac.warrantyroster.mainactivity.warrantiesfragment.WarrantyDataModel"
+            app:nullable="false" />
+        <action
+            android:id="@+id/action_editWarrantyFragment_to_warrantyDetailsFragment"
+            app:destination="@id/warrantyDetailsFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            app:popUpTo="@id/warrantiesFragment" />
     </fragment>
 
 </navigation>
