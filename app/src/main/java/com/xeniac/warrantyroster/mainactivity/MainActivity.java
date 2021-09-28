@@ -63,12 +63,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void showNavBar() {
-        mainBinding.appbarMain.setVisibility(View.VISIBLE);
-        mainBinding.fabMain.setVisibility(View.VISIBLE);
+        mainBinding.appbarMain.performShow();
+        mainBinding.fabMain.show();
     }
 
     public void hideNavBar() {
-        mainBinding.appbarMain.setVisibility(View.GONE);
-        mainBinding.fabMain.setVisibility(View.GONE);
+        mainBinding.fabMain.hide();
+        mainBinding.appbarMain.performHide();
     }
 }
