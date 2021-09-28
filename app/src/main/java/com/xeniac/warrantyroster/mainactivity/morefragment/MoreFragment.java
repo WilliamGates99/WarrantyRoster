@@ -2,6 +2,8 @@ package com.xeniac.warrantyroster.mainactivity.morefragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +15,9 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.xeniac.warrantyroster.Constants;
 import com.xeniac.warrantyroster.databinding.FragmentMoreBinding;
+import com.xeniac.warrantyroster.landingactivity.LandingActivity;
 import com.xeniac.warrantyroster.mainactivity.MainActivity;
 
 public class MoreFragment extends Fragment {
@@ -48,5 +52,19 @@ public class MoreFragment extends Fragment {
         context = getContext();
         navController = Navigation.findNavController(view);
         ((MainActivity) context).showNavBar();
+
+        logoutOnClick();
+    }
+
+    private void logoutOnClick() {
+        moreBinding.btnMoreLogout.setOnClickListener(view -> {
+            SharedPreferences.Editor editor = context
+                    .getSharedPreferences(Constants.PREFERENCE_LOGIN, Context.MODE_PRIVATE).edit();
+            editor.remove(Constants.PREFERENCE_USER_TOKEN_KEY).apply();
+            editor.remove(Constants.PREFERENCE_IS_LOGGED_IN_KEY).apply();
+
+            startActivity(new Intent(context, LandingActivity.class));
+            activity.finish();
+        });
     }
 }
