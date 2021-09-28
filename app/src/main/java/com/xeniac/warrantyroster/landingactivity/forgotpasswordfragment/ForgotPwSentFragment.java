@@ -15,7 +15,6 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import com.xeniac.warrantyroster.R;
 import com.xeniac.warrantyroster.databinding.FragmentForgotPwSentBinding;
 
 import java.text.DecimalFormat;
@@ -72,10 +71,8 @@ public class ForgotPwSentFragment extends Fragment {
     }
 
     private void countdown() {
-        forgotPwSentBinding.tvForgotPwSentResend.setVisibility(View.GONE);
-        forgotPwSentBinding.btnForgotPwSentResend.setVisibility(View.GONE);
-        forgotPwSentBinding.tvForgotPwSentResent.setVisibility(View.VISIBLE);
-        forgotPwSentBinding.tvForgotPwSentTimer.setVisibility(View.VISIBLE);
+        forgotPwSentBinding.groupForgotPwSentResend.setVisibility(View.GONE);
+        forgotPwSentBinding.groupForgotPwSentTimer.setVisibility(View.VISIBLE);
 
         DecimalFormat decimalFormat = new DecimalFormat("00");
         int startTime = 120 * 1000;
@@ -93,10 +90,8 @@ public class ForgotPwSentFragment extends Fragment {
             @Override
             public void onFinish() {
                 new Handler().postDelayed(() -> {
-                    forgotPwSentBinding.tvForgotPwSentResent.setVisibility(View.GONE);
-                    forgotPwSentBinding.tvForgotPwSentTimer.setVisibility(View.GONE);
-                    forgotPwSentBinding.tvForgotPwSentResend.setVisibility(View.VISIBLE);
-                    forgotPwSentBinding.btnForgotPwSentResend.setVisibility(View.VISIBLE);
+                    forgotPwSentBinding.groupForgotPwSentTimer.setVisibility(View.GONE);
+                    forgotPwSentBinding.groupForgotPwSentResend.setVisibility(View.VISIBLE);
                 }, 500);
             }
         }.start();

@@ -31,7 +31,7 @@
         android:gravity="start|center_vertical"
         android:text="@string/forgot_pw_text_title"
         android:textAlignment="gravity"
-        android:textColor="@android:color/white"
+        android:textColor="@color/whiteConstant"
         android:textSize="28sp"
         app:layout_constraintBottom_toTopOf="@+id/fcv_landing"
         app:layout_constraintEnd_toEndOf="parent"

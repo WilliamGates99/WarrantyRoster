@@ -15,4 +15,5 @@
     <color name="grayLight">#F3F3F3</color>
     <color name="grayMedium">#E9E9E9</color>
     <color name="grayDark">#959595</color>
+    <color name="whiteConstant">#FFFFFF</color>
 </resources>
