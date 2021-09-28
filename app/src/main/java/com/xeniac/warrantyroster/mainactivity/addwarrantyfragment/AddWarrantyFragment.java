@@ -340,7 +340,7 @@ public class AddWarrantyFragment extends Fragment {
         } else if (!isStartingDateValid(startingCalendar, expiryCalendar)) {
             showDateError();
         } else {
-            String title = addWarrantyBinding.tiAddWarrantyEditTitle.getText().toString();
+            String title = addWarrantyBinding.tiAddWarrantyEditTitle.getText().toString().trim();
             String brand = null;
             String model = null;
             String serialNumber = null;
@@ -348,16 +348,16 @@ public class AddWarrantyFragment extends Fragment {
             String categoryId = "10";
 
             if (!TextUtils.isEmpty(addWarrantyBinding.tiAddWarrantyEditBrand.getText())) {
-                brand = addWarrantyBinding.tiAddWarrantyEditBrand.getText().toString();
+                brand = addWarrantyBinding.tiAddWarrantyEditBrand.getText().toString().trim();
             }
             if (!TextUtils.isEmpty(addWarrantyBinding.tiAddWarrantyEditModel.getText())) {
-                model = addWarrantyBinding.tiAddWarrantyEditModel.getText().toString();
+                model = addWarrantyBinding.tiAddWarrantyEditModel.getText().toString().trim();
             }
             if (!TextUtils.isEmpty(addWarrantyBinding.tiAddWarrantyEditSerial.getText())) {
-                serialNumber = addWarrantyBinding.tiAddWarrantyEditSerial.getText().toString();
+                serialNumber = addWarrantyBinding.tiAddWarrantyEditSerial.getText().toString().trim();
             }
             if (!TextUtils.isEmpty(addWarrantyBinding.tiAddWarrantyEditDescription.getText())) {
-                description = addWarrantyBinding.tiAddWarrantyEditDescription.getText().toString();
+                description = addWarrantyBinding.tiAddWarrantyEditDescription.getText().toString().trim();
             }
             if (selectedCategory != null) {
                 categoryId = selectedCategory.getId();
