@@ -142,7 +142,7 @@
     <style name="Theme.WarrantyRoster.Toolbar" parent="Widget.MaterialComponents.Toolbar">
         <item name="titleTextAppearance">@style/Theme.WarrantyRoster.Toolbar.Title</item>
         <item name="android:background">@color/surface</item>
-        <item name="android:elevation">4dp</item>
+        <item name="android:elevation">3dp</item>
         <item name="titleCentered">true</item>
     </style>
 
