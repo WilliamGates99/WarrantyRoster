@@ -20,10 +20,10 @@
     </fragment>
 
     <fragment
-        android:id="@+id/moreFragment"
-        android:name="com.xeniac.warrantyroster.mainactivity.morefragment.MoreFragment"
-        android:label="MoreFragment"
-        tools:layout="@layout/fragment_more" />
+        android:id="@+id/settingsFragment"
+        android:name="com.xeniac.warrantyroster.mainactivity.setingsfragment.SettingsFragment"
+        android:label="SettingsFragment"
+        tools:layout="@layout/fragment_settings" />
 
     <fragment
         android:id="@+id/addWarrantyFragment"

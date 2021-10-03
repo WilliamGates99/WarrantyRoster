@@ -9,11 +9,15 @@
     <color name="green">#00BD62</color>
     <color name="red">#FF3442</color>
     <color name="orange">#FF9100</color>
-    <color name="green20">#3300BD62</color>
-    <color name="red20">#33FF3442</color>
-    <color name="orange20">#33FF9100</color>
     <color name="grayLight">#F3F3F3</color>
     <color name="grayMedium">#E9E9E9</color>
     <color name="grayDark">#959595</color>
     <color name="whiteConstant">#FFFFFF</color>
+    <color name="navyBlue10">#1A00144F</color>
+    <color name="green10">#1A00BD62</color>
+    <color name="green20">#3300BD62</color>
+    <color name="red10">#1AFF3442</color>
+    <color name="blue20">#331C53F4</color>
+    <color name="red20">#33FF3442</color>
+    <color name="orange20">#33FF9100</color>
 </resources>

@@ -13,9 +13,9 @@
         android:title="" />
 
     <item
-        android:id="@+id/moreFragment"
-        android:icon="@drawable/ic_menu_more"
+        android:id="@+id/settingsFragment"
+        android:icon="@drawable/ic_menu_settings"
         android:orderInCategory="3"
-        android:title="@string/main_menu_title_more" />
+        android:title="@string/main_menu_title_settings" />
 
 </menu>

@@ -1,0 +1,523 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar_settings"
+        style="@style/Theme.WarrantyRoster.Toolbar"
+        android:layout_width="0dp"
+        android:layout_height="?attr/actionBarSize"
+        app:contentInsetEnd="12dp"
+        app:contentInsetStart="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="@string/settings_text_title" />
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:overScrollMode="never"
+        android:scrollbars="none"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_settings">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_settings_title_account"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="24sp"
+                android:layout_marginTop="24dp"
+                android:fontFamily="@font/nunito_extra_bold"
+                android:gravity="center_vertical|start"
+                android:text="@string/edit_warranty_title_account"
+                android:textAlignment="gravity"
+                android:textAllCaps="true"
+                android:textColor="@color/navyBlue"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cv_settings_account"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginTop="8dp"
+                app:cardBackgroundColor="@color/surface"
+                app:cardCornerRadius="12dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_settings_title_account">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/iv_settings_account_email"
+                        android:layout_width="26dp"
+                        android:layout_height="26dp"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginTop="12dp"
+                        android:background="@color/red10"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:shapeAppearance="@style/Theme.WarrantyRoster.ImageViewShapeAppearance.Settings" />
+
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/lav_settings_account_email"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/iv_settings_account_email"
+                        app:layout_constraintEnd_toEndOf="@+id/iv_settings_account_email"
+                        app:layout_constraintStart_toStartOf="@+id/iv_settings_account_email"
+                        app:layout_constraintTop_toTopOf="@+id/iv_settings_account_email"
+                        app:lottie_autoPlay="true"
+                        app:lottie_loop="true"
+                        app:lottie_rawRes="@raw/anim_account_not_verified"
+                        app:lottie_speed="1.00" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/tv_settings_account_email"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="12dp"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/nunito_semi_bold"
+                        android:gravity="center_vertical|start"
+                        android:maxLines="1"
+                        android:text="email@example.com"
+                        android:textAlignment="gravity"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/iv_settings_account_email"
+                        app:layout_constraintEnd_toStartOf="@+id/btn_settings_account_email"
+                        app:layout_constraintStart_toEndOf="@+id/iv_settings_account_email"
+                        app:layout_constraintTop_toTopOf="@+id/iv_settings_account_email"
+                        app:layout_constraintVertical_bias="0.5"
+                        tools:ignore="HardcodedText" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_settings_account_email"
+                        style="@style/Theme.WarrantyRoster.TextButton.Settings"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="12dp"
+                        android:fontFamily="@font/nunito_black"
+                        android:gravity="center"
+                        android:text="@string/edit_warranty_btn_account_verify"
+                        android:textAlignment="gravity"
+                        android:textSize="10sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/iv_settings_account_email"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/iv_settings_account_email"
+                        app:layout_constraintVertical_bias="0.5"
+                        tools:ignore="SmallSp" />
+
+                    <View
+                        android:id="@+id/divider_settings_account_first"
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="12dp"
+                        android:background="@color/grayLight"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/iv_settings_account_email" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cl_settings_account_change_email"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:paddingVertical="12dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/divider_settings_account_first">
+
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:id="@+id/iv_settings_account_change_email"
+                            android:layout_width="26dp"
+                            android:layout_height="26dp"
+                            android:layout_marginStart="12dp"
+                            android:background="@color/navyBlue10"
+                            android:src="@drawable/ic_settings_email"
+                            app:contentPadding="4dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:shapeAppearance="@style/Theme.WarrantyRoster.ImageViewShapeAppearance.Settings" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/tv_settings_account_change_email"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="12dp"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/nunito_semi_bold"
+                            android:gravity="center_vertical|start"
+                            android:maxLines="1"
+                            android:text="@string/edit_warranty_text_account_change_email"
+                            android:textAlignment="gravity"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            app:layout_constraintBottom_toBottomOf="@+id/iv_settings_account_change_email"
+                            app:layout_constraintEnd_toStartOf="@+id/iv_settings_account_change_email_arrow"
+                            app:layout_constraintStart_toEndOf="@+id/iv_settings_account_change_email"
+                            app:layout_constraintTop_toTopOf="@+id/iv_settings_account_change_email"
+                            app:layout_constraintVertical_bias="0.5" />
+
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:id="@+id/iv_settings_account_change_email_arrow"
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:layout_marginEnd="12dp"
+                            android:src="@drawable/ic_settings_arrow"
+                            app:layout_constraintBottom_toBottomOf="@+id/iv_settings_account_change_email"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/iv_settings_account_change_email"
+                            app:layout_constraintVertical_bias="0.5" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <View
+                        android:id="@+id/divider_settings_account_second"
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:background="@color/grayLight"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/cl_settings_account_change_email" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cl_settings_account_change_password"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:paddingVertical="12dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/divider_settings_account_second">
+
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:id="@+id/iv_settings_account_change_password"
+                            android:layout_width="26dp"
+                            android:layout_height="26dp"
+                            android:layout_marginStart="12dp"
+                            android:background="@color/navyBlue10"
+                            android:src="@drawable/ic_settings_password"
+                            app:contentPadding="4dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:shapeAppearance="@style/Theme.WarrantyRoster.ImageViewShapeAppearance.Settings" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/tv_settings_account_changepassword"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="12dp"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/nunito_semi_bold"
+                            android:gravity="center_vertical|start"
+                            android:maxLines="1"
+                            android:text="@string/edit_warranty_text_account_change_password"
+                            android:textAlignment="gravity"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            app:layout_constraintBottom_toBottomOf="@+id/iv_settings_account_change_password"
+                            app:layout_constraintEnd_toStartOf="@+id/iv_settings_account_change_password_arrow"
+                            app:layout_constraintStart_toEndOf="@+id/iv_settings_account_change_password"
+                            app:layout_constraintTop_toTopOf="@+id/iv_settings_account_change_password"
+                            app:layout_constraintVertical_bias="0.5" />
+
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:id="@+id/iv_settings_account_change_password_arrow"
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:layout_marginEnd="12dp"
+                            android:src="@drawable/ic_settings_arrow"
+                            app:layout_constraintBottom_toBottomOf="@+id/iv_settings_account_change_password"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/iv_settings_account_change_password"
+                            app:layout_constraintVertical_bias="0.5" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_settings_title_settings"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="24sp"
+                android:layout_marginTop="24dp"
+                android:fontFamily="@font/nunito_extra_bold"
+                android:gravity="center_vertical|start"
+                android:text="@string/edit_warranty_title_settings"
+                android:textAlignment="gravity"
+                android:textAllCaps="true"
+                android:textColor="@color/navyBlue"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cv_settings_account" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cv_settings_settings"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginTop="8dp"
+                app:cardBackgroundColor="@color/surface"
+                app:cardCornerRadius="12dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_settings_title_settings">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cl_settings_settings_language"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:paddingVertical="12dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:id="@+id/iv_settings_settings_language"
+                            android:layout_width="26dp"
+                            android:layout_height="26dp"
+                            android:layout_marginStart="12dp"
+                            android:background="@color/navyBlue10"
+                            android:src="@drawable/ic_settings_language"
+                            app:contentPadding="4dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:shapeAppearance="@style/Theme.WarrantyRoster.ImageViewShapeAppearance.Settings" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/tv_settings_settings_language"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="12dp"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/nunito_semi_bold"
+                            android:gravity="center_vertical|start"
+                            android:maxLines="1"
+                            android:text="@string/edit_warranty_text_settings_language"
+                            android:textAlignment="gravity"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            app:layout_constraintBottom_toBottomOf="@+id/iv_settings_settings_language"
+                            app:layout_constraintEnd_toStartOf="@+id/tv_settings_settings_language_language"
+                            app:layout_constraintStart_toEndOf="@+id/iv_settings_settings_language"
+                            app:layout_constraintTop_toTopOf="@+id/iv_settings_settings_language"
+                            app:layout_constraintVertical_bias="0.5" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/tv_settings_settings_language_language"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="12dp"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/nunito_bold"
+                            android:gravity="center"
+                            android:maxLines="1"
+                            android:text="@string/edit_warranty_text_settings_language_english"
+                            android:textAlignment="gravity"
+                            android:textAllCaps="true"
+                            android:textColor="@color/grayDark"
+                            android:textSize="12sp"
+                            app:layout_constraintBottom_toBottomOf="@+id/iv_settings_settings_language"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/iv_settings_settings_language"
+                            app:layout_constraintVertical_bias="0.5" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <View
+                        android:id="@+id/divider_settings_settings_first"
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:background="@color/grayLight"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/cl_settings_settings_language" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cl_settings_settings_theme"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:paddingVertical="12dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/divider_settings_settings_first">
+
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:id="@+id/iv_settings_settings_theme"
+                            android:layout_width="26dp"
+                            android:layout_height="26dp"
+                            android:layout_marginStart="12dp"
+                            android:background="@color/navyBlue10"
+                            android:src="@drawable/ic_settings_theme"
+                            app:contentPadding="4dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:shapeAppearance="@style/Theme.WarrantyRoster.ImageViewShapeAppearance.Settings" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/tv_settings_settings_theme"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="12dp"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/nunito_semi_bold"
+                            android:gravity="center_vertical|start"
+                            android:maxLines="1"
+                            android:text="@string/edit_warranty_text_settings_theme"
+                            android:textAlignment="gravity"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            app:layout_constraintBottom_toBottomOf="@+id/iv_settings_settings_theme"
+                            app:layout_constraintEnd_toStartOf="@+id/tv_settings_settings_theme_theme"
+                            app:layout_constraintStart_toEndOf="@+id/iv_settings_settings_theme"
+                            app:layout_constraintTop_toTopOf="@+id/iv_settings_settings_theme"
+                            app:layout_constraintVertical_bias="0.5" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/tv_settings_settings_theme_theme"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="12dp"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/nunito_bold"
+                            android:gravity="center"
+                            android:maxLines="1"
+                            android:text="@string/edit_warranty_text_settings_theme_default"
+                            android:textAlignment="gravity"
+                            android:textAllCaps="true"
+                            android:textColor="@color/grayDark"
+                            android:textSize="12sp"
+                            app:layout_constraintBottom_toBottomOf="@+id/iv_settings_settings_theme"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/iv_settings_settings_theme"
+                            app:layout_constraintVertical_bias="0.5" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <View
+                        android:id="@+id/divider_settings_settings_second"
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:background="@color/grayLight"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/cl_settings_settings_theme" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cl_settings_settings_privacy_policy"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:paddingVertical="12dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/divider_settings_settings_second">
+
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:id="@+id/iv_settings_settings_privacy_policy"
+                            android:layout_width="26dp"
+                            android:layout_height="26dp"
+                            android:layout_marginStart="12dp"
+                            android:background="@color/navyBlue10"
+                            android:src="@drawable/ic_settings_privacy_policy"
+                            app:contentPadding="4dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:shapeAppearance="@style/Theme.WarrantyRoster.ImageViewShapeAppearance.Settings" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/tv_settings_settings_privacy_policy"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="12dp"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/nunito_semi_bold"
+                            android:gravity="center_vertical|start"
+                            android:maxLines="1"
+                            android:text="@string/edit_warranty_text_settings_privacy_policy"
+                            android:textAlignment="gravity"
+                            android:textColor="@color/black"
+                            android:textSize="16sp"
+                            app:layout_constraintBottom_toBottomOf="@+id/iv_settings_settings_privacy_policy"
+                            app:layout_constraintEnd_toStartOf="@+id/iv_settings_settings_privacy_policy_arrow"
+                            app:layout_constraintStart_toEndOf="@+id/iv_settings_settings_privacy_policy"
+                            app:layout_constraintTop_toTopOf="@+id/iv_settings_settings_privacy_policy"
+                            app:layout_constraintVertical_bias="0.5" />
+
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:id="@+id/iv_settings_settings_privacy_policy_arrow"
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:layout_marginEnd="12dp"
+                            android:src="@drawable/ic_settings_arrow"
+                            app:layout_constraintBottom_toBottomOf="@+id/iv_settings_settings_privacy_policy"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/iv_settings_settings_privacy_policy"
+                            app:layout_constraintVertical_bias="0.5" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_settings_logout"
+                style="@style/Theme.WarrantyRoster.Button.Settings"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="60dp"
+                android:fontFamily="@font/nunito_bold"
+                android:text="@string/edit_warranty_btn_logout"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cv_settings_settings" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
