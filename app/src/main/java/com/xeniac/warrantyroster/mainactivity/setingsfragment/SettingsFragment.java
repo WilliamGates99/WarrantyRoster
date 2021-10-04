@@ -82,12 +82,12 @@ public class SettingsFragment extends Fragment {
 
     private void changeEmailOnClick() {
         settingsBinding.clSettingsAccountChangeEmail.setOnClickListener(view ->
-                Toast.makeText(context, "Change Email", Toast.LENGTH_SHORT).show());
+                navController.navigate(R.id.action_settingsFragment_to_changeEmailFragment));
     }
 
     private void changePasswordOnClick() {
         settingsBinding.clSettingsAccountChangePassword.setOnClickListener(view ->
-                Toast.makeText(context, "Change Password", Toast.LENGTH_SHORT).show());
+                navController.navigate(R.id.action_settingsFragment_to_changePasswordFragment));
     }
 
     private void languageOnClick() {

@@ -1,0 +1,288 @@
+package com.xeniac.warrantyroster.mainactivity.changepasswordfragment;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
+import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+
+import com.apollographql.apollo.ApolloClient;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
+import com.xeniac.warrantyroster.Constants;
+import com.xeniac.warrantyroster.NetworkHelper;
+import com.xeniac.warrantyroster.R;
+import com.xeniac.warrantyroster.databinding.FragmentChangePasswordBinding;
+import com.xeniac.warrantyroster.mainactivity.MainActivity;
+
+import java.util.regex.Pattern;
+
+public class ChangePasswordFragment extends Fragment {
+
+    private FragmentChangePasswordBinding changePasswordBinding;
+    private View view;
+    private Activity activity;
+    private Context context;
+    private NavController navController;
+
+    public ChangePasswordFragment() {
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        changePasswordBinding = FragmentChangePasswordBinding.inflate(inflater, container, false);
+        view = changePasswordBinding.getRoot();
+        return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        changePasswordBinding = null;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        super.onViewCreated(view, savedInstanceState);
+        activity = getActivity();
+        context = getContext();
+        navController = Navigation.findNavController(view);
+        ((MainActivity) context).hideNavBar();
+
+        textInputsBackgroundColor();
+        textInputsStrokeColor();
+        returnToMainActivity();
+        changePasswordOnClick();
+        changePasswordActionDone();
+    }
+
+    private void textInputsBackgroundColor() {
+        changePasswordBinding.tiChangePasswordEditCurrent.setOnFocusChangeListener((view, focused) -> {
+            if (focused) {
+                changePasswordBinding.tiChangePasswordLayoutCurrent.setBoxBackgroundColorResource(R.color.background);
+            } else {
+                changePasswordBinding.tiChangePasswordLayoutCurrent.setBoxBackgroundColorResource(R.color.grayLight);
+            }
+        });
+
+        changePasswordBinding.tiChangePasswordEditNew.setOnFocusChangeListener((view, focused) -> {
+            if (focused) {
+                changePasswordBinding.tiChangePasswordLayoutNew.setBoxBackgroundColorResource(R.color.background);
+            } else {
+                changePasswordBinding.tiChangePasswordLayoutNew.setBoxBackgroundColorResource(R.color.grayLight);
+            }
+        });
+
+        changePasswordBinding.tiChangePasswordEditRetype.setOnFocusChangeListener((view, focused) -> {
+            if (focused) {
+                changePasswordBinding.tiChangePasswordLayoutRetype.setBoxBackgroundColorResource(R.color.background);
+            } else {
+                changePasswordBinding.tiChangePasswordLayoutRetype.setBoxBackgroundColorResource(R.color.grayLight);
+            }
+        });
+    }
+
+    private void textInputsStrokeColor() {
+        changePasswordBinding.tiChangePasswordEditCurrent.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence inputEmail, int start, int before, int count) {
+                changePasswordBinding.tiChangePasswordLayoutCurrent.setErrorEnabled(false);
+                changePasswordBinding.tiChangePasswordLayoutCurrent.setBoxStrokeColor(context.getResources().getColor(R.color.blue));
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        changePasswordBinding.tiChangePasswordEditNew.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence inputNewPassword, int start, int before, int count) {
+                if (changePasswordBinding.tiChangePasswordLayoutNew.hasFocus()) {
+                    switch (newPasswordStrength(inputNewPassword.toString())) {
+                        case -1:
+                            changePasswordBinding.tiChangePasswordLayoutNew.setHelperText(context.getResources().getString(R.string.change_password_helper_password_weak));
+                            changePasswordBinding.tiChangePasswordLayoutNew.setHelperTextColor(ColorStateList.valueOf(context.getResources().getColor(R.color.red)));
+                            changePasswordBinding.tiChangePasswordLayoutNew.setBoxStrokeColor(context.getResources().getColor(R.color.red));
+                            break;
+                        case 0:
+                            changePasswordBinding.tiChangePasswordLayoutNew.setHelperText(context.getResources().getString(R.string.change_password_helper_password_mediocre));
+                            changePasswordBinding.tiChangePasswordLayoutNew.setHelperTextColor(ColorStateList.valueOf(context.getResources().getColor(R.color.orange)));
+                            changePasswordBinding.tiChangePasswordLayoutNew.setBoxStrokeColor(context.getResources().getColor(R.color.orange));
+                            break;
+                        case 1:
+                            changePasswordBinding.tiChangePasswordLayoutNew.setHelperText(context.getResources().getString(R.string.change_password_helper_password_strong));
+                            changePasswordBinding.tiChangePasswordLayoutNew.setHelperTextColor(ColorStateList.valueOf(context.getResources().getColor(R.color.green)));
+                            changePasswordBinding.tiChangePasswordLayoutNew.setBoxStrokeColor(context.getResources().getColor(R.color.green));
+                            break;
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        changePasswordBinding.tiChangePasswordEditRetype.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence inputRetypePassword, int start, int before, int count) {
+                changePasswordBinding.tiChangePasswordLayoutRetype.setErrorEnabled(false);
+                changePasswordBinding.tiChangePasswordLayoutRetype.setBoxStrokeColor(context.getResources().getColor(R.color.blue));
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
+    private void returnToMainActivity() {
+        changePasswordBinding.toolbarChangePassword.setNavigationOnClickListener(view ->
+                activity.onBackPressed());
+    }
+
+    private void changePasswordOnClick() {
+        changePasswordBinding.btnChangePassword.setOnClickListener(view ->
+                changePassword());
+    }
+
+    private void changePasswordActionDone() {
+        changePasswordBinding.tiChangePasswordEditRetype.setOnEditorActionListener((textView, actionId, keyEvent) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                changePassword();
+            }
+            return false;
+        });
+    }
+
+    private void changePassword() {
+        InputMethodManager inputMethodManager = (InputMethodManager)
+                context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
+
+        if (NetworkHelper.hasNetworkAccess(context)) {
+            getChangePasswordInputs();
+        } else {
+            hideLoadingAnimation();
+            Snackbar.make(view, context.getResources().getString(R.string.network_error_connection),
+                    BaseTransientBottomBar.LENGTH_INDEFINITE)
+                    .setAction(context.getResources().getString(R.string.network_error_retry), v -> changePassword()).show();
+        }
+    }
+
+    private void getChangePasswordInputs() {
+        String currentPassword;
+        String newPassword;
+        String retypeNewPassword;
+
+        if (TextUtils.isEmpty(changePasswordBinding.tiChangePasswordEditCurrent.getText())) {
+            changePasswordBinding.tiChangePasswordLayoutCurrent.requestFocus();
+            changePasswordBinding.tiChangePasswordLayoutCurrent.setBoxStrokeColor(context.getResources().getColor(R.color.red));
+        } else if (TextUtils.isEmpty(changePasswordBinding.tiChangePasswordEditNew.getText())) {
+            changePasswordBinding.tiChangePasswordLayoutNew.requestFocus();
+            changePasswordBinding.tiChangePasswordLayoutNew.setBoxStrokeColor(context.getResources().getColor(R.color.red));
+        } else if (TextUtils.isEmpty(changePasswordBinding.tiChangePasswordEditRetype.getText())) {
+            changePasswordBinding.tiChangePasswordLayoutRetype.requestFocus();
+            changePasswordBinding.tiChangePasswordLayoutRetype.setBoxStrokeColor(context.getResources().getColor(R.color.red));
+        } else {
+            currentPassword = changePasswordBinding.tiChangePasswordEditCurrent.getText().toString().trim();
+            newPassword = changePasswordBinding.tiChangePasswordEditNew.getText().toString().trim();
+            retypeNewPassword = changePasswordBinding.tiChangePasswordEditRetype.getText().toString().trim();
+
+            if (!isRetypePasswordValid(newPassword, retypeNewPassword)) {
+                changePasswordBinding.tiChangePasswordLayoutRetype.requestFocus();
+                changePasswordBinding.tiChangePasswordLayoutRetype.setError(context.getResources().getString(R.string.change_password_error_password));
+            } else {
+                changeEmailMutation(currentPassword, newPassword, retypeNewPassword);
+            }
+        }
+    }
+
+    private void changeEmailMutation(String currentPassword, String newPassword, String retypeNewPassword) {
+        showLoadingAnimation();
+
+        SharedPreferences loginPrefs = context.getSharedPreferences(Constants.PREFERENCE_LOGIN, Context.MODE_PRIVATE);
+        String userToken = loginPrefs.getString(Constants.PREFERENCE_USER_TOKEN_KEY, null);
+
+        ApolloClient apolloClient = ApolloClient.builder()
+                .serverUrl(Constants.URL_GRAPHQL)
+                .build();
+
+        //TODO connect to api
+        Toast.makeText(context, "password changed", Toast.LENGTH_SHORT).show();
+    }
+
+    private void showLoadingAnimation() {
+        changePasswordBinding.tiChangePasswordEditCurrent.setEnabled(false);
+        changePasswordBinding.tiChangePasswordEditNew.setEnabled(false);
+        changePasswordBinding.tiChangePasswordEditRetype.setEnabled(false);
+        changePasswordBinding.btnChangePassword.setClickable(false);
+        changePasswordBinding.btnChangePassword.setText(null);
+        changePasswordBinding.cpiChangePassword.setVisibility(View.VISIBLE);
+    }
+
+    private void hideLoadingAnimation() {
+        changePasswordBinding.cpiChangePassword.setVisibility(View.GONE);
+        changePasswordBinding.tiChangePasswordEditCurrent.setEnabled(true);
+        changePasswordBinding.tiChangePasswordEditNew.setEnabled(true);
+        changePasswordBinding.tiChangePasswordEditRetype.setEnabled(true);
+        changePasswordBinding.btnChangePassword.setClickable(true);
+        changePasswordBinding.btnChangePassword.setText(context.getResources().getString(R.string.change_password_btn_change));
+    }
+
+    private byte newPasswordStrength(String newPassword) {
+        Pattern PASSWORD = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=(.*[\\W])*).{8,}$");
+
+        if (newPassword.length() < 4) {
+            return -1;
+        } else if (newPassword.length() < 8) {
+            return 0;
+        } else {
+            if (PASSWORD.matcher(newPassword).matches()) {
+                return 1;
+            } else {
+                return 0;
+            }
+        }
+    }
+
+    private boolean isRetypePasswordValid(String password, String retypePassword) {
+        return password.equals(retypePassword);
+    }
+}
