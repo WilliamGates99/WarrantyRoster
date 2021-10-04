@@ -13,6 +13,7 @@
         <item name="snackbarStyle">@style/Theme.WarrantyRoster.Snackbar</item>
         <item name="snackbarTextViewStyle">@style/Theme.WarrantyRoster.Snackbar.TextView</item>
         <item name="snackbarButtonStyle">@style/Theme.WarrantyRoster.Snackbar.ActionButton</item>
+        <item name="materialAlertDialogTheme">@style/Theme.WarrantyRoster.AlertDialog</item>
     </style>
 
     <style name="Theme.WarrantyRoster.Splash" parent="Theme.SplashScreen">
@@ -190,6 +191,61 @@
     <style name="Theme.WarrantyRoster.ImageViewShapeAppearance.Settings">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">8dp</item>
+    </style>
+
+    <style name="Theme.WarrantyRoster.AlertDialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="alertDialogStyle">@style/Theme.WarrantyRoster.AlertDialog.Style</item>
+        <item name="materialAlertDialogTitleTextStyle">
+            @style/Theme.WarrantyRoster.AlertDialog.Title
+        </item>
+        <item name="materialAlertDialogBodyTextStyle">@style/Theme.WarrantyRoster.AlertDialog.Body
+        </item>
+        <item name="android:checkedTextViewStyle">@style/Theme.WarrantyRoster.AlertDialog.Choice
+        </item>
+        <item name="buttonBarPositiveButtonStyle">
+            @style/Theme.WarrantyRoster.AlertDialog.PositiveButton
+        </item>
+    </style>
+
+    <style name="Theme.WarrantyRoster.AlertDialog.Style" parent="MaterialAlertDialog.MaterialComponents">
+        <item name="shapeAppearance">@style/Theme.WarrantyRoster.AlertDialog.Appearance</item>
+    </style>
+
+    <style name="Theme.WarrantyRoster.AlertDialog.Appearance">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">12dp</item>
+    </style>
+
+    <style name="Theme.WarrantyRoster.AlertDialog.Title" parent="MaterialAlertDialog.MaterialComponents.Title.Text">
+        <item name="android:textColor">@color/navyBlue</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:fontFamily">@font/nunito_extra_bold</item>
+    </style>
+
+    <style name="Theme.WarrantyRoster.AlertDialog.Body" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/nunito_regular</item>
+    </style>
+
+    <style name="Theme.WarrantyRoster.AlertDialog.Choice" parent="Widget.MaterialComponents.CheckedTextView">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/nunito_regular</item>
+    </style>
+
+    <style name="Theme.WarrantyRoster.AlertDialog.PositiveButton" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="shapeAppearance">@style/Theme.WarrantyRoster.TextButton.Appearance</item>
+        <item name="android:textColor">@color/blue</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/nunito_bold</item>
+        <item name="textAllCaps">true</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingBottom">4dp</item>
+        <item name="android:paddingStart">8dp</item>
+        <item name="android:paddingEnd">8dp</item>
     </style>
 
 </resources>

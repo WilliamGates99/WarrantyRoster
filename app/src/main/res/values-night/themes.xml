@@ -13,6 +13,7 @@
         <item name="snackbarStyle">@style/Theme.WarrantyRoster.Snackbar</item>
         <item name="snackbarTextViewStyle">@style/Theme.WarrantyRoster.Snackbar.TextView</item>
         <item name="snackbarButtonStyle">@style/Theme.WarrantyRoster.Snackbar.ActionButton</item>
+        <item name="materialAlertDialogTheme">@style/Theme.WarrantyRoster.AlertDialog</item>
     </style>
 
     <style name="Theme.WarrantyRoster.Landing" parent="Theme.WarrantyRoster">

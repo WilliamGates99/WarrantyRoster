@@ -23,9 +23,9 @@ public class SubApplication extends Application {
 
     private void setNightMode() {
         settingsPrefs = getSharedPreferences(Constants.PREFERENCE_SETTINGS, MODE_PRIVATE);
-        int nightMode = settingsPrefs.getInt(Constants.PREFERENCE_NIGHT_MODE_KEY, 0);
+        int theme = settingsPrefs.getInt(Constants.PREFERENCE_THEME_KEY, 0);
 
-        switch (nightMode) {
+        switch (theme) {
             case 0:
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
                 break;
