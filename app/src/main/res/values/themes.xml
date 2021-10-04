@@ -104,9 +104,11 @@
     <style name="Theme.WarrantyRoster.Button" parent="Widget.MaterialComponents.Button.UnelevatedButton">
         <item name="shapeAppearance">@style/Theme.WarrantyRoster.Button.Appearance</item>
         <item name="android:textColor">@color/whiteConstant</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/nunito_bold</item>
         <item name="textAllCaps">false</item>
-        <item name="android:ellipsize">end</item>
         <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
         <item name="android:padding">16dp</item>
     </style>
 
@@ -114,9 +116,11 @@
         <item name="shapeAppearance">@style/Theme.WarrantyRoster.Button.Appearance</item>
         <item name="backgroundTint">@color/red10</item>
         <item name="android:textColor">@color/red</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/nunito_bold</item>
         <item name="textAllCaps">true</item>
-        <item name="android:ellipsize">end</item>
         <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
         <item name="android:padding">16dp</item>
     </style>
 
@@ -128,13 +132,15 @@
     <style name="Theme.WarrantyRoster.TextButton" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="shapeAppearance">@style/Theme.WarrantyRoster.TextButton.Appearance</item>
         <item name="android:textColor">@color/blue</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/nunito_bold</item>
         <item name="textAllCaps">false</item>
+        <item name="android:maxLines">1</item>
         <item name="android:ellipsize">end</item>
         <item name="android:insetLeft">0dp</item>
         <item name="android:insetTop">0dp</item>
         <item name="android:insetRight">0dp</item>
         <item name="android:insetBottom">0dp</item>
-        <item name="android:maxLines">1</item>
         <item name="android:minWidth">0dp</item>
         <item name="android:minHeight">0dp</item>
         <item name="android:padding">5dp</item>
@@ -142,16 +148,18 @@
 
     <style name="Theme.WarrantyRoster.TextButton.Settings" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="shapeAppearance">@style/Theme.WarrantyRoster.TextButton.Appearance</item>
-        <item name="android:textColor">@color/blue</item>
         <item name="backgroundTint">@color/blue20</item>
+        <item name="android:textColor">@color/blue</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:fontFamily">@font/nunito_black</item>
         <item name="textAllCaps">true</item>
         <item name="android:letterSpacing">0</item>
+        <item name="android:maxLines">1</item>
         <item name="android:ellipsize">end</item>
         <item name="android:insetLeft">0dp</item>
         <item name="android:insetTop">0dp</item>
         <item name="android:insetRight">0dp</item>
         <item name="android:insetBottom">0dp</item>
-        <item name="android:maxLines">1</item>
         <item name="android:minWidth">0dp</item>
         <item name="android:minHeight">0dp</item>
         <item name="android:paddingTop">4dp</item>
