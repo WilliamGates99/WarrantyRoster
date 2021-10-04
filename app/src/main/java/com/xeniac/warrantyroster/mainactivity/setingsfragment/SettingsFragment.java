@@ -69,7 +69,7 @@ public class SettingsFragment extends Fragment {
         currentTheme = settingsPrefs.getInt(Constants.PREFERENCE_THEME_KEY, 0);
 
         setCurrentLanguageText();
-        setCurrentThemeText(currentTheme);
+        setCurrentThemeText();
         verifyOnClick();
         changeEmailOnClick();
         changePasswordOnClick();
@@ -92,7 +92,7 @@ public class SettingsFragment extends Fragment {
         }
     }
 
-    private void setCurrentThemeText(int currentTheme) {
+    private void setCurrentThemeText() {
         switch (currentTheme) {
             case 0:
                 settingsBinding.tvSettingsSettingsThemeCurrent.setText(
@@ -169,7 +169,8 @@ public class SettingsFragment extends Fragment {
                                 }
                                 break;
                         }
-                        setCurrentThemeText(i);
+                        currentTheme = i;
+                        setCurrentThemeText();
                         dialogInterface.dismiss();
                     });
             themeDialogBuilder.show();
