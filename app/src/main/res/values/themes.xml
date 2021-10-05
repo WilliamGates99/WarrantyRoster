@@ -85,6 +85,14 @@
         <item name="android:textSize">12sp</item>
     </style>
 
+    <style name="Theme.WarrantyRoster.LoadingProgressBar" parent="Widget.MaterialComponents.CircularProgressIndicator">
+        <item name="android:indeterminate">true</item>
+        <item name="hideAnimationBehavior">inward</item>
+        <item name="indicatorColor">@color/grayMedium</item>
+        <item name="showAnimationBehavior">outward</item>
+        <item name="trackCornerRadius">12dp</item>
+    </style>
+
     <style name="Theme.WarrantyRoster.LoadingProgressBar.Button" parent="Widget.MaterialComponents.CircularProgressIndicator.Small">
         <item name="android:indeterminate">true</item>
         <item name="hideAnimationBehavior">inward</item>
@@ -93,10 +101,10 @@
         <item name="trackCornerRadius">12dp</item>
     </style>
 
-    <style name="Theme.WarrantyRoster.LoadingProgressBar" parent="Widget.MaterialComponents.CircularProgressIndicator">
+    <style name="Theme.WarrantyRoster.LoadingProgressBar.Toolbar" parent="Widget.MaterialComponents.CircularProgressIndicator.Small">
         <item name="android:indeterminate">true</item>
         <item name="hideAnimationBehavior">inward</item>
-        <item name="indicatorColor">@color/grayMedium</item>
+        <item name="indicatorColor">@color/black</item>
         <item name="showAnimationBehavior">outward</item>
         <item name="trackCornerRadius">12dp</item>
     </style>
@@ -213,6 +221,9 @@
         <item name="buttonBarPositiveButtonStyle">
             @style/Theme.WarrantyRoster.AlertDialog.PositiveButton
         </item>
+        <item name="buttonBarNegativeButtonStyle">
+            @style/Theme.WarrantyRoster.AlertDialog.NegativeButton
+        </item>
     </style>
 
     <style name="Theme.WarrantyRoster.AlertDialog.Style" parent="MaterialAlertDialog.MaterialComponents">
@@ -243,6 +254,20 @@
     </style>
 
     <style name="Theme.WarrantyRoster.AlertDialog.PositiveButton" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="shapeAppearance">@style/Theme.WarrantyRoster.TextButton.Appearance</item>
+        <item name="android:textColor">@color/blue</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/nunito_bold</item>
+        <item name="textAllCaps">true</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingBottom">4dp</item>
+        <item name="android:paddingStart">8dp</item>
+        <item name="android:paddingEnd">8dp</item>
+    </style>
+
+    <style name="Theme.WarrantyRoster.AlertDialog.NegativeButton" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
         <item name="shapeAppearance">@style/Theme.WarrantyRoster.TextButton.Appearance</item>
         <item name="android:textColor">@color/blue</item>
         <item name="android:textSize">14sp</item>

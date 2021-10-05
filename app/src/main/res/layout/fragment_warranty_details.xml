@@ -17,7 +17,17 @@
         app:layout_constraintTop_toTopOf="parent"
         app:menu="@menu/menu_warranty_details"
         app:navigationIcon="@drawable/ic_menu_back"
-        app:title="Dining Room TV" />
+        app:title="Dining Room TV">
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/cpi_warranty_details"
+            style="@style/Theme.WarrantyRoster.LoadingProgressBar.Toolbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|end"
+            android:visibility="gone" />
+
+    </com.google.android.material.appbar.MaterialToolbar>
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/sv_warranty_details"

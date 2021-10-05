@@ -117,7 +117,7 @@
 
     <!--Warranty Details Fragment-->
     <string name="warranty_details_fab_edit">Edit</string>
-    <string name="warranty_details_menu_title_remove">Remove Warranty</string>
+    <string name="warranty_details_menu_title_delete">Delete Warranty</string>
     <string name="warranty_details_title_date_starting">Starting Date</string>
     <string name="warranty_details_title_date_expiry">Expiry Date</string>
     <string name="warranty_details_title_device">Device Info</string>
@@ -128,6 +128,11 @@
     <string name="warranty_details_status_valid">Warranty is valid</string>
     <string name="warranty_details_status_soon">Warranty will expire soon</string>
     <string name="warranty_details_status_expired">Warranty is expired</string>
+    <string name="warranty_details_delete_dialog_title">Delete Warranty?</string>
+    <string name="warranty_details_delete_dialog_message">Are you sure you want to delete %s?</string>
+    <string name="warranty_details_delete_dialog_positive">Delete</string>
+    <string name="warranty_details_delete_dialog_negative">Cancel</string>
+    <string name="warranty_details_delete_success">%s has been deleted successfully.</string>
 
     <!--Edit Warranty Fragment-->
     <string name="edit_warranty_text_title">Edit Warranty</string>

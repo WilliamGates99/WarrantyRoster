@@ -2,6 +2,7 @@ package com.xeniac.warrantyroster.mainactivity.warrantydetailsfragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,11 +19,20 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.apollographql.apollo.ApolloCall;
+import com.apollographql.apollo.ApolloClient;
+import com.apollographql.apollo.api.Response;
+import com.apollographql.apollo.exception.ApolloException;
+import com.apollographql.apollo.request.RequestHeaders;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
+import com.xeniac.warrantyroster.Constants;
+import com.xeniac.warrantyroster.NetworkHelper;
 import com.xeniac.warrantyroster.R;
 import com.xeniac.warrantyroster.database.WarrantyRosterDatabase;
 import com.xeniac.warrantyroster.databinding.FragmentWarrantyDetailsBinding;
 import com.xeniac.warrantyroster.mainactivity.MainActivity;
-import com.xeniac.warrantyroster.mainactivity.warrantiesfragment.WarrantiesFragmentDirections;
 import com.xeniac.warrantyroster.mainactivity.warrantiesfragment.WarrantyDataModel;
 
 import java.text.DecimalFormat;
@@ -73,7 +83,7 @@ public class WarrantyDetailsFragment extends Fragment {
         handleExtendedFAB();
         getWarranty();
         editWarrantyOnClick();
-        removeWarrantyOnClick();
+        deleteWarrantyOnClick();
     }
 
     private void returnToMainActivity() {
@@ -156,14 +166,94 @@ public class WarrantyDetailsFragment extends Fragment {
         });
     }
 
-    private void removeWarrantyOnClick() {
+    private void deleteWarrantyOnClick() {
         warrantyDetailsBinding.toolbarWarrantyDetails.getMenu().getItem(0).setOnMenuItemClickListener(menuItem -> {
-            removeWarranty();
+            deleteWarranty();
             return false;
         });
     }
 
-    private void removeWarranty() {
-        Toast.makeText(context, "Removed", Toast.LENGTH_SHORT).show();
+    private void deleteWarranty() {
+        if (NetworkHelper.hasNetworkAccess(context)) {
+            showDeleteWarrantyDialog();
+        } else {
+            hideLoadingAnimation();
+            Snackbar.make(view, context.getResources().getString(R.string.network_error_connection),
+                    BaseTransientBottomBar.LENGTH_INDEFINITE)
+                    .setAction(context.getResources().getString(R.string.network_error_retry), v -> deleteWarranty()).show();
+        }
+    }
+
+    private void showDeleteWarrantyDialog() {
+        MaterialAlertDialogBuilder deleteWarrantyDialogBuilder = new MaterialAlertDialogBuilder(context)
+                .setTitle(context.getResources().getString(R.string.warranty_details_delete_dialog_title))
+                .setMessage(String.format(context.getResources().getString(R.string.warranty_details_delete_dialog_message), warranty.getTitle()))
+                .setPositiveButton(context.getResources().getString(R.string.warranty_details_delete_dialog_positive), (dialogInterface, i) ->
+                        deleteWarrantyMutation())
+                .setNegativeButton(context.getResources().getString(R.string.warranty_details_delete_dialog_negative), (dialogInterface, i) -> {
+                });
+        deleteWarrantyDialogBuilder.show();
+    }
+
+    private void deleteWarrantyMutation() {
+        showLoadingAnimation();
+
+        SharedPreferences loginPrefs = context.getSharedPreferences(Constants.PREFERENCE_LOGIN, Context.MODE_PRIVATE);
+        String userToken = loginPrefs.getString(Constants.PREFERENCE_USER_TOKEN_KEY, null);
+
+        ApolloClient apolloClient = ApolloClient.builder()
+                .serverUrl(Constants.URL_GRAPHQL)
+                .build();
+
+        apolloClient.mutate(new DeleteWarrantyMutation(warranty.getId()))
+                .toBuilder().requestHeaders(RequestHeaders.builder().addHeader("Authorization", "Bearer " + userToken).build())
+                .build()
+                .enqueue(new ApolloCall.Callback<DeleteWarrantyMutation.Data>() {
+                    @Override
+                    public void onResponse(@NonNull Response<DeleteWarrantyMutation.Data> response) {
+                        if (warrantyDetailsBinding != null) {
+                            activity.runOnUiThread(() -> {
+                                hideLoadingAnimation();
+
+                                if (!response.hasErrors()) {
+                                    Log.i("deleteWarranty", "onResponse: " + response);
+                                    Toast.makeText(context, String.format(
+                                            context.getResources().getString(R.string.warranty_details_delete_success),
+                                                    warranty.getTitle()), Toast.LENGTH_SHORT).show();
+                                    activity.onBackPressed();
+                                } else {
+                                    Log.e("deleteWarranty", "onResponse Errors: " + response.getErrors());
+                                    Snackbar.make(view, context.getResources().getString(R.string.network_error_response),
+                                            BaseTransientBottomBar.LENGTH_INDEFINITE)
+                                            .setAction(context.getResources().getString(R.string.network_error_retry), v -> deleteWarranty()).show();
+                                }
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull ApolloException e) {
+                        Log.e("deleteWarranty", "onFailure: " + e.getMessage());
+                        if (warrantyDetailsBinding != null) {
+                            activity.runOnUiThread(() -> {
+                                hideLoadingAnimation();
+                                Snackbar.make(view, context.getResources().getString(R.string.network_error_failure),
+                                        BaseTransientBottomBar.LENGTH_LONG).show();
+                            });
+                        }
+                    }
+                });
+    }
+
+    private void showLoadingAnimation() {
+        warrantyDetailsBinding.toolbarWarrantyDetails.getMenu().getItem(0).setVisible(false);
+        warrantyDetailsBinding.fabWarrantyDetails.setClickable(false);
+        warrantyDetailsBinding.cpiWarrantyDetails.setVisibility(View.VISIBLE);
+    }
+
+    private void hideLoadingAnimation() {
+        warrantyDetailsBinding.toolbarWarrantyDetails.getMenu().getItem(0).setVisible(true);
+        warrantyDetailsBinding.fabWarrantyDetails.setClickable(true);
+        warrantyDetailsBinding.cpiWarrantyDetails.setVisibility(View.GONE);
     }
 }
