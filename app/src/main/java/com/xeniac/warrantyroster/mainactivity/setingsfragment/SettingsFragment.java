@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +19,17 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.airbnb.lottie.LottieDrawable;
+import com.apollographql.apollo.ApolloCall;
+import com.apollographql.apollo.ApolloClient;
+import com.apollographql.apollo.api.Response;
+import com.apollographql.apollo.exception.ApolloException;
+import com.apollographql.apollo.request.RequestHeaders;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 import com.xeniac.warrantyroster.Constants;
+import com.xeniac.warrantyroster.NetworkHelper;
 import com.xeniac.warrantyroster.R;
 import com.xeniac.warrantyroster.databinding.FragmentSettingsBinding;
 import com.xeniac.warrantyroster.landingactivity.LandingActivity;
@@ -68,6 +78,7 @@ public class SettingsFragment extends Fragment {
         currentCountry = settingsPrefs.getString(Constants.PREFERENCE_COUNTRY_KEY, "US");
         currentTheme = settingsPrefs.getInt(Constants.PREFERENCE_THEME_KEY, 0);
 
+        getAccountDetails();
         setCurrentLanguageText();
         setCurrentThemeText();
         verifyOnClick();
@@ -77,6 +88,94 @@ public class SettingsFragment extends Fragment {
         themeOnClick();
         privacyPolicyOnClick();
         logoutOnClick();
+    }
+
+    private void getAccountDetails() {
+        if (NetworkHelper.hasNetworkAccess(context)) {
+            getAccountDetailsQuery();
+        } else {
+            hideAccountDetails();
+            hideLoadingAnimation();
+            Snackbar.make(view, context.getResources().getString(R.string.network_error_connection),
+                    BaseTransientBottomBar.LENGTH_INDEFINITE)
+                    .setAction(context.getResources().getString(R.string.network_error_retry), v -> getAccountDetails()).show();
+        }
+    }
+
+    private void getAccountDetailsQuery() {
+        showLoadingAnimation();
+
+        SharedPreferences loginPrefs = context.getSharedPreferences(Constants.PREFERENCE_LOGIN, Context.MODE_PRIVATE);
+        String userToken = loginPrefs.getString(Constants.PREFERENCE_USER_TOKEN_KEY, null);
+
+        ApolloClient apolloClient = ApolloClient.builder()
+                .serverUrl(Constants.URL_GRAPHQL)
+                .build();
+
+        apolloClient.query(new GetAccountDetailsQuery())
+                .toBuilder().requestHeaders(RequestHeaders.builder().addHeader("Authorization", "Bearer " + userToken).build())
+                .build()
+                .enqueue(new ApolloCall.Callback<GetAccountDetailsQuery.Data>() {
+                    @Override
+                    public void onResponse(@NonNull Response<GetAccountDetailsQuery.Data> response) {
+                        if (settingsBinding != null) {
+                            activity.runOnUiThread(() -> {
+                                hideLoadingAnimation();
+
+                                if (!response.hasErrors()) {
+                                    Log.i("getAccountDetails", "onResponse: " + response);
+                                    setAccountDetails(response.getData().getAccountDetails().email(),
+                                            response.getData().getAccountDetails().is_email_verified());
+                                } else {
+                                    Log.e("getAccountDetails", "onResponse Errors: " + response.getErrors());
+                                    Snackbar.make(view, context.getResources().getString(R.string.network_error_response),
+                                            BaseTransientBottomBar.LENGTH_INDEFINITE)
+                                            .setAction(context.getResources().getString(R.string.network_error_retry), v -> getAccountDetails()).show();
+                                }
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull ApolloException e) {
+                        Log.e("getAccountDetails", "onFailure: " + e.getMessage());
+                        if (settingsBinding != null) {
+                            activity.runOnUiThread(() -> {
+                                hideLoadingAnimation();
+                                hideAccountDetails();
+                                Snackbar.make(view, context.getResources().getString(R.string.network_error_failure),
+                                        BaseTransientBottomBar.LENGTH_LONG).show();
+                            });
+                        }
+                    }
+                });
+    }
+
+    private void setAccountDetails(String email, boolean isEmailVerified) {
+        showAccountDetails();
+        settingsBinding.tvSettingsAccountEmail.setText(email);
+
+        if (isEmailVerified) {
+            settingsBinding.btnSettingsAccountEmail.setClickable(false);
+            settingsBinding.btnSettingsAccountEmail.setText(context.getResources().getString(R.string.settings_btn_account_verified));
+            settingsBinding.btnSettingsAccountEmail.setTextColor(context.getResources().getColor(R.color.green));
+            settingsBinding.btnSettingsAccountEmail.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.green20)));
+            settingsBinding.ivSettingsAccountEmail.setBackgroundColor(context.getResources().getColor(R.color.green10));
+            settingsBinding.lavSettingsAccountEmail.setRepeatCount(0);
+            settingsBinding.lavSettingsAccountEmail.setSpeed(0.60f);
+            settingsBinding.lavSettingsAccountEmail.setAnimation(R.raw.anim_account_verified);
+            settingsBinding.lavSettingsAccountEmail.playAnimation();
+        } else {
+            settingsBinding.btnSettingsAccountEmail.setClickable(true);
+            settingsBinding.btnSettingsAccountEmail.setText(context.getResources().getString(R.string.settings_btn_account_verify));
+            settingsBinding.btnSettingsAccountEmail.setTextColor(context.getResources().getColor(R.color.red));
+            settingsBinding.btnSettingsAccountEmail.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.red20)));
+            settingsBinding.ivSettingsAccountEmail.setBackgroundColor(context.getResources().getColor(R.color.red10));
+            settingsBinding.lavSettingsAccountEmail.setRepeatCount(LottieDrawable.INFINITE);
+            settingsBinding.lavSettingsAccountEmail.setSpeed(1.00f);
+            settingsBinding.lavSettingsAccountEmail.setAnimation(R.raw.anim_account_not_verified);
+            settingsBinding.lavSettingsAccountEmail.playAnimation();
+        }
     }
 
     private void setCurrentLanguageText() {
@@ -111,6 +210,7 @@ public class SettingsFragment extends Fragment {
 
     private void verifyOnClick() {
         settingsBinding.btnSettingsAccountEmail.setOnClickListener(view -> {
+            //TODO edit
             Toast.makeText(context, "click", Toast.LENGTH_SHORT).show();
             settingsBinding.btnSettingsAccountEmail.setClickable(false);
             settingsBinding.btnSettingsAccountEmail.setText(context.getResources().getString(R.string.settings_btn_account_verified));
@@ -192,5 +292,22 @@ public class SettingsFragment extends Fragment {
             startActivity(new Intent(context, LandingActivity.class));
             activity.finish();
         });
+    }
+
+    private void showAccountDetails() {
+        settingsBinding.groupSettingsAccount.setVisibility(View.VISIBLE);
+    }
+
+    private void hideAccountDetails() {
+        settingsBinding.groupSettingsAccount.setVisibility(View.GONE);
+    }
+
+    private void showLoadingAnimation() {
+        settingsBinding.lpiSettingsAccountEmail.setVisibility(View.VISIBLE);
+
+    }
+
+    private void hideLoadingAnimation() {
+        settingsBinding.lpiSettingsAccountEmail.setVisibility(View.GONE);
     }
 }
