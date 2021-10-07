@@ -87,25 +87,19 @@
 
     <style name="Theme.WarrantyRoster.LoadingProgressBar" parent="Widget.MaterialComponents.CircularProgressIndicator">
         <item name="android:indeterminate">true</item>
-        <item name="hideAnimationBehavior">inward</item>
         <item name="indicatorColor">@color/grayMedium</item>
-        <item name="showAnimationBehavior">outward</item>
         <item name="trackCornerRadius">12dp</item>
     </style>
 
     <style name="Theme.WarrantyRoster.LoadingProgressBar.Button" parent="Widget.MaterialComponents.CircularProgressIndicator.Small">
         <item name="android:indeterminate">true</item>
-        <item name="hideAnimationBehavior">inward</item>
         <item name="indicatorColor">@color/whiteConstant</item>
-        <item name="showAnimationBehavior">outward</item>
         <item name="trackCornerRadius">12dp</item>
     </style>
 
     <style name="Theme.WarrantyRoster.LoadingProgressBar.Toolbar" parent="Widget.MaterialComponents.CircularProgressIndicator.Small">
         <item name="android:indeterminate">true</item>
-        <item name="hideAnimationBehavior">inward</item>
         <item name="indicatorColor">@color/black</item>
-        <item name="showAnimationBehavior">outward</item>
         <item name="trackCornerRadius">12dp</item>
     </style>
 
