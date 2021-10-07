@@ -512,6 +512,14 @@
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
+                    <!--TODO remove after adding change language feature-->
+                    <androidx.constraintlayout.widget.Group
+                        android:id="@+id/group_settings_language"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        app:constraint_referenced_ids="cl_settings_settings_language,divider_settings_settings_first" />
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </com.google.android.material.card.MaterialCardView>
