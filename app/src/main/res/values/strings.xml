@@ -3,7 +3,7 @@
     <string name="network_error_connection">Unable to connect to the internet.</string>
     <string name="network_error_failure">You\'re having network issues. Please try again later.</string>
     <string name="network_error_retry">Retry</string>
-    <string name="network_error_response">Whoops!\nIt looks like you encountered an error. Please try again.</string>
+    <string name="network_error_response">It looks like you encountered an error. Please try again.</string>
 
     <!--Category Titles-->
     <string name="category_accessory">Accessory</string>
@@ -132,7 +132,7 @@
     <string name="warranty_details_delete_dialog_message">Are you sure you want to delete %s?</string>
     <string name="warranty_details_delete_dialog_positive">Delete</string>
     <string name="warranty_details_delete_dialog_negative">Cancel</string>
-    <string name="warranty_details_delete_success">%s has been deleted successfully.</string>
+    <string name="warranty_details_delete_success">%s has been successfully deleted.</string>
 
     <!--Edit Warranty Fragment-->
     <string name="edit_warranty_text_title">Edit Warranty</string>
@@ -194,5 +194,9 @@
     <string name="change_email_hint_email">Enter a new email address</string>
     <string name="change_email_btn_change">Change Email</string>
     <string name="change_email_error_email">Email address is not valid!</string>
+    <string name="change_email_error_email_same">New email cannot be the same as your current email!</string>
+    <string name="change_email_error_email_exists">An account with the provided email already exists.</string>
+    <string name="change_email_dialog_message">Your email has been successfully changed.</string>
+    <string name="change_email_dialog_positive">Confirm</string>
 
 </resources>

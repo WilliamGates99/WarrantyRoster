@@ -271,7 +271,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:visibility="gone"
-                        app:constraint_referenced_ids="iv_settings_account_email,lav_settings_account_email,tv_settings_account_email,btn_settings_account_email,divider_settings_account_first" />
+                        app:constraint_referenced_ids="iv_settings_account_email,lav_settings_account_email,tv_settings_account_email,btn_settings_account_email,divider_settings_account_first,cl_settings_account_change_email,divider_settings_account_second" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

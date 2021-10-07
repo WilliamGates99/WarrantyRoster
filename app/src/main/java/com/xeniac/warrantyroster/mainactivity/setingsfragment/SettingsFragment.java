@@ -47,6 +47,7 @@ public class SettingsFragment extends Fragment {
     private String currentLanguage;
     private String currentCountry;
     private int currentTheme;
+    private String accountEmail;
 
     public SettingsFragment() {
     }
@@ -124,7 +125,8 @@ public class SettingsFragment extends Fragment {
 
                                 if (!response.hasErrors()) {
                                     Log.i("getAccountDetails", "onResponse: " + response);
-                                    setAccountDetails(response.getData().getAccountDetails().email(),
+                                    accountEmail = response.getData().getAccountDetails().email();
+                                    setAccountDetails(accountEmail,
                                             response.getData().getAccountDetails().is_email_verified());
                                 } else {
                                     Log.e("getAccountDetails", "onResponse Errors: " + response.getErrors());
@@ -225,8 +227,11 @@ public class SettingsFragment extends Fragment {
     }
 
     private void changeEmailOnClick() {
-        settingsBinding.clSettingsAccountChangeEmail.setOnClickListener(view ->
-                navController.navigate(R.id.action_settingsFragment_to_changeEmailFragment));
+        settingsBinding.clSettingsAccountChangeEmail.setOnClickListener(view -> {
+            SettingsFragmentDirections.ActionSettingsFragmentToChangeEmailFragment action =
+                    SettingsFragmentDirections.actionSettingsFragmentToChangeEmailFragment(accountEmail);
+            navController.navigate(action);
+        });
     }
 
     private void changePasswordOnClick() {
