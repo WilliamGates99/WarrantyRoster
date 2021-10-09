@@ -219,7 +219,7 @@ public class WarrantyDetailsFragment extends Fragment {
                                     Log.i("deleteWarranty", "onResponse: " + response);
                                     Toast.makeText(context, String.format(
                                             context.getResources().getString(R.string.warranty_details_delete_success),
-                                                    warranty.getTitle()), Toast.LENGTH_SHORT).show();
+                                                    warranty.getTitle()), Toast.LENGTH_LONG).show();
                                     activity.onBackPressed();
                                 } else {
                                     Log.e("deleteWarranty", "onResponse Errors: " + response.getErrors());
