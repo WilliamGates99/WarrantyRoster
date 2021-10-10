@@ -123,6 +123,17 @@
                         app:layout_constraintTop_toTopOf="@+id/iv_settings_account_email"
                         app:layout_constraintVertical_bias="0.5" />
 
+                    <com.google.android.material.progressindicator.CircularProgressIndicator
+                        android:id="@+id/cpi_settings_account_email_verification"
+                        style="@style/Theme.WarrantyRoster.LoadingProgressBar.Button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="@+id/btn_settings_account_email"
+                        app:layout_constraintEnd_toEndOf="@+id/btn_settings_account_email"
+                        app:layout_constraintStart_toStartOf="@+id/btn_settings_account_email"
+                        app:layout_constraintTop_toTopOf="@+id/btn_settings_account_email" />
+
                     <com.google.android.material.progressindicator.LinearProgressIndicator
                         android:id="@+id/lpi_settings_account_email"
                         style="@style/Theme.WarrantyRoster.LoadingProgressBar.Linear"

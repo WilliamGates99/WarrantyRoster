@@ -211,19 +211,71 @@ public class SettingsFragment extends Fragment {
     }
 
     private void verifyOnClick() {
-        settingsBinding.btnSettingsAccountEmail.setOnClickListener(view -> {
-            //TODO edit
-            Toast.makeText(context, "click", Toast.LENGTH_SHORT).show();
-            settingsBinding.btnSettingsAccountEmail.setClickable(false);
-            settingsBinding.btnSettingsAccountEmail.setText(context.getResources().getString(R.string.settings_btn_account_verified));
-            settingsBinding.btnSettingsAccountEmail.setTextColor(context.getResources().getColor(R.color.green));
-            settingsBinding.btnSettingsAccountEmail.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.green20)));
-            settingsBinding.ivSettingsAccountEmail.setBackgroundColor(context.getResources().getColor(R.color.green10));
-            settingsBinding.lavSettingsAccountEmail.setRepeatCount(0);
-            settingsBinding.lavSettingsAccountEmail.setSpeed(0.60f);
-            settingsBinding.lavSettingsAccountEmail.setAnimation(R.raw.anim_account_verified);
-            settingsBinding.lavSettingsAccountEmail.playAnimation();
-        });
+        settingsBinding.btnSettingsAccountEmail.setOnClickListener(view ->
+                sendVerificationEmail());
+    }
+
+    private void sendVerificationEmail() {
+        if (NetworkHelper.hasNetworkAccess(context)) {
+            sendVerificationEmailMutation();
+        } else {
+            hideVerificationLoadingAnimation();
+            Snackbar.make(view, context.getResources().getString(R.string.network_error_connection),
+                    BaseTransientBottomBar.LENGTH_INDEFINITE)
+                    .setAction(context.getResources().getString(R.string.network_error_retry), v -> sendVerificationEmail()).show();
+        }
+    }
+
+    private void sendVerificationEmailMutation() {
+        showVerificationLoadingAnimation();
+
+        SharedPreferences loginPrefs = context.getSharedPreferences(Constants.PREFERENCE_LOGIN, Context.MODE_PRIVATE);
+        String userToken = loginPrefs.getString(Constants.PREFERENCE_USER_TOKEN_KEY, null);
+
+        ApolloClient apolloClient = ApolloClient.builder()
+                .serverUrl(Constants.URL_GRAPHQL)
+                .build();
+
+        apolloClient.mutate(new SendVerificationEmailMutation())
+                .toBuilder().requestHeaders(RequestHeaders.builder().addHeader("Authorization", "Bearer " + userToken).build())
+                .build()
+                .enqueue(new ApolloCall.Callback<SendVerificationEmailMutation.Data>() {
+                    @Override
+                    public void onResponse(@NonNull Response<SendVerificationEmailMutation.Data> response) {
+                        if (settingsBinding != null) {
+                            activity.runOnUiThread(() -> {
+                                hideVerificationLoadingAnimation();
+
+                                if (!response.hasErrors()) {
+                                    Log.i("sendVerificationEmail", "onResponse: " + response);
+                                    MaterialAlertDialogBuilder sendVerificationEmailDialogBuilder = new MaterialAlertDialogBuilder(context)
+                                            .setMessage(context.getResources().getString(R.string.settings_dialog_message))
+                                            .setPositiveButton(context.getResources().getString(R.string.settings_dialog_positive), (dialog, which) -> {
+                                            });
+                                    sendVerificationEmailDialogBuilder.show();
+                                } else {
+                                    Log.e("sendVerificationEmail", "onResponse Errors: " + response.getErrors());
+                                    Snackbar.make(view, context.getResources().getString(R.string.network_error_response),
+                                            BaseTransientBottomBar.LENGTH_INDEFINITE)
+                                            .setAction(context.getResources().getString(R.string.network_error_retry), v -> sendVerificationEmail())
+                                            .show();
+                                }
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull ApolloException e) {
+                        Log.e("sendVerificationEmail", "onFailure: " + e.getMessage());
+                        if (settingsBinding != null) {
+                            activity.runOnUiThread(() -> {
+                                hideVerificationLoadingAnimation();
+                                Snackbar.make(view, context.getResources().getString(R.string.network_error_failure),
+                                        BaseTransientBottomBar.LENGTH_LONG).show();
+                            });
+                        }
+                    }
+                });
     }
 
     private void changeEmailOnClick() {
@@ -314,5 +366,18 @@ public class SettingsFragment extends Fragment {
 
     private void hideLoadingAnimation() {
         settingsBinding.lpiSettingsAccountEmail.setVisibility(View.GONE);
+    }
+
+    private void showVerificationLoadingAnimation() {
+        settingsBinding.btnSettingsAccountEmail.setClickable(false);
+        settingsBinding.btnSettingsAccountEmail.setText(null);
+        settingsBinding.cpiSettingsAccountEmailVerification.setVisibility(View.VISIBLE);
+
+    }
+
+    private void hideVerificationLoadingAnimation() {
+        settingsBinding.cpiSettingsAccountEmailVerification.setVisibility(View.GONE);
+        settingsBinding.btnSettingsAccountEmail.setClickable(true);
+        settingsBinding.btnSettingsAccountEmail.setText(context.getResources().getString(R.string.settings_btn_account_verify));
     }
 }
