@@ -507,6 +507,7 @@ public class EditWarrantyFragment extends Fragment {
     }
 
     private void showLoadingAnimation() {
+        editWarrantyBinding.toolbarEditWarranty.getMenu().getItem(0).setVisible(false);
         editWarrantyBinding.tiEditWarrantyEditTitle.setEnabled(false);
         editWarrantyBinding.tiEditWarrantyDdCategory.setEnabled(false);
         editWarrantyBinding.tiEditWarrantyEditBrand.setEnabled(false);
@@ -519,6 +520,7 @@ public class EditWarrantyFragment extends Fragment {
     }
 
     private void hideLoadingAnimation() {
+        editWarrantyBinding.toolbarEditWarranty.getMenu().getItem(0).setVisible(true);
         editWarrantyBinding.tiEditWarrantyEditTitle.setEnabled(true);
         editWarrantyBinding.tiEditWarrantyDdCategory.setEnabled(true);
         editWarrantyBinding.tiEditWarrantyEditBrand.setEnabled(true);

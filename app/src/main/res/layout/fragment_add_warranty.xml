@@ -16,7 +16,17 @@
         app:layout_constraintTop_toTopOf="parent"
         app:menu="@menu/menu_add_warranty"
         app:navigationIcon="@drawable/ic_menu_back"
-        app:title="@string/add_warranty_text_title" />
+        app:title="@string/add_warranty_text_title">
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/cpi_add_warranty"
+            style="@style/Theme.WarrantyRoster.LoadingProgressBar.Toolbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|end"
+            android:visibility="gone" />
+
+    </com.google.android.material.appbar.MaterialToolbar>
 
     <ScrollView
         android:layout_width="0dp"
@@ -47,7 +57,8 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:paddingBottom="16dp">
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/tv_add_warranty_title_title"
@@ -95,43 +106,44 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/tv_add_warranty_title_category"
+                        android:id="@+id/tv_add_warranty_title_date_starting"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="24dp"
+                        android:layout_marginHorizontal="8dp"
                         android:layout_marginTop="16dp"
                         android:fontFamily="@font/nunito_bold"
                         android:gravity="center_vertical|start"
-                        android:labelFor="@+id/ti_add_warranty_layout_category"
+                        android:labelFor="@+id/ti_add_warranty_layout_date_starting"
                         android:maxLines="1"
-                        android:text="@string/add_warranty_title_category"
+                        android:text="@string/add_warranty_title_date_starting"
                         android:textAlignment="gravity"
                         android:textColor="@color/black"
                         android:textSize="14sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/ti_add_warranty_layout_date_starting"
+                        app:layout_constraintStart_toStartOf="@+id/ti_add_warranty_layout_date_starting"
                         app:layout_constraintTop_toBottomOf="@+id/ti_add_warranty_layout_title" />
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/ti_add_warranty_layout_category"
-                        style="@style/Theme.WarrantyRoster.TextInputLayout.Dropdown"
+                        android:id="@+id/ti_add_warranty_layout_date_starting"
+                        style="@style/Theme.WarrantyRoster.TextInputLayout"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginStart="16dp"
                         android:layout_marginTop="4dp"
-                        android:layout_marginBottom="16dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/iv_add_warranty_icon_category"
+                        android:layout_marginEnd="8dp"
+                        app:layout_constraintEnd_toStartOf="@+id/ti_add_warranty_layout_date_expiry"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintHorizontal_weight="1"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_add_warranty_title_category">
+                        app:layout_constraintTop_toBottomOf="@+id/tv_add_warranty_title_date_starting">
 
-                        <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                            android:id="@+id/ti_add_warranty_dd_category"
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/ti_add_warranty_edit_date_starting"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/nunito_regular"
                             android:gravity="center_vertical"
-                            android:hint="@string/add_warranty_hint_category"
+                            android:hint="@string/add_warranty_hint_date"
                             android:imeOptions="actionNext"
                             android:inputType="none"
                             android:maxLines="1"
@@ -141,19 +153,71 @@
 
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <com.google.android.material.imageview.ShapeableImageView
-                        android:id="@+id/iv_add_warranty_icon_category"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/tv_add_warranty_title_date_expiry"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="8dp"
+                        android:layout_marginTop="16dp"
+                        android:fontFamily="@font/nunito_bold"
+                        android:gravity="center_vertical|start"
+                        android:labelFor="@+id/ti_add_warranty_layout_date_expiry"
+                        android:maxLines="1"
+                        android:text="@string/add_warranty_title_date_expiry"
+                        android:textAlignment="gravity"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
+                        app:layout_constraintEnd_toEndOf="@+id/ti_add_warranty_layout_date_expiry"
+                        app:layout_constraintStart_toStartOf="@+id/ti_add_warranty_layout_date_expiry"
+                        app:layout_constraintTop_toBottomOf="@+id/ti_add_warranty_layout_title" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/ti_add_warranty_layout_date_expiry"
+                        style="@style/Theme.WarrantyRoster.TextInputLayout"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="4dp"
                         android:layout_marginEnd="16dp"
-                        android:background="@color/grayLight"
-                        android:elevation="8dp"
-                        android:src="@drawable/ic_category_miscellaneous"
-                        app:contentPadding="12dp"
-                        app:layout_constraintBottom_toBottomOf="@+id/ti_add_warranty_layout_category"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/ti_add_warranty_layout_category"
-                        app:shapeAppearance="@style/Theme.WarrantyRoster.ImageViewShapeAppearance" />
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintHorizontal_weight="1"
+                        app:layout_constraintStart_toEndOf="@+id/ti_add_warranty_layout_date_starting"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_add_warranty_title_date_expiry">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/ti_add_warranty_edit_date_expiry"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/nunito_regular"
+                            android:gravity="center_vertical"
+                            android:hint="@string/add_warranty_hint_date"
+                            android:imeOptions="actionNext"
+                            android:inputType="none"
+                            android:maxLines="1"
+                            android:textColor="@color/black"
+                            android:textColorHint="@color/grayDark"
+                            android:textSize="16sp" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/tv_add_warranty_date_error"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="24dp"
+                        android:layout_marginTop="4dp"
+                        android:fontFamily="@font/nunito_semi_bold"
+                        android:gravity="center_vertical|start"
+                        android:text="@string/add_warranty_error_date"
+                        android:textAlignment="gravity"
+                        android:textColor="@color/red"
+                        android:textSize="12sp"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/ti_add_warranty_layout_date_starting" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -334,117 +398,63 @@
                     android:layout_height="match_parent">
 
                     <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/tv_add_warranty_title_date_starting"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="8dp"
-                        android:layout_marginTop="16dp"
-                        android:fontFamily="@font/nunito_bold"
-                        android:gravity="center_vertical|start"
-                        android:labelFor="@+id/ti_add_warranty_layout_date_starting"
-                        android:maxLines="1"
-                        android:text="@string/add_warranty_title_date_starting"
-                        android:textAlignment="gravity"
-                        android:textColor="@color/black"
-                        android:textSize="14sp"
-                        app:layout_constraintEnd_toEndOf="@+id/ti_add_warranty_layout_date_starting"
-                        app:layout_constraintStart_toStartOf="@+id/ti_add_warranty_layout_date_starting"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/ti_add_warranty_layout_date_starting"
-                        style="@style/Theme.WarrantyRoster.TextInputLayout"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginEnd="8dp"
-                        app:layout_constraintEnd_toStartOf="@+id/ti_add_warranty_layout_date_expiry"
-                        app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintHorizontal_weight="1"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_add_warranty_title_date_starting">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/ti_add_warranty_edit_date_starting"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/nunito_regular"
-                            android:gravity="center_vertical"
-                            android:hint="@string/add_warranty_hint_date"
-                            android:imeOptions="actionNext"
-                            android:inputType="none"
-                            android:maxLines="1"
-                            android:textColor="@color/black"
-                            android:textColorHint="@color/grayDark"
-                            android:textSize="16sp" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/tv_add_warranty_title_date_expiry"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="8dp"
-                        android:layout_marginTop="16dp"
-                        android:fontFamily="@font/nunito_bold"
-                        android:gravity="center_vertical|start"
-                        android:labelFor="@+id/ti_add_warranty_layout_date_expiry"
-                        android:maxLines="1"
-                        android:text="@string/add_warranty_title_date_expiry"
-                        android:textAlignment="gravity"
-                        android:textColor="@color/black"
-                        android:textSize="14sp"
-                        app:layout_constraintEnd_toEndOf="@+id/ti_add_warranty_layout_date_expiry"
-                        app:layout_constraintStart_toStartOf="@+id/ti_add_warranty_layout_date_expiry"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/ti_add_warranty_layout_date_expiry"
-                        style="@style/Theme.WarrantyRoster.TextInputLayout"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginEnd="16dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintHorizontal_weight="1"
-                        app:layout_constraintStart_toEndOf="@+id/ti_add_warranty_layout_date_starting"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_add_warranty_title_date_expiry">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/ti_add_warranty_edit_date_expiry"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/nunito_regular"
-                            android:gravity="center_vertical"
-                            android:hint="@string/add_warranty_hint_date"
-                            android:imeOptions="actionNext"
-                            android:inputType="none"
-                            android:maxLines="1"
-                            android:textColor="@color/black"
-                            android:textColorHint="@color/grayDark"
-                            android:textSize="16sp" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/tv_add_warranty_date_error"
+                        android:id="@+id/tv_add_warranty_title_category"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="24dp"
-                        android:layout_marginTop="4dp"
-                        android:fontFamily="@font/nunito_semi_bold"
+                        android:layout_marginTop="16dp"
+                        android:fontFamily="@font/nunito_bold"
                         android:gravity="center_vertical|start"
-                        android:text="@string/add_warranty_error_date"
+                        android:labelFor="@+id/ti_add_warranty_layout_category"
+                        android:maxLines="1"
+                        android:text="@string/add_warranty_title_category"
                         android:textAlignment="gravity"
-                        android:textColor="@color/red"
-                        android:textSize="12sp"
-                        android:visibility="gone"
+                        android:textColor="@color/black"
+                        android:textSize="14sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/ti_add_warranty_layout_date_starting" />
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/ti_add_warranty_layout_category"
+                        style="@style/Theme.WarrantyRoster.TextInputLayout.Dropdown"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="16dp"
+                        android:layout_marginTop="4dp"
+                        app:layout_constraintEnd_toStartOf="@+id/iv_add_warranty_icon_category"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_add_warranty_title_category">
+
+                        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                            android:id="@+id/ti_add_warranty_dd_category"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/nunito_regular"
+                            android:gravity="center_vertical"
+                            android:hint="@string/add_warranty_hint_category"
+                            android:imeOptions="actionNext"
+                            android:inputType="none"
+                            android:maxLines="1"
+                            android:textColor="@color/black"
+                            android:textColorHint="@color/grayDark"
+                            android:textSize="16sp" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/iv_add_warranty_icon_category"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_marginEnd="16dp"
+                        android:background="@color/grayLight"
+                        android:elevation="8dp"
+                        android:src="@drawable/ic_category_miscellaneous"
+                        app:contentPadding="12dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/ti_add_warranty_layout_category"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/ti_add_warranty_layout_category"
+                        app:shapeAppearance="@style/Theme.WarrantyRoster.ImageViewShapeAppearance" />
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/tv_add_warranty_title_description"
@@ -462,7 +472,7 @@
                         android:textSize="14sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_add_warranty_date_error" />
+                        app:layout_constraintTop_toBottomOf="@+id/ti_add_warranty_layout_category" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ti_add_warranty_layout_description"
@@ -499,17 +509,5 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
-
-    <com.google.android.material.progressindicator.CircularProgressIndicator
-        android:id="@+id/cpi_add_warranty"
-        style="@style/Theme.WarrantyRoster.LoadingProgressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:indicatorColor="@color/blue"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar_add_warranty" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
