@@ -48,6 +48,7 @@ public class SettingsFragment extends Fragment {
     private String currentCountry;
     private int currentTheme;
     private String accountEmail;
+    private ColorStateList verifyEmailBackgroundTint;
 
     public SettingsFragment() {
     }
@@ -166,18 +167,19 @@ public class SettingsFragment extends Fragment {
             settingsBinding.lavSettingsAccountEmail.setRepeatCount(0);
             settingsBinding.lavSettingsAccountEmail.setSpeed(0.60f);
             settingsBinding.lavSettingsAccountEmail.setAnimation(R.raw.anim_account_verified);
-            settingsBinding.lavSettingsAccountEmail.playAnimation();
         } else {
             settingsBinding.btnSettingsAccountEmail.setClickable(true);
             settingsBinding.btnSettingsAccountEmail.setText(context.getResources().getString(R.string.settings_btn_account_verify));
-            settingsBinding.btnSettingsAccountEmail.setTextColor(context.getResources().getColor(R.color.red));
-            settingsBinding.btnSettingsAccountEmail.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.red20)));
+            settingsBinding.btnSettingsAccountEmail.setTextColor(context.getResources().getColor(R.color.blue));
+            settingsBinding.btnSettingsAccountEmail.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.blue20)));
             settingsBinding.ivSettingsAccountEmail.setBackgroundColor(context.getResources().getColor(R.color.red10));
             settingsBinding.lavSettingsAccountEmail.setRepeatCount(LottieDrawable.INFINITE);
             settingsBinding.lavSettingsAccountEmail.setSpeed(1.00f);
             settingsBinding.lavSettingsAccountEmail.setAnimation(R.raw.anim_account_not_verified);
-            settingsBinding.lavSettingsAccountEmail.playAnimation();
         }
+
+        settingsBinding.lavSettingsAccountEmail.playAnimation();
+        verifyEmailBackgroundTint = settingsBinding.btnSettingsAccountEmail.getBackgroundTintList();
     }
 
     private void setCurrentLanguageText() {
@@ -371,13 +373,15 @@ public class SettingsFragment extends Fragment {
     private void showVerificationLoadingAnimation() {
         settingsBinding.btnSettingsAccountEmail.setClickable(false);
         settingsBinding.btnSettingsAccountEmail.setText(null);
+        settingsBinding.btnSettingsAccountEmail.setBackgroundTintList(null);
         settingsBinding.cpiSettingsAccountEmailVerification.setVisibility(View.VISIBLE);
 
     }
 
     private void hideVerificationLoadingAnimation() {
         settingsBinding.cpiSettingsAccountEmailVerification.setVisibility(View.GONE);
-        settingsBinding.btnSettingsAccountEmail.setClickable(true);
+        settingsBinding.btnSettingsAccountEmail.setBackgroundTintList(verifyEmailBackgroundTint);
         settingsBinding.btnSettingsAccountEmail.setText(context.getResources().getString(R.string.settings_btn_account_verify));
+        settingsBinding.btnSettingsAccountEmail.setClickable(true);
     }
 }
