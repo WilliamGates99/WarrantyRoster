@@ -28,7 +28,6 @@ public class WarrantyAdapter extends RecyclerView.Adapter<WarrantyAdapter.ViewHo
     private final WarrantyRosterDatabase database;
     private final List<WarrantyDataModel> warrantyList;
     private final WarrantyListClickInterface warrantyListClickInterface;
-    private long daysUntilExpiry;
 
     public WarrantyAdapter(Context context, WarrantyRosterDatabase database,
                            List<WarrantyDataModel> warrantyList,
@@ -82,7 +81,7 @@ public class WarrantyAdapter extends RecyclerView.Adapter<WarrantyAdapter.ViewHo
                         getDayWithSuffix(expiryCalendar.get(Calendar.DAY_OF_MONTH)),
                         expiryCalendar.get(Calendar.YEAR)));
 
-                daysUntilExpiry = getDaysUntilExpiry(expiryCalendar);
+                long daysUntilExpiry = getDaysUntilExpiry(expiryCalendar);
                 if (daysUntilExpiry < 0) {
                     warrantyBinding.tvListWarrantyStatus.setText(context.getResources().getString(R.string.warranties_list_status_expired));
                     warrantyBinding.tvListWarrantyStatus.setTextColor(context.getResources().getColor(R.color.red));
@@ -96,13 +95,13 @@ public class WarrantyAdapter extends RecyclerView.Adapter<WarrantyAdapter.ViewHo
                     warrantyBinding.tvListWarrantyStatus.setTextColor(context.getResources().getColor(R.color.green));
                     warrantyBinding.flListWarrantyStatus.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.green)));
                 }
+
+                warrantyBinding.cvListWarranty.setOnClickListener(view ->
+                        warrantyListClickInterface.onItemClick(warrantyItem, daysUntilExpiry));
             } catch (ParseException e) {
                 e.printStackTrace();
                 Log.e("warrantyAdapter", "ParseException: " + e.getMessage());
             }
-
-            warrantyBinding.cvListWarranty.setOnClickListener(view ->
-                    warrantyListClickInterface.onItemClick(warrantyItem, daysUntilExpiry));
         }
     }
 
