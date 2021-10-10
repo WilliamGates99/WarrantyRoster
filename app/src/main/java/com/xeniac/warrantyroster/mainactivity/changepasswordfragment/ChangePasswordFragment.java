@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +22,12 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.apollographql.apollo.ApolloCall;
 import com.apollographql.apollo.ApolloClient;
+import com.apollographql.apollo.api.Response;
+import com.apollographql.apollo.exception.ApolloException;
+import com.apollographql.apollo.request.RequestHeaders;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.xeniac.warrantyroster.Constants;
@@ -30,6 +36,7 @@ import com.xeniac.warrantyroster.R;
 import com.xeniac.warrantyroster.databinding.FragmentChangePasswordBinding;
 import com.xeniac.warrantyroster.mainactivity.MainActivity;
 
+import java.util.Arrays;
 import java.util.regex.Pattern;
 
 public class ChangePasswordFragment extends Fragment {
@@ -74,11 +81,11 @@ public class ChangePasswordFragment extends Fragment {
     }
 
     private void textInputsBackgroundColor() {
-        changePasswordBinding.tiChangePasswordEditCurrent.setOnFocusChangeListener((view, focused) -> {
+        changePasswordBinding.tiChangePasswordEditOld.setOnFocusChangeListener((view, focused) -> {
             if (focused) {
-                changePasswordBinding.tiChangePasswordLayoutCurrent.setBoxBackgroundColorResource(R.color.background);
+                changePasswordBinding.tiChangePasswordLayoutOld.setBoxBackgroundColorResource(R.color.background);
             } else {
-                changePasswordBinding.tiChangePasswordLayoutCurrent.setBoxBackgroundColorResource(R.color.grayLight);
+                changePasswordBinding.tiChangePasswordLayoutOld.setBoxBackgroundColorResource(R.color.grayLight);
             }
         });
 
@@ -100,7 +107,7 @@ public class ChangePasswordFragment extends Fragment {
     }
 
     private void textInputsStrokeColor() {
-        changePasswordBinding.tiChangePasswordEditCurrent.addTextChangedListener(new TextWatcher() {
+        changePasswordBinding.tiChangePasswordEditOld.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -108,8 +115,8 @@ public class ChangePasswordFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence inputEmail, int start, int before, int count) {
-                changePasswordBinding.tiChangePasswordLayoutCurrent.setErrorEnabled(false);
-                changePasswordBinding.tiChangePasswordLayoutCurrent.setBoxStrokeColor(context.getResources().getColor(R.color.blue));
+                changePasswordBinding.tiChangePasswordLayoutOld.setErrorEnabled(false);
+                changePasswordBinding.tiChangePasswordLayoutOld.setBoxStrokeColor(context.getResources().getColor(R.color.blue));
             }
 
             @Override
@@ -179,41 +186,41 @@ public class ChangePasswordFragment extends Fragment {
 
     private void changePasswordOnClick() {
         changePasswordBinding.btnChangePassword.setOnClickListener(view ->
-                changePassword());
+                changeUserPassword());
     }
 
     private void changePasswordActionDone() {
         changePasswordBinding.tiChangePasswordEditRetype.setOnEditorActionListener((textView, actionId, keyEvent) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                changePassword();
+                changeUserPassword();
             }
             return false;
         });
     }
 
-    private void changePassword() {
+    private void changeUserPassword() {
         InputMethodManager inputMethodManager = (InputMethodManager)
                 context.getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
 
         if (NetworkHelper.hasNetworkAccess(context)) {
-            getChangePasswordInputs();
+            getChangeUserPasswordInputs();
         } else {
             hideLoadingAnimation();
             Snackbar.make(view, context.getResources().getString(R.string.network_error_connection),
                     BaseTransientBottomBar.LENGTH_INDEFINITE)
-                    .setAction(context.getResources().getString(R.string.network_error_retry), v -> changePassword()).show();
+                    .setAction(context.getResources().getString(R.string.network_error_retry), v -> changeUserPassword()).show();
         }
     }
 
-    private void getChangePasswordInputs() {
-        String currentPassword;
+    private void getChangeUserPasswordInputs() {
+        String oldPassword;
         String newPassword;
         String retypeNewPassword;
 
-        if (TextUtils.isEmpty(changePasswordBinding.tiChangePasswordEditCurrent.getText())) {
-            changePasswordBinding.tiChangePasswordLayoutCurrent.requestFocus();
-            changePasswordBinding.tiChangePasswordLayoutCurrent.setBoxStrokeColor(context.getResources().getColor(R.color.red));
+        if (TextUtils.isEmpty(changePasswordBinding.tiChangePasswordEditOld.getText())) {
+            changePasswordBinding.tiChangePasswordLayoutOld.requestFocus();
+            changePasswordBinding.tiChangePasswordLayoutOld.setBoxStrokeColor(context.getResources().getColor(R.color.red));
         } else if (TextUtils.isEmpty(changePasswordBinding.tiChangePasswordEditNew.getText())) {
             changePasswordBinding.tiChangePasswordLayoutNew.requestFocus();
             changePasswordBinding.tiChangePasswordLayoutNew.setBoxStrokeColor(context.getResources().getColor(R.color.red));
@@ -221,20 +228,20 @@ public class ChangePasswordFragment extends Fragment {
             changePasswordBinding.tiChangePasswordLayoutRetype.requestFocus();
             changePasswordBinding.tiChangePasswordLayoutRetype.setBoxStrokeColor(context.getResources().getColor(R.color.red));
         } else {
-            currentPassword = changePasswordBinding.tiChangePasswordEditCurrent.getText().toString().trim();
+            oldPassword = changePasswordBinding.tiChangePasswordEditOld.getText().toString().trim();
             newPassword = changePasswordBinding.tiChangePasswordEditNew.getText().toString().trim();
             retypeNewPassword = changePasswordBinding.tiChangePasswordEditRetype.getText().toString().trim();
 
             if (!isRetypePasswordValid(newPassword, retypeNewPassword)) {
                 changePasswordBinding.tiChangePasswordLayoutRetype.requestFocus();
-                changePasswordBinding.tiChangePasswordLayoutRetype.setError(context.getResources().getString(R.string.change_password_error_password));
+                changePasswordBinding.tiChangePasswordLayoutRetype.setError(context.getResources().getString(R.string.change_password_error_match));
             } else {
-                changeEmailMutation(currentPassword, newPassword, retypeNewPassword);
+                changeEmailMutation(oldPassword, newPassword);
             }
         }
     }
 
-    private void changeEmailMutation(String currentPassword, String newPassword, String retypeNewPassword) {
+    private void changeEmailMutation(String oldPassword, String newPassword) {
         showLoadingAnimation();
 
         SharedPreferences loginPrefs = context.getSharedPreferences(Constants.PREFERENCE_LOGIN, Context.MODE_PRIVATE);
@@ -244,12 +251,57 @@ public class ChangePasswordFragment extends Fragment {
                 .serverUrl(Constants.URL_GRAPHQL)
                 .build();
 
-        //TODO connect to api
-        Toast.makeText(context, "password changed", Toast.LENGTH_SHORT).show();
+        apolloClient.mutate(new ChangeUserPasswordMutation(oldPassword, newPassword))
+                .toBuilder().requestHeaders(RequestHeaders.builder().addHeader("Authorization", "Bearer " + userToken).build())
+                .build()
+                .enqueue(new ApolloCall.Callback<ChangeUserPasswordMutation.Data>() {
+                    @Override
+                    public void onResponse(@NonNull Response<ChangeUserPasswordMutation.Data> response) {
+                        if (changePasswordBinding != null) {
+                            activity.runOnUiThread(() -> {
+                                hideLoadingAnimation();
+
+                                if (!response.hasErrors()) {
+                                    Log.i("changeUserPassword", "onResponse: " + response);
+                                    MaterialAlertDialogBuilder changeUserPasswordDialogBuilder = new MaterialAlertDialogBuilder(context)
+                                            .setMessage(context.getResources().getString(R.string.change_password_dialog_message))
+                                            .setPositiveButton(context.getResources().getString(R.string.change_password_dialog_positive), (dialog, which) -> {
+                                            })
+                                            .setOnDismissListener(dialog -> activity.onBackPressed());
+                                    changeUserPasswordDialogBuilder.show();
+                                } else {
+                                    Log.e("changeUserPassword", "onResponse Errors: " + response.getErrors());
+                                    if (Arrays.toString(response.getErrors().get(0).getCustomAttributes().values().toArray()).contains("code=400")) {
+                                        Snackbar.make(view, context.getResources().getString(R.string.change_password_error_old),
+                                                BaseTransientBottomBar.LENGTH_LONG)
+                                                .show();
+                                    } else {
+                                        Snackbar.make(view, context.getResources().getString(R.string.network_error_response),
+                                                BaseTransientBottomBar.LENGTH_INDEFINITE)
+                                                .setAction(context.getResources().getString(R.string.network_error_retry), v -> changeUserPassword())
+                                                .show();
+                                    }
+                                }
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull ApolloException e) {
+                        Log.e("changeUserPassword", "onFailure: " + e.getMessage());
+                        if (changePasswordBinding != null) {
+                            activity.runOnUiThread(() -> {
+                                hideLoadingAnimation();
+                                Snackbar.make(view, context.getResources().getString(R.string.network_error_failure),
+                                        BaseTransientBottomBar.LENGTH_LONG).show();
+                            });
+                        }
+                    }
+                });
     }
 
     private void showLoadingAnimation() {
-        changePasswordBinding.tiChangePasswordEditCurrent.setEnabled(false);
+        changePasswordBinding.tiChangePasswordEditOld.setEnabled(false);
         changePasswordBinding.tiChangePasswordEditNew.setEnabled(false);
         changePasswordBinding.tiChangePasswordEditRetype.setEnabled(false);
         changePasswordBinding.btnChangePassword.setClickable(false);
@@ -259,7 +311,7 @@ public class ChangePasswordFragment extends Fragment {
 
     private void hideLoadingAnimation() {
         changePasswordBinding.cpiChangePassword.setVisibility(View.GONE);
-        changePasswordBinding.tiChangePasswordEditCurrent.setEnabled(true);
+        changePasswordBinding.tiChangePasswordEditOld.setEnabled(true);
         changePasswordBinding.tiChangePasswordEditNew.setEnabled(true);
         changePasswordBinding.tiChangePasswordEditRetype.setEnabled(true);
         changePasswordBinding.btnChangePassword.setClickable(true);
