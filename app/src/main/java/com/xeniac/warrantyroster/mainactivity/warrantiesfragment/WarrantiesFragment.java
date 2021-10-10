@@ -33,6 +33,7 @@ import com.xeniac.warrantyroster.databinding.FragmentWarrantiesBinding;
 import com.xeniac.warrantyroster.mainactivity.MainActivity;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class WarrantiesFragment extends Fragment implements WarrantyListClickInterface {
@@ -201,8 +202,8 @@ public class WarrantiesFragment extends Fragment implements WarrantyListClickInt
         warrantiesBinding.groupWarrantiesEmptyList.setVisibility(View.GONE);
         warrantiesBinding.rvWarranties.setVisibility(View.VISIBLE);
 
-        WarrantyAdapter warrantyAdapter =
-                new WarrantyAdapter(context, database, warrantiesList, this);
+        WarrantyAdapter warrantyAdapter = new WarrantyAdapter(context,
+                database, sortWarrantiesAlphabetically(warrantiesList), this);
         warrantiesBinding.rvWarranties.setAdapter(warrantyAdapter);
 
         //TODO remove comment after adding search function
@@ -212,8 +213,15 @@ public class WarrantiesFragment extends Fragment implements WarrantyListClickInt
     @Override
     public void onItemClick(WarrantyDataModel warranty, long daysUntilExpiry) {
         WarrantiesFragmentDirections.ActionWarrantiesFragmentToWarrantyDetailsFragment action =
-                WarrantiesFragmentDirections.actionWarrantiesFragmentToWarrantyDetailsFragment(warranty,daysUntilExpiry);
+                WarrantiesFragmentDirections.actionWarrantiesFragmentToWarrantyDetailsFragment(warranty, daysUntilExpiry);
         navController.navigate(action);
+    }
+
+    private List<WarrantyDataModel> sortWarrantiesAlphabetically(List<WarrantyDataModel> warrantiesList) {
+        //noinspection ComparatorCombinators
+        Collections.sort(warrantiesList, (warranty1, warranty2) ->
+                warranty1.getTitle().compareTo(warranty2.getTitle()));
+        return warrantiesList;
     }
 
     private void searchWarrantiesList() {
