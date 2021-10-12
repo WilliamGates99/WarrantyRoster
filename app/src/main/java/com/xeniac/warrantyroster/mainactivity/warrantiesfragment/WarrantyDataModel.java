@@ -16,13 +16,14 @@ public class WarrantyDataModel implements Parcelable {
     private String expiryDate;
     private String description;
     private String categoryId;
+    private ListItemType itemType;
 
     public WarrantyDataModel() {
     }
 
     public WarrantyDataModel(String id, String title, String brand, String model,
                              String serialNumber, String startingDate, String expiryDate,
-                             String description, String categoryId) {
+                             String description, String categoryId, ListItemType itemType) {
         this.id = id;
         this.title = title;
         this.brand = brand;
@@ -32,6 +33,7 @@ public class WarrantyDataModel implements Parcelable {
         this.expiryDate = expiryDate;
         this.description = description;
         this.categoryId = categoryId;
+        this.itemType = itemType;
     }
 
     protected WarrantyDataModel(Parcel in) {
@@ -130,6 +132,14 @@ public class WarrantyDataModel implements Parcelable {
         this.categoryId = categoryId;
     }
 
+    public ListItemType getItemType() {
+        return itemType;
+    }
+
+    public void setItemType(ListItemType itemType) {
+        this.itemType = itemType;
+    }
+
     @NonNull
     @Override
     public String toString() {
@@ -143,6 +153,7 @@ public class WarrantyDataModel implements Parcelable {
                 ", expiryDate='" + expiryDate + '\'' +
                 ", description='" + description + '\'' +
                 ", categoryId='" + categoryId + '\'' +
+                ", itemType=" + itemType +
                 '}';
     }
 
@@ -152,15 +163,15 @@ public class WarrantyDataModel implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(id);
-        parcel.writeString(title);
-        parcel.writeString(brand);
-        parcel.writeString(model);
-        parcel.writeString(serialNumber);
-        parcel.writeString(startingDate);
-        parcel.writeString(expiryDate);
-        parcel.writeString(description);
-        parcel.writeString(categoryId);
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(title);
+        dest.writeString(brand);
+        dest.writeString(model);
+        dest.writeString(serialNumber);
+        dest.writeString(startingDate);
+        dest.writeString(expiryDate);
+        dest.writeString(description);
+        dest.writeString(categoryId);
     }
 }

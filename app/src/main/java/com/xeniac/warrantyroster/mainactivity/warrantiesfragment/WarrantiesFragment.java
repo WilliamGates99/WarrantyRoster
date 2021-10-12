@@ -36,6 +36,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import ir.tapsell.plus.TapsellPlus;
+import ir.tapsell.plus.TapsellPlusInitListener;
+import ir.tapsell.plus.model.AdNetworkError;
+import ir.tapsell.plus.model.AdNetworks;
+
 public class WarrantiesFragment extends Fragment implements WarrantyListClickInterface {
 
     private FragmentWarrantiesBinding warrantiesBinding;
@@ -72,8 +77,23 @@ public class WarrantiesFragment extends Fragment implements WarrantyListClickInt
         database = WarrantyRosterDatabase.getInstance(context);
         ((MainActivity) context).showNavBar();
 
+        adInit();
         seedCategories();
         getWarrantiesList();
+    }
+
+    private void adInit() {
+        TapsellPlus.initialize(context, Constants.TAPSELL_KEY, new TapsellPlusInitListener() {
+            @Override
+            public void onInitializeSuccess(AdNetworks adNetworks) {
+                Log.i("adInit", "onInitializeSuccess: " + adNetworks.name());
+            }
+
+            @Override
+            public void onInitializeFailed(AdNetworks adNetworks, AdNetworkError adNetworkError) {
+                Log.e("adInit", "onInitializeFailed: " + adNetworks.name() + ", error: " + adNetworkError.getErrorMessage());
+            }
+        });
     }
 
     private void seedCategories() {
@@ -136,7 +156,8 @@ public class WarrantiesFragment extends Fragment implements WarrantyListClickInt
                                                     response.getData().getAllWarranties().get(i).starting_date().toString(),
                                                     response.getData().getAllWarranties().get(i).expiry_date().toString(),
                                                     response.getData().getAllWarranties().get(i).description(),
-                                                    response.getData().getAllWarranties().get(i).category_id()
+                                                    response.getData().getAllWarranties().get(i).category_id(),
+                                                    ListItemType.WARRANTY
                                             ));
                                         }
 
@@ -201,9 +222,19 @@ public class WarrantiesFragment extends Fragment implements WarrantyListClickInt
         warrantiesBinding.groupWarrantiesNetwork.setVisibility(View.GONE);
         warrantiesBinding.groupWarrantiesEmptyList.setVisibility(View.GONE);
         warrantiesBinding.rvWarranties.setVisibility(View.VISIBLE);
+        sortWarrantiesAlphabetically(warrantiesList);
 
-        WarrantyAdapter warrantyAdapter = new WarrantyAdapter(context,
-                database, sortWarrantiesAlphabetically(warrantiesList), this);
+        for (int i = 0; i < warrantiesList.size(); i++) {
+            if (i > 0 && i % 5 == 0) {
+                warrantiesList.add(i, new WarrantyDataModel(
+                        null, null, null, null, null, null,
+                        null, null, null, ListItemType.AD
+                ));
+            }
+        }
+
+        WarrantyAdapter warrantyAdapter = new WarrantyAdapter(activity, context,
+                database, warrantiesList, this);
         warrantiesBinding.rvWarranties.setAdapter(warrantyAdapter);
 
         //TODO remove comment after adding search function
@@ -217,11 +248,10 @@ public class WarrantiesFragment extends Fragment implements WarrantyListClickInt
         navController.navigate(action);
     }
 
-    private List<WarrantyDataModel> sortWarrantiesAlphabetically(List<WarrantyDataModel> warrantiesList) {
+    private void sortWarrantiesAlphabetically(List<WarrantyDataModel> warrantiesList) {
         //noinspection ComparatorCombinators
         Collections.sort(warrantiesList, (warranty1, warranty2) ->
                 warranty1.getTitle().compareTo(warranty2.getTitle()));
-        return warrantiesList;
     }
 
     private void searchWarrantiesList() {

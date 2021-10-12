@@ -1,5 +1,6 @@
 package com.xeniac.warrantyroster.mainactivity.warrantiesfragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.util.Log;
@@ -10,8 +11,10 @@ import androidx.annotation.NonNull;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.xeniac.warrantyroster.Constants;
 import com.xeniac.warrantyroster.R;
 import com.xeniac.warrantyroster.database.WarrantyRosterDatabase;
+import com.xeniac.warrantyroster.databinding.ListAdContainerBinding;
 import com.xeniac.warrantyroster.databinding.ListWarrantyBinding;
 
 import java.text.ParseException;
@@ -22,16 +25,30 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
-public class WarrantyAdapter extends RecyclerView.Adapter<WarrantyAdapter.ViewHolder> {
+import ir.tapsell.plus.AdHolder;
+import ir.tapsell.plus.AdRequestCallback;
+import ir.tapsell.plus.AdShowListener;
+import ir.tapsell.plus.TapsellPlus;
+import ir.tapsell.plus.model.TapsellPlusAdModel;
+import ir.tapsell.plus.model.TapsellPlusErrorModel;
 
+public class WarrantyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+    private final Activity activity;
     private final Context context;
     private final WarrantyRosterDatabase database;
     private final List<WarrantyDataModel> warrantyList;
     private final WarrantyListClickInterface warrantyListClickInterface;
 
-    public WarrantyAdapter(Context context, WarrantyRosterDatabase database,
+    private static final int VIEW_TYPE_WARRANTY = 0;
+    private static final int VIEW_TYPE_AD = 1;
+
+    private int requestCounter;
+
+    public WarrantyAdapter(Activity activity, Context context, WarrantyRosterDatabase database,
                            List<WarrantyDataModel> warrantyList,
                            WarrantyListClickInterface warrantyListClickInterface) {
+        this.activity = activity;
         this.context = context;
         this.database = database;
         this.warrantyList = warrantyList;
@@ -40,15 +57,33 @@ public class WarrantyAdapter extends RecyclerView.Adapter<WarrantyAdapter.ViewHo
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        ListWarrantyBinding warrantyBinding = ListWarrantyBinding.inflate(inflater, parent, false);
-        return new ViewHolder(warrantyBinding);
+        if (viewType == VIEW_TYPE_WARRANTY) {
+            ListWarrantyBinding warrantyBinding = ListWarrantyBinding.inflate(inflater, parent, false);
+            return new WarrantyViewHolder(warrantyBinding);
+        } else {
+            ListAdContainerBinding adContainerBinding = ListAdContainerBinding.inflate(inflater, parent, false);
+            return new AdViewHolder(adContainerBinding);
+        }
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.bindView(context, warrantyList.get(position));
+    public int getItemViewType(int position) {
+        if (warrantyList.get(position).getItemType() == ListItemType.WARRANTY) {
+            return VIEW_TYPE_WARRANTY;
+        } else {
+            return VIEW_TYPE_AD;
+        }
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        if (getItemViewType(position) == VIEW_TYPE_WARRANTY) {
+            ((WarrantyViewHolder) holder).bindView(context, warrantyList.get(position));
+        } else {
+            ((AdViewHolder) holder).bindView();
+        }
     }
 
     @Override
@@ -56,11 +91,11 @@ public class WarrantyAdapter extends RecyclerView.Adapter<WarrantyAdapter.ViewHo
         return warrantyList.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    class WarrantyViewHolder extends RecyclerView.ViewHolder {
 
-        ListWarrantyBinding warrantyBinding;
+        private final ListWarrantyBinding warrantyBinding;
 
-        public ViewHolder(@NonNull ListWarrantyBinding warrantyBinding) {
+        public WarrantyViewHolder(@NonNull ListWarrantyBinding warrantyBinding) {
             super(warrantyBinding.getRoot());
             this.warrantyBinding = warrantyBinding;
         }
@@ -130,5 +165,54 @@ public class WarrantyAdapter extends RecyclerView.Adapter<WarrantyAdapter.ViewHo
         todayCalendar.set(Calendar.MILLISECOND, 0);
 
         return TimeUnit.MILLISECONDS.toDays(expiryCalendar.getTimeInMillis() - todayCalendar.getTimeInMillis());
+    }
+
+    class AdViewHolder extends RecyclerView.ViewHolder {
+
+        private final AdHolder adHolder;
+
+        public AdViewHolder(@NonNull ListAdContainerBinding adContainerBinding) {
+            super(adContainerBinding.getRoot());
+            adHolder = TapsellPlus.createAdHolder(activity,
+                    adContainerBinding.cvListAdContainer, R.layout.list_ad_banner);
+        }
+
+        void bindView() {
+            requestCounter = 0;
+            requestNativeAd(adHolder);
+        }
+    }
+
+    private void requestNativeAd(AdHolder adHolder) {
+        TapsellPlus.requestNativeAd(activity, Constants.TAPSELL_NATIVE_ZONE_ID,
+                new AdRequestCallback() {
+                    @Override
+                    public void response(TapsellPlusAdModel tapsellPlusAdModel) {
+                        super.response(tapsellPlusAdModel);
+                        Log.i("requestNativeBannerAd", "response: " + tapsellPlusAdModel.toString());
+                        TapsellPlus.showNativeAd(activity, tapsellPlusAdModel.getResponseId(),
+                                adHolder, new AdShowListener() {
+                                    @Override
+                                    public void onOpened(TapsellPlusAdModel tapsellPlusAdModel) {
+                                        super.onOpened(tapsellPlusAdModel);
+                                    }
+
+                                    @Override
+                                    public void onError(TapsellPlusErrorModel tapsellPlusErrorModel) {
+                                        super.onError(tapsellPlusErrorModel);
+                                    }
+                                });
+                    }
+
+                    @Override
+                    public void error(String s) {
+                        super.error(s);
+                        Log.e("requestNativeBannerAd", "error: " + s);
+                        if (requestCounter < 3) {
+                            requestCounter++;
+                            requestNativeAd(adHolder);
+                        }
+                    }
+                });
     }
 }

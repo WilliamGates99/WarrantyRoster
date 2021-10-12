@@ -37,6 +37,7 @@ import com.xeniac.warrantyroster.database.CategoryDataModel;
 import com.xeniac.warrantyroster.database.WarrantyRosterDatabase;
 import com.xeniac.warrantyroster.databinding.FragmentEditWarrantyBinding;
 import com.xeniac.warrantyroster.mainactivity.MainActivity;
+import com.xeniac.warrantyroster.mainactivity.warrantiesfragment.ListItemType;
 import com.xeniac.warrantyroster.mainactivity.warrantiesfragment.WarrantyDataModel;
 
 import java.text.DecimalFormat;
@@ -470,7 +471,8 @@ public class EditWarrantyFragment extends Fragment {
                                             response.getData().editWarranty().starting_date().toString(),
                                             response.getData().editWarranty().expiry_date().toString(),
                                             response.getData().editWarranty().description(),
-                                            response.getData().editWarranty().category_id()
+                                            response.getData().editWarranty().category_id(),
+                                            ListItemType.WARRANTY
                                     );
 
                                     long daysUntilExpiry = getDaysUntilExpiry(editedWarranty.getExpiryDate());

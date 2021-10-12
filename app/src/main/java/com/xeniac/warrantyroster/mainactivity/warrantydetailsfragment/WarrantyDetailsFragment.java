@@ -42,6 +42,15 @@ import java.util.Calendar;
 import java.util.Locale;
 import java.util.Objects;
 
+import ir.tapsell.plus.AdRequestCallback;
+import ir.tapsell.plus.AdShowListener;
+import ir.tapsell.plus.TapsellPlus;
+import ir.tapsell.plus.TapsellPlusInitListener;
+import ir.tapsell.plus.model.AdNetworkError;
+import ir.tapsell.plus.model.AdNetworks;
+import ir.tapsell.plus.model.TapsellPlusAdModel;
+import ir.tapsell.plus.model.TapsellPlusErrorModel;
+
 public class WarrantyDetailsFragment extends Fragment {
 
     private FragmentWarrantyDetailsBinding warrantyDetailsBinding;
@@ -82,6 +91,7 @@ public class WarrantyDetailsFragment extends Fragment {
         returnToMainActivity();
         handleExtendedFAB();
         getWarranty();
+        adInit();
         editWarrantyOnClick();
         deleteWarrantyOnClick();
     }
@@ -158,6 +168,20 @@ public class WarrantyDetailsFragment extends Fragment {
         }
     }
 
+    private void adInit() {
+        TapsellPlus.initialize(context, Constants.TAPSELL_KEY, new TapsellPlusInitListener() {
+            @Override
+            public void onInitializeSuccess(AdNetworks adNetworks) {
+                Log.i("adInit", "onInitializeSuccess: " + adNetworks.name());
+            }
+
+            @Override
+            public void onInitializeFailed(AdNetworks adNetworks, AdNetworkError adNetworkError) {
+                Log.e("adInit", "onInitializeFailed: " + adNetworks.name() + ", error: " + adNetworkError.getErrorMessage());
+            }
+        });
+    }
+
     private void editWarrantyOnClick() {
         warrantyDetailsBinding.fabWarrantyDetails.setOnClickListener(view -> {
             WarrantyDetailsFragmentDirections.ActionWarrantyDetailsFragmentToEditWarrantyFragment action =
@@ -220,6 +244,7 @@ public class WarrantyDetailsFragment extends Fragment {
                                     Toast.makeText(context, String.format(
                                             context.getResources().getString(R.string.warranty_details_delete_success),
                                             warranty.getTitle()), Toast.LENGTH_LONG).show();
+                                    requestInterstitialAd();
                                     activity.onBackPressed();
                                 } else {
                                     Log.e("deleteWarranty", "onResponse Errors: " + response.getErrors());
@@ -255,5 +280,42 @@ public class WarrantyDetailsFragment extends Fragment {
         warrantyDetailsBinding.toolbarWarrantyDetails.getMenu().getItem(0).setVisible(true);
         warrantyDetailsBinding.fabWarrantyDetails.setClickable(true);
         warrantyDetailsBinding.cpiWarrantyDetails.setVisibility(View.GONE);
+    }
+
+    private void requestInterstitialAd() {
+        TapsellPlus.requestInterstitialAd(activity, Constants.TAPSELL_Interstitial_ZONE_ID,
+                new AdRequestCallback() {
+                    @Override
+                    public void response(TapsellPlusAdModel tapsellPlusAdModel) {
+                        super.response(tapsellPlusAdModel);
+                        Log.i("requestInterstitialAd", "response: " + tapsellPlusAdModel.toString());
+                        showInterstitialAd(tapsellPlusAdModel.getResponseId());
+                    }
+
+                    @Override
+                    public void error(String s) {
+                        super.error(s);
+                        Log.e("requestInterstitialAd", "error: " + s);
+                    }
+                });
+    }
+
+    private void showInterstitialAd(String responseId) {
+        TapsellPlus.showInterstitialAd(activity, responseId, new AdShowListener() {
+            @Override
+            public void onOpened(TapsellPlusAdModel tapsellPlusAdModel) {
+                super.onOpened(tapsellPlusAdModel);
+            }
+
+            @Override
+            public void onClosed(TapsellPlusAdModel tapsellPlusAdModel) {
+                super.onClosed(tapsellPlusAdModel);
+            }
+
+            @Override
+            public void onError(TapsellPlusErrorModel tapsellPlusErrorModel) {
+                super.onError(tapsellPlusErrorModel);
+            }
+        });
     }
 }
