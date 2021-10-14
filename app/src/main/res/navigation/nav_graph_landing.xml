@@ -51,6 +51,11 @@
         android:id="@+id/forgotPwSentFragment"
         android:name="com.xeniac.warrantyroster.landingactivity.forgotpasswordfragment.ForgotPwSentFragment"
         android:label="ForgotPwSentFragment"
-        tools:layout="@layout/fragment_forgot_pw_sent" />
+        tools:layout="@layout/fragment_forgot_pw_sent">
+        <argument
+            android:name="email"
+            app:argType="string"
+            app:nullable="false" />
+    </fragment>
 
 </navigation>
