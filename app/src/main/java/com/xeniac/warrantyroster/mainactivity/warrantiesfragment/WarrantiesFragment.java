@@ -224,8 +224,10 @@ public class WarrantiesFragment extends Fragment implements WarrantyListClickInt
         warrantiesBinding.rvWarranties.setVisibility(View.VISIBLE);
         sortWarrantiesAlphabetically(warrantiesList);
 
+        int adIndex = 5;
         for (int i = 0; i < warrantiesList.size(); i++) {
-            if (i > 0 && i % 5 == 0) {
+            if (i == adIndex) {
+                adIndex += 6;
                 warrantiesList.add(i, new WarrantyDataModel(
                         null, null, null, null, null, null,
                         null, null, null, ListItemType.AD
