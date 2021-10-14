@@ -260,8 +260,8 @@ public class AddWarrantyFragment extends Fragment {
                     decimalFormat.format(startingCalendar.get(Calendar.DAY_OF_MONTH)));
 
             String startingDateInput = String.format("%s/%s/%s",
-                    decimalFormat.format(startingCalendar.get(Calendar.DAY_OF_MONTH)),
                     decimalFormat.format((startingCalendar.get(Calendar.MONTH)) + 1),
+                    decimalFormat.format(startingCalendar.get(Calendar.DAY_OF_MONTH)),
                     startingCalendar.get(Calendar.YEAR));
 
             addWarrantyBinding.tiAddWarrantyEditDateStarting.setText(startingDateInput);
@@ -288,8 +288,8 @@ public class AddWarrantyFragment extends Fragment {
                     decimalFormat.format(expiryCalendar.get(Calendar.DAY_OF_MONTH)));
 
             String expiryDateInput = String.format("%s/%s/%s",
-                    decimalFormat.format(expiryCalendar.get(Calendar.DAY_OF_MONTH)),
                     decimalFormat.format((expiryCalendar.get(Calendar.MONTH)) + 1),
+                    decimalFormat.format(expiryCalendar.get(Calendar.DAY_OF_MONTH)),
                     expiryCalendar.get(Calendar.YEAR));
 
             addWarrantyBinding.tiAddWarrantyEditDateExpiry.setText(expiryDateInput);

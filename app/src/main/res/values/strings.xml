@@ -113,7 +113,7 @@
     <string name="add_warranty_hint_serial">Enter the serial number of the device</string>
     <string name="add_warranty_title_date_starting">Starting Date</string>
     <string name="add_warranty_title_date_expiry">Expiry Date</string>
-    <string name="add_warranty_hint_date">dd/mm/yyyy</string>
+    <string name="add_warranty_hint_date">mm/dd/yyyy</string>
     <string name="add_warranty_title_description">Description</string>
     <string name="add_warranty_hint_description">Enter description</string>
     <string name="add_warranty_title_date_picker_starting">Select Starting Date</string>
@@ -154,7 +154,7 @@
     <string name="edit_warranty_hint_serial">Enter the serial number of the device</string>
     <string name="edit_warranty_title_date_starting">Starting Date</string>
     <string name="edit_warranty_title_date_expiry">Expiry Date</string>
-    <string name="edit_warranty_hint_date">dd/mm/yyyy</string>
+    <string name="edit_warranty_hint_date">mm/dd/yyyy</string>
     <string name="edit_warranty_title_description">Description</string>
     <string name="edit_warranty_hint_description">Enter description</string>
     <string name="edit_warranty_title_date_picker_starting">Select Starting Date</string>
