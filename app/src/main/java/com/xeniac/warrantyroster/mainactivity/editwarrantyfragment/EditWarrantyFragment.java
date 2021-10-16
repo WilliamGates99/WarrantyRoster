@@ -254,7 +254,7 @@ public class EditWarrantyFragment extends Fragment {
 
     private void openStartingDatePicker() {
         MaterialDatePicker<Long> startingDP = MaterialDatePicker.Builder.datePicker()
-                .setTitleText(getResources().getString(R.string.add_warranty_title_date_picker_starting))
+                .setTitleText(getResources().getString(R.string.edit_warranty_title_date_picker_starting))
                 .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
                 .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
                 .build();
@@ -283,7 +283,7 @@ public class EditWarrantyFragment extends Fragment {
 
     private void openExpiryDatePicker() {
         MaterialDatePicker<Long> expiryDP = MaterialDatePicker.Builder.datePicker()
-                .setTitleText(getResources().getString(R.string.add_warranty_title_date_picker_expiry))
+                .setTitleText(getResources().getString(R.string.edit_warranty_title_date_picker_expiry))
                 .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
                 .build();
         expiryDP.show(getParentFragmentManager(), Constants.FRAGMENT_TAG_ADD_CALENDAR_EXPIRY);
