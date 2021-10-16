@@ -4,8 +4,9 @@ public class Constants {
 
     public static final String URL_GRAPHQL = "https://warranty-roster.herokuapp.com/graphql";
     public static final String TAPSELL_KEY = "phbftfiakptpjbkegafmqmmkdsjcjmkldcahhapfssfftdnbgpqeimkjiitfpcoingqkad";
-    public static final String TAPSELL_Interstitial_ZONE_ID = "6165dea5b2c8056d868b68a9";
-    public static final String TAPSELL_NATIVE_ZONE_ID = "61647159b2c8056d868b66c6";
+    public static final String WARRANTIES_NATIVE_ZONE_ID = "61647159b2c8056d868b66c6";
+    public static final String SETTINGS_NATIVE_ZONE_ID = "616b0d4cb2c8056d868b6a1a";
+    public static final String DELETE_WARRANTY_Interstitial_ZONE_ID = "6165dea5b2c8056d868b68a9";
     public static final String DB_FILE_NAME = "warranty-roster";
     public static final int DB_VERSION = 1;
 

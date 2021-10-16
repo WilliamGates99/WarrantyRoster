@@ -525,6 +525,32 @@
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
+                    <View
+                        android:id="@+id/divider_settings_settings_third"
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:background="@color/grayLight"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/cl_settings_settings_privacy_policy" />
+
+                    <FrameLayout
+                        android:id="@+id/fl_settings_ad_container"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/divider_settings_settings_third" />
+
+                    <androidx.constraintlayout.widget.Group
+                        android:id="@+id/group_settings_ad"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        app:constraint_referenced_ids="divider_settings_settings_third,fl_settings_ad_container" />
+
                     <!--TODO remove after adding change language feature-->
                     <androidx.constraintlayout.widget.Group
                         android:id="@+id/group_settings_language"

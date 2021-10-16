@@ -283,7 +283,7 @@ public class WarrantyDetailsFragment extends Fragment {
     }
 
     private void requestInterstitialAd() {
-        TapsellPlus.requestInterstitialAd(activity, Constants.TAPSELL_Interstitial_ZONE_ID,
+        TapsellPlus.requestInterstitialAd(activity, Constants.DELETE_WARRANTY_Interstitial_ZONE_ID,
                 new AdRequestCallback() {
                     @Override
                     public void response(TapsellPlusAdModel tapsellPlusAdModel) {

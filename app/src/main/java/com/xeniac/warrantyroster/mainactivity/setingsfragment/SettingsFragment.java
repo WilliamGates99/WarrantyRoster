@@ -35,6 +35,15 @@ import com.xeniac.warrantyroster.databinding.FragmentSettingsBinding;
 import com.xeniac.warrantyroster.landingactivity.LandingActivity;
 import com.xeniac.warrantyroster.mainactivity.MainActivity;
 
+import ir.tapsell.plus.AdHolder;
+import ir.tapsell.plus.AdRequestCallback;
+import ir.tapsell.plus.AdShowListener;
+import ir.tapsell.plus.TapsellPlus;
+import ir.tapsell.plus.TapsellPlusInitListener;
+import ir.tapsell.plus.model.AdNetworkError;
+import ir.tapsell.plus.model.AdNetworks;
+import ir.tapsell.plus.model.TapsellPlusAdModel;
+
 public class SettingsFragment extends Fragment {
 
     private FragmentSettingsBinding settingsBinding;
@@ -50,6 +59,9 @@ public class SettingsFragment extends Fragment {
     private String accountEmail;
     private ColorStateList verifyEmailBackgroundTint;
 
+    private int requestAdCounter;
+    private String responseId;
+
     public SettingsFragment() {
     }
 
@@ -64,6 +76,7 @@ public class SettingsFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        destroyAd();
         settingsBinding = null;
     }
 
@@ -90,6 +103,7 @@ public class SettingsFragment extends Fragment {
         themeOnClick();
         privacyPolicyOnClick();
         logoutOnClick();
+        adInit();
     }
 
     private void getAccountDetails() {
@@ -383,5 +397,69 @@ public class SettingsFragment extends Fragment {
         settingsBinding.btnSettingsAccountEmail.setBackgroundTintList(verifyEmailBackgroundTint);
         settingsBinding.btnSettingsAccountEmail.setText(context.getResources().getString(R.string.settings_btn_account_verify));
         settingsBinding.btnSettingsAccountEmail.setClickable(true);
+    }
+
+    private void adInit() {
+        TapsellPlus.initialize(context, Constants.TAPSELL_KEY, new TapsellPlusInitListener() {
+            @Override
+            public void onInitializeSuccess(AdNetworks adNetworks) {
+                Log.i("adInit", "onInitializeSuccess: " + adNetworks.name());
+                AdHolder adHolder = TapsellPlus.createAdHolder(activity,
+                        settingsBinding.flSettingsAdContainer, R.layout.ad_banner_settings);
+                requestAdCounter = 0;
+                requestNativeAd(adHolder);
+            }
+
+            @Override
+            public void onInitializeFailed(AdNetworks adNetworks, AdNetworkError adNetworkError) {
+                Log.e("adInit", "onInitializeFailed: " + adNetworks.name() + ", error: " + adNetworkError.getErrorMessage());
+            }
+        });
+    }
+
+    private void requestNativeAd(AdHolder adHolder) {
+        TapsellPlus.requestNativeAd(activity, Constants.SETTINGS_NATIVE_ZONE_ID,
+                new AdRequestCallback() {
+                    @Override
+                    public void response(TapsellPlusAdModel tapsellPlusAdModel) {
+                        super.response(tapsellPlusAdModel);
+                        Log.i("requestNativeAd", "response: " + tapsellPlusAdModel.toString());
+                        responseId = tapsellPlusAdModel.getResponseId();
+                        showNativeAd(adHolder, responseId);
+                    }
+
+                    @Override
+                    public void error(String s) {
+                        super.error(s);
+                        Log.e("requestNativeAd", "error: " + s);
+                        if (requestAdCounter < 3) {
+                            requestAdCounter++;
+                            requestNativeAd(adHolder);
+                        }
+                    }
+                });
+    }
+
+    private void showNativeAd(AdHolder adHolder, String responseId) {
+        settingsBinding.groupSettingsAd.setVisibility(View.VISIBLE);
+
+        TapsellPlus.showNativeAd(activity, responseId, adHolder,
+                new AdShowListener() {
+                    @Override
+                    public void onOpened(TapsellPlusAdModel tapsellPlusAdModel) {
+                        super.onOpened(tapsellPlusAdModel);
+                    }
+
+                    @Override
+                    public void onClosed(TapsellPlusAdModel tapsellPlusAdModel) {
+                        super.onClosed(tapsellPlusAdModel);
+                    }
+                });
+    }
+
+    private void destroyAd() {
+        if (responseId != null) {
+            TapsellPlus.destroyNativeBanner(activity, responseId);
+        }
     }
 }

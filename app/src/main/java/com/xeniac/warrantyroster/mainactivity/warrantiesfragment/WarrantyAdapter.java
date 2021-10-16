@@ -43,7 +43,7 @@ public class WarrantyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private static final int VIEW_TYPE_WARRANTY = 0;
     private static final int VIEW_TYPE_AD = 1;
 
-    private int requestCounter;
+    private int requestAdCounter;
 
     public WarrantyAdapter(Activity activity, Context context, WarrantyRosterDatabase database,
                            List<WarrantyDataModel> warrantyList,
@@ -178,18 +178,18 @@ public class WarrantyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
 
         void bindView() {
-            requestCounter = 0;
+            requestAdCounter = 0;
             requestNativeAd(adHolder);
         }
     }
 
     private void requestNativeAd(AdHolder adHolder) {
-        TapsellPlus.requestNativeAd(activity, Constants.TAPSELL_NATIVE_ZONE_ID,
+        TapsellPlus.requestNativeAd(activity, Constants.WARRANTIES_NATIVE_ZONE_ID,
                 new AdRequestCallback() {
                     @Override
                     public void response(TapsellPlusAdModel tapsellPlusAdModel) {
                         super.response(tapsellPlusAdModel);
-                        Log.i("requestNativeBannerAd", "response: " + tapsellPlusAdModel.toString());
+                        Log.i("requestNativeAd", "response: " + tapsellPlusAdModel.toString());
                         TapsellPlus.showNativeAd(activity, tapsellPlusAdModel.getResponseId(),
                                 adHolder, new AdShowListener() {
                                     @Override
@@ -207,9 +207,9 @@ public class WarrantyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     @Override
                     public void error(String s) {
                         super.error(s);
-                        Log.e("requestNativeBannerAd", "error: " + s);
-                        if (requestCounter < 3) {
-                            requestCounter++;
+                        Log.e("requestNativeAd", "error: " + s);
+                        if (requestAdCounter < 3) {
+                            requestAdCounter++;
                             requestNativeAd(adHolder);
                         }
                     }
