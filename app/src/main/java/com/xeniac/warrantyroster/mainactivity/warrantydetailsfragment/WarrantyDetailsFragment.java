@@ -122,11 +122,34 @@ public class WarrantyDetailsFragment extends Fragment {
     }
 
     private void setWarrantyDetails(long daysUntilExpiry) {
+        if (warranty.getBrand() != null) {
+            warrantyDetailsBinding.tvWarrantyDetailsBrand.setText(warranty.getBrand());
+        } else {
+            warrantyDetailsBinding.tvWarrantyDetailsBrand.setText("•");
+        }
+
+        if (warranty.getModel() != null) {
+            warrantyDetailsBinding.tvWarrantyDetailsModel.setText(warranty.getModel());
+        } else {
+            warrantyDetailsBinding.tvWarrantyDetailsModel.setText(
+                    context.getResources().getString(R.string.warranty_details_empty_device));
+        }
+
+        if (warranty.getSerialNumber() != null) {
+            warrantyDetailsBinding.tvWarrantyDetailsSerial.setText(warranty.getSerialNumber());
+        } else {
+            warrantyDetailsBinding.tvWarrantyDetailsSerial.setText(
+                    context.getResources().getString(R.string.warranty_details_empty_device));
+        }
+
+        if (warranty.getDescription() != null) {
+            warrantyDetailsBinding.tvWarrantyDetailsDescription.setText(warranty.getDescription());
+        } else {
+            warrantyDetailsBinding.tvWarrantyDetailsDescription.setText(
+                    context.getResources().getString(R.string.warranty_details_empty_description));
+        }
+
         warrantyDetailsBinding.toolbarWarrantyDetails.setTitle(warranty.getTitle());
-        warrantyDetailsBinding.tvWarrantyDetailsBrand.setText(warranty.getBrand());
-        warrantyDetailsBinding.tvWarrantyDetailsModel.setText(warranty.getModel());
-        warrantyDetailsBinding.tvWarrantyDetailsSerial.setText(warranty.getSerialNumber());
-        warrantyDetailsBinding.tvWarrantyDetailsDescription.setText(warranty.getDescription());
         warrantyDetailsBinding.ivWarrantyDetailsIcon.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(),
                 database.categoryDAO().getCategoryById(warranty.getCategoryId()).getIcon(), context.getTheme()));
 
