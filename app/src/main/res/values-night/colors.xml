@@ -14,6 +14,7 @@
     <color name="grayDark">#808080</color>
     <color name="whiteConstant">#FFFFFF</color>
     <color name="navyBlue10">#1ADEF4FD</color>
+    <color name="navyBlue20">#33DEF4FD</color>
     <color name="green10">#1A00BD62</color>
     <color name="green20">#3300BD62</color>
     <color name="red10">#1AFF3442</color>
