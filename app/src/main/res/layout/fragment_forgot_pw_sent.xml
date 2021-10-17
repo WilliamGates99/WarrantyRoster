@@ -41,7 +41,7 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_forgot_pw_sent_description"
             app:lottie_autoPlay="true"
             app:lottie_loop="false"
-            app:lottie_rawRes="@raw/anim_email"
+            app:lottie_rawRes="@raw/anim_email_sent"
             app:lottie_speed="0.65" />
 
         <com.google.android.material.textview.MaterialTextView
