@@ -441,20 +441,22 @@ public class SettingsFragment extends Fragment {
     }
 
     private void showNativeAd(AdHolder adHolder, String responseId) {
-        settingsBinding.groupSettingsAd.setVisibility(View.VISIBLE);
+        if (settingsBinding != null) {
+            settingsBinding.groupSettingsAd.setVisibility(View.VISIBLE);
 
-        TapsellPlus.showNativeAd(activity, responseId, adHolder,
-                new AdShowListener() {
-                    @Override
-                    public void onOpened(TapsellPlusAdModel tapsellPlusAdModel) {
-                        super.onOpened(tapsellPlusAdModel);
-                    }
+            TapsellPlus.showNativeAd(activity, responseId, adHolder,
+                    new AdShowListener() {
+                        @Override
+                        public void onOpened(TapsellPlusAdModel tapsellPlusAdModel) {
+                            super.onOpened(tapsellPlusAdModel);
+                        }
 
-                    @Override
-                    public void onClosed(TapsellPlusAdModel tapsellPlusAdModel) {
-                        super.onClosed(tapsellPlusAdModel);
-                    }
-                });
+                        @Override
+                        public void onClosed(TapsellPlusAdModel tapsellPlusAdModel) {
+                            super.onClosed(tapsellPlusAdModel);
+                        }
+                    });
+        }
     }
 
     private void destroyAd() {
