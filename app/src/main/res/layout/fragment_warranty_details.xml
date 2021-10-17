@@ -45,7 +45,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="16dp">
+            android:paddingBottom="80dp">
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/iv_warranty_details_icon"
