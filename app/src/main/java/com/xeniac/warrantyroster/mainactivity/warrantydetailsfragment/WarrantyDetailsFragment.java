@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -125,12 +126,15 @@ public class WarrantyDetailsFragment extends Fragment {
         if (warranty.getBrand() != null) {
             warrantyDetailsBinding.tvWarrantyDetailsBrand.setText(warranty.getBrand());
         } else {
-            warrantyDetailsBinding.tvWarrantyDetailsBrand.setText("•");
+            warrantyDetailsBinding.tvWarrantyDetailsBrand.setTextColor(context.getResources().getColor(R.color.grayDark));
+            warrantyDetailsBinding.tvWarrantyDetailsBrand.setText(
+                    context.getResources().getString(R.string.warranty_details_empty_device));
         }
 
         if (warranty.getModel() != null) {
             warrantyDetailsBinding.tvWarrantyDetailsModel.setText(warranty.getModel());
         } else {
+            warrantyDetailsBinding.tvWarrantyDetailsModel.setTextColor(context.getResources().getColor(R.color.grayDark));
             warrantyDetailsBinding.tvWarrantyDetailsModel.setText(
                     context.getResources().getString(R.string.warranty_details_empty_device));
         }
@@ -138,6 +142,7 @@ public class WarrantyDetailsFragment extends Fragment {
         if (warranty.getSerialNumber() != null) {
             warrantyDetailsBinding.tvWarrantyDetailsSerial.setText(warranty.getSerialNumber());
         } else {
+            warrantyDetailsBinding.tvWarrantyDetailsSerial.setTextColor(context.getResources().getColor(R.color.grayDark));
             warrantyDetailsBinding.tvWarrantyDetailsSerial.setText(
                     context.getResources().getString(R.string.warranty_details_empty_device));
         }
@@ -145,6 +150,8 @@ public class WarrantyDetailsFragment extends Fragment {
         if (warranty.getDescription() != null) {
             warrantyDetailsBinding.tvWarrantyDetailsDescription.setText(warranty.getDescription());
         } else {
+            warrantyDetailsBinding.tvWarrantyDetailsDescription.setGravity(Gravity.CENTER);
+            warrantyDetailsBinding.tvWarrantyDetailsDescription.setTextColor(context.getResources().getColor(R.color.grayDark));
             warrantyDetailsBinding.tvWarrantyDetailsDescription.setText(
                     context.getResources().getString(R.string.warranty_details_empty_description));
         }

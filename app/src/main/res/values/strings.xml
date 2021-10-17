@@ -134,7 +134,7 @@
     <string name="warranty_details_status_soon">Warranty will expire soon</string>
     <string name="warranty_details_status_expired">Warranty is expired</string>
     <string name="warranty_details_empty_device" translatable="false">•</string>
-    <string name="warranty_details_empty_description">No Description is provided for this warranty.</string>
+    <string name="warranty_details_empty_description">No description is provided.</string>
     <string name="warranty_details_delete_dialog_title">Delete Warranty?</string>
     <string name="warranty_details_delete_dialog_message">Are you sure you want to delete %s?</string>
     <string name="warranty_details_delete_dialog_positive">Delete</string>
