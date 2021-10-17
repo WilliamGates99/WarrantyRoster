@@ -2,6 +2,8 @@
 <resources>
     <color name="background">#FFFFFF</color>
     <color name="surface">#FFFFFF</color>
+    <color name="statusBar">#FFFFFF</color>
+    <color name="statusBarV21">#C2C2C2</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
     <color name="navyBlue">#00144F</color>
