@@ -57,7 +57,6 @@ public class SettingsFragment extends Fragment {
     private String currentCountry;
     private int currentTheme;
     private String accountEmail;
-    private ColorStateList verifyEmailBackgroundTint;
 
     private int requestAdCounter;
     private String responseId;
@@ -191,9 +190,7 @@ public class SettingsFragment extends Fragment {
             settingsBinding.lavSettingsAccountEmail.setSpeed(1.00f);
             settingsBinding.lavSettingsAccountEmail.setAnimation(R.raw.anim_account_not_verified);
         }
-
         settingsBinding.lavSettingsAccountEmail.playAnimation();
-        verifyEmailBackgroundTint = settingsBinding.btnSettingsAccountEmail.getBackgroundTintList();
     }
 
     private void setCurrentLanguageText() {
@@ -385,18 +382,14 @@ public class SettingsFragment extends Fragment {
     }
 
     private void showVerificationLoadingAnimation() {
-        settingsBinding.btnSettingsAccountEmail.setClickable(false);
-        settingsBinding.btnSettingsAccountEmail.setText(null);
-        settingsBinding.btnSettingsAccountEmail.setBackgroundTintList(null);
+        settingsBinding.btnSettingsAccountEmail.setVisibility(View.GONE);
         settingsBinding.cpiSettingsAccountEmailVerification.setVisibility(View.VISIBLE);
 
     }
 
     private void hideVerificationLoadingAnimation() {
         settingsBinding.cpiSettingsAccountEmailVerification.setVisibility(View.GONE);
-        settingsBinding.btnSettingsAccountEmail.setBackgroundTintList(verifyEmailBackgroundTint);
-        settingsBinding.btnSettingsAccountEmail.setText(context.getResources().getString(R.string.settings_btn_account_verify));
-        settingsBinding.btnSettingsAccountEmail.setClickable(true);
+        settingsBinding.btnSettingsAccountEmail.setVisibility(View.VISIBLE);
     }
 
     private void adInit() {

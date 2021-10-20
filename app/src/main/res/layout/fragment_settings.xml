@@ -125,7 +125,7 @@
 
                     <com.google.android.material.progressindicator.CircularProgressIndicator
                         android:id="@+id/cpi_settings_account_email_verification"
-                        style="@style/Theme.WarrantyRoster.LoadingProgressBar.Button"
+                        style="@style/Theme.WarrantyRoster.LoadingProgressBar.Verification"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="12dp"
