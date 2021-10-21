@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -348,8 +349,15 @@ public class SettingsFragment extends Fragment {
     }
 
     private void privacyPolicyOnClick() {
-        settingsBinding.clSettingsSettingsPrivacyPolicy.setOnClickListener(view ->
-                Toast.makeText(context, "Privacy Policy", Toast.LENGTH_SHORT).show());
+        settingsBinding.clSettingsSettingsPrivacyPolicy.setOnClickListener(view -> {
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.URL_PRIVACY_POLICY));
+            if (intent.resolveActivity(context.getPackageManager()) != null) {
+                startActivity(intent);
+            } else {
+                Snackbar.make(view, context.getResources().getString(R.string.intent_error_app_not_found),
+                        BaseTransientBottomBar.LENGTH_LONG).show();
+            }
+        });
     }
 
     private void logoutOnClick() {

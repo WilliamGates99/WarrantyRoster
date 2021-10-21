@@ -3,6 +3,7 @@ package com.xeniac.warrantyroster;
 public class Constants {
 
     public static final String URL_GRAPHQL = "https://warranty-roster.herokuapp.com/graphql";
+    public static final String URL_PRIVACY_POLICY = "https://warranty-roster.herokuapp.com/privacy-policy";
     public static final String TAPSELL_KEY = "phbftfiakptpjbkegafmqmmkdsjcjmkldcahhapfssfftdnbgpqeimkjiitfpcoingqkad";
     public static final String WARRANTIES_NATIVE_ZONE_ID = "61647159b2c8056d868b66c6";
     public static final String SETTINGS_NATIVE_ZONE_ID = "616b0d4cb2c8056d868b6a1a";

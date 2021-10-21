@@ -4,6 +4,7 @@
     <string name="network_error_failure">You\'re having network issues. Please try again later.</string>
     <string name="network_error_retry">Retry</string>
     <string name="network_error_response">It looks like you encountered an error. Please try again.</string>
+    <string name="intent_error_app_not_found">There is no app on the phone to handle this action.</string>
 
     <!--Category Titles-->
     <string name="category_accessory">Accessory</string>
