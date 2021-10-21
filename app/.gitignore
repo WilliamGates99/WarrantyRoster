@@ -1,4 +1,5 @@
 /build
 /release/
+/obfuscation/
 /src/main/graphql/
 /src/main/dbschemas/
