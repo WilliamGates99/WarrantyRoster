@@ -18,8 +18,6 @@ import android.view.inputmethod.InputMethodManager;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 
 import com.apollographql.apollo.ApolloCall;
 import com.apollographql.apollo.ApolloClient;
@@ -44,7 +42,6 @@ public class ChangePasswordFragment extends Fragment {
     private View view;
     private Activity activity;
     private Context context;
-    private NavController navController;
 
     public ChangePasswordFragment() {
     }
@@ -69,7 +66,6 @@ public class ChangePasswordFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         activity = getActivity();
         context = getContext();
-        navController = Navigation.findNavController(view);
         ((MainActivity) context).hideNavBar();
 
         textInputsBackgroundColor();

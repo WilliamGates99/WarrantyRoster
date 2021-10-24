@@ -2,7 +2,6 @@ package com.xeniac.warrantyroster.mainactivity.changeemailfragment;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
@@ -19,8 +18,6 @@ import android.view.inputmethod.InputMethodManager;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 
 import com.apollographql.apollo.ApolloCall;
 import com.apollographql.apollo.ApolloClient;
@@ -44,7 +41,6 @@ public class ChangeEmailFragment extends Fragment {
     private View view;
     private Activity activity;
     private Context context;
-    private NavController navController;
     private String currentEmail;
 
     public ChangeEmailFragment() {
@@ -70,7 +66,6 @@ public class ChangeEmailFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         activity = getActivity();
         context = getContext();
-        navController = Navigation.findNavController(view);
         ((MainActivity) context).hideNavBar();
 
         textInputsBackgroundColor();
@@ -203,7 +198,7 @@ public class ChangeEmailFragment extends Fragment {
                                     changeUserEmailDialogBuilder.show();
                                 } else {
                                     Log.e("changeUserEmail", "onResponse Errors: " + response.getErrors());
-                                    if (Arrays.toString(response.getErrors().get(0).getCustomAttributes().values().toArray()).contains("already exists")) {
+                                    if (Arrays.toString(response.getErrors().get(0).getCustomAttributes().values().toArray()).contains("code=400")) {
                                         Snackbar.make(view, context.getResources().getString(R.string.change_email_error_email_exists),
                                                 BaseTransientBottomBar.LENGTH_LONG)
                                                 .show();

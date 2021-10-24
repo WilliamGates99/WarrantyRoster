@@ -44,7 +44,6 @@ import ir.tapsell.plus.model.AdNetworks;
 public class WarrantiesFragment extends Fragment implements WarrantyListClickInterface {
 
     private FragmentWarrantiesBinding warrantiesBinding;
-    private View view;
     private Activity activity;
     private Context context;
     private NavController navController;
@@ -57,8 +56,7 @@ public class WarrantiesFragment extends Fragment implements WarrantyListClickInt
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         warrantiesBinding = FragmentWarrantiesBinding.inflate(inflater, container, false);
-        view = warrantiesBinding.getRoot();
-        return view;
+        return warrantiesBinding.getRoot();
     }
 
     @Override

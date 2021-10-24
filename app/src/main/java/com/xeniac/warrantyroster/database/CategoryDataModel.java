@@ -8,8 +8,6 @@ import androidx.room.PrimaryKey;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.UUID;
-
 @Entity
 public class CategoryDataModel {
 
