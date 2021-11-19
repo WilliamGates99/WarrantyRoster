@@ -49,6 +49,7 @@
     <!--Register Fragment-->
     <string name="register_text_title">Register</string>
     <string name="register_text_description">Enter your information below.</string>
+    <string name="register_text_agreement">By registering, you agree to our <font fgcolor="#1C53F4"><b>Privacy Policy</b></font>.</string>
     <string name="register_title_email">Email Address</string>
     <string name="register_hint_email">Enter your email address</string>
     <string name="register_title_password">Password</string>
