@@ -217,6 +217,9 @@ public class AddWarrantyFragment extends Fragment {
             if (selectedCategory != null) {
                 addWarrantyBinding.ivAddWarrantyIconCategory.setImageDrawable(ResourcesCompat.getDrawable(
                         getResources(), selectedCategory.getIcon(), context.getTheme()));
+                /*TODO TEST THIS LINE
+                addWarrantyBinding.ivAddWarrantyIconCategory.setImageResource(selectedCategory.getIcon());
+                TODO END OF TODO*/
             }
         });
     }
