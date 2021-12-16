@@ -17,3 +17,4 @@ local.properties
 /app/obfuscation/
 /app/src/main/graphql/
 /app/src/main/dbschemas/
+/app/google-services.json
