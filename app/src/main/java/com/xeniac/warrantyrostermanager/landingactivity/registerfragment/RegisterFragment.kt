@@ -329,13 +329,13 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     }
 
     private fun hideLoadingAnimation() {
-        binding.cpiRegister.visibility = View.GONE
         binding.tiRegisterEditEmail.isEnabled = true
         binding.tiRegisterEditPassword.isEnabled = true
         binding.tiRegisterEditRetypePassword.isEnabled = true
         binding.btnRegisterRegister.isClickable = true
         binding.btnRegisterRegister.text =
             requireContext().getString(R.string.register_btn_register)
+        binding.cpiRegister.visibility = View.GONE
     }
 
     private fun passwordStrength(password: String): Byte {
