@@ -191,21 +191,11 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                     user?.let {
                         Log.i("loginViaEmail", "${it.email} logged in successfully.")
 
-                        it.getIdToken(false).addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                val idToken = task.result.token
-
-                                requireContext()
-                                    .getSharedPreferences(
-                                        Constants.PREFERENCE_LOGIN,
-                                        Context.MODE_PRIVATE
-                                    )
-                                    .edit().apply {
-                                        putString(Constants.PREFERENCE_USER_TOKEN_KEY, idToken)
-                                        putBoolean(Constants.PREFERENCE_IS_LOGGED_IN_KEY, true)
-                                        apply()
-                                    }
-                            }
+                        requireContext().getSharedPreferences(
+                            Constants.PREFERENCE_LOGIN, Context.MODE_PRIVATE
+                        ).edit().apply {
+                            putBoolean(Constants.PREFERENCE_IS_LOGGED_IN_KEY, true)
+                            apply()
                         }
 
                         withContext(Dispatchers.Main) {
