@@ -145,7 +145,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(binding.root.applicationWindowToken, 0)
 
-        if (NetworkHelper.hasNetworkAccess(context)) {
+        if (NetworkHelper.hasNetworkAccess(requireContext())) {
             getLoginInputs()
         } else {
             hideLoadingAnimation()
