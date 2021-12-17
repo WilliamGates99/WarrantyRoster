@@ -32,7 +32,7 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
 
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var email: String
-    private lateinit var countDownTimer: CountDownTimer
+    private var countDownTimer: CountDownTimer? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -46,7 +46,7 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        countDownTimer.cancel()
+        countDownTimer?.cancel()
         _binding = null
     }
 
@@ -128,7 +128,7 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
         val decimalFormat = DecimalFormat("00")
         val startTime = 120 * 1000
 
-        object : CountDownTimer(startTime.toLong(), 1) {
+        countDownTimer = object : CountDownTimer(startTime.toLong(), 1) {
             override fun onTick(millisUntilFinished: Long) {
                 val minutes = millisUntilFinished / 60000
                 val seconds = (millisUntilFinished / 1000) % 60
