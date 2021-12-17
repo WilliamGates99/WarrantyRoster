@@ -8,6 +8,8 @@ import android.text.TextWatcher
 import android.util.Log
 import android.util.Patterns
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat
@@ -245,7 +247,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         binding.tiLoginEditPassword.isEnabled = false
         binding.btnLoginLogin.isClickable = false
         binding.btnLoginLogin.text = null
-        binding.cpiLogin.visibility = View.VISIBLE
+        binding.cpiLogin.visibility = VISIBLE
     }
 
     private fun hideLoadingAnimation() {
@@ -254,7 +256,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         binding.btnLoginLogin.isClickable = true
         binding.btnLoginLogin.text =
             requireContext().getString(R.string.login_btn_login)
-        binding.cpiLogin.visibility = View.GONE
+        binding.cpiLogin.visibility = GONE
     }
 
     private fun isEmailValid(email: String): Boolean {
