@@ -10,6 +10,8 @@ import android.text.TextWatcher
 import android.util.Log
 import android.util.Patterns
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat
@@ -325,7 +327,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         binding.tiRegisterEditRetypePassword.isEnabled = false
         binding.btnRegisterRegister.isClickable = false
         binding.btnRegisterRegister.text = null
-        binding.cpiRegister.visibility = View.VISIBLE
+        binding.cpiRegister.visibility = VISIBLE
     }
 
     private fun hideLoadingAnimation() {
@@ -335,7 +337,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         binding.btnRegisterRegister.isClickable = true
         binding.btnRegisterRegister.text =
             requireContext().getString(R.string.register_btn_register)
-        binding.cpiRegister.visibility = View.GONE
+        binding.cpiRegister.visibility = GONE
     }
 
     private fun passwordStrength(password: String): Byte {
