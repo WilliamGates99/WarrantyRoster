@@ -57,8 +57,8 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     }
 
     private fun textInputsBackgroundColor() {
-        binding.tiLoginEditEmail.setOnFocusChangeListener { _, focused ->
-            if (focused) {
+        binding.tiLoginEditEmail.setOnFocusChangeListener { _, isFocused ->
+            if (isFocused) {
                 binding.tiLoginLayoutEmail.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.background)
             } else {
@@ -67,8 +67,8 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             }
         }
 
-        binding.tiLoginEditPassword.setOnFocusChangeListener { _, focused ->
-            if (focused) {
+        binding.tiLoginEditPassword.setOnFocusChangeListener { _, isFocused ->
+            if (isFocused) {
                 binding.tiLoginLayoutPassword.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.background)
             } else {
