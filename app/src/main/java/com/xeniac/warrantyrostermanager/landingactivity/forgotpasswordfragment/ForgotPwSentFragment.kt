@@ -101,22 +101,11 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
                 Log.e("resendResetPasswordEmail", "Exception: ${e.message}")
                 withContext(Dispatchers.Main) {
                     hideLoadingAnimation()
-                    if (e.toString().contains(
-                            "code=500"
-                        )
-                    ) {
-                        Snackbar.make(
-                            binding.root,
-                            requireContext().getString(R.string.forgot_pw_sent_error_wait),
-                            LENGTH_LONG
-                        ).show()
-                    } else {
-                        Snackbar.make(
-                            binding.root,
-                            requireContext().getString(R.string.network_error_failure),
-                            LENGTH_LONG
-                        ).show()
-                    }
+                    Snackbar.make(
+                        binding.root,
+                        requireContext().getString(R.string.network_error_failure),
+                        LENGTH_LONG
+                    ).show()
                 }
             }
         }

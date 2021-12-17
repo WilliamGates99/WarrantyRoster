@@ -83,7 +83,6 @@
     <string name="forgot_pw_sent_text_resend">Didn\'t receive the link?</string>
     <string name="forgot_pw_sent_btn_resend">Resend</string>
     <string name="forgot_pw_sent_text_resent">A new email has been sent.</string>
-    <string name="forgot_pw_sent_error_wait">Please wait a minute before requesting to resend the email.</string>
 
     <!--Main Activity-->
     <string name="main_menu_title_warranties">Warranty List</string>
