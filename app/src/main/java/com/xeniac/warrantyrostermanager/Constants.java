@@ -2,6 +2,7 @@ package com.xeniac.warrantyrostermanager;
 
 public class Constants {
 
+    //TODO remove URL_GRAPHQL
     public static final String URL_GRAPHQL = "https://warranty-roster.herokuapp.com/graphql";
     public static final String URL_PRIVACY_POLICY = "https://warranty-roster.herokuapp.com/privacy-policy";
     public static final String TAPSELL_KEY = "phbftfiakptpjbkegafmqmmkdsjcjmkldcahhapfssfftdnbgpqeimkjiitfpcoingqkad";
@@ -25,4 +26,7 @@ public class Constants {
     //Add Warranty Activity Calendars Fragment Tag Constants
     public static final String FRAGMENT_TAG_ADD_CALENDAR_STARTING = "fragment_tag_add_calendar_starting";
     public static final String FRAGMENT_TAG_ADD_CALENDAR_EXPIRY = "fragment_tag_add_calendar_expiry";
+
+    //Firestore Collections ID
+    public static final String COLLECTION_USERS = "users";
 }

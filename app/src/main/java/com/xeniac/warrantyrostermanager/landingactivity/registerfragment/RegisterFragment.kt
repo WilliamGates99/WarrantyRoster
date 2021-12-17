@@ -20,11 +20,14 @@ import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_INDEFI
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.xeniac.warrantyrostermanager.Constants
 import com.xeniac.warrantyrostermanager.NetworkHelper
 import com.xeniac.warrantyrostermanager.R
 import com.xeniac.warrantyrostermanager.databinding.FragmentRegisterBinding
 import com.xeniac.warrantyrostermanager.mainactivity.MainActivity
+import com.xeniac.warrantyrostermanager.model.User
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -37,6 +40,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     private val binding get() = _binding!!
 
     private lateinit var firebaseAuth: FirebaseAuth
+    private val usersCollectionRef = Firebase.firestore.collection(Constants.COLLECTION_USERS)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -266,6 +270,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                     user?.let {
                         Log.i("registerViaEmail", "${it.email} registered successfully.")
                         it.sendEmailVerification()
+                        usersCollectionRef.add(User(it.uid)).await()
 
                         it.getIdToken(false).addOnCompleteListener { task ->
                             if (task.isSuccessful) {
