@@ -5,32 +5,34 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 
+import com.xeniac.warrantyrostermanager.model.Category;
+
 import java.util.List;
 
 @Dao
 public interface CategoryDAO {
 
     @Insert
-    void insertAllCategories(List<CategoryDataModel> categoriesList);
+    void insertAllCategories(List<Category> categoriesList);
 
     @Insert
-    void insertCategory(CategoryDataModel... category);
+    void insertCategory(Category... category);
 
-    @Query("DELETE FROM CategoryDataModel")
+    @Query("DELETE FROM Category")
     void deleteAllCategories();
 
     @Delete
-    void deleteCategory(CategoryDataModel... category);
+    void deleteCategory(Category... category);
 
-    @Query("SELECT COUNT(*) FROM CategoryDataModel")
+    @Query("SELECT COUNT(*) FROM Category")
     int countItems();
 
-    @Query("SELECT * FROM CategoryDataModel ORDER BY title")
-    List<CategoryDataModel> getAllCategories();
+    @Query("SELECT * FROM Category ORDER BY title")
+    List<Category> getAllCategories();
 
-    @Query("SELECT title FROM CategoryDataModel ORDER BY title")
+    @Query("SELECT title FROM Category ORDER BY title")
     List<Integer> getAllCategoryTitles();
 
-    @Query("SELECT * FROM categorydatamodel WHERE id = :categoryId")
-    CategoryDataModel getCategoryById(String categoryId);
+    @Query("SELECT * FROM Category WHERE id = :categoryId")
+    Category getCategoryById(String categoryId);
 }

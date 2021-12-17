@@ -1,11 +1,11 @@
-package com.xeniac.warrantyrostermanager.mainactivity.warrantiesfragment;
+package com.xeniac.warrantyrostermanager.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
-public class WarrantyDataModel implements Parcelable {
+public class Warranty implements Parcelable {
 
     private String id;
     private String title;
@@ -18,12 +18,12 @@ public class WarrantyDataModel implements Parcelable {
     private String categoryId;
     private ListItemType itemType;
 
-    public WarrantyDataModel() {
+    public Warranty() {
     }
 
-    public WarrantyDataModel(String id, String title, String brand, String model,
-                             String serialNumber, String startingDate, String expiryDate,
-                             String description, String categoryId, ListItemType itemType) {
+    public Warranty(String id, String title, String brand, String model,
+                    String serialNumber, String startingDate, String expiryDate,
+                    String description, String categoryId, ListItemType itemType) {
         this.id = id;
         this.title = title;
         this.brand = brand;
@@ -36,7 +36,7 @@ public class WarrantyDataModel implements Parcelable {
         this.itemType = itemType;
     }
 
-    protected WarrantyDataModel(Parcel in) {
+    protected Warranty(Parcel in) {
         id = in.readString();
         title = in.readString();
         brand = in.readString();
@@ -48,15 +48,15 @@ public class WarrantyDataModel implements Parcelable {
         categoryId = in.readString();
     }
 
-    public static final Creator<WarrantyDataModel> CREATOR = new Creator<WarrantyDataModel>() {
+    public static final Creator<Warranty> CREATOR = new Creator<Warranty>() {
         @Override
-        public WarrantyDataModel createFromParcel(Parcel in) {
-            return new WarrantyDataModel(in);
+        public Warranty createFromParcel(Parcel in) {
+            return new Warranty(in);
         }
 
         @Override
-        public WarrantyDataModel[] newArray(int size) {
-            return new WarrantyDataModel[size];
+        public Warranty[] newArray(int size) {
+            return new Warranty[size];
         }
     };
 

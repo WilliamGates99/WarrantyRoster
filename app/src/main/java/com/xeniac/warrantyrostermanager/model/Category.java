@@ -1,4 +1,4 @@
-package com.xeniac.warrantyrostermanager.database;
+package com.xeniac.warrantyrostermanager.model;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
@@ -9,7 +9,7 @@ import androidx.room.PrimaryKey;
 import org.jetbrains.annotations.NotNull;
 
 @Entity
-public class CategoryDataModel {
+public class Category {
 
     @PrimaryKey
     @NonNull
@@ -19,11 +19,11 @@ public class CategoryDataModel {
     @ColumnInfo
     private int icon;
 
-    public CategoryDataModel() {
+    public Category() {
     }
 
     @Ignore
-    public CategoryDataModel(@NotNull String id, int title, int icon) {
+    public Category(@NotNull String id, int title, int icon) {
         this.id = id;
         this.title = title;
         this.icon = icon;

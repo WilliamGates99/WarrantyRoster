@@ -16,6 +16,8 @@ import com.xeniac.warrantyrostermanager.R;
 import com.xeniac.warrantyrostermanager.database.WarrantyRosterDatabase;
 import com.xeniac.warrantyrostermanager.databinding.ListAdContainerBinding;
 import com.xeniac.warrantyrostermanager.databinding.ListWarrantyBinding;
+import com.xeniac.warrantyrostermanager.model.ListItemType;
+import com.xeniac.warrantyrostermanager.model.Warranty;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -37,7 +39,7 @@ public class WarrantyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private final Activity activity;
     private final Context context;
     private final WarrantyRosterDatabase database;
-    private final List<WarrantyDataModel> warrantyList;
+    private final List<Warranty> warrantyList;
     private final WarrantyListClickInterface warrantyListClickInterface;
 
     private static final int VIEW_TYPE_WARRANTY = 0;
@@ -46,7 +48,7 @@ public class WarrantyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private int requestAdCounter;
 
     public WarrantyAdapter(Activity activity, Context context, WarrantyRosterDatabase database,
-                           List<WarrantyDataModel> warrantyList,
+                           List<Warranty> warrantyList,
                            WarrantyListClickInterface warrantyListClickInterface) {
         this.activity = activity;
         this.context = context;
@@ -100,7 +102,7 @@ public class WarrantyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             this.warrantyBinding = warrantyBinding;
         }
 
-        public void bindView(Context context, WarrantyDataModel warrantyItem) {
+        public void bindView(Context context, Warranty warrantyItem) {
             warrantyBinding.tvListWarrantyTitle.setText(warrantyItem.getTitle());
             warrantyBinding.tvListWarrantyCategory.setText(context.getResources().getString(
                     database.categoryDAO().getCategoryById(warrantyItem.getCategoryId()).getTitle()));

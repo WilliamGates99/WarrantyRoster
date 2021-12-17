@@ -1,5 +1,7 @@
 package com.xeniac.warrantyrostermanager.mainactivity.warrantiesfragment;
 
+import com.xeniac.warrantyrostermanager.model.Warranty;
+
 public interface WarrantyListClickInterface {
-    void onItemClick(WarrantyDataModel warranty, long daysUntilExpiry);
+    void onItemClick(Warranty warranty, long daysUntilExpiry);
 }

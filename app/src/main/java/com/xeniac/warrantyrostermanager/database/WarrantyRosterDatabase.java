@@ -7,8 +7,9 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
 import com.xeniac.warrantyrostermanager.Constants;
+import com.xeniac.warrantyrostermanager.model.Category;
 
-@Database(entities = {CategoryDataModel.class}, version = Constants.DB_VERSION)
+@Database(entities = {Category.class}, version = Constants.DB_VERSION)
 public abstract class WarrantyRosterDatabase extends RoomDatabase {
 
     private static WarrantyRosterDatabase instance;
