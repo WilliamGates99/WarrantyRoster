@@ -55,16 +55,16 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     }
 
     private fun textInputsBackgroundColor() {
-        binding.tiRegisterEditEmail.setOnFocusChangeListener { _, focused ->
-            if (focused) {
+        binding.tiRegisterEditEmail.setOnFocusChangeListener { _, isFocused ->
+            if (isFocused) {
                 binding.tiRegisterLayoutEmail.setBoxBackgroundColorResource(R.color.background)
             } else {
                 binding.tiRegisterLayoutEmail.setBoxBackgroundColorResource(R.color.grayLight)
             }
         }
 
-        binding.tiRegisterEditPassword.setOnFocusChangeListener { _, focused ->
-            if (focused) {
+        binding.tiRegisterEditPassword.setOnFocusChangeListener { _, isFocused ->
+            if (isFocused) {
                 binding.tiRegisterLayoutPassword.setBoxBackgroundColorResource(R.color.background)
             } else {
                 binding.tiRegisterLayoutPassword.setBoxBackgroundColorResource(R.color.grayLight)
@@ -72,8 +72,8 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
             }
         }
 
-        binding.tiRegisterEditRetypePassword.setOnFocusChangeListener { _, focused ->
-            if (focused) {
+        binding.tiRegisterEditRetypePassword.setOnFocusChangeListener { _, isFocused ->
+            if (isFocused) {
                 binding.tiRegisterLayoutRetypePassword.setBoxBackgroundColorResource(R.color.background)
             } else {
                 binding.tiRegisterLayoutRetypePassword.setBoxBackgroundColorResource(R.color.grayLight)
