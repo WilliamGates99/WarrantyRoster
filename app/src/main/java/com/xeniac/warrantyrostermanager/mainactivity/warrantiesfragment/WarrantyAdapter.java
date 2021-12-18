@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.xeniac.warrantyrostermanager.Constants;
@@ -106,8 +105,8 @@ public class WarrantyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             warrantyBinding.tvListWarrantyTitle.setText(warrantyItem.getTitle());
             warrantyBinding.tvListWarrantyCategory.setText(context.getResources().getString(
                     database.categoryDAO().getCategoryById(warrantyItem.getCategoryId()).getTitle()));
-            warrantyBinding.ivListWarrantyIcon.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(),
-                    database.categoryDAO().getCategoryById(warrantyItem.getCategoryId()).getIcon(), context.getTheme()));
+            warrantyBinding.ivListWarrantyIcon.setImageResource(
+                    database.categoryDAO().getCategoryById(warrantyItem.getCategoryId()).getIcon());
 
             Calendar expiryCalendar = Calendar.getInstance();
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-M-dd", Locale.getDefault());

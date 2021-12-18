@@ -9,6 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ListenerRegistration
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -41,6 +43,7 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
         Firebase.firestore.collection(Constants.COLLECTION_CATEGORIES)
     private val warrantiesCollectionRef =
         Firebase.firestore.collection(Constants.COLLECTION_WARRANTIES)
+    private lateinit var querySnapshot: ListenerRegistration
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -57,6 +60,7 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
     override fun onDestroyView() {
         super.onDestroyView()
         WarrantyRosterDatabase.destroyInstance()
+        querySnapshot.remove()
         _binding = null
     }
 
@@ -114,8 +118,9 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
     private fun getWarrantiesListFromFirestore() {
         showLoadingAnimation()
 
-        warrantiesCollectionRef
+        querySnapshot = warrantiesCollectionRef
             .whereEqualTo(Constants.WARRANTIES_UUID, Firebase.auth.currentUser?.uid)
+            .orderBy(Constants.WARRANTIES_TITLE, Query.Direction.ASCENDING)
             .addSnapshotListener { value, error ->
                 error?.let {
                     Log.e("getWarrantiesList", "Exception: ${error.message}")
@@ -190,7 +195,6 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
         binding.groupWarrantiesNetwork.visibility = GONE
         binding.groupWarrantiesEmptyList.visibility = GONE
         binding.rvWarranties.visibility = VISIBLE
-        sortWarrantiesAlphabetically(warrantiesList)
 
         var adIndex = 5
         for (i in 0..warrantiesList.size) {
@@ -219,10 +223,6 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
         val action = WarrantiesFragmentDirections
             .actionWarrantiesFragmentToWarrantyDetailsFragment(warranty, daysUntilExpiry)
         navController.navigate(action)
-    }
-
-    private fun sortWarrantiesAlphabetically(warrantiesList: MutableList<Warranty>) {
-        warrantiesList.sortBy { it.title }
     }
 
 //    private fun searchWarrantiesList() {
