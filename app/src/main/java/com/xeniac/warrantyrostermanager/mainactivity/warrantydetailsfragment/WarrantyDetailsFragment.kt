@@ -155,13 +155,13 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
         }
 
         binding.tvWarrantyDetailsDateStarting.text =
-            "${decimalFormat.format(startingCalendar.get(Calendar.DAY_OF_MONTH))}/" +
-                    "${decimalFormat.format((startingCalendar.get(Calendar.MONTH)) + 1)}/" +
+            "${decimalFormat.format((startingCalendar.get(Calendar.MONTH)) + 1)}/" +
+                    "${decimalFormat.format(startingCalendar.get(Calendar.DAY_OF_MONTH))}/" +
                     "${startingCalendar.get(Calendar.YEAR)}"
 
         binding.tvWarrantyDetailsDateExpiry.text =
-            "${decimalFormat.format(expiryCalendar.get(Calendar.DAY_OF_MONTH))}/" +
-                    "${decimalFormat.format((expiryCalendar.get(Calendar.MONTH)) + 1)}/" +
+            "${decimalFormat.format((expiryCalendar.get(Calendar.MONTH)) + 1)}/" +
+                    "${decimalFormat.format(expiryCalendar.get(Calendar.DAY_OF_MONTH))}/" +
                     "${expiryCalendar.get(Calendar.YEAR)}"
 
         when {
