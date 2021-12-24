@@ -380,6 +380,7 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
             } catch (e: Exception) {
                 Log.e("addWarranty", "Exception: ${e.message}")
                 withContext(Dispatchers.Main) {
+                    hideLoadingAnimation()
                     Snackbar.make(
                         binding.root,
                         requireContext().getString(R.string.network_error_failure),
