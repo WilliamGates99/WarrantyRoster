@@ -337,11 +337,6 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
 
     private fun getWarrantyInput() {
         val title = binding.tiAddWarrantyEditTitle.text.toString().trim()
-        val brand = binding.tiAddWarrantyEditBrand.text?.toString()?.trim()
-        val model = binding.tiAddWarrantyEditModel.text?.toString()?.trim()
-        val serialNumber = binding.tiAddWarrantyEditSerial.text?.toString()?.trim()
-        val description = binding.tiAddWarrantyEditDescription.text?.toString()?.trim()
-        val categoryId = selectedCategory?.id ?: "10"
 
         if (title.isBlank()) {
             binding.tiAddWarrantyLayoutTitle.requestFocus()
@@ -358,6 +353,12 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
         } else if (!isStartingDateValid(startingCalendar!!, expiryCalendar!!)) {
             showDateError()
         } else {
+            val brand = binding.tiAddWarrantyEditBrand.text?.toString()?.trim()
+            val model = binding.tiAddWarrantyEditModel.text?.toString()?.trim()
+            val serialNumber = binding.tiAddWarrantyEditSerial.text?.toString()?.trim()
+            val description = binding.tiAddWarrantyEditDescription.text?.toString()?.trim()
+            val categoryId = selectedCategory?.id ?: "10"
+
             val warrantyInput = WarrantyInput(
                 title, brand, model, serialNumber, startingDateInput,
                 expiryDateInput, description, categoryId, Firebase.auth.currentUser?.uid.toString()
