@@ -32,6 +32,10 @@ public class Constants {
     public static final String FRAGMENT_TAG_ADD_CALENDAR_STARTING = "fragment_tag_add_calendar_starting";
     public static final String FRAGMENT_TAG_ADD_CALENDAR_EXPIRY = "fragment_tag_add_calendar_expiry";
 
+    //Edit Warranty Activity Calendars Fragment Tag Constants
+    public static final String FRAGMENT_TAG_EDIT_CALENDAR_STARTING = "fragment_tag_edit_calendar_starting";
+    public static final String FRAGMENT_TAG_EDIT_CALENDAR_EXPIRY = "fragment_tag_edit_calendar_expiry";
+
     //Firestore Collections ID Constants
     public static final String COLLECTION_USERS = "users";
     public static final String COLLECTION_CATEGORIES = "categories";
