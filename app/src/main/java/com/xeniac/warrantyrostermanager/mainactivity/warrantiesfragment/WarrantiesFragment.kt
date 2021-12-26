@@ -43,7 +43,7 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
         Firebase.firestore.collection(Constants.COLLECTION_CATEGORIES)
     private val warrantiesCollectionRef =
         Firebase.firestore.collection(Constants.COLLECTION_WARRANTIES)
-    private lateinit var querySnapshot: ListenerRegistration
+    private var warrantiesQuery: ListenerRegistration? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -60,7 +60,7 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
     override fun onDestroyView() {
         super.onDestroyView()
         WarrantyRosterDatabase.destroyInstance()
-        querySnapshot.remove()
+        warrantiesQuery?.remove()
         _binding = null
     }
 
@@ -89,11 +89,11 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
 
             CoroutineScope(Dispatchers.IO).launch {
                 try {
-                    val querySnapshot: QuerySnapshot = categoriesCollectionRef.get().await()
+                    val categoriesQuery: QuerySnapshot = categoriesCollectionRef.get().await()
                     Log.i("seedCategories", "Categories Data successfully retrieved.")
 
                     val categoriesList = mutableListOf<Category>()
-                    for (document in querySnapshot.documents) {
+                    for (document in categoriesQuery.documents) {
                         val category = document.toObject<Category>()
                         category?.let { categoriesList.add(it) }
                     }
@@ -118,7 +118,7 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
     private fun getWarrantiesListFromFirestore() {
         showLoadingAnimation()
 
-        querySnapshot = warrantiesCollectionRef
+        warrantiesQuery = warrantiesCollectionRef
             .whereEqualTo(Constants.WARRANTIES_UUID, Firebase.auth.currentUser?.uid)
             .orderBy(Constants.WARRANTIES_TITLE, Query.Direction.ASCENDING)
             .addSnapshotListener { value, error ->
