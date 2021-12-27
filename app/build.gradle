@@ -11,7 +11,7 @@ android {
     buildToolsVersion '32.0.0'
 
     defaultConfig {
-        applicationId "com.xeniac.warrantyrostermanager"
+        applicationId "com.xeniac.warrantyroster_manager"
         minSdkVersion 21
         targetSdkVersion 32
         versionCode 4
