@@ -108,13 +108,6 @@
         <item name="trackThickness">2dp</item>
     </style>
 
-    <style name="Theme.WarrantyRoster.LoadingProgressBar.Linear" parent="Widget.MaterialComponents.LinearProgressIndicator">
-        <item name="android:indeterminate">true</item>
-        <item name="indicatorColor">@color/grayMedium</item>
-        <item name="trackCornerRadius">12dp</item>
-        <item name="trackThickness">4dp</item>
-    </style>
-
     <style name="Theme.WarrantyRoster.Button" parent="Widget.MaterialComponents.Button.UnelevatedButton">
         <item name="shapeAppearance">@style/Theme.WarrantyRoster.Button.Appearance</item>
         <item name="android:textColor">@color/whiteConstant</item>

@@ -86,47 +86,49 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         _binding = null
     }
 
-    private fun getAccountDetails() {
-        showLoadingAnimation()
+    private fun getAccountDetails() = CoroutineScope(Dispatchers.IO).launch {
+        try {
+            currentUser?.let {
+                accountEmail = it.email.toString()
+                var isVerified = it.isEmailVerified
+                Log.i(
+                    "getAccountDetails",
+                    "Current user is $accountEmail and isVerified: $isVerified"
+                )
 
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                currentUser?.let {
-                    Log.i(
-                        "getAccountDetails",
-                        "Current user is ${it.email} and isVerified: ${it.isEmailVerified}"
-                    )
+                withContext(Dispatchers.Main) {
+                    setAccountDetails(accountEmail, isVerified)
+                }
 
-                    if (NetworkHelper.hasNetworkAccess(requireContext())) {
-                        it.reload().await()
+                if (NetworkHelper.hasNetworkAccess(requireContext())) {
+                    it.reload().await()
+                    if (accountEmail != it.email || isVerified != it.isEmailVerified) {
+                        accountEmail = it.email.toString()
+                        isVerified = it.isEmailVerified
                         Log.i(
                             "getAccountDetails",
-                            "Updated current user is ${it.email} and isVerified: ${it.isEmailVerified}"
+                            "Updated current user is $$accountEmail and isVerified: $isVerified"
                         )
-                    }
 
-                    withContext(Dispatchers.Main) {
-                        hideLoadingAnimation()
-                        accountEmail = it.email.toString()
-                        setAccountDetails(accountEmail, it.isEmailVerified)
+                        withContext(Dispatchers.Main) {
+                            setAccountDetails(accountEmail, isVerified)
+                        }
                     }
                 }
-            } catch (e: Exception) {
-                Log.i("getAccountDetails", "Exception: ${e.message}")
-                withContext(Dispatchers.Main) {
-                    hideLoadingAnimation()
-                    Snackbar.make(
-                        binding.root,
-                        requireContext().getString(R.string.network_error_failure),
-                        LENGTH_LONG
-                    ).show()
-                }
+            }
+        } catch (e: Exception) {
+            Log.i("getAccountDetails", "Exception: ${e.message}")
+            withContext(Dispatchers.Main) {
+                Snackbar.make(
+                    binding.root,
+                    requireContext().getString(R.string.network_error_failure),
+                    LENGTH_LONG
+                ).show()
             }
         }
     }
 
     private fun setAccountDetails(email: String, isEmailVerified: Boolean) {
-        showAccountDetails()
         binding.tvSettingsAccountEmail.text = email
 
         if (isEmailVerified) {
@@ -203,7 +205,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         if (NetworkHelper.hasNetworkAccess(requireContext())) {
             sendVerificationEmailAuth()
         } else {
-            hideVerificationLoadingAnimation()
+            hideLoadingAnimation()
             Snackbar.make(
                 binding.root,
                 requireContext().getString(R.string.network_error_connection),
@@ -216,7 +218,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     }
 
     private fun sendVerificationEmailAuth() {
-        showVerificationLoadingAnimation()
+        showLoadingAnimation()
 
         CoroutineScope(Dispatchers.IO).launch {
             try {
@@ -224,7 +226,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                     it.sendEmailVerification().await()
                     Log.i("sendVerificationEmail", "Email sent to ${it.email}")
                     withContext(Dispatchers.Main) {
-                        hideVerificationLoadingAnimation()
+                        hideLoadingAnimation()
 
                         MaterialAlertDialogBuilder(requireContext()).apply {
                             setMessage(requireContext().getString(R.string.settings_dialog_message))
@@ -235,7 +237,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             } catch (e: Exception) {
                 Log.e("sendVerificationEmail", "Exception: ${e.message}")
                 withContext(Dispatchers.Main) {
-                    hideVerificationLoadingAnimation()
+                    hideLoadingAnimation()
                     Snackbar.make(
                         binding.root,
                         requireContext().getString(R.string.network_error_failure),
@@ -336,25 +338,13 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         }
     }
 
-    private fun showAccountDetails() {
-        binding.groupSettingsAccount.visibility = VISIBLE
-    }
-
     private fun showLoadingAnimation() {
-        binding.lpiSettingsAccountEmail.visibility = VISIBLE
-    }
-
-    private fun hideLoadingAnimation() {
-        binding.lpiSettingsAccountEmail.visibility = GONE
-    }
-
-    private fun showVerificationLoadingAnimation() {
         binding.btnSettingsAccountEmail.visibility = GONE
         binding.cpiSettingsAccountEmailVerification.visibility = VISIBLE
 
     }
 
-    private fun hideVerificationLoadingAnimation() {
+    private fun hideLoadingAnimation() {
         binding.cpiSettingsAccountEmailVerification.visibility = GONE
         binding.btnSettingsAccountEmail.visibility = VISIBLE
     }
