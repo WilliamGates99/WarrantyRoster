@@ -42,7 +42,6 @@ public class Constants {
     public static final String COLLECTION_WARRANTIES = "warranties";
 
     //Firestore Warranties Collection Fields Constants
-    public static final String WARRANTIES_UUID = "uuid";
     public static final String WARRANTIES_TITLE = "title";
     public static final String WARRANTIES_BRAND = "brand";
     public static final String WARRANTIES_MODEL = "model";
@@ -51,4 +50,5 @@ public class Constants {
     public static final String WARRANTIES_EXPIRY_DATE = "expiryDate";
     public static final String WARRANTIES_DESCRIPTION = "description";
     public static final String WARRANTIES_CATEGORY_ID = "categoryId";
+    public static final String WARRANTIES_UUID = "uuid";
 }
