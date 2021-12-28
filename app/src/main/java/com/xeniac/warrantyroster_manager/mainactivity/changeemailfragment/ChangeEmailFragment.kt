@@ -246,6 +246,8 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
                             .contains("The password is invalid or the user does not have a password")
                         || e.toString()
                             .contains("The supplied credentials do not correspond to the previously signed in user")
+                        || e.toString()
+                            .contains("There is no user record corresponding to this identifier")
                     ) {
                         Snackbar.make(
                             binding.root,
