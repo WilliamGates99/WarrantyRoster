@@ -21,7 +21,7 @@
 
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.xeniac.warrantyroster_manager.mainactivity.setingsfragment.SettingsFragment"
+        android:name="com.xeniac.warrantyroster_manager.mainactivity.settingsfragment.SettingsFragment"
         android:label="SettingsFragment"
         tools:layout="@layout/fragment_settings">
         <action

@@ -1,4 +1,4 @@
-package com.xeniac.warrantyroster_manager.mainactivity.setingsfragment
+package com.xeniac.warrantyroster_manager.mainactivity.settingsfragment
 
 import android.content.Context
 import android.content.Intent
@@ -364,7 +364,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                         activity, binding.flSettingsAdContainer, R.layout.ad_banner_settings
                     )
                     requestAdCounter = 0
-                    requestNativeAd(adHolder!!)
+                    adHolder?.let { requestNativeAd(it) }
                 }
 
                 override fun onInitializeFailed(
@@ -384,9 +384,11 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                 override fun response(tapsellPlusAdModel: TapsellPlusAdModel?) {
                     super.response(tapsellPlusAdModel)
                     Log.i("requestNativeAd", "response: ${tapsellPlusAdModel.toString()}")
-                    tapsellPlusAdModel?.let {
-                        responseId = it.responseId
-                        showNativeAd(adHolder, responseId!!)
+                    _binding?.let {
+                        tapsellPlusAdModel?.let {
+                            responseId = it.responseId
+                            showNativeAd(adHolder, responseId!!)
+                        }
                     }
                 }
 
@@ -417,7 +419,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
     private fun destroyAd() {
         responseId?.let {
-            TapsellPlus.destroyNativeBanner(requireActivity(), responseId)
+            TapsellPlus.destroyNativeBanner(requireActivity(), it)
         }
     }
 }
