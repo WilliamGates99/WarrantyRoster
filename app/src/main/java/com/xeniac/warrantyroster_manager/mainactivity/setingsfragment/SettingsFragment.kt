@@ -118,13 +118,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             }
         } catch (e: Exception) {
             Log.i("getAccountDetails", "Exception: ${e.message}")
-            withContext(Dispatchers.Main) {
-                Snackbar.make(
-                    binding.root,
-                    requireContext().getString(R.string.network_error_failure),
-                    LENGTH_LONG
-                ).show()
-            }
         }
     }
 
@@ -326,15 +319,28 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
     private fun logoutOnClick() {
         binding.btnSettingsLogout.setOnClickListener {
-            firebaseAuth.signOut()
-            requireContext().getSharedPreferences(Constants.PREFERENCE_LOGIN, Context.MODE_PRIVATE)
-                .edit().apply {
+            logout()
+        }
+    }
+
+    private fun logout() = CoroutineScope(Dispatchers.IO).launch {
+        try {
+            currentUser?.let {
+                firebaseAuth.signOut()
+                Log.i("logout", "${it.email} successfully logged out.")
+
+                requireContext().getSharedPreferences(
+                    Constants.PREFERENCE_LOGIN, Context.MODE_PRIVATE
+                ).edit().apply {
                     remove(Constants.PREFERENCE_IS_LOGGED_IN_KEY)
                     apply()
                 }
 
-            startActivity(Intent(requireContext(), LandingActivity::class.java))
-            requireActivity().finish()
+                startActivity(Intent(requireContext(), LandingActivity::class.java))
+                requireActivity().finish()
+            }
+        } catch (e: Exception) {
+            Log.e("logout", "Exception: ${e.message}")
         }
     }
 
