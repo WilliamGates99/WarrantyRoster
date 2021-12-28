@@ -109,12 +109,7 @@
         android:id="@+id/changeEmailFragment"
         android:name="com.xeniac.warrantyroster_manager.mainactivity.changeemailfragment.ChangeEmailFragment"
         android:label="ChangeEmailFragment"
-        tools:layout="@layout/fragment_change_email">
-        <argument
-            android:name="accountEmail"
-            app:argType="string"
-            app:nullable="false" />
-    </fragment>
+        tools:layout="@layout/fragment_change_email" />
 
     <fragment
         android:id="@+id/changePasswordFragment"

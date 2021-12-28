@@ -49,7 +49,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     private lateinit var currentLanguage: String
     private lateinit var currentCountry: String
     private var currentTheme: Int = 0
-    private lateinit var accountEmail: String
 
     private var requestAdCounter = 0
     private var responseId: String? = null
@@ -89,29 +88,26 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     private fun getAccountDetails() = CoroutineScope(Dispatchers.IO).launch {
         try {
             currentUser?.let {
-                accountEmail = it.email.toString()
+                var email = it.email.toString()
                 var isVerified = it.isEmailVerified
-                Log.i(
-                    "getAccountDetails",
-                    "Current user is $accountEmail and isVerified: $isVerified"
-                )
+                Log.i("getAccountDetails", "Current user is $email and isVerified: $isVerified")
 
                 withContext(Dispatchers.Main) {
-                    setAccountDetails(accountEmail, isVerified)
+                    setAccountDetails(email, isVerified)
                 }
 
                 if (NetworkHelper.hasNetworkAccess(requireContext())) {
                     it.reload().await()
-                    if (accountEmail != it.email || isVerified != it.isEmailVerified) {
-                        accountEmail = it.email.toString()
+                    if (email != it.email || isVerified != it.isEmailVerified) {
+                        email = it.email.toString()
                         isVerified = it.isEmailVerified
                         Log.i(
                             "getAccountDetails",
-                            "Updated current user is $$accountEmail and isVerified: $isVerified"
+                            "Updated current user is $$email and isVerified: $isVerified"
                         )
 
                         withContext(Dispatchers.Main) {
-                            setAccountDetails(accountEmail, isVerified)
+                            setAccountDetails(email, isVerified)
                         }
                     }
                 }
@@ -243,9 +239,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
     private fun changeEmailOnClick() {
         binding.clSettingsAccountChangeEmail.setOnClickListener {
-            val action = SettingsFragmentDirections
-                .actionSettingsFragmentToChangeEmailFragment(accountEmail)
-            navController.navigate(action)
+            navController.navigate(R.id.action_settingsFragment_to_changeEmailFragment)
         }
     }
 
@@ -325,20 +319,18 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
     private fun logout() = CoroutineScope(Dispatchers.IO).launch {
         try {
-            currentUser?.let {
-                firebaseAuth.signOut()
-                Log.i("logout", "${it.email} successfully logged out.")
+            firebaseAuth.signOut()
+            Log.i("logout", "${currentUser?.email} successfully logged out.")
 
-                requireContext().getSharedPreferences(
-                    Constants.PREFERENCE_LOGIN, Context.MODE_PRIVATE
-                ).edit().apply {
-                    remove(Constants.PREFERENCE_IS_LOGGED_IN_KEY)
-                    apply()
-                }
-
-                startActivity(Intent(requireContext(), LandingActivity::class.java))
-                requireActivity().finish()
+            requireContext().getSharedPreferences(
+                Constants.PREFERENCE_LOGIN, Context.MODE_PRIVATE
+            ).edit().apply {
+                remove(Constants.PREFERENCE_IS_LOGGED_IN_KEY)
+                apply()
             }
+
+            startActivity(Intent(requireContext(), LandingActivity::class.java))
+            requireActivity().finish()
         } catch (e: Exception) {
             Log.e("logout", "Exception: ${e.message}")
         }
