@@ -18,9 +18,11 @@
 
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
-#-renamesourcefileattribute SourceFile
+
+##---------------Begin: proguard configuration for Obfuscation Mapping  ----------
 -printseeds obfuscation/seeds.txt
 -printmapping obfuscation/mapping.txt
+##---------------End: proguard configuration for Obfuscation Mapping  ----------
 
 ##---------------Begin: proguard configuration for Gson  ----------
 # Gson uses generic type information stored in a class file when working with fields. Proguard
