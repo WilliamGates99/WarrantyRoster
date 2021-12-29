@@ -81,7 +81,7 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
             }
 
             override fun onTextChanged(
-                inputEmail: CharSequence?, start: Int, before: Int, count: Int
+                inputPassword: CharSequence?, start: Int, before: Int, count: Int
             ) {
                 binding.tiChangeEmailLayoutPassword.boxStrokeColor =
                     ContextCompat.getColor(requireContext(), R.color.blue)
