@@ -187,8 +187,8 @@
 
     <!--Change Password Fragment-->
     <string name="change_password_text_title">Change Password</string>
-    <string name="change_password_title_old">Old Password</string>
-    <string name="change_password_hint_old">Enter your old password</string>
+    <string name="change_password_title_current">Current Password</string>
+    <string name="change_password_hint_current">Enter your current password</string>
     <string name="change_password_title_new">New Password</string>
     <string name="change_password_hint_new">Enter a new password</string>
     <string name="change_password_title_retype">Retype New Password</string>
@@ -197,8 +197,8 @@
     <string name="change_password_helper_password_weak">Weak</string>
     <string name="change_password_helper_password_mediocre">Mediocre</string>
     <string name="change_password_helper_password_strong">Strong</string>
+    <string name="change_password_error_password_short">Password should be at least 6 characters!</string>
     <string name="change_password_error_match">New password and retype new password do not match!</string>
-    <string name="change_password_error_old">The old password is not entered correctly!!</string>
     <string name="change_password_dialog_message">Your password has been successfully changed.</string>
     <string name="change_password_dialog_positive">Confirm</string>
 
