@@ -13,8 +13,6 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_INDEFINITE
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
@@ -35,14 +33,12 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
 
     private var _binding: FragmentChangeEmailBinding? = null
     private val binding get() = _binding!!
-    private lateinit var navController: NavController
     private val firebaseAuth = FirebaseAuth.getInstance()
     private val currentUser = firebaseAuth.currentUser
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentChangeEmailBinding.bind(view)
-        navController = Navigation.findNavController(view)
         (requireContext() as MainActivity).hideNavBar()
 
         textInputsBackgroundColor()
