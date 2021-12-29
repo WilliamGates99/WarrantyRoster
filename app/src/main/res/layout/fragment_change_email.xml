@@ -46,57 +46,11 @@
                 app:lottie_rawRes="@raw/anim_keyboard" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tv_change_email_title_current_email"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="32dp"
-                android:layout_marginTop="8dp"
-                android:fontFamily="@font/nunito_bold"
-                android:gravity="start|center_vertical"
-                android:labelFor="@+id/ti_change_email_layout_current_email"
-                android:maxLines="1"
-                android:text="@string/change_email_title_current_email"
-                android:textAlignment="gravity"
-                android:textColor="@color/black"
-                android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/lav_change_email" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/ti_change_email_layout_current_email"
-                style="@style/Theme.WarrantyRoster.TextInputLayout"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="24dp"
-                android:layout_marginTop="4dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_change_email_title_current_email">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/ti_change_email_edit_current_email"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/nunito_regular"
-                    android:gravity="center_vertical"
-                    android:hint="@string/change_email_hint_current_email"
-                    android:imeOptions="actionNext"
-                    android:inputType="textEmailAddress"
-                    android:maxLines="1"
-                    android:textColor="@color/black"
-                    android:textColorHint="@color/grayDark"
-                    android:textDirection="ltr"
-                    android:textSize="16sp" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_change_email_title_password"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="32dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:fontFamily="@font/nunito_bold"
                 android:gravity="start|center_vertical"
                 android:labelFor="@+id/ti_change_email_layout_password"
@@ -107,7 +61,7 @@
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ti_change_email_layout_current_email" />
+                app:layout_constraintTop_toBottomOf="@+id/lav_change_email" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/ti_change_email_layout_password"

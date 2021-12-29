@@ -58,16 +58,6 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
     }
 
     private fun textInputsBackgroundColor() {
-        binding.tiChangeEmailEditCurrentEmail.setOnFocusChangeListener { _, isFocused ->
-            if (isFocused) {
-                binding.tiChangeEmailLayoutCurrentEmail.boxBackgroundColor =
-                    ContextCompat.getColor(requireContext(), R.color.background)
-            } else {
-                binding.tiChangeEmailLayoutCurrentEmail.boxBackgroundColor =
-                    ContextCompat.getColor(requireContext(), R.color.grayLight)
-            }
-        }
-
         binding.tiChangeEmailEditPassword.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
                 binding.tiChangeEmailLayoutPassword.boxBackgroundColor =
@@ -90,22 +80,6 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
     }
 
     private fun textInputsStrokeColor() {
-        binding.tiChangeEmailEditCurrentEmail.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-
-            override fun onTextChanged(
-                inputEmail: CharSequence?, start: Int, before: Int, count: Int
-            ) {
-                binding.tiChangeEmailLayoutCurrentEmail.isErrorEnabled = false
-                binding.tiChangeEmailLayoutCurrentEmail.boxStrokeColor =
-                    ContextCompat.getColor(requireContext(), R.color.blue)
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-            }
-        })
-
         binding.tiChangeEmailEditPassword.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
@@ -180,15 +154,10 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
     }
 
     private fun getChangeUserEmailInputs() {
-        val email = binding.tiChangeEmailEditCurrentEmail.text.toString().trim().lowercase()
         val password = binding.tiChangeEmailEditPassword.text.toString().trim()
         val newEmail = binding.tiChangeEmailEditNewEmail.text.toString().trim().lowercase()
 
-        if (email.isBlank()) {
-            binding.tiChangeEmailLayoutCurrentEmail.requestFocus()
-            binding.tiChangeEmailLayoutCurrentEmail.boxStrokeColor =
-                ContextCompat.getColor(requireContext(), R.color.red)
-        } else if (password.isBlank()) {
+        if (password.isBlank()) {
             binding.tiChangeEmailLayoutPassword.requestFocus()
             binding.tiChangeEmailLayoutPassword.boxStrokeColor =
                 ContextCompat.getColor(requireContext(), R.color.red)
@@ -197,11 +166,7 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
             binding.tiChangeEmailLayoutNewEmail.boxStrokeColor =
                 ContextCompat.getColor(requireContext(), R.color.red)
         } else {
-            if (!isEmailValid(email)) {
-                binding.tiChangeEmailLayoutCurrentEmail.requestFocus()
-                binding.tiChangeEmailLayoutCurrentEmail.error =
-                    requireContext().getString(R.string.change_email_error_email)
-            } else if (!isEmailValid(newEmail)) {
+            if (!isEmailValid(newEmail)) {
                 binding.tiChangeEmailLayoutNewEmail.requestFocus()
                 binding.tiChangeEmailLayoutNewEmail.error =
                     requireContext().getString(R.string.change_email_error_new_email)
@@ -210,23 +175,50 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
                 binding.tiChangeEmailLayoutNewEmail.error =
                     requireContext().getString(R.string.change_email_error_email_same)
             } else {
-                changeUserEmailAuth(email, password, newEmail)
+                showLoadingAnimation()
+                reAuthenticateUser(password, newEmail)
             }
         }
     }
 
-    private fun changeUserEmailAuth(email: String, password: String, newEmail: String) {
-        showLoadingAnimation()
-
+    private fun reAuthenticateUser(password: String, newEmail: String) =
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 currentUser?.let {
-                    val credential = EmailAuthProvider.getCredential(email, password)
+                    val credential = EmailAuthProvider.getCredential(it.email.toString(), password)
                     it.reauthenticate(credential).await()
-                    Log.i("changeUserEmail", "User re-authenticated.")
+                    Log.i("reAuthenticateUser", "User re-authenticated.")
+                    changeUserEmailAuth(newEmail)
+                }
+            } catch (e: Exception) {
+                Log.e("reAuthenticateUser", "Exception: ${e.message}")
+                withContext(Dispatchers.Main) {
+                    hideLoadingAnimation()
+                    if (e.toString()
+                            .contains("The password is invalid or the user does not have a password")
+                    ) {
+                        Snackbar.make(
+                            binding.root,
+                            requireContext().getString(R.string.change_email_error_credentials),
+                            LENGTH_INDEFINITE
+                        ).show()
+                    } else {
+                        Snackbar.make(
+                            binding.root,
+                            requireContext().getString(R.string.network_error_failure),
+                            LENGTH_LONG
+                        ).show()
+                    }
+                }
+            }
+        }
 
+    private fun changeUserEmailAuth(newEmail: String) =
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                currentUser?.let {
                     it.updateEmail(newEmail).await()
-                    Log.i("changeUserEmail", "User email updated to ${newEmail}.")
+                    Log.i("changeUserEmailAuth", "User email updated to ${newEmail}.")
 
                     withContext(Dispatchers.Main) {
                         hideLoadingAnimation()
@@ -239,22 +231,9 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
                     }
                 }
             } catch (e: Exception) {
-                Log.e("changeUserEmail", "Exception: ${e.message}")
+                Log.e("changeUserEmailAuth", "Exception: ${e.message}")
                 withContext(Dispatchers.Main) {
                     hideLoadingAnimation()
-                    if (e.toString()
-                            .contains("The password is invalid or the user does not have a password")
-                        || e.toString()
-                            .contains("The supplied credentials do not correspond to the previously signed in user")
-                        || e.toString()
-                            .contains("There is no user record corresponding to this identifier")
-                    ) {
-                        Snackbar.make(
-                            binding.root,
-                            requireContext().getString(R.string.change_email_error_credentials),
-                            LENGTH_INDEFINITE
-                        ).show()
-                    }
                     if (e.toString()
                             .contains("The email address is already in use by another account")
                     ) {
@@ -273,10 +252,8 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
                 }
             }
         }
-    }
 
     private fun showLoadingAnimation() {
-        binding.tiChangeEmailEditCurrentEmail.isEnabled = false
         binding.tiChangeEmailEditPassword.isEnabled = false
         binding.tiChangeEmailEditNewEmail.isEnabled = false
         binding.btnChangeEmail.isClickable = false
@@ -286,7 +263,6 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
 
     private fun hideLoadingAnimation() {
         binding.cpiChangeEmail.visibility = GONE
-        binding.tiChangeEmailEditCurrentEmail.isEnabled = true
         binding.tiChangeEmailEditPassword.isEnabled = true
         binding.tiChangeEmailEditNewEmail.isEnabled = true
         binding.btnChangeEmail.isClickable = true

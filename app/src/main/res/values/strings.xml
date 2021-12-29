@@ -204,14 +204,11 @@
 
     <!--Change Email Fragment-->
     <string name="change_email_text_title">Change Email</string>
-    <string name="change_email_title_current_email">Current Email Address</string>
-    <string name="change_email_hint_current_email">Enter your current email address</string>
     <string name="change_email_title_password">Password</string>
     <string name="change_email_hint_password">Enter your password</string>
     <string name="change_email_title_new_email">New Email Address</string>
     <string name="change_email_hint_new_email">Enter a new email address</string>
     <string name="change_email_btn_change">Change Email</string>
-    <string name="change_email_error_email">Email address is not valid!</string>
     <string name="change_email_error_new_email">New email address is not valid!</string>
     <string name="change_email_error_credentials">The provided credentials are incorrect.</string>
     <string name="change_email_error_email_same">New email cannot be the same as your current email!</string>
