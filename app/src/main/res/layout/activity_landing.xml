@@ -7,7 +7,7 @@
     tools:context=".landingactivity.LandingActivity">
 
     <ImageView
-        android:id="@+id/iv_landing_header"
+        android:id="@+id/iv_header"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
@@ -22,7 +22,7 @@
         app:tint="@color/blue" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tv_landing_title"
+        android:id="@+id/tv_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="28dp"
@@ -33,13 +33,13 @@
         android:textAlignment="gravity"
         android:textColor="@color/whiteConstant"
         android:textSize="34sp"
-        app:layout_constraintBottom_toTopOf="@+id/fcv_landing"
+        app:layout_constraintBottom_toTopOf="@+id/fcv"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fcv_landing"
+        android:id="@+id/fcv"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -50,7 +50,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/iv_landing_header"
+        app:layout_constraintTop_toBottomOf="@+id/iv_header"
         app:navGraph="@navigation/nav_graph_landing" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

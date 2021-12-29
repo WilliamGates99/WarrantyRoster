@@ -59,37 +59,37 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     }
 
     private fun textInputsBackgroundColor() {
-        binding.tiLoginEditEmail.setOnFocusChangeListener { _, isFocused ->
+        binding.tiEditEmail.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                binding.tiLoginLayoutEmail.boxBackgroundColor =
+                binding.tiLayoutEmail.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.background)
             } else {
-                binding.tiLoginLayoutEmail.boxBackgroundColor =
+                binding.tiLayoutEmail.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.grayLight)
             }
         }
 
-        binding.tiLoginEditPassword.setOnFocusChangeListener { _, isFocused ->
+        binding.tiEditPassword.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                binding.tiLoginLayoutPassword.boxBackgroundColor =
+                binding.tiLayoutPassword.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.background)
             } else {
-                binding.tiLoginLayoutPassword.boxBackgroundColor =
+                binding.tiLayoutPassword.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.grayLight)
             }
         }
     }
 
     private fun textInputsStrokeColor() {
-        binding.tiLoginEditEmail.addTextChangedListener(object : TextWatcher {
+        binding.tiEditEmail.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
 
             override fun onTextChanged(
                 inputEmail: CharSequence?, start: Int, before: Int, count: Int
             ) {
-                binding.tiLoginLayoutEmail.isErrorEnabled = false
-                binding.tiLoginLayoutEmail.boxStrokeColor =
+                binding.tiLayoutEmail.isErrorEnabled = false
+                binding.tiLayoutEmail.boxStrokeColor =
                     ContextCompat.getColor(requireContext(), R.color.blue)
             }
 
@@ -97,14 +97,14 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             }
         })
 
-        binding.tiLoginEditPassword.addTextChangedListener(object : TextWatcher {
+        binding.tiEditPassword.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
 
             override fun onTextChanged(
                 inputEmail: CharSequence?, start: Int, before: Int, count: Int
             ) {
-                binding.tiLoginLayoutPassword.boxStrokeColor =
+                binding.tiLayoutPassword.boxStrokeColor =
                     ContextCompat.getColor(requireContext(), R.color.blue)
             }
 
@@ -113,32 +113,25 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         })
     }
 
-    private fun forgotPwOnClick() {
-        binding.btnLoginForgotPw.setOnClickListener {
-            navController.navigate(R.id.action_loginFragment_to_forgotPasswordFragment)
-        }
+    private fun forgotPwOnClick() = binding.btnForgotPw.setOnClickListener {
+        navController.navigate(R.id.action_loginFragment_to_forgotPasswordFragment)
     }
 
-    private fun registerOnClick() {
-        binding.btnLoginRegister.setOnClickListener {
-            navController.navigate(R.id.action_loginFragment_to_registerFragment)
-        }
+    private fun registerOnClick() = binding.btnRegister.setOnClickListener {
+        navController.navigate(R.id.action_loginFragment_to_registerFragment)
     }
 
-    private fun loginOnClick() {
-        binding.btnLoginLogin.setOnClickListener {
-            loginViaEmail()
-        }
+    private fun loginOnClick() = binding.btnLogin.setOnClickListener {
+        loginViaEmail()
     }
 
-    private fun loginActionDone() {
-        binding.tiLoginEditPassword.setOnEditorActionListener { _, actionId, _ ->
+    private fun loginActionDone() =
+        binding.tiEditPassword.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 loginViaEmail()
             }
             false
         }
-    }
 
     private fun loginViaEmail() {
         val inputMethodManager = requireContext()
@@ -161,21 +154,21 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     }
 
     private fun getLoginInputs() {
-        val email = binding.tiLoginEditEmail.text.toString().trim().lowercase()
-        val password = binding.tiLoginEditPassword.text.toString().trim()
+        val email = binding.tiEditEmail.text.toString().trim().lowercase()
+        val password = binding.tiEditPassword.text.toString().trim()
 
         if (email.isBlank()) {
-            binding.tiLoginLayoutEmail.requestFocus()
-            binding.tiLoginLayoutEmail.boxStrokeColor =
+            binding.tiLayoutEmail.requestFocus()
+            binding.tiLayoutEmail.boxStrokeColor =
                 ContextCompat.getColor(requireContext(), R.color.red)
         } else if (password.isBlank()) {
-            binding.tiLoginLayoutPassword.requestFocus()
-            binding.tiLoginLayoutPassword.boxStrokeColor =
+            binding.tiLayoutPassword.requestFocus()
+            binding.tiLayoutPassword.boxStrokeColor =
                 ContextCompat.getColor(requireContext(), R.color.red)
         } else {
             if (!isEmailValid(email)) {
-                binding.tiLoginLayoutEmail.requestFocus()
-                binding.tiLoginLayoutEmail.error =
+                binding.tiLayoutEmail.requestFocus()
+                binding.tiLayoutEmail.error =
                     requireContext().getString(R.string.login_error_email)
             } else {
                 loginViaEmailAuth(email, password)
@@ -233,23 +226,22 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     }
 
     private fun showLoadingAnimation() {
-        binding.tiLoginEditEmail.isEnabled = false
-        binding.tiLoginEditPassword.isEnabled = false
-        binding.btnLoginLogin.isClickable = false
-        binding.btnLoginLogin.text = null
+        binding.tiEditEmail.isEnabled = false
+        binding.tiEditPassword.isEnabled = false
+        binding.btnLogin.isClickable = false
+        binding.btnLogin.text = null
         binding.cpiLogin.visibility = VISIBLE
     }
 
     private fun hideLoadingAnimation() {
-        binding.tiLoginEditEmail.isEnabled = true
-        binding.tiLoginEditPassword.isEnabled = true
-        binding.btnLoginLogin.isClickable = true
-        binding.btnLoginLogin.text =
-            requireContext().getString(R.string.login_btn_login)
         binding.cpiLogin.visibility = GONE
+        binding.tiEditEmail.isEnabled = true
+        binding.tiEditPassword.isEnabled = true
+        binding.btnLogin.isClickable = true
+        binding.btnLogin.text =
+            requireContext().getString(R.string.login_btn_login)
     }
 
-    private fun isEmailValid(email: String): Boolean {
-        return Patterns.EMAIL_ADDRESS.matcher(email).matches()
-    }
+    private fun isEmailValid(email: String): Boolean =
+        Patterns.EMAIL_ADDRESS.matcher(email).matches()
 }

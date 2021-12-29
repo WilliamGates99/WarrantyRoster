@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbar_change_email"
+        android:id="@+id/toolbar"
         style="@style/Theme.WarrantyRoster.Toolbar"
         android:layout_width="0dp"
         android:layout_height="?attr/actionBarSize"
@@ -26,14 +26,14 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_change_email">
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/lav_change_email"
+                android:id="@+id/lav_keyboard"
                 android:layout_width="250dp"
                 android:layout_height="250dp"
                 android:layout_marginHorizontal="8dp"
@@ -46,14 +46,14 @@
                 app:lottie_rawRes="@raw/anim_keyboard" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tv_change_email_title_password"
+                android:id="@+id/tv_title_password"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="32dp"
                 android:layout_marginTop="8dp"
                 android:fontFamily="@font/nunito_bold"
                 android:gravity="start|center_vertical"
-                android:labelFor="@+id/ti_change_email_layout_password"
+                android:labelFor="@+id/ti_layout_password"
                 android:maxLines="1"
                 android:text="@string/change_email_title_password"
                 android:textAlignment="gravity"
@@ -61,10 +61,10 @@
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/lav_change_email" />
+                app:layout_constraintTop_toBottomOf="@+id/lav_keyboard" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/ti_change_email_layout_password"
+                android:id="@+id/ti_layout_password"
                 style="@style/Theme.WarrantyRoster.TextInputLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -72,11 +72,11 @@
                 android:layout_marginTop="4dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_change_email_title_password"
+                app:layout_constraintTop_toBottomOf="@+id/tv_title_password"
                 app:passwordToggleEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/ti_change_email_edit_password"
+                    android:id="@+id/ti_edit_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/nunito_regular"
@@ -93,14 +93,14 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tv_change_email_title_new_email"
+                android:id="@+id/tv_title_new_email"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="32dp"
                 android:layout_marginTop="8dp"
                 android:fontFamily="@font/nunito_bold"
                 android:gravity="start|center_vertical"
-                android:labelFor="@+id/ti_change_email_layout_new_email"
+                android:labelFor="@+id/ti_layout_new_email"
                 android:maxLines="1"
                 android:text="@string/change_email_title_new_email"
                 android:textAlignment="gravity"
@@ -108,10 +108,10 @@
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ti_change_email_layout_password" />
+                app:layout_constraintTop_toBottomOf="@+id/ti_layout_password" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/ti_change_email_layout_new_email"
+                android:id="@+id/ti_layout_new_email"
                 style="@style/Theme.WarrantyRoster.TextInputLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -119,10 +119,10 @@
                 android:layout_marginTop="4dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_change_email_title_new_email">
+                app:layout_constraintTop_toBottomOf="@+id/tv_title_new_email">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/ti_change_email_edit_new_email"
+                    android:id="@+id/ti_edit_new_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/nunito_regular"
@@ -150,7 +150,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ti_change_email_layout_new_email" />
+                app:layout_constraintTop_toBottomOf="@+id/ti_layout_new_email" />
 
             <com.google.android.material.progressindicator.CircularProgressIndicator
                 android:id="@+id/cpi_change_email"

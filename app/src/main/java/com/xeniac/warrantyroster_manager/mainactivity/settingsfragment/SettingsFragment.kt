@@ -118,50 +118,50 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     }
 
     private fun setAccountDetails(email: String, isEmailVerified: Boolean) {
-        binding.tvSettingsAccountEmail.text = email
+        binding.tvAccountEmail.text = email
 
         if (isEmailVerified) {
-            binding.btnSettingsAccountEmail.isClickable = false
-            binding.btnSettingsAccountEmail.text =
+            binding.btnAccountVerification.isClickable = false
+            binding.btnAccountVerification.text =
                 requireContext().getString(R.string.settings_btn_account_verified)
-            binding.btnSettingsAccountEmail.setTextColor(
+            binding.btnAccountVerification.setTextColor(
                 ContextCompat.getColor(requireContext(), R.color.green)
             )
-            binding.btnSettingsAccountEmail.backgroundTintList =
+            binding.btnAccountVerification.backgroundTintList =
                 ContextCompat.getColorStateList(requireContext(), R.color.green20)
-            binding.ivSettingsAccountEmail.setBackgroundColor(
+            binding.ivAccountEmail.setBackgroundColor(
                 ContextCompat.getColor(requireContext(), R.color.green10)
             )
-            binding.lavSettingsAccountEmail.repeatCount = 0
-            binding.lavSettingsAccountEmail.speed = 0.60f
-            binding.lavSettingsAccountEmail.setAnimation(R.raw.anim_account_verified)
+            binding.lavAccountVerification.repeatCount = 0
+            binding.lavAccountVerification.speed = 0.60f
+            binding.lavAccountVerification.setAnimation(R.raw.anim_account_verified)
         } else {
-            binding.btnSettingsAccountEmail.isClickable = true
-            binding.btnSettingsAccountEmail.text =
+            binding.btnAccountVerification.isClickable = true
+            binding.btnAccountVerification.text =
                 requireContext().getString(R.string.settings_btn_account_verify)
-            binding.btnSettingsAccountEmail.setTextColor(
+            binding.btnAccountVerification.setTextColor(
                 ContextCompat.getColor(requireContext(), R.color.blue)
             )
-            binding.btnSettingsAccountEmail.backgroundTintList =
+            binding.btnAccountVerification.backgroundTintList =
                 ContextCompat.getColorStateList(requireContext(), R.color.blue20)
-            binding.ivSettingsAccountEmail.setBackgroundColor(
+            binding.ivAccountEmail.setBackgroundColor(
                 ContextCompat.getColor(requireContext(), R.color.red10)
             )
-            binding.lavSettingsAccountEmail.repeatCount = LottieDrawable.INFINITE
-            binding.lavSettingsAccountEmail.speed = 1.00f
-            binding.lavSettingsAccountEmail.setAnimation(R.raw.anim_account_not_verified)
+            binding.lavAccountVerification.repeatCount = LottieDrawable.INFINITE
+            binding.lavAccountVerification.speed = 1.00f
+            binding.lavAccountVerification.setAnimation(R.raw.anim_account_not_verified)
         }
-        binding.lavSettingsAccountEmail.playAnimation()
+        binding.lavAccountVerification.playAnimation()
     }
 
     private fun setCurrentLanguageText() {
         when (currentLanguage) {
             "en" -> {
-                binding.tvSettingsSettingsLanguageCurrent.text =
+                binding.tvSettingsLanguageCurrent.text =
                     requireContext().getString(R.string.settings_text_settings_language_english)
             }
             "fa" -> {
-                binding.tvSettingsSettingsLanguageCurrent.text =
+                binding.tvSettingsLanguageCurrent.text =
                     requireContext().getString(R.string.settings_text_settings_language_persian)
             }
         }
@@ -170,24 +170,22 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     private fun setCurrentThemeText() {
         when (currentTheme) {
             0 -> {
-                binding.tvSettingsSettingsThemeCurrent.text =
+                binding.tvSettingsThemeCurrent.text =
                     requireContext().getString(R.string.settings_text_settings_theme_default)
             }
             1 -> {
-                binding.tvSettingsSettingsThemeCurrent.text =
+                binding.tvSettingsThemeCurrent.text =
                     requireContext().getString(R.string.settings_text_settings_theme_light)
             }
             2 -> {
-                binding.tvSettingsSettingsThemeCurrent.text =
+                binding.tvSettingsThemeCurrent.text =
                     requireContext().getString(R.string.settings_text_settings_theme_dark)
             }
         }
     }
 
-    private fun verifyOnClick() {
-        binding.btnSettingsAccountEmail.setOnClickListener {
-            sendVerificationEmail()
-        }
+    private fun verifyOnClick() = binding.btnAccountVerification.setOnClickListener {
+        sendVerificationEmail()
     }
 
     private fun sendVerificationEmail() {
@@ -237,68 +235,61 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         }
     }
 
-    private fun changeEmailOnClick() {
-        binding.clSettingsAccountChangeEmail.setOnClickListener {
-            navController.navigate(R.id.action_settingsFragment_to_changeEmailFragment)
-        }
+    private fun changeEmailOnClick() = binding.clAccountChangeEmail.setOnClickListener {
+        navController.navigate(R.id.action_settingsFragment_to_changeEmailFragment)
     }
 
-    private fun changePasswordOnClick() {
-        binding.clSettingsAccountChangePassword.setOnClickListener {
+    private fun changePasswordOnClick() =
+        binding.clAccountChangePassword.setOnClickListener {
             navController.navigate(R.id.action_settingsFragment_to_changePasswordFragment)
         }
+
+    private fun languageOnClick() = binding.clSettingsLanguage.setOnClickListener {
+        Toast.makeText(requireContext(), "Language", Toast.LENGTH_SHORT).show()
     }
 
-    private fun languageOnClick() {
-        binding.clSettingsSettingsLanguage.setOnClickListener {
-            Toast.makeText(requireContext(), "Language", Toast.LENGTH_SHORT).show()
-        }
-    }
+    private fun themeOnClick() = binding.clSettingsTheme.setOnClickListener {
+        val themeItems = arrayOf(
+            requireContext().getString(R.string.settings_text_settings_theme_default),
+            requireContext().getString(R.string.settings_text_settings_theme_light),
+            requireContext().getString(R.string.settings_text_settings_theme_dark)
+        )
 
-    private fun themeOnClick() {
-        binding.clSettingsSettingsTheme.setOnClickListener {
-            val themeItems = arrayOf(
-                requireContext().getString(R.string.settings_text_settings_theme_default),
-                requireContext().getString(R.string.settings_text_settings_theme_light),
-                requireContext().getString(R.string.settings_text_settings_theme_dark)
-            )
-
-            MaterialAlertDialogBuilder(requireContext()).apply {
-                setTitle(requireContext().getString(R.string.settings_text_settings_theme))
-                setSingleChoiceItems(themeItems, currentTheme) { dialogInterface, i ->
-                    when (i) {
-                        0 -> {
-                            if (AppCompatDelegate.getDefaultNightMode() != AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM) {
-                                settingsPrefs.edit().putInt(Constants.PREFERENCE_THEME_KEY, i)
-                                    .apply()
-                                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
-                            }
-                        }
-                        1 -> {
-                            if (AppCompatDelegate.getDefaultNightMode() != AppCompatDelegate.MODE_NIGHT_NO) {
-                                settingsPrefs.edit().putInt(Constants.PREFERENCE_THEME_KEY, i)
-                                    .apply()
-                                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                            }
-                        }
-                        2 -> {
-                            if (AppCompatDelegate.getDefaultNightMode() != AppCompatDelegate.MODE_NIGHT_YES) {
-                                settingsPrefs.edit().putInt(Constants.PREFERENCE_THEME_KEY, i)
-                                    .apply()
-                                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                            }
+        MaterialAlertDialogBuilder(requireContext()).apply {
+            setTitle(requireContext().getString(R.string.settings_text_settings_theme))
+            setSingleChoiceItems(themeItems, currentTheme) { dialogInterface, i ->
+                when (i) {
+                    0 -> {
+                        if (AppCompatDelegate.getDefaultNightMode() != AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM) {
+                            settingsPrefs.edit().putInt(Constants.PREFERENCE_THEME_KEY, i)
+                                .apply()
+                            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
                         }
                     }
-                    currentTheme = i
-                    setCurrentThemeText()
-                    dialogInterface.dismiss()
+                    1 -> {
+                        if (AppCompatDelegate.getDefaultNightMode() != AppCompatDelegate.MODE_NIGHT_NO) {
+                            settingsPrefs.edit().putInt(Constants.PREFERENCE_THEME_KEY, i)
+                                .apply()
+                            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                        }
+                    }
+                    2 -> {
+                        if (AppCompatDelegate.getDefaultNightMode() != AppCompatDelegate.MODE_NIGHT_YES) {
+                            settingsPrefs.edit().putInt(Constants.PREFERENCE_THEME_KEY, i)
+                                .apply()
+                            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                        }
+                    }
                 }
-            }.show()
-        }
+                currentTheme = i
+                setCurrentThemeText()
+                dialogInterface.dismiss()
+            }
+        }.show()
     }
 
-    private fun privacyPolicyOnClick() {
-        binding.clSettingsSettingsPrivacyPolicy.setOnClickListener {
+    private fun privacyPolicyOnClick() =
+        binding.clSettingsPrivacyPolicy.setOnClickListener {
             Intent(Intent.ACTION_VIEW, Uri.parse(Constants.URL_PRIVACY_POLICY)).apply {
                 this.resolveActivity(requireContext().packageManager)?.let {
                     startActivity(this)
@@ -309,12 +300,9 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                 ).show()
             }
         }
-    }
 
-    private fun logoutOnClick() {
-        binding.btnSettingsLogout.setOnClickListener {
-            logout()
-        }
+    private fun logoutOnClick() = binding.btnLogout.setOnClickListener {
+        logout()
     }
 
     private fun logout() = CoroutineScope(Dispatchers.IO).launch {
@@ -337,38 +325,36 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     }
 
     private fun showLoadingAnimation() {
-        binding.btnSettingsAccountEmail.visibility = GONE
-        binding.cpiSettingsAccountEmailVerification.visibility = VISIBLE
+        binding.btnAccountVerification.visibility = GONE
+        binding.cpiVerify.visibility = VISIBLE
 
     }
 
     private fun hideLoadingAnimation() {
-        binding.cpiSettingsAccountEmailVerification.visibility = GONE
-        binding.btnSettingsAccountEmail.visibility = VISIBLE
+        binding.cpiVerify.visibility = GONE
+        binding.btnAccountVerification.visibility = VISIBLE
     }
 
-    private fun adInit() {
-        TapsellPlus.initialize(
-            requireContext(), Constants.TAPSELL_KEY, object : TapsellPlusInitListener {
-                override fun onInitializeSuccess(adNetworks: AdNetworks?) {
-                    Log.i("adInit", "onInitializeSuccess: ${adNetworks?.name}")
-                    val adHolder = TapsellPlus.createAdHolder(
-                        activity, binding.flSettingsAdContainer, R.layout.ad_banner_settings
-                    )
-                    requestAdCounter = 0
-                    adHolder?.let { requestNativeAd(it) }
-                }
+    private fun adInit() = TapsellPlus.initialize(requireContext(), Constants.TAPSELL_KEY,
+        object : TapsellPlusInitListener {
+            override fun onInitializeSuccess(adNetworks: AdNetworks?) {
+                Log.i("adInit", "onInitializeSuccess: ${adNetworks?.name}")
+                val adHolder = TapsellPlus.createAdHolder(
+                    activity, binding.flAdContainer, R.layout.ad_banner_settings
+                )
+                requestAdCounter = 0
+                adHolder?.let { requestNativeAd(it) }
+            }
 
-                override fun onInitializeFailed(
-                    adNetworks: AdNetworks?, adNetworkError: AdNetworkError?
-                ) {
-                    Log.e(
-                        "adInit",
-                        "onInitializeFailed: ${adNetworks?.name}, error: ${adNetworkError?.errorMessage}"
-                    )
-                }
-            })
-    }
+            override fun onInitializeFailed(
+                adNetworks: AdNetworks?, adNetworkError: AdNetworkError?
+            ) {
+                Log.e(
+                    "adInit",
+                    "onInitializeFailed: ${adNetworks?.name}, error: ${adNetworkError?.errorMessage}"
+                )
+            }
+        })
 
     private fun requestNativeAd(adHolder: AdHolder) {
         TapsellPlus.requestNativeAd(requireActivity(),
@@ -396,7 +382,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     }
 
     private fun showNativeAd(adHolder: AdHolder, responseId: String) {
-        binding.groupSettingsAd.visibility = VISIBLE
+        binding.groupAd.visibility = VISIBLE
         TapsellPlus.showNativeAd(requireActivity(),
             responseId, adHolder, object : AdShowListener() {
                 override fun onOpened(tapsellPlusAdModel: TapsellPlusAdModel?) {
@@ -409,9 +395,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             })
     }
 
-    private fun destroyAd() {
-        responseId?.let {
-            TapsellPlus.destroyNativeBanner(requireActivity(), it)
-        }
+    private fun destroyAd() = responseId?.let {
+        TapsellPlus.destroyNativeBanner(requireActivity(), it)
     }
 }

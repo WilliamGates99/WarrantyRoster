@@ -102,37 +102,37 @@ public class WarrantyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
 
         public void bindView(Context context, Warranty warrantyItem) {
-            warrantyBinding.tvListWarrantyTitle.setText(warrantyItem.getTitle());
-            warrantyBinding.tvListWarrantyCategory.setText(context.getResources().getString(
+            warrantyBinding.tvTitle.setText(warrantyItem.getTitle());
+            warrantyBinding.tvCategory.setText(context.getResources().getString(
                     database.categoryDAO().getCategoryById(warrantyItem.getCategoryId()).getTitle()));
-            warrantyBinding.ivListWarrantyIcon.setImageResource(
+            warrantyBinding.ivIcon.setImageResource(
                     database.categoryDAO().getCategoryById(warrantyItem.getCategoryId()).getIcon());
 
             Calendar expiryCalendar = Calendar.getInstance();
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-M-dd", Locale.getDefault());
             try {
                 expiryCalendar.setTime(Objects.requireNonNull(dateFormat.parse(warrantyItem.getExpiryDate())));
-                warrantyBinding.tvListWarrantyExpiryDate.setText(String.format(("%s %s, %s"),
+                warrantyBinding.tvExpiryDate.setText(String.format(("%s %s, %s"),
                         expiryCalendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()),
                         getDayWithSuffix(expiryCalendar.get(Calendar.DAY_OF_MONTH)),
                         expiryCalendar.get(Calendar.YEAR)));
 
                 long daysUntilExpiry = getDaysUntilExpiry(expiryCalendar);
                 if (daysUntilExpiry < 0) {
-                    warrantyBinding.tvListWarrantyStatus.setText(context.getResources().getString(R.string.warranties_list_status_expired));
-                    warrantyBinding.tvListWarrantyStatus.setTextColor(context.getResources().getColor(R.color.red));
-                    warrantyBinding.flListWarrantyStatus.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.red)));
+                    warrantyBinding.tvStatus.setText(context.getResources().getString(R.string.warranties_list_status_expired));
+                    warrantyBinding.tvStatus.setTextColor(context.getResources().getColor(R.color.red));
+                    warrantyBinding.flStatus.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.red)));
                 } else if (daysUntilExpiry <= 30) {
-                    warrantyBinding.tvListWarrantyStatus.setText(context.getResources().getString(R.string.warranties_list_status_soon));
-                    warrantyBinding.tvListWarrantyStatus.setTextColor(context.getResources().getColor(R.color.orange));
-                    warrantyBinding.flListWarrantyStatus.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.orange)));
+                    warrantyBinding.tvStatus.setText(context.getResources().getString(R.string.warranties_list_status_soon));
+                    warrantyBinding.tvStatus.setTextColor(context.getResources().getColor(R.color.orange));
+                    warrantyBinding.flStatus.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.orange)));
                 } else {
-                    warrantyBinding.tvListWarrantyStatus.setText(context.getResources().getString(R.string.warranties_list_status_valid));
-                    warrantyBinding.tvListWarrantyStatus.setTextColor(context.getResources().getColor(R.color.green));
-                    warrantyBinding.flListWarrantyStatus.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.green)));
+                    warrantyBinding.tvStatus.setText(context.getResources().getString(R.string.warranties_list_status_valid));
+                    warrantyBinding.tvStatus.setTextColor(context.getResources().getColor(R.color.green));
+                    warrantyBinding.flStatus.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.green)));
                 }
 
-                warrantyBinding.cvListWarranty.setOnClickListener(view ->
+                warrantyBinding.cvWarranty.setOnClickListener(view ->
                         warrantyListClickInterface.onItemClick(warrantyItem, daysUntilExpiry));
             } catch (ParseException e) {
                 e.printStackTrace();
@@ -175,7 +175,7 @@ public class WarrantyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         public AdViewHolder(@NonNull ListAdContainerBinding adContainerBinding) {
             super(adContainerBinding.getRoot());
             adHolder = TapsellPlus.createAdHolder(activity,
-                    adContainerBinding.cvListAdContainer, R.layout.list_ad_banner);
+                    adContainerBinding.cvAdContainer, R.layout.list_ad_banner);
         }
 
         void bindView() {

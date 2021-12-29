@@ -90,89 +90,89 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
     }
 
     private fun textInputsBackgroundColor() {
-        binding.tiEditWarrantyEditTitle.setOnFocusChangeListener { _, isFocused ->
+        binding.tiEditTitle.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                binding.tiEditWarrantyLayoutTitle.boxBackgroundColor =
+                binding.tiLayoutTitle.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.background)
             } else {
-                binding.tiEditWarrantyLayoutTitle.boxBackgroundColor =
+                binding.tiLayoutTitle.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.grayLight)
             }
         }
 
-        binding.tiEditWarrantyDdCategory.setOnFocusChangeListener { _, isFocused ->
+        binding.tiDdCategory.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                binding.tiEditWarrantyLayoutCategory.boxBackgroundColor =
+                binding.tiLayoutCategory.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.background)
             } else {
-                binding.tiEditWarrantyLayoutCategory.boxBackgroundColor =
+                binding.tiLayoutCategory.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.grayLight)
             }
         }
 
-        binding.tiEditWarrantyEditBrand.setOnFocusChangeListener { _, isFocused ->
+        binding.tiEditBrand.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                binding.tiEditWarrantyLayoutBrand.boxBackgroundColor =
+                binding.tiLayoutBrand.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.background)
             } else {
-                binding.tiEditWarrantyLayoutBrand.boxBackgroundColor =
+                binding.tiLayoutBrand.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.grayLight)
             }
         }
 
-        binding.tiEditWarrantyEditModel.setOnFocusChangeListener { _, isFocused ->
+        binding.tiEditModel.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                binding.tiEditWarrantyLayoutModel.boxBackgroundColor =
+                binding.tiLayoutModel.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.background)
             } else {
-                binding.tiEditWarrantyLayoutModel.boxBackgroundColor =
+                binding.tiLayoutModel.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.grayLight)
             }
         }
 
-        binding.tiEditWarrantyEditSerial.setOnFocusChangeListener { _, isFocused ->
+        binding.tiEditSerial.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                binding.tiEditWarrantyLayoutSerial.boxBackgroundColor =
+                binding.tiLayoutSerial.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.background)
             } else {
-                binding.tiEditWarrantyLayoutSerial.boxBackgroundColor =
+                binding.tiLayoutSerial.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.grayLight)
             }
         }
 
-        binding.tiEditWarrantyEditDateStarting.setOnFocusChangeListener { _, isFocused ->
+        binding.tiEditDateStarting.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                binding.tiEditWarrantyLayoutDateStarting.boxBackgroundColor =
+                binding.tiLayoutDateStarting.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.background)
             } else {
-                binding.tiEditWarrantyLayoutDateStarting.boxBackgroundColor =
+                binding.tiLayoutDateStarting.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.grayLight)
             }
         }
 
-        binding.tiEditWarrantyEditDateExpiry.setOnFocusChangeListener { _, isFocused ->
+        binding.tiEditDateExpiry.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                binding.tiEditWarrantyLayoutDateExpiry.boxBackgroundColor =
+                binding.tiLayoutDateExpiry.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.background)
             } else {
-                binding.tiEditWarrantyLayoutDateExpiry.boxBackgroundColor =
+                binding.tiLayoutDateExpiry.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.grayLight)
             }
         }
 
-        binding.tiEditWarrantyEditDescription.setOnFocusChangeListener { _, isFocused ->
+        binding.tiEditDescription.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                binding.tiEditWarrantyLayoutDescription.boxBackgroundColor =
+                binding.tiLayoutDescription.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.background)
             } else {
-                binding.tiEditWarrantyLayoutDescription.boxBackgroundColor =
+                binding.tiLayoutDescription.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.grayLight)
             }
         }
     }
 
     private fun textInputsStrokeColor() {
-        binding.tiEditWarrantyEditDateStarting.addTextChangedListener(object : TextWatcher {
+        binding.tiEditDateStarting.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
 
@@ -186,7 +186,7 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
             }
         })
 
-        binding.tiEditWarrantyEditDateExpiry.addTextChangedListener(object : TextWatcher {
+        binding.tiEditDateExpiry.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
 
@@ -207,25 +207,24 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
             titlesList.add(requireContext().getString(categoryTitleId))
         }
 
-        binding.tiEditWarrantyDdCategory.setAdapter(
+        binding.tiDdCategory.setAdapter(
             ArrayAdapter(requireContext(), R.layout.dropdown_category, titlesList)
         )
     }
 
-    private fun categoryDropDownSelection() {
-        binding.tiEditWarrantyDdCategory.setOnItemClickListener { _, _, index, _ ->
+    private fun categoryDropDownSelection() =
+        binding.tiDdCategory.setOnItemClickListener { _, _, index, _ ->
             selectedCategory = database.categoryDAO().getCategoryById((index + 1).toString())
             selectedCategory?.let {
-                binding.ivEditWarrantyIconCategory.setImageResource(it.icon)
+                binding.ivIconCategory.setImageResource(it.icon)
             }
         }
-    }
 
     private fun startingDatePicker() {
-        binding.tiEditWarrantyEditDateStarting.inputType = InputType.TYPE_NULL
-        binding.tiEditWarrantyEditDateStarting.keyListener = null
+        binding.tiEditDateStarting.inputType = InputType.TYPE_NULL
+        binding.tiEditDateStarting.keyListener = null
 
-        binding.tiEditWarrantyEditDateStarting.setOnFocusChangeListener { _, isFocused ->
+        binding.tiEditDateStarting.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
                 openStartingDatePicker()
             }
@@ -233,10 +232,10 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
     }
 
     private fun expiryDatePicker() {
-        binding.tiEditWarrantyEditDateExpiry.inputType = InputType.TYPE_NULL
-        binding.tiEditWarrantyEditDateExpiry.keyListener = null
+        binding.tiEditDateExpiry.inputType = InputType.TYPE_NULL
+        binding.tiEditDateExpiry.keyListener = null
 
-        binding.tiEditWarrantyEditDateExpiry.setOnFocusChangeListener { _, isFocused ->
+        binding.tiEditDateExpiry.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
                 openExpiryDatePicker()
             }
@@ -265,13 +264,13 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
                             "${decimalFormat.format(it.get(Calendar.DAY_OF_MONTH))}/" +
                             "${it.get(Calendar.YEAR)}"
 
-                binding.tiEditWarrantyEditDateStarting.setText(startingDateInput)
-                binding.tiEditWarrantyEditDateStarting.clearFocus()
+                binding.tiEditDateStarting.setText(startingDateInput)
+                binding.tiEditDateStarting.clearFocus()
             }
         }
 
         startingDP.addOnDismissListener {
-            binding.tiEditWarrantyEditDateStarting.clearFocus()
+            binding.tiEditDateStarting.clearFocus()
         }
     }
 
@@ -297,21 +296,20 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
                             "${decimalFormat.format(it.get(Calendar.DAY_OF_MONTH))}/" +
                             "${it.get(Calendar.YEAR)}"
 
-                binding.tiEditWarrantyEditDateExpiry.setText(expiryDateInput)
-                binding.tiEditWarrantyEditDateExpiry.clearFocus()
+                binding.tiEditDateExpiry.setText(expiryDateInput)
+                binding.tiEditDateExpiry.clearFocus()
             }
         }
 
         expiryDP.addOnDismissListener {
-            binding.tiEditWarrantyEditDateExpiry.clearFocus()
+            binding.tiEditDateExpiry.clearFocus()
         }
     }
 
-    private fun returnToWarrantyDetailsFragment() {
-        binding.toolbarEditWarranty.setNavigationOnClickListener {
+    private fun returnToWarrantyDetailsFragment() =
+        binding.toolbar.setNavigationOnClickListener {
             requireActivity().onBackPressed()
         }
-    }
 
     private fun getWarranty() {
         val args: EditWarrantyFragmentArgs by navArgs()
@@ -321,14 +319,14 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
 
     private fun setWarrantyDetails() {
         selectedCategory = database.categoryDAO().getCategoryById(warranty.categoryId)
-        binding.tiEditWarrantyEditTitle.setText(warranty.title)
-        binding.tiEditWarrantyEditBrand.setText(warranty.brand)
-        binding.tiEditWarrantyEditModel.setText(warranty.model)
-        binding.tiEditWarrantyEditSerial.setText(warranty.serialNumber)
-        binding.tiEditWarrantyEditDescription.setText(warranty.description)
+        binding.tiEditTitle.setText(warranty.title)
+        binding.tiEditBrand.setText(warranty.brand)
+        binding.tiEditModel.setText(warranty.model)
+        binding.tiEditSerial.setText(warranty.serialNumber)
+        binding.tiEditDescription.setText(warranty.description)
         selectedCategory?.let {
-            binding.tiEditWarrantyDdCategory.setText(requireContext().getString(it.title))
-            binding.ivEditWarrantyIconCategory.setImageResource(it.icon)
+            binding.tiDdCategory.setText(requireContext().getString(it.title))
+            binding.ivIconCategory.setImageResource(it.icon)
         }
 
         val startingCalendar = Calendar.getInstance()
@@ -350,25 +348,24 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
                 "${decimalFormat.format((expiryCalendar.get(Calendar.MONTH)) + 1)}-" +
                 decimalFormat.format(expiryCalendar.get(Calendar.DAY_OF_MONTH))
 
-        binding.tiEditWarrantyEditDateStarting.setText(
+        binding.tiEditDateStarting.setText(
             "${decimalFormat.format((startingCalendar.get(Calendar.MONTH)) + 1)}/" +
                     "${decimalFormat.format(startingCalendar.get(Calendar.DAY_OF_MONTH))}/" +
                     "${startingCalendar.get(Calendar.YEAR)}"
         )
 
-        binding.tiEditWarrantyEditDateExpiry.setText(
+        binding.tiEditDateExpiry.setText(
             "${decimalFormat.format((expiryCalendar.get(Calendar.MONTH)) + 1)}/" +
                     "${decimalFormat.format(expiryCalendar.get(Calendar.DAY_OF_MONTH))}/" +
                     "${expiryCalendar.get(Calendar.YEAR)}"
         )
     }
 
-    private fun editWarrantyOnClick() {
-        binding.toolbarEditWarranty.menu.getItem(0).setOnMenuItemClickListener {
+    private fun editWarrantyOnClick() =
+        binding.toolbar.menu.getItem(0).setOnMenuItemClickListener {
             editWarranty()
             false
         }
-    }
 
     private fun editWarranty() {
         val inputMethodManager = requireContext()
@@ -391,27 +388,27 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
     }
 
     private fun getWarrantyInput() {
-        val title = binding.tiEditWarrantyEditTitle.text.toString().trim()
+        val title = binding.tiEditTitle.text.toString().trim()
 
         if (title.isBlank()) {
-            binding.tiEditWarrantyLayoutTitle.requestFocus()
-            binding.tiEditWarrantyLayoutTitle.boxStrokeColor =
+            binding.tiLayoutTitle.requestFocus()
+            binding.tiLayoutTitle.boxStrokeColor =
                 ContextCompat.getColor(requireContext(), R.color.red)
         } else if (startingCalendarInput == null) {
-            binding.tiEditWarrantyLayoutDateStarting.requestFocus()
-            binding.tiEditWarrantyLayoutDateStarting.boxStrokeColor =
+            binding.tiLayoutDateStarting.requestFocus()
+            binding.tiLayoutDateStarting.boxStrokeColor =
                 ContextCompat.getColor(requireContext(), R.color.red)
         } else if (expiryCalendarInput == null) {
-            binding.tiEditWarrantyLayoutDateExpiry.requestFocus()
-            binding.tiEditWarrantyLayoutDateExpiry.boxStrokeColor =
+            binding.tiLayoutDateExpiry.requestFocus()
+            binding.tiLayoutDateExpiry.boxStrokeColor =
                 ContextCompat.getColor(requireContext(), R.color.red)
         } else if (!isStartingDateValid(startingCalendarInput!!, expiryCalendarInput!!)) {
             showDateError()
         } else {
-            val brand = binding.tiEditWarrantyEditBrand.text?.toString()?.trim()
-            val model = binding.tiEditWarrantyEditModel.text?.toString()?.trim()
-            val serialNumber = binding.tiEditWarrantyEditSerial.text?.toString()?.trim()
-            val description = binding.tiEditWarrantyEditDescription.text?.toString()?.trim()
+            val brand = binding.tiEditBrand.text?.toString()?.trim()
+            val model = binding.tiEditModel.text?.toString()?.trim()
+            val serialNumber = binding.tiEditSerial.text?.toString()?.trim()
+            val description = binding.tiEditDescription.text?.toString()?.trim()
             val categoryId = selectedCategory?.id ?: "10"
 
             val warrantyInput = WarrantyInput(
@@ -469,42 +466,42 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
     }
 
     private fun showLoadingAnimation() {
-        binding.toolbarEditWarranty.menu.getItem(0).isVisible = false
-        binding.tiEditWarrantyEditTitle.isEnabled = false
-        binding.tiEditWarrantyDdCategory.isEnabled = false
-        binding.tiEditWarrantyEditBrand.isEnabled = false
-        binding.tiEditWarrantyEditModel.isEnabled = false
-        binding.tiEditWarrantyEditSerial.isEnabled = false
-        binding.tiEditWarrantyEditDateStarting.isEnabled = false
-        binding.tiEditWarrantyEditDateExpiry.isEnabled = false
-        binding.tiEditWarrantyEditDescription.isEnabled = false
-        binding.cpiEditWarranty.visibility = VISIBLE
+        binding.toolbar.menu.getItem(0).isVisible = false
+        binding.tiEditTitle.isEnabled = false
+        binding.tiDdCategory.isEnabled = false
+        binding.tiEditBrand.isEnabled = false
+        binding.tiEditModel.isEnabled = false
+        binding.tiEditSerial.isEnabled = false
+        binding.tiEditDateStarting.isEnabled = false
+        binding.tiEditDateExpiry.isEnabled = false
+        binding.tiEditDescription.isEnabled = false
+        binding.cpiEdit.visibility = VISIBLE
     }
 
     private fun hideLoadingAnimation() {
-        binding.toolbarEditWarranty.menu.getItem(0).isVisible = true
-        binding.tiEditWarrantyEditTitle.isEnabled = true
-        binding.tiEditWarrantyDdCategory.isEnabled = true
-        binding.tiEditWarrantyEditBrand.isEnabled = true
-        binding.tiEditWarrantyEditModel.isEnabled = true
-        binding.tiEditWarrantyEditSerial.isEnabled = true
-        binding.tiEditWarrantyEditDateStarting.isEnabled = true
-        binding.tiEditWarrantyEditDateExpiry.isEnabled = true
-        binding.tiEditWarrantyEditDescription.isEnabled = true
-        binding.cpiEditWarranty.visibility = GONE
+        binding.cpiEdit.visibility = GONE
+        binding.toolbar.menu.getItem(0).isVisible = true
+        binding.tiEditTitle.isEnabled = true
+        binding.tiDdCategory.isEnabled = true
+        binding.tiEditBrand.isEnabled = true
+        binding.tiEditModel.isEnabled = true
+        binding.tiEditSerial.isEnabled = true
+        binding.tiEditDateStarting.isEnabled = true
+        binding.tiEditDateExpiry.isEnabled = true
+        binding.tiEditDescription.isEnabled = true
     }
 
     private fun showDateError() {
-        binding.tiEditWarrantyLayoutDateStarting.requestFocus()
-        binding.tiEditWarrantyLayoutDateStarting.boxStrokeColor =
+        binding.tiLayoutDateStarting.requestFocus()
+        binding.tiLayoutDateStarting.boxStrokeColor =
             ContextCompat.getColor(requireContext(), R.color.red)
-        binding.tvEditWarrantyDateError.visibility = VISIBLE
+        binding.tvDateError.visibility = VISIBLE
     }
 
     private fun hideDateError() {
-        binding.tiEditWarrantyLayoutDateStarting.boxStrokeColor =
+        binding.tiLayoutDateStarting.boxStrokeColor =
             ContextCompat.getColor(requireContext(), R.color.blue)
-        binding.tvEditWarrantyDateError.visibility = GONE
+        binding.tvDateError.visibility = GONE
     }
 
     private fun isStartingDateValid(startingCalendar: Calendar, expiryCalendar: Calendar): Boolean =

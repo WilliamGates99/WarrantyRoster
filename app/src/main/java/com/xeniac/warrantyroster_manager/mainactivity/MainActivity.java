@@ -43,10 +43,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void bottomAppBarStyle() {
-        mainBinding.bnvMain.setBackground(null);
+        mainBinding.bnv.setBackground(null);
         float radius = getResources().getDimension(R.dimen.dimen_bottom_nav_radius);
 
-        MaterialShapeDrawable shapeDrawable = (MaterialShapeDrawable) mainBinding.appbarMain.getBackground();
+        MaterialShapeDrawable shapeDrawable = (MaterialShapeDrawable) mainBinding.appbar.getBackground();
         shapeDrawable.setShapeAppearanceModel(shapeDrawable.getShapeAppearanceModel()
                 .toBuilder()
                 .setTopRightCorner(CornerFamily.ROUNDED, radius)
@@ -56,27 +56,27 @@ public class MainActivity extends AppCompatActivity {
 
     private void bottomNavActions() {
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.fcv_main);
+                .findFragmentById(R.id.fcv);
 
         if (navHostFragment != null) {
             navController = navHostFragment.getNavController();
-            NavigationUI.setupWithNavController(mainBinding.bnvMain, navController);
+            NavigationUI.setupWithNavController(mainBinding.bnv, navController);
         }
     }
 
     private void fabOnClick() {
-        mainBinding.fabMain.setOnClickListener(view ->
+        mainBinding.fab.setOnClickListener(view ->
                 navController.navigate(R.id.action_mainActivity_to_addWarrantyFragment));
     }
 
     public void showNavBar() {
-        mainBinding.appbarMain.performShow();
-        mainBinding.fabMain.show();
+        mainBinding.appbar.performShow();
+        mainBinding.fab.show();
     }
 
     public void hideNavBar() {
-        mainBinding.fabMain.hide();
-        mainBinding.appbarMain.performHide();
+        mainBinding.fab.hide();
+        mainBinding.appbar.performHide();
     }
 
     public void requestInterstitialAd() {

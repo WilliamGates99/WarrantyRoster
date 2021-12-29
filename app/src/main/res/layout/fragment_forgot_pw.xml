@@ -14,7 +14,7 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_forgot_pw_description"
+            android:id="@+id/tv_description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="24dp"
@@ -30,14 +30,14 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_forgot_pw_title_email"
+            android:id="@+id/tv_title_email"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="32dp"
             android:layout_marginTop="76dp"
             android:fontFamily="@font/nunito_bold"
             android:gravity="start|center_vertical"
-            android:labelFor="@+id/ti_forgot_pw_layout_email"
+            android:labelFor="@+id/ti_layout_email"
             android:maxLines="1"
             android:text="@string/forgot_pw_title_email"
             android:textAlignment="gravity"
@@ -45,10 +45,10 @@
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_forgot_pw_description" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_description" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/ti_forgot_pw_layout_email"
+            android:id="@+id/ti_layout_email"
             style="@style/Theme.WarrantyRoster.TextInputLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -56,10 +56,10 @@
             android:layout_marginTop="4dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_forgot_pw_title_email">
+            app:layout_constraintTop_toBottomOf="@+id/tv_title_email">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/ti_forgot_pw_edit_email"
+                android:id="@+id/ti_edit_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/nunito_regular"
@@ -76,7 +76,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_forgot_pw_send"
+            android:id="@+id/btn_send"
             style="@style/Theme.WarrantyRoster.Button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -85,21 +85,21 @@
             android:text="@string/forgot_pw_btn_send"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ti_forgot_pw_layout_email" />
+            app:layout_constraintTop_toBottomOf="@+id/ti_layout_email" />
 
         <com.google.android.material.progressindicator.CircularProgressIndicator
-            android:id="@+id/cpi_forgot_pw"
+            android:id="@+id/cpi_send"
             style="@style/Theme.WarrantyRoster.LoadingProgressBar.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/btn_forgot_pw_send"
-            app:layout_constraintEnd_toEndOf="@+id/btn_forgot_pw_send"
-            app:layout_constraintStart_toStartOf="@+id/btn_forgot_pw_send"
-            app:layout_constraintTop_toTopOf="@+id/btn_forgot_pw_send" />
+            app:layout_constraintBottom_toBottomOf="@+id/btn_send"
+            app:layout_constraintEnd_toEndOf="@+id/btn_send"
+            app:layout_constraintStart_toStartOf="@+id/btn_send"
+            app:layout_constraintTop_toTopOf="@+id/btn_send" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_forgot_pw_return"
+            android:id="@+id/btn_return"
             style="@style/Theme.WarrantyRoster.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -112,7 +112,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_forgot_pw_send" />
+            app:layout_constraintTop_toBottomOf="@+id/btn_send" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

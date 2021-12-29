@@ -55,16 +55,12 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
         email = args.email
     }
 
-    private fun returnOnClick() {
-        binding.btnForgotPwSentReturn.setOnClickListener {
-            requireActivity().onBackPressed()
-        }
+    private fun returnOnClick() = binding.btnReturn.setOnClickListener {
+        requireActivity().onBackPressed()
     }
 
-    private fun resendOnClick() {
-        binding.btnForgotPwSentResend.setOnClickListener {
-            resendResetPasswordEmail()
-        }
+    private fun resendOnClick() = binding.btnResend.setOnClickListener {
+        resendResetPasswordEmail()
     }
 
     private fun resendResetPasswordEmail() {
@@ -95,7 +91,7 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
                 withContext(Dispatchers.Main) {
                     hideLoadingAnimation()
                     countdown()
-                    binding.lavForgotPwSent.playAnimation()
+                    binding.lavSent.playAnimation()
                 }
             } catch (e: Exception) {
                 Log.e("resendResetPasswordEmail", "Exception: ${e.message}")
@@ -112,18 +108,18 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
     }
 
     private fun showLoadingAnimation() {
-        binding.btnForgotPwSentResend.visibility = GONE
-        binding.cpiForgotPwSent.visibility = VISIBLE
+        binding.btnResend.visibility = GONE
+        binding.cpiResend.visibility = VISIBLE
     }
 
     private fun hideLoadingAnimation() {
-        binding.btnForgotPwSentResend.visibility = VISIBLE
-        binding.cpiForgotPwSent.visibility = GONE
+        binding.cpiResend.visibility = GONE
+        binding.btnResend.visibility = VISIBLE
     }
 
     private fun countdown() {
-        binding.groupForgotPwSentResend.visibility = GONE
-        binding.groupForgotPwSentTimer.visibility = VISIBLE
+        binding.groupResend.visibility = GONE
+        binding.groupTimer.visibility = VISIBLE
 
         val decimalFormat = DecimalFormat("00")
         val startTime = 120 * 1000
@@ -133,14 +129,14 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
                 val minutes = millisUntilFinished / 60000
                 val seconds = (millisUntilFinished / 1000) % 60
 
-                binding.tvForgotPwSentTimer.text =
+                binding.tvTimer.text =
                     "(${decimalFormat.format(minutes)}:${decimalFormat.format(seconds)})"
             }
 
             override fun onFinish() {
                 Handler(Looper.getMainLooper()).postDelayed({
-                    binding.groupForgotPwSentTimer.visibility = GONE
-                    binding.groupForgotPwSentResend.visibility = VISIBLE
+                    binding.groupTimer.visibility = GONE
+                    binding.groupResend.visibility = VISIBLE
                 }, 500)
             }
         }.start()

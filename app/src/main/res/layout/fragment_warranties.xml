@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbar_warranties"
+        android:id="@+id/toolbar"
         style="@style/Theme.WarrantyRoster.Toolbar"
         android:layout_width="0dp"
         android:layout_height="?attr/actionBarSize"
@@ -17,7 +17,7 @@
         app:title="@string/warranties_text_title">
 
         <androidx.appcompat.widget.SearchView
-            android:id="@+id/search_warranties"
+            android:id="@+id/sv_warranties"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|end"
@@ -29,15 +29,15 @@
     </com.google.android.material.appbar.MaterialToolbar>
 
     <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/lav_warranties"
+        android:id="@+id/lav_empty_list"
         android:layout_width="250dp"
         android:layout_height="250dp"
         android:layout_marginHorizontal="4dp"
         android:layout_marginTop="4dp"
-        app:layout_constraintBottom_toTopOf="@+id/tv_warranties_empty_list"
+        app:layout_constraintBottom_toTopOf="@+id/tv_empty_list"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_warranties"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
         app:layout_constraintVertical_bias="0.5"
         app:layout_constraintVertical_chainStyle="packed"
         app:lottie_autoPlay="true"
@@ -46,7 +46,7 @@
         app:lottie_speed="1.10" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tv_warranties_empty_list"
+        android:id="@+id/tv_empty_list"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="28sp"
@@ -60,11 +60,11 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lav_warranties"
+        app:layout_constraintTop_toBottomOf="@+id/lav_empty_list"
         app:layout_constraintVertical_bias="0.5" />
 
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/tv_warranties_network_error"
+        android:id="@+id/tv_network_error"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="32sp"
@@ -75,15 +75,15 @@
         android:textAlignment="gravity"
         android:textColor="@color/grayDark"
         android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/btn_warranties_network_retry"
+        app:layout_constraintBottom_toTopOf="@+id/btn_network_retry"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_warranties"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
         app:layout_constraintVertical_bias="0.5"
         app:layout_constraintVertical_chainStyle="packed" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_warranties_network_retry"
+        android:id="@+id/btn_network_retry"
         style="@style/Theme.WarrantyRoster.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -97,11 +97,11 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_warranties_network_error"
+        app:layout_constraintTop_toBottomOf="@+id/tv_network_error"
         app:layout_constraintVertical_bias="0.5" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_warranties"
+        android:id="@+id/rv"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:clipToPadding="false"
@@ -114,10 +114,10 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_warranties" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     <com.google.android.material.progressindicator.CircularProgressIndicator
-        android:id="@+id/cpi_warranties"
+        android:id="@+id/cpi"
         style="@style/Theme.WarrantyRoster.LoadingProgressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -125,20 +125,20 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_warranties" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     <androidx.constraintlayout.widget.Group
-        android:id="@+id/group_warranties_empty_list"
+        android:id="@+id/group_empty_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:constraint_referenced_ids="tv_warranties_empty_list,lav_warranties" />
+        app:constraint_referenced_ids="tv_empty_list,lav_empty_list" />
 
     <androidx.constraintlayout.widget.Group
-        android:id="@+id/group_warranties_network"
+        android:id="@+id/group_network"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:constraint_referenced_ids="tv_warranties_network_error,btn_warranties_network_retry" />
+        app:constraint_referenced_ids="tv_network_error,btn_network_retry" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

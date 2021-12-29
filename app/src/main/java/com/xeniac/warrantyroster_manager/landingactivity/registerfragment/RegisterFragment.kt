@@ -2,7 +2,6 @@ package com.xeniac.warrantyroster_manager.landingactivity.registerfragment
 
 import android.content.Context
 import android.content.Intent
-import android.content.res.ColorStateList
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
@@ -20,14 +19,11 @@ import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_INDEFI
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import com.xeniac.warrantyroster_manager.Constants
 import com.xeniac.warrantyroster_manager.NetworkHelper
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentRegisterBinding
 import com.xeniac.warrantyroster_manager.mainactivity.MainActivity
-import com.xeniac.warrantyroster_manager.model.User
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -40,7 +36,6 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     private val binding get() = _binding!!
 
     private lateinit var firebaseAuth: FirebaseAuth
-    private val usersCollectionRef = Firebase.firestore.collection(Constants.COLLECTION_USERS)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -61,42 +56,42 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     }
 
     private fun textInputsBackgroundColor() {
-        binding.tiRegisterEditEmail.setOnFocusChangeListener { _, isFocused ->
+        binding.tiEditEmail.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                binding.tiRegisterLayoutEmail.setBoxBackgroundColorResource(R.color.background)
+                binding.tiLayoutEmail.setBoxBackgroundColorResource(R.color.background)
             } else {
-                binding.tiRegisterLayoutEmail.setBoxBackgroundColorResource(R.color.grayLight)
+                binding.tiLayoutEmail.setBoxBackgroundColorResource(R.color.grayLight)
             }
         }
 
-        binding.tiRegisterEditPassword.setOnFocusChangeListener { _, isFocused ->
+        binding.tiEditPassword.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                binding.tiRegisterLayoutPassword.setBoxBackgroundColorResource(R.color.background)
+                binding.tiLayoutPassword.setBoxBackgroundColorResource(R.color.background)
             } else {
-                binding.tiRegisterLayoutPassword.setBoxBackgroundColorResource(R.color.grayLight)
-                binding.tiRegisterLayoutPassword.isHelperTextEnabled = false
+                binding.tiLayoutPassword.setBoxBackgroundColorResource(R.color.grayLight)
+                binding.tiLayoutPassword.isHelperTextEnabled = false
             }
         }
 
-        binding.tiRegisterEditRetypePassword.setOnFocusChangeListener { _, isFocused ->
+        binding.tiEditRetypePassword.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                binding.tiRegisterLayoutRetypePassword.setBoxBackgroundColorResource(R.color.background)
+                binding.tiLayoutRetypePassword.setBoxBackgroundColorResource(R.color.background)
             } else {
-                binding.tiRegisterLayoutRetypePassword.setBoxBackgroundColorResource(R.color.grayLight)
+                binding.tiLayoutRetypePassword.setBoxBackgroundColorResource(R.color.grayLight)
             }
         }
     }
 
     private fun textInputsStrokeColor() {
-        binding.tiRegisterEditEmail.addTextChangedListener(object : TextWatcher {
+        binding.tiEditEmail.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
 
             override fun onTextChanged(
                 inputEmail: CharSequence?, start: Int, before: Int, count: Int
             ) {
-                binding.tiRegisterLayoutEmail.isErrorEnabled = false
-                binding.tiRegisterLayoutEmail.boxStrokeColor =
+                binding.tiLayoutEmail.isErrorEnabled = false
+                binding.tiLayoutEmail.boxStrokeColor =
                     ContextCompat.getColor(requireContext(), R.color.blue)
             }
 
@@ -104,47 +99,41 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
             }
         })
 
-        binding.tiRegisterEditPassword.addTextChangedListener(object : TextWatcher {
+        binding.tiEditPassword.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
 
             override fun onTextChanged(
                 inputPassword: CharSequence?, start: Int, before: Int, count: Int
             ) {
-                if (binding.tiRegisterLayoutPassword.hasFocus()) {
+                if (binding.tiLayoutPassword.hasFocus()) {
                     when (passwordStrength(inputPassword.toString())) {
                         (-1).toByte() -> {
-                            binding.tiRegisterLayoutPassword.helperText =
-                                getString(R.string.register_helper_password_weak)
-                            binding.tiRegisterLayoutPassword.setHelperTextColor(
-                                ColorStateList.valueOf(
-                                    ContextCompat.getColor(requireContext(), R.color.red)
-                                )
-                            )
-                            binding.tiRegisterLayoutPassword.boxStrokeColor =
+                            binding.tiLayoutPassword.boxStrokeColor =
                                 ContextCompat.getColor(requireContext(), R.color.red)
+                            binding.tiLayoutPassword.helperText =
+                                getString(R.string.register_helper_password_weak)
+                            binding.tiLayoutPassword.setHelperTextColor(
+                                ContextCompat.getColorStateList(requireContext(), R.color.red)
+                            )
                         }
                         (0).toByte() -> {
-                            binding.tiRegisterLayoutPassword.helperText =
-                                getString(R.string.register_helper_password_mediocre)
-                            binding.tiRegisterLayoutPassword.setHelperTextColor(
-                                ColorStateList.valueOf(
-                                    ContextCompat.getColor(requireContext(), R.color.orange)
-                                )
-                            )
-                            binding.tiRegisterLayoutPassword.boxStrokeColor =
+                            binding.tiLayoutPassword.boxStrokeColor =
                                 ContextCompat.getColor(requireContext(), R.color.orange)
+                            binding.tiLayoutPassword.helperText =
+                                getString(R.string.register_helper_password_mediocre)
+                            binding.tiLayoutPassword.setHelperTextColor(
+                                ContextCompat.getColorStateList(requireContext(), R.color.orange)
+                            )
                         }
                         (1).toByte() -> {
-                            binding.tiRegisterLayoutPassword.helperText =
-                                getString(R.string.register_helper_password_strong)
-                            binding.tiRegisterLayoutPassword.setHelperTextColor(
-                                ColorStateList.valueOf(
-                                    ContextCompat.getColor(requireContext(), R.color.green)
-                                )
-                            )
-                            binding.tiRegisterLayoutPassword.boxStrokeColor =
+                            binding.tiLayoutPassword.boxStrokeColor =
                                 ContextCompat.getColor(requireContext(), R.color.green)
+                            binding.tiLayoutPassword.helperText =
+                                getString(R.string.register_helper_password_strong)
+                            binding.tiLayoutPassword.setHelperTextColor(
+                                ContextCompat.getColorStateList(requireContext(), R.color.green)
+                            )
                         }
                     }
                 }
@@ -154,15 +143,15 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
             }
         })
 
-        binding.tiRegisterEditRetypePassword.addTextChangedListener(object : TextWatcher {
+        binding.tiEditRetypePassword.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
 
             override fun onTextChanged(
                 inputRetypePassword: CharSequence?, start: Int, before: Int, count: Int
             ) {
-                binding.tiRegisterLayoutRetypePassword.isErrorEnabled = false
-                binding.tiRegisterLayoutRetypePassword.boxStrokeColor =
+                binding.tiLayoutRetypePassword.isErrorEnabled = false
+                binding.tiLayoutRetypePassword.boxStrokeColor =
                     ContextCompat.getColor(requireContext(), R.color.blue)
             }
 
@@ -171,40 +160,33 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         })
     }
 
-    private fun agreementOnclick() {
-        binding.btnRegisterAgreement.setOnClickListener {
-            Intent(Intent.ACTION_VIEW, Uri.parse(Constants.URL_PRIVACY_POLICY)).apply {
-                resolveActivity(requireContext().packageManager)?.let {
-                    startActivity(this)
-                } ?: Snackbar.make(
-                    binding.root,
-                    getString(R.string.intent_error_app_not_found),
-                    LENGTH_LONG
-                ).show()
-            }
+    private fun agreementOnclick() = binding.btnAgreement.setOnClickListener {
+        Intent(Intent.ACTION_VIEW, Uri.parse(Constants.URL_PRIVACY_POLICY)).apply {
+            resolveActivity(requireContext().packageManager)?.let {
+                startActivity(this)
+            } ?: Snackbar.make(
+                binding.root,
+                getString(R.string.intent_error_app_not_found),
+                LENGTH_LONG
+            ).show()
         }
     }
 
-    private fun loginOnClick() {
-        binding.btnRegisterLogin.setOnClickListener {
-            requireActivity().onBackPressed()
-        }
+    private fun loginOnClick() = binding.btnLogin.setOnClickListener {
+        requireActivity().onBackPressed()
     }
 
-    private fun registerOnClick() {
-        binding.btnRegisterRegister.setOnClickListener {
-            registerViaEmail()
-        }
+    private fun registerOnClick() = binding.btnRegister.setOnClickListener {
+        registerViaEmail()
     }
 
-    private fun registerActionDone() {
-        binding.tiRegisterEditRetypePassword.setOnEditorActionListener { _, actionId, _ ->
+    private fun registerActionDone() =
+        binding.tiEditRetypePassword.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 registerViaEmail()
             }
             false
         }
-    }
 
     private fun registerViaEmail() {
         val inputMethodManager = requireContext()
@@ -227,34 +209,34 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     }
 
     private fun getRegisterInputs() {
-        val email = binding.tiRegisterEditEmail.text.toString().trim().lowercase()
-        val password = binding.tiRegisterEditPassword.text.toString().trim()
-        val retypePassword = binding.tiRegisterEditRetypePassword.text.toString().trim()
+        val email = binding.tiEditEmail.text.toString().trim().lowercase()
+        val password = binding.tiEditPassword.text.toString().trim()
+        val retypePassword = binding.tiEditRetypePassword.text.toString().trim()
 
         if (email.isBlank()) {
-            binding.tiRegisterLayoutEmail.requestFocus()
-            binding.tiRegisterLayoutEmail.boxStrokeColor =
+            binding.tiLayoutEmail.requestFocus()
+            binding.tiLayoutEmail.boxStrokeColor =
                 ContextCompat.getColor(requireContext(), R.color.red)
         } else if (password.isBlank()) {
-            binding.tiRegisterLayoutPassword.requestFocus()
-            binding.tiRegisterLayoutPassword.boxStrokeColor =
+            binding.tiLayoutPassword.requestFocus()
+            binding.tiLayoutPassword.boxStrokeColor =
                 ContextCompat.getColor(requireContext(), R.color.red)
         } else if (retypePassword.isBlank()) {
-            binding.tiRegisterLayoutRetypePassword.requestFocus()
-            binding.tiRegisterLayoutRetypePassword.boxStrokeColor =
+            binding.tiLayoutRetypePassword.requestFocus()
+            binding.tiLayoutRetypePassword.boxStrokeColor =
                 ContextCompat.getColor(requireContext(), R.color.red)
         } else {
             if (!isEmailValid(email)) {
-                binding.tiRegisterLayoutEmail.requestFocus()
-                binding.tiRegisterLayoutEmail.error =
+                binding.tiLayoutEmail.requestFocus()
+                binding.tiLayoutEmail.error =
                     requireContext().getString(R.string.register_error_email)
             } else if (passwordStrength(password) == (-1).toByte()) {
-                binding.tiRegisterLayoutPassword.requestFocus()
-                binding.tiRegisterLayoutPassword.error =
+                binding.tiLayoutPassword.requestFocus()
+                binding.tiLayoutPassword.error =
                     requireContext().getString(R.string.register_error_password_short)
             } else if (!isRetypePasswordValid(password, retypePassword)) {
-                binding.tiRegisterLayoutRetypePassword.requestFocus()
-                binding.tiRegisterLayoutRetypePassword.error =
+                binding.tiLayoutRetypePassword.requestFocus()
+                binding.tiLayoutRetypePassword.error =
                     requireContext().getString(R.string.register_error_password)
             } else {
                 registerViaEmailAuth(email, password)
@@ -270,7 +252,6 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                     user?.let {
                         Log.i("registerViaEmail", "${it.email} registered successfully.")
                         it.sendEmailVerification()
-                        usersCollectionRef.add(User(it.uid)).await()
 
                         requireContext().getSharedPreferences(
                             Constants.PREFERENCE_LOGIN, Context.MODE_PRIVATE
@@ -318,22 +299,22 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     }
 
     private fun showLoadingAnimation() {
-        binding.tiRegisterEditEmail.isEnabled = false
-        binding.tiRegisterEditPassword.isEnabled = false
-        binding.tiRegisterEditRetypePassword.isEnabled = false
-        binding.btnRegisterRegister.isClickable = false
-        binding.btnRegisterRegister.text = null
+        binding.tiEditEmail.isEnabled = false
+        binding.tiEditPassword.isEnabled = false
+        binding.tiEditRetypePassword.isEnabled = false
+        binding.btnRegister.isClickable = false
+        binding.btnRegister.text = null
         binding.cpiRegister.visibility = VISIBLE
     }
 
     private fun hideLoadingAnimation() {
-        binding.tiRegisterEditEmail.isEnabled = true
-        binding.tiRegisterEditPassword.isEnabled = true
-        binding.tiRegisterEditRetypePassword.isEnabled = true
-        binding.btnRegisterRegister.isClickable = true
-        binding.btnRegisterRegister.text =
-            requireContext().getString(R.string.register_btn_register)
         binding.cpiRegister.visibility = GONE
+        binding.tiEditEmail.isEnabled = true
+        binding.tiEditPassword.isEnabled = true
+        binding.tiEditRetypePassword.isEnabled = true
+        binding.btnRegister.isClickable = true
+        binding.btnRegister.text =
+            requireContext().getString(R.string.register_btn_register)
     }
 
     private fun passwordStrength(password: String): Byte {
@@ -347,11 +328,9 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         }
     }
 
-    private fun isEmailValid(email: String): Boolean {
-        return Patterns.EMAIL_ADDRESS.matcher(email).matches()
-    }
+    private fun isEmailValid(email: String): Boolean =
+        Patterns.EMAIL_ADDRESS.matcher(email).matches()
 
-    private fun isRetypePasswordValid(password: String, retypePassword: String): Boolean {
-        return password == retypePassword
-    }
+    private fun isRetypePasswordValid(password: String, retypePassword: String): Boolean =
+        password == retypePassword
 }

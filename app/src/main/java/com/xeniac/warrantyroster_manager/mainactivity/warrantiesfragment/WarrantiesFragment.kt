@@ -64,23 +64,21 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
         _binding = null
     }
 
-    private fun adInit() {
-        TapsellPlus.initialize(
-            requireContext(), Constants.TAPSELL_KEY, object : TapsellPlusInitListener {
-                override fun onInitializeSuccess(adNetworks: AdNetworks?) {
-                    Log.i("adInit", "onInitializeSuccess: ${adNetworks?.name}")
-                }
+    private fun adInit() = TapsellPlus.initialize(
+        requireContext(), Constants.TAPSELL_KEY, object : TapsellPlusInitListener {
+            override fun onInitializeSuccess(adNetworks: AdNetworks?) {
+                Log.i("adInit", "onInitializeSuccess: ${adNetworks?.name}")
+            }
 
-                override fun onInitializeFailed(
-                    adNetworks: AdNetworks?, adNetworkError: AdNetworkError?
-                ) {
-                    Log.e(
-                        "adInit",
-                        "onInitializeFailed: ${adNetworks?.name}, error: ${adNetworkError?.errorMessage}"
-                    )
-                }
-            })
-    }
+            override fun onInitializeFailed(
+                adNetworks: AdNetworks?, adNetworkError: AdNetworkError?
+            ) {
+                Log.e(
+                    "adInit",
+                    "onInitializeFailed: ${adNetworks?.name}, error: ${adNetworkError?.errorMessage}"
+                )
+            }
+        })
 
     private fun seedCategories() {
         val itemCount = database.categoryDAO().countItems()
@@ -109,7 +107,7 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
         if (NetworkHelper.hasNetworkAccess(requireContext())) {
             getWarrantiesListFromFirestore()
         } else {
-            binding.tvWarrantiesNetworkError.text =
+            binding.tvNetworkError.text =
                 requireContext().getString(R.string.network_error_connection)
             showNetworkError()
         }
@@ -124,7 +122,7 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
             .addSnapshotListener { value, error ->
                 error?.let {
                     Log.e("getWarrantiesList", "Exception: ${error.message}")
-                    binding.tvWarrantiesNetworkError.text =
+                    binding.tvNetworkError.text =
                         requireContext().getString(R.string.network_error_failure)
                     showNetworkError()
                 }
@@ -160,41 +158,39 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
 
     private fun showNetworkError() {
         hideLoadingAnimation()
-        binding.groupWarrantiesEmptyList.visibility = GONE
-        binding.rvWarranties.visibility = GONE
-        binding.groupWarrantiesNetwork.visibility = VISIBLE
+        binding.groupEmptyList.visibility = GONE
+        binding.rv.visibility = GONE
+        binding.groupNetwork.visibility = VISIBLE
         retryNetworkBtn()
     }
 
-    private fun retryNetworkBtn() {
-        binding.btnWarrantiesNetworkRetry.setOnClickListener {
-            getWarrantiesList()
-        }
+    private fun retryNetworkBtn() = binding.btnNetworkRetry.setOnClickListener {
+        getWarrantiesList()
     }
 
     private fun showLoadingAnimation() {
-        binding.searchWarranties.visibility = GONE
-        binding.groupWarrantiesNetwork.visibility = GONE
-        binding.groupWarrantiesEmptyList.visibility = GONE
-        binding.rvWarranties.visibility = GONE
-        binding.cpiWarranties.visibility = VISIBLE
+        binding.svWarranties.visibility = GONE
+        binding.groupNetwork.visibility = GONE
+        binding.groupEmptyList.visibility = GONE
+        binding.rv.visibility = GONE
+        binding.cpi.visibility = VISIBLE
     }
 
     private fun hideLoadingAnimation() {
-        binding.cpiWarranties.visibility = GONE
+        binding.cpi.visibility = GONE
     }
 
     private fun showWarrantiesEmptyList() {
-        binding.searchWarranties.visibility = GONE
-        binding.groupWarrantiesNetwork.visibility = GONE
-        binding.rvWarranties.visibility = GONE
-        binding.groupWarrantiesEmptyList.visibility = VISIBLE
+        binding.svWarranties.visibility = GONE
+        binding.groupNetwork.visibility = GONE
+        binding.rv.visibility = GONE
+        binding.groupEmptyList.visibility = VISIBLE
     }
 
     private fun showWarrantiesList(warrantiesList: MutableList<Warranty>) {
-        binding.groupWarrantiesNetwork.visibility = GONE
-        binding.groupWarrantiesEmptyList.visibility = GONE
-        binding.rvWarranties.visibility = VISIBLE
+        binding.groupNetwork.visibility = GONE
+        binding.groupEmptyList.visibility = GONE
+        binding.rv.visibility = VISIBLE
 
         var adIndex = 5
         for (i in 0..warrantiesList.size) {
@@ -213,7 +209,7 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
         val warrantyAdapter = WarrantyAdapter(
             activity, requireContext(), database, warrantiesList, this
         )
-        binding.rvWarranties.adapter = warrantyAdapter
+        binding.rv.adapter = warrantyAdapter
 
         //TODO remove comment after adding search function
 //        searchWarrantiesList();
@@ -226,9 +222,9 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
     }
 
 //    private fun searchWarrantiesList() {
-//        warrantiesBinding.searchWarranties.setVisibility(VISIBLE);
+//        binding.svWarranties.setVisibility(VISIBLE);
 //
-//        warrantiesBinding.searchWarranties.setOnQueryTextFocusChangeListener((view, hasFocus) -> {
+//        binding.svWarranties.setOnQueryTextFocusChangeListener((view, hasFocus) -> {
 //            if (hasFocus) {
 //                warrantiesBinding.toolbarWarranties.setTitle(null);
 //            } else {
@@ -238,12 +234,12 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
 //            }
 //        });
 //
-//        warrantiesBinding.searchWarranties.setOnQueryTextListener(new SearchView . OnQueryTextListener () {
+//        warrantiesBinding.svWarranties.setOnQueryTextListener(new SearchView . OnQueryTextListener () {
 //            @Override
 //            public boolean onQueryTextSubmit(String query) {
 //                if (!TextUtils.isEmpty(query)) {
 //                    Toast.makeText(context, "onQueryTextSubmit", Toast.LENGTH_SHORT).show();
-//                    warrantiesBinding.searchWarranties.onActionViewCollapsed();
+//                    warrantiesBinding.svWarranties.onActionViewCollapsed();
 //                }
 //                return false;
 //            }

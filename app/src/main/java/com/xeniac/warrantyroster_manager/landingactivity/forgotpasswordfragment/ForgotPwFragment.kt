@@ -54,20 +54,19 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
         _binding = null
     }
 
-    private fun textInputsBackgroundColor() {
-        binding.tiForgotPwEditEmail.setOnFocusChangeListener { _, isFocused ->
+    private fun textInputsBackgroundColor() =
+        binding.tiEditEmail.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                binding.tiForgotPwLayoutEmail.boxBackgroundColor =
+                binding.tiLayoutEmail.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.background)
             } else {
-                binding.tiForgotPwLayoutEmail.boxBackgroundColor =
+                binding.tiLayoutEmail.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.grayLight)
             }
         }
-    }
 
-    private fun textInputsStrokeColor() {
-        binding.tiForgotPwEditEmail.addTextChangedListener(object : TextWatcher {
+    private fun textInputsStrokeColor() =
+        binding.tiEditEmail.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
 
@@ -77,36 +76,30 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
                 before: Int,
                 count: Int
             ) {
-                binding.tiForgotPwLayoutEmail.isErrorEnabled = false
-                binding.tiForgotPwLayoutEmail.boxStrokeColor =
+                binding.tiLayoutEmail.isErrorEnabled = false
+                binding.tiLayoutEmail.boxStrokeColor =
                     ContextCompat.getColor(requireContext(), R.color.blue)
             }
 
             override fun afterTextChanged(s: Editable?) {
             }
         })
+
+    private fun returnOnClick() = binding.btnReturn.setOnClickListener {
+        requireActivity().onBackPressed()
     }
 
-    private fun returnOnClick() {
-        binding.btnForgotPwReturn.setOnClickListener {
-            requireActivity().onBackPressed()
-        }
+    private fun sendOnClick() = binding.btnSend.setOnClickListener {
+        sendResetPasswordEmail()
     }
 
-    private fun sendOnClick() {
-        binding.btnForgotPwSend.setOnClickListener {
-            sendResetPasswordEmail()
-        }
-    }
-
-    private fun sendActionDone() {
-        binding.tiForgotPwEditEmail.setOnEditorActionListener { _, actionId, _ ->
+    private fun sendActionDone() =
+        binding.tiEditEmail.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 sendResetPasswordEmail()
             }
             false
         }
-    }
 
     private fun sendResetPasswordEmail() {
         val inputMethodManager = requireContext()
@@ -129,16 +122,16 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
     }
 
     private fun getResetPasswordInput() {
-        val email = binding.tiForgotPwEditEmail.text.toString().trim().lowercase()
+        val email = binding.tiEditEmail.text.toString().trim().lowercase()
 
         if (email.isBlank()) {
-            binding.tiForgotPwLayoutEmail.requestFocus()
-            binding.tiForgotPwLayoutEmail.boxStrokeColor =
+            binding.tiLayoutEmail.requestFocus()
+            binding.tiLayoutEmail.boxStrokeColor =
                 ContextCompat.getColor(requireContext(), R.color.red)
         } else {
             if (!isEmailValid(email)) {
-                binding.tiForgotPwLayoutEmail.requestFocus()
-                binding.tiForgotPwLayoutEmail.error =
+                binding.tiLayoutEmail.requestFocus()
+                binding.tiLayoutEmail.error =
                     requireContext().getString(R.string.forgot_pw_error_email)
             } else {
                 sendResetPasswordEmailAuth(email)
@@ -188,21 +181,20 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
     }
 
     private fun showLoadingAnimation() {
-        binding.tiForgotPwEditEmail.isEnabled = false
-        binding.btnForgotPwSend.isClickable = false
-        binding.btnForgotPwSend.text = null
-        binding.cpiForgotPw.visibility = VISIBLE
+        binding.tiEditEmail.isEnabled = false
+        binding.btnSend.isClickable = false
+        binding.btnSend.text = null
+        binding.cpiSend.visibility = VISIBLE
     }
 
     private fun hideLoadingAnimation() {
-        binding.tiForgotPwEditEmail.isEnabled = true
-        binding.btnForgotPwSend.isClickable = true
-        binding.btnForgotPwSend.text =
+        binding.cpiSend.visibility = GONE
+        binding.tiEditEmail.isEnabled = true
+        binding.btnSend.isClickable = true
+        binding.btnSend.text =
             requireContext().getString(R.string.login_btn_login)
-        binding.cpiForgotPw.visibility = GONE
     }
 
-    private fun isEmailValid(email: String): Boolean {
-        return Patterns.EMAIL_ADDRESS.matcher(email).matches()
-    }
+    private fun isEmailValid(email: String): Boolean =
+        Patterns.EMAIL_ADDRESS.matcher(email).matches()
 }

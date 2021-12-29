@@ -49,7 +49,7 @@ public class LandingActivity extends AppCompatActivity {
 
     private void setTitle() {
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
-                .findFragmentById(landingBinding.fcvLanding.getId());
+                .findFragmentById(landingBinding.fcv.getId());
 
         if (navHostFragment != null) {
             NavController navController = navHostFragment.getNavController();
@@ -57,13 +57,13 @@ public class LandingActivity extends AppCompatActivity {
             navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
                 if (destination.getLabel() != null) {
                     if (destination.getLabel().equals("LoginFragment")) {
-                        landingBinding.tvLandingTitle.setText(getString(R.string.login_text_title));
+                        landingBinding.tvTitle.setText(getString(R.string.login_text_title));
                     } else if (destination.getLabel().equals("RegisterFragment")) {
-                        landingBinding.tvLandingTitle.setText(getString(R.string.register_text_title));
+                        landingBinding.tvTitle.setText(getString(R.string.register_text_title));
                     } else if (destination.getLabel().equals("ForgotPwFragment")) {
-                        landingBinding.tvLandingTitle.setText(getString(R.string.forgot_pw_text_title));
+                        landingBinding.tvTitle.setText(getString(R.string.forgot_pw_text_title));
                     } else if (destination.getLabel().equals("ForgotPwSentFragment")) {
-                        landingBinding.tvLandingTitle.setText(getString(R.string.forgot_pw_sent_text_title));
+                        landingBinding.tvTitle.setText(getString(R.string.forgot_pw_sent_text_title));
                     }
                 }
             });

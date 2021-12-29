@@ -3,7 +3,6 @@ plugins {
     id 'kotlin-android'
     id 'com.google.gms.google-services'
     id 'androidx.navigation.safeargs'
-    id("com.apollographql.apollo").version("2.5.11")
 }
 
 android {
@@ -81,7 +80,6 @@ dependencies {
 
     //Third Party Libraries
     implementation 'com.airbnb.android:lottie:4.2.2'
-    implementation 'com.apollographql.apollo:apollo-runtime:2.5.11'
 
     //Ads Libraries
     implementation 'ir.tapsell.plus:tapsell-plus-sdk-android:2.1.5'
