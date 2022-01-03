@@ -5,8 +5,8 @@ public class Constants {
     public static final String URL_PRIVACY_POLICY = "https://warranty-roster.herokuapp.com/privacy-policy";
 
     //ROOM Database Constants
-    public static final String DB_FILE_NAME = "warranty-roster";
-    public static final int DB_VERSION = 1;
+    public static final String DB_FILE_NAME_NEW = "WarrantyRosterDB.db";
+    public static final String DB_TABLE_NAME_CATEGORIES = "categories";
 
     //Tapsell Ads Constants
     public static final String TAPSELL_KEY = "phbftfiakptpjbkegafmqmmkdsjcjmkldcahhapfssfftdnbgpqeimkjiitfpcoingqkad";
@@ -24,6 +24,10 @@ public class Constants {
     public static final String PREFERENCE_LOGIN = "preference_login";
     public static final String PREFERENCE_IS_LOGGED_IN_KEY = "is_logged_in";
 
+    //SharedPreference Settings Constants
+    public static final String PREFERENCE_DB_SEED = "preference_db_seed";
+    public static final String PREFERENCE_EN_US_KEY = "en-US";
+
     //Add Warranty Activity Calendars Fragment Tag Constants
     public static final String FRAGMENT_TAG_ADD_CALENDAR_STARTING = "fragment_tag_add_calendar_starting";
     public static final String FRAGMENT_TAG_ADD_CALENDAR_EXPIRY = "fragment_tag_add_calendar_expiry";
@@ -35,6 +39,10 @@ public class Constants {
     //Firestore Collections ID Constants
     public static final String COLLECTION_CATEGORIES = "categories";
     public static final String COLLECTION_WARRANTIES = "warranties";
+
+    //Firestore Categories Collection Fields Constants
+    public static final String CATEGORIES_TITLE = "title";
+    public static final String CATEGORIES_ICON = "icon";
 
     //Firestore Warranties Collection Fields Constants
     public static final String WARRANTIES_TITLE = "title";

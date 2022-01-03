@@ -25,12 +25,13 @@
             android:layout_marginTop="12dp"
             android:layout_marginBottom="12dp"
             android:background="@color/grayLight"
-            android:src="@drawable/ic_category_accessory"
+            android:src="@drawable/ic_category_miscellaneous"
             app:contentPadding="12dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:shapeAppearance="@style/Theme.WarrantyRoster.ImageViewShapeAppearance" />
+            app:shapeAppearance="@style/Theme.WarrantyRoster.ImageViewShapeAppearance"
+            app:tint="@color/black" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_title"

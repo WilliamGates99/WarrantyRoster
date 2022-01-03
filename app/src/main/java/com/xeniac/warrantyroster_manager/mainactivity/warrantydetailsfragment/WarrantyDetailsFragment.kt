@@ -13,6 +13,9 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
+import coil.ImageLoader
+import coil.decode.SvgDecoder
+import coil.load
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_INDEFINITE
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
@@ -44,6 +47,7 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
     private var _binding: FragmentWarrantyDetailsBinding? = null
     private val binding get() = _binding!!
     private lateinit var navController: NavController
+
     private lateinit var database: WarrantyRosterDatabase
     private lateinit var warranty: Warranty
     private val warrantiesCollectionRef =
@@ -53,7 +57,7 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentWarrantyDetailsBinding.bind(view)
         navController = Navigation.findNavController(view)
-        database = WarrantyRosterDatabase.getInstance(requireContext())
+        database = WarrantyRosterDatabase(requireContext())
         (requireContext() as MainActivity).hideNavBar()
 
         returnToMainActivity()
@@ -66,7 +70,6 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        WarrantyRosterDatabase.destroyInstance()
         _binding = null
     }
 
@@ -92,6 +95,14 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
     }
 
     private fun setWarrantyDetails(daysUntilExpiry: Long) {
+        binding.toolbar.title = warranty.title
+
+        val imageLoader = ImageLoader.Builder(requireContext())
+            .componentRegistry { add(SvgDecoder(requireContext())) }.build()
+        binding.ivIcon.load(
+            database.getCategoryDao().getCategoryById(warranty.categoryId).icon, imageLoader
+        )
+
         if (warranty.brand != null) {
             binding.tvBrand.text = warranty.brand
         } else {
@@ -132,11 +143,6 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
             binding.tvDescription.text =
                 requireContext().getString(R.string.warranty_details_empty_description)
         }
-
-        binding.toolbar.title = warranty.title
-        binding.ivIcon.setImageResource(
-            database.categoryDAO().getCategoryById(warranty.categoryId).icon
-        )
 
         val startingCalendar = Calendar.getInstance()
         val expiryCalendar = Calendar.getInstance()

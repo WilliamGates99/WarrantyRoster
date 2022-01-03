@@ -454,7 +454,8 @@
                         app:layout_constraintBottom_toBottomOf="@+id/ti_layout_category"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/ti_layout_category"
-                        app:shapeAppearance="@style/Theme.WarrantyRoster.ImageViewShapeAppearance" />
+                        app:shapeAppearance="@style/Theme.WarrantyRoster.ImageViewShapeAppearance"
+                        app:tint="@color/black" />
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/tv_title_description"

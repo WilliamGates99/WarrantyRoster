@@ -55,11 +55,12 @@
                 android:layout_marginTop="16dp"
                 android:background="@color/grayLight"
                 android:elevation="12dp"
-                android:src="@drawable/ic_category_accessory"
+                android:src="@drawable/ic_category_miscellaneous"
                 app:contentPadding="12dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:shapeAppearance="@style/Theme.WarrantyRoster.ImageViewShapeAppearance" />
+                app:shapeAppearance="@style/Theme.WarrantyRoster.ImageViewShapeAppearance"
+                app:tint="@color/black" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_status"

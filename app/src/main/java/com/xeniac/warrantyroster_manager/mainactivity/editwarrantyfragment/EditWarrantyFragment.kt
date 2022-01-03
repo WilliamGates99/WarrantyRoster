@@ -16,6 +16,9 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
+import coil.ImageLoader
+import coil.decode.SvgDecoder
+import coil.load
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_INDEFINITE
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
@@ -29,10 +32,7 @@ import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.database.WarrantyRosterDatabase
 import com.xeniac.warrantyroster_manager.databinding.FragmentEditWarrantyBinding
 import com.xeniac.warrantyroster_manager.mainactivity.MainActivity
-import com.xeniac.warrantyroster_manager.model.Category
-import com.xeniac.warrantyroster_manager.model.ListItemType
-import com.xeniac.warrantyroster_manager.model.Warranty
-import com.xeniac.warrantyroster_manager.model.WarrantyInput
+import com.xeniac.warrantyroster_manager.model.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -48,6 +48,8 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
     private var _binding: FragmentEditWarrantyBinding? = null
     private val binding get() = _binding!!
     private lateinit var navController: NavController
+    private lateinit var imageLoader: ImageLoader
+
     private lateinit var database: WarrantyRosterDatabase
     private lateinit var warranty: Warranty
     private val warrantiesCollectionRef =
@@ -65,8 +67,11 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentEditWarrantyBinding.bind(view)
         navController = Navigation.findNavController(view)
-        database = WarrantyRosterDatabase.getInstance(context)
+        database = WarrantyRosterDatabase(requireContext())
         (requireContext() as MainActivity).hideNavBar()
+
+        imageLoader = ImageLoader.Builder(requireContext())
+            .componentRegistry { add(SvgDecoder(requireContext())) }.build()
 
         textInputsBackgroundColor()
         textInputsStrokeColor()
@@ -80,7 +85,6 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        WarrantyRosterDatabase.destroyInstance()
         _binding = null
     }
 
@@ -203,8 +207,8 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
 
     private fun categoryDropDown() {
         val titlesList = mutableListOf<String>()
-        for (categoryTitleId in database.categoryDAO().allCategoryTitles) {
-            titlesList.add(requireContext().getString(categoryTitleId))
+        for (category in database.getCategoryDao().getAllCategories()) {
+            titlesList.add(category.title[getCategoryTitleMapKey()].toString())
         }
 
         binding.tiDdCategory.setAdapter(
@@ -214,11 +218,22 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
 
     private fun categoryDropDownSelection() =
         binding.tiDdCategory.setOnItemClickListener { _, _, index, _ ->
-            selectedCategory = database.categoryDAO().getCategoryById((index + 1).toString())
+            selectedCategory = database.getCategoryDao().getCategoryById((index + 1).toString())
+
             selectedCategory?.let {
-                binding.ivIconCategory.setImageResource(it.icon)
+                binding.ivIconCategory.load(it.icon, imageLoader)
             }
         }
+
+    private fun getCategoryTitleMapKey(): String {
+        val settingsPrefs = requireContext()
+            .getSharedPreferences(Constants.PREFERENCE_SETTINGS, Context.MODE_PRIVATE)
+        val currentLanguage = settingsPrefs
+            .getString(Constants.PREFERENCE_LANGUAGE_KEY, "en").toString()
+        val currentCountry = settingsPrefs
+            .getString(Constants.PREFERENCE_COUNTRY_KEY, "US").toString()
+        return "${currentLanguage}-${currentCountry}"
+    }
 
     private fun startingDatePicker() {
         binding.tiEditDateStarting.inputType = InputType.TYPE_NULL
@@ -318,15 +333,15 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
     }
 
     private fun setWarrantyDetails() {
-        selectedCategory = database.categoryDAO().getCategoryById(warranty.categoryId)
+        selectedCategory = database.getCategoryDao().getCategoryById(warranty.categoryId)
         binding.tiEditTitle.setText(warranty.title)
         binding.tiEditBrand.setText(warranty.brand)
         binding.tiEditModel.setText(warranty.model)
         binding.tiEditSerial.setText(warranty.serialNumber)
         binding.tiEditDescription.setText(warranty.description)
         selectedCategory?.let {
-            binding.tiDdCategory.setText(requireContext().getString(it.title))
-            binding.ivIconCategory.setImageResource(it.icon)
+            binding.tiDdCategory.setText(it.title[getCategoryTitleMapKey()])
+            binding.ivIconCategory.load(it.icon, imageLoader)
         }
 
         val startingCalendar = Calendar.getInstance()

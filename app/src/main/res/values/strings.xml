@@ -6,29 +6,6 @@
     <string name="network_error_response">It looks like you encountered an error. Please try again.</string>
     <string name="intent_error_app_not_found">There is no app on the phone to handle this action.</string>
 
-    <!--Category Titles-->
-    <string name="category_accessory">Accessory</string>
-    <string name="category_air_conditioner">Air Conditioner</string>
-    <string name="category_audio_device">Audio Device</string>
-    <string name="category_camera">Camera</string>
-    <string name="category_game_console">Game Console</string>
-    <string name="category_headset">Headset</string>
-    <string name="category_healthcare">Healthcare</string>
-    <string name="category_home_appliance">Home Appliance</string>
-    <string name="category_memory_and_storage">Memory and Storage</string>
-    <string name="category_miscellaneous">Miscellaneous</string>
-    <string name="category_monitor">Monitor</string>
-    <string name="category_musical_instrument">Musical Instrument</string>
-    <string name="category_peripheral_device">Peripheral Device</string>
-    <string name="category_personal_care">Personal Care</string>
-    <string name="category_personal_computer">Personal Computer</string>
-    <string name="category_phone_and_tablet">Phone and Tablet</string>
-    <string name="category_smart_home">Smart Home</string>
-    <string name="category_smart_watch">Smart Watch</string>
-    <string name="category_sport_and_fitness">Sport and Fitness</string>
-    <string name="category_tool">Tool</string>
-    <string name="category_vehicle">Vehicle</string>
-
     <!--Landing Activity-->
     <string name="landing_text_content_description">Header</string>
 
