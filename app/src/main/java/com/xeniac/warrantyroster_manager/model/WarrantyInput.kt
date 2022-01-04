@@ -1,5 +1,8 @@
 package com.xeniac.warrantyroster_manager.model
 
+import androidx.annotation.Keep
+
+@Keep
 data class WarrantyInput(
     var title: String,
     var brand: String?,
