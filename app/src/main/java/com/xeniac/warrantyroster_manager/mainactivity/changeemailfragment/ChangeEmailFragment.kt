@@ -33,6 +33,7 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
 
     private var _binding: FragmentChangeEmailBinding? = null
     private val binding get() = _binding!!
+
     private val firebaseAuth = FirebaseAuth.getInstance()
     private val currentUser = firebaseAuth.currentUser
 
@@ -185,20 +186,22 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
                 Log.e("reAuthenticateUser", "Exception: ${e.message}")
                 withContext(Dispatchers.Main) {
                     hideLoadingAnimation()
-                    if (e.toString()
-                            .contains("The password is invalid or the user does not have a password")
-                    ) {
-                        Snackbar.make(
-                            binding.root,
-                            requireContext().getString(R.string.change_email_error_credentials),
-                            LENGTH_INDEFINITE
-                        ).show()
-                    } else {
-                        Snackbar.make(
-                            binding.root,
-                            requireContext().getString(R.string.network_error_failure),
-                            LENGTH_LONG
-                        ).show()
+                    when {
+                        e.toString()
+                            .contains("The password is invalid or the user does not have a password") -> {
+                            Snackbar.make(
+                                binding.root,
+                                requireContext().getString(R.string.change_email_error_credentials),
+                                LENGTH_INDEFINITE
+                            ).show()
+                        }
+                        else -> {
+                            Snackbar.make(
+                                binding.root,
+                                requireContext().getString(R.string.network_error_failure),
+                                LENGTH_LONG
+                            ).show()
+                        }
                     }
                 }
             }
@@ -225,20 +228,22 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
                 Log.e("changeUserEmailAuth", "Exception: ${e.message}")
                 withContext(Dispatchers.Main) {
                     hideLoadingAnimation()
-                    if (e.toString()
-                            .contains("The email address is already in use by another account")
-                    ) {
-                        Snackbar.make(
-                            binding.root,
-                            requireContext().getString(R.string.change_email_error_email_exists),
-                            LENGTH_INDEFINITE
-                        ).show()
-                    } else {
-                        Snackbar.make(
-                            binding.root,
-                            requireContext().getString(R.string.network_error_failure),
-                            LENGTH_LONG
-                        ).show()
+                    when {
+                        e.toString()
+                            .contains("The email address is already in use by another account") -> {
+                            Snackbar.make(
+                                binding.root,
+                                requireContext().getString(R.string.change_email_error_email_exists),
+                                LENGTH_LONG
+                            ).show()
+                        }
+                        else -> {
+                            Snackbar.make(
+                                binding.root,
+                                requireContext().getString(R.string.network_error_failure),
+                                LENGTH_LONG
+                            ).show()
+                        }
                     }
                 }
             }

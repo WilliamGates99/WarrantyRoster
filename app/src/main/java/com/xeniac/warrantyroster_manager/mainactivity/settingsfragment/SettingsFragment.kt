@@ -42,6 +42,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     private var _binding: FragmentSettingsBinding? = null
     private val binding get() = _binding!!
     private lateinit var navController: NavController
+
     private val firebaseAuth = FirebaseAuth.getInstance()
     private val currentUser = firebaseAuth.currentUser
 
@@ -59,13 +60,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         navController = Navigation.findNavController(view)
         (requireContext() as MainActivity).showNavBar()
 
-        settingsPrefs = requireContext()
-            .getSharedPreferences(Constants.PREFERENCE_SETTINGS, Context.MODE_PRIVATE)
-        currentLanguage = settingsPrefs
-            .getString(Constants.PREFERENCE_LANGUAGE_KEY, "en").toString()
-        currentCountry = settingsPrefs.getString(Constants.PREFERENCE_COUNTRY_KEY, "US").toString()
-        currentTheme = settingsPrefs.getInt(Constants.PREFERENCE_THEME_KEY, 0)
-
+        getCurrentSettings()
         getAccountDetails()
         setCurrentLanguageText()
         setCurrentThemeText()
@@ -83,6 +78,15 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         super.onDestroyView()
         destroyAd()
         _binding = null
+    }
+
+    private fun getCurrentSettings() {
+        settingsPrefs = requireContext()
+            .getSharedPreferences(Constants.PREFERENCE_SETTINGS, Context.MODE_PRIVATE)
+        currentLanguage = settingsPrefs
+            .getString(Constants.PREFERENCE_LANGUAGE_KEY, "en").toString()
+        currentCountry = settingsPrefs.getString(Constants.PREFERENCE_COUNTRY_KEY, "US").toString()
+        currentTheme = settingsPrefs.getInt(Constants.PREFERENCE_THEME_KEY, 0)
     }
 
     private fun getAccountDetails() = CoroutineScope(Dispatchers.IO).launch {
@@ -206,7 +210,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
     private fun sendVerificationEmailAuth() {
         showLoadingAnimation()
-
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 currentUser?.let {

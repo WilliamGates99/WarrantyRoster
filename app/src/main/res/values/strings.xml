@@ -3,7 +3,6 @@
     <string name="network_error_connection">Unable to connect to the internet.</string>
     <string name="network_error_failure">You\'re having network issues. Please try again later.</string>
     <string name="network_error_retry">Retry</string>
-    <string name="network_error_response">It looks like you encountered an error. Please try again.</string>
     <string name="intent_error_app_not_found">There is no app on the phone to handle this action.</string>
 
     <!--Landing Activity-->
@@ -21,6 +20,7 @@
     <string name="login_text_register_title">Don’t have an account?</string>
     <string name="login_btn_register">Register</string>
     <string name="login_error_email">Email address is not valid!</string>
+    <string name="login_error_not_found">The account with the provided email does not exist.</string>
     <string name="login_error_credentials">The provided credentials are incorrect.</string>
 
     <!--Register Fragment-->
@@ -68,7 +68,6 @@
 
     <!--Warranties Fragment-->
     <string name="warranties_text_title">Warranty List</string>
-    <string name="warranties_menu_title_search">Search</string>
     <string name="warranties_menu_hint_search">Search by title…</string>
     <string name="warranties_text_empty_list">There is currently no warranty on your list. You can add a warranty by clicking on the <font fgcolor="#1C53F4">Add Button</font>.</string>
     <string name="warranties_list_status_valid">Valid</string>

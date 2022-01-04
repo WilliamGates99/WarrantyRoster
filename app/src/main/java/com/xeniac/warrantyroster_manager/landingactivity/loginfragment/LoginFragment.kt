@@ -118,6 +118,10 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     }
 
     private fun registerOnClick() = binding.btnRegister.setOnClickListener {
+        navigateToRegister()
+    }
+
+    private fun navigateToRegister() {
         navController.navigate(R.id.action_loginFragment_to_registerFragment)
     }
 
@@ -204,21 +208,33 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                 Log.e("loginViaEmail", "Exception: ${e.message}")
                 withContext(Dispatchers.Main) {
                     hideLoadingAnimation()
-                    if (e.toString().contains(
-                            "The password is invalid or the user does not have a password"
-                        )
-                    ) {
-                        Snackbar.make(
-                            binding.root,
-                            requireContext().getString(R.string.login_error_credentials),
-                            LENGTH_LONG
-                        ).show()
-                    } else {
-                        Snackbar.make(
-                            binding.root,
-                            requireContext().getString(R.string.network_error_failure),
-                            LENGTH_LONG
-                        ).show()
+                    when {
+                        e.toString()
+                            .contains("The email address is already in use by another account") -> {
+                            Snackbar.make(
+                                binding.root,
+                                requireContext().getString(R.string.login_error_not_found),
+                                LENGTH_INDEFINITE
+                            ).apply {
+                                setAction(requireContext().getString(R.string.login_btn_register)) { navigateToRegister() }
+                                show()
+                            }
+                        }
+                        e.toString()
+                            .contains("The password is invalid or the user does not have a password") -> {
+                            Snackbar.make(
+                                binding.root,
+                                requireContext().getString(R.string.login_error_credentials),
+                                LENGTH_LONG
+                            ).show()
+                        }
+                        else -> {
+                            Snackbar.make(
+                                binding.root,
+                                requireContext().getString(R.string.network_error_failure),
+                                LENGTH_LONG
+                            ).show()
+                        }
                     }
                 }
             }

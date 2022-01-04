@@ -71,10 +71,7 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
             }
 
             override fun onTextChanged(
-                inputEmail: CharSequence?,
-                start: Int,
-                before: Int,
-                count: Int
+                inputEmail: CharSequence?, start: Int, before: Int, count: Int
             ) {
                 binding.tiLayoutEmail.isErrorEnabled = false
                 binding.tiLayoutEmail.boxStrokeColor =
@@ -141,7 +138,6 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
 
     private fun sendResetPasswordEmailAuth(email: String) {
         showLoadingAnimation()
-
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 firebaseAuth.sendPasswordResetEmail(email).await()
@@ -159,21 +155,22 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
                 Log.e("sendResetPasswordEmail", "Exception: ${e.message}")
                 withContext(Dispatchers.Main) {
                     hideLoadingAnimation()
-                    if (e.toString().contains(
-                            "There is no user record corresponding to this identifier"
-                        )
-                    ) {
-                        Snackbar.make(
-                            binding.root,
-                            requireContext().getString(R.string.forgot_pw_error_not_found),
-                            LENGTH_LONG
-                        ).show()
-                    } else {
-                        Snackbar.make(
-                            binding.root,
-                            requireContext().getString(R.string.network_error_failure),
-                            LENGTH_LONG
-                        ).show()
+                    when {
+                        e.toString()
+                            .contains("There is no user record corresponding to this identifier") -> {
+                            Snackbar.make(
+                                binding.root,
+                                requireContext().getString(R.string.forgot_pw_error_not_found),
+                                LENGTH_LONG
+                            ).show()
+                        }
+                        else -> {
+                            Snackbar.make(
+                                binding.root,
+                                requireContext().getString(R.string.network_error_failure),
+                                LENGTH_LONG
+                            ).show()
+                        }
                     }
                 }
             }

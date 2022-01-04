@@ -436,13 +436,14 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
 
     private fun updateWarrantyInFirestore(warrantyInput: WarrantyInput) {
         showLoadingAnimation()
-
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 warrantiesCollectionRef.document(warranty.id).set(warrantyInput).await()
                 Log.i("editWarranty", "Warranty successfully updated.")
+
                 val documentSnapshot = warrantiesCollectionRef.document(warranty.id).get().await()
                 Log.i("editWarranty", "documentSnapshot: $documentSnapshot")
+
                 val updatedWarranty = Warranty(
                     documentSnapshot.id,
                     documentSnapshot.get(Constants.WARRANTIES_TITLE).toString(),

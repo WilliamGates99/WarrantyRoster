@@ -58,26 +58,32 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     private fun textInputsBackgroundColor() {
         binding.tiEditEmail.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                binding.tiLayoutEmail.setBoxBackgroundColorResource(R.color.background)
+                binding.tiLayoutEmail.boxBackgroundColor =
+                    ContextCompat.getColor(requireContext(), R.color.background)
             } else {
-                binding.tiLayoutEmail.setBoxBackgroundColorResource(R.color.grayLight)
+                binding.tiLayoutEmail.boxBackgroundColor =
+                    ContextCompat.getColor(requireContext(), R.color.grayLight)
             }
         }
 
         binding.tiEditPassword.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                binding.tiLayoutPassword.setBoxBackgroundColorResource(R.color.background)
+                binding.tiLayoutPassword.boxBackgroundColor =
+                    ContextCompat.getColor(requireContext(), R.color.background)
             } else {
-                binding.tiLayoutPassword.setBoxBackgroundColorResource(R.color.grayLight)
+                binding.tiLayoutPassword.boxBackgroundColor =
+                    ContextCompat.getColor(requireContext(), R.color.grayLight)
                 binding.tiLayoutPassword.isHelperTextEnabled = false
             }
         }
 
         binding.tiEditRetypePassword.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                binding.tiLayoutRetypePassword.setBoxBackgroundColorResource(R.color.background)
+                binding.tiLayoutRetypePassword.boxBackgroundColor =
+                    ContextCompat.getColor(requireContext(), R.color.background)
             } else {
-                binding.tiLayoutRetypePassword.setBoxBackgroundColorResource(R.color.grayLight)
+                binding.tiLayoutRetypePassword.boxBackgroundColor =
+                    ContextCompat.getColor(requireContext(), R.color.grayLight)
             }
         }
     }
@@ -262,7 +268,6 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
 
                         withContext(Dispatchers.Main) {
                             hideLoadingAnimation()
-
                             Intent(requireContext(), MainActivity::class.java).apply {
                                 startActivity(this)
                                 requireActivity().finish()
@@ -274,24 +279,25 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                 Log.e("registerViaEmail", "Exception: ${e.message}")
                 withContext(Dispatchers.Main) {
                     hideLoadingAnimation()
-                    if (e.toString().contains(
-                            "The email address is already in use by another account"
-                        )
-                    ) {
-                        Snackbar.make(
-                            binding.root,
-                            requireContext().getString(R.string.register_error_account_exists),
-                            LENGTH_INDEFINITE
-                        ).apply {
-                            setAction(requireContext().getString(R.string.register_btn_login)) { requireActivity().onBackPressed() }
-                            show()
+                    when {
+                        e.toString()
+                            .contains("The email address is already in use by another account") -> {
+                            Snackbar.make(
+                                binding.root,
+                                requireContext().getString(R.string.register_error_account_exists),
+                                LENGTH_INDEFINITE
+                            ).apply {
+                                setAction(requireContext().getString(R.string.register_btn_login)) { requireActivity().onBackPressed() }
+                                show()
+                            }
                         }
-                    } else {
-                        Snackbar.make(
-                            binding.root,
-                            requireContext().getString(R.string.network_error_failure),
-                            LENGTH_LONG
-                        ).show()
+                        else -> {
+                            Snackbar.make(
+                                binding.root,
+                                requireContext().getString(R.string.network_error_failure),
+                                LENGTH_LONG
+                            ).show()
+                        }
                     }
                 }
             }

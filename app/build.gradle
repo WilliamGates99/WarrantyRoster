@@ -81,7 +81,6 @@ dependencies {
     implementation 'androidx.room:room-runtime:2.4.0'
     kapt 'androidx.room:room-compiler:2.4.0'
     implementation 'androidx.room:room-ktx:2.4.0'
-    implementation 'androidx.room:room-runtime:2.4.0' //TODO remove after moving to kotlin
     annotationProcessor 'androidx.room:room-compiler:2.4.0' //TODO remove after moving to kotlin
 
     //Third Party Libraries

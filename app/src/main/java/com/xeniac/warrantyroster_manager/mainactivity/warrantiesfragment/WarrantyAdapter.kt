@@ -22,7 +22,6 @@ import ir.tapsell.plus.AdRequestCallback
 import ir.tapsell.plus.AdShowListener
 import ir.tapsell.plus.TapsellPlus
 import ir.tapsell.plus.model.TapsellPlusAdModel
-import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -37,7 +36,6 @@ class WarrantyAdapter(
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var requestAdCounter = 0
-
 
     companion object {
         private const val VIEW_TYPE_WARRANTY = 0
@@ -77,32 +75,32 @@ class WarrantyAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         fun bindView(mContext: Context, warranty: Warranty) {
-            val imageLoader = ImageLoader.Builder(mContext)
-                .componentRegistry { add(SvgDecoder(mContext)) }.build()
-            binding.tvCategory.text =
-                database.getCategoryDao().getCategoryById(warranty.categoryId).title[titleMapKey]
-            binding.ivIcon.load(
-                database.getCategoryDao().getCategoryById(warranty.categoryId).icon, imageLoader
-            )
-            binding.tvTitle.text = warranty.title
-
-            val expiryCalendar = Calendar.getInstance()
-            val dateFormat = SimpleDateFormat("yyyy-M-dd", Locale.getDefault())
             try {
-                dateFormat.parse(warranty.expiryDate)?.let {
-                    expiryCalendar.time = it
+                val imageLoader = ImageLoader.Builder(mContext)
+                    .componentRegistry { add(SvgDecoder(mContext)) }.build()
 
-                    val expiryDate = "${
-                        expiryCalendar
-                            .getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault())
-                    } " +
-                            "${getDayWithSuffix(expiryCalendar.get(Calendar.DAY_OF_MONTH))}, " +
-                            "${expiryCalendar.get(Calendar.YEAR)}"
+                val categoryTitle = database
+                    .getCategoryDao().getCategoryById(warranty.categoryId).title[titleMapKey]
+                val categoryIcon = database
+                    .getCategoryDao().getCategoryById(warranty.categoryId).icon
 
-                    binding.tvExpiryDate.text = expiryDate
-                }
-
+                val expiryCalendar = Calendar.getInstance()
+                val dateFormat = SimpleDateFormat("yyyy-M-dd", Locale.getDefault())
+                dateFormat.parse(warranty.expiryDate)?.let { expiryCalendar.time = it }
                 val daysUntilExpiry = getDaysUntilExpiry(expiryCalendar)
+
+                val expiryDate = "${
+                    expiryCalendar.getDisplayName(
+                        Calendar.MONTH, Calendar.LONG, Locale.getDefault()
+                    )
+                } ${getDayWithSuffix(expiryCalendar.get(Calendar.DAY_OF_MONTH))}, " +
+                        "${expiryCalendar.get(Calendar.YEAR)}"
+
+                binding.ivIcon.load(categoryIcon, imageLoader)
+                binding.tvTitle.text = warranty.title
+                binding.tvCategory.text = categoryTitle
+                binding.tvExpiryDate.text = expiryDate
+
                 when {
                     daysUntilExpiry < 0 -> {
                         binding.tvStatus.text =
@@ -136,9 +134,8 @@ class WarrantyAdapter(
                 binding.cvWarranty.setOnClickListener {
                     clickInterface.onItemClick(warranty, daysUntilExpiry)
                 }
-            } catch (e: ParseException) {
-                e.printStackTrace()
-                Log.e("warrantyAdapter", "ParseException: ${e.message}")
+            } catch (e: Exception) {
+                Log.e("WarrantyViewHolder", "Exception: ${e.message}")
             }
         }
     }

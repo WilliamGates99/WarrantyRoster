@@ -379,7 +379,6 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
 
     private fun addWarrantyToFirestore(warrantyInput: WarrantyInput) {
         showLoadingAnimation()
-
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 warrantiesCollectionRef.add(warrantyInput).await()

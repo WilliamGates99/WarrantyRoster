@@ -32,6 +32,7 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
 
     private var _binding: FragmentChangePasswordBinding? = null
     private val binding get() = _binding!!
+
     private val firebaseAuth = FirebaseAuth.getInstance()
     private val currentUser = firebaseAuth.currentUser
 
@@ -245,20 +246,22 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
                 Log.e("reAuthenticateUser", "Exception: ${e.message}")
                 withContext(Dispatchers.Main) {
                     hideLoadingAnimation()
-                    if (e.toString()
-                            .contains("The password is invalid or the user does not have a password")
-                    ) {
-                        Snackbar.make(
-                            binding.root,
-                            requireContext().getString(R.string.change_email_error_credentials),
-                            LENGTH_LONG
-                        ).show()
-                    } else {
-                        Snackbar.make(
-                            binding.root,
-                            requireContext().getString(R.string.network_error_failure),
-                            LENGTH_LONG
-                        ).show()
+                    when {
+                        e.toString()
+                            .contains("The password is invalid or the user does not have a password") -> {
+                            Snackbar.make(
+                                binding.root,
+                                requireContext().getString(R.string.change_email_error_credentials),
+                                LENGTH_LONG
+                            ).show()
+                        }
+                        else -> {
+                            Snackbar.make(
+                                binding.root,
+                                requireContext().getString(R.string.network_error_failure),
+                                LENGTH_LONG
+                            ).show()
+                        }
                     }
                 }
             }
