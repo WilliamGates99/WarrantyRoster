@@ -339,10 +339,6 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
         binding.tiEditModel.setText(warranty.model)
         binding.tiEditSerial.setText(warranty.serialNumber)
         binding.tiEditDescription.setText(warranty.description)
-        selectedCategory?.let {
-            binding.tiDdCategory.setText(it.title[getCategoryTitleMapKey()])
-            binding.ivIconCategory.load(it.icon, imageLoader)
-        }
 
         val startingCalendar = Calendar.getInstance()
         val expiryCalendar = Calendar.getInstance()
@@ -374,6 +370,11 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
                     "${decimalFormat.format(expiryCalendar.get(Calendar.DAY_OF_MONTH))}/" +
                     "${expiryCalendar.get(Calendar.YEAR)}"
         )
+
+        selectedCategory?.let {
+            binding.tiDdCategory.setText(it.title[getCategoryTitleMapKey()])
+            binding.ivIconCategory.load(it.icon, imageLoader)
+        }
     }
 
     private fun editWarrantyOnClick() =

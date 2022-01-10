@@ -99,9 +99,6 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
 
         val imageLoader = ImageLoader.Builder(requireContext())
             .componentRegistry { add(SvgDecoder(requireContext())) }.build()
-        binding.ivIcon.load(
-            database.getCategoryDao().getCategoryById(warranty.categoryId).icon, imageLoader
-        )
 
         if (warranty.brand != null) {
             binding.tvBrand.text = warranty.brand
@@ -196,6 +193,10 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
                     ContextCompat.getColorStateList(requireContext(), R.color.green20)
             }
         }
+
+        binding.ivIcon.load(
+            database.getCategoryDao().getCategoryById(warranty.categoryId).icon, imageLoader
+        )
     }
 
     private fun adInit() = TapsellPlus.initialize(

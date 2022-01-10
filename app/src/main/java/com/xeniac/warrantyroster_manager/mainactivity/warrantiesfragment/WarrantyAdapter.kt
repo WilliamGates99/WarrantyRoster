@@ -96,7 +96,7 @@ class WarrantyAdapter(
                 } ${getDayWithSuffix(expiryCalendar.get(Calendar.DAY_OF_MONTH))}, " +
                         "${expiryCalendar.get(Calendar.YEAR)}"
 
-                binding.ivIcon.load(categoryIcon, imageLoader)
+//                binding.ivIcon.load(categoryIcon, imageLoader)
                 binding.tvTitle.text = warranty.title
                 binding.tvCategory.text = categoryTitle
                 binding.tvExpiryDate.text = expiryDate
@@ -134,6 +134,8 @@ class WarrantyAdapter(
                 binding.cvWarranty.setOnClickListener {
                     clickInterface.onItemClick(warranty, daysUntilExpiry)
                 }
+
+                binding.ivIcon.load(categoryIcon, imageLoader)
             } catch (e: Exception) {
                 Log.e("WarrantyViewHolder", "Exception: ${e.message}")
             }
