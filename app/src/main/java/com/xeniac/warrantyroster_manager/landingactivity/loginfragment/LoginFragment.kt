@@ -210,7 +210,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                     hideLoadingAnimation()
                     when {
                         e.toString()
-                            .contains("The email address is already in use by another account") -> {
+                            .contains("There is no user record corresponding to this identifier") -> {
                             Snackbar.make(
                                 binding.root,
                                 requireContext().getString(R.string.login_error_not_found),
