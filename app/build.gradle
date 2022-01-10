@@ -61,9 +61,9 @@ dependencies {
     implementation 'androidx.work:work-runtime:2.7.1'
 
     //Coroutines
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0-RC2'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0-RC2'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.0-RC2'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0-native-mt'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0-native-mt'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.0-native-mt'
 
     //Firebase
     implementation platform('com.google.firebase:firebase-bom:29.0.2')
