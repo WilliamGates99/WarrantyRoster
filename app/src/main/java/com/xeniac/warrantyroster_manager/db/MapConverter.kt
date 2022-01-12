@@ -1,4 +1,4 @@
-package com.xeniac.warrantyroster_manager.database
+package com.xeniac.warrantyroster_manager.db
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson

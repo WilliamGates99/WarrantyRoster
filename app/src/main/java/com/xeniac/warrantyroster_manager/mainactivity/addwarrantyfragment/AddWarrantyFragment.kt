@@ -26,14 +26,19 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.xeniac.warrantyroster_manager.Constants
-import com.xeniac.warrantyroster_manager.NetworkHelper
+import com.xeniac.warrantyroster_manager.util.NetworkHelper
 import com.xeniac.warrantyroster_manager.R
-import com.xeniac.warrantyroster_manager.database.WarrantyRosterDatabase
+import com.xeniac.warrantyroster_manager.db.WarrantyRosterDatabase
 import com.xeniac.warrantyroster_manager.databinding.FragmentAddWarrantyBinding
 import com.xeniac.warrantyroster_manager.mainactivity.MainActivity
 import com.xeniac.warrantyroster_manager.model.Category
 import com.xeniac.warrantyroster_manager.model.WarrantyInput
+import com.xeniac.warrantyroster_manager.util.Constants.Companion.COLLECTION_WARRANTIES
+import com.xeniac.warrantyroster_manager.util.Constants.Companion.FRAGMENT_TAG_ADD_CALENDAR_EXPIRY
+import com.xeniac.warrantyroster_manager.util.Constants.Companion.FRAGMENT_TAG_ADD_CALENDAR_STARTING
+import com.xeniac.warrantyroster_manager.util.Constants.Companion.PREFERENCE_COUNTRY_KEY
+import com.xeniac.warrantyroster_manager.util.Constants.Companion.PREFERENCE_LANGUAGE_KEY
+import com.xeniac.warrantyroster_manager.util.Constants.Companion.PREFERENCE_SETTINGS
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -50,7 +55,7 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
 
     private lateinit var database: WarrantyRosterDatabase
     private val warrantiesCollectionRef =
-        Firebase.firestore.collection(Constants.COLLECTION_WARRANTIES)
+        Firebase.firestore.collection(COLLECTION_WARRANTIES)
 
     private val decimalFormat = DecimalFormat("00")
     private var selectedCategory: Category? = null
@@ -221,11 +226,11 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
 
     private fun getCategoryTitleMapKey(): String {
         val settingsPrefs = requireContext()
-            .getSharedPreferences(Constants.PREFERENCE_SETTINGS, Context.MODE_PRIVATE)
+            .getSharedPreferences(PREFERENCE_SETTINGS, Context.MODE_PRIVATE)
         val currentLanguage = settingsPrefs
-            .getString(Constants.PREFERENCE_LANGUAGE_KEY, "en").toString()
+            .getString(PREFERENCE_LANGUAGE_KEY, "en").toString()
         val currentCountry = settingsPrefs
-            .getString(Constants.PREFERENCE_COUNTRY_KEY, "US").toString()
+            .getString(PREFERENCE_COUNTRY_KEY, "US").toString()
         return "${currentLanguage}-${currentCountry}"
     }
 
@@ -258,7 +263,7 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
             .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
             .build()
 
-        startingDP.show(parentFragmentManager, Constants.FRAGMENT_TAG_ADD_CALENDAR_STARTING)
+        startingDP.show(parentFragmentManager, FRAGMENT_TAG_ADD_CALENDAR_STARTING)
 
         startingDP.addOnPositiveButtonClickListener { selection ->
             startingCalendar = Calendar.getInstance()
@@ -290,7 +295,7 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
             .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
             .build()
 
-        expiryDP.show(parentFragmentManager, Constants.FRAGMENT_TAG_ADD_CALENDAR_EXPIRY)
+        expiryDP.show(parentFragmentManager, FRAGMENT_TAG_ADD_CALENDAR_EXPIRY)
 
         expiryDP.addOnPositiveButtonClickListener { selection ->
             expiryCalendar = Calendar.getInstance()

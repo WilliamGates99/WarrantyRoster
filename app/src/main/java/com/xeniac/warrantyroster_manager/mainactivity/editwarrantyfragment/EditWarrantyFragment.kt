@@ -26,13 +26,26 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.xeniac.warrantyroster_manager.Constants
-import com.xeniac.warrantyroster_manager.NetworkHelper
+import com.xeniac.warrantyroster_manager.util.NetworkHelper
 import com.xeniac.warrantyroster_manager.R
-import com.xeniac.warrantyroster_manager.database.WarrantyRosterDatabase
+import com.xeniac.warrantyroster_manager.db.WarrantyRosterDatabase
 import com.xeniac.warrantyroster_manager.databinding.FragmentEditWarrantyBinding
 import com.xeniac.warrantyroster_manager.mainactivity.MainActivity
 import com.xeniac.warrantyroster_manager.model.*
+import com.xeniac.warrantyroster_manager.util.Constants.Companion.COLLECTION_WARRANTIES
+import com.xeniac.warrantyroster_manager.util.Constants.Companion.FRAGMENT_TAG_EDIT_CALENDAR_EXPIRY
+import com.xeniac.warrantyroster_manager.util.Constants.Companion.FRAGMENT_TAG_EDIT_CALENDAR_STARTING
+import com.xeniac.warrantyroster_manager.util.Constants.Companion.PREFERENCE_COUNTRY_KEY
+import com.xeniac.warrantyroster_manager.util.Constants.Companion.PREFERENCE_LANGUAGE_KEY
+import com.xeniac.warrantyroster_manager.util.Constants.Companion.PREFERENCE_SETTINGS
+import com.xeniac.warrantyroster_manager.util.Constants.Companion.WARRANTIES_BRAND
+import com.xeniac.warrantyroster_manager.util.Constants.Companion.WARRANTIES_CATEGORY_ID
+import com.xeniac.warrantyroster_manager.util.Constants.Companion.WARRANTIES_DESCRIPTION
+import com.xeniac.warrantyroster_manager.util.Constants.Companion.WARRANTIES_EXPIRY_DATE
+import com.xeniac.warrantyroster_manager.util.Constants.Companion.WARRANTIES_MODEL
+import com.xeniac.warrantyroster_manager.util.Constants.Companion.WARRANTIES_SERIAL_NUMBER
+import com.xeniac.warrantyroster_manager.util.Constants.Companion.WARRANTIES_STARTING_DATE
+import com.xeniac.warrantyroster_manager.util.Constants.Companion.WARRANTIES_TITLE
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -53,7 +66,7 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
     private lateinit var database: WarrantyRosterDatabase
     private lateinit var warranty: Warranty
     private val warrantiesCollectionRef =
-        Firebase.firestore.collection(Constants.COLLECTION_WARRANTIES)
+        Firebase.firestore.collection(COLLECTION_WARRANTIES)
 
     private val decimalFormat = DecimalFormat("00")
     private val dateFormat = SimpleDateFormat("yyyy-M-dd")
@@ -227,11 +240,11 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
 
     private fun getCategoryTitleMapKey(): String {
         val settingsPrefs = requireContext()
-            .getSharedPreferences(Constants.PREFERENCE_SETTINGS, Context.MODE_PRIVATE)
+            .getSharedPreferences(PREFERENCE_SETTINGS, Context.MODE_PRIVATE)
         val currentLanguage = settingsPrefs
-            .getString(Constants.PREFERENCE_LANGUAGE_KEY, "en").toString()
+            .getString(PREFERENCE_LANGUAGE_KEY, "en").toString()
         val currentCountry = settingsPrefs
-            .getString(Constants.PREFERENCE_COUNTRY_KEY, "US").toString()
+            .getString(PREFERENCE_COUNTRY_KEY, "US").toString()
         return "${currentLanguage}-${currentCountry}"
     }
 
@@ -264,7 +277,7 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
             .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
             .build()
 
-        startingDP.show(parentFragmentManager, Constants.FRAGMENT_TAG_EDIT_CALENDAR_STARTING)
+        startingDP.show(parentFragmentManager, FRAGMENT_TAG_EDIT_CALENDAR_STARTING)
 
         startingDP.addOnPositiveButtonClickListener { selection ->
             startingCalendarInput = Calendar.getInstance()
@@ -296,7 +309,7 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
             .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
             .build()
 
-        expiryDP.show(parentFragmentManager, Constants.FRAGMENT_TAG_EDIT_CALENDAR_EXPIRY)
+        expiryDP.show(parentFragmentManager, FRAGMENT_TAG_EDIT_CALENDAR_EXPIRY)
 
         expiryDP.addOnPositiveButtonClickListener { selection ->
             expiryCalendarInput = Calendar.getInstance()
@@ -333,7 +346,7 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
     }
 
     private fun setWarrantyDetails() {
-        selectedCategory = database.getCategoryDao().getCategoryById(warranty.categoryId)
+        selectedCategory = database.getCategoryDao().getCategoryById(warranty.categoryId!!)
         binding.tiEditTitle.setText(warranty.title)
         binding.tiEditBrand.setText(warranty.brand)
         binding.tiEditModel.setText(warranty.model)
@@ -343,11 +356,11 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
         val startingCalendar = Calendar.getInstance()
         val expiryCalendar = Calendar.getInstance()
 
-        dateFormat.parse(warranty.startingDate)?.let {
+        dateFormat.parse(warranty.startingDate!!)?.let {
             startingCalendar.time = it
         }
 
-        dateFormat.parse(warranty.expiryDate)?.let {
+        dateFormat.parse(warranty.expiryDate!!)?.let {
             expiryCalendar.time = it
         }
 
@@ -439,25 +452,25 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
         showLoadingAnimation()
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                warrantiesCollectionRef.document(warranty.id).set(warrantyInput).await()
+                warrantiesCollectionRef.document(warranty.id!!).set(warrantyInput).await()
                 Log.i("editWarranty", "Warranty successfully updated.")
 
-                val documentSnapshot = warrantiesCollectionRef.document(warranty.id).get().await()
+                val documentSnapshot = warrantiesCollectionRef.document(warranty.id!!).get().await()
                 Log.i("editWarranty", "documentSnapshot: $documentSnapshot")
 
                 val updatedWarranty = Warranty(
                     documentSnapshot.id,
-                    documentSnapshot.get(Constants.WARRANTIES_TITLE).toString(),
-                    documentSnapshot.get(Constants.WARRANTIES_BRAND).toString(),
-                    documentSnapshot.get(Constants.WARRANTIES_MODEL).toString(),
-                    documentSnapshot.get(Constants.WARRANTIES_SERIAL_NUMBER).toString(),
-                    documentSnapshot.get(Constants.WARRANTIES_STARTING_DATE).toString(),
-                    documentSnapshot.get(Constants.WARRANTIES_EXPIRY_DATE).toString(),
-                    documentSnapshot.get(Constants.WARRANTIES_DESCRIPTION).toString(),
-                    documentSnapshot.get(Constants.WARRANTIES_CATEGORY_ID).toString(),
+                    documentSnapshot.get(WARRANTIES_TITLE).toString(),
+                    documentSnapshot.get(WARRANTIES_BRAND).toString(),
+                    documentSnapshot.get(WARRANTIES_MODEL).toString(),
+                    documentSnapshot.get(WARRANTIES_SERIAL_NUMBER).toString(),
+                    documentSnapshot.get(WARRANTIES_STARTING_DATE).toString(),
+                    documentSnapshot.get(WARRANTIES_EXPIRY_DATE).toString(),
+                    documentSnapshot.get(WARRANTIES_DESCRIPTION).toString(),
+                    documentSnapshot.get(WARRANTIES_CATEGORY_ID).toString(),
                     ListItemType.WARRANTY
                 )
-                val daysUntilExpiry = getDaysUntilExpiry(updatedWarranty.expiryDate)
+                val daysUntilExpiry = getDaysUntilExpiry(updatedWarranty.expiryDate!!)
 
                 withContext(Dispatchers.Main) {
                     hideLoadingAnimation()

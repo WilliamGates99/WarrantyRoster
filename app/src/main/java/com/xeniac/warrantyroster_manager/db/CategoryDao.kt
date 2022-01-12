@@ -1,4 +1,4 @@
-package com.xeniac.warrantyroster_manager.database
+package com.xeniac.warrantyroster_manager.db
 
 import androidx.room.*
 import com.xeniac.warrantyroster_manager.model.Category

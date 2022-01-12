@@ -20,11 +20,12 @@ import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_INDEFI
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
-import com.xeniac.warrantyroster_manager.Constants
-import com.xeniac.warrantyroster_manager.NetworkHelper
+import com.xeniac.warrantyroster_manager.util.NetworkHelper
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentLoginBinding
 import com.xeniac.warrantyroster_manager.mainactivity.MainActivity
+import com.xeniac.warrantyroster_manager.util.Constants.Companion.PREFERENCE_IS_LOGGED_IN_KEY
+import com.xeniac.warrantyroster_manager.util.Constants.Companion.PREFERENCE_LOGIN
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -189,9 +190,9 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                         Log.i("loginViaEmail", "${it.email} logged in successfully.")
 
                         requireContext().getSharedPreferences(
-                            Constants.PREFERENCE_LOGIN, Context.MODE_PRIVATE
+                            PREFERENCE_LOGIN, Context.MODE_PRIVATE
                         ).edit().apply {
-                            putBoolean(Constants.PREFERENCE_IS_LOGGED_IN_KEY, true)
+                            putBoolean(PREFERENCE_IS_LOGGED_IN_KEY, true)
                             apply()
                         }
 

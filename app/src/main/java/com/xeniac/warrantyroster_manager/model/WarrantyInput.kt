@@ -4,13 +4,13 @@ import androidx.annotation.Keep
 
 @Keep
 data class WarrantyInput(
-    var title: String,
-    var brand: String?,
-    var model: String?,
-    var serialNumber: String?,
-    var startingDate: String,
-    var expiryDate: String,
-    var description: String?,
-    var categoryId: String,
-    var uuid: String
+    val title: String,
+    val brand: String?,
+    val model: String?,
+    val serialNumber: String?,
+    val startingDate: String,
+    val expiryDate: String,
+    val description: String?,
+    val categoryId: String,
+    val uuid: String
 )

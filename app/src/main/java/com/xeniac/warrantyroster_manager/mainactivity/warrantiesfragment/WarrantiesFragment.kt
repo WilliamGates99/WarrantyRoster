@@ -14,14 +14,32 @@ import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.xeniac.warrantyroster_manager.Constants
 import com.xeniac.warrantyroster_manager.R
-import com.xeniac.warrantyroster_manager.database.WarrantyRosterDatabase
+import com.xeniac.warrantyroster_manager.db.WarrantyRosterDatabase
 import com.xeniac.warrantyroster_manager.databinding.FragmentWarrantiesBinding
 import com.xeniac.warrantyroster_manager.mainactivity.MainActivity
 import com.xeniac.warrantyroster_manager.model.Category
 import com.xeniac.warrantyroster_manager.model.ListItemType
 import com.xeniac.warrantyroster_manager.model.Warranty
+import com.xeniac.warrantyroster_manager.util.Constants.Companion.CATEGORIES_ICON
+import com.xeniac.warrantyroster_manager.util.Constants.Companion.CATEGORIES_TITLE
+import com.xeniac.warrantyroster_manager.util.Constants.Companion.COLLECTION_CATEGORIES
+import com.xeniac.warrantyroster_manager.util.Constants.Companion.COLLECTION_WARRANTIES
+import com.xeniac.warrantyroster_manager.util.Constants.Companion.PREFERENCE_COUNTRY_KEY
+import com.xeniac.warrantyroster_manager.util.Constants.Companion.PREFERENCE_DB_SEED
+import com.xeniac.warrantyroster_manager.util.Constants.Companion.PREFERENCE_EN_US_KEY
+import com.xeniac.warrantyroster_manager.util.Constants.Companion.PREFERENCE_LANGUAGE_KEY
+import com.xeniac.warrantyroster_manager.util.Constants.Companion.PREFERENCE_SETTINGS
+import com.xeniac.warrantyroster_manager.util.Constants.Companion.TAPSELL_KEY
+import com.xeniac.warrantyroster_manager.util.Constants.Companion.WARRANTIES_BRAND
+import com.xeniac.warrantyroster_manager.util.Constants.Companion.WARRANTIES_CATEGORY_ID
+import com.xeniac.warrantyroster_manager.util.Constants.Companion.WARRANTIES_DESCRIPTION
+import com.xeniac.warrantyroster_manager.util.Constants.Companion.WARRANTIES_EXPIRY_DATE
+import com.xeniac.warrantyroster_manager.util.Constants.Companion.WARRANTIES_MODEL
+import com.xeniac.warrantyroster_manager.util.Constants.Companion.WARRANTIES_SERIAL_NUMBER
+import com.xeniac.warrantyroster_manager.util.Constants.Companion.WARRANTIES_STARTING_DATE
+import com.xeniac.warrantyroster_manager.util.Constants.Companion.WARRANTIES_TITLE
+import com.xeniac.warrantyroster_manager.util.Constants.Companion.WARRANTIES_UUID
 import ir.tapsell.plus.TapsellPlus
 import ir.tapsell.plus.TapsellPlusInitListener
 import ir.tapsell.plus.model.AdNetworkError
@@ -38,11 +56,11 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
     private lateinit var navController: NavController
 
     private val categoriesCollectionRef = Firebase.firestore
-        .collection(Constants.COLLECTION_CATEGORIES)
+        .collection(COLLECTION_CATEGORIES)
     private lateinit var database: WarrantyRosterDatabase
 
     private val warrantiesCollectionRef = Firebase.firestore
-        .collection(Constants.COLLECTION_WARRANTIES)
+        .collection(COLLECTION_WARRANTIES)
     private var warrantiesQuery: ListenerRegistration? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -64,7 +82,7 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
     }
 
     private fun adInit() = TapsellPlus.initialize(
-        requireContext(), Constants.TAPSELL_KEY, object : TapsellPlusInitListener {
+        requireContext(), TAPSELL_KEY, object : TapsellPlusInitListener {
             override fun onInitializeSuccess(adNetworks: AdNetworks?) {
                 Log.i("adInit", "onInitializeSuccess: ${adNetworks?.name}")
             }
@@ -82,14 +100,14 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
     private fun seedCategories() = CoroutineScope(Dispatchers.IO).launch {
         try {
             val seedPrefs = requireContext()
-                .getSharedPreferences(Constants.PREFERENCE_DB_SEED, Context.MODE_PRIVATE)
-            val isEnUsSeeded = seedPrefs.getBoolean(Constants.PREFERENCE_EN_US_KEY, false)
+                .getSharedPreferences(PREFERENCE_DB_SEED, Context.MODE_PRIVATE)
+            val isEnUsSeeded = seedPrefs.getBoolean(PREFERENCE_EN_US_KEY, false)
 
             //TODO add isFaIRSeeded after adding persian
             if (!isEnUsSeeded) {
                 database.getCategoryDao().deleteAllCategories()
                 val categoriesQuery = categoriesCollectionRef
-                    .orderBy(Constants.CATEGORIES_TITLE, Query.Direction.ASCENDING)
+                    .orderBy(CATEGORIES_TITLE, Query.Direction.ASCENDING)
                     .get().await()
                 Log.i("seedCategories", "Categories successfully retrieved.")
 
@@ -98,8 +116,8 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
                     @Suppress("UNCHECKED_CAST")
                     document?.let {
                         val id = it.id
-                        val title = it.get(Constants.CATEGORIES_TITLE) as Map<String, String>
-                        val icon = it.get(Constants.CATEGORIES_ICON).toString()
+                        val title = it.get(CATEGORIES_TITLE) as Map<String, String>
+                        val icon = it.get(CATEGORIES_ICON).toString()
                         categoriesList.add(Category(id, title, icon))
                     }
                 }
@@ -109,9 +127,9 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
                 if (itemCount == 21) {
                     Log.i("seedCategories", "categories successfully seeded to DB.")
                     requireContext().getSharedPreferences(
-                        Constants.PREFERENCE_DB_SEED, Context.MODE_PRIVATE
+                        PREFERENCE_DB_SEED, Context.MODE_PRIVATE
                     ).edit().apply {
-                        putBoolean(Constants.PREFERENCE_EN_US_KEY, true)
+                        putBoolean(PREFERENCE_EN_US_KEY, true)
                         apply()
                     }
                 }
@@ -125,8 +143,8 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
         showLoadingAnimation()
 
         warrantiesQuery = warrantiesCollectionRef
-            .whereEqualTo(Constants.WARRANTIES_UUID, Firebase.auth.currentUser?.uid)
-            .orderBy(Constants.WARRANTIES_TITLE, Query.Direction.ASCENDING)
+            .whereEqualTo(WARRANTIES_UUID, Firebase.auth.currentUser?.uid)
+            .orderBy(WARRANTIES_TITLE, Query.Direction.ASCENDING)
             .addSnapshotListener { value, error ->
                 error?.let {
                     Log.e("getWarrantiesList", "Exception: ${it.message}")
@@ -146,14 +164,14 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
                         for (document in it.documents) {
                             val warranty = Warranty(
                                 document.id,
-                                document.get(Constants.WARRANTIES_TITLE).toString(),
-                                document.get(Constants.WARRANTIES_BRAND).toString(),
-                                document.get(Constants.WARRANTIES_MODEL).toString(),
-                                document.get(Constants.WARRANTIES_SERIAL_NUMBER).toString(),
-                                document.get(Constants.WARRANTIES_STARTING_DATE).toString(),
-                                document.get(Constants.WARRANTIES_EXPIRY_DATE).toString(),
-                                document.get(Constants.WARRANTIES_DESCRIPTION).toString(),
-                                document.get(Constants.WARRANTIES_CATEGORY_ID).toString(),
+                                document.get(WARRANTIES_TITLE).toString(),
+                                document.get(WARRANTIES_BRAND).toString(),
+                                document.get(WARRANTIES_MODEL).toString(),
+                                document.get(WARRANTIES_SERIAL_NUMBER).toString(),
+                                document.get(WARRANTIES_STARTING_DATE).toString(),
+                                document.get(WARRANTIES_EXPIRY_DATE).toString(),
+                                document.get(WARRANTIES_DESCRIPTION).toString(),
+                                document.get(WARRANTIES_CATEGORY_ID).toString(),
                                 ListItemType.WARRANTY
                             )
                             warrantiesList.add(warranty)
@@ -232,11 +250,11 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
 
     private fun getCategoryTitleMapKey(): String {
         val settingsPrefs = requireContext()
-            .getSharedPreferences(Constants.PREFERENCE_SETTINGS, Context.MODE_PRIVATE)
+            .getSharedPreferences(PREFERENCE_SETTINGS, Context.MODE_PRIVATE)
         val currentLanguage = settingsPrefs
-            .getString(Constants.PREFERENCE_LANGUAGE_KEY, "en").toString()
+            .getString(PREFERENCE_LANGUAGE_KEY, "en").toString()
         val currentCountry = settingsPrefs
-            .getString(Constants.PREFERENCE_COUNTRY_KEY, "US").toString()
+            .getString(PREFERENCE_COUNTRY_KEY, "US").toString()
         return "${currentLanguage}-${currentCountry}"
     }
 

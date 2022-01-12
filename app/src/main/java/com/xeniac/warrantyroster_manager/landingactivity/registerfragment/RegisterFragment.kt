@@ -19,11 +19,13 @@ import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_INDEFI
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
-import com.xeniac.warrantyroster_manager.Constants
-import com.xeniac.warrantyroster_manager.NetworkHelper
+import com.xeniac.warrantyroster_manager.util.NetworkHelper
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentRegisterBinding
 import com.xeniac.warrantyroster_manager.mainactivity.MainActivity
+import com.xeniac.warrantyroster_manager.util.Constants.Companion.PREFERENCE_IS_LOGGED_IN_KEY
+import com.xeniac.warrantyroster_manager.util.Constants.Companion.PREFERENCE_LOGIN
+import com.xeniac.warrantyroster_manager.util.Constants.Companion.URL_PRIVACY_POLICY
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -167,7 +169,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     }
 
     private fun agreementOnclick() = binding.btnAgreement.setOnClickListener {
-        Intent(Intent.ACTION_VIEW, Uri.parse(Constants.URL_PRIVACY_POLICY)).apply {
+        Intent(Intent.ACTION_VIEW, Uri.parse(URL_PRIVACY_POLICY)).apply {
             resolveActivity(requireContext().packageManager)?.let {
                 startActivity(this)
             } ?: Snackbar.make(
@@ -260,9 +262,9 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                         it.sendEmailVerification()
 
                         requireContext().getSharedPreferences(
-                            Constants.PREFERENCE_LOGIN, Context.MODE_PRIVATE
+                            PREFERENCE_LOGIN, Context.MODE_PRIVATE
                         ).edit().apply {
-                            putBoolean(Constants.PREFERENCE_IS_LOGGED_IN_KEY, true)
+                            putBoolean(PREFERENCE_IS_LOGGED_IN_KEY, true)
                             apply()
                         }
 

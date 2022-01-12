@@ -22,13 +22,14 @@ import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.xeniac.warrantyroster_manager.Constants
-import com.xeniac.warrantyroster_manager.NetworkHelper
+import com.xeniac.warrantyroster_manager.util.NetworkHelper
 import com.xeniac.warrantyroster_manager.R
-import com.xeniac.warrantyroster_manager.database.WarrantyRosterDatabase
+import com.xeniac.warrantyroster_manager.db.WarrantyRosterDatabase
 import com.xeniac.warrantyroster_manager.databinding.FragmentWarrantyDetailsBinding
 import com.xeniac.warrantyroster_manager.mainactivity.MainActivity
 import com.xeniac.warrantyroster_manager.model.Warranty
+import com.xeniac.warrantyroster_manager.util.Constants.Companion.COLLECTION_WARRANTIES
+import com.xeniac.warrantyroster_manager.util.Constants.Companion.TAPSELL_KEY
 import ir.tapsell.plus.TapsellPlus
 import ir.tapsell.plus.TapsellPlusInitListener
 import ir.tapsell.plus.model.AdNetworkError
@@ -51,7 +52,7 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
     private lateinit var database: WarrantyRosterDatabase
     private lateinit var warranty: Warranty
     private val warrantiesCollectionRef =
-        Firebase.firestore.collection(Constants.COLLECTION_WARRANTIES)
+        Firebase.firestore.collection(COLLECTION_WARRANTIES)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -146,11 +147,11 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
         val dateFormat = SimpleDateFormat("yyyy-M-dd")
         val decimalFormat = DecimalFormat("00")
 
-        dateFormat.parse(warranty.startingDate)?.let {
+        dateFormat.parse(warranty.startingDate!!)?.let {
             startingCalendar.time = it
         }
 
-        dateFormat.parse(warranty.expiryDate)?.let {
+        dateFormat.parse(warranty.expiryDate!!)?.let {
             expiryCalendar.time = it
         }
 
@@ -195,12 +196,12 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
         }
 
         binding.ivIcon.load(
-            database.getCategoryDao().getCategoryById(warranty.categoryId).icon, imageLoader
+            database.getCategoryDao().getCategoryById(warranty.categoryId!!).icon, imageLoader
         )
     }
 
     private fun adInit() = TapsellPlus.initialize(
-        requireContext(), Constants.TAPSELL_KEY, object : TapsellPlusInitListener {
+        requireContext(), TAPSELL_KEY, object : TapsellPlusInitListener {
             override fun onInitializeSuccess(adNetworks: AdNetworks?) {
                 Log.i("adInit", "onInitializeSuccess: ${adNetworks?.name}")
             }
@@ -260,7 +261,7 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
         showLoadingAnimation()
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                warrantiesCollectionRef.document(warranty.id).delete().await()
+                warrantiesCollectionRef.document(warranty.id!!).delete().await()
                 Log.i("deleteWarranty", "${warranty.id} successfully deleted.")
                 withContext(Dispatchers.Main) {
                     hideLoadingAnimation()

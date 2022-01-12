@@ -2,8 +2,8 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
-    //id 'androidx.navigation.safeargs.kotlin' TODO uncomment after moving to kotlin
-    id 'androidx.navigation.safeargs' //TODO remove after moving to kotlin
+    id 'kotlin-parcelize'
+    id 'androidx.navigation.safeargs.kotlin'
     id 'com.google.gms.google-services'
 }
 
@@ -15,14 +15,17 @@ android {
         applicationId "com.xeniac.warrantyroster_manager"
         minSdkVersion 21
         targetSdkVersion 32
-        versionCode 1
-        versionName "1.1.1"
+        versionCode 2
+        versionName "1.2.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         javaCompileOptions {
             annotationProcessorOptions {
-                arguments = ["room.schemaLocation": "$projectDir/src/main/dbschemas".toString()]
+                arguments += [
+                        "room.schemaLocation"  : "$projectDir/src/main/dbschemas".toString(),
+                        "room.incremental"     : "true",
+                        "room.expandProjection": "true"]
             }
         }
     }
@@ -71,7 +74,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth-ktx'
     implementation 'com.google.firebase:firebase-firestore-ktx'
     implementation 'com.google.firebase:firebase-storage-ktx'
-    implementation 'com.google.android.gms:play-services-auth:20.0.0'
+    implementation 'com.google.android.gms:play-services-auth:20.0.1'
 
     //Navigation Component
     implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
@@ -79,9 +82,8 @@ dependencies {
 
     //Room Library
     implementation 'androidx.room:room-runtime:2.4.0'
-    kapt 'androidx.room:room-compiler:2.4.0'
     implementation 'androidx.room:room-ktx:2.4.0'
-    annotationProcessor 'androidx.room:room-compiler:2.4.0' //TODO remove after moving to kotlin
+    kapt 'androidx.room:room-compiler:2.4.0'
 
     //Third Party Libraries
     implementation 'com.airbnb.android:lottie:4.2.2'

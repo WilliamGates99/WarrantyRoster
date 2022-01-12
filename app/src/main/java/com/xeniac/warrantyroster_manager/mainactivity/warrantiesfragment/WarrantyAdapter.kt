@@ -10,13 +10,13 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.ImageLoader
 import coil.decode.SvgDecoder
 import coil.load
-import com.xeniac.warrantyroster_manager.Constants
 import com.xeniac.warrantyroster_manager.R
-import com.xeniac.warrantyroster_manager.database.WarrantyRosterDatabase
+import com.xeniac.warrantyroster_manager.db.WarrantyRosterDatabase
 import com.xeniac.warrantyroster_manager.databinding.ListAdContainerBinding
 import com.xeniac.warrantyroster_manager.databinding.ListWarrantyBinding
 import com.xeniac.warrantyroster_manager.model.ListItemType
 import com.xeniac.warrantyroster_manager.model.Warranty
+import com.xeniac.warrantyroster_manager.util.Constants.Companion.WARRANTIES_NATIVE_ZONE_ID
 import ir.tapsell.plus.AdHolder
 import ir.tapsell.plus.AdRequestCallback
 import ir.tapsell.plus.AdShowListener
@@ -80,13 +80,13 @@ class WarrantyAdapter(
                     .componentRegistry { add(SvgDecoder(mContext)) }.build()
 
                 val categoryTitle = database
-                    .getCategoryDao().getCategoryById(warranty.categoryId).title[titleMapKey]
+                    .getCategoryDao().getCategoryById(warranty.categoryId!!).title[titleMapKey]
                 val categoryIcon = database
                     .getCategoryDao().getCategoryById(warranty.categoryId).icon
 
                 val expiryCalendar = Calendar.getInstance()
                 val dateFormat = SimpleDateFormat("yyyy-M-dd", Locale.getDefault())
-                dateFormat.parse(warranty.expiryDate)?.let { expiryCalendar.time = it }
+                dateFormat.parse(warranty.expiryDate!!)?.let { expiryCalendar.time = it }
                 val daysUntilExpiry = getDaysUntilExpiry(expiryCalendar)
 
                 val expiryDate = "${
@@ -96,7 +96,6 @@ class WarrantyAdapter(
                 } ${getDayWithSuffix(expiryCalendar.get(Calendar.DAY_OF_MONTH))}, " +
                         "${expiryCalendar.get(Calendar.YEAR)}"
 
-//                binding.ivIcon.load(categoryIcon, imageLoader)
                 binding.tvTitle.text = warranty.title
                 binding.tvCategory.text = categoryTitle
                 binding.tvExpiryDate.text = expiryDate
@@ -179,7 +178,7 @@ class WarrantyAdapter(
     }
 
     private fun requestNativeAd(adHolder: AdHolder) {
-        TapsellPlus.requestNativeAd(mActivity, Constants.WARRANTIES_NATIVE_ZONE_ID,
+        TapsellPlus.requestNativeAd(mActivity, WARRANTIES_NATIVE_ZONE_ID,
             object : AdRequestCallback() {
                 override fun response(tapsellPlusAdModel: TapsellPlusAdModel?) {
                     super.response(tapsellPlusAdModel)

@@ -1,9 +1,9 @@
-package com.xeniac.warrantyroster_manager.database
+package com.xeniac.warrantyroster_manager.db
 
 import android.content.Context
 import androidx.room.*
-import com.xeniac.warrantyroster_manager.Constants
 import com.xeniac.warrantyroster_manager.model.Category
+import com.xeniac.warrantyroster_manager.util.Constants.Companion.DB_FILE_NAME_NEW
 
 @Database(entities = [Category::class], exportSchema = true, version = 1)
 @TypeConverters(MapConverter::class)
@@ -23,7 +23,7 @@ abstract class WarrantyRosterDatabase : RoomDatabase() {
         private fun createDatabase(context: Context) =
             Room.databaseBuilder(
                 context.applicationContext,
-                WarrantyRosterDatabase::class.java, Constants.DB_FILE_NAME_NEW
+                WarrantyRosterDatabase::class.java, DB_FILE_NAME_NEW
             ).allowMainThreadQueries().build()
     }
 }

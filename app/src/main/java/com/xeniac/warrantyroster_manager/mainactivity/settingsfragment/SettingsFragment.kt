@@ -21,12 +21,20 @@ import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_INDEFI
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
-import com.xeniac.warrantyroster_manager.Constants
-import com.xeniac.warrantyroster_manager.NetworkHelper
+import com.xeniac.warrantyroster_manager.util.NetworkHelper
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentSettingsBinding
 import com.xeniac.warrantyroster_manager.landingactivity.LandingActivity
 import com.xeniac.warrantyroster_manager.mainactivity.MainActivity
+import com.xeniac.warrantyroster_manager.util.Constants.Companion.PREFERENCE_COUNTRY_KEY
+import com.xeniac.warrantyroster_manager.util.Constants.Companion.PREFERENCE_IS_LOGGED_IN_KEY
+import com.xeniac.warrantyroster_manager.util.Constants.Companion.PREFERENCE_LANGUAGE_KEY
+import com.xeniac.warrantyroster_manager.util.Constants.Companion.PREFERENCE_LOGIN
+import com.xeniac.warrantyroster_manager.util.Constants.Companion.PREFERENCE_SETTINGS
+import com.xeniac.warrantyroster_manager.util.Constants.Companion.PREFERENCE_THEME_KEY
+import com.xeniac.warrantyroster_manager.util.Constants.Companion.SETTINGS_NATIVE_ZONE_ID
+import com.xeniac.warrantyroster_manager.util.Constants.Companion.TAPSELL_KEY
+import com.xeniac.warrantyroster_manager.util.Constants.Companion.URL_PRIVACY_POLICY
 import ir.tapsell.plus.*
 import ir.tapsell.plus.model.AdNetworkError
 import ir.tapsell.plus.model.AdNetworks
@@ -82,11 +90,11 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
     private fun getCurrentSettings() {
         settingsPrefs = requireContext()
-            .getSharedPreferences(Constants.PREFERENCE_SETTINGS, Context.MODE_PRIVATE)
+            .getSharedPreferences(PREFERENCE_SETTINGS, Context.MODE_PRIVATE)
         currentLanguage = settingsPrefs
-            .getString(Constants.PREFERENCE_LANGUAGE_KEY, "en").toString()
-        currentCountry = settingsPrefs.getString(Constants.PREFERENCE_COUNTRY_KEY, "US").toString()
-        currentTheme = settingsPrefs.getInt(Constants.PREFERENCE_THEME_KEY, 0)
+            .getString(PREFERENCE_LANGUAGE_KEY, "en").toString()
+        currentCountry = settingsPrefs.getString(PREFERENCE_COUNTRY_KEY, "US").toString()
+        currentTheme = settingsPrefs.getInt(PREFERENCE_THEME_KEY, 0)
     }
 
     private fun getAccountDetails() = CoroutineScope(Dispatchers.IO).launch {
@@ -264,21 +272,21 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                 when (i) {
                     0 -> {
                         if (AppCompatDelegate.getDefaultNightMode() != AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM) {
-                            settingsPrefs.edit().putInt(Constants.PREFERENCE_THEME_KEY, i)
+                            settingsPrefs.edit().putInt(PREFERENCE_THEME_KEY, i)
                                 .apply()
                             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
                         }
                     }
                     1 -> {
                         if (AppCompatDelegate.getDefaultNightMode() != AppCompatDelegate.MODE_NIGHT_NO) {
-                            settingsPrefs.edit().putInt(Constants.PREFERENCE_THEME_KEY, i)
+                            settingsPrefs.edit().putInt(PREFERENCE_THEME_KEY, i)
                                 .apply()
                             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
                         }
                     }
                     2 -> {
                         if (AppCompatDelegate.getDefaultNightMode() != AppCompatDelegate.MODE_NIGHT_YES) {
-                            settingsPrefs.edit().putInt(Constants.PREFERENCE_THEME_KEY, i)
+                            settingsPrefs.edit().putInt(PREFERENCE_THEME_KEY, i)
                                 .apply()
                             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
                         }
@@ -293,7 +301,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
     private fun privacyPolicyOnClick() =
         binding.clSettingsPrivacyPolicy.setOnClickListener {
-            Intent(Intent.ACTION_VIEW, Uri.parse(Constants.URL_PRIVACY_POLICY)).apply {
+            Intent(Intent.ACTION_VIEW, Uri.parse(URL_PRIVACY_POLICY)).apply {
                 this.resolveActivity(requireContext().packageManager)?.let {
                     startActivity(this)
                 } ?: Snackbar.make(
@@ -314,9 +322,9 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             Log.i("logout", "${currentUser?.email} successfully logged out.")
 
             requireContext().getSharedPreferences(
-                Constants.PREFERENCE_LOGIN, Context.MODE_PRIVATE
+                PREFERENCE_LOGIN, Context.MODE_PRIVATE
             ).edit().apply {
-                remove(Constants.PREFERENCE_IS_LOGGED_IN_KEY)
+                remove(PREFERENCE_IS_LOGGED_IN_KEY)
                 apply()
             }
 
@@ -338,7 +346,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         binding.btnAccountVerification.visibility = VISIBLE
     }
 
-    private fun adInit() = TapsellPlus.initialize(requireContext(), Constants.TAPSELL_KEY,
+    private fun adInit() = TapsellPlus.initialize(requireContext(), TAPSELL_KEY,
         object : TapsellPlusInitListener {
             override fun onInitializeSuccess(adNetworks: AdNetworks?) {
                 Log.i("adInit", "onInitializeSuccess: ${adNetworks?.name}")
@@ -361,7 +369,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
     private fun requestNativeAd(adHolder: AdHolder) {
         TapsellPlus.requestNativeAd(requireActivity(),
-            Constants.SETTINGS_NATIVE_ZONE_ID, object : AdRequestCallback() {
+            SETTINGS_NATIVE_ZONE_ID, object : AdRequestCallback() {
                 override fun response(tapsellPlusAdModel: TapsellPlusAdModel?) {
                     super.response(tapsellPlusAdModel)
                     Log.i("requestNativeAd", "response: ${tapsellPlusAdModel.toString()}")
