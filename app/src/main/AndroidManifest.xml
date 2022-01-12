@@ -7,7 +7,7 @@
 
     <!--TODO change backup attributes to true before release-->
     <application
-        android:name="SubApplication"
+        android:name=".SubApplication"
         android:allowBackup="false"
         android:fullBackupContent="false"
         android:icon="@mipmap/ic_launcher"
