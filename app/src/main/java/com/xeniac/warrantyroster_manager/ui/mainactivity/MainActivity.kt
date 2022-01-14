@@ -1,4 +1,4 @@
-package com.xeniac.warrantyroster_manager.mainactivity
+package com.xeniac.warrantyroster_manager.ui.mainactivity
 
 import android.os.Bundle
 import android.util.Log

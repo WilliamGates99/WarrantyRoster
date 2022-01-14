@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/warrantiesFragment"
-        android:name="com.xeniac.warrantyroster_manager.mainactivity.warrantiesfragment.WarrantiesFragment"
+        android:name="com.xeniac.warrantyroster_manager.ui.mainactivity.fragments.WarrantiesFragment"
         android:label="WarrantiesFragment"
         tools:layout="@layout/fragment_warranties">
         <action
@@ -21,7 +21,7 @@
 
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.xeniac.warrantyroster_manager.mainactivity.settingsfragment.SettingsFragment"
+        android:name="com.xeniac.warrantyroster_manager.ui.mainactivity.fragments.SettingsFragment"
         android:label="SettingsFragment"
         tools:layout="@layout/fragment_settings">
         <action
@@ -42,7 +42,7 @@
 
     <fragment
         android:id="@+id/addWarrantyFragment"
-        android:name="com.xeniac.warrantyroster_manager.mainactivity.addwarrantyfragment.AddWarrantyFragment"
+        android:name="com.xeniac.warrantyroster_manager.ui.mainactivity.fragments.AddWarrantyFragment"
         android:label="AddWarrantyFragment"
         tools:layout="@layout/fragment_add_warranty">
         <action
@@ -66,12 +66,12 @@
 
     <fragment
         android:id="@+id/warrantyDetailsFragment"
-        android:name="com.xeniac.warrantyroster_manager.mainactivity.warrantydetailsfragment.WarrantyDetailsFragment"
+        android:name="com.xeniac.warrantyroster_manager.ui.mainactivity.fragments.WarrantyDetailsFragment"
         android:label="WarrantyDetailsFragment"
         tools:layout="@layout/fragment_warranty_details">
         <argument
             android:name="warranty"
-            app:argType="com.xeniac.warrantyroster_manager.model.Warranty"
+            app:argType="com.xeniac.warrantyroster_manager.models.Warranty"
             app:nullable="false" />
         <argument
             android:name="daysUntilExpiry"
@@ -88,12 +88,12 @@
 
     <fragment
         android:id="@+id/editWarrantyFragment"
-        android:name="com.xeniac.warrantyroster_manager.mainactivity.editwarrantyfragment.EditWarrantyFragment"
+        android:name="com.xeniac.warrantyroster_manager.ui.mainactivity.fragments.EditWarrantyFragment"
         android:label="EditWarrantyFragment"
         tools:layout="@layout/fragment_edit_warranty">
         <argument
             android:name="warranty"
-            app:argType="com.xeniac.warrantyroster_manager.model.Warranty"
+            app:argType="com.xeniac.warrantyroster_manager.models.Warranty"
             app:nullable="false" />
         <action
             android:id="@+id/action_editWarrantyFragment_to_warrantyDetailsFragment"
@@ -107,13 +107,13 @@
 
     <fragment
         android:id="@+id/changeEmailFragment"
-        android:name="com.xeniac.warrantyroster_manager.mainactivity.changeemailfragment.ChangeEmailFragment"
+        android:name="com.xeniac.warrantyroster_manager.ui.mainactivity.fragments.ChangeEmailFragment"
         android:label="ChangeEmailFragment"
         tools:layout="@layout/fragment_change_email" />
 
     <fragment
         android:id="@+id/changePasswordFragment"
-        android:name="com.xeniac.warrantyroster_manager.mainactivity.changepasswordfragment.ChangePasswordFragment"
+        android:name="com.xeniac.warrantyroster_manager.ui.mainactivity.fragments.ChangePasswordFragment"
         android:label="ChangePasswordFragment"
         tools:layout="@layout/fragment_change_password" />
 

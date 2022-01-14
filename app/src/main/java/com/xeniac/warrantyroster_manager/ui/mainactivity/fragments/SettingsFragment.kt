@@ -1,4 +1,4 @@
-package com.xeniac.warrantyroster_manager.mainactivity.settingsfragment
+package com.xeniac.warrantyroster_manager.ui.mainactivity.fragments
 
 import android.content.Context
 import android.content.Intent
@@ -24,8 +24,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.xeniac.warrantyroster_manager.util.NetworkHelper
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentSettingsBinding
-import com.xeniac.warrantyroster_manager.landingactivity.LandingActivity
-import com.xeniac.warrantyroster_manager.mainactivity.MainActivity
+import com.xeniac.warrantyroster_manager.ui.landingactivity.LandingActivity
+import com.xeniac.warrantyroster_manager.ui.mainactivity.MainActivity
 import com.xeniac.warrantyroster_manager.util.Constants.Companion.PREFERENCE_COUNTRY_KEY
 import com.xeniac.warrantyroster_manager.util.Constants.Companion.PREFERENCE_IS_LOGGED_IN_KEY
 import com.xeniac.warrantyroster_manager.util.Constants.Companion.PREFERENCE_LANGUAGE_KEY

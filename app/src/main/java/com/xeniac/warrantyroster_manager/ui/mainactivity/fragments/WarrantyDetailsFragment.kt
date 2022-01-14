@@ -1,4 +1,4 @@
-package com.xeniac.warrantyroster_manager.mainactivity.warrantydetailsfragment
+package com.xeniac.warrantyroster_manager.ui.mainactivity.fragments
 
 import android.os.Bundle
 import android.util.Log
@@ -24,10 +24,10 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.xeniac.warrantyroster_manager.util.NetworkHelper
 import com.xeniac.warrantyroster_manager.R
-import com.xeniac.warrantyroster_manager.db.WarrantyRosterDatabase
 import com.xeniac.warrantyroster_manager.databinding.FragmentWarrantyDetailsBinding
-import com.xeniac.warrantyroster_manager.mainactivity.MainActivity
-import com.xeniac.warrantyroster_manager.model.Warranty
+import com.xeniac.warrantyroster_manager.db.WarrantyRosterDatabase
+import com.xeniac.warrantyroster_manager.ui.mainactivity.MainActivity
+import com.xeniac.warrantyroster_manager.models.Warranty
 import com.xeniac.warrantyroster_manager.util.Constants.Companion.COLLECTION_WARRANTIES
 import com.xeniac.warrantyroster_manager.util.Constants.Companion.TAPSELL_KEY
 import ir.tapsell.plus.TapsellPlus
@@ -95,109 +95,114 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
         setWarrantyDetails(daysUntilExpiry)
     }
 
-    private fun setWarrantyDetails(daysUntilExpiry: Long) {
-        binding.toolbar.title = warranty.title
+    private fun setWarrantyDetails(daysUntilExpiry: Long) = CoroutineScope(Dispatchers.IO).launch {
+        try {
+            val category = database.getCategoryDao().getCategoryById(warranty.categoryId!!)
 
-        val imageLoader = ImageLoader.Builder(requireContext())
-            .componentRegistry { add(SvgDecoder(requireContext())) }.build()
+            withContext(Dispatchers.Main) {
+                binding.toolbar.title = warranty.title
 
-        if (warranty.brand != null) {
-            binding.tvBrand.text = warranty.brand
-        } else {
-            binding.tvBrand.setTextColor(
-                ContextCompat.getColor(requireContext(), R.color.grayDark)
-            )
-            binding.tvBrand.text =
-                requireContext().getString(R.string.warranty_details_empty_device)
-        }
+                if (warranty.brand != null) {
+                    binding.tvBrand.text = warranty.brand
+                } else {
+                    binding.tvBrand.setTextColor(
+                        ContextCompat.getColor(requireContext(), R.color.grayDark)
+                    )
+                    binding.tvBrand.text =
+                        requireContext().getString(R.string.warranty_details_empty_device)
+                }
 
-        if (warranty.model != null) {
-            binding.tvModel.text = warranty.model
-        } else {
-            binding.tvModel.setTextColor(
-                ContextCompat.getColor(requireContext(), R.color.grayDark)
-            )
-            binding.tvModel.text =
-                requireContext().getString(R.string.warranty_details_empty_device)
-        }
+                if (warranty.model != null) {
+                    binding.tvModel.text = warranty.model
+                } else {
+                    binding.tvModel.setTextColor(
+                        ContextCompat.getColor(requireContext(), R.color.grayDark)
+                    )
+                    binding.tvModel.text =
+                        requireContext().getString(R.string.warranty_details_empty_device)
+                }
 
-        if (warranty.serialNumber != null) {
-            binding.tvSerial.text = warranty.serialNumber
-        } else {
-            binding.tvSerial.setTextColor(
-                ContextCompat.getColor(requireContext(), R.color.grayDark)
-            )
-            binding.tvSerial.text =
-                requireContext().getString(R.string.warranty_details_empty_device)
-        }
+                if (warranty.serialNumber != null) {
+                    binding.tvSerial.text = warranty.serialNumber
+                } else {
+                    binding.tvSerial.setTextColor(
+                        ContextCompat.getColor(requireContext(), R.color.grayDark)
+                    )
+                    binding.tvSerial.text =
+                        requireContext().getString(R.string.warranty_details_empty_device)
+                }
 
-        if (warranty.description != null) {
-            binding.tvDescription.text = warranty.description
-        } else {
-            binding.tvDescription.gravity = Gravity.CENTER
-            binding.tvDescription.setTextColor(
-                ContextCompat.getColor(requireContext(), R.color.grayDark)
-            )
-            binding.tvDescription.text =
-                requireContext().getString(R.string.warranty_details_empty_description)
-        }
+                if (warranty.description != null) {
+                    binding.tvDescription.text = warranty.description
+                } else {
+                    binding.tvDescription.gravity = Gravity.CENTER
+                    binding.tvDescription.setTextColor(
+                        ContextCompat.getColor(requireContext(), R.color.grayDark)
+                    )
+                    binding.tvDescription.text =
+                        requireContext().getString(R.string.warranty_details_empty_description)
+                }
 
-        val startingCalendar = Calendar.getInstance()
-        val expiryCalendar = Calendar.getInstance()
-        val dateFormat = SimpleDateFormat("yyyy-M-dd")
-        val decimalFormat = DecimalFormat("00")
+                val startingCalendar = Calendar.getInstance()
+                val expiryCalendar = Calendar.getInstance()
+                val dateFormat = SimpleDateFormat("yyyy-M-dd")
+                val decimalFormat = DecimalFormat("00")
 
-        dateFormat.parse(warranty.startingDate!!)?.let {
-            startingCalendar.time = it
-        }
+                dateFormat.parse(warranty.startingDate!!)?.let {
+                    startingCalendar.time = it
+                }
 
-        dateFormat.parse(warranty.expiryDate!!)?.let {
-            expiryCalendar.time = it
-        }
+                dateFormat.parse(warranty.expiryDate!!)?.let {
+                    expiryCalendar.time = it
+                }
 
-        binding.tvDateStarting.text =
-            "${decimalFormat.format((startingCalendar.get(Calendar.MONTH)) + 1)}/" +
-                    "${decimalFormat.format(startingCalendar.get(Calendar.DAY_OF_MONTH))}/" +
-                    "${startingCalendar.get(Calendar.YEAR)}"
+                binding.tvDateStarting.text =
+                    "${decimalFormat.format((startingCalendar.get(Calendar.MONTH)) + 1)}/" +
+                            "${decimalFormat.format(startingCalendar.get(Calendar.DAY_OF_MONTH))}/" +
+                            "${startingCalendar.get(Calendar.YEAR)}"
 
-        binding.tvDateExpiry.text =
-            "${decimalFormat.format((expiryCalendar.get(Calendar.MONTH)) + 1)}/" +
-                    "${decimalFormat.format(expiryCalendar.get(Calendar.DAY_OF_MONTH))}/" +
-                    "${expiryCalendar.get(Calendar.YEAR)}"
+                binding.tvDateExpiry.text =
+                    "${decimalFormat.format((expiryCalendar.get(Calendar.MONTH)) + 1)}/" +
+                            "${decimalFormat.format(expiryCalendar.get(Calendar.DAY_OF_MONTH))}/" +
+                            "${expiryCalendar.get(Calendar.YEAR)}"
 
-        when {
-            daysUntilExpiry < 0 -> {
-                binding.tvStatus.text =
-                    requireContext().getString(R.string.warranty_details_status_expired)
-                binding.tvStatus.setTextColor(
-                    ContextCompat.getColor(requireContext(), R.color.red)
-                )
-                binding.tvStatus.backgroundTintList =
-                    ContextCompat.getColorStateList(requireContext(), R.color.red20)
+                when {
+                    daysUntilExpiry < 0 -> {
+                        binding.tvStatus.text =
+                            requireContext().getString(R.string.warranty_details_status_expired)
+                        binding.tvStatus.setTextColor(
+                            ContextCompat.getColor(requireContext(), R.color.red)
+                        )
+                        binding.tvStatus.backgroundTintList =
+                            ContextCompat.getColorStateList(requireContext(), R.color.red20)
+                    }
+                    daysUntilExpiry <= 30 -> {
+                        binding.tvStatus.text =
+                            requireContext().getString(R.string.warranty_details_status_soon)
+                        binding.tvStatus.setTextColor(
+                            ContextCompat.getColor(requireContext(), R.color.orange)
+                        )
+                        binding.tvStatus.backgroundTintList =
+                            ContextCompat.getColorStateList(requireContext(), R.color.orange20)
+                    }
+                    else -> {
+                        binding.tvStatus.text =
+                            requireContext().getString(R.string.warranty_details_status_valid)
+                        binding.tvStatus.setTextColor(
+                            ContextCompat.getColor(requireContext(), R.color.green)
+                        )
+                        binding.tvStatus.backgroundTintList =
+                            ContextCompat.getColorStateList(requireContext(), R.color.green20)
+                    }
+                }
+
+                val imageLoader = ImageLoader.Builder(requireContext())
+                    .componentRegistry { add(SvgDecoder(requireContext())) }.build()
+                binding.ivIcon.load(category.icon, imageLoader)
             }
-            daysUntilExpiry <= 30 -> {
-                binding.tvStatus.text =
-                    requireContext().getString(R.string.warranty_details_status_soon)
-                binding.tvStatus.setTextColor(
-                    ContextCompat.getColor(requireContext(), R.color.orange)
-                )
-                binding.tvStatus.backgroundTintList =
-                    ContextCompat.getColorStateList(requireContext(), R.color.orange20)
-            }
-            else -> {
-                binding.tvStatus.text =
-                    requireContext().getString(R.string.warranty_details_status_valid)
-                binding.tvStatus.setTextColor(
-                    ContextCompat.getColor(requireContext(), R.color.green)
-                )
-                binding.tvStatus.backgroundTintList =
-                    ContextCompat.getColorStateList(requireContext(), R.color.green20)
-            }
+        } catch (e: Exception) {
+            Log.e("setWarrantyDetails", "Exception: ${e.message}")
         }
-
-        binding.ivIcon.load(
-            database.getCategoryDao().getCategoryById(warranty.categoryId!!).icon, imageLoader
-        )
     }
 
     private fun adInit() = TapsellPlus.initialize(

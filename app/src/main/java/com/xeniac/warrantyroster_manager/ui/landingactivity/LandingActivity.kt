@@ -1,4 +1,4 @@
-package com.xeniac.warrantyroster_manager.landingactivity
+package com.xeniac.warrantyroster_manager.ui.landingactivity
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,7 +7,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.fragment.NavHostFragment
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.ActivityLandingBinding
-import com.xeniac.warrantyroster_manager.mainactivity.MainActivity
+import com.xeniac.warrantyroster_manager.ui.mainactivity.MainActivity
 import com.xeniac.warrantyroster_manager.util.Constants.Companion.PREFERENCE_IS_LOGGED_IN_KEY
 import com.xeniac.warrantyroster_manager.util.Constants.Companion.PREFERENCE_LOGIN
 import com.xeniac.warrantyroster_manager.util.LocaleModifier

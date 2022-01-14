@@ -1,4 +1,4 @@
-package com.xeniac.warrantyroster_manager.mainactivity.changeemailfragment
+package com.xeniac.warrantyroster_manager.ui.mainactivity.fragments
 
 import android.content.Context
 import android.os.Bundle
@@ -22,7 +22,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.xeniac.warrantyroster_manager.util.NetworkHelper
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentChangeEmailBinding
-import com.xeniac.warrantyroster_manager.mainactivity.MainActivity
+import com.xeniac.warrantyroster_manager.ui.mainactivity.MainActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

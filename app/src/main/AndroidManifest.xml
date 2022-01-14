@@ -16,7 +16,7 @@
         android:supportsRtl="false"
         android:theme="@style/Theme.WarrantyRoster">
         <activity
-            android:name=".landingactivity.LandingActivity"
+            android:name=".ui.landingactivity.LandingActivity"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.WarrantyRoster.Splash">
@@ -26,7 +26,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".mainactivity.MainActivity"
+            android:name=".ui.mainactivity.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.WarrantyRoster"
             android:windowSoftInputMode="adjustPan|stateHidden" />

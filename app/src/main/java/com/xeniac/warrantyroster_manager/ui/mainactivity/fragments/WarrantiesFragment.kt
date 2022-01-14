@@ -1,4 +1,4 @@
-package com.xeniac.warrantyroster_manager.mainactivity.warrantiesfragment
+package com.xeniac.warrantyroster_manager.ui.mainactivity.fragments
 
 import android.content.Context
 import android.os.Bundle
@@ -15,12 +15,14 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.xeniac.warrantyroster_manager.R
-import com.xeniac.warrantyroster_manager.db.WarrantyRosterDatabase
+import com.xeniac.warrantyroster_manager.ui.mainactivity.adapters.WarrantyAdapter
+import com.xeniac.warrantyroster_manager.ui.mainactivity.adapters.WarrantyListClickInterface
 import com.xeniac.warrantyroster_manager.databinding.FragmentWarrantiesBinding
-import com.xeniac.warrantyroster_manager.mainactivity.MainActivity
-import com.xeniac.warrantyroster_manager.model.Category
-import com.xeniac.warrantyroster_manager.model.ListItemType
-import com.xeniac.warrantyroster_manager.model.Warranty
+import com.xeniac.warrantyroster_manager.db.WarrantyRosterDatabase
+import com.xeniac.warrantyroster_manager.models.Category
+import com.xeniac.warrantyroster_manager.ui.mainactivity.MainActivity
+import com.xeniac.warrantyroster_manager.models.ListItemType
+import com.xeniac.warrantyroster_manager.models.Warranty
 import com.xeniac.warrantyroster_manager.util.Constants.Companion.CATEGORIES_ICON
 import com.xeniac.warrantyroster_manager.util.Constants.Companion.CATEGORIES_TITLE
 import com.xeniac.warrantyroster_manager.util.Constants.Companion.COLLECTION_CATEGORIES
@@ -258,36 +260,38 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
         return "${currentLanguage}-${currentCountry}"
     }
 
-//    private fun searchWarrantiesList() {
-//        binding.svWarranties.setVisibility(VISIBLE);
-//
-//        binding.svWarranties.setOnQueryTextFocusChangeListener((view, hasFocus) -> {
-//            if (hasFocus) {
-//                warrantiesBinding.toolbarWarranties.setTitle(null);
-//            } else {
-//                warrantiesBinding.toolbarWarranties.setTitle(
-//                    context.getResources().getString(R.string.warranties_text_title)
-//                );
-//            }
-//        });
-//
-//        warrantiesBinding.svWarranties.setOnQueryTextListener(new SearchView . OnQueryTextListener () {
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                if (!TextUtils.isEmpty(query)) {
-//                    Toast.makeText(context, "onQueryTextSubmit", Toast.LENGTH_SHORT).show();
-//                    warrantiesBinding.svWarranties.onActionViewCollapsed();
-//                }
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-//                if (!TextUtils.isEmpty(newText)) {
-//                    Toast.makeText(context, "Input: " + newText, Toast.LENGTH_SHORT).show();
-//                }
-//                return false;
-//            }
-//        });
-//    }
+    /*
+    private fun searchWarrantiesList() {
+        binding.svWarranties.setVisibility(VISIBLE);
+
+        binding.svWarranties.setOnQueryTextFocusChangeListener((view, hasFocus) -> {
+            if (hasFocus) {
+                warrantiesBinding.toolbarWarranties.setTitle(null);
+            } else {
+                warrantiesBinding.toolbarWarranties.setTitle(
+                    context.getResources().getString(R.string.warranties_text_title)
+                );
+            }
+        });
+
+        warrantiesBinding.svWarranties.setOnQueryTextListener(new SearchView . OnQueryTextListener () {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                if (!TextUtils.isEmpty(query)) {
+                    Toast.makeText(context, "onQueryTextSubmit", Toast.LENGTH_SHORT).show();
+                    warrantiesBinding.svWarranties.onActionViewCollapsed();
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (!TextUtils.isEmpty(newText)) {
+                    Toast.makeText(context, "Input: " + newText, Toast.LENGTH_SHORT).show();
+                }
+                return false;
+            }
+        });
+    }
+     */
 }

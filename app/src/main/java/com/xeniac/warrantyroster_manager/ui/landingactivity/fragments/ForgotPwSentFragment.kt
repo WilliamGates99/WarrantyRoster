@@ -1,4 +1,4 @@
-package com.xeniac.warrantyroster_manager.landingactivity.forgotpasswordfragment
+package com.xeniac.warrantyroster_manager.ui.landingactivity.fragments
 
 import android.os.Bundle
 import android.os.CountDownTimer

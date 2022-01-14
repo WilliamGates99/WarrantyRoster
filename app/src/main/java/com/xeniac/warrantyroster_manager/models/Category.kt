@@ -1,4 +1,4 @@
-package com.xeniac.warrantyroster_manager.model
+package com.xeniac.warrantyroster_manager.models
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

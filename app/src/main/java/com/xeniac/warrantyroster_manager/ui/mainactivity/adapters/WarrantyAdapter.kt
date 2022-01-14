@@ -1,4 +1,4 @@
-package com.xeniac.warrantyroster_manager.mainactivity.warrantiesfragment
+package com.xeniac.warrantyroster_manager.ui.mainactivity.adapters
 
 import android.app.Activity
 import android.content.Context
@@ -14,14 +14,18 @@ import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.db.WarrantyRosterDatabase
 import com.xeniac.warrantyroster_manager.databinding.ListAdContainerBinding
 import com.xeniac.warrantyroster_manager.databinding.ListWarrantyBinding
-import com.xeniac.warrantyroster_manager.model.ListItemType
-import com.xeniac.warrantyroster_manager.model.Warranty
+import com.xeniac.warrantyroster_manager.models.ListItemType
+import com.xeniac.warrantyroster_manager.models.Warranty
 import com.xeniac.warrantyroster_manager.util.Constants.Companion.WARRANTIES_NATIVE_ZONE_ID
 import ir.tapsell.plus.AdHolder
 import ir.tapsell.plus.AdRequestCallback
 import ir.tapsell.plus.AdShowListener
 import ir.tapsell.plus.TapsellPlus
 import ir.tapsell.plus.model.TapsellPlusAdModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -63,7 +67,7 @@ class WarrantyAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (getItemViewType(position) == VIEW_TYPE_WARRANTY) {
-            (holder as WarrantyViewHolder).bindView(mContext, warrantyList[position])
+            (holder as WarrantyViewHolder).bindView(warrantyList[position])
         } else {
             (holder as AdViewHolder).bindView()
         }
@@ -74,67 +78,70 @@ class WarrantyAdapter(
     inner class WarrantyViewHolder(val binding: ListWarrantyBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bindView(mContext: Context, warranty: Warranty) {
+        fun bindView(warranty: Warranty) = CoroutineScope(Dispatchers.IO).launch {
             try {
-                val imageLoader = ImageLoader.Builder(mContext)
-                    .componentRegistry { add(SvgDecoder(mContext)) }.build()
-
-                val categoryTitle = database
-                    .getCategoryDao().getCategoryById(warranty.categoryId!!).title[titleMapKey]
-                val categoryIcon = database
-                    .getCategoryDao().getCategoryById(warranty.categoryId).icon
-
-                val expiryCalendar = Calendar.getInstance()
-                val dateFormat = SimpleDateFormat("yyyy-M-dd", Locale.getDefault())
-                dateFormat.parse(warranty.expiryDate!!)?.let { expiryCalendar.time = it }
-                val daysUntilExpiry = getDaysUntilExpiry(expiryCalendar)
-
-                val expiryDate = "${
-                    expiryCalendar.getDisplayName(
-                        Calendar.MONTH, Calendar.LONG, Locale.getDefault()
-                    )
-                } ${getDayWithSuffix(expiryCalendar.get(Calendar.DAY_OF_MONTH))}, " +
-                        "${expiryCalendar.get(Calendar.YEAR)}"
-
-                binding.tvTitle.text = warranty.title
-                binding.tvCategory.text = categoryTitle
-                binding.tvExpiryDate.text = expiryDate
-
-                when {
-                    daysUntilExpiry < 0 -> {
-                        binding.tvStatus.text =
-                            mContext.getString(R.string.warranties_list_status_expired)
-                        binding.tvStatus.setTextColor(
-                            ContextCompat.getColor(mContext, R.color.red)
-                        )
-                        binding.flStatus.backgroundTintList =
-                            ContextCompat.getColorStateList(mContext, R.color.red)
-                    }
-                    daysUntilExpiry <= 30 -> {
-                        binding.tvStatus.text =
-                            mContext.getString(R.string.warranties_list_status_soon)
-                        binding.tvStatus.setTextColor(
-                            ContextCompat.getColor(mContext, R.color.orange)
-                        )
-                        binding.flStatus.backgroundTintList =
-                            ContextCompat.getColorStateList(mContext, R.color.orange)
-                    }
-                    else -> {
-                        binding.tvStatus.text =
-                            mContext.getString(R.string.warranties_list_status_valid)
-                        binding.tvStatus.setTextColor(
-                            ContextCompat.getColor(mContext, R.color.green)
-                        )
-                        binding.flStatus.backgroundTintList =
-                            ContextCompat.getColorStateList(mContext, R.color.green)
-                    }
+                val category = warranty.categoryId?.let {
+                    database.getCategoryDao().getCategoryById(it)
                 }
 
-                binding.cvWarranty.setOnClickListener {
-                    clickInterface.onItemClick(warranty, daysUntilExpiry)
-                }
+                withContext(Dispatchers.Main) {
+                    val expiryCalendar = Calendar.getInstance()
+                    val dateFormat = SimpleDateFormat("yyyy-M-dd", Locale.getDefault())
+                    dateFormat.parse(warranty.expiryDate!!)?.let { expiryCalendar.time = it }
+                    val daysUntilExpiry = getDaysUntilExpiry(expiryCalendar)
 
-                binding.ivIcon.load(categoryIcon, imageLoader)
+                    val expiryDate = "${
+                        expiryCalendar.getDisplayName(
+                            Calendar.MONTH, Calendar.LONG, Locale.getDefault()
+                        )
+                    } ${getDayWithSuffix(expiryCalendar.get(Calendar.DAY_OF_MONTH))}, " +
+                            "${expiryCalendar.get(Calendar.YEAR)}"
+
+                    binding.tvTitle.text = warranty.title
+                    binding.tvExpiryDate.text = expiryDate
+
+                    when {
+                        daysUntilExpiry < 0 -> {
+                            binding.tvStatus.text =
+                                mContext.getString(R.string.warranties_list_status_expired)
+                            binding.tvStatus.setTextColor(
+                                ContextCompat.getColor(mContext, R.color.red)
+                            )
+                            binding.flStatus.backgroundTintList =
+                                ContextCompat.getColorStateList(mContext, R.color.red)
+                        }
+                        daysUntilExpiry <= 30 -> {
+                            binding.tvStatus.text =
+                                mContext.getString(R.string.warranties_list_status_soon)
+                            binding.tvStatus.setTextColor(
+                                ContextCompat.getColor(mContext, R.color.orange)
+                            )
+                            binding.flStatus.backgroundTintList =
+                                ContextCompat.getColorStateList(mContext, R.color.orange)
+                        }
+                        else -> {
+                            binding.tvStatus.text =
+                                mContext.getString(R.string.warranties_list_status_valid)
+                            binding.tvStatus.setTextColor(
+                                ContextCompat.getColor(mContext, R.color.green)
+                            )
+                            binding.flStatus.backgroundTintList =
+                                ContextCompat.getColorStateList(mContext, R.color.green)
+                        }
+                    }
+
+                    binding.cvWarranty.setOnClickListener {
+                        clickInterface.onItemClick(warranty, daysUntilExpiry)
+                    }
+
+                    category?.let {
+                        val imageLoader = ImageLoader.Builder(mContext)
+                            .componentRegistry { add(SvgDecoder(mContext)) }.build()
+
+                        binding.tvCategory.text = it.title[titleMapKey]
+                        binding.ivIcon.load(it.icon, imageLoader)
+                    }
+                }
             } catch (e: Exception) {
                 Log.e("WarrantyViewHolder", "Exception: ${e.message}")
             }
