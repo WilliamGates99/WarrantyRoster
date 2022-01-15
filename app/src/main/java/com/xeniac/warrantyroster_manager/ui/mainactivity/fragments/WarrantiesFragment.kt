@@ -137,7 +137,7 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
                 }
             }
         } catch (e: Exception) {
-            Log.e("seedCategories", "Exception: " + e.message)
+            Log.e("seedCategories", "Exception: ${e.message}")
         }
     }
 
