@@ -14,7 +14,7 @@ class Constants {
             "phbftfiakptpjbkegafmqmmkdsjcjmkldcahhapfssfftdnbgpqeimkjiitfpcoingqkad"
         const val WARRANTIES_NATIVE_ZONE_ID = "61647159b2c8056d868b66c6"
         const val SETTINGS_NATIVE_ZONE_ID = "616b0d4cb2c8056d868b6a1a"
-        const val DELETE_WARRANTY_Interstitial_ZONE_ID = "6165dea5b2c8056d868b68a9"
+        const val DELETE_WARRANTY_Interstitial_ZONE_ID = "616476f7b2c8056d868b66cb"
 
         //SharedPreference Settings Constants
         const val PREFERENCE_SETTINGS = "preference_settings"
