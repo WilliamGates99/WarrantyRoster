@@ -16,6 +16,7 @@ import androidx.navigation.fragment.navArgs
 import coil.ImageLoader
 import coil.decode.SvgDecoder
 import coil.load
+import coil.request.CachePolicy
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_INDEFINITE
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
@@ -198,7 +199,11 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
 
                 val imageLoader = ImageLoader.Builder(requireContext())
                     .componentRegistry { add(SvgDecoder(requireContext())) }.build()
-                binding.ivIcon.load(category.icon, imageLoader)
+                binding.ivIcon.load(category.icon, imageLoader) {
+                    memoryCachePolicy(CachePolicy.ENABLED)
+                    diskCachePolicy(CachePolicy.ENABLED)
+                    networkCachePolicy(CachePolicy.ENABLED)
+                }
             }
         } catch (e: Exception) {
             Log.e("setWarrantyDetails", "Exception: ${e.message}")

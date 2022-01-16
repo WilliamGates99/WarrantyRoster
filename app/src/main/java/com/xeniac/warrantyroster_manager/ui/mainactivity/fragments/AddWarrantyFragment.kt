@@ -19,6 +19,7 @@ import androidx.navigation.Navigation
 import coil.ImageLoader
 import coil.decode.SvgDecoder
 import coil.load
+import coil.request.CachePolicy
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_INDEFINITE
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
@@ -230,7 +231,11 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
                         selectedCategory?.let {
                             val imageLoader = ImageLoader.Builder(requireContext())
                                 .componentRegistry { add(SvgDecoder(requireContext())) }.build()
-                            binding.ivIconCategory.load(it.icon, imageLoader)
+                            binding.ivIconCategory.load(it.icon, imageLoader) {
+                                memoryCachePolicy(CachePolicy.ENABLED)
+                                diskCachePolicy(CachePolicy.ENABLED)
+                                networkCachePolicy(CachePolicy.ENABLED)
+                            }
                         }
                     }
                 } catch (e: Exception) {
