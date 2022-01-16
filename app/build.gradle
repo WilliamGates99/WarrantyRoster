@@ -99,6 +99,6 @@ dependencies {
     implementation 'io.coil-kt:coil-svg:1.4.0'
 
     //Ads Libraries
-    implementation 'ir.tapsell.plus:tapsell-plus-sdk-android:2.1.5'
+    implementation 'ir.tapsell.plus:tapsell-plus-sdk-android:2.1.6'
     implementation 'com.google.android.gms:play-services-ads:20.5.0'
 }
