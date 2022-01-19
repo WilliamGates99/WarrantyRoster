@@ -27,19 +27,17 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.xeniac.warrantyroster_manager.util.NetworkHelper
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentAddWarrantyBinding
 import com.xeniac.warrantyroster_manager.db.WarrantyRosterDatabase
 import com.xeniac.warrantyroster_manager.ui.mainactivity.MainActivity
 import com.xeniac.warrantyroster_manager.models.Category
 import com.xeniac.warrantyroster_manager.models.WarrantyInput
+import com.xeniac.warrantyroster_manager.util.CategoryHelper.Companion.getCategoryTitleMapKey
 import com.xeniac.warrantyroster_manager.util.Constants.Companion.COLLECTION_WARRANTIES
 import com.xeniac.warrantyroster_manager.util.Constants.Companion.FRAGMENT_TAG_ADD_CALENDAR_EXPIRY
 import com.xeniac.warrantyroster_manager.util.Constants.Companion.FRAGMENT_TAG_ADD_CALENDAR_STARTING
-import com.xeniac.warrantyroster_manager.util.Constants.Companion.PREFERENCE_COUNTRY_KEY
-import com.xeniac.warrantyroster_manager.util.Constants.Companion.PREFERENCE_LANGUAGE_KEY
-import com.xeniac.warrantyroster_manager.util.Constants.Companion.PREFERENCE_SETTINGS
+import com.xeniac.warrantyroster_manager.util.NetworkHelper.Companion.hasInternetConnection
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -207,7 +205,7 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
         try {
             val titlesList = mutableListOf<String>()
             for (category in database.getCategoryDao().getAllCategories()) {
-                titlesList.add(category.title[getCategoryTitleMapKey()].toString())
+                titlesList.add(category.title[getCategoryTitleMapKey(requireContext())].toString())
             }
 
             withContext(Dispatchers.Main) {
@@ -243,16 +241,6 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
                 }
             }
         }
-
-    private fun getCategoryTitleMapKey(): String {
-        val settingsPrefs = requireContext()
-            .getSharedPreferences(PREFERENCE_SETTINGS, Context.MODE_PRIVATE)
-        val currentLanguage = settingsPrefs
-            .getString(PREFERENCE_LANGUAGE_KEY, "en").toString()
-        val currentCountry = settingsPrefs
-            .getString(PREFERENCE_COUNTRY_KEY, "US").toString()
-        return "${currentLanguage}-${currentCountry}"
-    }
 
     private fun startingDatePicker() {
         binding.tiEditDateStarting.inputType = InputType.TYPE_NULL
@@ -355,7 +343,7 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
             .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(binding.root.applicationWindowToken, 0)
 
-        if (NetworkHelper.hasNetworkAccess(requireContext())) {
+        if (hasInternetConnection(requireContext())) {
             getWarrantyInput()
         } else {
             hideLoadingAnimation()

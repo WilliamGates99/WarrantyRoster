@@ -21,7 +21,6 @@ import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_INDEFI
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
-import com.xeniac.warrantyroster_manager.util.NetworkHelper
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentSettingsBinding
 import com.xeniac.warrantyroster_manager.ui.landingactivity.LandingActivity
@@ -35,6 +34,7 @@ import com.xeniac.warrantyroster_manager.util.Constants.Companion.PREFERENCE_THE
 import com.xeniac.warrantyroster_manager.util.Constants.Companion.SETTINGS_NATIVE_ZONE_ID
 import com.xeniac.warrantyroster_manager.util.Constants.Companion.TAPSELL_KEY
 import com.xeniac.warrantyroster_manager.util.Constants.Companion.URL_PRIVACY_POLICY
+import com.xeniac.warrantyroster_manager.util.NetworkHelper.Companion.hasInternetConnection
 import ir.tapsell.plus.*
 import ir.tapsell.plus.model.AdNetworkError
 import ir.tapsell.plus.model.AdNetworks
@@ -108,7 +108,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                     setAccountDetails(email, isVerified)
                 }
 
-                if (NetworkHelper.hasNetworkAccess(requireContext())) {
+                if (hasInternetConnection(requireContext())) {
                     it.reload().await()
                     if (email != it.email || isVerified != it.isEmailVerified) {
                         email = it.email.toString()
@@ -201,7 +201,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     }
 
     private fun sendVerificationEmail() {
-        if (NetworkHelper.hasNetworkAccess(requireContext())) {
+        if (hasInternetConnection(requireContext())) {
             sendVerificationEmailAuth()
         } else {
             hideLoadingAnimation()

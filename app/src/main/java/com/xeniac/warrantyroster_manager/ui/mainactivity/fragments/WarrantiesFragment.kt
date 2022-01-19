@@ -27,11 +27,8 @@ import com.xeniac.warrantyroster_manager.util.Constants.Companion.CATEGORIES_ICO
 import com.xeniac.warrantyroster_manager.util.Constants.Companion.CATEGORIES_TITLE
 import com.xeniac.warrantyroster_manager.util.Constants.Companion.COLLECTION_CATEGORIES
 import com.xeniac.warrantyroster_manager.util.Constants.Companion.COLLECTION_WARRANTIES
-import com.xeniac.warrantyroster_manager.util.Constants.Companion.PREFERENCE_COUNTRY_KEY
 import com.xeniac.warrantyroster_manager.util.Constants.Companion.PREFERENCE_DB_SEED
 import com.xeniac.warrantyroster_manager.util.Constants.Companion.PREFERENCE_EN_US_KEY
-import com.xeniac.warrantyroster_manager.util.Constants.Companion.PREFERENCE_LANGUAGE_KEY
-import com.xeniac.warrantyroster_manager.util.Constants.Companion.PREFERENCE_SETTINGS
 import com.xeniac.warrantyroster_manager.util.Constants.Companion.TAPSELL_KEY
 import com.xeniac.warrantyroster_manager.util.Constants.Companion.WARRANTIES_BRAND
 import com.xeniac.warrantyroster_manager.util.Constants.Companion.WARRANTIES_CATEGORY_ID
@@ -236,7 +233,7 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
 
         val warrantyAdapter = WarrantyAdapter(
             requireActivity(), requireContext(), database,
-            warrantiesList, getCategoryTitleMapKey(), this
+            warrantiesList, this
         )
         binding.rv.adapter = warrantyAdapter
 
@@ -248,16 +245,6 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
         val action = WarrantiesFragmentDirections
             .actionWarrantiesFragmentToWarrantyDetailsFragment(warranty, daysUntilExpiry)
         navController.navigate(action)
-    }
-
-    private fun getCategoryTitleMapKey(): String {
-        val settingsPrefs = requireContext()
-            .getSharedPreferences(PREFERENCE_SETTINGS, Context.MODE_PRIVATE)
-        val currentLanguage = settingsPrefs
-            .getString(PREFERENCE_LANGUAGE_KEY, "en").toString()
-        val currentCountry = settingsPrefs
-            .getString(PREFERENCE_COUNTRY_KEY, "US").toString()
-        return "${currentLanguage}-${currentCountry}"
     }
 
     /*

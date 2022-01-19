@@ -19,10 +19,10 @@ import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
-import com.xeniac.warrantyroster_manager.util.NetworkHelper
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentChangeEmailBinding
 import com.xeniac.warrantyroster_manager.ui.mainactivity.MainActivity
+import com.xeniac.warrantyroster_manager.util.NetworkHelper.Companion.hasInternetConnection
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -130,7 +130,7 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
             .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(binding.root.applicationWindowToken, 0)
 
-        if (NetworkHelper.hasNetworkAccess(requireContext())) {
+        if (hasInternetConnection(requireContext())) {
             getChangeUserEmailInputs()
         } else {
             hideLoadingAnimation()

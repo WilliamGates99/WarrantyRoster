@@ -17,6 +17,7 @@ import com.xeniac.warrantyroster_manager.databinding.ListAdContainerBinding
 import com.xeniac.warrantyroster_manager.databinding.ListWarrantyBinding
 import com.xeniac.warrantyroster_manager.models.ListItemType
 import com.xeniac.warrantyroster_manager.models.Warranty
+import com.xeniac.warrantyroster_manager.util.CategoryHelper.Companion.getCategoryTitleMapKey
 import com.xeniac.warrantyroster_manager.util.Constants.Companion.WARRANTIES_NATIVE_ZONE_ID
 import ir.tapsell.plus.AdHolder
 import ir.tapsell.plus.AdRequestCallback
@@ -36,7 +37,6 @@ class WarrantyAdapter(
     private val mContext: Context,
     private val database: WarrantyRosterDatabase,
     private val warrantyList: List<Warranty>,
-    private val titleMapKey: String,
     private val clickInterface: WarrantyListClickInterface
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -118,7 +118,9 @@ class WarrantyAdapter(
 
                     binding.title = warranty.title
                     binding.expiryDate = expiryDate
-                    binding.categoryTitle = category?.let { it.title[titleMapKey] }
+                    binding.categoryTitle = category?.let {
+                        it.title[getCategoryTitleMapKey(mContext)]
+                    }
                     binding.executePendingBindings()
 
                     binding.cvWarranty.setOnClickListener {
