@@ -1,4 +1,4 @@
-package com.xeniac.warrantyroster_manager.ui.mainactivity
+package com.xeniac.warrantyroster_manager.ui.main
 
 import android.os.Bundle
 import android.util.Log
@@ -10,8 +10,8 @@ import com.google.android.material.shape.CornerFamily.ROUNDED
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.ActivityMainBinding
-import com.xeniac.warrantyroster_manager.util.Constants.Companion.DELETE_WARRANTY_Interstitial_ZONE_ID
-import com.xeniac.warrantyroster_manager.util.LocaleModifier
+import com.xeniac.warrantyroster_manager.utils.Constants.DELETE_WARRANTY_Interstitial_ZONE_ID
+import com.xeniac.warrantyroster_manager.utils.LocaleModifier
 import ir.tapsell.plus.AdRequestCallback
 import ir.tapsell.plus.AdShowListener
 import ir.tapsell.plus.TapsellPlus

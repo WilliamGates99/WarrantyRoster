@@ -1,4 +1,4 @@
-package com.xeniac.warrantyroster_manager.ui.landingactivity.fragments
+package com.xeniac.warrantyroster_manager.ui.landing.fragments
 
 import android.content.Context
 import android.content.Intent
@@ -21,11 +21,11 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentRegisterBinding
-import com.xeniac.warrantyroster_manager.ui.mainactivity.MainActivity
-import com.xeniac.warrantyroster_manager.util.Constants.Companion.PREFERENCE_IS_LOGGED_IN_KEY
-import com.xeniac.warrantyroster_manager.util.Constants.Companion.PREFERENCE_LOGIN
-import com.xeniac.warrantyroster_manager.util.Constants.Companion.URL_PRIVACY_POLICY
-import com.xeniac.warrantyroster_manager.util.NetworkHelper.Companion.hasInternetConnection
+import com.xeniac.warrantyroster_manager.ui.main.MainActivity
+import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_IS_LOGGED_IN_KEY
+import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_LOGIN
+import com.xeniac.warrantyroster_manager.utils.Constants.URL_PRIVACY_POLICY
+import com.xeniac.warrantyroster_manager.utils.NetworkHelper.hasInternetConnection
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

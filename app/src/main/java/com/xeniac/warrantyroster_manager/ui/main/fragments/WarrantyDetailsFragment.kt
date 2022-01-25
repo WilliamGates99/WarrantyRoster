@@ -1,4 +1,4 @@
-package com.xeniac.warrantyroster_manager.ui.mainactivity.fragments
+package com.xeniac.warrantyroster_manager.ui.main.fragments
 
 import android.os.Bundle
 import android.util.Log
@@ -26,11 +26,11 @@ import com.google.firebase.ktx.Firebase
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentWarrantyDetailsBinding
 import com.xeniac.warrantyroster_manager.db.WarrantyRosterDatabase
-import com.xeniac.warrantyroster_manager.ui.mainactivity.MainActivity
+import com.xeniac.warrantyroster_manager.ui.main.MainActivity
 import com.xeniac.warrantyroster_manager.models.Warranty
-import com.xeniac.warrantyroster_manager.util.Constants.Companion.COLLECTION_WARRANTIES
-import com.xeniac.warrantyroster_manager.util.Constants.Companion.TAPSELL_KEY
-import com.xeniac.warrantyroster_manager.util.NetworkHelper.Companion.hasInternetConnection
+import com.xeniac.warrantyroster_manager.utils.Constants.COLLECTION_WARRANTIES
+import com.xeniac.warrantyroster_manager.utils.Constants.TAPSELL_KEY
+import com.xeniac.warrantyroster_manager.utils.NetworkHelper.hasInternetConnection
 import ir.tapsell.plus.TapsellPlus
 import ir.tapsell.plus.TapsellPlusInitListener
 import ir.tapsell.plus.model.AdNetworkError

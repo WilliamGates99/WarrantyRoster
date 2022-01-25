@@ -1,4 +1,4 @@
-package com.xeniac.warrantyroster_manager.ui.mainactivity.fragments
+package com.xeniac.warrantyroster_manager.ui.main.fragments
 
 import android.content.Context
 import android.os.Bundle
@@ -30,14 +30,14 @@ import com.google.firebase.ktx.Firebase
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentAddWarrantyBinding
 import com.xeniac.warrantyroster_manager.db.WarrantyRosterDatabase
-import com.xeniac.warrantyroster_manager.ui.mainactivity.MainActivity
+import com.xeniac.warrantyroster_manager.ui.main.MainActivity
 import com.xeniac.warrantyroster_manager.models.Category
 import com.xeniac.warrantyroster_manager.models.WarrantyInput
-import com.xeniac.warrantyroster_manager.util.CategoryHelper.Companion.getCategoryTitleMapKey
-import com.xeniac.warrantyroster_manager.util.Constants.Companion.COLLECTION_WARRANTIES
-import com.xeniac.warrantyroster_manager.util.Constants.Companion.FRAGMENT_TAG_ADD_CALENDAR_EXPIRY
-import com.xeniac.warrantyroster_manager.util.Constants.Companion.FRAGMENT_TAG_ADD_CALENDAR_STARTING
-import com.xeniac.warrantyroster_manager.util.NetworkHelper.Companion.hasInternetConnection
+import com.xeniac.warrantyroster_manager.utils.CategoryHelper.getCategoryTitleMapKey
+import com.xeniac.warrantyroster_manager.utils.Constants.COLLECTION_WARRANTIES
+import com.xeniac.warrantyroster_manager.utils.Constants.FRAGMENT_TAG_ADD_CALENDAR_EXPIRY
+import com.xeniac.warrantyroster_manager.utils.Constants.FRAGMENT_TAG_ADD_CALENDAR_STARTING
+import com.xeniac.warrantyroster_manager.utils.NetworkHelper.hasInternetConnection
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

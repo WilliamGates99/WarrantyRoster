@@ -1,4 +1,4 @@
-package com.xeniac.warrantyroster_manager.ui.landingactivity.fragments
+package com.xeniac.warrantyroster_manager.ui.landing.fragments
 
 import android.content.Context
 import android.os.Bundle
@@ -21,7 +21,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentForgotPwBinding
-import com.xeniac.warrantyroster_manager.util.NetworkHelper.Companion.hasInternetConnection
+import com.xeniac.warrantyroster_manager.utils.NetworkHelper.hasInternetConnection
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

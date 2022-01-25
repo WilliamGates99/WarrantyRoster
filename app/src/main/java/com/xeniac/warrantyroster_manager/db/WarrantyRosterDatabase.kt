@@ -3,7 +3,7 @@ package com.xeniac.warrantyroster_manager.db
 import android.content.Context
 import androidx.room.*
 import com.xeniac.warrantyroster_manager.models.Category
-import com.xeniac.warrantyroster_manager.util.Constants.Companion.DB_FILE_NAME_NEW
+import com.xeniac.warrantyroster_manager.utils.Constants.DB_FILE_NAME_NEW
 
 @Database(entities = [Category::class], exportSchema = true, version = 1)
 @TypeConverters(MapConverter::class)

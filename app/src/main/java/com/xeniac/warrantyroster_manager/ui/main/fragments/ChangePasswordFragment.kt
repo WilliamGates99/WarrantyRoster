@@ -1,4 +1,4 @@
-package com.xeniac.warrantyroster_manager.ui.mainactivity.fragments
+package com.xeniac.warrantyroster_manager.ui.main.fragments
 
 import android.content.Context
 import android.os.Bundle
@@ -20,8 +20,8 @@ import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentChangePasswordBinding
-import com.xeniac.warrantyroster_manager.ui.mainactivity.MainActivity
-import com.xeniac.warrantyroster_manager.util.NetworkHelper.Companion.hasInternetConnection
+import com.xeniac.warrantyroster_manager.ui.main.MainActivity
+import com.xeniac.warrantyroster_manager.utils.NetworkHelper.hasInternetConnection
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

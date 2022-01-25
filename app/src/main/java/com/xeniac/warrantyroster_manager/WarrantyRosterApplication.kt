@@ -2,13 +2,13 @@ package com.xeniac.warrantyroster_manager
 
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
-import com.xeniac.warrantyroster_manager.util.Constants.Companion.PREFERENCE_COUNTRY_KEY
-import com.xeniac.warrantyroster_manager.util.Constants.Companion.PREFERENCE_LANGUAGE_KEY
-import com.xeniac.warrantyroster_manager.util.Constants.Companion.PREFERENCE_SETTINGS
-import com.xeniac.warrantyroster_manager.util.Constants.Companion.PREFERENCE_THEME_KEY
+import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_COUNTRY_KEY
+import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_LANGUAGE_KEY
+import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_SETTINGS
+import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_THEME_KEY
 import java.util.*
 
-class SubApplication : Application() {
+class WarrantyRosterApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()

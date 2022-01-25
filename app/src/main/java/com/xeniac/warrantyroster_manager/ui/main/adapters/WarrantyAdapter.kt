@@ -1,4 +1,4 @@
-package com.xeniac.warrantyroster_manager.ui.mainactivity.adapters
+package com.xeniac.warrantyroster_manager.ui.main.adapters
 
 import android.app.Activity
 import android.content.Context
@@ -17,8 +17,8 @@ import com.xeniac.warrantyroster_manager.databinding.ListAdContainerBinding
 import com.xeniac.warrantyroster_manager.databinding.ListWarrantyBinding
 import com.xeniac.warrantyroster_manager.models.ListItemType
 import com.xeniac.warrantyroster_manager.models.Warranty
-import com.xeniac.warrantyroster_manager.util.CategoryHelper.Companion.getCategoryTitleMapKey
-import com.xeniac.warrantyroster_manager.util.Constants.Companion.WARRANTIES_NATIVE_ZONE_ID
+import com.xeniac.warrantyroster_manager.utils.CategoryHelper.getCategoryTitleMapKey
+import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_NATIVE_ZONE_ID
 import ir.tapsell.plus.AdHolder
 import ir.tapsell.plus.AdRequestCallback
 import ir.tapsell.plus.AdShowListener

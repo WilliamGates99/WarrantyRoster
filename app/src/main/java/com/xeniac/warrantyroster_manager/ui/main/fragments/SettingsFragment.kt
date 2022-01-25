@@ -1,4 +1,4 @@
-package com.xeniac.warrantyroster_manager.ui.mainactivity.fragments
+package com.xeniac.warrantyroster_manager.ui.main.fragments
 
 import android.content.Context
 import android.content.Intent
@@ -23,18 +23,18 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentSettingsBinding
-import com.xeniac.warrantyroster_manager.ui.landingactivity.LandingActivity
-import com.xeniac.warrantyroster_manager.ui.mainactivity.MainActivity
-import com.xeniac.warrantyroster_manager.util.Constants.Companion.PREFERENCE_COUNTRY_KEY
-import com.xeniac.warrantyroster_manager.util.Constants.Companion.PREFERENCE_IS_LOGGED_IN_KEY
-import com.xeniac.warrantyroster_manager.util.Constants.Companion.PREFERENCE_LANGUAGE_KEY
-import com.xeniac.warrantyroster_manager.util.Constants.Companion.PREFERENCE_LOGIN
-import com.xeniac.warrantyroster_manager.util.Constants.Companion.PREFERENCE_SETTINGS
-import com.xeniac.warrantyroster_manager.util.Constants.Companion.PREFERENCE_THEME_KEY
-import com.xeniac.warrantyroster_manager.util.Constants.Companion.SETTINGS_NATIVE_ZONE_ID
-import com.xeniac.warrantyroster_manager.util.Constants.Companion.TAPSELL_KEY
-import com.xeniac.warrantyroster_manager.util.Constants.Companion.URL_PRIVACY_POLICY
-import com.xeniac.warrantyroster_manager.util.NetworkHelper.Companion.hasInternetConnection
+import com.xeniac.warrantyroster_manager.ui.landing.LandingActivity
+import com.xeniac.warrantyroster_manager.ui.main.MainActivity
+import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_COUNTRY_KEY
+import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_IS_LOGGED_IN_KEY
+import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_LANGUAGE_KEY
+import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_LOGIN
+import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_SETTINGS
+import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_THEME_KEY
+import com.xeniac.warrantyroster_manager.utils.Constants.SETTINGS_NATIVE_ZONE_ID
+import com.xeniac.warrantyroster_manager.utils.Constants.TAPSELL_KEY
+import com.xeniac.warrantyroster_manager.utils.Constants.URL_PRIVACY_POLICY
+import com.xeniac.warrantyroster_manager.utils.NetworkHelper.hasInternetConnection
 import ir.tapsell.plus.*
 import ir.tapsell.plus.model.AdNetworkError
 import ir.tapsell.plus.model.AdNetworks
