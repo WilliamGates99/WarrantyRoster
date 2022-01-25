@@ -160,6 +160,8 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
                         showWarrantiesEmptyList()
                     } else {
                         val warrantiesList = mutableListOf<Warranty>()
+                        var adIndex = 5
+
                         for (document in it.documents) {
                             val warranty = Warranty(
                                 document.id,
@@ -174,6 +176,16 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
                                 ListItemType.WARRANTY
                             )
                             warrantiesList.add(warranty)
+
+                            if (warrantiesList.size == adIndex) {
+                                adIndex += 6
+                                val nativeAd = Warranty(
+                                    null, null, null, null,
+                                    null, null, null,
+                                    null, null, ListItemType.AD
+                                )
+                                warrantiesList.add(nativeAd)
+                            }
                         }
                         showWarrantiesList(warrantiesList)
                     }
@@ -216,20 +228,6 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
         binding.groupNetwork.visibility = GONE
         binding.groupEmptyList.visibility = GONE
         binding.rv.visibility = VISIBLE
-
-        var adIndex = 5
-        for (i in 0..warrantiesList.size) {
-            if (i == adIndex) {
-                adIndex += 6
-                warrantiesList.add(
-                    i, Warranty(
-                        null, null, null, null, null,
-                        null, null, null, null,
-                        ListItemType.AD
-                    )
-                )
-            }
-        }
 
         val warrantyAdapter = WarrantyAdapter(
             requireActivity(), requireContext(), database,
