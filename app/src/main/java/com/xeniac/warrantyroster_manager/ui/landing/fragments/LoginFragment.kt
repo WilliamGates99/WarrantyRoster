@@ -3,8 +3,6 @@ package com.xeniac.warrantyroster_manager.ui.landing.fragments
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.util.Patterns
 import android.view.View
@@ -13,6 +11,7 @@ import android.view.View.VISIBLE
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -84,36 +83,16 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     }
 
     private fun textInputsStrokeColor() {
-        binding.tiEditEmail.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
+        binding.tiEditEmail.addTextChangedListener {
+            binding.tiLayoutEmail.isErrorEnabled = false
+            binding.tiLayoutEmail.boxStrokeColor =
+                ContextCompat.getColor(requireContext(), R.color.blue)
+        }
 
-            override fun onTextChanged(
-                inputEmail: CharSequence?, start: Int, before: Int, count: Int
-            ) {
-                binding.tiLayoutEmail.isErrorEnabled = false
-                binding.tiLayoutEmail.boxStrokeColor =
-                    ContextCompat.getColor(requireContext(), R.color.blue)
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-            }
-        })
-
-        binding.tiEditPassword.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-
-            override fun onTextChanged(
-                inputEmail: CharSequence?, start: Int, before: Int, count: Int
-            ) {
-                binding.tiLayoutPassword.boxStrokeColor =
-                    ContextCompat.getColor(requireContext(), R.color.blue)
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-            }
-        })
+        binding.tiEditPassword.addTextChangedListener {
+            binding.tiLayoutPassword.boxStrokeColor =
+                ContextCompat.getColor(requireContext(), R.color.blue)
+        }
     }
 
     private fun forgotPwOnClick() = binding.btnForgotPw.setOnClickListener {

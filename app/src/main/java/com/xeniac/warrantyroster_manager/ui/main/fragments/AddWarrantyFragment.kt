@@ -2,9 +2,7 @@ package com.xeniac.warrantyroster_manager.ui.main.fragments
 
 import android.content.Context
 import android.os.Bundle
-import android.text.Editable
 import android.text.InputType
-import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.view.View.GONE
@@ -13,6 +11,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
 import androidx.core.view.get
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -174,33 +173,13 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
     }
 
     private fun textInputsStrokeColor() {
-        binding.tiEditDateStarting.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
+        binding.tiEditDateStarting.addTextChangedListener {
+            hideDateError()
+        }
 
-            override fun onTextChanged(
-                inputEmail: CharSequence?, start: Int, before: Int, count: Int
-            ) {
-                hideDateError()
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-            }
-        })
-
-        binding.tiEditDateExpiry.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-
-            override fun onTextChanged(
-                inputEmail: CharSequence?, start: Int, before: Int, count: Int
-            ) {
-                hideDateError()
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-            }
-        })
+        binding.tiEditDateExpiry.addTextChangedListener {
+            hideDateError()
+        }
     }
 
     private fun categoryDropDown() = CoroutineScope(Dispatchers.IO).launch {

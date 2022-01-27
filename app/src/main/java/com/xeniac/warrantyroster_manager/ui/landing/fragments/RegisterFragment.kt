@@ -4,8 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.util.Patterns
 import android.view.View
@@ -14,6 +12,7 @@ import android.view.View.VISIBLE
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_INDEFINITE
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
@@ -93,81 +92,51 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     }
 
     private fun textInputsStrokeColor() {
-        binding.tiEditEmail.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
+        binding.tiEditEmail.addTextChangedListener {
+            binding.tiLayoutEmail.isErrorEnabled = false
+            binding.tiLayoutEmail.boxStrokeColor =
+                ContextCompat.getColor(requireContext(), R.color.blue)
+        }
 
-            override fun onTextChanged(
-                inputEmail: CharSequence?, start: Int, before: Int, count: Int
-            ) {
-                binding.tiLayoutEmail.isErrorEnabled = false
-                binding.tiLayoutEmail.boxStrokeColor =
-                    ContextCompat.getColor(requireContext(), R.color.blue)
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-            }
-        })
-
-        binding.tiEditPassword.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-
-            override fun onTextChanged(
-                inputPassword: CharSequence?, start: Int, before: Int, count: Int
-            ) {
-                if (binding.tiLayoutPassword.hasFocus()) {
-                    when (passwordStrength(inputPassword.toString())) {
-                        (-1).toByte() -> {
-                            binding.tiLayoutPassword.boxStrokeColor =
-                                ContextCompat.getColor(requireContext(), R.color.red)
-                            binding.tiLayoutPassword.helperText =
-                                getString(R.string.register_helper_password_weak)
-                            binding.tiLayoutPassword.setHelperTextColor(
-                                ContextCompat.getColorStateList(requireContext(), R.color.red)
-                            )
-                        }
-                        (0).toByte() -> {
-                            binding.tiLayoutPassword.boxStrokeColor =
-                                ContextCompat.getColor(requireContext(), R.color.orange)
-                            binding.tiLayoutPassword.helperText =
-                                getString(R.string.register_helper_password_mediocre)
-                            binding.tiLayoutPassword.setHelperTextColor(
-                                ContextCompat.getColorStateList(requireContext(), R.color.orange)
-                            )
-                        }
-                        (1).toByte() -> {
-                            binding.tiLayoutPassword.boxStrokeColor =
-                                ContextCompat.getColor(requireContext(), R.color.green)
-                            binding.tiLayoutPassword.helperText =
-                                getString(R.string.register_helper_password_strong)
-                            binding.tiLayoutPassword.setHelperTextColor(
-                                ContextCompat.getColorStateList(requireContext(), R.color.green)
-                            )
-                        }
+        binding.tiEditPassword.addTextChangedListener { inputPassword ->
+            if (binding.tiLayoutPassword.hasFocus()) {
+                when (passwordStrength(inputPassword.toString())) {
+                    (-1).toByte() -> {
+                        binding.tiLayoutPassword.boxStrokeColor =
+                            ContextCompat.getColor(requireContext(), R.color.red)
+                        binding.tiLayoutPassword.helperText =
+                            getString(R.string.register_helper_password_weak)
+                        binding.tiLayoutPassword.setHelperTextColor(
+                            ContextCompat.getColorStateList(requireContext(), R.color.red)
+                        )
+                    }
+                    (0).toByte() -> {
+                        binding.tiLayoutPassword.boxStrokeColor =
+                            ContextCompat.getColor(requireContext(), R.color.orange)
+                        binding.tiLayoutPassword.helperText =
+                            getString(R.string.register_helper_password_mediocre)
+                        binding.tiLayoutPassword.setHelperTextColor(
+                            ContextCompat.getColorStateList(requireContext(), R.color.orange)
+                        )
+                    }
+                    (1).toByte() -> {
+                        binding.tiLayoutPassword.boxStrokeColor =
+                            ContextCompat.getColor(requireContext(), R.color.green)
+                        binding.tiLayoutPassword.helperText =
+                            getString(R.string.register_helper_password_strong)
+                        binding.tiLayoutPassword.setHelperTextColor(
+                            ContextCompat.getColorStateList(requireContext(), R.color.green)
+                        )
                     }
                 }
             }
+        }
 
-            override fun afterTextChanged(s: Editable?) {
-            }
-        })
-
-        binding.tiEditRetypePassword.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-
-            override fun onTextChanged(
-                inputRetypePassword: CharSequence?, start: Int, before: Int, count: Int
-            ) {
-                binding.tiLayoutRetypePassword.isErrorEnabled = false
-                binding.tiLayoutRetypePassword.boxStrokeColor =
-                    ContextCompat.getColor(requireContext(), R.color.blue)
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-            }
-        })
+        binding.tiEditRetypePassword.addTextChangedListener {
+            binding.tiLayoutRetypePassword.isErrorEnabled = false
+            binding.tiLayoutRetypePassword.boxStrokeColor =
+                ContextCompat.getColor(requireContext(), R.color.blue)
+        }
     }
 
     private fun agreementOnclick() = binding.btnAgreement.setOnClickListener {
