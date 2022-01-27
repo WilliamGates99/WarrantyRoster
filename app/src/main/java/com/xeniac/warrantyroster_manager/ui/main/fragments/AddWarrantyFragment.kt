@@ -63,6 +63,8 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
     private lateinit var startingDateInput: String
     private lateinit var expiryDateInput: String
 
+    private val TAG = "AddWarrantyFragment"
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentAddWarrantyBinding.bind(view)
@@ -214,7 +216,7 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
                 )
             }
         } catch (e: Exception) {
-            Log.e("categoryDropDown", "Exception: ${e.message}")
+            Log.e(TAG, "Exception: ${e.message}")
         }
     }
 
@@ -237,7 +239,7 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
                         }
                     }
                 } catch (e: Exception) {
-                    Log.e("categoryDropDown", "Exception: ${e.message}")
+                    Log.e(TAG, "Exception: ${e.message}")
                 }
             }
         }
@@ -395,13 +397,13 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 warrantiesCollectionRef.add(warrantyInput).await()
-                Log.i("addWarranty", "Warranty successfully added.")
+                Log.i(TAG, "Warranty successfully added.")
                 withContext(Dispatchers.Main) {
                     hideLoadingAnimation()
                     navController.navigate(R.id.action_addWarrantyFragment_to_warrantiesFragment)
                 }
             } catch (e: Exception) {
-                Log.e("addWarranty", "Exception: ${e.message}")
+                Log.e(TAG, "Exception: ${e.message}")
                 withContext(Dispatchers.Main) {
                     hideLoadingAnimation()
                     Snackbar.make(

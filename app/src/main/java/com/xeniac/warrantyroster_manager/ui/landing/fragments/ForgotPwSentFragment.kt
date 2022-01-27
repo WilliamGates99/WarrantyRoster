@@ -34,6 +34,8 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
     private lateinit var email: String
     private var countDownTimer: CountDownTimer? = null
 
+    private val TAG = "ForgotPwSentFragment"
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentForgotPwSentBinding.bind(view)
@@ -84,17 +86,14 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 firebaseAuth.sendPasswordResetEmail(email).await()
-                Log.i(
-                    "resendResetPasswordEmail",
-                    "Reset password email successfully sent to ${email}."
-                )
+                Log.i(TAG, "Reset password email successfully sent to ${email}.")
                 withContext(Dispatchers.Main) {
                     hideLoadingAnimation()
                     countdown()
                     binding.lavSent.playAnimation()
                 }
             } catch (e: Exception) {
-                Log.e("resendResetPasswordEmail", "Exception: ${e.message}")
+                Log.e(TAG, "Exception: ${e.message}")
                 withContext(Dispatchers.Main) {
                     hideLoadingAnimation()
                     Snackbar.make(
@@ -129,8 +128,8 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
                 val minutes = millisUntilFinished / 60000
                 val seconds = (millisUntilFinished / 1000) % 60
 
-                binding.tvTimer.text =
-                    "(${decimalFormat.format(minutes)}:${decimalFormat.format(seconds)})"
+                val time = "(${decimalFormat.format(minutes)}:${decimalFormat.format(seconds)})"
+                binding.tvTimer.text = time
             }
 
             override fun onFinish() {

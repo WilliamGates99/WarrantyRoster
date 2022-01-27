@@ -78,6 +78,8 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
     private lateinit var startingDateInput: String
     private lateinit var expiryDateInput: String
 
+    private val TAG = "EditWarrantyFragment"
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentEditWarrantyBinding.bind(view)
@@ -233,7 +235,7 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
                 )
             }
         } catch (e: Exception) {
-            Log.e("categoryDropDown", "Exception: ${e.message}")
+            Log.e(TAG, "Exception: ${e.message}")
         }
     }
 
@@ -256,7 +258,7 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
                         }
                     }
                 } catch (e: Exception) {
-                    Log.e("categoryDropDown", "Exception: ${e.message}")
+                    Log.e(TAG, "Exception: ${e.message}")
                 }
             }
         }
@@ -390,17 +392,17 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
                         "${decimalFormat.format((expiryCalendar.get(Calendar.MONTH)) + 1)}-" +
                         decimalFormat.format(expiryCalendar.get(Calendar.DAY_OF_MONTH))
 
-                binding.tiEditDateStarting.setText(
+                val startingDate =
                     "${decimalFormat.format((startingCalendar.get(Calendar.MONTH)) + 1)}/" +
                             "${decimalFormat.format(startingCalendar.get(Calendar.DAY_OF_MONTH))}/" +
                             "${startingCalendar.get(Calendar.YEAR)}"
-                )
+                binding.tiEditDateStarting.setText(startingDate)
 
-                binding.tiEditDateExpiry.setText(
+                val expiryDate =
                     "${decimalFormat.format((expiryCalendar.get(Calendar.MONTH)) + 1)}/" +
                             "${decimalFormat.format(expiryCalendar.get(Calendar.DAY_OF_MONTH))}/" +
                             "${expiryCalendar.get(Calendar.YEAR)}"
-                )
+                binding.tiEditDateExpiry.setText(expiryDate)
 
                 selectedCategory?.let {
                     binding.tiDdCategory.setText(it.title[getCategoryTitleMapKey(requireContext())])
@@ -412,7 +414,7 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
                 }
             }
         } catch (e: Exception) {
-            Log.e("setWarrantyDetails", "Exception: ${e.message}")
+            Log.e(TAG, "Exception: ${e.message}")
         }
     }
 
@@ -479,10 +481,10 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 warrantiesCollectionRef.document(warranty.id!!).set(warrantyInput).await()
-                Log.i("editWarranty", "Warranty successfully updated.")
+                Log.i(TAG, "Warranty successfully updated.")
 
                 val documentSnapshot = warrantiesCollectionRef.document(warranty.id!!).get().await()
-                Log.i("editWarranty", "documentSnapshot: $documentSnapshot")
+                Log.i(TAG, "documentSnapshot: $documentSnapshot")
 
                 val updatedWarranty = Warranty(
                     documentSnapshot.id,
@@ -508,7 +510,7 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
                     navController.navigate(action)
                 }
             } catch (e: Exception) {
-                Log.e("editWarranty", "Exception: ${e.message}")
+                Log.e(TAG, "Exception: ${e.message}")
                 withContext(Dispatchers.Main) {
                     hideLoadingAnimation()
                     Snackbar.make(

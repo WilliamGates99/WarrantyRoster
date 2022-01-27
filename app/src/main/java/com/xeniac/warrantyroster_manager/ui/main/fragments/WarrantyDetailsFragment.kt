@@ -55,6 +55,8 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
     private val warrantiesCollectionRef =
         Firebase.firestore.collection(COLLECTION_WARRANTIES)
 
+    private val TAG = "WarrantyDetailsFragment"
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentWarrantyDetailsBinding.bind(view)
@@ -157,15 +159,17 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
                     expiryCalendar.time = it
                 }
 
-                binding.tvDateStarting.text =
+                val startingDate =
                     "${decimalFormat.format((startingCalendar.get(Calendar.MONTH)) + 1)}/" +
                             "${decimalFormat.format(startingCalendar.get(Calendar.DAY_OF_MONTH))}/" +
                             "${startingCalendar.get(Calendar.YEAR)}"
+                binding.tvDateStarting.text = startingDate
 
-                binding.tvDateExpiry.text =
+                val expiryDate =
                     "${decimalFormat.format((expiryCalendar.get(Calendar.MONTH)) + 1)}/" +
                             "${decimalFormat.format(expiryCalendar.get(Calendar.DAY_OF_MONTH))}/" +
                             "${expiryCalendar.get(Calendar.YEAR)}"
+                binding.tvDateExpiry.text = expiryDate
 
                 when {
                     daysUntilExpiry < 0 -> {
@@ -206,21 +210,21 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
                 }
             }
         } catch (e: Exception) {
-            Log.e("setWarrantyDetails", "Exception: ${e.message}")
+            Log.e(TAG, "Exception: ${e.message}")
         }
     }
 
     private fun adInit() = TapsellPlus.initialize(
         requireContext(), TAPSELL_KEY, object : TapsellPlusInitListener {
             override fun onInitializeSuccess(adNetworks: AdNetworks?) {
-                Log.i("adInit", "onInitializeSuccess: ${adNetworks?.name}")
+                Log.i(TAG, "onInitializeSuccess: ${adNetworks?.name}")
             }
 
             override fun onInitializeFailed(
                 adNetworks: AdNetworks?, adNetworkError: AdNetworkError?
             ) {
                 Log.e(
-                    "adInit",
+                    TAG,
                     "onInitializeFailed: ${adNetworks?.name}, error: ${adNetworkError?.errorMessage}"
                 )
             }
@@ -272,7 +276,7 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 warrantiesCollectionRef.document(warranty.id!!).delete().await()
-                Log.i("deleteWarranty", "${warranty.id} successfully deleted.")
+                Log.i(TAG, "${warranty.id} successfully deleted.")
                 withContext(Dispatchers.Main) {
                     hideLoadingAnimation()
                     Toast.makeText(
@@ -289,7 +293,7 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
                     requireActivity().onBackPressed()
                 }
             } catch (e: Exception) {
-                Log.e("deleteWarranty", "Exception: ${e.message}")
+                Log.e(TAG, "Exception: ${e.message}")
                 withContext(Dispatchers.Main) {
                     hideLoadingAnimation()
                     Snackbar.make(

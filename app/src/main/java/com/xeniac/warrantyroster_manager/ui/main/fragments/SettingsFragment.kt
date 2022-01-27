@@ -62,6 +62,8 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     private var requestAdCounter = 0
     private var responseId: String? = null
 
+    private val TAG = "SettingsFragment"
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentSettingsBinding.bind(view)
@@ -102,7 +104,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             currentUser?.let {
                 var email = it.email.toString()
                 var isVerified = it.isEmailVerified
-                Log.i("getAccountDetails", "Current user is $email and isVerified: $isVerified")
+                Log.i(TAG, "Current user is $email and isVerified: $isVerified")
 
                 withContext(Dispatchers.Main) {
                     setAccountDetails(email, isVerified)
@@ -113,10 +115,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                     if (email != it.email || isVerified != it.isEmailVerified) {
                         email = it.email.toString()
                         isVerified = it.isEmailVerified
-                        Log.i(
-                            "getAccountDetails",
-                            "Updated current user is $$email and isVerified: $isVerified"
-                        )
+                        Log.i(TAG, "Updated current user is $$email and isVerified: $isVerified")
 
                         withContext(Dispatchers.Main) {
                             setAccountDetails(email, isVerified)
@@ -125,7 +124,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                 }
             }
         } catch (e: Exception) {
-            Log.i("getAccountDetails", "Exception: ${e.message}")
+            Log.i(TAG, "Exception: ${e.message}")
         }
     }
 
@@ -222,7 +221,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             try {
                 currentUser?.let {
                     it.sendEmailVerification().await()
-                    Log.i("sendVerificationEmail", "Email sent to ${it.email}")
+                    Log.i(TAG, "Email sent to ${it.email}")
                     withContext(Dispatchers.Main) {
                         hideLoadingAnimation()
 
@@ -233,7 +232,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                     }
                 }
             } catch (e: Exception) {
-                Log.e("sendVerificationEmail", "Exception: ${e.message}")
+                Log.e(TAG, "Exception: ${e.message}")
                 withContext(Dispatchers.Main) {
                     hideLoadingAnimation()
                     Snackbar.make(
@@ -319,7 +318,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     private fun logout() = CoroutineScope(Dispatchers.IO).launch {
         try {
             firebaseAuth.signOut()
-            Log.i("logout", "${currentUser?.email} successfully logged out.")
+            Log.i(TAG, "${currentUser?.email} successfully logged out.")
 
             requireContext().getSharedPreferences(
                 PREFERENCE_LOGIN, Context.MODE_PRIVATE
@@ -331,7 +330,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             startActivity(Intent(requireContext(), LandingActivity::class.java))
             requireActivity().finish()
         } catch (e: Exception) {
-            Log.e("logout", "Exception: ${e.message}")
+            Log.e(TAG, "Exception: ${e.message}")
         }
     }
 
@@ -349,7 +348,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     private fun adInit() = TapsellPlus.initialize(requireContext(), TAPSELL_KEY,
         object : TapsellPlusInitListener {
             override fun onInitializeSuccess(adNetworks: AdNetworks?) {
-                Log.i("adInit", "onInitializeSuccess: ${adNetworks?.name}")
+                Log.i(TAG, "onInitializeSuccess: ${adNetworks?.name}")
                 val adHolder = TapsellPlus.createAdHolder(
                     activity, binding.flAdContainer, R.layout.ad_banner_settings
                 )
@@ -361,7 +360,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                 adNetworks: AdNetworks?, adNetworkError: AdNetworkError?
             ) {
                 Log.e(
-                    "adInit",
+                    TAG,
                     "onInitializeFailed: ${adNetworks?.name}, error: ${adNetworkError?.errorMessage}"
                 )
             }
@@ -372,7 +371,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             SETTINGS_NATIVE_ZONE_ID, object : AdRequestCallback() {
                 override fun response(tapsellPlusAdModel: TapsellPlusAdModel?) {
                     super.response(tapsellPlusAdModel)
-                    Log.i("requestNativeAd", "response: ${tapsellPlusAdModel.toString()}")
+                    Log.i(TAG, "response: ${tapsellPlusAdModel.toString()}")
                     _binding?.let {
                         tapsellPlusAdModel?.let {
                             responseId = it.responseId
@@ -383,7 +382,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
                 override fun error(error: String?) {
                     super.error(error)
-                    Log.e("requestNativeAd", "Error: $error")
+                    Log.e(TAG, "Error: $error")
                     if (requestAdCounter < 3) {
                         requestAdCounter++
                         requestNativeAd(adHolder)

@@ -23,6 +23,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
 
+    private val TAG = "MainActivity"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -74,13 +76,13 @@ class MainActivity : AppCompatActivity() {
         DELETE_WARRANTY_Interstitial_ZONE_ID, object : AdRequestCallback() {
             override fun response(tapsellPlusAdModel: TapsellPlusAdModel?) {
                 super.response(tapsellPlusAdModel)
-                Log.i("requestInterstitialAd", "response: $tapsellPlusAdModel")
+                Log.i(TAG, "response: $tapsellPlusAdModel")
                 tapsellPlusAdModel?.let { showInterstitialAd(it.responseId) }
             }
 
             override fun error(s: String?) {
                 super.error(s)
-                Log.e("requestInterstitialAd", "error: $s")
+                Log.e(TAG, "error: $s")
             }
         })
 
@@ -88,17 +90,17 @@ class MainActivity : AppCompatActivity() {
         responseId, object : AdShowListener() {
             override fun onOpened(tapsellPlusAdModel: TapsellPlusAdModel?) {
                 super.onOpened(tapsellPlusAdModel)
-                Log.i("showInterstitialAd", "onOpened: $tapsellPlusAdModel")
+                Log.i(TAG, "onOpened: $tapsellPlusAdModel")
             }
 
             override fun onClosed(tapsellPlusAdModel: TapsellPlusAdModel?) {
                 super.onClosed(tapsellPlusAdModel)
-                Log.i("showInterstitialAd", "onClosed: $tapsellPlusAdModel")
+                Log.i(TAG, "onClosed: $tapsellPlusAdModel")
             }
 
             override fun onError(tapsellPlusErrorModel: TapsellPlusErrorModel?) {
                 super.onError(tapsellPlusErrorModel)
-                Log.e("showInterstitialAd", "onError: $tapsellPlusErrorModel")
+                Log.e(TAG, "onError: $tapsellPlusErrorModel")
             }
         })
 }

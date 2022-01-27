@@ -36,6 +36,8 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
 
     private lateinit var firebaseAuth: FirebaseAuth
 
+    private val TAG = "ForgotPwFragment"
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentForgotPwBinding.bind(view)
@@ -141,10 +143,7 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 firebaseAuth.sendPasswordResetEmail(email).await()
-                Log.i(
-                    "sendResetPasswordEmail",
-                    "Reset password email successfully sent to ${email}."
-                )
+                Log.i(TAG, "Reset password email successfully sent to ${email}.")
                 withContext(Dispatchers.Main) {
                     hideLoadingAnimation()
                     val action = ForgotPwFragmentDirections
@@ -152,7 +151,7 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
                     navController.navigate(action)
                 }
             } catch (e: Exception) {
-                Log.e("sendResetPasswordEmail", "Exception: ${e.message}")
+                Log.e(TAG, "Exception: ${e.message}")
                 withContext(Dispatchers.Main) {
                     hideLoadingAnimation()
                     when {

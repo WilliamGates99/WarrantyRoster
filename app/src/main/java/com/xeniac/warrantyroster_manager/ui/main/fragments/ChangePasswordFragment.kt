@@ -36,6 +36,8 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
     private val firebaseAuth = FirebaseAuth.getInstance()
     private val currentUser = firebaseAuth.currentUser
 
+    private val TAG = "ChangePasswordFragment"
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentChangePasswordBinding.bind(view)
@@ -239,11 +241,11 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
                     val credential = EmailAuthProvider
                         .getCredential(it.email.toString(), currentPassword)
                     it.reauthenticate(credential).await()
-                    Log.i("reAuthenticateUser", "User re-authenticated.")
+                    Log.i(TAG, "User re-authenticated.")
                     changeUserPasswordAuth(newPassword)
                 }
             } catch (e: Exception) {
-                Log.e("reAuthenticateUser", "Exception: ${e.message}")
+                Log.e(TAG, "Exception: ${e.message}")
                 withContext(Dispatchers.Main) {
                     hideLoadingAnimation()
                     when {
@@ -272,7 +274,7 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
             try {
                 currentUser?.let {
                     it.updatePassword(newPassword).await()
-                    Log.i("changeUserPasswordAuth", "User password updated.")
+                    Log.i(TAG, "User password updated.")
 
                     withContext(Dispatchers.Main) {
                         hideLoadingAnimation()
@@ -285,7 +287,7 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
                     }
                 }
             } catch (e: Exception) {
-                Log.e("changeUserPasswordAuth", "Exception: ${e.message}")
+                Log.e(TAG, "Exception: ${e.message}")
                 withContext(Dispatchers.Main) {
                     hideLoadingAnimation()
                     Snackbar.make(

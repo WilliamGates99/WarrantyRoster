@@ -37,6 +37,8 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
     private val firebaseAuth = FirebaseAuth.getInstance()
     private val currentUser = firebaseAuth.currentUser
 
+    private val TAG = "ChangeEmailFragment"
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentChangeEmailBinding.bind(view)
@@ -179,11 +181,11 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
                 currentUser?.let {
                     val credential = EmailAuthProvider.getCredential(it.email.toString(), password)
                     it.reauthenticate(credential).await()
-                    Log.i("reAuthenticateUser", "User re-authenticated.")
+                    Log.i(TAG, "User re-authenticated.")
                     changeUserEmailAuth(newEmail)
                 }
             } catch (e: Exception) {
-                Log.e("reAuthenticateUser", "Exception: ${e.message}")
+                Log.e(TAG, "Exception: ${e.message}")
                 withContext(Dispatchers.Main) {
                     hideLoadingAnimation()
                     when {
@@ -212,7 +214,7 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
             try {
                 currentUser?.let {
                     it.updateEmail(newEmail).await()
-                    Log.i("changeUserEmailAuth", "User email updated to ${newEmail}.")
+                    Log.i(TAG, "User email updated to ${newEmail}.")
 
                     withContext(Dispatchers.Main) {
                         hideLoadingAnimation()
@@ -225,7 +227,7 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
                     }
                 }
             } catch (e: Exception) {
-                Log.e("changeUserEmailAuth", "Exception: ${e.message}")
+                Log.e(TAG, "Exception: ${e.message}")
                 withContext(Dispatchers.Main) {
                     hideLoadingAnimation()
                     when {

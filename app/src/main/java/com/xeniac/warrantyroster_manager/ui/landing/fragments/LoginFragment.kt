@@ -40,6 +40,8 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
     private lateinit var firebaseAuth: FirebaseAuth
 
+    private val TAG = "LoginFragment"
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentLoginBinding.bind(view)
@@ -187,7 +189,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             try {
                 firebaseAuth.signInWithEmailAndPassword(email, password).await().apply {
                     user?.let {
-                        Log.i("loginViaEmail", "${it.email} logged in successfully.")
+                        Log.i(TAG, "${it.email} logged in successfully.")
 
                         requireContext().getSharedPreferences(
                             PREFERENCE_LOGIN, Context.MODE_PRIVATE
@@ -206,7 +208,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                     }
                 }
             } catch (e: Exception) {
-                Log.e("loginViaEmail", "Exception: ${e.message}")
+                Log.e(TAG, "Exception: ${e.message}")
                 withContext(Dispatchers.Main) {
                     hideLoadingAnimation()
                     when {

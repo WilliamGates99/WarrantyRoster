@@ -62,6 +62,8 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
         .collection(COLLECTION_WARRANTIES)
     private var warrantiesQuery: ListenerRegistration? = null
 
+    private val TAG = "WarrantiesFragment"
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentWarrantiesBinding.bind(view)
@@ -83,14 +85,14 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
     private fun adInit() = TapsellPlus.initialize(
         requireContext(), TAPSELL_KEY, object : TapsellPlusInitListener {
             override fun onInitializeSuccess(adNetworks: AdNetworks?) {
-                Log.i("adInit", "onInitializeSuccess: ${adNetworks?.name}")
+                Log.i(TAG, "onInitializeSuccess: ${adNetworks?.name}")
             }
 
             override fun onInitializeFailed(
                 adNetworks: AdNetworks?, adNetworkError: AdNetworkError?
             ) {
                 Log.e(
-                    "adInit",
+                    TAG,
                     "onInitializeFailed: ${adNetworks?.name}, error: ${adNetworkError?.errorMessage}"
                 )
             }
@@ -108,7 +110,7 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
                 val categoriesQuery = categoriesCollectionRef
                     .orderBy(CATEGORIES_TITLE, Query.Direction.ASCENDING)
                     .get().await()
-                Log.i("seedCategories", "Categories successfully retrieved.")
+                Log.i(TAG, "Categories successfully retrieved.")
 
                 val categoriesList = mutableListOf<Category>()
                 for (document in categoriesQuery.documents) {
@@ -124,7 +126,7 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
 
                 val itemCount = database.getCategoryDao().countItems()
                 if (itemCount == 21) {
-                    Log.i("seedCategories", "categories successfully seeded to DB.")
+                    Log.i(TAG, "categories successfully seeded to DB.")
                     requireContext().getSharedPreferences(
                         PREFERENCE_DB_SEED, Context.MODE_PRIVATE
                     ).edit().apply {
@@ -134,7 +136,7 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
                 }
             }
         } catch (e: Exception) {
-            Log.e("seedCategories", "Exception: ${e.message}")
+            Log.e(TAG, "Exception: ${e.message}")
         }
     }
 
@@ -146,14 +148,14 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
             .orderBy(WARRANTIES_TITLE, Query.Direction.ASCENDING)
             .addSnapshotListener { value, error ->
                 error?.let {
-                    Log.e("getWarrantiesList", "Exception: ${it.message}")
+                    Log.e(TAG, "Exception: ${it.message}")
                     binding.tvNetworkError.text =
                         requireContext().getString(R.string.network_error_connection)
                     showNetworkError()
                 }
 
                 value?.let {
-                    Log.i("getWarrantiesList", "Warranties List successfully retrieved.")
+                    Log.i(TAG, "Warranties List successfully retrieved.")
                     hideLoadingAnimation()
 
                     if (it.documents.size == 0) {

@@ -42,6 +42,8 @@ class WarrantyAdapter(
 
     private var requestAdCounter = 0
 
+    private val TAG = "WarrantyAdapter"
+
     companion object {
         private const val VIEW_TYPE_WARRANTY = 0
         private const val VIEW_TYPE_AD = 1
@@ -138,7 +140,7 @@ class WarrantyAdapter(
                     }
                 }
             } catch (e: Exception) {
-                Log.e("WarrantyViewHolder", "Exception: ${e.message}")
+                Log.e(TAG, "Exception: ${e.message}")
             }
         }
     }
@@ -184,7 +186,7 @@ class WarrantyAdapter(
             object : AdRequestCallback() {
                 override fun response(tapsellPlusAdModel: TapsellPlusAdModel?) {
                     super.response(tapsellPlusAdModel)
-                    Log.i("requestNativeAd", "response: $tapsellPlusAdModel")
+                    Log.i(TAG, "response: $tapsellPlusAdModel")
                     TapsellPlus.showNativeAd(mActivity, tapsellPlusAdModel!!.responseId,
                         adHolder, object : AdShowListener() {
                             override fun onOpened(tapsellPlusAdModel: TapsellPlusAdModel?) {
@@ -199,7 +201,7 @@ class WarrantyAdapter(
 
                 override fun error(error: String?) {
                     super.error(error)
-                    Log.e("requestNativeAd", "error: $error")
+                    Log.e(TAG, "error: $error")
                     if (requestAdCounter < 3) {
                         requestAdCounter++
                         requestNativeAd(adHolder)

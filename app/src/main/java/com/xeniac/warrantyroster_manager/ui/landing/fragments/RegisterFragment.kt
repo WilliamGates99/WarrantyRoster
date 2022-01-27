@@ -39,6 +39,8 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
 
     private lateinit var firebaseAuth: FirebaseAuth
 
+    private val TAG = "RegisterFragment"
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentRegisterBinding.bind(view)
@@ -258,7 +260,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
             try {
                 firebaseAuth.createUserWithEmailAndPassword(email, password).await().apply {
                     user?.let {
-                        Log.i("registerViaEmail", "${it.email} registered successfully.")
+                        Log.i(TAG, "${it.email} registered successfully.")
                         it.sendEmailVerification()
 
                         requireContext().getSharedPreferences(
@@ -278,7 +280,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                     }
                 }
             } catch (e: Exception) {
-                Log.e("registerViaEmail", "Exception: ${e.message}")
+                Log.e(TAG, "Exception: ${e.message}")
                 withContext(Dispatchers.Main) {
                     hideLoadingAnimation()
                     when {
