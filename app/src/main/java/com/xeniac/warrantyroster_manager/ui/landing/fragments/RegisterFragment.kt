@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.util.Patterns
 import android.view.View
 import android.view.View.GONE
@@ -17,33 +16,27 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_INDEFINITE
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.auth.FirebaseAuth
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentRegisterBinding
+import com.xeniac.warrantyroster_manager.ui.landing.LandingActivity
+import com.xeniac.warrantyroster_manager.ui.landing.LandingViewModel
 import com.xeniac.warrantyroster_manager.ui.main.MainActivity
 import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_IS_LOGGED_IN_KEY
 import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_LOGIN
 import com.xeniac.warrantyroster_manager.utils.Constants.URL_PRIVACY_POLICY
-import com.xeniac.warrantyroster_manager.utils.NetworkHelper.hasInternetConnection
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
+import com.xeniac.warrantyroster_manager.utils.Resource
 
 class RegisterFragment : Fragment(R.layout.fragment_register) {
 
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var firebaseAuth: FirebaseAuth
-
-    private val TAG = "RegisterFragment"
+    private lateinit var viewModel: LandingViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentRegisterBinding.bind(view)
-        firebaseAuth = FirebaseAuth.getInstance()
+        viewModel = (activity as LandingActivity).viewModel
 
         textInputsBackgroundColor()
         textInputsStrokeColor()
@@ -51,6 +44,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         loginOnClick()
         registerOnClick()
         registerActionDone()
+        registerObserver()
     }
 
     override fun onDestroyView() {
@@ -156,38 +150,22 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     }
 
     private fun registerOnClick() = binding.btnRegister.setOnClickListener {
-        registerViaEmail()
+        getRegisterInputs()
     }
 
     private fun registerActionDone() =
         binding.tiEditRetypePassword.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                registerViaEmail()
+                getRegisterInputs()
             }
             false
         }
 
-    private fun registerViaEmail() {
+    private fun getRegisterInputs() {
         val inputMethodManager = requireContext()
             .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(binding.root.applicationWindowToken, 0)
 
-        if (hasInternetConnection(requireContext())) {
-            getRegisterInputs()
-        } else {
-            hideLoadingAnimation()
-            Snackbar.make(
-                binding.root,
-                requireContext().getString(R.string.network_error_connection),
-                LENGTH_INDEFINITE
-            ).apply {
-                setAction(requireContext().getString(R.string.network_error_retry)) { registerViaEmail() }
-                show()
-            }
-        }
-    }
-
-    private fun getRegisterInputs() {
         val email = binding.tiEditEmail.text.toString().trim().lowercase()
         val password = binding.tiEditPassword.text.toString().trim()
         val retypePassword = binding.tiEditRetypePassword.text.toString().trim()
@@ -218,64 +196,70 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                 binding.tiLayoutRetypePassword.error =
                     requireContext().getString(R.string.register_error_password)
             } else {
-                registerViaEmailAuth(email, password)
+                registerViaEmail(email, password)
             }
         }
     }
 
-    private fun registerViaEmailAuth(email: String, password: String) {
-        showLoadingAnimation()
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                firebaseAuth.createUserWithEmailAndPassword(email, password).await().apply {
-                    user?.let {
-                        Log.i(TAG, "${it.email} registered successfully.")
-                        it.sendEmailVerification()
+    private fun registerViaEmail(email: String, password: String) =
+        viewModel.registerViaEmail(email, password)
 
-                        requireContext().getSharedPreferences(
-                            PREFERENCE_LOGIN, Context.MODE_PRIVATE
-                        ).edit().apply {
+    private fun registerObserver() =
+        viewModel.registerLiveData.observe(viewLifecycleOwner) { response ->
+            when (response) {
+                is Resource.Loading -> {
+                    showLoadingAnimation()
+                }
+                is Resource.Success -> {
+                    hideLoadingAnimation()
+
+                    requireContext()
+                        .getSharedPreferences(PREFERENCE_LOGIN, Context.MODE_PRIVATE).edit().apply {
                             putBoolean(PREFERENCE_IS_LOGGED_IN_KEY, true)
                             apply()
                         }
 
-                        withContext(Dispatchers.Main) {
-                            hideLoadingAnimation()
-                            Intent(requireContext(), MainActivity::class.java).apply {
-                                startActivity(this)
-                                requireActivity().finish()
-                            }
-                        }
+                    Intent(requireContext(), MainActivity::class.java).apply {
+                        startActivity(this)
+                        requireActivity().finish()
                     }
                 }
-            } catch (e: Exception) {
-                Log.e(TAG, "Exception: ${e.message}")
-                withContext(Dispatchers.Main) {
+                is Resource.Error -> {
                     hideLoadingAnimation()
-                    when {
-                        e.toString()
-                            .contains("The email address is already in use by another account") -> {
-                            Snackbar.make(
-                                binding.root,
-                                requireContext().getString(R.string.register_error_account_exists),
-                                LENGTH_INDEFINITE
-                            ).apply {
-                                setAction(requireContext().getString(R.string.register_btn_login)) { requireActivity().onBackPressed() }
-                                show()
+                    response.message?.let {
+                        when {
+                            it.contains("Unable to connect to the internet") -> {
+                                Snackbar.make(
+                                    binding.root,
+                                    requireContext().getString(R.string.network_error_connection),
+                                    LENGTH_INDEFINITE
+                                ).apply {
+                                    setAction(requireContext().getString(R.string.network_error_retry)) { getRegisterInputs() }
+                                    show()
+                                }
                             }
-                        }
-                        else -> {
-                            Snackbar.make(
-                                binding.root,
-                                requireContext().getString(R.string.network_error_failure),
-                                LENGTH_LONG
-                            ).show()
+                            it.contains("The email address is already in use by another account") -> {
+                                Snackbar.make(
+                                    binding.root,
+                                    requireContext().getString(R.string.register_error_account_exists),
+                                    LENGTH_INDEFINITE
+                                ).apply {
+                                    setAction(requireContext().getString(R.string.register_btn_login)) { requireActivity().onBackPressed() }
+                                    show()
+                                }
+                            }
+                            else -> {
+                                Snackbar.make(
+                                    binding.root,
+                                    requireContext().getString(R.string.network_error_failure),
+                                    LENGTH_LONG
+                                ).show()
+                            }
                         }
                     }
                 }
             }
         }
-    }
 
     private fun showLoadingAnimation() {
         binding.tiEditEmail.isEnabled = false

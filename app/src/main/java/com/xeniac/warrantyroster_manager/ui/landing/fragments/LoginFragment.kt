@@ -3,7 +3,6 @@ package com.xeniac.warrantyroster_manager.ui.landing.fragments
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.util.Patterns
 import android.view.View
 import android.view.View.GONE
@@ -18,18 +17,14 @@ import androidx.navigation.Navigation
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_INDEFINITE
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.auth.FirebaseAuth
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentLoginBinding
+import com.xeniac.warrantyroster_manager.ui.landing.LandingActivity
+import com.xeniac.warrantyroster_manager.ui.landing.LandingViewModel
 import com.xeniac.warrantyroster_manager.ui.main.MainActivity
 import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_IS_LOGGED_IN_KEY
 import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_LOGIN
-import com.xeniac.warrantyroster_manager.utils.NetworkHelper.hasInternetConnection
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
+import com.xeniac.warrantyroster_manager.utils.Resource
 
 class LoginFragment : Fragment(R.layout.fragment_login) {
 
@@ -37,15 +32,13 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     private val binding get() = _binding!!
     private lateinit var navController: NavController
 
-    private lateinit var firebaseAuth: FirebaseAuth
-
-    private val TAG = "LoginFragment"
+    private lateinit var viewModel: LandingViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentLoginBinding.bind(view)
-        firebaseAuth = FirebaseAuth.getInstance()
         navController = Navigation.findNavController(view)
+        viewModel = (activity as LandingActivity).viewModel
 
         textInputsBackgroundColor()
         textInputsStrokeColor()
@@ -53,6 +46,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         registerOnClick()
         loginOnClick()
         loginActionDone()
+        loginObserver()
     }
 
     override fun onDestroyView() {
@@ -103,43 +97,26 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         navigateToRegister()
     }
 
-    private fun navigateToRegister() {
+    private fun navigateToRegister() =
         navController.navigate(R.id.action_loginFragment_to_registerFragment)
-    }
 
     private fun loginOnClick() = binding.btnLogin.setOnClickListener {
-        loginViaEmail()
+        getLoginInputs()
     }
 
     private fun loginActionDone() =
         binding.tiEditPassword.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                loginViaEmail()
+                getLoginInputs()
             }
             false
         }
 
-    private fun loginViaEmail() {
+    private fun getLoginInputs() {
         val inputMethodManager = requireContext()
             .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(binding.root.applicationWindowToken, 0)
 
-        if (hasInternetConnection(requireContext())) {
-            getLoginInputs()
-        } else {
-            hideLoadingAnimation()
-            Snackbar.make(
-                binding.root,
-                requireContext().getString(R.string.network_error_connection),
-                LENGTH_INDEFINITE
-            ).apply {
-                setAction(requireContext().getString(R.string.network_error_retry)) { getLoginInputs() }
-                show()
-            }
-        }
-    }
-
-    private fun getLoginInputs() {
         val email = binding.tiEditEmail.text.toString().trim().lowercase()
         val password = binding.tiEditPassword.text.toString().trim()
 
@@ -157,71 +134,77 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                 binding.tiLayoutEmail.error =
                     requireContext().getString(R.string.login_error_email)
             } else {
-                loginViaEmailAuth(email, password)
+                loginViaEmail(email, password)
             }
         }
     }
 
-    private fun loginViaEmailAuth(email: String, password: String) {
-        showLoadingAnimation()
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                firebaseAuth.signInWithEmailAndPassword(email, password).await().apply {
-                    user?.let {
-                        Log.i(TAG, "${it.email} logged in successfully.")
+    private fun loginViaEmail(email: String, password: String) =
+        viewModel.loginViaEmail(email, password)
 
-                        requireContext().getSharedPreferences(
-                            PREFERENCE_LOGIN, Context.MODE_PRIVATE
-                        ).edit().apply {
+    private fun loginObserver() =
+        viewModel.loginLiveData.observe(viewLifecycleOwner) { response ->
+            when (response) {
+                is Resource.Loading -> {
+                    showLoadingAnimation()
+                }
+                is Resource.Success -> {
+                    hideLoadingAnimation()
+
+                    requireContext()
+                        .getSharedPreferences(PREFERENCE_LOGIN, Context.MODE_PRIVATE).edit().apply {
                             putBoolean(PREFERENCE_IS_LOGGED_IN_KEY, true)
                             apply()
                         }
 
-                        withContext(Dispatchers.Main) {
-                            hideLoadingAnimation()
-                            Intent(requireContext(), MainActivity::class.java).apply {
-                                startActivity(this)
-                                requireActivity().finish()
-                            }
-                        }
+                    Intent(requireContext(), MainActivity::class.java).apply {
+                        startActivity(this)
+                        requireActivity().finish()
                     }
                 }
-            } catch (e: Exception) {
-                Log.e(TAG, "Exception: ${e.message}")
-                withContext(Dispatchers.Main) {
+                is Resource.Error -> {
                     hideLoadingAnimation()
-                    when {
-                        e.toString()
-                            .contains("There is no user record corresponding to this identifier") -> {
-                            Snackbar.make(
-                                binding.root,
-                                requireContext().getString(R.string.login_error_not_found),
-                                LENGTH_INDEFINITE
-                            ).apply {
-                                setAction(requireContext().getString(R.string.login_btn_register)) { navigateToRegister() }
-                                show()
+                    response.message?.let {
+                        when {
+                            it.contains("Unable to connect to the internet") -> {
+                                Snackbar.make(
+                                    binding.root,
+                                    requireContext().getString(R.string.network_error_connection),
+                                    LENGTH_INDEFINITE
+                                ).apply {
+                                    setAction(requireContext().getString(R.string.network_error_retry)) { getLoginInputs() }
+                                    show()
+                                }
                             }
-                        }
-                        e.toString()
-                            .contains("The password is invalid or the user does not have a password") -> {
-                            Snackbar.make(
-                                binding.root,
-                                requireContext().getString(R.string.login_error_credentials),
-                                LENGTH_LONG
-                            ).show()
-                        }
-                        else -> {
-                            Snackbar.make(
-                                binding.root,
-                                requireContext().getString(R.string.network_error_failure),
-                                LENGTH_LONG
-                            ).show()
+                            it.contains("There is no user record corresponding to this identifier") -> {
+                                Snackbar.make(
+                                    binding.root,
+                                    requireContext().getString(R.string.login_error_not_found),
+                                    LENGTH_INDEFINITE
+                                ).apply {
+                                    setAction(requireContext().getString(R.string.login_btn_register)) { navigateToRegister() }
+                                    show()
+                                }
+                            }
+                            it.contains("The password is invalid or the user does not have a password") -> {
+                                Snackbar.make(
+                                    binding.root,
+                                    requireContext().getString(R.string.login_error_credentials),
+                                    LENGTH_LONG
+                                ).show()
+                            }
+                            else -> {
+                                Snackbar.make(
+                                    binding.root,
+                                    requireContext().getString(R.string.network_error_failure),
+                                    LENGTH_LONG
+                                ).show()
+                            }
                         }
                     }
                 }
             }
         }
-    }
 
     private fun showLoadingAnimation() {
         binding.tiEditEmail.isEnabled = false

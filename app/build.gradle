@@ -58,11 +58,13 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'com.google.android.material:material:1.5.0'
     implementation 'androidx.core:core-splashscreen:1.0.0-beta01'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
-    implementation 'androidx.work:work-runtime:2.7.1'
+
+    //Architectural Components
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.4.0'
 
     //Coroutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0-native-mt'
@@ -85,7 +87,7 @@ dependencies {
     //Firebase Storage
     implementation 'com.google.firebase:firebase-storage-ktx'
 
-    // Firebase Coroutines
+    //Firebase Coroutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.0-native-mt'
 
     //Room Library
@@ -93,9 +95,11 @@ dependencies {
     implementation 'androidx.room:room-ktx:2.4.1'
     kapt 'androidx.room:room-compiler:2.4.1'
 
-    //Third Party Libraries
-    implementation 'com.airbnb.android:lottie:4.2.2'
+    //Lottie Library
     implementation 'io.coil-kt:coil:1.4.0'
+
+    //Coil Library
+    implementation 'com.airbnb.android:lottie:4.2.2'
     implementation 'io.coil-kt:coil-svg:1.4.0'
 
     //Ads Libraries

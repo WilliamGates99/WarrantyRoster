@@ -2,7 +2,6 @@ package com.xeniac.warrantyroster_manager.ui.landing.fragments
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.util.Patterns
 import android.view.View
 import android.view.View.GONE
@@ -17,15 +16,11 @@ import androidx.navigation.Navigation
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_INDEFINITE
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.auth.FirebaseAuth
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentForgotPwBinding
-import com.xeniac.warrantyroster_manager.utils.NetworkHelper.hasInternetConnection
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
+import com.xeniac.warrantyroster_manager.ui.landing.LandingActivity
+import com.xeniac.warrantyroster_manager.ui.landing.LandingViewModel
+import com.xeniac.warrantyroster_manager.utils.Resource
 
 class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
 
@@ -33,21 +28,20 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
     private val binding get() = _binding!!
     private lateinit var navController: NavController
 
-    private lateinit var firebaseAuth: FirebaseAuth
-
-    private val TAG = "ForgotPwFragment"
+    private lateinit var viewModel: LandingViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentForgotPwBinding.bind(view)
         navController = Navigation.findNavController(view)
-        firebaseAuth = FirebaseAuth.getInstance()
+        viewModel = (activity as LandingActivity).viewModel
 
         textInputsBackgroundColor()
         textInputsStrokeColor()
         returnOnClick()
         sendOnClick()
         sendActionDone()
+        forgotPwObserver()
     }
 
     override fun onDestroyView() {
@@ -77,38 +71,22 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
     }
 
     private fun sendOnClick() = binding.btnSend.setOnClickListener {
-        sendResetPasswordEmail()
+        getResetPasswordInput()
     }
 
     private fun sendActionDone() =
         binding.tiEditEmail.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                sendResetPasswordEmail()
+                getResetPasswordInput()
             }
             false
         }
 
-    private fun sendResetPasswordEmail() {
+    private fun getResetPasswordInput() {
         val inputMethodManager = requireContext()
             .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(binding.root.applicationWindowToken, 0)
 
-        if (hasInternetConnection(requireContext())) {
-            getResetPasswordInput()
-        } else {
-            hideLoadingAnimation()
-            Snackbar.make(
-                binding.root,
-                requireContext().getString(R.string.network_error_connection),
-                LENGTH_INDEFINITE
-            ).apply {
-                setAction(requireContext().getString(R.string.network_error_retry)) { sendResetPasswordEmail() }
-                show()
-            }
-        }
-    }
-
-    private fun getResetPasswordInput() {
         val email = binding.tiEditEmail.text.toString().trim().lowercase()
 
         if (email.isBlank()) {
@@ -121,48 +99,61 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
                 binding.tiLayoutEmail.error =
                     requireContext().getString(R.string.forgot_pw_error_email)
             } else {
-                sendResetPasswordEmailAuth(email)
+                sendResetPasswordEmail(email)
             }
         }
     }
 
-    private fun sendResetPasswordEmailAuth(email: String) {
-        showLoadingAnimation()
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                firebaseAuth.sendPasswordResetEmail(email).await()
-                Log.i(TAG, "Reset password email successfully sent to ${email}.")
-                withContext(Dispatchers.Main) {
-                    hideLoadingAnimation()
-                    val action = ForgotPwFragmentDirections
-                        .actionForgotPasswordFragmentToForgotPwSentFragment(email)
-                    navController.navigate(action)
+    private fun sendResetPasswordEmail(email: String) = viewModel.sendResetPasswordEmail(email)
+
+    private fun forgotPwObserver() =
+        viewModel.forgotPwLiveData.observe(viewLifecycleOwner) { response ->
+            when (response) {
+                is Resource.Loading -> {
+                    showLoadingAnimation()
                 }
-            } catch (e: Exception) {
-                Log.e(TAG, "Exception: ${e.message}")
-                withContext(Dispatchers.Main) {
+                is Resource.Success -> {
                     hideLoadingAnimation()
-                    when {
-                        e.toString()
-                            .contains("There is no user record corresponding to this identifier") -> {
-                            Snackbar.make(
-                                binding.root,
-                                requireContext().getString(R.string.forgot_pw_error_not_found),
-                                LENGTH_LONG
-                            ).show()
-                        }
-                        else -> {
-                            Snackbar.make(
-                                binding.root,
-                                requireContext().getString(R.string.network_error_failure),
-                                LENGTH_LONG
-                            ).show()
+
+                    response.data?.let { email ->
+                        val action = ForgotPwFragmentDirections
+                            .actionForgotPasswordFragmentToForgotPwSentFragment(email)
+                        navController.navigate(action)
+                    }
+                }
+                is Resource.Error -> {
+                    hideLoadingAnimation()
+                    response.message?.let {
+                        when {
+                            it.contains("Unable to connect to the internet") -> {
+                                Snackbar.make(
+                                    binding.root,
+                                    requireContext().getString(R.string.network_error_connection),
+                                    LENGTH_INDEFINITE
+                                ).apply {
+                                    setAction(requireContext().getString(R.string.network_error_retry)) { getResetPasswordInput() }
+                                    show()
+                                }
+                            }
+                            it.contains("There is no user record corresponding to this identifier") -> {
+                                Snackbar.make(
+                                    binding.root,
+                                    requireContext().getString(R.string.forgot_pw_error_not_found),
+                                    LENGTH_LONG
+                                ).show()
+                            }
+                            else -> {
+                                Snackbar.make(
+                                    binding.root,
+                                    requireContext().getString(R.string.network_error_failure),
+                                    LENGTH_LONG
+                                ).show()
+                            }
                         }
                     }
                 }
             }
         }
-    }
 
     private fun showLoadingAnimation() {
         binding.tiEditEmail.isEnabled = false

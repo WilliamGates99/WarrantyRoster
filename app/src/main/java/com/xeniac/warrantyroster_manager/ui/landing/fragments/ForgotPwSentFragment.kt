@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -13,16 +12,11 @@ import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_INDEFINITE
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.auth.FirebaseAuth
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentForgotPwSentBinding
-import com.xeniac.warrantyroster_manager.utils.NetworkHelper.hasInternetConnection
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
-import java.lang.Exception
+import com.xeniac.warrantyroster_manager.ui.landing.LandingActivity
+import com.xeniac.warrantyroster_manager.ui.landing.LandingViewModel
+import com.xeniac.warrantyroster_manager.utils.Resource
 import java.text.DecimalFormat
 
 class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
@@ -30,20 +24,20 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
     private var _binding: FragmentForgotPwSentBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var viewModel: LandingViewModel
+
     private lateinit var email: String
     private var countDownTimer: CountDownTimer? = null
-
-    private val TAG = "ForgotPwSentFragment"
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentForgotPwSentBinding.bind(view)
-        firebaseAuth = FirebaseAuth.getInstance()
+        viewModel = (activity as LandingActivity).viewModel
 
         getEmailFromArgs()
         returnOnClick()
         resendOnClick()
+        forgotPwSentObserver()
     }
 
     override fun onDestroyView() {
@@ -65,46 +59,45 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
         resendResetPasswordEmail()
     }
 
-    private fun resendResetPasswordEmail() {
-        if (hasInternetConnection(requireContext())) {
-            resendResetPasswordEmailAuth()
-        } else {
-            hideLoadingAnimation()
-            Snackbar.make(
-                binding.root,
-                requireContext().getString(R.string.network_error_connection),
-                LENGTH_INDEFINITE
-            ).apply {
-                setAction(requireContext().getString(R.string.network_error_retry)) { resendResetPasswordEmail() }
-                show()
-            }
-        }
-    }
+    private fun resendResetPasswordEmail() = viewModel.sendResetPasswordEmail(email)
 
-    private fun resendResetPasswordEmailAuth() {
-        showLoadingAnimation()
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                firebaseAuth.sendPasswordResetEmail(email).await()
-                Log.i(TAG, "Reset password email successfully sent to ${email}.")
-                withContext(Dispatchers.Main) {
+    private fun forgotPwSentObserver() =
+        viewModel.forgotPwLiveData.observe(viewLifecycleOwner) { response ->
+            when (response) {
+                is Resource.Loading -> {
+                    showLoadingAnimation()
+                }
+                is Resource.Success -> {
                     hideLoadingAnimation()
                     countdown()
                     binding.lavSent.playAnimation()
                 }
-            } catch (e: Exception) {
-                Log.e(TAG, "Exception: ${e.message}")
-                withContext(Dispatchers.Main) {
+                is Resource.Error -> {
                     hideLoadingAnimation()
-                    Snackbar.make(
-                        binding.root,
-                        requireContext().getString(R.string.network_error_failure),
-                        LENGTH_LONG
-                    ).show()
+                    response.message?.let {
+                        when {
+                            it.contains("Unable to connect to the internet") -> {
+                                Snackbar.make(
+                                    binding.root,
+                                    requireContext().getString(R.string.network_error_connection),
+                                    LENGTH_INDEFINITE
+                                ).apply {
+                                    setAction(requireContext().getString(R.string.network_error_retry)) { resendResetPasswordEmail() }
+                                    show()
+                                }
+                            }
+                            else -> {
+                                Snackbar.make(
+                                    binding.root,
+                                    requireContext().getString(R.string.network_error_failure),
+                                    LENGTH_LONG
+                                ).show()
+                            }
+                        }
+                    }
                 }
             }
         }
-    }
 
     private fun showLoadingAnimation() {
         binding.btnResend.visibility = GONE
