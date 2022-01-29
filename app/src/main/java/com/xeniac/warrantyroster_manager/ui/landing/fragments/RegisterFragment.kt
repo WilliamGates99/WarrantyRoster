@@ -13,7 +13,6 @@ import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
-import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_INDEFINITE
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
@@ -232,7 +231,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                                 Snackbar.make(
                                     binding.root,
                                     requireContext().getString(R.string.network_error_connection),
-                                    LENGTH_INDEFINITE
+                                    LENGTH_LONG
                                 ).apply {
                                     setAction(requireContext().getString(R.string.network_error_retry)) { getRegisterInputs() }
                                     show()
@@ -242,7 +241,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                                 Snackbar.make(
                                     binding.root,
                                     requireContext().getString(R.string.register_error_account_exists),
-                                    LENGTH_INDEFINITE
+                                    LENGTH_LONG
                                 ).apply {
                                     setAction(requireContext().getString(R.string.register_btn_login)) { requireActivity().onBackPressed() }
                                     show()
@@ -258,6 +257,10 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                         }
                     }
                 }
+            }
+
+            if (viewModel.registerLiveData.value != null) {
+                viewModel.registerLiveData.value = null
             }
         }
 

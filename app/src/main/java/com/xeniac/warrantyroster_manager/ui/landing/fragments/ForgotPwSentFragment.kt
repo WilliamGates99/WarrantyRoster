@@ -9,7 +9,6 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
-import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_INDEFINITE
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
@@ -80,7 +79,7 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
                                 Snackbar.make(
                                     binding.root,
                                     requireContext().getString(R.string.network_error_connection),
-                                    LENGTH_INDEFINITE
+                                    LENGTH_LONG
                                 ).apply {
                                     setAction(requireContext().getString(R.string.network_error_retry)) { resendResetPasswordEmail() }
                                     show()
@@ -96,6 +95,10 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
                         }
                     }
                 }
+            }
+
+            if (viewModel.forgotPwLiveData.value != null) {
+                viewModel.forgotPwLiveData.value = null
             }
         }
 

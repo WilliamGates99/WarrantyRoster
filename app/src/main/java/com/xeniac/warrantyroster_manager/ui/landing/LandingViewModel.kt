@@ -37,9 +37,6 @@ class LandingViewModel(
     }
 
     private suspend fun safeRegisterViaEmail(email: String, password: String) {
-        if (registerLiveData.value != null) {
-            registerLiveData.value = null
-        }
         registerLiveData.postValue(Resource.Loading())
         try {
             if (hasInternetConnection(getApplication<WarrantyRosterApplication>())) {
@@ -70,9 +67,6 @@ class LandingViewModel(
     }
 
     private suspend fun safeLoginViaEmail(email: String, password: String) {
-        if (loginLiveData.value != null) {
-            loginLiveData.value = null
-        }
         loginLiveData.postValue(Resource.Loading())
         try {
             if (hasInternetConnection(getApplication<WarrantyRosterApplication>())) {
@@ -94,9 +88,6 @@ class LandingViewModel(
     }
 
     private suspend fun safeSendResetPasswordEmail(email: String) {
-        if (forgotPwLiveData.value != null) {
-            forgotPwLiveData.value = null
-        }
         forgotPwLiveData.postValue(Resource.Loading())
         try {
             if (hasInternetConnection(getApplication<WarrantyRosterApplication>())) {
