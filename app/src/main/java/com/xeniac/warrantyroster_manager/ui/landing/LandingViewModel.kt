@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseUser
 import com.xeniac.warrantyroster_manager.WarrantyRosterApplication
-import com.xeniac.warrantyroster_manager.repositories.LandingRepository
+import com.xeniac.warrantyroster_manager.repositories.UserRepository
 import com.xeniac.warrantyroster_manager.utils.NetworkHelper.hasInternetConnection
 import com.xeniac.warrantyroster_manager.utils.Resource
 import kotlinx.coroutines.launch
@@ -15,7 +15,7 @@ import kotlinx.coroutines.tasks.await
 
 class LandingViewModel(
     application: Application,
-    private val landingRepository: LandingRepository
+    private val userRepository: UserRepository
 ) : AndroidViewModel(application) {
 
     val registerLiveData: MutableLiveData<Resource<Any>> = MutableLiveData()
@@ -40,7 +40,7 @@ class LandingViewModel(
         registerLiveData.postValue(Resource.Loading())
         try {
             if (hasInternetConnection(getApplication<WarrantyRosterApplication>())) {
-                landingRepository.registerViaEmail(email, password).await().apply {
+                userRepository.registerViaEmail(email, password).await().apply {
                     user?.let {
                         Log.i(TAG, "${it.email} registered successfully.")
                         sendVerificationEmail(it)
@@ -60,7 +60,7 @@ class LandingViewModel(
 
     private fun sendVerificationEmail(user: FirebaseUser) {
         try {
-            landingRepository.sendVerificationEmail(user)
+            userRepository.sendVerificationEmail(user)
         } catch (t: Throwable) {
             Log.e(TAG, "Exception: ${t.message}")
         }
@@ -70,7 +70,7 @@ class LandingViewModel(
         loginLiveData.postValue(Resource.Loading())
         try {
             if (hasInternetConnection(getApplication<WarrantyRosterApplication>())) {
-                landingRepository.loginViaEmail(email, password).await().apply {
+                userRepository.loginViaEmail(email, password).await().apply {
                     user?.let {
                         Log.i(TAG, "${it.email} logged in successfully.")
                         loginLiveData.postValue(Resource.Success(null))
@@ -91,7 +91,7 @@ class LandingViewModel(
         forgotPwLiveData.postValue(Resource.Loading())
         try {
             if (hasInternetConnection(getApplication<WarrantyRosterApplication>())) {
-                landingRepository.sendResetPasswordEmail(email).await().apply {
+                userRepository.sendResetPasswordEmail(email).await().apply {
                     Log.i(TAG, "Reset password email successfully sent to ${email}.")
                     forgotPwLiveData.postValue(Resource.Success(email))
                 }

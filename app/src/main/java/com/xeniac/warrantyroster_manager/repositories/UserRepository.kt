@@ -3,7 +3,7 @@ package com.xeniac.warrantyroster_manager.repositories
 import com.google.firebase.auth.FirebaseUser
 import com.xeniac.warrantyroster_manager.firebase.FirebaseAuthInstance
 
-class LandingRepository {
+class UserRepository {
 
     fun registerViaEmail(email: String, password: String) =
         FirebaseAuthInstance.auth.createUserWithEmailAndPassword(email, password)

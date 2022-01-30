@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.ActivityLandingBinding
-import com.xeniac.warrantyroster_manager.repositories.LandingRepository
+import com.xeniac.warrantyroster_manager.repositories.UserRepository
 import com.xeniac.warrantyroster_manager.ui.main.MainActivity
 import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_IS_LOGGED_IN_KEY
 import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_LOGIN
@@ -44,7 +44,7 @@ class LandingActivity : AppCompatActivity() {
         binding = ActivityLandingBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val repository = LandingRepository()
+        val repository = UserRepository()
         val viewModelProviderFactory = LandingViewModelProviderFactory(application, repository)
         viewModel = ViewModelProvider(this, viewModelProviderFactory)[LandingViewModel::class.java]
 
