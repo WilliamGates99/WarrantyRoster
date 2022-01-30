@@ -9,7 +9,8 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseUser
 import com.xeniac.warrantyroster_manager.WarrantyRosterApplication
 import com.xeniac.warrantyroster_manager.repositories.UserRepository
-import com.xeniac.warrantyroster_manager.utils.Constants
+import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_IS_LOGGED_IN_KEY
+import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_LOGIN
 import com.xeniac.warrantyroster_manager.utils.NetworkHelper.hasInternetConnection
 import com.xeniac.warrantyroster_manager.utils.Resource
 import kotlinx.coroutines.launch
@@ -48,9 +49,9 @@ class LandingViewModel(
                         sendVerificationEmail(it)
 
                         getApplication<WarrantyRosterApplication>()
-                            .getSharedPreferences(Constants.PREFERENCE_LOGIN, Context.MODE_PRIVATE)
+                            .getSharedPreferences(PREFERENCE_LOGIN, Context.MODE_PRIVATE)
                             .edit().apply {
-                                putBoolean(Constants.PREFERENCE_IS_LOGGED_IN_KEY, true)
+                                putBoolean(PREFERENCE_IS_LOGGED_IN_KEY, true)
                                 apply()
                             }
 
@@ -85,9 +86,9 @@ class LandingViewModel(
                         Log.i(TAG, "${it.email} logged in successfully.")
 
                         getApplication<WarrantyRosterApplication>()
-                            .getSharedPreferences(Constants.PREFERENCE_LOGIN, Context.MODE_PRIVATE)
+                            .getSharedPreferences(PREFERENCE_LOGIN, Context.MODE_PRIVATE)
                             .edit().apply {
-                                putBoolean(Constants.PREFERENCE_IS_LOGGED_IN_KEY, true)
+                                putBoolean(PREFERENCE_IS_LOGGED_IN_KEY, true)
                                 apply()
                             }
 
