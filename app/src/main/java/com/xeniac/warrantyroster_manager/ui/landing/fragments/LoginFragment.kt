@@ -21,8 +21,6 @@ import com.xeniac.warrantyroster_manager.databinding.FragmentLoginBinding
 import com.xeniac.warrantyroster_manager.ui.landing.LandingActivity
 import com.xeniac.warrantyroster_manager.ui.landing.LandingViewModel
 import com.xeniac.warrantyroster_manager.ui.main.MainActivity
-import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_IS_LOGGED_IN_KEY
-import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_LOGIN
 import com.xeniac.warrantyroster_manager.utils.Resource
 
 class LoginFragment : Fragment(R.layout.fragment_login) {
@@ -149,13 +147,6 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                 }
                 is Resource.Success -> {
                     hideLoadingAnimation()
-
-                    requireContext()
-                        .getSharedPreferences(PREFERENCE_LOGIN, Context.MODE_PRIVATE).edit().apply {
-                            putBoolean(PREFERENCE_IS_LOGGED_IN_KEY, true)
-                            apply()
-                        }
-
                     Intent(requireContext(), MainActivity::class.java).apply {
                         startActivity(this)
                         requireActivity().finish()

@@ -1,6 +1,7 @@
 package com.xeniac.warrantyroster_manager.ui.landing
 
 import android.app.Application
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
@@ -8,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseUser
 import com.xeniac.warrantyroster_manager.WarrantyRosterApplication
 import com.xeniac.warrantyroster_manager.repositories.UserRepository
+import com.xeniac.warrantyroster_manager.utils.Constants
 import com.xeniac.warrantyroster_manager.utils.NetworkHelper.hasInternetConnection
 import com.xeniac.warrantyroster_manager.utils.Resource
 import kotlinx.coroutines.launch
@@ -44,6 +46,14 @@ class LandingViewModel(
                     user?.let {
                         Log.i(TAG, "${it.email} registered successfully.")
                         sendVerificationEmail(it)
+
+                        getApplication<WarrantyRosterApplication>()
+                            .getSharedPreferences(Constants.PREFERENCE_LOGIN, Context.MODE_PRIVATE)
+                            .edit().apply {
+                                putBoolean(Constants.PREFERENCE_IS_LOGGED_IN_KEY, true)
+                                apply()
+                            }
+
                         registerLiveData.postValue(Resource.Success(null))
                     }
                 }
@@ -73,6 +83,14 @@ class LandingViewModel(
                 userRepository.loginViaEmail(email, password).await().apply {
                     user?.let {
                         Log.i(TAG, "${it.email} logged in successfully.")
+
+                        getApplication<WarrantyRosterApplication>()
+                            .getSharedPreferences(Constants.PREFERENCE_LOGIN, Context.MODE_PRIVATE)
+                            .edit().apply {
+                                putBoolean(Constants.PREFERENCE_IS_LOGGED_IN_KEY, true)
+                                apply()
+                            }
+
                         loginLiveData.postValue(Resource.Success(null))
                     }
                 }
