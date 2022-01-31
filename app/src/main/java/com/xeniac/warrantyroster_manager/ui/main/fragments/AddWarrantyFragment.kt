@@ -346,9 +346,7 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
     private fun addWarrantyObserver() =
         viewModel.addWarrantyLiveData.observe(viewLifecycleOwner) { response ->
             when (response) {
-                is Resource.Loading -> {
-                    showLoadingAnimation()
-                }
+                is Resource.Loading -> showLoadingAnimation()
                 is Resource.Success -> {
                     hideLoadingAnimation()
                     navController.navigate(R.id.action_addWarrantyFragment_to_warrantiesFragment)
