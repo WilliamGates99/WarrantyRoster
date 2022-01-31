@@ -59,6 +59,7 @@ class LandingViewModel(
                     }
                 }
             } else {
+                Log.e(TAG, "Unable to connect to the internet")
                 registerLiveData.postValue(
                     Resource.Error("Unable to connect to the internet")
                 )
@@ -96,6 +97,7 @@ class LandingViewModel(
                     }
                 }
             } else {
+                Log.e(TAG, "Unable to connect to the internet")
                 loginLiveData.postValue(
                     Resource.Error("Unable to connect to the internet")
                 )
@@ -115,6 +117,7 @@ class LandingViewModel(
                     forgotPwLiveData.postValue(Resource.Success(email))
                 }
             } else {
+                Log.e(TAG, "Unable to connect to the internet")
                 forgotPwLiveData.postValue(
                     Resource.Error("Unable to connect to the internet")
                 )
