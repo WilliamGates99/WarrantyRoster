@@ -3,6 +3,7 @@ package com.xeniac.warrantyroster_manager.ui.main
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
@@ -10,6 +11,8 @@ import com.google.android.material.shape.CornerFamily.ROUNDED
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.ActivityMainBinding
+import com.xeniac.warrantyroster_manager.db.WarrantyRosterDatabase
+import com.xeniac.warrantyroster_manager.repositories.WarrantyRepository
 import com.xeniac.warrantyroster_manager.utils.Constants.DELETE_WARRANTY_Interstitial_ZONE_ID
 import com.xeniac.warrantyroster_manager.utils.LocaleModifier
 import ir.tapsell.plus.AdRequestCallback
@@ -22,6 +25,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
+    lateinit var viewModel: MainViewModel
 
     private val TAG = "MainActivity"
 
@@ -33,6 +37,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun mainInit() {
+        val warrantyRepository = WarrantyRepository(WarrantyRosterDatabase(this))
+        val viewModelProviderFactory = MainViewModelProviderFactory(application, warrantyRepository)
+        viewModel = ViewModelProvider(this, viewModelProviderFactory)[MainViewModel::class.java]
+
         LocaleModifier.setLocale(this)
         bottomAppBarStyle()
         bottomNavActions()
