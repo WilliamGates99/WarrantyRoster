@@ -70,14 +70,6 @@ class LandingViewModel(
         }
     }
 
-    private fun sendVerificationEmail(user: FirebaseUser) {
-        try {
-            userRepository.sendVerificationEmail(user)
-        } catch (t: Throwable) {
-            Log.e(TAG, "Exception: ${t.message}")
-        }
-    }
-
     private suspend fun safeLoginViaEmail(email: String, password: String) {
         loginLiveData.postValue(Resource.Loading())
         try {
@@ -125,6 +117,14 @@ class LandingViewModel(
         } catch (t: Throwable) {
             Log.e(TAG, "Exception: ${t.message}")
             forgotPwLiveData.postValue(Resource.Error(t.message.toString()))
+        }
+    }
+
+    private fun sendVerificationEmail(user: FirebaseUser) {
+        try {
+            userRepository.sendVerificationEmail(user)
+        } catch (t: Throwable) {
+            Log.e(TAG, "Exception: ${t.message}")
         }
     }
 }
