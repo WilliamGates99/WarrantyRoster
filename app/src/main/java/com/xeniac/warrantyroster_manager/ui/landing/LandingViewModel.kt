@@ -21,8 +21,8 @@ class LandingViewModel(
     private val userRepository: UserRepository
 ) : AndroidViewModel(application) {
 
-    val registerLiveData: MutableLiveData<Resource<Any>> = MutableLiveData()
-    val loginLiveData: MutableLiveData<Resource<Any>> = MutableLiveData()
+    val registerLiveData: MutableLiveData<Resource<Nothing>> = MutableLiveData()
+    val loginLiveData: MutableLiveData<Resource<Nothing>> = MutableLiveData()
     val forgotPwLiveData: MutableLiveData<Resource<String>> = MutableLiveData()
 
     private val TAG = "LandingViewModel"
