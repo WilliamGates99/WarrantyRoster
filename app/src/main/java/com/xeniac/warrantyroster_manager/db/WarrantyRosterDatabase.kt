@@ -23,7 +23,8 @@ abstract class WarrantyRosterDatabase : RoomDatabase() {
         private fun createDatabase(context: Context) =
             Room.databaseBuilder(
                 context.applicationContext,
-                WarrantyRosterDatabase::class.java, DB_FILE_NAME_NEW
+                WarrantyRosterDatabase::class.java,
+                DB_FILE_NAME_NEW
             ).build()
     }
 }
