@@ -1,6 +1,5 @@
 package com.xeniac.warrantyroster_manager.ui.main.fragments
 
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -9,58 +8,28 @@ import android.view.View.VISIBLE
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.ListenerRegistration
-import com.google.firebase.firestore.Query
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.ui.main.adapters.WarrantyAdapter
 import com.xeniac.warrantyroster_manager.ui.main.adapters.WarrantyListClickInterface
 import com.xeniac.warrantyroster_manager.databinding.FragmentWarrantiesBinding
-import com.xeniac.warrantyroster_manager.db.WarrantyRosterDatabase
-import com.xeniac.warrantyroster_manager.models.Category
 import com.xeniac.warrantyroster_manager.ui.main.MainActivity
-import com.xeniac.warrantyroster_manager.models.ListItemType
 import com.xeniac.warrantyroster_manager.models.Warranty
-import com.xeniac.warrantyroster_manager.utils.Constants.CATEGORIES_ICON
-import com.xeniac.warrantyroster_manager.utils.Constants.CATEGORIES_TITLE
-import com.xeniac.warrantyroster_manager.utils.Constants.COLLECTION_CATEGORIES
-import com.xeniac.warrantyroster_manager.utils.Constants.COLLECTION_WARRANTIES
-import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_DB_SEED
-import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_EN_US_KEY
+import com.xeniac.warrantyroster_manager.ui.main.MainViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.TAPSELL_KEY
-import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_BRAND
-import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_CATEGORY_ID
-import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_DESCRIPTION
-import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_EXPIRY_DATE
-import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_MODEL
-import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_SERIAL_NUMBER
-import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_STARTING_DATE
-import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_TITLE
-import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_UUID
+import com.xeniac.warrantyroster_manager.utils.Resource
 import ir.tapsell.plus.TapsellPlus
 import ir.tapsell.plus.TapsellPlusInitListener
 import ir.tapsell.plus.model.AdNetworkError
 import ir.tapsell.plus.model.AdNetworks
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 
 class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListClickInterface {
 
     private var _binding: FragmentWarrantiesBinding? = null
     private val binding get() = _binding!!
     private lateinit var navController: NavController
+    private lateinit var viewModel: MainViewModel
 
-    private val categoriesCollectionRef = Firebase.firestore
-        .collection(COLLECTION_CATEGORIES)
-    private lateinit var database: WarrantyRosterDatabase
-
-    private val warrantiesCollectionRef = Firebase.firestore
-        .collection(COLLECTION_WARRANTIES)
-    private var warrantiesQuery: ListenerRegistration? = null
+    private lateinit var warrantyAdapter: WarrantyAdapter
 
     private val TAG = "WarrantiesFragment"
 
@@ -68,17 +37,18 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentWarrantiesBinding.bind(view)
         navController = Navigation.findNavController(view)
-        database = WarrantyRosterDatabase(requireContext())
         (requireContext() as MainActivity).showNavBar()
+        viewModel = (activity as MainActivity).viewModel
 
         adInit()
         seedCategories()
+        setupRecyclerView()
         getWarrantiesListFromFirestore()
+        warrantiesListObserver()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        warrantiesQuery?.remove()
         _binding = null
     }
 
@@ -98,105 +68,45 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
             }
         })
 
-    private fun seedCategories() = CoroutineScope(Dispatchers.IO).launch {
-        try {
-            val seedPrefs = requireContext()
-                .getSharedPreferences(PREFERENCE_DB_SEED, Context.MODE_PRIVATE)
-            val isEnUsSeeded = seedPrefs.getBoolean(PREFERENCE_EN_US_KEY, false)
+    private fun seedCategories() = viewModel.seedCategories()
 
-            //TODO add isFaIRSeeded after adding persian
-            if (!isEnUsSeeded) {
-                database.getCategoryDao().deleteAllCategories()
-                val categoriesQuery = categoriesCollectionRef
-                    .orderBy(CATEGORIES_TITLE, Query.Direction.ASCENDING)
-                    .get().await()
-                Log.i(TAG, "Categories successfully retrieved.")
-
-                val categoriesList = mutableListOf<Category>()
-                for (document in categoriesQuery.documents) {
-                    @Suppress("UNCHECKED_CAST")
-                    document?.let {
-                        val id = it.id
-                        val title = it.get(CATEGORIES_TITLE) as Map<String, String>
-                        val icon = it.get(CATEGORIES_ICON).toString()
-                        categoriesList.add(Category(id, title, icon))
-                    }
-                }
-                database.getCategoryDao().insertAllCategories(categoriesList)
-
-                val itemCount = database.getCategoryDao().countItems()
-                if (itemCount == 21) {
-                    Log.i(TAG, "categories successfully seeded to DB.")
-                    requireContext().getSharedPreferences(
-                        PREFERENCE_DB_SEED, Context.MODE_PRIVATE
-                    ).edit().apply {
-                        putBoolean(PREFERENCE_EN_US_KEY, true)
-                        apply()
-                    }
-                }
-            }
-        } catch (e: Exception) {
-            Log.e(TAG, "Exception: ${e.message}")
-        }
+    private fun setupRecyclerView() {
+        warrantyAdapter = WarrantyAdapter(requireActivity(), requireContext(), viewModel, this)
+        binding.rv.adapter = warrantyAdapter
     }
 
-    private fun getWarrantiesListFromFirestore() {
-        showLoadingAnimation()
+    private fun getWarrantiesListFromFirestore() = viewModel.getWarrantiesListFromFirestore()
 
-        warrantiesQuery = warrantiesCollectionRef
-            .whereEqualTo(WARRANTIES_UUID, Firebase.auth.currentUser?.uid)
-            .orderBy(WARRANTIES_TITLE, Query.Direction.ASCENDING)
-            .addSnapshotListener { value, error ->
-                error?.let {
-                    Log.e(TAG, "Exception: ${it.message}")
-                    binding.tvNetworkError.text =
-                        requireContext().getString(R.string.network_error_connection)
-                    showNetworkError()
-                }
-
-                value?.let {
-                    Log.i(TAG, "Warranties List successfully retrieved.")
+    private fun warrantiesListObserver() {
+        viewModel.warrantiesLiveData.observe(viewLifecycleOwner) { response ->
+            when (response) {
+                is Resource.Loading -> showLoadingAnimation()
+                is Resource.Success -> {
                     hideLoadingAnimation()
-
-                    if (it.documents.size == 0) {
-                        showWarrantiesEmptyList()
-                    } else {
-                        val warrantiesList = mutableListOf<Warranty>()
-                        var adIndex = 5
-
-                        for (document in it.documents) {
-                            val warranty = Warranty(
-                                document.id,
-                                document.get(WARRANTIES_TITLE).toString(),
-                                document.get(WARRANTIES_BRAND).toString(),
-                                document.get(WARRANTIES_MODEL).toString(),
-                                document.get(WARRANTIES_SERIAL_NUMBER).toString(),
-                                document.get(WARRANTIES_STARTING_DATE).toString(),
-                                document.get(WARRANTIES_EXPIRY_DATE).toString(),
-                                document.get(WARRANTIES_DESCRIPTION).toString(),
-                                document.get(WARRANTIES_CATEGORY_ID).toString(),
-                                ListItemType.WARRANTY
-                            )
-                            warrantiesList.add(warranty)
-
-                            if (warrantiesList.size == adIndex) {
-                                adIndex += 6
-                                val nativeAd = Warranty(
-                                    null, null, null, null,
-                                    null, null, null,
-                                    null, null, ListItemType.AD
-                                )
-                                warrantiesList.add(nativeAd)
-                            }
-                        }
+                    response.data?.let { warrantiesList ->
                         showWarrantiesList(warrantiesList)
                     }
                 }
+                is Resource.Error -> {
+                    hideLoadingAnimation()
+                    response.message?.let {
+                        when {
+                            it.contains("Warranty list is empty") -> {
+                                showWarrantiesEmptyList()
+                            }
+                            else -> {
+                                binding.tvNetworkError.text =
+                                    requireContext().getString(R.string.network_error_connection)
+                                showNetworkError()
+                            }
+                        }
+                    }
+                }
             }
+        }
     }
 
     private fun showNetworkError() {
-        hideLoadingAnimation()
         binding.groupEmptyList.visibility = GONE
         binding.rv.visibility = GONE
         binding.groupNetwork.visibility = VISIBLE
@@ -230,12 +140,7 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
         binding.groupNetwork.visibility = GONE
         binding.groupEmptyList.visibility = GONE
         binding.rv.visibility = VISIBLE
-
-        val warrantyAdapter = WarrantyAdapter(
-            requireActivity(), requireContext(), database,
-            warrantiesList, this
-        )
-        binding.rv.adapter = warrantyAdapter
+        warrantyAdapter.warrantyListDiffer.submitList(warrantiesList)
 
         //TODO remove comment after adding search function
 //        searchWarrantiesList();

@@ -6,17 +6,19 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.ImageLoader
 import coil.decode.SvgDecoder
 import coil.load
 import coil.request.CachePolicy
 import com.xeniac.warrantyroster_manager.R
-import com.xeniac.warrantyroster_manager.db.WarrantyRosterDatabase
 import com.xeniac.warrantyroster_manager.databinding.ListAdContainerBinding
 import com.xeniac.warrantyroster_manager.databinding.ListWarrantyBinding
 import com.xeniac.warrantyroster_manager.models.ListItemType
 import com.xeniac.warrantyroster_manager.models.Warranty
+import com.xeniac.warrantyroster_manager.ui.main.MainViewModel
 import com.xeniac.warrantyroster_manager.utils.CategoryHelper.getCategoryTitleMapKey
 import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_NATIVE_ZONE_ID
 import ir.tapsell.plus.AdHolder
@@ -33,10 +35,9 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 class WarrantyAdapter(
-    private val mActivity: Activity,
-    private val mContext: Context,
-    private val database: WarrantyRosterDatabase,
-    private val warrantyList: List<Warranty>,
+    private val activity: Activity,
+    private val context: Context,
+    private val viewModel: MainViewModel,
     private val clickInterface: WarrantyListClickInterface
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -48,6 +49,18 @@ class WarrantyAdapter(
         private const val VIEW_TYPE_WARRANTY = 0
         private const val VIEW_TYPE_AD = 1
     }
+
+    private val differCallback = object : DiffUtil.ItemCallback<Warranty>() {
+        override fun areItemsTheSame(oldItem: Warranty, newItem: Warranty): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: Warranty, newItem: Warranty): Boolean {
+            return oldItem == newItem
+        }
+    }
+
+    val warrantyListDiffer = AsyncListDiffer(this, differCallback)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -61,7 +74,7 @@ class WarrantyAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (warrantyList[position].itemType == ListItemType.WARRANTY) {
+        return if (warrantyListDiffer.currentList[position].itemType == ListItemType.WARRANTY) {
             VIEW_TYPE_WARRANTY
         } else {
             VIEW_TYPE_AD
@@ -70,13 +83,13 @@ class WarrantyAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (getItemViewType(position) == VIEW_TYPE_WARRANTY) {
-            (holder as WarrantyViewHolder).bindView(warrantyList[position])
+            (holder as WarrantyViewHolder).bindView(warrantyListDiffer.currentList[position])
         } else {
             (holder as AdViewHolder).bindView()
         }
     }
 
-    override fun getItemCount(): Int = warrantyList.size
+    override fun getItemCount(): Int = warrantyListDiffer.currentList.size
 
     inner class WarrantyViewHolder(val binding: ListWarrantyBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -84,7 +97,8 @@ class WarrantyAdapter(
         fun bindView(warranty: Warranty) = CoroutineScope(Dispatchers.IO).launch {
             try {
                 val category = warranty.categoryId?.let {
-                    database.getCategoryDao().getCategoryById(it)
+                    viewModel.getCategoryById(it)
+//                    database.getCategoryDao().getCategoryById(it)
                 }
 
                 withContext(Dispatchers.Main) {
@@ -102,41 +116,41 @@ class WarrantyAdapter(
 
                     when {
                         daysUntilExpiry < 0 -> {
-                            binding.statusColor = ContextCompat.getColor(mContext, R.color.red)
+                            binding.statusColor = ContextCompat.getColor(context, R.color.red)
                             binding.statusTitle =
-                                mContext.getString(R.string.warranties_list_status_expired)
+                                context.getString(R.string.warranties_list_status_expired)
                         }
                         daysUntilExpiry <= 30 -> {
-                            binding.statusColor = ContextCompat.getColor(mContext, R.color.orange)
+                            binding.statusColor = ContextCompat.getColor(context, R.color.orange)
                             binding.statusTitle =
-                                mContext.getString(R.string.warranties_list_status_soon)
+                                context.getString(R.string.warranties_list_status_soon)
                         }
                         else -> {
-                            binding.statusColor = ContextCompat.getColor(mContext, R.color.green)
+                            binding.statusColor = ContextCompat.getColor(context, R.color.green)
                             binding.statusTitle =
-                                mContext.getString(R.string.warranties_list_status_valid)
+                                context.getString(R.string.warranties_list_status_valid)
                         }
                     }
 
                     binding.title = warranty.title
                     binding.expiryDate = expiryDate
                     binding.categoryTitle = category?.let {
-                        it.title[getCategoryTitleMapKey(mContext)]
+                        it.title[getCategoryTitleMapKey(context)]
                     }
                     binding.executePendingBindings()
 
-                    binding.cvWarranty.setOnClickListener {
-                        clickInterface.onItemClick(warranty, daysUntilExpiry)
-                    }
-
                     category?.let {
-                        val imageLoader = ImageLoader.Builder(mContext)
-                            .componentRegistry { add(SvgDecoder(mContext)) }.build()
+                        val imageLoader = ImageLoader.Builder(context)
+                            .componentRegistry { add(SvgDecoder(context)) }.build()
                         binding.ivIcon.load(it.icon, imageLoader) {
                             memoryCachePolicy(CachePolicy.ENABLED)
                             diskCachePolicy(CachePolicy.ENABLED)
                             networkCachePolicy(CachePolicy.ENABLED)
                         }
+                    }
+
+                    binding.cvWarranty.setOnClickListener {
+                        clickInterface.onItemClick(warranty, daysUntilExpiry)
                     }
                 }
             } catch (e: Exception) {
@@ -173,7 +187,7 @@ class WarrantyAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         private val adHolder = TapsellPlus
-            .createAdHolder(mActivity, binding.cvAdContainer, R.layout.list_ad_banner)
+            .createAdHolder(activity, binding.cvAdContainer, R.layout.list_ad_banner)
 
         fun bindView() {
             requestAdCounter = 0
@@ -182,12 +196,12 @@ class WarrantyAdapter(
     }
 
     private fun requestNativeAd(adHolder: AdHolder) {
-        TapsellPlus.requestNativeAd(mActivity, WARRANTIES_NATIVE_ZONE_ID,
+        TapsellPlus.requestNativeAd(activity, WARRANTIES_NATIVE_ZONE_ID,
             object : AdRequestCallback() {
                 override fun response(tapsellPlusAdModel: TapsellPlusAdModel?) {
                     super.response(tapsellPlusAdModel)
                     Log.i(TAG, "response: $tapsellPlusAdModel")
-                    TapsellPlus.showNativeAd(mActivity, tapsellPlusAdModel!!.responseId,
+                    TapsellPlus.showNativeAd(activity, tapsellPlusAdModel!!.responseId,
                         adHolder, object : AdShowListener() {
                             override fun onOpened(tapsellPlusAdModel: TapsellPlusAdModel?) {
                                 super.onOpened(tapsellPlusAdModel)
