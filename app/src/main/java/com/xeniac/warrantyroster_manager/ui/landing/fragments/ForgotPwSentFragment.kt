@@ -63,9 +63,7 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
     private fun forgotPwSentObserver() =
         viewModel.forgotPwLiveData.observe(viewLifecycleOwner) { response ->
             when (response) {
-                is Resource.Loading -> {
-                    showLoadingAnimation()
-                }
+                is Resource.Loading -> showLoadingAnimation()
                 is Resource.Success -> {
                     hideLoadingAnimation()
                     countdown()

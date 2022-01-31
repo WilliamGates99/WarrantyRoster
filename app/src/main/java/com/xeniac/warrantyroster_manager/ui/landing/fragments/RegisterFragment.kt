@@ -204,9 +204,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     private fun registerObserver() =
         viewModel.registerLiveData.observe(viewLifecycleOwner) { response ->
             when (response) {
-                is Resource.Loading -> {
-                    showLoadingAnimation()
-                }
+                is Resource.Loading -> showLoadingAnimation()
                 is Resource.Success -> {
                     hideLoadingAnimation()
                     Intent(requireContext(), MainActivity::class.java).apply {

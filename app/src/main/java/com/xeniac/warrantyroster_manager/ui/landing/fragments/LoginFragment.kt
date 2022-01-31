@@ -142,9 +142,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     private fun loginObserver() =
         viewModel.loginLiveData.observe(viewLifecycleOwner) { response ->
             when (response) {
-                is Resource.Loading -> {
-                    showLoadingAnimation()
-                }
+                is Resource.Loading -> showLoadingAnimation()
                 is Resource.Success -> {
                     hideLoadingAnimation()
                     Intent(requireContext(), MainActivity::class.java).apply {
