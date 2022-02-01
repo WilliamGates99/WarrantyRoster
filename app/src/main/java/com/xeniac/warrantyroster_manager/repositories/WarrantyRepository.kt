@@ -7,7 +7,6 @@ import com.xeniac.warrantyroster_manager.firebase.FirestoreInstance
 import com.xeniac.warrantyroster_manager.models.Category
 import com.xeniac.warrantyroster_manager.models.WarrantyInput
 import com.xeniac.warrantyroster_manager.utils.Constants
-import kotlinx.coroutines.tasks.await
 
 class WarrantyRepository(private val db: WarrantyRosterDatabase) {
 
@@ -26,7 +25,7 @@ class WarrantyRepository(private val db: WarrantyRosterDatabase) {
         .orderBy(Constants.CATEGORIES_TITLE, Query.Direction.ASCENDING)
         .get()
 
-    fun getWarrantiesFromFirestore()=FirestoreInstance.warrantiesCollectionRef
+    fun getWarrantiesFromFirestore() = FirestoreInstance.warrantiesCollectionRef
         .whereEqualTo(Constants.WARRANTIES_UUID, FirebaseAuthInstance.auth.currentUser?.uid)
         .orderBy(Constants.WARRANTIES_TITLE, Query.Direction.ASCENDING)
 
