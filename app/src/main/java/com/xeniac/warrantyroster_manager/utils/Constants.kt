@@ -55,4 +55,14 @@ object Constants {
     const val WARRANTIES_DESCRIPTION = "description"
     const val WARRANTIES_CATEGORY_ID = "categoryId"
     const val WARRANTIES_UUID = "uuid"
+
+    //Response Errors
+    const val ERROR_NETWORK_CONNECTION = "Unable to connect to the internet"
+    const val ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS =
+        "The email address is already in use by another account"
+    const val ERROR_FIREBASE_AUTH_ACCOUNT_NOT_FOUND =
+        "There is no user record corresponding to this identifier"
+    const val ERROR_FIREBASE_AUTH_CREDENTIALS =
+        "The password is invalid or the user does not have a password"
+    const val ERROR_EMPTY_WARRANTY_LIST = "Warranty list is empty"
 }
