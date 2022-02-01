@@ -1,9 +1,10 @@
-package com.xeniac.warrantyroster_manager.ui.main
+package com.xeniac.warrantyroster_manager.ui.main.viewmodels
 
 import android.app.Application
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.xeniac.warrantyroster_manager.WarrantyRosterApplication
@@ -14,6 +15,8 @@ import com.xeniac.warrantyroster_manager.models.WarrantyInput
 import com.xeniac.warrantyroster_manager.repositories.WarrantyRepository
 import com.xeniac.warrantyroster_manager.utils.CategoryHelper.getCategoryTitleMapKey
 import com.xeniac.warrantyroster_manager.utils.Constants
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_EMPTY_WARRANTY_LIST
 import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_BRAND
 import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_CATEGORY_ID
 import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_DESCRIPTION
@@ -22,6 +25,7 @@ import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_MODEL
 import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_SERIAL_NUMBER
 import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_STARTING_DATE
 import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_TITLE
+import com.xeniac.warrantyroster_manager.utils.Event
 import com.xeniac.warrantyroster_manager.utils.NetworkHelper.hasInternetConnection
 import com.xeniac.warrantyroster_manager.utils.Resource
 import kotlinx.coroutines.launch
@@ -32,8 +36,12 @@ class MainViewModel(
     private val warrantyRepository: WarrantyRepository
 ) : AndroidViewModel(application) {
 
-    val warrantiesLiveData: MutableLiveData<Resource<MutableList<Warranty>>> = MutableLiveData()
-    val addWarrantyLiveData: MutableLiveData<Resource<Nothing>> = MutableLiveData()
+    private val _warrantiesLiveData:
+            MutableLiveData<Event<Resource<MutableList<Warranty>>>> = MutableLiveData()
+    val warrantiesLiveData: LiveData<Event<Resource<MutableList<Warranty>>>> = _warrantiesLiveData
+
+    private val _addWarrantyLiveData: MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
+    val addWarrantyLiveData: LiveData<Event<Resource<Nothing>>> = _addWarrantyLiveData
 
     private val TAG = "MainViewModel"
 
@@ -74,18 +82,18 @@ class MainViewModel(
     fun getCategoryById(categoryId: String) = warrantyRepository.getCategoryById(categoryId)
 
     fun getWarrantiesListFromFirestore() = viewModelScope.launch {
-        warrantiesLiveData.postValue(Resource.Loading())
+        _warrantiesLiveData.postValue(Event(Resource.loading()))
         warrantyRepository.getWarrantiesFromFirestore().addSnapshotListener { value, error ->
             error?.let {
                 Log.e(TAG, "Error: ${it.message}")
-                warrantiesLiveData.postValue(Resource.Error(it.message.toString()))
+                _warrantiesLiveData.postValue(Event(Resource.error(it.message.toString())))
             }
 
             value?.let {
                 Log.i(TAG, "Warranties List successfully retrieved.")
 
                 if (it.documents.size == 0) {
-                    warrantiesLiveData.postValue(Resource.Error("Warranty list is empty"))
+                    _warrantiesLiveData.postValue(Event(Resource.error(ERROR_EMPTY_WARRANTY_LIST)))
                 } else {
                     val warrantiesList = mutableListOf<Warranty>()
                     var adIndex = 5
@@ -115,7 +123,7 @@ class MainViewModel(
                             warrantiesList.add(nativeAd)
                         }
                     }
-                    warrantiesLiveData.postValue(Resource.Success(warrantiesList))
+                    _warrantiesLiveData.postValue(Event(Resource.success(warrantiesList)))
                 }
             }
         }
@@ -159,21 +167,21 @@ class MainViewModel(
     }
 
     private suspend fun safeAddWarrantyToFirestore(warrantyInput: WarrantyInput) {
-        addWarrantyLiveData.postValue(Resource.Loading())
+        _addWarrantyLiveData.postValue(Event(Resource.loading()))
         try {
             if (hasInternetConnection(getApplication<WarrantyRosterApplication>())) {
                 warrantyRepository.addWarrantyToFirestore(warrantyInput).await()
-                addWarrantyLiveData.postValue(Resource.Success(null))
+                _addWarrantyLiveData.postValue(Event(Resource.success(null)))
                 Log.i(TAG, "Warranty successfully added.")
             } else {
-                Log.e(TAG, "Unable to connect to the internet")
-                addWarrantyLiveData.postValue(
-                    Resource.Error("Unable to connect to the internet")
+                Log.e(TAG, ERROR_NETWORK_CONNECTION)
+                _addWarrantyLiveData.postValue(
+                    Event(Resource.error(ERROR_NETWORK_CONNECTION))
                 )
             }
         } catch (t: Throwable) {
             Log.e(TAG, "Exception: ${t.message}")
-            addWarrantyLiveData.postValue(Resource.Error(t.message.toString()))
+            _addWarrantyLiveData.postValue(Event(Resource.error(t.message.toString())))
         }
     }
 }
