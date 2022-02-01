@@ -13,6 +13,8 @@ import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.ActivityMainBinding
 import com.xeniac.warrantyroster_manager.db.WarrantyRosterDatabase
 import com.xeniac.warrantyroster_manager.repositories.WarrantyRepository
+import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModel
+import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModelProviderFactory
 import com.xeniac.warrantyroster_manager.utils.Constants.DELETE_WARRANTY_Interstitial_ZONE_ID
 import com.xeniac.warrantyroster_manager.utils.LocaleModifier
 import ir.tapsell.plus.AdRequestCallback

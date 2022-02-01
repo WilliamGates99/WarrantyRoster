@@ -1,4 +1,4 @@
-package com.xeniac.warrantyroster_manager.ui.main
+package com.xeniac.warrantyroster_manager.ui.main.viewmodels
 
 import android.app.Application
 import androidx.lifecycle.ViewModel
