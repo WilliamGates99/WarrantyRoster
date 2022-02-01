@@ -18,7 +18,7 @@ import com.xeniac.warrantyroster_manager.databinding.ListAdContainerBinding
 import com.xeniac.warrantyroster_manager.databinding.ListWarrantyBinding
 import com.xeniac.warrantyroster_manager.models.ListItemType
 import com.xeniac.warrantyroster_manager.models.Warranty
-import com.xeniac.warrantyroster_manager.ui.main.MainViewModel
+import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModel
 import com.xeniac.warrantyroster_manager.utils.CategoryHelper.getCategoryTitleMapKey
 import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_NATIVE_ZONE_ID
 import ir.tapsell.plus.AdHolder

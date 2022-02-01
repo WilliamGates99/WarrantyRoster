@@ -14,9 +14,10 @@ import com.xeniac.warrantyroster_manager.ui.main.adapters.WarrantyListClickInter
 import com.xeniac.warrantyroster_manager.databinding.FragmentWarrantiesBinding
 import com.xeniac.warrantyroster_manager.ui.main.MainActivity
 import com.xeniac.warrantyroster_manager.models.Warranty
-import com.xeniac.warrantyroster_manager.ui.main.MainViewModel
+import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModel
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_EMPTY_WARRANTY_LIST
 import com.xeniac.warrantyroster_manager.utils.Constants.TAPSELL_KEY
-import com.xeniac.warrantyroster_manager.utils.Resource
+import com.xeniac.warrantyroster_manager.utils.Status
 import ir.tapsell.plus.TapsellPlus
 import ir.tapsell.plus.TapsellPlusInitListener
 import ir.tapsell.plus.model.AdNetworkError
@@ -78,26 +79,28 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
     private fun getWarrantiesListFromFirestore() = viewModel.getWarrantiesListFromFirestore()
 
     private fun warrantiesListObserver() {
-        viewModel.warrantiesLiveData.observe(viewLifecycleOwner) { response ->
-            when (response) {
-                is Resource.Loading -> showLoadingAnimation()
-                is Resource.Success -> {
-                    hideLoadingAnimation()
-                    response.data?.let { warrantiesList ->
-                        showWarrantiesList(warrantiesList)
+        viewModel.warrantiesLiveData.observe(viewLifecycleOwner) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { response ->
+                when (response.status) {
+                    Status.LOADING -> showLoadingAnimation()
+                    Status.SUCCESS -> {
+                        hideLoadingAnimation()
+                        response.data?.let { warrantiesList ->
+                            showWarrantiesList(warrantiesList)
+                        }
                     }
-                }
-                is Resource.Error -> {
-                    hideLoadingAnimation()
-                    response.message?.let {
-                        when {
-                            it.contains("Warranty list is empty") -> {
-                                showWarrantiesEmptyList()
-                            }
-                            else -> {
-                                binding.tvNetworkError.text =
-                                    requireContext().getString(R.string.network_error_connection)
-                                showNetworkError()
+                    Status.ERROR -> {
+                        hideLoadingAnimation()
+                        response.message?.let {
+                            when {
+                                it.contains(ERROR_EMPTY_WARRANTY_LIST) -> {
+                                    showWarrantiesEmptyList()
+                                }
+                                else -> {
+                                    binding.tvNetworkError.text =
+                                        requireContext().getString(R.string.network_error_connection)
+                                    showNetworkError()
+                                }
                             }
                         }
                     }
