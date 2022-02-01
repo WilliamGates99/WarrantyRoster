@@ -15,7 +15,8 @@ import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentForgotPwSentBinding
 import com.xeniac.warrantyroster_manager.ui.landing.LandingActivity
 import com.xeniac.warrantyroster_manager.ui.landing.LandingViewModel
-import com.xeniac.warrantyroster_manager.utils.Resource
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
+import com.xeniac.warrantyroster_manager.utils.Status
 import java.text.DecimalFormat
 
 class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
@@ -61,42 +62,40 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
     private fun resendResetPasswordEmail() = viewModel.sendResetPasswordEmail(email)
 
     private fun forgotPwSentObserver() =
-        viewModel.forgotPwLiveData.observe(viewLifecycleOwner) { response ->
-            when (response) {
-                is Resource.Loading -> showLoadingAnimation()
-                is Resource.Success -> {
-                    hideLoadingAnimation()
-                    countdown()
-                    binding.lavSent.playAnimation()
-                }
-                is Resource.Error -> {
-                    hideLoadingAnimation()
-                    response.message?.let {
-                        when {
-                            it.contains("Unable to connect to the internet") -> {
-                                Snackbar.make(
-                                    binding.root,
-                                    requireContext().getString(R.string.network_error_connection),
-                                    LENGTH_LONG
-                                ).apply {
-                                    setAction(requireContext().getString(R.string.network_error_retry)) { resendResetPasswordEmail() }
-                                    show()
+        viewModel.forgotPwLiveData.observe(viewLifecycleOwner) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { response ->
+                when (response.status) {
+                    Status.LOADING -> showLoadingAnimation()
+                    Status.SUCCESS -> {
+                        hideLoadingAnimation()
+                        countdown()
+                        binding.lavSent.playAnimation()
+                    }
+                    Status.ERROR -> {
+                        hideLoadingAnimation()
+                        response.message?.let {
+                            when {
+                                it.contains(ERROR_NETWORK_CONNECTION) -> {
+                                    Snackbar.make(
+                                        binding.root,
+                                        requireContext().getString(R.string.network_error_connection),
+                                        LENGTH_LONG
+                                    ).apply {
+                                        setAction(requireContext().getString(R.string.network_error_retry)) { resendResetPasswordEmail() }
+                                        show()
+                                    }
                                 }
-                            }
-                            else -> {
-                                Snackbar.make(
-                                    binding.root,
-                                    requireContext().getString(R.string.network_error_failure),
-                                    LENGTH_LONG
-                                ).show()
+                                else -> {
+                                    Snackbar.make(
+                                        binding.root,
+                                        requireContext().getString(R.string.network_error_failure),
+                                        LENGTH_LONG
+                                    ).show()
+                                }
                             }
                         }
                     }
                 }
-            }
-
-            if (viewModel.forgotPwLiveData.value != null) {
-                viewModel.forgotPwLiveData.value = null
             }
         }
 

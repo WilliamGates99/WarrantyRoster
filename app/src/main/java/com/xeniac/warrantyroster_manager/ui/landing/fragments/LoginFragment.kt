@@ -21,7 +21,10 @@ import com.xeniac.warrantyroster_manager.databinding.FragmentLoginBinding
 import com.xeniac.warrantyroster_manager.ui.landing.LandingActivity
 import com.xeniac.warrantyroster_manager.ui.landing.LandingViewModel
 import com.xeniac.warrantyroster_manager.ui.main.MainActivity
-import com.xeniac.warrantyroster_manager.utils.Resource
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_ACCOUNT_NOT_FOUND
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_CREDENTIALS
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
+import com.xeniac.warrantyroster_manager.utils.Status
 
 class LoginFragment : Fragment(R.layout.fragment_login) {
 
@@ -140,61 +143,59 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         viewModel.loginViaEmail(email, password)
 
     private fun loginObserver() =
-        viewModel.loginLiveData.observe(viewLifecycleOwner) { response ->
-            when (response) {
-                is Resource.Loading -> showLoadingAnimation()
-                is Resource.Success -> {
-                    hideLoadingAnimation()
-                    Intent(requireContext(), MainActivity::class.java).apply {
-                        startActivity(this)
-                        requireActivity().finish()
+        viewModel.loginLiveData.observe(viewLifecycleOwner) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { response ->
+                when (response.status) {
+                    Status.LOADING -> showLoadingAnimation()
+                    Status.SUCCESS -> {
+                        hideLoadingAnimation()
+                        Intent(requireContext(), MainActivity::class.java).apply {
+                            startActivity(this)
+                            requireActivity().finish()
+                        }
                     }
-                }
-                is Resource.Error -> {
-                    hideLoadingAnimation()
-                    response.message?.let {
-                        when {
-                            it.contains("Unable to connect to the internet") -> {
-                                Snackbar.make(
-                                    binding.root,
-                                    requireContext().getString(R.string.network_error_connection),
-                                    LENGTH_LONG
-                                ).apply {
-                                    setAction(requireContext().getString(R.string.network_error_retry)) { getLoginInputs() }
-                                    show()
+                    Status.ERROR -> {
+                        hideLoadingAnimation()
+                        response.message?.let {
+                            when {
+                                it.contains(ERROR_NETWORK_CONNECTION) -> {
+                                    Snackbar.make(
+                                        binding.root,
+                                        requireContext().getString(R.string.network_error_connection),
+                                        LENGTH_LONG
+                                    ).apply {
+                                        setAction(requireContext().getString(R.string.network_error_retry)) { getLoginInputs() }
+                                        show()
+                                    }
                                 }
-                            }
-                            it.contains("There is no user record corresponding to this identifier") -> {
-                                Snackbar.make(
-                                    binding.root,
-                                    requireContext().getString(R.string.login_error_not_found),
-                                    LENGTH_LONG
-                                ).apply {
-                                    setAction(requireContext().getString(R.string.login_btn_register)) { navigateToRegister() }
-                                    show()
+                                it.contains(ERROR_FIREBASE_AUTH_ACCOUNT_NOT_FOUND) -> {
+                                    Snackbar.make(
+                                        binding.root,
+                                        requireContext().getString(R.string.login_error_not_found),
+                                        LENGTH_LONG
+                                    ).apply {
+                                        setAction(requireContext().getString(R.string.login_btn_register)) { navigateToRegister() }
+                                        show()
+                                    }
                                 }
-                            }
-                            it.contains("The password is invalid or the user does not have a password") -> {
-                                Snackbar.make(
-                                    binding.root,
-                                    requireContext().getString(R.string.login_error_credentials),
-                                    LENGTH_LONG
-                                ).show()
-                            }
-                            else -> {
-                                Snackbar.make(
-                                    binding.root,
-                                    requireContext().getString(R.string.network_error_failure),
-                                    LENGTH_LONG
-                                ).show()
+                                it.contains(ERROR_FIREBASE_AUTH_CREDENTIALS) -> {
+                                    Snackbar.make(
+                                        binding.root,
+                                        requireContext().getString(R.string.login_error_credentials),
+                                        LENGTH_LONG
+                                    ).show()
+                                }
+                                else -> {
+                                    Snackbar.make(
+                                        binding.root,
+                                        requireContext().getString(R.string.network_error_failure),
+                                        LENGTH_LONG
+                                    ).show()
+                                }
                             }
                         }
                     }
                 }
-            }
-
-            if (viewModel.loginLiveData.value != null) {
-                viewModel.loginLiveData.value = null
             }
         }
 

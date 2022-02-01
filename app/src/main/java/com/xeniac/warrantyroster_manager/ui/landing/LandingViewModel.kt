@@ -4,13 +4,16 @@ import android.app.Application
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseUser
 import com.xeniac.warrantyroster_manager.WarrantyRosterApplication
 import com.xeniac.warrantyroster_manager.repositories.UserRepository
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_IS_LOGGED_IN_KEY
 import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_LOGIN
+import com.xeniac.warrantyroster_manager.utils.Event
 import com.xeniac.warrantyroster_manager.utils.NetworkHelper.hasInternetConnection
 import com.xeniac.warrantyroster_manager.utils.Resource
 import kotlinx.coroutines.launch
@@ -21,9 +24,14 @@ class LandingViewModel(
     private val userRepository: UserRepository
 ) : AndroidViewModel(application) {
 
-    val registerLiveData: MutableLiveData<Resource<Nothing>> = MutableLiveData()
-    val loginLiveData: MutableLiveData<Resource<Nothing>> = MutableLiveData()
-    val forgotPwLiveData: MutableLiveData<Resource<String>> = MutableLiveData()
+    private val _registerLiveData: MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
+    val registerLiveData: LiveData<Event<Resource<Nothing>>> = _registerLiveData
+
+    private val _loginLiveData: MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
+    val loginLiveData: LiveData<Event<Resource<Nothing>>> = _loginLiveData
+
+    private val _forgotPwLiveData: MutableLiveData<Event<Resource<String>>> = MutableLiveData()
+    val forgotPwLiveData: LiveData<Event<Resource<String>>> = _forgotPwLiveData
 
     private val TAG = "LandingViewModel"
 
@@ -40,7 +48,7 @@ class LandingViewModel(
     }
 
     private suspend fun safeRegisterViaEmail(email: String, password: String) {
-        registerLiveData.postValue(Resource.Loading())
+        _registerLiveData.postValue(Event(Resource.loading()))
         try {
             if (hasInternetConnection(getApplication<WarrantyRosterApplication>())) {
                 userRepository.registerViaEmail(email, password).await().apply {
@@ -55,23 +63,23 @@ class LandingViewModel(
                                 apply()
                             }
 
-                        registerLiveData.postValue(Resource.Success(null))
+                        _registerLiveData.postValue(Event(Resource.success(null)))
                     }
                 }
             } else {
-                Log.e(TAG, "Unable to connect to the internet")
-                registerLiveData.postValue(
-                    Resource.Error("Unable to connect to the internet")
+                Log.e(TAG, ERROR_NETWORK_CONNECTION)
+                _registerLiveData.postValue(
+                    Event(Resource.error(ERROR_NETWORK_CONNECTION))
                 )
             }
         } catch (t: Throwable) {
             Log.e(TAG, "Exception: ${t.message}")
-            registerLiveData.postValue(Resource.Error(t.message.toString()))
+            _registerLiveData.postValue(Event(Resource.error(t.message.toString())))
         }
     }
 
     private suspend fun safeLoginViaEmail(email: String, password: String) {
-        loginLiveData.postValue(Resource.Loading())
+        _loginLiveData.postValue(Event(Resource.loading()))
         try {
             if (hasInternetConnection(getApplication<WarrantyRosterApplication>())) {
                 userRepository.loginViaEmail(email, password).await().apply {
@@ -85,38 +93,38 @@ class LandingViewModel(
                                 apply()
                             }
 
-                        loginLiveData.postValue(Resource.Success(null))
+                        _loginLiveData.postValue(Event(Resource.success(null)))
                     }
                 }
             } else {
-                Log.e(TAG, "Unable to connect to the internet")
-                loginLiveData.postValue(
-                    Resource.Error("Unable to connect to the internet")
+                Log.e(TAG, ERROR_NETWORK_CONNECTION)
+                _loginLiveData.postValue(
+                    Event(Resource.error(ERROR_NETWORK_CONNECTION))
                 )
             }
         } catch (t: Throwable) {
             Log.e(TAG, "Exception: ${t.message}")
-            loginLiveData.postValue(Resource.Error(t.message.toString()))
+            _loginLiveData.postValue(Event(Resource.error(t.message.toString())))
         }
     }
 
     private suspend fun safeSendResetPasswordEmail(email: String) {
-        forgotPwLiveData.postValue(Resource.Loading())
+        _forgotPwLiveData.postValue(Event(Resource.loading()))
         try {
             if (hasInternetConnection(getApplication<WarrantyRosterApplication>())) {
                 userRepository.sendResetPasswordEmail(email).await().apply {
                     Log.i(TAG, "Reset password email successfully sent to ${email}.")
-                    forgotPwLiveData.postValue(Resource.Success(email))
+                    _forgotPwLiveData.postValue(Event(Resource.success(email)))
                 }
             } else {
-                Log.e(TAG, "Unable to connect to the internet")
-                forgotPwLiveData.postValue(
-                    Resource.Error("Unable to connect to the internet")
+                Log.e(TAG, ERROR_NETWORK_CONNECTION)
+                _forgotPwLiveData.postValue(
+                    Event(Resource.error(ERROR_NETWORK_CONNECTION))
                 )
             }
         } catch (t: Throwable) {
             Log.e(TAG, "Exception: ${t.message}")
-            forgotPwLiveData.postValue(Resource.Error(t.message.toString()))
+            _forgotPwLiveData.postValue(Event(Resource.error(t.message.toString())))
         }
     }
 

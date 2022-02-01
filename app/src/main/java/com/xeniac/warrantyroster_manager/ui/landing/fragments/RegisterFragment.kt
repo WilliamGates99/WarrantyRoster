@@ -20,8 +20,10 @@ import com.xeniac.warrantyroster_manager.databinding.FragmentRegisterBinding
 import com.xeniac.warrantyroster_manager.ui.landing.LandingActivity
 import com.xeniac.warrantyroster_manager.ui.landing.LandingViewModel
 import com.xeniac.warrantyroster_manager.ui.main.MainActivity
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.Constants.URL_PRIVACY_POLICY
-import com.xeniac.warrantyroster_manager.utils.Resource
+import com.xeniac.warrantyroster_manager.utils.Status
 
 class RegisterFragment : Fragment(R.layout.fragment_register) {
 
@@ -202,54 +204,52 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         viewModel.registerViaEmail(email, password)
 
     private fun registerObserver() =
-        viewModel.registerLiveData.observe(viewLifecycleOwner) { response ->
-            when (response) {
-                is Resource.Loading -> showLoadingAnimation()
-                is Resource.Success -> {
-                    hideLoadingAnimation()
-                    Intent(requireContext(), MainActivity::class.java).apply {
-                        startActivity(this)
-                        requireActivity().finish()
+        viewModel.registerLiveData.observe(viewLifecycleOwner) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { response ->
+                when (response.status) {
+                    Status.LOADING -> showLoadingAnimation()
+                    Status.SUCCESS -> {
+                        hideLoadingAnimation()
+                        Intent(requireContext(), MainActivity::class.java).apply {
+                            startActivity(this)
+                            requireActivity().finish()
+                        }
                     }
-                }
-                is Resource.Error -> {
-                    hideLoadingAnimation()
-                    response.message?.let {
-                        when {
-                            it.contains("Unable to connect to the internet") -> {
-                                Snackbar.make(
-                                    binding.root,
-                                    requireContext().getString(R.string.network_error_connection),
-                                    LENGTH_LONG
-                                ).apply {
-                                    setAction(requireContext().getString(R.string.network_error_retry)) { getRegisterInputs() }
-                                    show()
+                    Status.ERROR -> {
+                        hideLoadingAnimation()
+                        response.message?.let {
+                            when {
+                                it.contains(ERROR_NETWORK_CONNECTION) -> {
+                                    Snackbar.make(
+                                        binding.root,
+                                        requireContext().getString(R.string.network_error_connection),
+                                        LENGTH_LONG
+                                    ).apply {
+                                        setAction(requireContext().getString(R.string.network_error_retry)) { getRegisterInputs() }
+                                        show()
+                                    }
                                 }
-                            }
-                            it.contains("The email address is already in use by another account") -> {
-                                Snackbar.make(
-                                    binding.root,
-                                    requireContext().getString(R.string.register_error_account_exists),
-                                    LENGTH_LONG
-                                ).apply {
-                                    setAction(requireContext().getString(R.string.register_btn_login)) { requireActivity().onBackPressed() }
-                                    show()
+                                it.contains(ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS) -> {
+                                    Snackbar.make(
+                                        binding.root,
+                                        requireContext().getString(R.string.register_error_account_exists),
+                                        LENGTH_LONG
+                                    ).apply {
+                                        setAction(requireContext().getString(R.string.register_btn_login)) { requireActivity().onBackPressed() }
+                                        show()
+                                    }
                                 }
-                            }
-                            else -> {
-                                Snackbar.make(
-                                    binding.root,
-                                    requireContext().getString(R.string.network_error_failure),
-                                    LENGTH_LONG
-                                ).show()
+                                else -> {
+                                    Snackbar.make(
+                                        binding.root,
+                                        requireContext().getString(R.string.network_error_failure),
+                                        LENGTH_LONG
+                                    ).show()
+                                }
                             }
                         }
                     }
                 }
-            }
-
-            if (viewModel.registerLiveData.value != null) {
-                viewModel.registerLiveData.value = null
             }
         }
 

@@ -19,7 +19,9 @@ import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentForgotPwBinding
 import com.xeniac.warrantyroster_manager.ui.landing.LandingActivity
 import com.xeniac.warrantyroster_manager.ui.landing.LandingViewModel
-import com.xeniac.warrantyroster_manager.utils.Resource
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_ACCOUNT_NOT_FOUND
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
+import com.xeniac.warrantyroster_manager.utils.Status
 
 class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
 
@@ -106,53 +108,51 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
     private fun sendResetPasswordEmail(email: String) = viewModel.sendResetPasswordEmail(email)
 
     private fun forgotPwObserver() =
-        viewModel.forgotPwLiveData.observe(viewLifecycleOwner) { response ->
-            when (response) {
-                is Resource.Loading -> showLoadingAnimation()
-                is Resource.Success -> {
-                    hideLoadingAnimation()
+        viewModel.forgotPwLiveData.observe(viewLifecycleOwner) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { response ->
+                when (response.status) {
+                    Status.LOADING -> showLoadingAnimation()
+                    Status.SUCCESS -> {
+                        hideLoadingAnimation()
 
-                    response.data?.let { email ->
-                        val action = ForgotPwFragmentDirections
-                            .actionForgotPasswordFragmentToForgotPwSentFragment(email)
-                        navController.navigate(action)
+                        response.data?.let { email ->
+                            val action = ForgotPwFragmentDirections
+                                .actionForgotPasswordFragmentToForgotPwSentFragment(email)
+                            navController.navigate(action)
+                        }
                     }
-                }
-                is Resource.Error -> {
-                    hideLoadingAnimation()
-                    response.message?.let {
-                        when {
-                            it.contains("Unable to connect to the internet") -> {
-                                Snackbar.make(
-                                    binding.root,
-                                    requireContext().getString(R.string.network_error_connection),
-                                    LENGTH_LONG
-                                ).apply {
-                                    setAction(requireContext().getString(R.string.network_error_retry)) { getResetPasswordInput() }
-                                    show()
+                    Status.ERROR -> {
+                        hideLoadingAnimation()
+                        response.message?.let {
+                            when {
+                                it.contains(ERROR_NETWORK_CONNECTION) -> {
+                                    Snackbar.make(
+                                        binding.root,
+                                        requireContext().getString(R.string.network_error_connection),
+                                        LENGTH_LONG
+                                    ).apply {
+                                        setAction(requireContext().getString(R.string.network_error_retry)) { getResetPasswordInput() }
+                                        show()
+                                    }
                                 }
-                            }
-                            it.contains("There is no user record corresponding to this identifier") -> {
-                                Snackbar.make(
-                                    binding.root,
-                                    requireContext().getString(R.string.forgot_pw_error_not_found),
-                                    LENGTH_LONG
-                                ).show()
-                            }
-                            else -> {
-                                Snackbar.make(
-                                    binding.root,
-                                    requireContext().getString(R.string.network_error_failure),
-                                    LENGTH_LONG
-                                ).show()
+                                it.contains(ERROR_FIREBASE_AUTH_ACCOUNT_NOT_FOUND) -> {
+                                    Snackbar.make(
+                                        binding.root,
+                                        requireContext().getString(R.string.forgot_pw_error_not_found),
+                                        LENGTH_LONG
+                                    ).show()
+                                }
+                                else -> {
+                                    Snackbar.make(
+                                        binding.root,
+                                        requireContext().getString(R.string.network_error_failure),
+                                        LENGTH_LONG
+                                    ).show()
+                                }
                             }
                         }
                     }
                 }
-            }
-
-            if (viewModel.forgotPwLiveData.value != null) {
-                viewModel.forgotPwLiveData.value = null
             }
         }
 
