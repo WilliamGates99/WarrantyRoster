@@ -28,10 +28,11 @@ import com.xeniac.warrantyroster_manager.databinding.FragmentAddWarrantyBinding
 import com.xeniac.warrantyroster_manager.ui.main.MainActivity
 import com.xeniac.warrantyroster_manager.models.Category
 import com.xeniac.warrantyroster_manager.models.WarrantyInput
-import com.xeniac.warrantyroster_manager.ui.main.MainViewModel
+import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModel
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.Constants.FRAGMENT_TAG_ADD_CALENDAR_EXPIRY
 import com.xeniac.warrantyroster_manager.utils.Constants.FRAGMENT_TAG_ADD_CALENDAR_STARTING
-import com.xeniac.warrantyroster_manager.utils.Resource
+import com.xeniac.warrantyroster_manager.utils.Status
 import kotlinx.coroutines.*
 import java.text.DecimalFormat
 import java.util.*
@@ -344,41 +345,39 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
         viewModel.addWarrantyToFirestore(warrantyInput)
 
     private fun addWarrantyObserver() =
-        viewModel.addWarrantyLiveData.observe(viewLifecycleOwner) { response ->
-            when (response) {
-                is Resource.Loading -> showLoadingAnimation()
-                is Resource.Success -> {
-                    hideLoadingAnimation()
-                    navController.navigate(R.id.action_addWarrantyFragment_to_warrantiesFragment)
-                }
-                is Resource.Error -> {
-                    hideLoadingAnimation()
-                    response.message?.let {
-                        when {
-                            it.contains("Unable to connect to the internet") -> {
-                                Snackbar.make(
-                                    binding.root,
-                                    requireContext().getString(R.string.network_error_connection),
-                                    LENGTH_LONG
-                                ).apply {
-                                    setAction(requireContext().getString(R.string.network_error_retry)) { getWarrantyInput() }
-                                    show()
+        viewModel.addWarrantyLiveData.observe(viewLifecycleOwner) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { response ->
+                when (response.status) {
+                    Status.LOADING -> showLoadingAnimation()
+                    Status.SUCCESS -> {
+                        hideLoadingAnimation()
+                        navController.navigate(R.id.action_addWarrantyFragment_to_warrantiesFragment)
+                    }
+                    Status.ERROR -> {
+                        hideLoadingAnimation()
+                        response.message?.let {
+                            when {
+                                it.contains(ERROR_NETWORK_CONNECTION) -> {
+                                    Snackbar.make(
+                                        binding.root,
+                                        requireContext().getString(R.string.network_error_connection),
+                                        LENGTH_LONG
+                                    ).apply {
+                                        setAction(requireContext().getString(R.string.network_error_retry)) { getWarrantyInput() }
+                                        show()
+                                    }
                                 }
-                            }
-                            else -> {
-                                Snackbar.make(
-                                    binding.root,
-                                    requireContext().getString(R.string.network_error_failure),
-                                    LENGTH_LONG
-                                ).show()
+                                else -> {
+                                    Snackbar.make(
+                                        binding.root,
+                                        requireContext().getString(R.string.network_error_failure),
+                                        LENGTH_LONG
+                                    ).show()
+                                }
                             }
                         }
                     }
                 }
-            }
-
-            if (viewModel.addWarrantyLiveData.value != null) {
-                viewModel.addWarrantyLiveData.value = null
             }
         }
 
