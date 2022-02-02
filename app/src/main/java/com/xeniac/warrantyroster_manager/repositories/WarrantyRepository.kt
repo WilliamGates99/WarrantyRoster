@@ -31,4 +31,7 @@ class WarrantyRepository(private val db: WarrantyRosterDatabase) {
 
     fun addWarrantyToFirestore(warrantyInput: WarrantyInput) =
         FirestoreInstance.warrantiesCollectionRef.add(warrantyInput)
+
+    fun deleteWarrantyFromFirestore(warrantyId: String) =
+        FirestoreInstance.warrantiesCollectionRef.document(warrantyId).delete()
 }

@@ -43,6 +43,10 @@ class MainViewModel(
     private val _addWarrantyLiveData: MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
     val addWarrantyLiveData: LiveData<Event<Resource<Nothing>>> = _addWarrantyLiveData
 
+    private val _deleteWarrantyLiveData: MutableLiveData<Event<Resource<Nothing>>> =
+        MutableLiveData()
+    val deleteWarrantyLiveData: LiveData<Event<Resource<Nothing>>> = _deleteWarrantyLiveData
+
     private val TAG = "MainViewModel"
 
     fun seedCategories() = viewModelScope.launch {
@@ -132,6 +136,10 @@ class MainViewModel(
         safeAddWarrantyToFirestore(warrantyInput)
     }
 
+    fun deleteWarrantyFromFirestore(warrantyId: String) = viewModelScope.launch {
+        safeDeleteWarrantyFromFirestore(warrantyId)
+    }
+
     private fun deleteAllCategories() = viewModelScope.launch {
         warrantyRepository.deleteAllCategories()
     }
@@ -181,6 +189,25 @@ class MainViewModel(
         } catch (t: Throwable) {
             Log.e(TAG, "Exception: ${t.message}")
             _addWarrantyLiveData.postValue(Event(Resource.error(t.message.toString())))
+        }
+    }
+
+    private suspend fun safeDeleteWarrantyFromFirestore(warrantyId: String) {
+        _deleteWarrantyLiveData.postValue(Event(Resource.loading()))
+        try {
+            if (hasInternetConnection(getApplication<WarrantyRosterApplication>())) {
+                warrantyRepository.deleteWarrantyFromFirestore(warrantyId).await()
+                _deleteWarrantyLiveData.postValue(Event(Resource.success(null)))
+                Log.i(TAG, "$warrantyId successfully deleted.")
+            } else {
+                Log.e(TAG, ERROR_NETWORK_CONNECTION)
+                _deleteWarrantyLiveData.postValue(
+                    Event(Resource.error(ERROR_NETWORK_CONNECTION))
+                )
+            }
+        } catch (t: Throwable) {
+            Log.e(TAG, "Exception: ${t.message}")
+            _deleteWarrantyLiveData.postValue(Event(Resource.error(t.message.toString())))
         }
     }
 }
