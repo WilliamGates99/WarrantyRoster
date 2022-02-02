@@ -47,6 +47,7 @@ class MainActivity : AppCompatActivity() {
         bottomAppBarStyle()
         bottomNavActions()
         fabOnClick()
+        seedCategories()
     }
 
     private fun bottomAppBarStyle() {
@@ -81,6 +82,8 @@ class MainActivity : AppCompatActivity() {
         binding.fab.hide()
         binding.appbar.performHide()
     }
+
+    private fun seedCategories() = viewModel.seedCategories()
 
     fun requestInterstitialAd() = TapsellPlus.requestInterstitialAd(this,
         DELETE_WARRANTY_Interstitial_ZONE_ID, object : AdRequestCallback() {

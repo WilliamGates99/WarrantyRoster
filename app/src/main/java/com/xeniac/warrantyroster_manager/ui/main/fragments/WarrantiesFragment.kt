@@ -42,7 +42,6 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
         viewModel = (activity as MainActivity).viewModel
 
         adInit()
-        seedCategories()
         setupRecyclerView()
         getWarrantiesListFromFirestore()
         warrantiesListObserver()
@@ -68,8 +67,6 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
                 )
             }
         })
-
-    private fun seedCategories() = viewModel.seedCategories()
 
     private fun setupRecyclerView() {
         warrantyAdapter = WarrantyAdapter(requireActivity(), requireContext(), viewModel, this)
