@@ -20,6 +20,8 @@ import com.xeniac.warrantyroster_manager.models.ListItemType
 import com.xeniac.warrantyroster_manager.models.Warranty
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModel
 import com.xeniac.warrantyroster_manager.utils.CategoryHelper.getCategoryTitleMapKey
+import com.xeniac.warrantyroster_manager.utils.Constants.VIEW_TYPE_AD
+import com.xeniac.warrantyroster_manager.utils.Constants.VIEW_TYPE_WARRANTY
 import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_NATIVE_ZONE_ID
 import ir.tapsell.plus.AdHolder
 import ir.tapsell.plus.AdRequestCallback
@@ -45,22 +47,21 @@ class WarrantyAdapter(
 
     private val TAG = "WarrantyAdapter"
 
-    companion object {
-        private const val VIEW_TYPE_WARRANTY = 0
-        private const val VIEW_TYPE_AD = 1
-    }
-
-    private val differCallback = object : DiffUtil.ItemCallback<Warranty>() {
+    private val diffCallback = object : DiffUtil.ItemCallback<Warranty>() {
         override fun areItemsTheSame(oldItem: Warranty, newItem: Warranty): Boolean {
             return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(oldItem: Warranty, newItem: Warranty): Boolean {
-            return oldItem == newItem
+            return oldItem.hashCode() == newItem.hashCode()
         }
     }
 
-    val warrantyListDiffer = AsyncListDiffer(this, differCallback)
+    private val differ = AsyncListDiffer(this, diffCallback)
+
+    var warrantiesList: List<Warranty>
+        get() = differ.currentList
+        set(value) = differ.submitList(value)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -74,7 +75,7 @@ class WarrantyAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (warrantyListDiffer.currentList[position].itemType == ListItemType.WARRANTY) {
+        return if (warrantiesList[position].itemType == ListItemType.WARRANTY) {
             VIEW_TYPE_WARRANTY
         } else {
             VIEW_TYPE_AD
@@ -83,13 +84,13 @@ class WarrantyAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (getItemViewType(position) == VIEW_TYPE_WARRANTY) {
-            (holder as WarrantyViewHolder).bindView(warrantyListDiffer.currentList[position])
+            (holder as WarrantyViewHolder).bindView(warrantiesList[position])
         } else {
             (holder as AdViewHolder).bindView()
         }
     }
 
-    override fun getItemCount(): Int = warrantyListDiffer.currentList.size
+    override fun getItemCount(): Int = warrantiesList.size
 
     inner class WarrantyViewHolder(val binding: ListWarrantyBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -98,7 +99,6 @@ class WarrantyAdapter(
             try {
                 val category = warranty.categoryId?.let {
                     viewModel.getCategoryById(it)
-//                    database.getCategoryDao().getCategoryById(it)
                 }
 
                 withContext(Dispatchers.Main) {

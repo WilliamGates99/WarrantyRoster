@@ -116,7 +116,7 @@ class MainViewModel(
                         if (warrantiesList.size == adIndex) {
                             adIndex += 6
                             val nativeAd = Warranty(
-                                null, null, null, null,
+                                adIndex.toString(), null, null, null,
                                 null, null, null,
                                 null, null, ListItemType.AD
                             )

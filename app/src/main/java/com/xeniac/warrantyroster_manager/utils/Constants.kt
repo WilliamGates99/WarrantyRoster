@@ -29,6 +29,10 @@ object Constants {
     const val PREFERENCE_DB_SEED = "preference_db_seed"
     const val PREFERENCE_EN_US_KEY = "en-US"
 
+    //Warranty Adapter View Type Constants
+    const val VIEW_TYPE_WARRANTY = 0
+    const val VIEW_TYPE_AD = 1
+
     //Add Warranty Activity Calendars Fragment Tag Constants
     const val FRAGMENT_TAG_ADD_CALENDAR_STARTING = "fragment_tag_add_calendar_starting"
     const val FRAGMENT_TAG_ADD_CALENDAR_EXPIRY = "fragment_tag_add_calendar_expiry"

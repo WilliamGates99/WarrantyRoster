@@ -143,7 +143,7 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
         binding.groupNetwork.visibility = GONE
         binding.groupEmptyList.visibility = GONE
         binding.rv.visibility = VISIBLE
-        warrantyAdapter.warrantyListDiffer.submitList(warrantiesList)
+        warrantyAdapter.warrantiesList = warrantiesList
 
         //TODO remove comment after adding search function
 //        searchWarrantiesList();

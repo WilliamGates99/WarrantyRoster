@@ -5,7 +5,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Warranty(
-    val id: String?,
+    val id: String,
     val title: String?,
     val brand: String?,
     val model: String?,
