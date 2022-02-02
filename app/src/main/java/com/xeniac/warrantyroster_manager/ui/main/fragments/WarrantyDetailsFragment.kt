@@ -45,7 +45,6 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
     private var _binding: FragmentWarrantyDetailsBinding? = null
     private val binding get() = _binding!!
     private lateinit var navController: NavController
-
     private lateinit var viewModel: MainViewModel
 
     private lateinit var warranty: Warranty
