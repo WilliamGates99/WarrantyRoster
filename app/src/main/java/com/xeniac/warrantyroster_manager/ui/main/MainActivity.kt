@@ -12,9 +12,12 @@ import com.google.android.material.shape.MaterialShapeDrawable
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.ActivityMainBinding
 import com.xeniac.warrantyroster_manager.db.WarrantyRosterDatabase
+import com.xeniac.warrantyroster_manager.repositories.UserRepository
 import com.xeniac.warrantyroster_manager.repositories.WarrantyRepository
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModel
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModelProviderFactory
+import com.xeniac.warrantyroster_manager.ui.main.viewmodels.SettingsViewModel
+import com.xeniac.warrantyroster_manager.ui.main.viewmodels.SettingsViewModelProviderFactory
 import com.xeniac.warrantyroster_manager.utils.Constants.DELETE_WARRANTY_Interstitial_ZONE_ID
 import com.xeniac.warrantyroster_manager.utils.LocaleModifier
 import ir.tapsell.plus.AdRequestCallback
@@ -28,6 +31,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
     lateinit var viewModel: MainViewModel
+    lateinit var settingsViewModel: SettingsViewModel
 
     private val TAG = "MainActivity"
 
@@ -39,15 +43,29 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun mainInit() {
-        val warrantyRepository = WarrantyRepository(WarrantyRosterDatabase(this))
-        val viewModelProviderFactory = MainViewModelProviderFactory(application, warrantyRepository)
-        viewModel = ViewModelProvider(this, viewModelProviderFactory)[MainViewModel::class.java]
+        mainViewModelSetup()
+        settingsViewModelSetup()
 
         LocaleModifier.setLocale(this)
         bottomAppBarStyle()
         bottomNavActions()
         fabOnClick()
         seedCategories()
+    }
+
+    private fun mainViewModelSetup() {
+        val warrantyRepository = WarrantyRepository(WarrantyRosterDatabase(this))
+        val viewModelProviderFactory = MainViewModelProviderFactory(application, warrantyRepository)
+        viewModel = ViewModelProvider(this, viewModelProviderFactory)[MainViewModel::class.java]
+    }
+
+    private fun settingsViewModelSetup() {
+        val userRepository = UserRepository()
+        val settingsViewModelProviderFactory =
+            SettingsViewModelProviderFactory(application, userRepository)
+        settingsViewModel = ViewModelProvider(
+            this, settingsViewModelProviderFactory
+        )[SettingsViewModel::class.java]
     }
 
     private fun bottomAppBarStyle() {

@@ -1,8 +1,6 @@
 package com.xeniac.warrantyroster_manager.ui.main.fragments
 
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -10,54 +8,42 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.airbnb.lottie.LottieDrawable
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_INDEFINITE
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentSettingsBinding
+import com.xeniac.warrantyroster_manager.models.Status
 import com.xeniac.warrantyroster_manager.ui.landing.LandingActivity
 import com.xeniac.warrantyroster_manager.ui.main.MainActivity
-import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_COUNTRY_KEY
-import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_IS_LOGGED_IN_KEY
-import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_LANGUAGE_KEY
-import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_LOGIN
-import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_SETTINGS
-import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_THEME_KEY
+import com.xeniac.warrantyroster_manager.ui.main.viewmodels.SettingsViewModel
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.Constants.SETTINGS_NATIVE_ZONE_ID
 import com.xeniac.warrantyroster_manager.utils.Constants.TAPSELL_KEY
 import com.xeniac.warrantyroster_manager.utils.Constants.URL_PRIVACY_POLICY
-import com.xeniac.warrantyroster_manager.utils.NetworkHelper.hasInternetConnection
 import ir.tapsell.plus.*
 import ir.tapsell.plus.model.AdNetworkError
 import ir.tapsell.plus.model.AdNetworks
 import ir.tapsell.plus.model.TapsellPlusAdModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
 
 class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
     private var _binding: FragmentSettingsBinding? = null
     private val binding get() = _binding!!
     private lateinit var navController: NavController
+    private lateinit var viewModel: SettingsViewModel
 
-    private val firebaseAuth = FirebaseAuth.getInstance()
-    private val currentUser = firebaseAuth.currentUser
-
-    private lateinit var settingsPrefs: SharedPreferences
     private lateinit var currentLanguage: String
     private lateinit var currentCountry: String
     private var currentTheme: Int = 0
+
+    private lateinit var currentUser: FirebaseUser
 
     private var requestAdCounter = 0
     private var responseId: String? = null
@@ -69,9 +55,11 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         _binding = FragmentSettingsBinding.bind(view)
         navController = Navigation.findNavController(view)
         (requireContext() as MainActivity).showNavBar()
+        viewModel = (activity as MainActivity).settingsViewModel
 
-        getCurrentSettings()
         getAccountDetails()
+        accountDetailsObserver()
+        getCurrentSettings()
         setCurrentLanguageText()
         setCurrentThemeText()
         verifyOnClick()
@@ -81,6 +69,8 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         themeOnClick()
         privacyPolicyOnClick()
         logoutOnClick()
+        sendVerificationEmailObserver()
+        logoutObserver()
         adInit()
     }
 
@@ -90,43 +80,23 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         _binding = null
     }
 
-    private fun getCurrentSettings() {
-        settingsPrefs = requireContext()
-            .getSharedPreferences(PREFERENCE_SETTINGS, Context.MODE_PRIVATE)
-        currentLanguage = settingsPrefs
-            .getString(PREFERENCE_LANGUAGE_KEY, "en").toString()
-        currentCountry = settingsPrefs.getString(PREFERENCE_COUNTRY_KEY, "US").toString()
-        currentTheme = settingsPrefs.getInt(PREFERENCE_THEME_KEY, 0)
-    }
+    private fun getAccountDetails() = viewModel.getAccountDetails()
 
-    private fun getAccountDetails() = CoroutineScope(Dispatchers.IO).launch {
-        try {
-            currentUser?.let {
-                var email = it.email.toString()
-                var isVerified = it.isEmailVerified
-                Log.i(TAG, "Current user is $email and isVerified: $isVerified")
-
-                withContext(Dispatchers.Main) {
-                    setAccountDetails(email, isVerified)
-                }
-
-                if (hasInternetConnection(requireContext())) {
-                    it.reload().await()
-                    if (email != it.email || isVerified != it.isEmailVerified) {
-                        email = it.email.toString()
-                        isVerified = it.isEmailVerified
-                        Log.i(TAG, "Updated current user is $$email and isVerified: $isVerified")
-
-                        withContext(Dispatchers.Main) {
-                            setAccountDetails(email, isVerified)
+    private fun accountDetailsObserver() =
+        viewModel.accountDetailsLiveData.observe(viewLifecycleOwner) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { response ->
+                when (response.status) {
+                    Status.SUCCESS -> {
+                        response.data?.let { user ->
+                            currentUser = user
+                            setAccountDetails(user.email.toString(), user.isEmailVerified)
                         }
                     }
+                    Status.ERROR -> Unit
+                    Status.LOADING -> Unit
                 }
             }
-        } catch (e: Exception) {
-            Log.i(TAG, "Exception: ${e.message}")
         }
-    }
 
     private fun setAccountDetails(email: String, isEmailVerified: Boolean) {
         binding.tvAccountEmail.text = email
@@ -165,6 +135,12 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         binding.lavAccountVerification.playAnimation()
     }
 
+    private fun getCurrentSettings() {
+        currentLanguage = viewModel.getCurrentLanguage()
+        currentCountry = viewModel.getCurrentCountry()
+        currentTheme = viewModel.getCurrentTheme()
+    }
+
     private fun setCurrentLanguageText() {
         when (currentLanguage) {
             "en" -> {
@@ -199,52 +175,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         sendVerificationEmail()
     }
 
-    private fun sendVerificationEmail() {
-        if (hasInternetConnection(requireContext())) {
-            sendVerificationEmailAuth()
-        } else {
-            hideLoadingAnimation()
-            Snackbar.make(
-                binding.root,
-                requireContext().getString(R.string.network_error_connection),
-                LENGTH_INDEFINITE
-            ).apply {
-                setAction(requireContext().getString(R.string.network_error_retry)) { sendVerificationEmail() }
-                show()
-            }
-        }
-    }
-
-    private fun sendVerificationEmailAuth() {
-        showLoadingAnimation()
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                currentUser?.let {
-                    it.sendEmailVerification().await()
-                    Log.i(TAG, "Email sent to ${it.email}")
-                    withContext(Dispatchers.Main) {
-                        hideLoadingAnimation()
-
-                        MaterialAlertDialogBuilder(requireContext()).apply {
-                            setMessage(requireContext().getString(R.string.settings_dialog_message))
-                            setPositiveButton(requireContext().getString(R.string.settings_dialog_positive)) { _, _ -> }
-                        }.show()
-                    }
-                }
-            } catch (e: Exception) {
-                Log.e(TAG, "Exception: ${e.message}")
-                withContext(Dispatchers.Main) {
-                    hideLoadingAnimation()
-                    Snackbar.make(
-                        binding.root,
-                        requireContext().getString(R.string.network_error_failure),
-                        LENGTH_LONG
-                    ).show()
-                }
-            }
-        }
-    }
-
     private fun changeEmailOnClick() = binding.clAccountChangeEmail.setOnClickListener {
         navController.navigate(R.id.action_settingsFragment_to_changeEmailFragment)
     }
@@ -267,31 +197,9 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
         MaterialAlertDialogBuilder(requireContext()).apply {
             setTitle(requireContext().getString(R.string.settings_text_settings_theme))
-            setSingleChoiceItems(themeItems, currentTheme) { dialogInterface, i ->
-                when (i) {
-                    0 -> {
-                        if (AppCompatDelegate.getDefaultNightMode() != AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM) {
-                            settingsPrefs.edit().putInt(PREFERENCE_THEME_KEY, i)
-                                .apply()
-                            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
-                        }
-                    }
-                    1 -> {
-                        if (AppCompatDelegate.getDefaultNightMode() != AppCompatDelegate.MODE_NIGHT_NO) {
-                            settingsPrefs.edit().putInt(PREFERENCE_THEME_KEY, i)
-                                .apply()
-                            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                        }
-                    }
-                    2 -> {
-                        if (AppCompatDelegate.getDefaultNightMode() != AppCompatDelegate.MODE_NIGHT_YES) {
-                            settingsPrefs.edit().putInt(PREFERENCE_THEME_KEY, i)
-                                .apply()
-                            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                        }
-                    }
-                }
-                currentTheme = i
+            setSingleChoiceItems(themeItems, currentTheme) { dialogInterface, index ->
+                setAppTheme(index)
+                currentTheme = index
                 setCurrentThemeText()
                 dialogInterface.dismiss()
             }
@@ -315,24 +223,65 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         logout()
     }
 
-    private fun logout() = CoroutineScope(Dispatchers.IO).launch {
-        try {
-            firebaseAuth.signOut()
-            Log.i(TAG, "${currentUser?.email} successfully logged out.")
+    private fun setAppTheme(index: Int) = viewModel.setAppTheme(index)
 
-            requireContext().getSharedPreferences(
-                PREFERENCE_LOGIN, Context.MODE_PRIVATE
-            ).edit().apply {
-                remove(PREFERENCE_IS_LOGGED_IN_KEY)
-                apply()
+    private fun sendVerificationEmail() = viewModel.sendVerificationEmail(currentUser)
+
+    private fun sendVerificationEmailObserver() =
+        viewModel.sendVerificationEmailLiveData.observe(viewLifecycleOwner) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { response ->
+                when (response.status) {
+                    Status.LOADING -> showLoadingAnimation()
+                    Status.SUCCESS -> {
+                        hideLoadingAnimation()
+                        MaterialAlertDialogBuilder(requireContext()).apply {
+                            setMessage(requireContext().getString(R.string.settings_dialog_message))
+                            setPositiveButton(requireContext().getString(R.string.settings_dialog_positive)) { _, _ -> }
+                        }.show()
+                    }
+                    Status.ERROR -> {
+                        hideLoadingAnimation()
+                        response.message?.let {
+                            when {
+                                it.contains(ERROR_NETWORK_CONNECTION) -> {
+                                    Snackbar.make(
+                                        binding.root,
+                                        requireContext().getString(R.string.network_error_connection),
+                                        LENGTH_LONG
+                                    ).apply {
+                                        setAction(requireContext().getString(R.string.network_error_retry)) { sendVerificationEmail() }
+                                        show()
+                                    }
+                                }
+                                else -> {
+                                    Snackbar.make(
+                                        binding.root,
+                                        requireContext().getString(R.string.network_error_failure),
+                                        LENGTH_LONG
+                                    ).show()
+                                }
+                            }
+                        }
+                    }
+                }
             }
-
-            startActivity(Intent(requireContext(), LandingActivity::class.java))
-            requireActivity().finish()
-        } catch (e: Exception) {
-            Log.e(TAG, "Exception: ${e.message}")
         }
-    }
+
+    private fun logout() = viewModel.logoutUser()
+
+    private fun logoutObserver() =
+        viewModel.logoutLiveData.observe(viewLifecycleOwner) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { response ->
+                when (response.status) {
+                    Status.SUCCESS -> {
+                        startActivity(Intent(requireContext(), LandingActivity::class.java))
+                        requireActivity().finish()
+                    }
+                    Status.ERROR -> Unit
+                    Status.LOADING -> Unit
+                }
+            }
+        }
 
     private fun showLoadingAnimation() {
         binding.btnAccountVerification.visibility = GONE

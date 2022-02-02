@@ -15,4 +15,10 @@ class UserRepository {
         FirebaseAuthInstance.auth.sendPasswordResetEmail(email)
 
     fun sendVerificationEmail(user: FirebaseUser) = user.sendEmailVerification()
+
+    fun getAccountDetails() = FirebaseAuthInstance.auth.currentUser
+
+    fun reloadCurrentUser(user: FirebaseUser) = user.reload()
+
+    fun logoutUser() = FirebaseAuthInstance.auth.signOut()
 }
