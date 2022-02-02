@@ -12,12 +12,12 @@ import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.ui.main.adapters.WarrantyAdapter
 import com.xeniac.warrantyroster_manager.ui.main.adapters.WarrantyListClickInterface
 import com.xeniac.warrantyroster_manager.databinding.FragmentWarrantiesBinding
+import com.xeniac.warrantyroster_manager.models.Status
 import com.xeniac.warrantyroster_manager.ui.main.MainActivity
 import com.xeniac.warrantyroster_manager.models.Warranty
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_EMPTY_WARRANTY_LIST
 import com.xeniac.warrantyroster_manager.utils.Constants.TAPSELL_KEY
-import com.xeniac.warrantyroster_manager.utils.Status
 import ir.tapsell.plus.TapsellPlus
 import ir.tapsell.plus.TapsellPlusInitListener
 import ir.tapsell.plus.model.AdNetworkError

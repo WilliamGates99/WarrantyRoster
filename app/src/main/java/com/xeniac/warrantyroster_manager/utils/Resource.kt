@@ -1,5 +1,7 @@
 package com.xeniac.warrantyroster_manager.utils
 
+import com.xeniac.warrantyroster_manager.models.Status
+
 data class Resource<out T>(
     val status: Status,
     val data: T?,
@@ -12,10 +14,4 @@ data class Resource<out T>(
 
         fun <T> loading(data: T? = null) = Resource(Status.LOADING, data, null)
     }
-}
-
-enum class Status {
-    SUCCESS,
-    ERROR,
-    LOADING
 }

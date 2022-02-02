@@ -14,5 +14,5 @@ data class Warranty(
     val expiryDate: String?,
     val description: String?,
     val categoryId: String?,
-    val itemType: ListItemType
+    val itemType: ListItemType = ListItemType.WARRANTY
 ) : Parcelable

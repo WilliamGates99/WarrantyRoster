@@ -108,8 +108,7 @@ class MainViewModel(
                             document.get(WARRANTIES_STARTING_DATE).toString(),
                             document.get(WARRANTIES_EXPIRY_DATE).toString(),
                             document.get(WARRANTIES_DESCRIPTION).toString(),
-                            document.get(WARRANTIES_CATEGORY_ID).toString(),
-                            ListItemType.WARRANTY
+                            document.get(WARRANTIES_CATEGORY_ID).toString()
                         )
                         warrantiesList.add(warranty)
 
