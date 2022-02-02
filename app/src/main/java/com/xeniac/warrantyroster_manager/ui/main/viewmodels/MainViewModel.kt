@@ -47,6 +47,14 @@ class MainViewModel(
         MutableLiveData()
     val deleteWarrantyLiveData: LiveData<Event<Resource<Nothing>>> = _deleteWarrantyLiveData
 
+    private val _updateWarrantyLiveData: MutableLiveData<Event<Resource<Nothing>>> =
+        MutableLiveData()
+    val updateWarrantyLiveData: LiveData<Event<Resource<Nothing>>> = _updateWarrantyLiveData
+
+    private val _updatedWarrantyLiveData: MutableLiveData<Event<Resource<Warranty>>> =
+        MutableLiveData()
+    val updatedWarrantyLiveData: LiveData<Event<Resource<Warranty>>> = _updatedWarrantyLiveData
+
     private val TAG = "MainViewModel"
 
     fun seedCategories() = viewModelScope.launch {
@@ -140,6 +148,15 @@ class MainViewModel(
         safeDeleteWarrantyFromFirestore(warrantyId)
     }
 
+    fun updateWarrantyInFirestore(warrantyId: String, warrantyInput: WarrantyInput) =
+        viewModelScope.launch {
+            safeUpdateWarrantyInFirestore(warrantyId, warrantyInput)
+        }
+
+    fun getUpdatedWarrantyFromFirestore(warrantyId: String) = viewModelScope.launch {
+        safeGetUpdatedWarrantyFromFirestore(warrantyId)
+    }
+
     private fun deleteAllCategories() = viewModelScope.launch {
         warrantyRepository.deleteAllCategories()
     }
@@ -208,6 +225,60 @@ class MainViewModel(
         } catch (t: Throwable) {
             Log.e(TAG, "Exception: ${t.message}")
             _deleteWarrantyLiveData.postValue(Event(Resource.error(t.message.toString())))
+        }
+    }
+
+    private suspend fun safeUpdateWarrantyInFirestore(
+        warrantyId: String, warrantyInput: WarrantyInput
+    ) {
+        _updateWarrantyLiveData.postValue(Event(Resource.loading()))
+        try {
+            if (hasInternetConnection(getApplication<WarrantyRosterApplication>())) {
+                warrantyRepository.updateWarrantyInFirestore(warrantyId, warrantyInput).await()
+                _updateWarrantyLiveData.postValue(Event(Resource.success(null)))
+                Log.i(TAG, "Warranty successfully updated.")
+            } else {
+                Log.e(TAG, ERROR_NETWORK_CONNECTION)
+                _updateWarrantyLiveData.postValue(
+                    Event(Resource.error(ERROR_NETWORK_CONNECTION))
+                )
+            }
+        } catch (t: Throwable) {
+            Log.e(TAG, "Exception: ${t.message}")
+            _updateWarrantyLiveData.postValue(Event(Resource.error(t.message.toString())))
+        }
+    }
+
+    private suspend fun safeGetUpdatedWarrantyFromFirestore(warrantyId: String) {
+        _updatedWarrantyLiveData.postValue(Event(Resource.loading()))
+        try {
+            if (hasInternetConnection(getApplication<WarrantyRosterApplication>())) {
+                val warrantySnapshot = warrantyRepository
+                    .getUpdatedWarrantyFromFirestore(warrantyId).await()
+
+                val updatedWarranty = Warranty(
+                    warrantySnapshot.id,
+                    warrantySnapshot.get(WARRANTIES_TITLE).toString(),
+                    warrantySnapshot.get(WARRANTIES_BRAND).toString(),
+                    warrantySnapshot.get(WARRANTIES_MODEL).toString(),
+                    warrantySnapshot.get(WARRANTIES_SERIAL_NUMBER).toString(),
+                    warrantySnapshot.get(WARRANTIES_STARTING_DATE).toString(),
+                    warrantySnapshot.get(WARRANTIES_EXPIRY_DATE).toString(),
+                    warrantySnapshot.get(WARRANTIES_DESCRIPTION).toString(),
+                    warrantySnapshot.get(WARRANTIES_CATEGORY_ID).toString()
+                )
+
+                _updatedWarrantyLiveData.postValue(Event(Resource.success(updatedWarranty)))
+                Log.i(TAG, "DocumentSnapshot: $warrantySnapshot")
+            } else {
+                Log.e(TAG, ERROR_NETWORK_CONNECTION)
+                _updatedWarrantyLiveData.postValue(
+                    Event(Resource.error(ERROR_NETWORK_CONNECTION))
+                )
+            }
+        } catch (t: Throwable) {
+            Log.e(TAG, "Exception: ${t.message}")
+            _updatedWarrantyLiveData.postValue(Event(Resource.error(t.message.toString())))
         }
     }
 }

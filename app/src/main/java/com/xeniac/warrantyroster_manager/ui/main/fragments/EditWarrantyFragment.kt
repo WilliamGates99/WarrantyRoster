@@ -3,7 +3,6 @@ package com.xeniac.warrantyroster_manager.ui.main.fragments
 import android.content.Context
 import android.os.Bundle
 import android.text.InputType
-import android.util.Log
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -20,37 +19,22 @@ import coil.decode.SvgDecoder
 import coil.load
 import coil.request.CachePolicy
 import com.google.android.material.datepicker.MaterialDatePicker
-import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_INDEFINITE
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentEditWarrantyBinding
-import com.xeniac.warrantyroster_manager.db.WarrantyRosterDatabase
+import com.xeniac.warrantyroster_manager.models.*
 import com.xeniac.warrantyroster_manager.ui.main.MainActivity
-import com.xeniac.warrantyroster_manager.models.Category
-import com.xeniac.warrantyroster_manager.models.ListItemType
-import com.xeniac.warrantyroster_manager.models.Warranty
-import com.xeniac.warrantyroster_manager.models.WarrantyInput
+import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModel
 import com.xeniac.warrantyroster_manager.utils.CategoryHelper.getCategoryTitleMapKey
-import com.xeniac.warrantyroster_manager.utils.Constants.COLLECTION_WARRANTIES
+import com.xeniac.warrantyroster_manager.utils.Constants
 import com.xeniac.warrantyroster_manager.utils.Constants.FRAGMENT_TAG_EDIT_CALENDAR_EXPIRY
 import com.xeniac.warrantyroster_manager.utils.Constants.FRAGMENT_TAG_EDIT_CALENDAR_STARTING
-import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_BRAND
-import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_CATEGORY_ID
-import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_DESCRIPTION
-import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_EXPIRY_DATE
-import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_MODEL
-import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_SERIAL_NUMBER
-import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_STARTING_DATE
-import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_TITLE
-import com.xeniac.warrantyroster_manager.utils.NetworkHelper.hasInternetConnection
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
@@ -62,12 +46,10 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
     private var _binding: FragmentEditWarrantyBinding? = null
     private val binding get() = _binding!!
     private lateinit var navController: NavController
-    private lateinit var imageLoader: ImageLoader
+    private lateinit var viewModel: MainViewModel
 
-    private lateinit var database: WarrantyRosterDatabase
+    private lateinit var imageLoader: ImageLoader
     private lateinit var warranty: Warranty
-    private val warrantiesCollectionRef =
-        Firebase.firestore.collection(COLLECTION_WARRANTIES)
 
     private val decimalFormat = DecimalFormat("00")
     private val dateFormat = SimpleDateFormat("yyyy-M-dd")
@@ -77,14 +59,12 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
     private lateinit var startingDateInput: String
     private lateinit var expiryDateInput: String
 
-    private val TAG = "EditWarrantyFragment"
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentEditWarrantyBinding.bind(view)
         navController = Navigation.findNavController(view)
-        database = WarrantyRosterDatabase(requireContext())
         (requireContext() as MainActivity).hideNavBar()
+        viewModel = (activity as MainActivity).viewModel
 
         imageLoader = ImageLoader.Builder(requireContext())
             .componentRegistry { add(SvgDecoder(requireContext())) }.build()
@@ -97,6 +77,8 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
         returnToWarrantyDetailsFragment()
         getWarranty()
         editWarrantyOnClick()
+        updateWarrantyObserver()
+        getUpdatedWarrantyObserver()
     }
 
     override fun onDestroyView() {
@@ -202,42 +184,27 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
     }
 
     private fun categoryDropDown() = CoroutineScope(Dispatchers.IO).launch {
-        try {
-            val titlesList = mutableListOf<String>()
-            for (category in database.getCategoryDao().getAllCategories()) {
-                titlesList.add(category.title[getCategoryTitleMapKey(requireContext())].toString())
-            }
-
-            withContext(Dispatchers.Main) {
-                binding.tiDdCategory.setAdapter(
-                    ArrayAdapter(requireContext(), R.layout.dropdown_category, titlesList)
-                )
-            }
-        } catch (e: Exception) {
-            Log.e(TAG, "Exception: ${e.message}")
+        val titlesList = viewModel.getAllCategoryTitles()
+        withContext(Dispatchers.Main) {
+            binding.tiDdCategory.setAdapter(
+                ArrayAdapter(requireContext(), R.layout.dropdown_category, titlesList)
+            )
         }
     }
 
     private fun categoryDropDownSelection() =
         binding.tiDdCategory.setOnItemClickListener { _, _, index, _ ->
             CoroutineScope(Dispatchers.IO).launch {
-                try {
-                    selectedCategory = database
-                        .getCategoryDao().getCategoryById((index + 1).toString())
+                selectedCategory = viewModel.getCategoryById((index + 1).toString())
 
-                    withContext(Dispatchers.Main) {
-                        selectedCategory?.let {
-                            val imageLoader = ImageLoader.Builder(requireContext())
-                                .componentRegistry { add(SvgDecoder(requireContext())) }.build()
-                            binding.ivIconCategory.load(it.icon, imageLoader) {
-                                memoryCachePolicy(CachePolicy.ENABLED)
-                                diskCachePolicy(CachePolicy.ENABLED)
-                                networkCachePolicy(CachePolicy.ENABLED)
-                            }
+                withContext(Dispatchers.Main) {
+                    selectedCategory?.let {
+                        binding.ivIconCategory.load(it.icon, imageLoader) {
+                            memoryCachePolicy(CachePolicy.ENABLED)
+                            diskCachePolicy(CachePolicy.ENABLED)
+                            networkCachePolicy(CachePolicy.ENABLED)
                         }
                     }
-                } catch (e: Exception) {
-                    Log.e(TAG, "Exception: ${e.message}")
                 }
             }
         }
@@ -340,90 +307,70 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
     }
 
     private fun setWarrantyDetails() = CoroutineScope(Dispatchers.IO).launch {
-        try {
-            selectedCategory = warranty.categoryId?.let {
-                database.getCategoryDao().getCategoryById(it)
+        selectedCategory = warranty.categoryId?.let {
+            viewModel.getCategoryById(it)
+        }
+
+        withContext(Dispatchers.Main) {
+            binding.tiEditTitle.setText(warranty.title)
+            binding.tiEditBrand.setText(warranty.brand)
+            binding.tiEditModel.setText(warranty.model)
+            binding.tiEditSerial.setText(warranty.serialNumber)
+            binding.tiEditDescription.setText(warranty.description)
+
+            val startingCalendar = Calendar.getInstance()
+            val expiryCalendar = Calendar.getInstance()
+
+            dateFormat.parse(warranty.startingDate!!)?.let {
+                startingCalendar.time = it
             }
 
-            withContext(Dispatchers.Main) {
-                binding.tiEditTitle.setText(warranty.title)
-                binding.tiEditBrand.setText(warranty.brand)
-                binding.tiEditModel.setText(warranty.model)
-                binding.tiEditSerial.setText(warranty.serialNumber)
-                binding.tiEditDescription.setText(warranty.description)
+            dateFormat.parse(warranty.expiryDate!!)?.let {
+                expiryCalendar.time = it
+            }
 
-                val startingCalendar = Calendar.getInstance()
-                val expiryCalendar = Calendar.getInstance()
+            startingDateInput = "${startingCalendar.get(Calendar.YEAR)}-" +
+                    "${decimalFormat.format((startingCalendar.get(Calendar.MONTH)) + 1)}-" +
+                    decimalFormat.format(startingCalendar.get(Calendar.DAY_OF_MONTH))
 
-                dateFormat.parse(warranty.startingDate!!)?.let {
-                    startingCalendar.time = it
-                }
+            expiryDateInput = "${expiryCalendar.get(Calendar.YEAR)}-" +
+                    "${decimalFormat.format((expiryCalendar.get(Calendar.MONTH)) + 1)}-" +
+                    decimalFormat.format(expiryCalendar.get(Calendar.DAY_OF_MONTH))
 
-                dateFormat.parse(warranty.expiryDate!!)?.let {
-                    expiryCalendar.time = it
-                }
+            val startingDate =
+                "${decimalFormat.format((startingCalendar.get(Calendar.MONTH)) + 1)}/" +
+                        "${decimalFormat.format(startingCalendar.get(Calendar.DAY_OF_MONTH))}/" +
+                        "${startingCalendar.get(Calendar.YEAR)}"
+            binding.tiEditDateStarting.setText(startingDate)
 
-                startingDateInput = "${startingCalendar.get(Calendar.YEAR)}-" +
-                        "${decimalFormat.format((startingCalendar.get(Calendar.MONTH)) + 1)}-" +
-                        decimalFormat.format(startingCalendar.get(Calendar.DAY_OF_MONTH))
+            val expiryDate =
+                "${decimalFormat.format((expiryCalendar.get(Calendar.MONTH)) + 1)}/" +
+                        "${decimalFormat.format(expiryCalendar.get(Calendar.DAY_OF_MONTH))}/" +
+                        "${expiryCalendar.get(Calendar.YEAR)}"
+            binding.tiEditDateExpiry.setText(expiryDate)
 
-                expiryDateInput = "${expiryCalendar.get(Calendar.YEAR)}-" +
-                        "${decimalFormat.format((expiryCalendar.get(Calendar.MONTH)) + 1)}-" +
-                        decimalFormat.format(expiryCalendar.get(Calendar.DAY_OF_MONTH))
-
-                val startingDate =
-                    "${decimalFormat.format((startingCalendar.get(Calendar.MONTH)) + 1)}/" +
-                            "${decimalFormat.format(startingCalendar.get(Calendar.DAY_OF_MONTH))}/" +
-                            "${startingCalendar.get(Calendar.YEAR)}"
-                binding.tiEditDateStarting.setText(startingDate)
-
-                val expiryDate =
-                    "${decimalFormat.format((expiryCalendar.get(Calendar.MONTH)) + 1)}/" +
-                            "${decimalFormat.format(expiryCalendar.get(Calendar.DAY_OF_MONTH))}/" +
-                            "${expiryCalendar.get(Calendar.YEAR)}"
-                binding.tiEditDateExpiry.setText(expiryDate)
-
-                selectedCategory?.let {
-                    binding.tiDdCategory.setText(it.title[getCategoryTitleMapKey(requireContext())])
-                    binding.ivIconCategory.load(it.icon, imageLoader) {
-                        memoryCachePolicy(CachePolicy.ENABLED)
-                        diskCachePolicy(CachePolicy.ENABLED)
-                        networkCachePolicy(CachePolicy.ENABLED)
-                    }
+            selectedCategory?.let {
+                binding.tiDdCategory.setText(it.title[getCategoryTitleMapKey(requireContext())])
+                binding.ivIconCategory.load(it.icon, imageLoader) {
+                    memoryCachePolicy(CachePolicy.ENABLED)
+                    diskCachePolicy(CachePolicy.ENABLED)
+                    networkCachePolicy(CachePolicy.ENABLED)
                 }
             }
-        } catch (e: Exception) {
-            Log.e(TAG, "Exception: ${e.message}")
         }
     }
 
     private fun editWarrantyOnClick() =
         binding.toolbar.menu.getItem(0).setOnMenuItemClickListener {
-            editWarranty()
+            getWarrantyInput()
             false
         }
 
-    private fun editWarranty() {
+    private fun getWarrantyInput() {
         val inputMethodManager = requireContext()
             .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(binding.root.applicationWindowToken, 0)
 
-        if (hasInternetConnection(requireContext())) {
-            getWarrantyInput()
-        } else {
-            hideLoadingAnimation()
-            Snackbar.make(
-                binding.root,
-                requireContext().getString(R.string.network_error_connection),
-                LENGTH_INDEFINITE
-            ).apply {
-                setAction(requireContext().getString(R.string.network_error_retry)) { editWarranty() }
-                show()
-            }
-        }
-    }
-
-    private fun getWarrantyInput() {
         val title = binding.tiEditTitle.text.toString().trim()
 
         if (title.isBlank()) {
@@ -455,52 +402,94 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
         }
     }
 
-    private fun updateWarrantyInFirestore(warrantyInput: WarrantyInput) {
-        showLoadingAnimation()
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                warrantiesCollectionRef.document(warranty.id!!).set(warrantyInput).await()
-                Log.i(TAG, "Warranty successfully updated.")
+    private fun updateWarrantyInFirestore(warrantyInput: WarrantyInput) =
+        viewModel.updateWarrantyInFirestore(warranty.id, warrantyInput)
 
-                val documentSnapshot = warrantiesCollectionRef.document(warranty.id!!).get().await()
-                Log.i(TAG, "documentSnapshot: $documentSnapshot")
-
-                val updatedWarranty = Warranty(
-                    documentSnapshot.id,
-                    documentSnapshot.get(WARRANTIES_TITLE).toString(),
-                    documentSnapshot.get(WARRANTIES_BRAND).toString(),
-                    documentSnapshot.get(WARRANTIES_MODEL).toString(),
-                    documentSnapshot.get(WARRANTIES_SERIAL_NUMBER).toString(),
-                    documentSnapshot.get(WARRANTIES_STARTING_DATE).toString(),
-                    documentSnapshot.get(WARRANTIES_EXPIRY_DATE).toString(),
-                    documentSnapshot.get(WARRANTIES_DESCRIPTION).toString(),
-                    documentSnapshot.get(WARRANTIES_CATEGORY_ID).toString(),
-                    ListItemType.WARRANTY
-                )
-                val daysUntilExpiry = getDaysUntilExpiry(updatedWarranty.expiryDate!!)
-
-                withContext(Dispatchers.Main) {
-                    hideLoadingAnimation()
-
-                    val action = EditWarrantyFragmentDirections
-                        .actionEditWarrantyFragmentToWarrantyDetailsFragment(
-                            updatedWarranty, daysUntilExpiry
-                        )
-                    navController.navigate(action)
-                }
-            } catch (e: Exception) {
-                Log.e(TAG, "Exception: ${e.message}")
-                withContext(Dispatchers.Main) {
-                    hideLoadingAnimation()
-                    Snackbar.make(
-                        binding.root,
-                        requireContext().getString(R.string.network_error_failure),
-                        LENGTH_LONG
-                    ).show()
+    private fun updateWarrantyObserver() =
+        viewModel.updateWarrantyLiveData.observe(viewLifecycleOwner) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { response ->
+                when (response.status) {
+                    Status.LOADING -> showLoadingAnimation()
+                    Status.SUCCESS -> {
+                        getUpdatedWarrantyFromFirestore()
+                    }
+                    Status.ERROR -> {
+                        hideLoadingAnimation()
+                        response.message?.let {
+                            when {
+                                it.contains(Constants.ERROR_NETWORK_CONNECTION) -> {
+                                    Snackbar.make(
+                                        binding.root,
+                                        requireContext().getString(R.string.network_error_connection),
+                                        LENGTH_LONG
+                                    ).apply {
+                                        setAction(requireContext().getString(R.string.network_error_retry)) { getWarrantyInput() }
+                                        show()
+                                    }
+                                }
+                                else -> {
+                                    Snackbar.make(
+                                        binding.root,
+                                        requireContext().getString(R.string.network_error_failure),
+                                        LENGTH_LONG
+                                    ).show()
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
-    }
+
+    private fun getUpdatedWarrantyFromFirestore() =
+        viewModel.getUpdatedWarrantyFromFirestore(warranty.id)
+
+    private fun getUpdatedWarrantyObserver() =
+        viewModel.updatedWarrantyLiveData.observe(viewLifecycleOwner) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { response ->
+                when (response.status) {
+                    Status.LOADING -> showLoadingAnimation()
+                    Status.SUCCESS -> {
+                        hideLoadingAnimation()
+                        response.data?.let { updatedWarranty ->
+                            val daysUntilExpiry = getDaysUntilExpiry(updatedWarranty.expiryDate!!)
+
+                            val action = EditWarrantyFragmentDirections
+                                .actionEditWarrantyFragmentToWarrantyDetailsFragment(
+                                    updatedWarranty, daysUntilExpiry
+                                )
+                            navController.navigate(action)
+                        }
+                    }
+                    Status.ERROR -> {
+                        hideLoadingAnimation()
+                        response.message?.let {
+                            when {
+                                it.contains(Constants.ERROR_NETWORK_CONNECTION) -> {
+                                    Snackbar.make(
+                                        binding.root,
+                                        requireContext().getString(R.string.network_error_connection),
+                                        LENGTH_LONG
+                                    ).apply {
+                                        setAction(requireContext().getString(R.string.network_error_retry)) {
+                                            getUpdatedWarrantyFromFirestore()
+                                        }
+                                        show()
+                                    }
+                                }
+                                else -> {
+                                    Snackbar.make(
+                                        binding.root,
+                                        requireContext().getString(R.string.network_error_failure),
+                                        LENGTH_LONG
+                                    ).show()
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
     private fun showLoadingAnimation() {
         binding.toolbar.menu.getItem(0).isVisible = false
