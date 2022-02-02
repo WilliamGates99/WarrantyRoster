@@ -29,7 +29,7 @@ import com.xeniac.warrantyroster_manager.models.*
 import com.xeniac.warrantyroster_manager.ui.main.MainActivity
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModel
 import com.xeniac.warrantyroster_manager.utils.CategoryHelper.getCategoryTitleMapKey
-import com.xeniac.warrantyroster_manager.utils.Constants
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.Constants.FRAGMENT_TAG_EDIT_CALENDAR_EXPIRY
 import com.xeniac.warrantyroster_manager.utils.Constants.FRAGMENT_TAG_EDIT_CALENDAR_STARTING
 import kotlinx.coroutines.CoroutineScope
@@ -417,7 +417,7 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
                         hideLoadingAnimation()
                         response.message?.let {
                             when {
-                                it.contains(Constants.ERROR_NETWORK_CONNECTION) -> {
+                                it.contains(ERROR_NETWORK_CONNECTION) -> {
                                     Snackbar.make(
                                         binding.root,
                                         requireContext().getString(R.string.network_error_connection),
@@ -465,7 +465,7 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
                         hideLoadingAnimation()
                         response.message?.let {
                             when {
-                                it.contains(Constants.ERROR_NETWORK_CONNECTION) -> {
+                                it.contains(ERROR_NETWORK_CONNECTION) -> {
                                     Snackbar.make(
                                         binding.root,
                                         requireContext().getString(R.string.network_error_connection),
