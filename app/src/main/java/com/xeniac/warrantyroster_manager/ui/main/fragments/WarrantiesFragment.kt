@@ -32,7 +32,9 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
 
     private lateinit var warrantyAdapter: WarrantyAdapter
 
-    private val TAG = "WarrantiesFragment"
+    companion object {
+        private const val TAG = "WarrantiesFragment"
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

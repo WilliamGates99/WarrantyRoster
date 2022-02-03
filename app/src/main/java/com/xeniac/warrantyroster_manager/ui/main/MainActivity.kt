@@ -33,7 +33,9 @@ class MainActivity : AppCompatActivity() {
     lateinit var viewModel: MainViewModel
     lateinit var settingsViewModel: SettingsViewModel
 
-    private val TAG = "MainActivity"
+    companion object {
+        private const val TAG = "MainActivity"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -107,13 +109,13 @@ class MainActivity : AppCompatActivity() {
         DELETE_WARRANTY_Interstitial_ZONE_ID, object : AdRequestCallback() {
             override fun response(tapsellPlusAdModel: TapsellPlusAdModel?) {
                 super.response(tapsellPlusAdModel)
-                Log.i(TAG, "response: $tapsellPlusAdModel")
+                Log.i(TAG, "RequestInterstitialAd Response: $tapsellPlusAdModel")
                 tapsellPlusAdModel?.let { showInterstitialAd(it.responseId) }
             }
 
             override fun error(s: String?) {
                 super.error(s)
-                Log.e(TAG, "error: $s")
+                Log.e(TAG, "RequestInterstitialAd Error: $s")
             }
         })
 
@@ -121,17 +123,14 @@ class MainActivity : AppCompatActivity() {
         responseId, object : AdShowListener() {
             override fun onOpened(tapsellPlusAdModel: TapsellPlusAdModel?) {
                 super.onOpened(tapsellPlusAdModel)
-                Log.i(TAG, "onOpened: $tapsellPlusAdModel")
             }
 
             override fun onClosed(tapsellPlusAdModel: TapsellPlusAdModel?) {
                 super.onClosed(tapsellPlusAdModel)
-                Log.i(TAG, "onClosed: $tapsellPlusAdModel")
             }
 
             override fun onError(tapsellPlusErrorModel: TapsellPlusErrorModel?) {
                 super.onError(tapsellPlusErrorModel)
-                Log.e(TAG, "onError: $tapsellPlusErrorModel")
             }
         })
 }

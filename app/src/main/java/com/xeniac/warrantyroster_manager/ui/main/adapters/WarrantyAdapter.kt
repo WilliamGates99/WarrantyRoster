@@ -45,7 +45,9 @@ class WarrantyAdapter(
 
     private var requestAdCounter = 0
 
-    private val TAG = "WarrantyAdapter"
+    companion object {
+        private const val TAG = "WarrantyAdapter"
+    }
 
     private val diffCallback = object : DiffUtil.ItemCallback<Warranty>() {
         override fun areItemsTheSame(oldItem: Warranty, newItem: Warranty): Boolean {
@@ -96,65 +98,61 @@ class WarrantyAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         fun bindView(warranty: Warranty) = CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val category = warranty.categoryId?.let {
-                    viewModel.getCategoryById(it)
-                }
+            val category = warranty.categoryId?.let {
+                viewModel.getCategoryById(it)
+            }
 
-                withContext(Dispatchers.Main) {
-                    val expiryCalendar = Calendar.getInstance()
-                    val dateFormat = SimpleDateFormat("yyyy-M-dd", Locale.getDefault())
-                    dateFormat.parse(warranty.expiryDate!!)?.let { expiryCalendar.time = it }
-                    val daysUntilExpiry = getDaysUntilExpiry(expiryCalendar)
+            withContext(Dispatchers.Main) {
+                val expiryCalendar = Calendar.getInstance()
+                val dateFormat = SimpleDateFormat("yyyy-M-dd", Locale.getDefault())
+                dateFormat.parse(warranty.expiryDate!!)?.let { expiryCalendar.time = it }
+                val daysUntilExpiry = getDaysUntilExpiry(expiryCalendar)
 
-                    val expiryDate = "${
-                        expiryCalendar.getDisplayName(
-                            Calendar.MONTH, Calendar.LONG, Locale.getDefault()
-                        )
-                    } ${getDayWithSuffix(expiryCalendar.get(Calendar.DAY_OF_MONTH))}, " +
-                            "${expiryCalendar.get(Calendar.YEAR)}"
+                val expiryDate = "${
+                    expiryCalendar.getDisplayName(
+                        Calendar.MONTH, Calendar.LONG, Locale.getDefault()
+                    )
+                } ${getDayWithSuffix(expiryCalendar.get(Calendar.DAY_OF_MONTH))}, " +
+                        "${expiryCalendar.get(Calendar.YEAR)}"
 
-                    when {
-                        daysUntilExpiry < 0 -> {
-                            binding.statusColor = ContextCompat.getColor(context, R.color.red)
-                            binding.statusTitle =
-                                context.getString(R.string.warranties_list_status_expired)
-                        }
-                        daysUntilExpiry <= 30 -> {
-                            binding.statusColor = ContextCompat.getColor(context, R.color.orange)
-                            binding.statusTitle =
-                                context.getString(R.string.warranties_list_status_soon)
-                        }
-                        else -> {
-                            binding.statusColor = ContextCompat.getColor(context, R.color.green)
-                            binding.statusTitle =
-                                context.getString(R.string.warranties_list_status_valid)
-                        }
+                when {
+                    daysUntilExpiry < 0 -> {
+                        binding.statusColor = ContextCompat.getColor(context, R.color.red)
+                        binding.statusTitle =
+                            context.getString(R.string.warranties_list_status_expired)
                     }
-
-                    binding.title = warranty.title
-                    binding.expiryDate = expiryDate
-                    binding.categoryTitle = category?.let {
-                        it.title[getCategoryTitleMapKey(context)]
+                    daysUntilExpiry <= 30 -> {
+                        binding.statusColor = ContextCompat.getColor(context, R.color.orange)
+                        binding.statusTitle =
+                            context.getString(R.string.warranties_list_status_soon)
                     }
-                    binding.executePendingBindings()
-
-                    category?.let {
-                        val imageLoader = ImageLoader.Builder(context)
-                            .componentRegistry { add(SvgDecoder(context)) }.build()
-                        binding.ivIcon.load(it.icon, imageLoader) {
-                            memoryCachePolicy(CachePolicy.ENABLED)
-                            diskCachePolicy(CachePolicy.ENABLED)
-                            networkCachePolicy(CachePolicy.ENABLED)
-                        }
-                    }
-
-                    binding.cvWarranty.setOnClickListener {
-                        clickInterface.onItemClick(warranty, daysUntilExpiry)
+                    else -> {
+                        binding.statusColor = ContextCompat.getColor(context, R.color.green)
+                        binding.statusTitle =
+                            context.getString(R.string.warranties_list_status_valid)
                     }
                 }
-            } catch (e: Exception) {
-                Log.e(TAG, "Exception: ${e.message}")
+
+                binding.title = warranty.title
+                binding.expiryDate = expiryDate
+                binding.categoryTitle = category?.let {
+                    it.title[getCategoryTitleMapKey(context)]
+                }
+                binding.executePendingBindings()
+
+                category?.let {
+                    val imageLoader = ImageLoader.Builder(context)
+                        .componentRegistry { add(SvgDecoder(context)) }.build()
+                    binding.ivIcon.load(it.icon, imageLoader) {
+                        memoryCachePolicy(CachePolicy.ENABLED)
+                        diskCachePolicy(CachePolicy.ENABLED)
+                        networkCachePolicy(CachePolicy.ENABLED)
+                    }
+                }
+
+                binding.cvWarranty.setOnClickListener {
+                    clickInterface.onItemClick(warranty, daysUntilExpiry)
+                }
             }
         }
     }
@@ -200,7 +198,7 @@ class WarrantyAdapter(
             object : AdRequestCallback() {
                 override fun response(tapsellPlusAdModel: TapsellPlusAdModel?) {
                     super.response(tapsellPlusAdModel)
-                    Log.i(TAG, "response: $tapsellPlusAdModel")
+                    Log.i(TAG, "RequestNativeAd Response: $tapsellPlusAdModel")
                     TapsellPlus.showNativeAd(activity, tapsellPlusAdModel!!.responseId,
                         adHolder, object : AdShowListener() {
                             override fun onOpened(tapsellPlusAdModel: TapsellPlusAdModel?) {
@@ -215,7 +213,7 @@ class WarrantyAdapter(
 
                 override fun error(error: String?) {
                     super.error(error)
-                    Log.e(TAG, "error: $error")
+                    Log.e(TAG, "RequestNativeAd Error: $error")
                     if (requestAdCounter < 3) {
                         requestAdCounter++
                         requestNativeAd(adHolder)

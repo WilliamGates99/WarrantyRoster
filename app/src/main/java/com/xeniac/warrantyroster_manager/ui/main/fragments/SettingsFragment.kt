@@ -45,7 +45,9 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     private var requestAdCounter = 0
     private var responseId: String? = null
 
-    private val TAG = "SettingsFragment"
+    companion object {
+        private const val TAG = "SettingsFragment"
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -316,7 +318,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             SETTINGS_NATIVE_ZONE_ID, object : AdRequestCallback() {
                 override fun response(tapsellPlusAdModel: TapsellPlusAdModel?) {
                     super.response(tapsellPlusAdModel)
-                    Log.i(TAG, "response: ${tapsellPlusAdModel.toString()}")
+                    Log.i(TAG, "RequestNativeAd Response: ${tapsellPlusAdModel.toString()}")
                     _binding?.let {
                         tapsellPlusAdModel?.let {
                             responseId = it.responseId
@@ -327,7 +329,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
                 override fun error(error: String?) {
                     super.error(error)
-                    Log.e(TAG, "Error: $error")
+                    Log.e(TAG, "RequestNativeAd Error: $error")
                     if (requestAdCounter < 3) {
                         requestAdCounter++
                         requestNativeAd(adHolder)

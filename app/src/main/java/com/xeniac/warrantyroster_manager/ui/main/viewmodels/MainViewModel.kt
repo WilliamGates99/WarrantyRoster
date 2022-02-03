@@ -55,7 +55,9 @@ class MainViewModel(
         MutableLiveData()
     val updatedWarrantyLiveData: LiveData<Event<Resource<Warranty>>> = _updatedWarrantyLiveData
 
-    private val TAG = "MainViewModel"
+    companion object {
+        private const val TAG = "MainViewModel"
+    }
 
     fun seedCategories() = viewModelScope.launch {
         try {
@@ -79,7 +81,7 @@ class MainViewModel(
                 }
             }
         } catch (e: Exception) {
-            Log.e(TAG, "Exception: ${e.message}")
+            Log.e(TAG, "SeedCategories Exception: ${e.message}")
         }
     }
 
@@ -97,7 +99,7 @@ class MainViewModel(
         _warrantiesLiveData.postValue(Event(Resource.loading()))
         warrantyRepository.getWarrantiesFromFirestore().addSnapshotListener { value, error ->
             error?.let {
-                Log.e(TAG, "Error: ${it.message}")
+                Log.e(TAG, "GetWarrantiesListFromFirestore Error: ${it.message}")
                 _warrantiesLiveData.postValue(Event(Resource.error(it.message.toString())))
             }
 
@@ -184,7 +186,7 @@ class MainViewModel(
                     }
                 }
             } catch (e: Exception) {
-                Log.e(TAG, "Exception: ${e.message}")
+                Log.e(TAG, "GetCategoriesFromFirestore Exception: ${e.message}")
             }
         }
         return categoriesList.toList()
@@ -203,9 +205,9 @@ class MainViewModel(
                     Event(Resource.error(ERROR_NETWORK_CONNECTION))
                 )
             }
-        } catch (t: Throwable) {
-            Log.e(TAG, "Exception: ${t.message}")
-            _addWarrantyLiveData.postValue(Event(Resource.error(t.message.toString())))
+        } catch (e: Exception) {
+            Log.e(TAG, "SafeAddWarrantyToFirestore Exception: ${e.message}")
+            _addWarrantyLiveData.postValue(Event(Resource.error(e.message.toString())))
         }
     }
 
@@ -222,9 +224,9 @@ class MainViewModel(
                     Event(Resource.error(ERROR_NETWORK_CONNECTION))
                 )
             }
-        } catch (t: Throwable) {
-            Log.e(TAG, "Exception: ${t.message}")
-            _deleteWarrantyLiveData.postValue(Event(Resource.error(t.message.toString())))
+        } catch (e: Exception) {
+            Log.e(TAG, "SafeDeleteWarrantyFromFirestore Exception: ${e.message}")
+            _deleteWarrantyLiveData.postValue(Event(Resource.error(e.message.toString())))
         }
     }
 
@@ -243,9 +245,9 @@ class MainViewModel(
                     Event(Resource.error(ERROR_NETWORK_CONNECTION))
                 )
             }
-        } catch (t: Throwable) {
-            Log.e(TAG, "Exception: ${t.message}")
-            _updateWarrantyLiveData.postValue(Event(Resource.error(t.message.toString())))
+        } catch (e: Exception) {
+            Log.e(TAG, "SafeUpdateWarrantyInFirestore Exception: ${e.message}")
+            _updateWarrantyLiveData.postValue(Event(Resource.error(e.message.toString())))
         }
     }
 
@@ -276,9 +278,9 @@ class MainViewModel(
                     Event(Resource.error(ERROR_NETWORK_CONNECTION))
                 )
             }
-        } catch (t: Throwable) {
-            Log.e(TAG, "Exception: ${t.message}")
-            _updatedWarrantyLiveData.postValue(Event(Resource.error(t.message.toString())))
+        } catch (e: Exception) {
+            Log.e(TAG, "SafeGetUpdatedWarrantyFromFirestore Exception: ${e.message}")
+            _updatedWarrantyLiveData.postValue(Event(Resource.error(e.message.toString())))
         }
     }
 }

@@ -52,7 +52,7 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
     private lateinit var warranty: Warranty
 
     private val decimalFormat = DecimalFormat("00")
-    private val dateFormat = SimpleDateFormat("yyyy-M-dd")
+    private val dateFormat = SimpleDateFormat("yyyy-M-dd", Locale.getDefault())
     private var selectedCategory: Category? = null
     private var startingCalendarInput: Calendar? = null
     private var expiryCalendarInput: Calendar? = null

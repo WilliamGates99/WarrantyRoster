@@ -32,7 +32,9 @@ class LandingViewModel(
     private val _forgotPwLiveData: MutableLiveData<Event<Resource<String>>> = MutableLiveData()
     val forgotPwLiveData: LiveData<Event<Resource<String>>> = _forgotPwLiveData
 
-    private val TAG = "LandingViewModel"
+    companion object {
+        private const val TAG = "LandingViewModel"
+    }
 
     fun registerViaEmail(email: String, password: String) = viewModelScope.launch {
         safeRegisterViaEmail(email, password)
@@ -68,9 +70,9 @@ class LandingViewModel(
                     Event(Resource.error(ERROR_NETWORK_CONNECTION))
                 )
             }
-        } catch (t: Throwable) {
-            Log.e(TAG, "Exception: ${t.message}")
-            _registerLiveData.postValue(Event(Resource.error(t.message.toString())))
+        } catch (e: Exception) {
+            Log.e(TAG, "SafeRegisterViaEmail Exception: ${e.message}")
+            _registerLiveData.postValue(Event(Resource.error(e.message.toString())))
         }
     }
 
@@ -80,8 +82,6 @@ class LandingViewModel(
             if (hasInternetConnection(getApplication<WarrantyRosterApplication>())) {
                 userRepository.loginViaEmail(email, password).await().apply {
                     user?.let {
-                        Log.i(TAG, "${it.email} logged in successfully.")
-
                         getApplication<WarrantyRosterApplication>()
                             .getSharedPreferences(PREFERENCE_LOGIN, Context.MODE_PRIVATE)
                             .edit().apply {
@@ -98,9 +98,9 @@ class LandingViewModel(
                     Event(Resource.error(ERROR_NETWORK_CONNECTION))
                 )
             }
-        } catch (t: Throwable) {
-            Log.e(TAG, "Exception: ${t.message}")
-            _loginLiveData.postValue(Event(Resource.error(t.message.toString())))
+        } catch (e: Exception) {
+            Log.e(TAG, "SafeLoginViaEmail Exception: ${e.message}")
+            _loginLiveData.postValue(Event(Resource.error(e.message.toString())))
         }
     }
 
@@ -118,9 +118,9 @@ class LandingViewModel(
                     Event(Resource.error(ERROR_NETWORK_CONNECTION))
                 )
             }
-        } catch (t: Throwable) {
-            Log.e(TAG, "Exception: ${t.message}")
-            _forgotPwLiveData.postValue(Event(Resource.error(t.message.toString())))
+        } catch (e: Exception) {
+            Log.e(TAG, "SafeSendResetPasswordEmail Exception: ${e.message}")
+            _forgotPwLiveData.postValue(Event(Resource.error(e.message.toString())))
         }
     }
 }

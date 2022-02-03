@@ -49,7 +49,9 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
 
     private lateinit var warranty: Warranty
 
-    private val TAG = "WarrantyDetailsFragment"
+    companion object {
+        private const val TAG = "WarrantyDetailsFragment"
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -142,7 +144,7 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
 
             val startingCalendar = Calendar.getInstance()
             val expiryCalendar = Calendar.getInstance()
-            val dateFormat = SimpleDateFormat("yyyy-M-dd")
+            val dateFormat = SimpleDateFormat("yyyy-M-dd", Locale.getDefault())
             val decimalFormat = DecimalFormat("00")
 
             dateFormat.parse(warranty.startingDate!!)?.let {

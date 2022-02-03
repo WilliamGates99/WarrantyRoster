@@ -56,7 +56,9 @@ class SettingsViewModel(
             MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
     val changeUserPasswordLiveData: LiveData<Event<Resource<Nothing>>> = _changeUserPasswordLiveData
 
-    private val TAG = "SettingsViewModel"
+    companion object {
+        private const val TAG = "SettingsViewModel"
+    }
 
     fun getCurrentLanguage(): String =
         settingsPrefs.getString(Constants.PREFERENCE_LANGUAGE_KEY, "en").toString()
@@ -134,7 +136,7 @@ class SettingsViewModel(
                 }
             }
         } catch (e: Exception) {
-            Log.e(TAG, "Exception: ${e.message}")
+            Log.e(TAG, "SafeGetAccountDetails Exception: ${e.message}")
             _accountDetailsLiveData.postValue(Event(Resource.error(e.message.toString())))
         }
     }
@@ -152,9 +154,9 @@ class SettingsViewModel(
                     Event(Resource.error(ERROR_NETWORK_CONNECTION))
                 )
             }
-        } catch (t: Throwable) {
-            Log.e(TAG, "Exception: ${t.message}")
-            _sendVerificationEmailLiveData.postValue(Event(Resource.error(t.message.toString())))
+        } catch (e: Exception) {
+            Log.e(TAG, "SafeSendVerificationEmail Exception: ${e.message}")
+            _sendVerificationEmailLiveData.postValue(Event(Resource.error(e.message.toString())))
         }
     }
 
@@ -172,9 +174,9 @@ class SettingsViewModel(
 
             _logoutLiveData.postValue(Event(Resource.success(null)))
             Log.i(TAG, "User successfully logged out.")
-        } catch (t: Throwable) {
-            Log.e(TAG, "Exception: ${t.message}")
-            _logoutLiveData.postValue(Event(Resource.error(t.message.toString())))
+        } catch (e: Exception) {
+            Log.e(TAG, "SafeLogoutUser Exception: ${e.message}")
+            _logoutLiveData.postValue(Event(Resource.error(e.message.toString())))
         }
     }
 
@@ -191,9 +193,9 @@ class SettingsViewModel(
                     Event(Resource.error(ERROR_NETWORK_CONNECTION))
                 )
             }
-        } catch (t: Throwable) {
-            Log.e(TAG, "Exception: ${t.message}")
-            _reAuthenticateUserLiveData.postValue(Event(Resource.error(t.message.toString())))
+        } catch (e: Exception) {
+            Log.e(TAG, "SafeReAuthenticateUser Exception: ${e.message}")
+            _reAuthenticateUserLiveData.postValue(Event(Resource.error(e.message.toString())))
         }
     }
 
@@ -210,9 +212,9 @@ class SettingsViewModel(
                     Event(Resource.error(ERROR_NETWORK_CONNECTION))
                 )
             }
-        } catch (t: Throwable) {
-            Log.e(TAG, "Exception: ${t.message}")
-            _changeUserEmailLiveData.postValue(Event(Resource.error(t.message.toString())))
+        } catch (e: Exception) {
+            Log.e(TAG, "SafeChangeUserEmail Exception: ${e.message}")
+            _changeUserEmailLiveData.postValue(Event(Resource.error(e.message.toString())))
         }
     }
 
@@ -229,9 +231,9 @@ class SettingsViewModel(
                     Event(Resource.error(ERROR_NETWORK_CONNECTION))
                 )
             }
-        } catch (t: Throwable) {
-            Log.e(TAG, "Exception: ${t.message}")
-            _changeUserPasswordLiveData.postValue(Event(Resource.error(t.message.toString())))
+        } catch (e: Exception) {
+            Log.e(TAG, "SafeChangeUserPassword Exception: ${e.message}")
+            _changeUserPasswordLiveData.postValue(Event(Resource.error(e.message.toString())))
         }
     }
 }
