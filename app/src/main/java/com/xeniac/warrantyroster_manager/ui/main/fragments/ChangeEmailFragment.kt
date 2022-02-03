@@ -143,7 +143,7 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
                     Status.LOADING -> showLoadingAnimation()
                     Status.SUCCESS -> {
                         response.data?.let { newEmail ->
-                            changeUserEmailAuth(newEmail)
+                            changeUserEmail(newEmail)
                         }
                     }
                     Status.ERROR -> {
@@ -183,7 +183,7 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
             }
         }
 
-    private fun changeUserEmailAuth(newEmail: String) = viewModel.changeUserEmail(newEmail)
+    private fun changeUserEmail(newEmail: String) = viewModel.changeUserEmail(newEmail)
 
     private fun changeUserEmailObserver() =
         viewModel.changeUserEmailLiveData.observe(viewLifecycleOwner) { responseEvent ->
