@@ -44,6 +44,14 @@ class SettingsViewModel(
     private val _logoutLiveData: MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
     val logoutLiveData: LiveData<Event<Resource<Nothing>>> = _logoutLiveData
 
+    private val _reAuthenticateUserLiveData:
+            MutableLiveData<Event<Resource<String>>> = MutableLiveData()
+    val reAuthenticateUserLiveData: LiveData<Event<Resource<String>>> = _reAuthenticateUserLiveData
+
+    private val _changeUserEmailLiveData:
+            MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
+    val changeUserEmailLiveData: LiveData<Event<Resource<Nothing>>> = _changeUserEmailLiveData
+
     private val TAG = "SettingsViewModel"
 
     fun getCurrentLanguage(): String =
@@ -81,18 +89,26 @@ class SettingsViewModel(
         safeGetAccountDetails()
     }
 
-    fun sendVerificationEmail(user: FirebaseUser) = viewModelScope.launch {
-        safeSendVerificationEmail(user)
+    fun sendVerificationEmail() = viewModelScope.launch {
+        safeSendVerificationEmail()
     }
 
     fun logoutUser() = viewModelScope.launch {
         safeLogoutUser()
     }
 
+    fun reAuthenticateUser(password: String, newEmail: String) = viewModelScope.launch {
+        safeReAuthenticateUser(password, newEmail)
+    }
+
+    fun changeUserEmail(newEmail: String) = viewModelScope.launch {
+        safeChangeUserEmail(newEmail)
+    }
+
     private suspend fun safeGetAccountDetails() {
         _accountDetailsLiveData.postValue(Event(Resource.loading()))
         try {
-            val currentUser = userRepository.getAccountDetails()
+            val currentUser = userRepository.getCurrentUser()
             currentUser?.let { user ->
                 var email = user.email
                 var isVerified = user.isEmailVerified
@@ -115,13 +131,13 @@ class SettingsViewModel(
         }
     }
 
-    private suspend fun safeSendVerificationEmail(user: FirebaseUser) {
+    private suspend fun safeSendVerificationEmail() {
         _sendVerificationEmailLiveData.postValue(Event(Resource.loading()))
         try {
             if (hasInternetConnection(getApplication<WarrantyRosterApplication>())) {
-                userRepository.sendVerificationEmail(user).await()
+                userRepository.sendVerificationEmail().await()
                 _sendVerificationEmailLiveData.postValue(Event(Resource.success(null)))
-                Log.i(TAG, "Email sent to ${user.email}")
+                Log.i(TAG, "Verification email sent.")
             } else {
                 Log.e(TAG, ERROR_NETWORK_CONNECTION)
                 _sendVerificationEmailLiveData.postValue(
@@ -151,6 +167,44 @@ class SettingsViewModel(
         } catch (t: Throwable) {
             Log.e(TAG, "Exception: ${t.message}")
             _logoutLiveData.postValue(Event(Resource.error(t.message.toString())))
+        }
+    }
+
+    private suspend fun safeReAuthenticateUser(password: String, newEmail: String) {
+        _reAuthenticateUserLiveData.postValue(Event(Resource.loading()))
+        try {
+            if (hasInternetConnection(getApplication<WarrantyRosterApplication>())) {
+                userRepository.reAuthenticateUser(password).await()
+                _reAuthenticateUserLiveData.postValue(Event(Resource.success(newEmail)))
+                Log.i(TAG, "User re-authenticated.")
+            } else {
+                Log.e(TAG, ERROR_NETWORK_CONNECTION)
+                _reAuthenticateUserLiveData.postValue(
+                    Event(Resource.error(ERROR_NETWORK_CONNECTION))
+                )
+            }
+        } catch (t: Throwable) {
+            Log.e(TAG, "Exception: ${t.message}")
+            _reAuthenticateUserLiveData.postValue(Event(Resource.error(t.message.toString())))
+        }
+    }
+
+    private suspend fun safeChangeUserEmail(newEmail: String) {
+        _changeUserEmailLiveData.postValue(Event(Resource.loading()))
+        try {
+            if (hasInternetConnection(getApplication<WarrantyRosterApplication>())) {
+                userRepository.updateEmail(newEmail).await()
+                _changeUserEmailLiveData.postValue(Event(Resource.success(null)))
+                Log.i(TAG, "User email updated to ${newEmail}.")
+            } else {
+                Log.e(TAG, ERROR_NETWORK_CONNECTION)
+                _changeUserEmailLiveData.postValue(
+                    Event(Resource.error(ERROR_NETWORK_CONNECTION))
+                )
+            }
+        } catch (t: Throwable) {
+            Log.e(TAG, "Exception: ${t.message}")
+            _changeUserEmailLiveData.postValue(Event(Resource.error(t.message.toString())))
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.xeniac.warrantyroster_manager.repositories
 
+import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseUser
 import com.xeniac.warrantyroster_manager.firebase.FirebaseAuthInstance
 
@@ -14,11 +15,18 @@ class UserRepository {
     fun sendResetPasswordEmail(email: String) =
         FirebaseAuthInstance.auth.sendPasswordResetEmail(email)
 
-    fun sendVerificationEmail(user: FirebaseUser) = user.sendEmailVerification()
+    fun getCurrentUser() = FirebaseAuthInstance.auth.currentUser
 
-    fun getAccountDetails() = FirebaseAuthInstance.auth.currentUser
+    fun sendVerificationEmail() = getCurrentUser()!!.sendEmailVerification()
 
     fun reloadCurrentUser(user: FirebaseUser) = user.reload()
 
     fun logoutUser() = FirebaseAuthInstance.auth.signOut()
+
+    fun reAuthenticateUser(password: String) = getCurrentUser()!!.let {
+        val credential = EmailAuthProvider.getCredential(it.email.toString(), password)
+        getCurrentUser()!!.reauthenticate(credential)
+    }
+
+    fun updateEmail(newEmail: String) = getCurrentUser()!!.updateEmail(newEmail)
 }

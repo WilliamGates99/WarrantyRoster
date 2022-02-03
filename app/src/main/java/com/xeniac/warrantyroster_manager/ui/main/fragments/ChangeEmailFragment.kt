@@ -2,7 +2,6 @@ package com.xeniac.warrantyroster_manager.ui.main.fragments
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.util.Patterns
 import android.view.View
 import android.view.View.GONE
@@ -13,41 +12,37 @@ import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_INDEFINITE
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentChangeEmailBinding
+import com.xeniac.warrantyroster_manager.models.Status
 import com.xeniac.warrantyroster_manager.ui.main.MainActivity
-import com.xeniac.warrantyroster_manager.utils.NetworkHelper.hasInternetConnection
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
+import com.xeniac.warrantyroster_manager.ui.main.viewmodels.SettingsViewModel
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_CREDENTIALS
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 
 class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
 
     private var _binding: FragmentChangeEmailBinding? = null
     private val binding get() = _binding!!
-
-    private val firebaseAuth = FirebaseAuth.getInstance()
-    private val currentUser = firebaseAuth.currentUser
-
-    private val TAG = "ChangeEmailFragment"
+    private lateinit var viewModel: SettingsViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentChangeEmailBinding.bind(view)
         (requireContext() as MainActivity).hideNavBar()
+        viewModel = (activity as MainActivity).settingsViewModel
 
         textInputsBackgroundColor()
         textInputsStrokeColor()
         returnToMainActivity()
         changeEmailOnClick()
         changeEmailActionDone()
+        reAuthenticateUserObserver()
+        changeUserEmailObserver()
     }
 
     override fun onDestroyView() {
@@ -95,38 +90,22 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
     }
 
     private fun changeEmailOnClick() = binding.btnChangeEmail.setOnClickListener {
-        changeUserEmail()
+        getChangeUserEmailInputs()
     }
 
     private fun changeEmailActionDone() =
         binding.tiEditNewEmail.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                changeUserEmail()
+                getChangeUserEmailInputs()
             }
             false
         }
 
-    private fun changeUserEmail() {
+    private fun getChangeUserEmailInputs() {
         val inputMethodManager = requireContext()
             .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(binding.root.applicationWindowToken, 0)
 
-        if (hasInternetConnection(requireContext())) {
-            getChangeUserEmailInputs()
-        } else {
-            hideLoadingAnimation()
-            Snackbar.make(
-                binding.root,
-                requireContext().getString(R.string.network_error_connection),
-                LENGTH_INDEFINITE
-            ).apply {
-                setAction(requireContext().getString(R.string.network_error_retry)) { changeUserEmail() }
-                show()
-            }
-        }
-    }
-
-    private fun getChangeUserEmailInputs() {
         val password = binding.tiEditPassword.text.toString().trim()
         val newEmail = binding.tiEditNewEmail.text.toString().trim().lowercase()
 
@@ -143,7 +122,7 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
                 binding.tiLayoutNewEmail.requestFocus()
                 binding.tiLayoutNewEmail.error =
                     requireContext().getString(R.string.change_email_error_new_email)
-            } else if (newEmail == currentUser?.email) {
+            } else if (newEmail == FirebaseAuth.getInstance().currentUser?.email) {
                 binding.tiLayoutNewEmail.requestFocus()
                 binding.tiLayoutNewEmail.error =
                     requireContext().getString(R.string.change_email_error_email_same)
@@ -155,47 +134,63 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
     }
 
     private fun reAuthenticateUser(password: String, newEmail: String) =
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                currentUser?.let {
-                    val credential = EmailAuthProvider.getCredential(it.email.toString(), password)
-                    it.reauthenticate(credential).await()
-                    Log.i(TAG, "User re-authenticated.")
-                    changeUserEmailAuth(newEmail)
-                }
-            } catch (e: Exception) {
-                Log.e(TAG, "Exception: ${e.message}")
-                withContext(Dispatchers.Main) {
-                    hideLoadingAnimation()
-                    when {
-                        e.toString()
-                            .contains("The password is invalid or the user does not have a password") -> {
-                            Snackbar.make(
-                                binding.root,
-                                requireContext().getString(R.string.change_email_error_credentials),
-                                LENGTH_INDEFINITE
-                            ).show()
+        viewModel.reAuthenticateUser(password, newEmail)
+
+    private fun reAuthenticateUserObserver() =
+        viewModel.reAuthenticateUserLiveData.observe(viewLifecycleOwner) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { response ->
+                when (response.status) {
+                    Status.LOADING -> showLoadingAnimation()
+                    Status.SUCCESS -> {
+                        response.data?.let { newEmail ->
+                            changeUserEmailAuth(newEmail)
                         }
-                        else -> {
-                            Snackbar.make(
-                                binding.root,
-                                requireContext().getString(R.string.network_error_failure),
-                                LENGTH_LONG
-                            ).show()
+                    }
+                    Status.ERROR -> {
+                        hideLoadingAnimation()
+                        response.message?.let {
+                            when {
+                                it.contains(ERROR_NETWORK_CONNECTION) -> {
+                                    Snackbar.make(
+                                        binding.root,
+                                        requireContext().getString(R.string.network_error_connection),
+                                        LENGTH_LONG
+                                    ).apply {
+                                        setAction(requireContext().getString(R.string.network_error_retry)) {
+                                            getChangeUserEmailInputs()
+                                        }
+                                        show()
+                                    }
+                                }
+                                it.contains(ERROR_FIREBASE_AUTH_CREDENTIALS) -> {
+                                    Snackbar.make(
+                                        binding.root,
+                                        requireContext().getString(R.string.change_email_error_credentials),
+                                        LENGTH_LONG
+                                    ).show()
+                                }
+                                else -> {
+                                    Snackbar.make(
+                                        binding.root,
+                                        requireContext().getString(R.string.network_error_failure),
+                                        LENGTH_LONG
+                                    ).show()
+                                }
+                            }
                         }
                     }
                 }
             }
         }
 
-    private fun changeUserEmailAuth(newEmail: String) =
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                currentUser?.let {
-                    it.updateEmail(newEmail).await()
-                    Log.i(TAG, "User email updated to ${newEmail}.")
+    private fun changeUserEmailAuth(newEmail: String) = viewModel.changeUserEmail(newEmail)
 
-                    withContext(Dispatchers.Main) {
+    private fun changeUserEmailObserver() =
+        viewModel.changeUserEmailLiveData.observe(viewLifecycleOwner) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { response ->
+                when (response.status) {
+                    Status.LOADING -> showLoadingAnimation()
+                    Status.SUCCESS -> {
                         hideLoadingAnimation()
                         MaterialAlertDialogBuilder(requireContext()).apply {
                             setMessage(requireContext().getString(R.string.change_email_dialog_message))
@@ -204,26 +199,37 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
                             show()
                         }
                     }
-                }
-            } catch (e: Exception) {
-                Log.e(TAG, "Exception: ${e.message}")
-                withContext(Dispatchers.Main) {
-                    hideLoadingAnimation()
-                    when {
-                        e.toString()
-                            .contains("The email address is already in use by another account") -> {
-                            Snackbar.make(
-                                binding.root,
-                                requireContext().getString(R.string.change_email_error_email_exists),
-                                LENGTH_LONG
-                            ).show()
-                        }
-                        else -> {
-                            Snackbar.make(
-                                binding.root,
-                                requireContext().getString(R.string.network_error_failure),
-                                LENGTH_LONG
-                            ).show()
+                    Status.ERROR -> {
+                        hideLoadingAnimation()
+                        response.message?.let {
+                            when {
+                                it.contains(ERROR_NETWORK_CONNECTION) -> {
+                                    Snackbar.make(
+                                        binding.root,
+                                        requireContext().getString(R.string.network_error_connection),
+                                        LENGTH_LONG
+                                    ).apply {
+                                        setAction(requireContext().getString(R.string.network_error_retry)) {
+                                            getChangeUserEmailInputs()
+                                        }
+                                        show()
+                                    }
+                                }
+                                it.contains(ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS) -> {
+                                    Snackbar.make(
+                                        binding.root,
+                                        requireContext().getString(R.string.change_email_error_email_exists),
+                                        LENGTH_LONG
+                                    ).show()
+                                }
+                                else -> {
+                                    Snackbar.make(
+                                        binding.root,
+                                        requireContext().getString(R.string.network_error_failure),
+                                        LENGTH_LONG
+                                    ).show()
+                                }
+                            }
                         }
                     }
                 }
