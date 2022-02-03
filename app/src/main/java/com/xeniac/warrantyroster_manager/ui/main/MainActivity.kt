@@ -12,6 +12,7 @@ import com.google.android.material.shape.MaterialShapeDrawable
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.ActivityMainBinding
 import com.xeniac.warrantyroster_manager.db.WarrantyRosterDatabase
+import com.xeniac.warrantyroster_manager.models.Status
 import com.xeniac.warrantyroster_manager.repositories.UserRepository
 import com.xeniac.warrantyroster_manager.repositories.WarrantyRepository
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModel
@@ -25,6 +26,9 @@ import ir.tapsell.plus.AdShowListener
 import ir.tapsell.plus.TapsellPlus
 import ir.tapsell.plus.model.TapsellPlusAdModel
 import ir.tapsell.plus.model.TapsellPlusErrorModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -32,6 +36,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
     lateinit var viewModel: MainViewModel
     lateinit var settingsViewModel: SettingsViewModel
+
+    private var isEnUsSeeded = false
+    private var seedCategoriesCounter = 0
 
     companion object {
         private const val TAG = "MainActivity"
@@ -52,6 +59,7 @@ class MainActivity : AppCompatActivity() {
         bottomAppBarStyle()
         bottomNavActions()
         fabOnClick()
+        getCategoriesSeedingPrefs()
         seedCategories()
     }
 
@@ -103,7 +111,39 @@ class MainActivity : AppCompatActivity() {
         binding.appbar.performHide()
     }
 
-    private fun seedCategories() = viewModel.seedCategories()
+    private fun getCategoriesSeedingPrefs() {
+        //TODO add isFaIRSeeded after adding persian
+        isEnUsSeeded = viewModel.isEnUsCategoriesSeeded()
+    }
+
+    private fun seedCategories() {
+        if (!isEnUsSeeded) {
+            viewModel.getCategoriesFromFirestore()
+            categoriesObserver()
+        }
+    }
+
+    private fun categoriesObserver() =
+        viewModel.categoriesLiveData.observe(this) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { response ->
+                when (response.status) {
+                    Status.SUCCESS -> {
+                        CoroutineScope(Dispatchers.IO).launch {
+                            response.data?.let { categoriesList ->
+                                viewModel.seedCategories(categoriesList)
+                            }
+                        }
+                    }
+                    Status.ERROR -> {
+                        if (seedCategoriesCounter < 3) {
+                            seedCategoriesCounter++
+                            seedCategories()
+                        }
+                    }
+                    Status.LOADING -> Unit
+                }
+            }
+        }
 
     fun requestInterstitialAd() = TapsellPlus.requestInterstitialAd(this,
         DELETE_WARRANTY_Interstitial_ZONE_ID, object : AdRequestCallback() {

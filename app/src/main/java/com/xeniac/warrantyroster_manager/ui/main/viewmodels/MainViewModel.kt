@@ -28,6 +28,8 @@ import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_TITLE
 import com.xeniac.warrantyroster_manager.utils.Event
 import com.xeniac.warrantyroster_manager.utils.NetworkHelper.hasInternetConnection
 import com.xeniac.warrantyroster_manager.utils.Resource
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
@@ -35,6 +37,10 @@ class MainViewModel(
     application: Application,
     private val warrantyRepository: WarrantyRepository
 ) : AndroidViewModel(application) {
+
+    private val _categoriesLiveData:
+            MutableLiveData<Event<Resource<MutableList<Category>>>> = MutableLiveData()
+    val categoriesLiveData: LiveData<Event<Resource<MutableList<Category>>>> = _categoriesLiveData
 
     private val _warrantiesLiveData:
             MutableLiveData<Event<Resource<MutableList<Warranty>>>> = MutableLiveData()
@@ -59,31 +65,43 @@ class MainViewModel(
         private const val TAG = "MainViewModel"
     }
 
-    fun seedCategories() = viewModelScope.launch {
-        try {
-            val seedPrefs = getApplication<WarrantyRosterApplication>()
-                .getSharedPreferences(Constants.PREFERENCE_DB_SEED, Context.MODE_PRIVATE)
-            val isEnUsSeeded = seedPrefs.getBoolean(Constants.PREFERENCE_EN_US_KEY, false)
+    fun isEnUsCategoriesSeeded(): Boolean {
+        val seedPrefs = getApplication<WarrantyRosterApplication>()
+            .getSharedPreferences(Constants.PREFERENCE_DB_SEED, Context.MODE_PRIVATE)
+        return seedPrefs.getBoolean(Constants.PREFERENCE_EN_US_KEY, false)
+    }
 
-            //TODO add isFaIRSeeded after adding persian
-            if (!isEnUsSeeded) {
+    fun getCategoriesFromFirestore() = viewModelScope.launch {
+        safeGetCategoriesFromFirestore()
+    }
+
+    fun seedCategories(categoriesList: List<Category>) = viewModelScope.launch {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
                 deleteAllCategories()
-                insertAllCategories(getCategoriesFromFirestore())
+                insertAllCategories(categoriesList)
 
                 if (countItems() == 21) {
-                    Log.i(TAG, "categories successfully seeded to DB.")
                     getApplication<WarrantyRosterApplication>().getSharedPreferences(
                         Constants.PREFERENCE_DB_SEED, Context.MODE_PRIVATE
                     ).edit().apply {
                         putBoolean(Constants.PREFERENCE_EN_US_KEY, true)
                         apply()
                     }
+                    Log.i(TAG, "categories successfully seeded to DB.")
                 }
+            } catch (e: Exception) {
+                Log.e(TAG, "SeedCategories Exception ${e.message}")
             }
-        } catch (e: Exception) {
-            Log.e(TAG, "SeedCategories Exception: ${e.message}")
         }
     }
+
+    private suspend fun deleteAllCategories() = warrantyRepository.deleteAllCategories()
+
+    private suspend fun insertAllCategories(categoriesList: List<Category>) =
+        warrantyRepository.insertAllCategories(categoriesList)
+
+    private fun countItems() = warrantyRepository.countItems()
 
     fun getAllCategoryTitles(): List<String> {
         val titleList = mutableListOf<String>()
@@ -159,23 +177,13 @@ class MainViewModel(
         safeGetUpdatedWarrantyFromFirestore(warrantyId)
     }
 
-    private fun deleteAllCategories() = viewModelScope.launch {
-        warrantyRepository.deleteAllCategories()
-    }
-
-    private fun insertAllCategories(categoriesList: List<Category>) = viewModelScope.launch {
-        warrantyRepository.insertAllCategories(categoriesList)
-    }
-
-    private fun countItems() = warrantyRepository.countItems()
-
-    private fun getCategoriesFromFirestore(): List<Category> {
-        val categoriesList = mutableListOf<Category>()
+    private fun safeGetCategoriesFromFirestore() {
         viewModelScope.launch {
+            _categoriesLiveData.postValue(Event(Resource.loading()))
             try {
                 val categoriesQuery = warrantyRepository.getCategoriesFromFirestore().await()
-                Log.i(TAG, "Categories successfully retrieved.")
 
+                val categoriesList = mutableListOf<Category>()
                 for (document in categoriesQuery.documents) {
                     @Suppress("UNCHECKED_CAST")
                     document?.let {
@@ -185,11 +193,13 @@ class MainViewModel(
                         categoriesList.add(Category(id, title, icon))
                     }
                 }
+                _categoriesLiveData.postValue(Event(Resource.success(categoriesList)))
+                Log.i(TAG, "Categories successfully retrieved.")
             } catch (e: Exception) {
                 Log.e(TAG, "GetCategoriesFromFirestore Exception: ${e.message}")
+                _categoriesLiveData.postValue(Event(Resource.error(e.message.toString())))
             }
         }
-        return categoriesList.toList()
     }
 
     private suspend fun safeAddWarrantyToFirestore(warrantyInput: WarrantyInput) {
