@@ -30,6 +30,8 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
     private val binding get() = _binding!!
     private lateinit var viewModel: SettingsViewModel
 
+    private lateinit var newEmail: String
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentChangeEmailBinding.bind(view)
@@ -107,7 +109,7 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
         inputMethodManager.hideSoftInputFromWindow(binding.root.applicationWindowToken, 0)
 
         val password = binding.tiEditPassword.text.toString().trim()
-        val newEmail = binding.tiEditNewEmail.text.toString().trim().lowercase()
+        newEmail = binding.tiEditNewEmail.text.toString().trim().lowercase()
 
         if (password.isBlank()) {
             binding.tiLayoutPassword.requestFocus()
@@ -128,13 +130,12 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
                     requireContext().getString(R.string.change_email_error_email_same)
             } else {
                 showLoadingAnimation()
-                reAuthenticateUser(password, newEmail)
+                reAuthenticateUser(password)
             }
         }
     }
 
-    private fun reAuthenticateUser(password: String, newEmail: String) =
-        viewModel.reAuthenticateUser(password, newEmail)
+    private fun reAuthenticateUser(password: String) = viewModel.reAuthenticateUser(password)
 
     private fun reAuthenticateUserObserver() =
         viewModel.reAuthenticateUserLiveData.observe(viewLifecycleOwner) { responseEvent ->
@@ -142,9 +143,7 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
                 when (response.status) {
                     Status.LOADING -> showLoadingAnimation()
                     Status.SUCCESS -> {
-                        response.data?.let { newEmail ->
-                            changeUserEmail(newEmail)
-                        }
+                        changeUserEmail()
                     }
                     Status.ERROR -> {
                         hideLoadingAnimation()
@@ -183,7 +182,7 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
             }
         }
 
-    private fun changeUserEmail(newEmail: String) = viewModel.changeUserEmail(newEmail)
+    private fun changeUserEmail() = viewModel.changeUserEmail(newEmail)
 
     private fun changeUserEmailObserver() =
         viewModel.changeUserEmailLiveData.observe(viewLifecycleOwner) { responseEvent ->
