@@ -28,5 +28,7 @@ class UserRepository {
         getCurrentUser()!!.reauthenticate(credential)
     }
 
-    fun updateEmail(newEmail: String) = getCurrentUser()!!.updateEmail(newEmail)
+    fun updateUserEmail(newEmail: String) = getCurrentUser()!!.updateEmail(newEmail)
+
+    fun updateUserPassword(newPassword: String) = getCurrentUser()!!.updatePassword(newPassword)
 }

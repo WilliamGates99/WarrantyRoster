@@ -2,7 +2,6 @@ package com.xeniac.warrantyroster_manager.ui.main.fragments
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -12,41 +11,36 @@ import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_INDEFINITE
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.auth.EmailAuthProvider
-import com.google.firebase.auth.FirebaseAuth
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentChangePasswordBinding
+import com.xeniac.warrantyroster_manager.models.Status
 import com.xeniac.warrantyroster_manager.ui.main.MainActivity
-import com.xeniac.warrantyroster_manager.utils.NetworkHelper.hasInternetConnection
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
+import com.xeniac.warrantyroster_manager.ui.main.viewmodels.SettingsViewModel
+import com.xeniac.warrantyroster_manager.utils.Constants
 
 class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
 
     private var _binding: FragmentChangePasswordBinding? = null
     private val binding get() = _binding!!
+    private lateinit var viewModel: SettingsViewModel
 
-    private val firebaseAuth = FirebaseAuth.getInstance()
-    private val currentUser = firebaseAuth.currentUser
-
-    private val TAG = "ChangePasswordFragment"
+    private lateinit var newPassword: String
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentChangePasswordBinding.bind(view)
         (requireContext() as MainActivity).hideNavBar()
+        viewModel = (activity as MainActivity).settingsViewModel
 
         textInputsBackgroundColor()
         textInputsStrokeColor()
         returnToMainActivity()
         changePasswordOnClick()
         changePasswordActionDone()
+        reAuthenticateUserObserver()
+        changeUserPasswordObserver()
     }
 
     override fun onDestroyView() {
@@ -139,40 +133,24 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
     }
 
     private fun changePasswordOnClick() = binding.btnChangePassword.setOnClickListener {
-        changeUserPassword()
+        getChangeUserPasswordInputs()
     }
 
     private fun changePasswordActionDone() =
         binding.tiEditRetypePassword.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                changeUserPassword()
+                getChangeUserPasswordInputs()
             }
             false
         }
 
-    private fun changeUserPassword() {
+    private fun getChangeUserPasswordInputs() {
         val inputMethodManager = requireContext()
             .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(binding.root.applicationWindowToken, 0)
 
-        if (hasInternetConnection(requireContext())) {
-            getChangeUserPasswordInputs()
-        } else {
-            hideLoadingAnimation()
-            Snackbar.make(
-                binding.root,
-                requireContext().getString(R.string.network_error_connection),
-                LENGTH_INDEFINITE
-            ).apply {
-                setAction(requireContext().getString(R.string.network_error_retry)) { changeUserPassword() }
-                show()
-            }
-        }
-    }
-
-    private fun getChangeUserPasswordInputs() {
         val currentPassword = binding.tiEditCurrentPassword.text.toString().trim()
-        val newPassword = binding.tiEditNewPassword.text.toString().trim()
+        newPassword = binding.tiEditNewPassword.text.toString().trim()
         val retypeNewPassword = binding.tiEditRetypePassword.text.toString().trim()
 
         if (currentPassword.isBlank()) {
@@ -198,54 +176,67 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
                     requireContext().getString(R.string.change_password_error_match)
             } else {
                 showLoadingAnimation()
-                reAuthenticateUser(currentPassword, newPassword)
+                reAuthenticateUser(currentPassword)
             }
         }
     }
 
-    private fun reAuthenticateUser(currentPassword: String, newPassword: String) =
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                currentUser?.let {
-                    val credential = EmailAuthProvider
-                        .getCredential(it.email.toString(), currentPassword)
-                    it.reauthenticate(credential).await()
-                    Log.i(TAG, "User re-authenticated.")
-                    changeUserPasswordAuth(newPassword)
-                }
-            } catch (e: Exception) {
-                Log.e(TAG, "Exception: ${e.message}")
-                withContext(Dispatchers.Main) {
-                    hideLoadingAnimation()
-                    when {
-                        e.toString()
-                            .contains("The password is invalid or the user does not have a password") -> {
-                            Snackbar.make(
-                                binding.root,
-                                requireContext().getString(R.string.change_email_error_credentials),
-                                LENGTH_LONG
-                            ).show()
-                        }
-                        else -> {
-                            Snackbar.make(
-                                binding.root,
-                                requireContext().getString(R.string.network_error_failure),
-                                LENGTH_LONG
-                            ).show()
+    private fun reAuthenticateUser(currentPassword: String) =
+        viewModel.reAuthenticateUser(currentPassword)
+
+    private fun reAuthenticateUserObserver() =
+        viewModel.reAuthenticateUserLiveData.observe(viewLifecycleOwner) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { response ->
+                when (response.status) {
+                    Status.LOADING -> showLoadingAnimation()
+                    Status.SUCCESS -> {
+                        changeUserPassword()
+                    }
+                    Status.ERROR -> {
+                        hideLoadingAnimation()
+                        response.message?.let {
+                            when {
+                                it.contains(Constants.ERROR_NETWORK_CONNECTION) -> {
+                                    Snackbar.make(
+                                        binding.root,
+                                        requireContext().getString(R.string.network_error_connection),
+                                        LENGTH_LONG
+                                    ).apply {
+                                        setAction(requireContext().getString(R.string.network_error_retry)) {
+                                            getChangeUserPasswordInputs()
+                                        }
+                                        show()
+                                    }
+                                }
+                                it.contains(Constants.ERROR_FIREBASE_AUTH_CREDENTIALS) -> {
+                                    Snackbar.make(
+                                        binding.root,
+                                        requireContext().getString(R.string.change_password_error_credentials),
+                                        LENGTH_LONG
+                                    ).show()
+                                }
+                                else -> {
+                                    Snackbar.make(
+                                        binding.root,
+                                        requireContext().getString(R.string.network_error_failure),
+                                        LENGTH_LONG
+                                    ).show()
+                                }
+                            }
                         }
                     }
                 }
             }
         }
 
-    private fun changeUserPasswordAuth(newPassword: String) =
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                currentUser?.let {
-                    it.updatePassword(newPassword).await()
-                    Log.i(TAG, "User password updated.")
+    private fun changeUserPassword() = viewModel.changeUserPassword(newPassword)
 
-                    withContext(Dispatchers.Main) {
+    private fun changeUserPasswordObserver() =
+        viewModel.changeUserPasswordLiveData.observe(viewLifecycleOwner) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { response ->
+                when (response.status) {
+                    Status.LOADING -> showLoadingAnimation()
+                    Status.SUCCESS -> {
                         hideLoadingAnimation()
                         MaterialAlertDialogBuilder(requireContext()).apply {
                             setMessage(requireContext().getString(R.string.change_password_dialog_message))
@@ -254,16 +245,32 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
                             show()
                         }
                     }
-                }
-            } catch (e: Exception) {
-                Log.e(TAG, "Exception: ${e.message}")
-                withContext(Dispatchers.Main) {
-                    hideLoadingAnimation()
-                    Snackbar.make(
-                        binding.root,
-                        requireContext().getString(R.string.network_error_failure),
-                        LENGTH_LONG
-                    ).show()
+                    Status.ERROR -> {
+                        hideLoadingAnimation()
+                        response.message?.let {
+                            when {
+                                it.contains(Constants.ERROR_NETWORK_CONNECTION) -> {
+                                    Snackbar.make(
+                                        binding.root,
+                                        requireContext().getString(R.string.network_error_connection),
+                                        LENGTH_LONG
+                                    ).apply {
+                                        setAction(requireContext().getString(R.string.network_error_retry)) {
+                                            getChangeUserPasswordInputs()
+                                        }
+                                        show()
+                                    }
+                                }
+                                else -> {
+                                    Snackbar.make(
+                                        binding.root,
+                                        requireContext().getString(R.string.network_error_failure),
+                                        LENGTH_LONG
+                                    ).show()
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }

@@ -45,12 +45,16 @@ class SettingsViewModel(
     val logoutLiveData: LiveData<Event<Resource<Nothing>>> = _logoutLiveData
 
     private val _reAuthenticateUserLiveData:
-            MutableLiveData<Event<Resource<String>>> = MutableLiveData()
-    val reAuthenticateUserLiveData: LiveData<Event<Resource<String>>> = _reAuthenticateUserLiveData
+            MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
+    val reAuthenticateUserLiveData: LiveData<Event<Resource<Nothing>>> = _reAuthenticateUserLiveData
 
     private val _changeUserEmailLiveData:
             MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
     val changeUserEmailLiveData: LiveData<Event<Resource<Nothing>>> = _changeUserEmailLiveData
+
+    private val _changeUserPasswordLiveData:
+            MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
+    val changeUserPasswordLiveData: LiveData<Event<Resource<Nothing>>> = _changeUserPasswordLiveData
 
     private val TAG = "SettingsViewModel"
 
@@ -97,12 +101,16 @@ class SettingsViewModel(
         safeLogoutUser()
     }
 
-    fun reAuthenticateUser(password: String, newEmail: String) = viewModelScope.launch {
-        safeReAuthenticateUser(password, newEmail)
+    fun reAuthenticateUser(password: String) = viewModelScope.launch {
+        safeReAuthenticateUser(password)
     }
 
     fun changeUserEmail(newEmail: String) = viewModelScope.launch {
         safeChangeUserEmail(newEmail)
+    }
+
+    fun changeUserPassword(newPassword: String) = viewModelScope.launch {
+        safeChangeUserPassword(newPassword)
     }
 
     private suspend fun safeGetAccountDetails() {
@@ -170,12 +178,12 @@ class SettingsViewModel(
         }
     }
 
-    private suspend fun safeReAuthenticateUser(password: String, newEmail: String) {
+    private suspend fun safeReAuthenticateUser(password: String) {
         _reAuthenticateUserLiveData.postValue(Event(Resource.loading()))
         try {
             if (hasInternetConnection(getApplication<WarrantyRosterApplication>())) {
                 userRepository.reAuthenticateUser(password).await()
-                _reAuthenticateUserLiveData.postValue(Event(Resource.success(newEmail)))
+                _reAuthenticateUserLiveData.postValue(Event(Resource.success(null)))
                 Log.i(TAG, "User re-authenticated.")
             } else {
                 Log.e(TAG, ERROR_NETWORK_CONNECTION)
@@ -193,7 +201,7 @@ class SettingsViewModel(
         _changeUserEmailLiveData.postValue(Event(Resource.loading()))
         try {
             if (hasInternetConnection(getApplication<WarrantyRosterApplication>())) {
-                userRepository.updateEmail(newEmail).await()
+                userRepository.updateUserEmail(newEmail).await()
                 _changeUserEmailLiveData.postValue(Event(Resource.success(null)))
                 Log.i(TAG, "User email updated to ${newEmail}.")
             } else {
@@ -205,6 +213,25 @@ class SettingsViewModel(
         } catch (t: Throwable) {
             Log.e(TAG, "Exception: ${t.message}")
             _changeUserEmailLiveData.postValue(Event(Resource.error(t.message.toString())))
+        }
+    }
+
+    private suspend fun safeChangeUserPassword(newPassword: String) {
+        _changeUserPasswordLiveData.postValue(Event(Resource.loading()))
+        try {
+            if (hasInternetConnection(getApplication<WarrantyRosterApplication>())) {
+                userRepository.updateUserPassword(newPassword).await()
+                _changeUserPasswordLiveData.postValue(Event(Resource.success(null)))
+                Log.i(TAG, "User password updated.")
+            } else {
+                Log.e(TAG, ERROR_NETWORK_CONNECTION)
+                _changeUserPasswordLiveData.postValue(
+                    Event(Resource.error(ERROR_NETWORK_CONNECTION))
+                )
+            }
+        } catch (t: Throwable) {
+            Log.e(TAG, "Exception: ${t.message}")
+            _changeUserPasswordLiveData.postValue(Event(Resource.error(t.message.toString())))
         }
     }
 }

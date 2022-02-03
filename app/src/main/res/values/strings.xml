@@ -175,6 +175,7 @@
     <string name="change_password_helper_password_strong">Strong</string>
     <string name="change_password_error_password_short">Password should be at least 6 characters!</string>
     <string name="change_password_error_match">New password and retype new password do not match!</string>
+    <string name="change_password_error_credentials">The provided credentials are incorrect.</string>
     <string name="change_password_dialog_message">Your password has been successfully changed.</string>
     <string name="change_password_dialog_positive">Confirm</string>
 
