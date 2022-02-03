@@ -7,7 +7,6 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.auth.FirebaseUser
 import com.xeniac.warrantyroster_manager.WarrantyRosterApplication
 import com.xeniac.warrantyroster_manager.repositories.UserRepository
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
@@ -51,21 +50,18 @@ class LandingViewModel(
         _registerLiveData.postValue(Event(Resource.loading()))
         try {
             if (hasInternetConnection(getApplication<WarrantyRosterApplication>())) {
-                userRepository.registerViaEmail(email, password).await().apply {
-                    user?.let {
-                        Log.i(TAG, "${it.email} registered successfully.")
-                        sendVerificationEmail(it)
+                userRepository.registerViaEmail(email, password).await()
+                userRepository.sendVerificationEmail()
 
-                        getApplication<WarrantyRosterApplication>()
-                            .getSharedPreferences(PREFERENCE_LOGIN, Context.MODE_PRIVATE)
-                            .edit().apply {
-                                putBoolean(PREFERENCE_IS_LOGGED_IN_KEY, true)
-                                apply()
-                            }
-
-                        _registerLiveData.postValue(Event(Resource.success(null)))
+                getApplication<WarrantyRosterApplication>()
+                    .getSharedPreferences(PREFERENCE_LOGIN, Context.MODE_PRIVATE)
+                    .edit().apply {
+                        putBoolean(PREFERENCE_IS_LOGGED_IN_KEY, true)
+                        apply()
                     }
-                }
+
+                _registerLiveData.postValue(Event(Resource.success(null)))
+                Log.i(TAG, "$email registered successfully.")
             } else {
                 Log.e(TAG, ERROR_NETWORK_CONNECTION)
                 _registerLiveData.postValue(
@@ -125,14 +121,6 @@ class LandingViewModel(
         } catch (t: Throwable) {
             Log.e(TAG, "Exception: ${t.message}")
             _forgotPwLiveData.postValue(Event(Resource.error(t.message.toString())))
-        }
-    }
-
-    private fun sendVerificationEmail(user: FirebaseUser) {
-        try {
-            userRepository.sendVerificationEmail(user)
-        } catch (t: Throwable) {
-            Log.e(TAG, "Exception: ${t.message}")
         }
     }
 }

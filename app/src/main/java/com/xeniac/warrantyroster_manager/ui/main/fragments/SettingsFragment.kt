@@ -16,7 +16,6 @@ import com.airbnb.lottie.LottieDrawable
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.auth.FirebaseUser
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentSettingsBinding
 import com.xeniac.warrantyroster_manager.models.Status
@@ -42,8 +41,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     private lateinit var currentLanguage: String
     private lateinit var currentCountry: String
     private var currentTheme: Int = 0
-
-    private lateinit var currentUser: FirebaseUser
 
     private var requestAdCounter = 0
     private var responseId: String? = null
@@ -88,7 +85,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                 when (response.status) {
                     Status.SUCCESS -> {
                         response.data?.let { user ->
-                            currentUser = user
                             setAccountDetails(user.email.toString(), user.isEmailVerified)
                         }
                     }
@@ -225,7 +221,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
     private fun setAppTheme(index: Int) = viewModel.setAppTheme(index)
 
-    private fun sendVerificationEmail() = viewModel.sendVerificationEmail(currentUser)
+    private fun sendVerificationEmail() = viewModel.sendVerificationEmail()
 
     private fun sendVerificationEmailObserver() =
         viewModel.sendVerificationEmailLiveData.observe(viewLifecycleOwner) { responseEvent ->
