@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:fillViewport="true"
     android:orientation="vertical"
-    android:overScrollMode="never"
+    android:overScrollMode="ifContentScrolls"
     android:paddingTop="12dp"
     android:scrollbars="none">
 
