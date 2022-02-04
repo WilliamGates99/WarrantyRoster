@@ -7,6 +7,7 @@ import android.os.Looper
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
@@ -110,6 +111,7 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
     }
 
     private fun countdown() {
+        updateConstraintToTimer()
         binding.groupResend.visibility = GONE
         binding.groupTimer.visibility = VISIBLE
 
@@ -127,10 +129,35 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
 
             override fun onFinish() {
                 Handler(Looper.getMainLooper()).postDelayed({
+                    resetConstraintToDefault()
                     binding.groupTimer.visibility = GONE
                     binding.groupResend.visibility = VISIBLE
                 }, 500)
             }
         }.start()
+    }
+
+    private fun updateConstraintToTimer() {
+        val constraintSet = ConstraintSet()
+        constraintSet.clone(binding.cl)
+        constraintSet.connect(
+            binding.lavSent.id,
+            ConstraintSet.BOTTOM,
+            binding.tvResent.id,
+            ConstraintSet.TOP
+        )
+        constraintSet.applyTo(binding.cl)
+    }
+
+    private fun resetConstraintToDefault() {
+        val constraintSet = ConstraintSet()
+        constraintSet.clone(binding.cl)
+        constraintSet.connect(
+            binding.lavSent.id,
+            ConstraintSet.BOTTOM,
+            binding.tvResend.id,
+            ConstraintSet.TOP
+        )
+        constraintSet.applyTo(binding.cl)
     }
 }

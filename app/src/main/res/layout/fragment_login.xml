@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:fillViewport="true"
     android:orientation="vertical"
-    android:overScrollMode="ifContentScrolls"
+    android:overScrollMode="never"
     android:paddingTop="12dp"
     android:scrollbars="none">
 
@@ -25,9 +25,12 @@
             android:textAlignment="gravity"
             android:textColor="@color/black"
             android:textSize="24sp"
+            app:layout_constraintBottom_toTopOf="@+id/tv_title_email"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0"
+            app:layout_constraintVertical_chainStyle="packed" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_title_email"
@@ -43,6 +46,7 @@
             android:textAlignment="gravity"
             android:textColor="@color/black"
             android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@+id/ti_layout_email"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_description" />
@@ -54,6 +58,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="24dp"
             android:layout_marginTop="4dp"
+            app:layout_constraintBottom_toTopOf="@+id/tv_title_password"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_title_email">
@@ -89,6 +94,7 @@
             android:textAlignment="gravity"
             android:textColor="@color/black"
             android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@+id/ti_layout_password"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ti_layout_email" />
@@ -100,6 +106,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="24dp"
             android:layout_marginTop="4dp"
+            app:layout_constraintBottom_toTopOf="@+id/btn_forgot_pw"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_title_password"
@@ -135,6 +142,7 @@
             android:textAlignment="gravity"
             android:textColor="@color/red"
             android:textSize="12sp"
+            app:layout_constraintBottom_toTopOf="@+id/btn_login"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ti_layout_password" />
 
@@ -146,6 +154,7 @@
             android:layout_marginHorizontal="24dp"
             android:layout_marginTop="35dp"
             android:text="@string/login_btn_login"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_forgot_pw" />
@@ -174,6 +183,7 @@
             android:textSize="14sp"
             app:layout_constraintBaseline_toBaselineOf="@+id/btn_register"
             app:layout_constraintEnd_toStartOf="@+id/btn_register"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -190,9 +200,10 @@
             android:textAlignment="gravity"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toEndOf="@+id/tv_register_title"
-            app:layout_constraintTop_toBottomOf="@+id/btn_login" />
+            app:layout_constraintTop_toBottomOf="@+id/btn_login"
+            app:layout_constraintVertical_bias="1"
+            app:layout_constraintVertical_chainStyle="spread" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -6,11 +6,12 @@
     android:layout_height="match_parent"
     android:fillViewport="true"
     android:orientation="vertical"
-    android:overScrollMode="ifContentScrolls"
+    android:overScrollMode="never"
     android:paddingTop="12dp"
     android:scrollbars="none">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -26,9 +27,12 @@
             android:textAlignment="gravity"
             android:textColor="@color/black"
             android:textSize="24sp"
+            app:layout_constraintBottom_toTopOf="@+id/lav_sent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0"
+            app:layout_constraintVertical_chainStyle="packed" />
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/lav_sent"
@@ -36,6 +40,7 @@
             android:layout_height="250dp"
             android:layout_marginHorizontal="4dp"
             android:layout_marginTop="44dp"
+            app:layout_constraintBottom_toTopOf="@+id/tv_resend"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_description"
@@ -55,6 +60,7 @@
             android:textAlignment="gravity"
             android:textColor="@color/grayDark"
             android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@+id/btn_resend"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/lav_sent" />
@@ -70,6 +76,7 @@
             android:textAlignment="gravity"
             android:textColor="@color/black"
             android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_resend" />
@@ -97,6 +104,7 @@
             android:textAlignment="gravity"
             android:textColor="@color/black"
             android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@+id/tv_timer"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/lav_sent" />
@@ -113,6 +121,7 @@
             android:textAlignment="gravity"
             android:textColor="@color/green"
             android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_resent"
@@ -131,8 +140,11 @@
             android:textAlignment="gravity"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_resend"
+            app:layout_constraintVertical_bias="1"
+            app:layout_constraintVertical_chainStyle="spread"
             app:layout_goneMarginTop="79dp" />
 
         <androidx.constraintlayout.widget.Group
