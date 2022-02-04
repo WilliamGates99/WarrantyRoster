@@ -35,7 +35,6 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentChangeEmailBinding.bind(view)
-        (requireContext() as MainActivity).hideNavBar()
         viewModel = (activity as MainActivity).settingsViewModel
 
         textInputsBackgroundColor()

@@ -54,7 +54,6 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentAddWarrantyBinding.bind(view)
         navController = Navigation.findNavController(view)
-        (requireContext() as MainActivity).hideNavBar()
         viewModel = (activity as MainActivity).viewModel
 
         textInputsBackgroundColor()

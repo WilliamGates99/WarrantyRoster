@@ -53,7 +53,6 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentWarrantyDetailsBinding.bind(view)
         navController = Navigation.findNavController(view)
-        (requireContext() as MainActivity).hideNavBar()
         viewModel = (activity as MainActivity).viewModel
 
         returnToMainActivity()

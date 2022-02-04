@@ -31,7 +31,6 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentChangePasswordBinding.bind(view)
-        (requireContext() as MainActivity).hideNavBar()
         viewModel = (activity as MainActivity).settingsViewModel
 
         textInputsBackgroundColor()

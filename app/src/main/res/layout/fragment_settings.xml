@@ -20,6 +20,7 @@
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginBottom="20dp"
         android:orientation="vertical"
         android:overScrollMode="ifContentScrolls"
         android:scrollbars="none"
@@ -45,9 +46,12 @@
                 android:textAllCaps="true"
                 android:textColor="@color/navyBlue"
                 android:textSize="16sp"
+                app:layout_constraintBottom_toTopOf="@+id/cv_account"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0"
+                app:layout_constraintVertical_chainStyle="packed" />
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cv_account"
@@ -57,6 +61,7 @@
                 android:layout_marginTop="8dp"
                 app:cardBackgroundColor="@color/surface"
                 app:cardCornerRadius="12dp"
+                app:layout_constraintBottom_toTopOf="@+id/tv_title_settings"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_title_account">
@@ -284,6 +289,7 @@
                 android:textAllCaps="true"
                 android:textColor="@color/navyBlue"
                 android:textSize="16sp"
+                app:layout_constraintBottom_toTopOf="@+id/cv_settings"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cv_account" />
@@ -296,6 +302,7 @@
                 android:layout_marginTop="8dp"
                 app:cardBackgroundColor="@color/surface"
                 app:cardCornerRadius="12dp"
+                app:layout_constraintBottom_toTopOf="@+id/btn_logout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_title_settings">
@@ -544,6 +551,8 @@
 
             </com.google.android.material.card.MaterialCardView>
 
+            <!--84dp bottom margin to align with fab-->
+            <!--84+6=90dp bottom margin-->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_logout"
                 style="@style/Theme.WarrantyRoster.Button.Settings"
@@ -551,7 +560,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="8dp"
                 android:layout_marginTop="24dp"
-                android:layout_marginBottom="80dp"
+                android:layout_marginBottom="70dp"
                 android:text="@string/settings_btn_logout"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

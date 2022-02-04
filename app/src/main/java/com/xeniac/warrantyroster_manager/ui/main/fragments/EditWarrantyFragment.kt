@@ -59,7 +59,6 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentEditWarrantyBinding.bind(view)
         navController = Navigation.findNavController(view)
-        (requireContext() as MainActivity).hideNavBar()
         viewModel = (activity as MainActivity).viewModel
 
         imageLoader = ImageLoader.Builder(requireContext())

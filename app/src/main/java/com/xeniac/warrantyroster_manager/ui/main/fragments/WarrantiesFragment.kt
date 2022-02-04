@@ -40,7 +40,6 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentWarrantiesBinding.bind(view)
         navController = Navigation.findNavController(view)
-        (requireContext() as MainActivity).showNavBar()
         viewModel = (activity as MainActivity).viewModel
 
         adInit()

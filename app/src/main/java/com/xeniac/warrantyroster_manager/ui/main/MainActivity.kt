@@ -2,6 +2,8 @@ package com.xeniac.warrantyroster_manager.ui.main
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -83,6 +85,19 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.fcv) as NavHostFragment
         navController = navHostFragment.navController
         NavigationUI.setupWithNavController(binding.bnv, navController)
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.warrantiesFragment -> showNavBar()
+                R.id.settingsFragment -> showNavBar()
+                R.id.warrantyDetailsFragment -> hideNavBar()
+                R.id.addWarrantyFragment -> hideNavBar()
+                R.id.editWarrantyFragment -> hideNavBar()
+                R.id.changeEmailFragment -> hideNavBar()
+                R.id.changePasswordFragment -> hideNavBar()
+                else -> showNavBar()
+            }
+        }
     }
 
     private fun fabOnClick() {
@@ -91,14 +106,16 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun showNavBar() {
+    private fun showNavBar() {
+        binding.appbar.visibility = VISIBLE
         binding.appbar.performShow()
         binding.fab.show()
     }
 
-    fun hideNavBar() {
+    private fun hideNavBar() {
         binding.fab.hide()
         binding.appbar.performHide()
+        binding.appbar.visibility = GONE
     }
 
     fun requestInterstitialAd() = TapsellPlus.requestInterstitialAd(this,

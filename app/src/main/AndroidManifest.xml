@@ -27,7 +27,6 @@
         </activity>
         <activity
             android:name=".ui.main.MainActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/Theme.WarrantyRoster"
             android:windowSoftInputMode="adjustPan|stateHidden" />
     </application>

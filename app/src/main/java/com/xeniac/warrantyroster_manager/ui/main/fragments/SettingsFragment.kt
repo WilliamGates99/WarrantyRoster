@@ -53,7 +53,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentSettingsBinding.bind(view)
         navController = Navigation.findNavController(view)
-        (requireContext() as MainActivity).showNavBar()
         viewModel = (activity as MainActivity).settingsViewModel
 
         getAccountDetails()
