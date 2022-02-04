@@ -94,45 +94,45 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
     private fun setWarrantyDetails(daysUntilExpiry: Long) {
         binding.toolbar.title = warranty.title
 
-        if (warranty.brand != null) {
-            binding.tvBrand.text = warranty.brand
-        } else {
+        if (warranty.brand.isNullOrBlank()) {
             binding.tvBrand.setTextColor(
                 ContextCompat.getColor(requireContext(), R.color.grayDark)
             )
             binding.tvBrand.text =
                 requireContext().getString(R.string.warranty_details_empty_device)
+        } else {
+            binding.tvBrand.text = warranty.brand
         }
 
-        if (warranty.model != null) {
-            binding.tvModel.text = warranty.model
-        } else {
+        if (warranty.model.isNullOrBlank()) {
             binding.tvModel.setTextColor(
                 ContextCompat.getColor(requireContext(), R.color.grayDark)
             )
             binding.tvModel.text =
                 requireContext().getString(R.string.warranty_details_empty_device)
+        } else {
+            binding.tvModel.text = warranty.model
         }
 
-        if (warranty.serialNumber != null) {
-            binding.tvSerial.text = warranty.serialNumber
-        } else {
+        if (warranty.serialNumber.isNullOrBlank()) {
             binding.tvSerial.setTextColor(
                 ContextCompat.getColor(requireContext(), R.color.grayDark)
             )
             binding.tvSerial.text =
                 requireContext().getString(R.string.warranty_details_empty_device)
+        } else {
+            binding.tvSerial.text = warranty.serialNumber
         }
 
-        if (warranty.description != null) {
-            binding.tvDescription.text = warranty.description
-        } else {
+        if (warranty.description.isNullOrBlank()) {
             binding.tvDescription.gravity = Gravity.CENTER
             binding.tvDescription.setTextColor(
                 ContextCompat.getColor(requireContext(), R.color.grayDark)
             )
             binding.tvDescription.text =
                 requireContext().getString(R.string.warranty_details_empty_description)
+        } else {
+            binding.tvDescription.text = warranty.description
         }
 
         val startingCalendar = Calendar.getInstance()
