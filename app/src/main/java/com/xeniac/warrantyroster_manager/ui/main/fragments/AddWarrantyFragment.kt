@@ -174,8 +174,9 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
     )
 
     private fun categoryDropDownSelection() =
-        binding.tiDdCategory.setOnItemClickListener { _, _, index, _ ->
-            selectedCategory = viewModel.getCategoryById((index + 1).toString())
+        binding.tiDdCategory.setOnItemClickListener { adapterView, _, position, _ ->
+            val categoryTitle = adapterView.getItemAtPosition(position).toString()
+            selectedCategory = viewModel.getCategoryByTitle(categoryTitle)
 
             selectedCategory?.let {
                 val imageLoader = ImageLoader.Builder(requireContext())

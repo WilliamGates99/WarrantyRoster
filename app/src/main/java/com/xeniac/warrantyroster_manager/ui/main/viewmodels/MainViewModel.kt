@@ -93,6 +93,18 @@ class MainViewModel(
         return category
     }
 
+    fun getCategoryByTitle(categoryTitle: String): Category? {
+        var category: Category? = null
+        categoriesLiveData.value?.let { responseEvent ->
+            responseEvent.peekContent().let { response ->
+                response.data?.let { categoriesList ->
+                    category = categoriesList.find { it.title.containsValue(categoryTitle) }
+                }
+            }
+        }
+        return category
+    }
+
     fun getWarrantiesListFromFirestore() = viewModelScope.launch {
         _warrantiesLiveData.postValue(Event(Resource.loading()))
         warrantyRepository.getWarrantiesFromFirestore().addSnapshotListener { value, error ->
