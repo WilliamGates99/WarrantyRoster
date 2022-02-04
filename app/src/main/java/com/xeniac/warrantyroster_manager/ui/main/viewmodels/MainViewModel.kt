@@ -1,7 +1,6 @@
 package com.xeniac.warrantyroster_manager.ui.main.viewmodels
 
 import android.app.Application
-import android.content.Context
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -14,7 +13,9 @@ import com.xeniac.warrantyroster_manager.models.Warranty
 import com.xeniac.warrantyroster_manager.models.WarrantyInput
 import com.xeniac.warrantyroster_manager.repositories.WarrantyRepository
 import com.xeniac.warrantyroster_manager.utils.CategoryHelper.getCategoryTitleMapKey
-import com.xeniac.warrantyroster_manager.utils.Constants
+import com.xeniac.warrantyroster_manager.utils.Constants.CATEGORIES_ICON
+import com.xeniac.warrantyroster_manager.utils.Constants.CATEGORIES_TITLE
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_EMPTY_CATEGORY_LIST
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_EMPTY_WARRANTY_LIST
 import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_BRAND
@@ -28,8 +29,6 @@ import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_TITLE
 import com.xeniac.warrantyroster_manager.utils.Event
 import com.xeniac.warrantyroster_manager.utils.NetworkHelper.hasInternetConnection
 import com.xeniac.warrantyroster_manager.utils.Resource
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
@@ -38,9 +37,8 @@ class MainViewModel(
     private val warrantyRepository: WarrantyRepository
 ) : AndroidViewModel(application) {
 
-    private val _categoriesLiveData:
-            MutableLiveData<Event<Resource<MutableList<Category>>>> = MutableLiveData()
-    val categoriesLiveData: LiveData<Event<Resource<MutableList<Category>>>> = _categoriesLiveData
+    private val categoriesLiveData:
+            MutableLiveData<Event<Resource<List<Category>>>> = MutableLiveData()
 
     private val _warrantiesLiveData:
             MutableLiveData<Event<Resource<MutableList<Warranty>>>> = MutableLiveData()
@@ -65,53 +63,35 @@ class MainViewModel(
         private const val TAG = "MainViewModel"
     }
 
-    fun isEnUsCategoriesSeeded(): Boolean {
-        val seedPrefs = getApplication<WarrantyRosterApplication>()
-            .getSharedPreferences(Constants.PREFERENCE_DB_SEED, Context.MODE_PRIVATE)
-        return seedPrefs.getBoolean(Constants.PREFERENCE_EN_US_KEY, false)
+    init {
+        getCategoriesFromFirestore()
     }
-
-    fun getCategoriesFromFirestore() = viewModelScope.launch {
-        safeGetCategoriesFromFirestore()
-    }
-
-    fun seedCategories(categoriesList: List<Category>) = viewModelScope.launch {
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                deleteAllCategories()
-                insertAllCategories(categoriesList)
-
-                if (countItems() == 21) {
-                    getApplication<WarrantyRosterApplication>().getSharedPreferences(
-                        Constants.PREFERENCE_DB_SEED, Context.MODE_PRIVATE
-                    ).edit().apply {
-                        putBoolean(Constants.PREFERENCE_EN_US_KEY, true)
-                        apply()
-                    }
-                    Log.i(TAG, "categories successfully seeded to DB.")
-                }
-            } catch (e: Exception) {
-                Log.e(TAG, "SeedCategories Exception ${e.message}")
-            }
-        }
-    }
-
-    private suspend fun deleteAllCategories() = warrantyRepository.deleteAllCategories()
-
-    private suspend fun insertAllCategories(categoriesList: List<Category>) =
-        warrantyRepository.insertAllCategories(categoriesList)
-
-    private fun countItems() = warrantyRepository.countItems()
 
     fun getAllCategoryTitles(): List<String> {
         val titleList = mutableListOf<String>()
-        for (category in warrantyRepository.getAllCategories()) {
-            titleList.add(category.title[getCategoryTitleMapKey(getApplication<WarrantyRosterApplication>())].toString())
+        categoriesLiveData.value?.let { responseEvent ->
+            responseEvent.peekContent().let { response ->
+                response.data?.let { categoriesList ->
+                    for (category in categoriesList) {
+                        titleList.add(category.title[getCategoryTitleMapKey(getApplication<WarrantyRosterApplication>())].toString())
+                    }
+                }
+            }
         }
         return titleList
     }
 
-    fun getCategoryById(categoryId: String) = warrantyRepository.getCategoryById(categoryId)
+    fun getCategoryById(categoryId: String): Category? {
+        var category: Category? = null
+        categoriesLiveData.value?.let { responseEvent ->
+            responseEvent.peekContent().let { response ->
+                response.data?.let { categoriesList ->
+                    category = categoriesList.find { it.id == categoryId }
+                }
+            }
+        }
+        return category
+    }
 
     fun getWarrantiesListFromFirestore() = viewModelScope.launch {
         _warrantiesLiveData.postValue(Event(Resource.loading()))
@@ -122,8 +102,6 @@ class MainViewModel(
             }
 
             value?.let {
-                Log.i(TAG, "Warranties List successfully retrieved.")
-
                 if (it.documents.size == 0) {
                     _warrantiesLiveData.postValue(Event(Resource.error(ERROR_EMPTY_WARRANTY_LIST)))
                 } else {
@@ -155,6 +133,7 @@ class MainViewModel(
                         }
                     }
                     _warrantiesLiveData.postValue(Event(Resource.success(warrantiesList)))
+                    Log.i(TAG, "Warranties List successfully retrieved.")
                 }
             }
         }
@@ -177,27 +156,32 @@ class MainViewModel(
         safeGetUpdatedWarrantyFromFirestore(warrantyId)
     }
 
-    private fun safeGetCategoriesFromFirestore() {
-        viewModelScope.launch {
-            _categoriesLiveData.postValue(Event(Resource.loading()))
-            try {
-                val categoriesQuery = warrantyRepository.getCategoriesFromFirestore().await()
+    private fun getCategoriesFromFirestore() = viewModelScope.launch {
+        categoriesLiveData.postValue(Event(Resource.loading()))
+        warrantyRepository.getCategoriesFromFirestore().addSnapshotListener { value, error ->
+            error?.let {
+                Log.e(TAG, "GetCategoriesFromFirestore Error: ${it.message}")
+                categoriesLiveData.postValue(Event(Resource.error(it.message.toString())))
+            }
 
-                val categoriesList = mutableListOf<Category>()
-                for (document in categoriesQuery.documents) {
-                    @Suppress("UNCHECKED_CAST")
-                    document?.let {
-                        val id = it.id
-                        val title = it.get(Constants.CATEGORIES_TITLE) as Map<String, String>
-                        val icon = it.get(Constants.CATEGORIES_ICON).toString()
-                        categoriesList.add(Category(id, title, icon))
+            value?.let {
+                if (it.documents.size == 0) {
+                    categoriesLiveData.postValue(Event(Resource.error(ERROR_EMPTY_CATEGORY_LIST)))
+                } else {
+                    val categoriesList = mutableListOf<Category>()
+
+                    for (document in it.documents) {
+                        @Suppress("UNCHECKED_CAST")
+                        val category = Category(
+                            document.id,
+                            document.get(CATEGORIES_TITLE) as Map<String, String>,
+                            document.get(CATEGORIES_ICON).toString()
+                        )
+                        categoriesList.add(category)
                     }
+                    categoriesLiveData.postValue(Event(Resource.success(categoriesList)))
+                    Log.i(TAG, "Categories List successfully retrieved.")
                 }
-                _categoriesLiveData.postValue(Event(Resource.success(categoriesList)))
-                Log.i(TAG, "Categories successfully retrieved.")
-            } catch (e: Exception) {
-                Log.e(TAG, "GetCategoriesFromFirestore Exception: ${e.message}")
-                _categoriesLiveData.postValue(Event(Resource.error(e.message.toString())))
             }
         }
     }
@@ -211,9 +195,7 @@ class MainViewModel(
                 Log.i(TAG, "Warranty successfully added.")
             } else {
                 Log.e(TAG, ERROR_NETWORK_CONNECTION)
-                _addWarrantyLiveData.postValue(
-                    Event(Resource.error(ERROR_NETWORK_CONNECTION))
-                )
+                _addWarrantyLiveData.postValue(Event(Resource.error(ERROR_NETWORK_CONNECTION)))
             }
         } catch (e: Exception) {
             Log.e(TAG, "SafeAddWarrantyToFirestore Exception: ${e.message}")
@@ -230,9 +212,7 @@ class MainViewModel(
                 Log.i(TAG, "$warrantyId successfully deleted.")
             } else {
                 Log.e(TAG, ERROR_NETWORK_CONNECTION)
-                _deleteWarrantyLiveData.postValue(
-                    Event(Resource.error(ERROR_NETWORK_CONNECTION))
-                )
+                _deleteWarrantyLiveData.postValue(Event(Resource.error(ERROR_NETWORK_CONNECTION)))
             }
         } catch (e: Exception) {
             Log.e(TAG, "SafeDeleteWarrantyFromFirestore Exception: ${e.message}")
@@ -251,9 +231,7 @@ class MainViewModel(
                 Log.i(TAG, "Warranty successfully updated.")
             } else {
                 Log.e(TAG, ERROR_NETWORK_CONNECTION)
-                _updateWarrantyLiveData.postValue(
-                    Event(Resource.error(ERROR_NETWORK_CONNECTION))
-                )
+                _updateWarrantyLiveData.postValue(Event(Resource.error(ERROR_NETWORK_CONNECTION)))
             }
         } catch (e: Exception) {
             Log.e(TAG, "SafeUpdateWarrantyInFirestore Exception: ${e.message}")
@@ -284,9 +262,7 @@ class MainViewModel(
                 Log.i(TAG, "DocumentSnapshot: $warrantySnapshot")
             } else {
                 Log.e(TAG, ERROR_NETWORK_CONNECTION)
-                _updatedWarrantyLiveData.postValue(
-                    Event(Resource.error(ERROR_NETWORK_CONNECTION))
-                )
+                _updatedWarrantyLiveData.postValue(Event(Resource.error(ERROR_NETWORK_CONNECTION)))
             }
         } catch (e: Exception) {
             Log.e(TAG, "SafeGetUpdatedWarrantyFromFirestore Exception: ${e.message}")

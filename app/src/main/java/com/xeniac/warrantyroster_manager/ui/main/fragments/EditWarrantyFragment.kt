@@ -32,10 +32,6 @@ import com.xeniac.warrantyroster_manager.utils.CategoryHelper.getCategoryTitleMa
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.Constants.FRAGMENT_TAG_EDIT_CALENDAR_EXPIRY
 import com.xeniac.warrantyroster_manager.utils.Constants.FRAGMENT_TAG_EDIT_CALENDAR_STARTING
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -183,28 +179,21 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
         }
     }
 
-    private fun categoryDropDown() = CoroutineScope(Dispatchers.IO).launch {
-        val titlesList = viewModel.getAllCategoryTitles()
-        withContext(Dispatchers.Main) {
-            binding.tiDdCategory.setAdapter(
-                ArrayAdapter(requireContext(), R.layout.dropdown_category, titlesList)
-            )
-        }
-    }
+    private fun categoryDropDown() = binding.tiDdCategory.setAdapter(
+        ArrayAdapter(requireContext(), R.layout.dropdown_category, viewModel.getAllCategoryTitles())
+    )
 
     private fun categoryDropDownSelection() =
         binding.tiDdCategory.setOnItemClickListener { _, _, index, _ ->
-            CoroutineScope(Dispatchers.IO).launch {
-                selectedCategory = viewModel.getCategoryById((index + 1).toString())
+            selectedCategory = viewModel.getCategoryById((index + 1).toString())
 
-                withContext(Dispatchers.Main) {
-                    selectedCategory?.let {
-                        binding.ivIconCategory.load(it.icon, imageLoader) {
-                            memoryCachePolicy(CachePolicy.ENABLED)
-                            diskCachePolicy(CachePolicy.ENABLED)
-                            networkCachePolicy(CachePolicy.ENABLED)
-                        }
-                    }
+            selectedCategory?.let {
+                val imageLoader = ImageLoader.Builder(requireContext())
+                    .componentRegistry { add(SvgDecoder(requireContext())) }.build()
+                binding.ivIconCategory.load(it.icon, imageLoader) {
+                    memoryCachePolicy(CachePolicy.ENABLED)
+                    diskCachePolicy(CachePolicy.ENABLED)
+                    networkCachePolicy(CachePolicy.ENABLED)
                 }
             }
         }
@@ -306,56 +295,54 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
         setWarrantyDetails()
     }
 
-    private fun setWarrantyDetails() = CoroutineScope(Dispatchers.IO).launch {
+    private fun setWarrantyDetails() {
+        binding.tiEditTitle.setText(warranty.title)
+        binding.tiEditBrand.setText(warranty.brand)
+        binding.tiEditModel.setText(warranty.model)
+        binding.tiEditSerial.setText(warranty.serialNumber)
+        binding.tiEditDescription.setText(warranty.description)
+
+        val startingCalendar = Calendar.getInstance()
+        val expiryCalendar = Calendar.getInstance()
+
+        dateFormat.parse(warranty.startingDate!!)?.let {
+            startingCalendar.time = it
+        }
+
+        dateFormat.parse(warranty.expiryDate!!)?.let {
+            expiryCalendar.time = it
+        }
+
+        startingDateInput = "${startingCalendar.get(Calendar.YEAR)}-" +
+                "${decimalFormat.format((startingCalendar.get(Calendar.MONTH)) + 1)}-" +
+                decimalFormat.format(startingCalendar.get(Calendar.DAY_OF_MONTH))
+
+        expiryDateInput = "${expiryCalendar.get(Calendar.YEAR)}-" +
+                "${decimalFormat.format((expiryCalendar.get(Calendar.MONTH)) + 1)}-" +
+                decimalFormat.format(expiryCalendar.get(Calendar.DAY_OF_MONTH))
+
+        val startingDate =
+            "${decimalFormat.format((startingCalendar.get(Calendar.MONTH)) + 1)}/" +
+                    "${decimalFormat.format(startingCalendar.get(Calendar.DAY_OF_MONTH))}/" +
+                    "${startingCalendar.get(Calendar.YEAR)}"
+        binding.tiEditDateStarting.setText(startingDate)
+
+        val expiryDate =
+            "${decimalFormat.format((expiryCalendar.get(Calendar.MONTH)) + 1)}/" +
+                    "${decimalFormat.format(expiryCalendar.get(Calendar.DAY_OF_MONTH))}/" +
+                    "${expiryCalendar.get(Calendar.YEAR)}"
+        binding.tiEditDateExpiry.setText(expiryDate)
+
         selectedCategory = warranty.categoryId?.let {
             viewModel.getCategoryById(it)
         }
 
-        withContext(Dispatchers.Main) {
-            binding.tiEditTitle.setText(warranty.title)
-            binding.tiEditBrand.setText(warranty.brand)
-            binding.tiEditModel.setText(warranty.model)
-            binding.tiEditSerial.setText(warranty.serialNumber)
-            binding.tiEditDescription.setText(warranty.description)
-
-            val startingCalendar = Calendar.getInstance()
-            val expiryCalendar = Calendar.getInstance()
-
-            dateFormat.parse(warranty.startingDate!!)?.let {
-                startingCalendar.time = it
-            }
-
-            dateFormat.parse(warranty.expiryDate!!)?.let {
-                expiryCalendar.time = it
-            }
-
-            startingDateInput = "${startingCalendar.get(Calendar.YEAR)}-" +
-                    "${decimalFormat.format((startingCalendar.get(Calendar.MONTH)) + 1)}-" +
-                    decimalFormat.format(startingCalendar.get(Calendar.DAY_OF_MONTH))
-
-            expiryDateInput = "${expiryCalendar.get(Calendar.YEAR)}-" +
-                    "${decimalFormat.format((expiryCalendar.get(Calendar.MONTH)) + 1)}-" +
-                    decimalFormat.format(expiryCalendar.get(Calendar.DAY_OF_MONTH))
-
-            val startingDate =
-                "${decimalFormat.format((startingCalendar.get(Calendar.MONTH)) + 1)}/" +
-                        "${decimalFormat.format(startingCalendar.get(Calendar.DAY_OF_MONTH))}/" +
-                        "${startingCalendar.get(Calendar.YEAR)}"
-            binding.tiEditDateStarting.setText(startingDate)
-
-            val expiryDate =
-                "${decimalFormat.format((expiryCalendar.get(Calendar.MONTH)) + 1)}/" +
-                        "${decimalFormat.format(expiryCalendar.get(Calendar.DAY_OF_MONTH))}/" +
-                        "${expiryCalendar.get(Calendar.YEAR)}"
-            binding.tiEditDateExpiry.setText(expiryDate)
-
-            selectedCategory?.let {
-                binding.tiDdCategory.setText(it.title[getCategoryTitleMapKey(requireContext())])
-                binding.ivIconCategory.load(it.icon, imageLoader) {
-                    memoryCachePolicy(CachePolicy.ENABLED)
-                    diskCachePolicy(CachePolicy.ENABLED)
-                    networkCachePolicy(CachePolicy.ENABLED)
-                }
+        selectedCategory?.let {
+            binding.tiDdCategory.setText(it.title[getCategoryTitleMapKey(requireContext())])
+            binding.ivIconCategory.load(it.icon, imageLoader) {
+                memoryCachePolicy(CachePolicy.ENABLED)
+                diskCachePolicy(CachePolicy.ENABLED)
+                networkCachePolicy(CachePolicy.ENABLED)
             }
         }
     }

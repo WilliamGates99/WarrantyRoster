@@ -4,10 +4,6 @@ object Constants {
     //Web URLs
     const val URL_PRIVACY_POLICY = "https://warranty-roster.herokuapp.com/privacy-policy"
 
-    //ROOM Database Constants
-    const val DB_FILE_NAME_NEW = "WarrantyRosterDB.db"
-    const val DB_TABLE_NAME_CATEGORIES = "categories"
-
     //Tapsell Ads Constants
     const val TAPSELL_KEY =
         "phbftfiakptpjbkegafmqmmkdsjcjmkldcahhapfssfftdnbgpqeimkjiitfpcoingqkad"
@@ -24,10 +20,6 @@ object Constants {
     //SharedPreference Login Constants
     const val PREFERENCE_LOGIN = "preference_login"
     const val PREFERENCE_IS_LOGGED_IN_KEY = "is_logged_in"
-
-    //SharedPreference Settings Constants
-    const val PREFERENCE_DB_SEED = "preference_db_seed"
-    const val PREFERENCE_EN_US_KEY = "en-US"
 
     //Warranty Adapter View Type Constants
     const val VIEW_TYPE_WARRANTY = 0
@@ -68,5 +60,6 @@ object Constants {
         "There is no user record corresponding to this identifier"
     const val ERROR_FIREBASE_AUTH_CREDENTIALS =
         "The password is invalid or the user does not have a password"
+    const val ERROR_EMPTY_CATEGORY_LIST = "Category list is empty"
     const val ERROR_EMPTY_WARRANTY_LIST = "Warranty list is empty"
 }

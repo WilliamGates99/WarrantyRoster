@@ -33,7 +33,6 @@ import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.Constants.FRAGMENT_TAG_ADD_CALENDAR_EXPIRY
 import com.xeniac.warrantyroster_manager.utils.Constants.FRAGMENT_TAG_ADD_CALENDAR_STARTING
-import kotlinx.coroutines.*
 import java.text.DecimalFormat
 import java.util.*
 
@@ -170,30 +169,21 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
         }
     }
 
-    private fun categoryDropDown() = CoroutineScope(Dispatchers.IO).launch {
-        val titlesList = viewModel.getAllCategoryTitles()
-        withContext(Dispatchers.Main) {
-            binding.tiDdCategory.setAdapter(
-                ArrayAdapter(requireContext(), R.layout.dropdown_category, titlesList)
-            )
-        }
-    }
+    private fun categoryDropDown() = binding.tiDdCategory.setAdapter(
+        ArrayAdapter(requireContext(), R.layout.dropdown_category, viewModel.getAllCategoryTitles())
+    )
 
     private fun categoryDropDownSelection() =
         binding.tiDdCategory.setOnItemClickListener { _, _, index, _ ->
-            CoroutineScope(Dispatchers.IO).launch {
-                selectedCategory = viewModel.getCategoryById((index + 1).toString())
+            selectedCategory = viewModel.getCategoryById((index + 1).toString())
 
-                withContext(Dispatchers.Main) {
-                    selectedCategory?.let {
-                        val imageLoader = ImageLoader.Builder(requireContext())
-                            .componentRegistry { add(SvgDecoder(requireContext())) }.build()
-                        binding.ivIconCategory.load(it.icon, imageLoader) {
-                            memoryCachePolicy(CachePolicy.ENABLED)
-                            diskCachePolicy(CachePolicy.ENABLED)
-                            networkCachePolicy(CachePolicy.ENABLED)
-                        }
-                    }
+            selectedCategory?.let {
+                val imageLoader = ImageLoader.Builder(requireContext())
+                    .componentRegistry { add(SvgDecoder(requireContext())) }.build()
+                binding.ivIconCategory.load(it.icon, imageLoader) {
+                    memoryCachePolicy(CachePolicy.ENABLED)
+                    diskCachePolicy(CachePolicy.ENABLED)
+                    networkCachePolicy(CachePolicy.ENABLED)
                 }
             }
         }
