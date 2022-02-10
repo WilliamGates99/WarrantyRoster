@@ -6,8 +6,7 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.ui.main.adapters.WarrantyAdapter
 import com.xeniac.warrantyroster_manager.ui.main.adapters.WarrantyListClickInterface
@@ -27,7 +26,6 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
 
     private var _binding: FragmentWarrantiesBinding? = null
     private val binding get() = _binding!!
-    private lateinit var navController: NavController
     private lateinit var viewModel: MainViewModel
 
     private lateinit var warrantyAdapter: WarrantyAdapter
@@ -39,7 +37,6 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentWarrantiesBinding.bind(view)
-        navController = Navigation.findNavController(view)
         viewModel = (activity as MainActivity).viewModel
 
         adInit()
@@ -150,7 +147,7 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
     override fun onItemClick(warranty: Warranty, daysUntilExpiry: Long) {
         val action = WarrantiesFragmentDirections
             .actionWarrantiesFragmentToWarrantyDetailsFragment(warranty, daysUntilExpiry)
-        navController.navigate(action)
+        findNavController().navigate(action)
     }
 
     /*

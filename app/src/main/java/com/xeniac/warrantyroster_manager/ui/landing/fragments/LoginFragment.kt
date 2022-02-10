@@ -12,8 +12,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
@@ -30,14 +29,12 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
-    private lateinit var navController: NavController
 
     private lateinit var viewModel: LandingViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentLoginBinding.bind(view)
-        navController = Navigation.findNavController(view)
         viewModel = (activity as LandingActivity).viewModel
 
         textInputsBackgroundColor()
@@ -90,7 +87,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     }
 
     private fun forgotPwOnClick() = binding.btnForgotPw.setOnClickListener {
-        navController.navigate(R.id.action_loginFragment_to_forgotPasswordFragment)
+        findNavController().navigate(R.id.action_loginFragment_to_forgotPasswordFragment)
     }
 
     private fun registerOnClick() = binding.btnRegister.setOnClickListener {
@@ -98,7 +95,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     }
 
     private fun navigateToRegister() =
-        navController.navigate(R.id.action_loginFragment_to_registerFragment)
+        findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
 
     private fun loginOnClick() = binding.btnLogin.setOnClickListener {
         getLoginInputs()

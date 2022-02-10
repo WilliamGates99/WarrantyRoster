@@ -7,7 +7,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.xeniac.warrantyroster_manager.WarrantyRosterApplication
+import com.xeniac.warrantyroster_manager.BaseApplication
 import com.xeniac.warrantyroster_manager.repositories.UserRepository
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_IS_LOGGED_IN_KEY
@@ -51,11 +51,11 @@ class LandingViewModel(
     private suspend fun safeRegisterViaEmail(email: String, password: String) {
         _registerLiveData.postValue(Event(Resource.loading()))
         try {
-            if (hasInternetConnection(getApplication<WarrantyRosterApplication>())) {
+            if (hasInternetConnection(getApplication<BaseApplication>())) {
                 userRepository.registerViaEmail(email, password).await()
                 userRepository.sendVerificationEmail()
 
-                getApplication<WarrantyRosterApplication>()
+                getApplication<BaseApplication>()
                     .getSharedPreferences(PREFERENCE_LOGIN, Context.MODE_PRIVATE)
                     .edit().apply {
                         putBoolean(PREFERENCE_IS_LOGGED_IN_KEY, true)
@@ -79,10 +79,10 @@ class LandingViewModel(
     private suspend fun safeLoginViaEmail(email: String, password: String) {
         _loginLiveData.postValue(Event(Resource.loading()))
         try {
-            if (hasInternetConnection(getApplication<WarrantyRosterApplication>())) {
+            if (hasInternetConnection(getApplication<BaseApplication>())) {
                 userRepository.loginViaEmail(email, password).await().apply {
                     user?.let {
-                        getApplication<WarrantyRosterApplication>()
+                        getApplication<BaseApplication>()
                             .getSharedPreferences(PREFERENCE_LOGIN, Context.MODE_PRIVATE)
                             .edit().apply {
                                 putBoolean(PREFERENCE_IS_LOGGED_IN_KEY, true)
@@ -107,7 +107,7 @@ class LandingViewModel(
     private suspend fun safeSendResetPasswordEmail(email: String) {
         _forgotPwLiveData.postValue(Event(Resource.loading()))
         try {
-            if (hasInternetConnection(getApplication<WarrantyRosterApplication>())) {
+            if (hasInternetConnection(getApplication<BaseApplication>())) {
                 userRepository.sendResetPasswordEmail(email).await().apply {
                     Log.i(TAG, "Reset password email successfully sent to ${email}.")
                     _forgotPwLiveData.postValue(Event(Resource.success(email)))

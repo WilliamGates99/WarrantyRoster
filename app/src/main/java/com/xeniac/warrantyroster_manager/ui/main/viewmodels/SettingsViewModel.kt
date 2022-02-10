@@ -9,7 +9,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseUser
-import com.xeniac.warrantyroster_manager.WarrantyRosterApplication
+import com.xeniac.warrantyroster_manager.BaseApplication
 import com.xeniac.warrantyroster_manager.repositories.UserRepository
 import com.xeniac.warrantyroster_manager.utils.Constants
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
@@ -29,7 +29,7 @@ class SettingsViewModel(
     private val userRepository: UserRepository
 ) : AndroidViewModel(application) {
 
-    private val settingsPrefs = getApplication<WarrantyRosterApplication>()
+    private val settingsPrefs = getApplication<BaseApplication>()
         .getSharedPreferences(PREFERENCE_SETTINGS, Context.MODE_PRIVATE)
 
     private val _accountDetailsLiveData:
@@ -125,7 +125,7 @@ class SettingsViewModel(
                 _accountDetailsLiveData.postValue(Event(Resource.success(user)))
                 Log.i(TAG, "Current user is $email and isVerified: $isVerified")
 
-                if (hasInternetConnection(getApplication<WarrantyRosterApplication>())) {
+                if (hasInternetConnection(getApplication<BaseApplication>())) {
                     userRepository.reloadCurrentUser(user).await()
                     if (email != user.email || isVerified != user.isEmailVerified) {
                         email = user.email
@@ -144,7 +144,7 @@ class SettingsViewModel(
     private suspend fun safeSendVerificationEmail() {
         _sendVerificationEmailLiveData.postValue(Event(Resource.loading()))
         try {
-            if (hasInternetConnection(getApplication<WarrantyRosterApplication>())) {
+            if (hasInternetConnection(getApplication<BaseApplication>())) {
                 userRepository.sendVerificationEmail().await()
                 _sendVerificationEmailLiveData.postValue(Event(Resource.success(null)))
                 Log.i(TAG, "Verification email sent.")
@@ -165,7 +165,7 @@ class SettingsViewModel(
         try {
             userRepository.logoutUser()
 
-            getApplication<WarrantyRosterApplication>().getSharedPreferences(
+            getApplication<BaseApplication>().getSharedPreferences(
                 PREFERENCE_LOGIN, Context.MODE_PRIVATE
             ).edit().apply {
                 remove(PREFERENCE_IS_LOGGED_IN_KEY)
@@ -183,7 +183,7 @@ class SettingsViewModel(
     private suspend fun safeReAuthenticateUser(password: String) {
         _reAuthenticateUserLiveData.postValue(Event(Resource.loading()))
         try {
-            if (hasInternetConnection(getApplication<WarrantyRosterApplication>())) {
+            if (hasInternetConnection(getApplication<BaseApplication>())) {
                 userRepository.reAuthenticateUser(password).await()
                 _reAuthenticateUserLiveData.postValue(Event(Resource.success(null)))
                 Log.i(TAG, "User re-authenticated.")
@@ -202,7 +202,7 @@ class SettingsViewModel(
     private suspend fun safeChangeUserEmail(newEmail: String) {
         _changeUserEmailLiveData.postValue(Event(Resource.loading()))
         try {
-            if (hasInternetConnection(getApplication<WarrantyRosterApplication>())) {
+            if (hasInternetConnection(getApplication<BaseApplication>())) {
                 userRepository.updateUserEmail(newEmail).await()
                 _changeUserEmailLiveData.postValue(Event(Resource.success(null)))
                 Log.i(TAG, "User email updated to ${newEmail}.")
@@ -221,7 +221,7 @@ class SettingsViewModel(
     private suspend fun safeChangeUserPassword(newPassword: String) {
         _changeUserPasswordLiveData.postValue(Event(Resource.loading()))
         try {
-            if (hasInternetConnection(getApplication<WarrantyRosterApplication>())) {
+            if (hasInternetConnection(getApplication<BaseApplication>())) {
                 userRepository.updateUserPassword(newPassword).await()
                 _changeUserPasswordLiveData.postValue(Event(Resource.success(null)))
                 Log.i(TAG, "User password updated.")

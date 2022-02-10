@@ -11,8 +11,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
@@ -27,14 +26,12 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
 
     private var _binding: FragmentForgotPwBinding? = null
     private val binding get() = _binding!!
-    private lateinit var navController: NavController
 
     private lateinit var viewModel: LandingViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentForgotPwBinding.bind(view)
-        navController = Navigation.findNavController(view)
         viewModel = (activity as LandingActivity).viewModel
 
         textInputsBackgroundColor()
@@ -118,7 +115,7 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
                         response.data?.let { email ->
                             val action = ForgotPwFragmentDirections
                                 .actionForgotPasswordFragmentToForgotPwSentFragment(email)
-                            navController.navigate(action)
+                            findNavController().navigate(action)
                         }
                     }
                     Status.ERROR -> {

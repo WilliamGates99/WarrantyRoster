@@ -11,8 +11,7 @@ import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import coil.ImageLoader
 import coil.decode.SvgDecoder
@@ -41,7 +40,6 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
 
     private var _binding: FragmentEditWarrantyBinding? = null
     private val binding get() = _binding!!
-    private lateinit var navController: NavController
     private lateinit var viewModel: MainViewModel
 
     private lateinit var imageLoader: ImageLoader
@@ -58,7 +56,6 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentEditWarrantyBinding.bind(view)
-        navController = Navigation.findNavController(view)
         viewModel = (activity as MainActivity).viewModel
 
         imageLoader = ImageLoader.Builder(requireContext())
@@ -445,7 +442,7 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
                                 .actionEditWarrantyFragmentToWarrantyDetailsFragment(
                                     updatedWarranty, daysUntilExpiry
                                 )
-                            navController.navigate(action)
+                            findNavController().navigate(action)
                         }
                     }
                     Status.ERROR -> {

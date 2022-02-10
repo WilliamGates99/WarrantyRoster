@@ -59,20 +59,18 @@ class LandingActivity : AppCompatActivity() {
         val navController = navHostFragment.navController
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            destination.label?.let {
-                when (it) {
-                    "LoginFragment" -> {
-                        binding.tvTitle.text = getString(R.string.login_text_title)
-                    }
-                    "RegisterFragment" -> {
-                        binding.tvTitle.text = getString(R.string.register_text_title)
-                    }
-                    "ForgotPwFragment" -> {
-                        binding.tvTitle.text = getString(R.string.forgot_pw_text_title)
-                    }
-                    "ForgotPwSentFragment" -> {
-                        binding.tvTitle.text = getString(R.string.forgot_pw_sent_text_title)
-                    }
+            when (destination.id) {
+                R.id.loginFragment -> {
+                    binding.tvTitle.text = getString(R.string.login_text_title)
+                }
+                R.id.registerFragment -> {
+                    binding.tvTitle.text = getString(R.string.register_text_title)
+                }
+                R.id.forgotPwFragment -> {
+                    binding.tvTitle.text = getString(R.string.forgot_pw_text_title)
+                }
+                R.id.forgotPwSentFragment -> {
+                    binding.tvTitle.text = getString(R.string.forgot_pw_sent_text_title)
                 }
             }
         }

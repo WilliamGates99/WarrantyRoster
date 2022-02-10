@@ -6,7 +6,7 @@ import com.xeniac.warrantyroster_manager.firebase.FirestoreInstance
 import com.xeniac.warrantyroster_manager.models.WarrantyInput
 import com.xeniac.warrantyroster_manager.utils.Constants
 
-class WarrantyRepository {
+class MainRepository {
 
     fun getCategoriesFromFirestore() = FirestoreInstance.categoriesCollectionRef
         .orderBy(Constants.CATEGORIES_TITLE, Query.Direction.ASCENDING)

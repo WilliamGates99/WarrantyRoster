@@ -7,7 +7,7 @@
 
     <!--TODO change backup attributes to true before release-->
     <application
-        android:name=".WarrantyRosterApplication"
+        android:name=".BaseApplication"
         android:allowBackup="false"
         android:fullBackupContent="false"
         android:icon="@mipmap/ic_launcher"

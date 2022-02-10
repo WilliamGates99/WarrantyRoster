@@ -8,7 +8,7 @@ import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_SETTINGS
 import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_THEME_KEY
 import java.util.*
 
-class WarrantyRosterApplication : Application() {
+class BaseApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()

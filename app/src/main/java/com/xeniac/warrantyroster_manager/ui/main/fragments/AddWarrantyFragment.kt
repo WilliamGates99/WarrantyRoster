@@ -12,8 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.get
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import coil.ImageLoader
 import coil.decode.SvgDecoder
 import coil.load
@@ -40,7 +39,6 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
 
     private var _binding: FragmentAddWarrantyBinding? = null
     private val binding get() = _binding!!
-    private lateinit var navController: NavController
     private lateinit var viewModel: MainViewModel
 
     private val decimalFormat = DecimalFormat("00")
@@ -53,7 +51,6 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentAddWarrantyBinding.bind(view)
-        navController = Navigation.findNavController(view)
         viewModel = (activity as MainActivity).viewModel
 
         textInputsBackgroundColor()
@@ -341,7 +338,7 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
                     Status.LOADING -> showLoadingAnimation()
                     Status.SUCCESS -> {
                         hideLoadingAnimation()
-                        navController.navigate(R.id.action_addWarrantyFragment_to_warrantiesFragment)
+                        findNavController().navigate(R.id.action_addWarrantyFragment_to_warrantiesFragment)
                     }
                     Status.ERROR -> {
                         hideLoadingAnimation()

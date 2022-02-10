@@ -10,8 +10,7 @@ import android.view.View.VISIBLE
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import com.airbnb.lottie.LottieDrawable
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
@@ -35,7 +34,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
     private var _binding: FragmentSettingsBinding? = null
     private val binding get() = _binding!!
-    private lateinit var navController: NavController
     private lateinit var viewModel: SettingsViewModel
 
     private lateinit var currentLanguage: String
@@ -52,7 +50,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentSettingsBinding.bind(view)
-        navController = Navigation.findNavController(view)
         viewModel = (activity as MainActivity).settingsViewModel
 
         getAccountDetails()
@@ -173,12 +170,12 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     }
 
     private fun changeEmailOnClick() = binding.clAccountChangeEmail.setOnClickListener {
-        navController.navigate(R.id.action_settingsFragment_to_changeEmailFragment)
+        findNavController().navigate(R.id.action_settingsFragment_to_changeEmailFragment)
     }
 
     private fun changePasswordOnClick() =
         binding.clAccountChangePassword.setOnClickListener {
-            navController.navigate(R.id.action_settingsFragment_to_changePasswordFragment)
+            findNavController().navigate(R.id.action_settingsFragment_to_changePasswordFragment)
         }
 
     private fun languageOnClick() = binding.clSettingsLanguage.setOnClickListener {

@@ -14,7 +14,7 @@ import com.google.android.material.shape.MaterialShapeDrawable
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.ActivityMainBinding
 import com.xeniac.warrantyroster_manager.repositories.UserRepository
-import com.xeniac.warrantyroster_manager.repositories.WarrantyRepository
+import com.xeniac.warrantyroster_manager.repositories.MainRepository
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModel
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModelProviderFactory
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.SettingsViewModel
@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun mainViewModelSetup() {
-        val warrantyRepository = WarrantyRepository()
+        val warrantyRepository = MainRepository()
         val viewModelProviderFactory = MainViewModelProviderFactory(application, warrantyRepository)
         viewModel = ViewModelProvider(this, viewModelProviderFactory)[MainViewModel::class.java]
     }

@@ -6,12 +6,12 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.xeniac.warrantyroster_manager.WarrantyRosterApplication
+import com.xeniac.warrantyroster_manager.BaseApplication
 import com.xeniac.warrantyroster_manager.models.Category
 import com.xeniac.warrantyroster_manager.models.ListItemType
 import com.xeniac.warrantyroster_manager.models.Warranty
 import com.xeniac.warrantyroster_manager.models.WarrantyInput
-import com.xeniac.warrantyroster_manager.repositories.WarrantyRepository
+import com.xeniac.warrantyroster_manager.repositories.MainRepository
 import com.xeniac.warrantyroster_manager.utils.CategoryHelper.getCategoryTitleMapKey
 import com.xeniac.warrantyroster_manager.utils.Constants.CATEGORIES_ICON
 import com.xeniac.warrantyroster_manager.utils.Constants.CATEGORIES_TITLE
@@ -34,7 +34,7 @@ import kotlinx.coroutines.tasks.await
 
 class MainViewModel(
     application: Application,
-    private val warrantyRepository: WarrantyRepository
+    private val mainRepository: MainRepository
 ) : AndroidViewModel(application) {
 
     private val categoriesLiveData:
@@ -73,7 +73,7 @@ class MainViewModel(
             responseEvent.peekContent().let { response ->
                 response.data?.let { categoriesList ->
                     for (category in categoriesList) {
-                        titleList.add(category.title[getCategoryTitleMapKey(getApplication<WarrantyRosterApplication>())].toString())
+                        titleList.add(category.title[getCategoryTitleMapKey(getApplication<BaseApplication>())].toString())
                     }
                 }
             }
@@ -107,7 +107,7 @@ class MainViewModel(
 
     fun getWarrantiesListFromFirestore() = viewModelScope.launch {
         _warrantiesLiveData.postValue(Event(Resource.loading()))
-        warrantyRepository.getWarrantiesFromFirestore().addSnapshotListener { value, error ->
+        mainRepository.getWarrantiesFromFirestore().addSnapshotListener { value, error ->
             error?.let {
                 Log.e(TAG, "GetWarrantiesListFromFirestore Error: ${it.message}")
                 _warrantiesLiveData.postValue(Event(Resource.error(it.message.toString())))
@@ -170,7 +170,7 @@ class MainViewModel(
 
     private fun getCategoriesFromFirestore() = viewModelScope.launch {
         categoriesLiveData.postValue(Event(Resource.loading()))
-        warrantyRepository.getCategoriesFromFirestore().addSnapshotListener { value, error ->
+        mainRepository.getCategoriesFromFirestore().addSnapshotListener { value, error ->
             error?.let {
                 Log.e(TAG, "GetCategoriesFromFirestore Error: ${it.message}")
                 categoriesLiveData.postValue(Event(Resource.error(it.message.toString())))
@@ -201,8 +201,8 @@ class MainViewModel(
     private suspend fun safeAddWarrantyToFirestore(warrantyInput: WarrantyInput) {
         _addWarrantyLiveData.postValue(Event(Resource.loading()))
         try {
-            if (hasInternetConnection(getApplication<WarrantyRosterApplication>())) {
-                warrantyRepository.addWarrantyToFirestore(warrantyInput).await()
+            if (hasInternetConnection(getApplication<BaseApplication>())) {
+                mainRepository.addWarrantyToFirestore(warrantyInput).await()
                 _addWarrantyLiveData.postValue(Event(Resource.success(null)))
                 Log.i(TAG, "Warranty successfully added.")
             } else {
@@ -218,8 +218,8 @@ class MainViewModel(
     private suspend fun safeDeleteWarrantyFromFirestore(warrantyId: String) {
         _deleteWarrantyLiveData.postValue(Event(Resource.loading()))
         try {
-            if (hasInternetConnection(getApplication<WarrantyRosterApplication>())) {
-                warrantyRepository.deleteWarrantyFromFirestore(warrantyId).await()
+            if (hasInternetConnection(getApplication<BaseApplication>())) {
+                mainRepository.deleteWarrantyFromFirestore(warrantyId).await()
                 _deleteWarrantyLiveData.postValue(Event(Resource.success(null)))
                 Log.i(TAG, "$warrantyId successfully deleted.")
             } else {
@@ -237,8 +237,8 @@ class MainViewModel(
     ) {
         _updateWarrantyLiveData.postValue(Event(Resource.loading()))
         try {
-            if (hasInternetConnection(getApplication<WarrantyRosterApplication>())) {
-                warrantyRepository.updateWarrantyInFirestore(warrantyId, warrantyInput).await()
+            if (hasInternetConnection(getApplication<BaseApplication>())) {
+                mainRepository.updateWarrantyInFirestore(warrantyId, warrantyInput).await()
                 _updateWarrantyLiveData.postValue(Event(Resource.success(null)))
                 Log.i(TAG, "Warranty successfully updated.")
             } else {
@@ -254,8 +254,8 @@ class MainViewModel(
     private suspend fun safeGetUpdatedWarrantyFromFirestore(warrantyId: String) {
         _updatedWarrantyLiveData.postValue(Event(Resource.loading()))
         try {
-            if (hasInternetConnection(getApplication<WarrantyRosterApplication>())) {
-                val warrantySnapshot = warrantyRepository
+            if (hasInternetConnection(getApplication<BaseApplication>())) {
+                val warrantySnapshot = mainRepository
                     .getUpdatedWarrantyFromFirestore(warrantyId).await()
 
                 val updatedWarranty = Warranty(
