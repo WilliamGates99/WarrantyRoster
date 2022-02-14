@@ -61,10 +61,10 @@ class SettingsViewModel(
     }
 
     fun getCurrentLanguage(): String =
-        settingsPrefs.getString(Constants.PREFERENCE_LANGUAGE_KEY, "en").toString()
+        settingsPrefs.getString(Constants.PREFERENCE_LANGUAGE_KEY, "en") ?: "en"
 
     fun getCurrentCountry(): String =
-        settingsPrefs.getString(PREFERENCE_COUNTRY_KEY, "US").toString()
+        settingsPrefs.getString(PREFERENCE_COUNTRY_KEY, "US") ?: "US"
 
     fun getCurrentTheme(): Int = settingsPrefs.getInt(PREFERENCE_THEME_KEY, 0)
 

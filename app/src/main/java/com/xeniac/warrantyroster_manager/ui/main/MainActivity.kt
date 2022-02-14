@@ -85,6 +85,7 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.fcv) as NavHostFragment
         navController = navHostFragment.navController
         NavigationUI.setupWithNavController(binding.bnv, navController)
+        binding.bnv.setOnItemReselectedListener { /* NO-OP */ }
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {

@@ -27,10 +27,7 @@ class LandingActivity : AppCompatActivity() {
     private fun splashScreen() {
         installSplashScreen()
 
-        val loginPrefs = getSharedPreferences(PREFERENCE_LOGIN, MODE_PRIVATE)
-        val isLoggedIn = loginPrefs.getBoolean(PREFERENCE_IS_LOGGED_IN_KEY, false)
-
-        if (isLoggedIn) {
+        if (isUserLoggedIn()) {
             Intent(this, MainActivity::class.java).apply {
                 startActivity(this)
                 finish()
@@ -38,6 +35,11 @@ class LandingActivity : AppCompatActivity() {
         } else {
             landingInit()
         }
+    }
+
+    private fun isUserLoggedIn(): Boolean {
+        val loginPrefs = getSharedPreferences(PREFERENCE_LOGIN, MODE_PRIVATE)
+        return loginPrefs.getBoolean(PREFERENCE_IS_LOGGED_IN_KEY, false)
     }
 
     private fun landingInit() {
