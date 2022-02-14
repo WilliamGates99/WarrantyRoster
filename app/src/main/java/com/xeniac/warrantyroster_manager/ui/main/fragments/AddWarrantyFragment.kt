@@ -32,6 +32,7 @@ import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.Constants.FRAGMENT_TAG_ADD_CALENDAR_EXPIRY
 import com.xeniac.warrantyroster_manager.utils.Constants.FRAGMENT_TAG_ADD_CALENDAR_STARTING
+import com.xeniac.warrantyroster_manager.utils.DateHelper.isStartingDateValid
 import java.text.DecimalFormat
 import java.util.*
 
@@ -406,7 +407,4 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
             ContextCompat.getColor(requireContext(), R.color.blue)
         binding.tvDateError.visibility = GONE
     }
-
-    private fun isStartingDateValid(startingCalendar: Calendar, expiryCalendar: Calendar): Boolean =
-        expiryCalendar >= startingCalendar
 }

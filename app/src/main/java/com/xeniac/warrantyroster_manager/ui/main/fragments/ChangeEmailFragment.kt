@@ -2,7 +2,6 @@ package com.xeniac.warrantyroster_manager.ui.main.fragments
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Patterns
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -23,6 +22,7 @@ import com.xeniac.warrantyroster_manager.ui.main.viewmodels.SettingsViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_CREDENTIALS
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
+import com.xeniac.warrantyroster_manager.utils.UserHelper.isEmailValid
 
 class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
 
@@ -249,7 +249,4 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
         binding.btnChangeEmail.isClickable = true
         binding.btnChangeEmail.text = requireContext().getString(R.string.change_email_btn_change)
     }
-
-    private fun isEmailValid(email: String): Boolean =
-        Patterns.EMAIL_ADDRESS.matcher(email).matches()
 }

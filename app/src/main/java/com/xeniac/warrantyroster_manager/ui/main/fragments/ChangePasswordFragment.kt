@@ -19,6 +19,8 @@ import com.xeniac.warrantyroster_manager.models.Status
 import com.xeniac.warrantyroster_manager.ui.main.MainActivity
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.SettingsViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants
+import com.xeniac.warrantyroster_manager.utils.UserHelper.isRetypePasswordValid
+import com.xeniac.warrantyroster_manager.utils.UserHelper.passwordStrength
 
 class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
 
@@ -88,7 +90,7 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
 
         binding.tiEditNewPassword.addTextChangedListener { inputPassword ->
             if (binding.tiLayoutNewPassword.hasFocus()) {
-                when (newPasswordStrength(inputPassword.toString())) {
+                when (passwordStrength(inputPassword.toString())) {
                     (-1).toByte() -> {
                         binding.tiLayoutNewPassword.boxStrokeColor =
                             ContextCompat.getColor(requireContext(), R.color.red)
@@ -165,7 +167,7 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
             binding.tiLayoutRetypePassword.boxStrokeColor =
                 ContextCompat.getColor(requireContext(), R.color.red)
         } else {
-            if (newPasswordStrength(newPassword) == (-1).toByte()) {
+            if (passwordStrength(newPassword) == (-1).toByte()) {
                 binding.tiLayoutNewPassword.requestFocus()
                 binding.tiLayoutNewPassword.error =
                     requireContext().getString(R.string.change_password_error_password_short)
@@ -292,18 +294,4 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
         binding.btnChangePassword.text =
             requireContext().getString(R.string.change_password_btn_change)
     }
-
-    private fun newPasswordStrength(password: String): Byte {
-        val passwordPattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=(.*[\\W])*).{8,}$"
-        val passwordMatcher = Regex(passwordPattern)
-
-        return when {
-            password.length < 6 -> -1
-            password.length < 8 -> 0
-            else -> if (passwordMatcher.matches(password)) 1 else 0
-        }
-    }
-
-    private fun isRetypePasswordValid(password: String, retypePassword: String): Boolean =
-        password == retypePassword
 }

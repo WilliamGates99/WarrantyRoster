@@ -23,6 +23,8 @@ import com.xeniac.warrantyroster_manager.utils.CategoryHelper.getCategoryTitleMa
 import com.xeniac.warrantyroster_manager.utils.Constants.VIEW_TYPE_AD
 import com.xeniac.warrantyroster_manager.utils.Constants.VIEW_TYPE_WARRANTY
 import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_NATIVE_ZONE_ID
+import com.xeniac.warrantyroster_manager.utils.DateHelper.getDayWithSuffix
+import com.xeniac.warrantyroster_manager.utils.DateHelper.getDaysUntilExpiry
 import ir.tapsell.plus.AdHolder
 import ir.tapsell.plus.AdRequestCallback
 import ir.tapsell.plus.AdShowListener
@@ -30,7 +32,6 @@ import ir.tapsell.plus.TapsellPlus
 import ir.tapsell.plus.model.TapsellPlusAdModel
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.concurrent.TimeUnit
 
 class WarrantyAdapter(
     private val activity: Activity,
@@ -148,30 +149,6 @@ class WarrantyAdapter(
                 clickInterface.onItemClick(warranty, daysUntilExpiry)
             }
         }
-    }
-
-    private fun getDayWithSuffix(day: Int): String {
-        if (day in 11..13) {
-            return "${day}th"
-        }
-
-        return when (day % 10) {
-            1 -> "${day}st"
-            2 -> "${day}nd"
-            3 -> "${day}rd"
-            else -> "${day}th"
-        }
-    }
-
-    private fun getDaysUntilExpiry(expiryCalendar: Calendar): Long {
-        val todayCalendar = Calendar.getInstance().apply {
-            set(Calendar.HOUR_OF_DAY, 0)
-            set(Calendar.MINUTE, 0)
-            set(Calendar.SECOND, 0)
-            set(Calendar.MILLISECOND, 0)
-        }
-
-        return TimeUnit.MILLISECONDS.toDays(expiryCalendar.timeInMillis - todayCalendar.timeInMillis)
     }
 
     inner class AdViewHolder(val binding: ListAdContainerBinding) :

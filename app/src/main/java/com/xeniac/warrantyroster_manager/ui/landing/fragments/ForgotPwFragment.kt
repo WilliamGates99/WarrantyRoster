@@ -2,7 +2,6 @@ package com.xeniac.warrantyroster_manager.ui.landing.fragments
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Patterns
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -21,6 +20,7 @@ import com.xeniac.warrantyroster_manager.ui.landing.LandingActivity
 import com.xeniac.warrantyroster_manager.ui.landing.LandingViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_ACCOUNT_NOT_FOUND
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
+import com.xeniac.warrantyroster_manager.utils.UserHelper.isEmailValid
 
 class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
 
@@ -167,7 +167,4 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
         binding.btnSend.text =
             requireContext().getString(R.string.login_btn_login)
     }
-
-    private fun isEmailValid(email: String): Boolean =
-        Patterns.EMAIL_ADDRESS.matcher(email).matches()
 }

@@ -31,10 +31,11 @@ import com.xeniac.warrantyroster_manager.utils.CategoryHelper.getCategoryTitleMa
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.Constants.FRAGMENT_TAG_EDIT_CALENDAR_EXPIRY
 import com.xeniac.warrantyroster_manager.utils.Constants.FRAGMENT_TAG_EDIT_CALENDAR_STARTING
+import com.xeniac.warrantyroster_manager.utils.DateHelper.getDaysUntilExpiry
+import com.xeniac.warrantyroster_manager.utils.DateHelper.isStartingDateValid
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.concurrent.TimeUnit
 
 class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
 
@@ -512,24 +513,5 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
         binding.tiLayoutDateStarting.boxStrokeColor =
             ContextCompat.getColor(requireContext(), R.color.blue)
         binding.tvDateError.visibility = GONE
-    }
-
-    private fun isStartingDateValid(startingCalendar: Calendar, expiryCalendar: Calendar): Boolean =
-        expiryCalendar >= startingCalendar
-
-    private fun getDaysUntilExpiry(expiryDate: String): Long {
-        val expiryCalendar = Calendar.getInstance()
-
-        dateFormat.parse(expiryDate)?.let {
-            expiryCalendar.time = it
-        }
-
-        val todayCalendar = Calendar.getInstance()
-        todayCalendar.set(Calendar.HOUR_OF_DAY, 0)
-        todayCalendar.set(Calendar.MINUTE, 0)
-        todayCalendar.set(Calendar.SECOND, 0)
-        todayCalendar.set(Calendar.MILLISECOND, 0)
-
-        return TimeUnit.MILLISECONDS.toDays(expiryCalendar.timeInMillis - todayCalendar.timeInMillis)
     }
 }

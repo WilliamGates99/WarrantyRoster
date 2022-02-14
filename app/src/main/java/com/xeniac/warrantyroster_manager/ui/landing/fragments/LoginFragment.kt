@@ -3,7 +3,6 @@ package com.xeniac.warrantyroster_manager.ui.landing.fragments
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Patterns
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -24,6 +23,7 @@ import com.xeniac.warrantyroster_manager.ui.main.MainActivity
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_ACCOUNT_NOT_FOUND
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_CREDENTIALS
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
+import com.xeniac.warrantyroster_manager.utils.UserHelper.isEmailValid
 
 class LoginFragment : Fragment(R.layout.fragment_login) {
 
@@ -212,7 +212,4 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         binding.btnLogin.text =
             requireContext().getString(R.string.login_btn_login)
     }
-
-    private fun isEmailValid(email: String): Boolean =
-        Patterns.EMAIL_ADDRESS.matcher(email).matches()
 }

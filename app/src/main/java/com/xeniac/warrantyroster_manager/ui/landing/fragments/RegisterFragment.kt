@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Patterns
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -24,6 +23,9 @@ import com.xeniac.warrantyroster_manager.ui.main.MainActivity
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.Constants.URL_PRIVACY_POLICY
+import com.xeniac.warrantyroster_manager.utils.UserHelper.isEmailValid
+import com.xeniac.warrantyroster_manager.utils.UserHelper.isRetypePasswordValid
+import com.xeniac.warrantyroster_manager.utils.UserHelper.passwordStrength
 
 class RegisterFragment : Fragment(R.layout.fragment_register) {
 
@@ -271,21 +273,4 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         binding.btnRegister.text =
             requireContext().getString(R.string.register_btn_register)
     }
-
-    private fun passwordStrength(password: String): Byte {
-        val passwordPattern = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=(.*[\\W])*).{8,}$"
-        val passwordMatcher = Regex(passwordPattern)
-
-        return when {
-            password.length < 6 -> -1
-            password.length < 8 -> 0
-            else -> if (passwordMatcher.matches(password)) 1 else 0
-        }
-    }
-
-    private fun isEmailValid(email: String): Boolean =
-        Patterns.EMAIL_ADDRESS.matcher(email).matches()
-
-    private fun isRetypePasswordValid(password: String, retypePassword: String): Boolean =
-        password == retypePassword
 }
