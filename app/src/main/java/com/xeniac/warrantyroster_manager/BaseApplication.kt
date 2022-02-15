@@ -6,8 +6,10 @@ import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_COUNTRY_KEY
 import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_LANGUAGE_KEY
 import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_SETTINGS
 import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_THEME_KEY
+import dagger.hilt.android.HiltAndroidApp
 import java.util.*
 
+@HiltAndroidApp
 class BaseApplication : Application() {
 
     override fun onCreate() {
