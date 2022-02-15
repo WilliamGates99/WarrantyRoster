@@ -10,7 +10,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import coil.load
@@ -41,7 +41,7 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
 
     private var _binding: FragmentWarrantyDetailsBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: MainViewModel by viewModels()
+    private lateinit var viewModel: MainViewModel
 
     private lateinit var warranty: Warranty
 
@@ -52,6 +52,7 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentWarrantyDetailsBinding.bind(view)
+        viewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
 
         returnToMainActivity()
         handleExtendedFAB()

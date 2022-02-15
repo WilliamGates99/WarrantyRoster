@@ -6,7 +6,7 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.ui.main.adapters.WarrantyAdapter
@@ -28,7 +28,7 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
 
     private var _binding: FragmentWarrantiesBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: MainViewModel by viewModels()
+    private lateinit var viewModel: MainViewModel
 
     private lateinit var warrantyAdapter: WarrantyAdapter
 
@@ -39,6 +39,7 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentWarrantiesBinding.bind(view)
+        viewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
 
         adInit()
         setupRecyclerView()

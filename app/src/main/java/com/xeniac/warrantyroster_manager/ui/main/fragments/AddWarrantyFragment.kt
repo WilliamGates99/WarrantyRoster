@@ -12,7 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.get
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import coil.load
 import coil.request.CachePolicy
@@ -41,7 +41,7 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
 
     private var _binding: FragmentAddWarrantyBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: MainViewModel by viewModels()
+    private lateinit var viewModel: MainViewModel
 
     private val decimalFormat = DecimalFormat("00")
     private var selectedCategory: Category? = null
@@ -53,6 +53,7 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentAddWarrantyBinding.bind(view)
+        viewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
 
         textInputsBackgroundColor()
         textInputsStrokeColor()
