@@ -28,7 +28,6 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
 
     private var _binding: FragmentForgotPwBinding? = null
     private val binding get() = _binding!!
-
     private val viewModel: LandingViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

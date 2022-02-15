@@ -8,13 +8,15 @@ import androidx.navigation.fragment.NavHostFragment
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.ActivityLandingBinding
 import com.xeniac.warrantyroster_manager.ui.main.MainActivity
-import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_IS_LOGGED_IN_KEY
-import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_LOGIN
 import com.xeniac.warrantyroster_manager.utils.LocaleModifier
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class LandingActivity : AppCompatActivity() {
+
+    @set:Inject
+    var isUserLoggedIn = false
 
     private lateinit var binding: ActivityLandingBinding
 
@@ -26,7 +28,7 @@ class LandingActivity : AppCompatActivity() {
     private fun splashScreen() {
         installSplashScreen()
 
-        if (isUserLoggedIn()) {
+        if (isUserLoggedIn) {
             Intent(this, MainActivity::class.java).apply {
                 startActivity(this)
                 finish()
@@ -34,11 +36,6 @@ class LandingActivity : AppCompatActivity() {
         } else {
             landingInit()
         }
-    }
-
-    private fun isUserLoggedIn(): Boolean {
-        val loginPrefs = getSharedPreferences(PREFERENCE_LOGIN, MODE_PRIVATE)
-        return loginPrefs.getBoolean(PREFERENCE_IS_LOGGED_IN_KEY, false)
     }
 
     private fun landingInit() {

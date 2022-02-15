@@ -18,6 +18,8 @@ import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentSettingsBinding
+import com.xeniac.warrantyroster_manager.di.CurrentCountry
+import com.xeniac.warrantyroster_manager.di.CurrentLanguage
 import com.xeniac.warrantyroster_manager.models.Status
 import com.xeniac.warrantyroster_manager.ui.landing.LandingActivity
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.SettingsViewModel
@@ -30,6 +32,7 @@ import ir.tapsell.plus.*
 import ir.tapsell.plus.model.AdNetworkError
 import ir.tapsell.plus.model.AdNetworks
 import ir.tapsell.plus.model.TapsellPlusAdModel
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class SettingsFragment : Fragment(R.layout.fragment_settings) {
@@ -38,9 +41,16 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     private val binding get() = _binding!!
     private val viewModel: SettingsViewModel by viewModels()
 
-    private lateinit var currentLanguage: String
-    private lateinit var currentCountry: String
-    private var currentTheme: Int = 0
+    @Inject
+    @CurrentLanguage
+    lateinit var currentLanguage: String
+
+    @Inject
+    @CurrentCountry
+    lateinit var currentCountry: String
+
+    @set:Inject
+    var currentTheme = 0
 
     private var requestAdCounter = 0
     private var responseId: String? = null
@@ -55,7 +65,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
         getAccountDetails()
         accountDetailsObserver()
-        getCurrentSettings()
         setCurrentLanguageText()
         setCurrentThemeText()
         verifyOnClick()
@@ -128,12 +137,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             binding.lavAccountVerification.setAnimation(R.raw.anim_account_not_verified)
         }
         binding.lavAccountVerification.playAnimation()
-    }
-
-    private fun getCurrentSettings() {
-        currentLanguage = viewModel.getCurrentLanguage()
-        currentCountry = viewModel.getCurrentCountry()
-        currentTheme = viewModel.getCurrentTheme()
     }
 
     private fun setCurrentLanguageText() {

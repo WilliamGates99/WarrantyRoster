@@ -26,7 +26,6 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
 
     private var _binding: FragmentForgotPwSentBinding? = null
     private val binding get() = _binding!!
-
     private val viewModel: LandingViewModel by viewModels()
 
     private lateinit var email: String

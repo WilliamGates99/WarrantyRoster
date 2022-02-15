@@ -1,17 +1,17 @@
 package com.xeniac.warrantyroster_manager.ui.landing
 
 import android.app.Application
-import android.content.Context
+import android.content.SharedPreferences
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.xeniac.warrantyroster_manager.BaseApplication
+import com.xeniac.warrantyroster_manager.di.LoginPrefs
 import com.xeniac.warrantyroster_manager.repositories.UserRepository
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_IS_LOGGED_IN_KEY
-import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_LOGIN
 import com.xeniac.warrantyroster_manager.utils.Event
 import com.xeniac.warrantyroster_manager.utils.NetworkHelper.hasInternetConnection
 import com.xeniac.warrantyroster_manager.utils.Resource
@@ -23,7 +23,8 @@ import javax.inject.Inject
 @HiltViewModel
 class LandingViewModel @Inject constructor(
     application: Application,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    @LoginPrefs private val loginPrefs: SharedPreferences
 ) : AndroidViewModel(application) {
 
     private val _registerLiveData: MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
@@ -57,14 +58,7 @@ class LandingViewModel @Inject constructor(
             if (hasInternetConnection(getApplication<BaseApplication>())) {
                 userRepository.registerViaEmail(email, password).await()
                 userRepository.sendVerificationEmail()
-
-                getApplication<BaseApplication>()
-                    .getSharedPreferences(PREFERENCE_LOGIN, Context.MODE_PRIVATE)
-                    .edit().apply {
-                        putBoolean(PREFERENCE_IS_LOGGED_IN_KEY, true)
-                        apply()
-                    }
-
+                loginPrefs.edit().putBoolean(PREFERENCE_IS_LOGGED_IN_KEY, true).apply()
                 _registerLiveData.postValue(Event(Resource.success(null)))
                 Log.i(TAG, "$email registered successfully.")
             } else {
@@ -85,14 +79,9 @@ class LandingViewModel @Inject constructor(
             if (hasInternetConnection(getApplication<BaseApplication>())) {
                 userRepository.loginViaEmail(email, password).await().apply {
                     user?.let {
-                        getApplication<BaseApplication>()
-                            .getSharedPreferences(PREFERENCE_LOGIN, Context.MODE_PRIVATE)
-                            .edit().apply {
-                                putBoolean(PREFERENCE_IS_LOGGED_IN_KEY, true)
-                                apply()
-                            }
-
+                        loginPrefs.edit().putBoolean(PREFERENCE_IS_LOGGED_IN_KEY, true).apply()
                         _loginLiveData.postValue(Event(Resource.success(null)))
+                        Log.i(TAG, "$email logged in successfully.")
                     }
                 }
             } else {
@@ -112,8 +101,8 @@ class LandingViewModel @Inject constructor(
         try {
             if (hasInternetConnection(getApplication<BaseApplication>())) {
                 userRepository.sendResetPasswordEmail(email).await().apply {
-                    Log.i(TAG, "Reset password email successfully sent to ${email}.")
                     _forgotPwLiveData.postValue(Event(Resource.success(email)))
+                    Log.i(TAG, "Reset password email successfully sent to ${email}.")
                 }
             } else {
                 Log.e(TAG, ERROR_NETWORK_CONNECTION)

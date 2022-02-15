@@ -72,20 +72,15 @@ class MainViewModel @Inject constructor(
 
     fun getAllCategoryTitles(): List<String> {
         val titleList = mutableListOf<String>()
-        Log.i("getAllCategoryTitles", "livedata value: ${categoriesLiveData.value}")
         categoriesLiveData.value?.let { responseEvent ->
-            Log.i("getAllCategoryTitles", "responseEvent: $responseEvent")
             responseEvent.peekContent().let { response ->
-                Log.i("getAllCategoryTitles", "response: $response")
                 response.data?.let { categoriesList ->
-                    Log.i("getAllCategoryTitles", "categoriesList: $categoriesList")
                     for (category in categoriesList) {
                         titleList.add(category.title[getCategoryTitleMapKey(getApplication<BaseApplication>())].toString())
                     }
                 }
             }
         }
-        Log.i("getAllCategoryTitles", "returning list: $titleList")
         return titleList
     }
 
@@ -202,7 +197,6 @@ class MainViewModel @Inject constructor(
                         categoriesList.add(category)
                     }
                     categoriesLiveData.postValue(Event(Resource.success(categoriesList)))
-                    Log.i(TAG, "values: ${categoriesLiveData.value}")
                     Log.i(TAG, "Categories List successfully retrieved.")
                 }
             }

@@ -1,7 +1,7 @@
 package com.xeniac.warrantyroster_manager.ui.main.viewmodels
 
 import android.app.Application
-import android.content.Context
+import android.content.SharedPreferences
 import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.AndroidViewModel
@@ -10,13 +10,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseUser
 import com.xeniac.warrantyroster_manager.BaseApplication
+import com.xeniac.warrantyroster_manager.di.LoginPrefs
+import com.xeniac.warrantyroster_manager.di.SettingsPrefs
 import com.xeniac.warrantyroster_manager.repositories.UserRepository
-import com.xeniac.warrantyroster_manager.utils.Constants
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
-import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_COUNTRY_KEY
 import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_IS_LOGGED_IN_KEY
-import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_LOGIN
-import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_SETTINGS
 import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_THEME_KEY
 import com.xeniac.warrantyroster_manager.utils.Event
 import com.xeniac.warrantyroster_manager.utils.NetworkHelper.hasInternetConnection
@@ -29,11 +27,10 @@ import javax.inject.Inject
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     application: Application,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    @SettingsPrefs private val settingsPrefs: SharedPreferences,
+    @LoginPrefs private val loginPrefs: SharedPreferences
 ) : AndroidViewModel(application) {
-
-    private val settingsPrefs = getApplication<BaseApplication>()
-        .getSharedPreferences(PREFERENCE_SETTINGS, Context.MODE_PRIVATE)
 
     private val _accountDetailsLiveData:
             MutableLiveData<Event<Resource<FirebaseUser>>> = MutableLiveData()
@@ -62,14 +59,6 @@ class SettingsViewModel @Inject constructor(
     companion object {
         private const val TAG = "SettingsViewModel"
     }
-
-    fun getCurrentLanguage(): String =
-        settingsPrefs.getString(Constants.PREFERENCE_LANGUAGE_KEY, "en") ?: "en"
-
-    fun getCurrentCountry(): String =
-        settingsPrefs.getString(PREFERENCE_COUNTRY_KEY, "US") ?: "US"
-
-    fun getCurrentTheme(): Int = settingsPrefs.getInt(PREFERENCE_THEME_KEY, 0)
 
     fun setAppTheme(index: Int) = viewModelScope.launch {
         when (index) {
@@ -167,14 +156,7 @@ class SettingsViewModel @Inject constructor(
         _logoutLiveData.postValue(Event(Resource.loading()))
         try {
             userRepository.logoutUser()
-
-            getApplication<BaseApplication>().getSharedPreferences(
-                PREFERENCE_LOGIN, Context.MODE_PRIVATE
-            ).edit().apply {
-                remove(PREFERENCE_IS_LOGGED_IN_KEY)
-                apply()
-            }
-
+            loginPrefs.edit().remove(PREFERENCE_IS_LOGGED_IN_KEY).apply()
             _logoutLiveData.postValue(Event(Resource.success(null)))
             Log.i(TAG, "User successfully logged out.")
         } catch (e: Exception) {
