@@ -14,8 +14,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import coil.ImageLoader
-import coil.decode.SvgDecoder
 import coil.load
 import coil.request.CachePolicy
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -28,6 +26,7 @@ import com.xeniac.warrantyroster_manager.databinding.FragmentEditWarrantyBinding
 import com.xeniac.warrantyroster_manager.models.*
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModel
 import com.xeniac.warrantyroster_manager.utils.CategoryHelper.getCategoryTitleMapKey
+import com.xeniac.warrantyroster_manager.utils.CoilHelper.getImageLoader
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.Constants.FRAGMENT_TAG_EDIT_CALENDAR_EXPIRY
 import com.xeniac.warrantyroster_manager.utils.Constants.FRAGMENT_TAG_EDIT_CALENDAR_STARTING
@@ -45,7 +44,6 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
     private val binding get() = _binding!!
     private val viewModel: MainViewModel by viewModels()
 
-    private lateinit var imageLoader: ImageLoader
     private lateinit var warranty: Warranty
 
     private val decimalFormat = DecimalFormat("00")
@@ -59,9 +57,6 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentEditWarrantyBinding.bind(view)
-
-        imageLoader = ImageLoader.Builder(requireContext())
-            .componentRegistry { add(SvgDecoder(requireContext())) }.build()
 
         textInputsBackgroundColor()
         textInputsStrokeColor()
@@ -187,9 +182,7 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
             selectedCategory = viewModel.getCategoryByTitle(categoryTitle)
 
             selectedCategory?.let {
-                val imageLoader = ImageLoader.Builder(requireContext())
-                    .componentRegistry { add(SvgDecoder(requireContext())) }.build()
-                binding.ivIconCategory.load(it.icon, imageLoader) {
+                binding.ivIconCategory.load(it.icon, getImageLoader(requireContext())) {
                     memoryCachePolicy(CachePolicy.ENABLED)
                     diskCachePolicy(CachePolicy.ENABLED)
                     networkCachePolicy(CachePolicy.ENABLED)
@@ -338,7 +331,7 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
 
         selectedCategory?.let {
             binding.tiDdCategory.setText(it.title[getCategoryTitleMapKey(requireContext())])
-            binding.ivIconCategory.load(it.icon, imageLoader) {
+            binding.ivIconCategory.load(it.icon, getImageLoader(requireContext())) {
                 memoryCachePolicy(CachePolicy.ENABLED)
                 diskCachePolicy(CachePolicy.ENABLED)
                 networkCachePolicy(CachePolicy.ENABLED)

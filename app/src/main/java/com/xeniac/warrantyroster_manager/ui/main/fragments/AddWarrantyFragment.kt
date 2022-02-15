@@ -14,8 +14,6 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import coil.ImageLoader
-import coil.decode.SvgDecoder
 import coil.load
 import coil.request.CachePolicy
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -29,6 +27,7 @@ import com.xeniac.warrantyroster_manager.models.Category
 import com.xeniac.warrantyroster_manager.models.Status
 import com.xeniac.warrantyroster_manager.models.WarrantyInput
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModel
+import com.xeniac.warrantyroster_manager.utils.CoilHelper.getImageLoader
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.Constants.FRAGMENT_TAG_ADD_CALENDAR_EXPIRY
 import com.xeniac.warrantyroster_manager.utils.Constants.FRAGMENT_TAG_ADD_CALENDAR_STARTING
@@ -177,9 +176,7 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
             selectedCategory = viewModel.getCategoryByTitle(categoryTitle)
 
             selectedCategory?.let {
-                val imageLoader = ImageLoader.Builder(requireContext())
-                    .componentRegistry { add(SvgDecoder(requireContext())) }.build()
-                binding.ivIconCategory.load(it.icon, imageLoader) {
+                binding.ivIconCategory.load(it.icon, getImageLoader(requireContext())) {
                     memoryCachePolicy(CachePolicy.ENABLED)
                     diskCachePolicy(CachePolicy.ENABLED)
                     networkCachePolicy(CachePolicy.ENABLED)

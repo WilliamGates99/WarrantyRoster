@@ -9,8 +9,6 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import coil.ImageLoader
-import coil.decode.SvgDecoder
 import coil.load
 import coil.request.CachePolicy
 import com.xeniac.warrantyroster_manager.R
@@ -20,6 +18,7 @@ import com.xeniac.warrantyroster_manager.models.ListItemType
 import com.xeniac.warrantyroster_manager.models.Warranty
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModel
 import com.xeniac.warrantyroster_manager.utils.CategoryHelper.getCategoryTitleMapKey
+import com.xeniac.warrantyroster_manager.utils.CoilHelper.getImageLoader
 import com.xeniac.warrantyroster_manager.utils.Constants.VIEW_TYPE_AD
 import com.xeniac.warrantyroster_manager.utils.Constants.VIEW_TYPE_WARRANTY
 import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_NATIVE_ZONE_ID
@@ -136,9 +135,7 @@ class WarrantyAdapter(
             category?.let {
                 binding.categoryTitle = it.title[getCategoryTitleMapKey(context)]
 
-                val imageLoader = ImageLoader.Builder(context)
-                    .componentRegistry { add(SvgDecoder(context)) }.build()
-                binding.ivIcon.load(it.icon, imageLoader) {
+                binding.ivIcon.load(it.icon, getImageLoader(context)) {
                     memoryCachePolicy(CachePolicy.ENABLED)
                     diskCachePolicy(CachePolicy.ENABLED)
                     networkCachePolicy(CachePolicy.ENABLED)
