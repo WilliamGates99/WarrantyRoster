@@ -10,6 +10,7 @@ import android.view.View.VISIBLE
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.airbnb.lottie.LottieDrawable
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -19,22 +20,23 @@ import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentSettingsBinding
 import com.xeniac.warrantyroster_manager.models.Status
 import com.xeniac.warrantyroster_manager.ui.landing.LandingActivity
-import com.xeniac.warrantyroster_manager.ui.main.MainActivity
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.SettingsViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.Constants.SETTINGS_NATIVE_ZONE_ID
 import com.xeniac.warrantyroster_manager.utils.Constants.TAPSELL_KEY
 import com.xeniac.warrantyroster_manager.utils.Constants.URL_PRIVACY_POLICY
+import dagger.hilt.android.AndroidEntryPoint
 import ir.tapsell.plus.*
 import ir.tapsell.plus.model.AdNetworkError
 import ir.tapsell.plus.model.AdNetworks
 import ir.tapsell.plus.model.TapsellPlusAdModel
 
+@AndroidEntryPoint
 class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
     private var _binding: FragmentSettingsBinding? = null
     private val binding get() = _binding!!
-    private lateinit var viewModel: SettingsViewModel
+    private val viewModel: SettingsViewModel by viewModels()
 
     private lateinit var currentLanguage: String
     private lateinit var currentCountry: String
@@ -50,7 +52,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentSettingsBinding.bind(view)
-        viewModel = (activity as MainActivity).settingsViewModel
 
         getAccountDetails()
         accountDetailsObserver()

@@ -6,27 +6,29 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.ui.main.adapters.WarrantyAdapter
 import com.xeniac.warrantyroster_manager.ui.main.adapters.WarrantyListClickInterface
 import com.xeniac.warrantyroster_manager.databinding.FragmentWarrantiesBinding
 import com.xeniac.warrantyroster_manager.models.Status
-import com.xeniac.warrantyroster_manager.ui.main.MainActivity
 import com.xeniac.warrantyroster_manager.models.Warranty
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_EMPTY_WARRANTY_LIST
 import com.xeniac.warrantyroster_manager.utils.Constants.TAPSELL_KEY
+import dagger.hilt.android.AndroidEntryPoint
 import ir.tapsell.plus.TapsellPlus
 import ir.tapsell.plus.TapsellPlusInitListener
 import ir.tapsell.plus.model.AdNetworkError
 import ir.tapsell.plus.model.AdNetworks
 
+@AndroidEntryPoint
 class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListClickInterface {
 
     private var _binding: FragmentWarrantiesBinding? = null
     private val binding get() = _binding!!
-    private lateinit var viewModel: MainViewModel
+    private val viewModel: MainViewModel by viewModels()
 
     private lateinit var warrantyAdapter: WarrantyAdapter
 
@@ -37,7 +39,6 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentWarrantiesBinding.bind(view)
-        viewModel = (activity as MainActivity).viewModel
 
         adInit()
         setupRecyclerView()

@@ -4,20 +4,19 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.ActivityLandingBinding
-import com.xeniac.warrantyroster_manager.repositories.UserRepository
 import com.xeniac.warrantyroster_manager.ui.main.MainActivity
 import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_IS_LOGGED_IN_KEY
 import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_LOGIN
 import com.xeniac.warrantyroster_manager.utils.LocaleModifier
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class LandingActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLandingBinding
-    lateinit var viewModel: LandingViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,10 +44,6 @@ class LandingActivity : AppCompatActivity() {
     private fun landingInit() {
         binding = ActivityLandingBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        val repository = UserRepository()
-        val viewModelProviderFactory = LandingViewModelProviderFactory(application, repository)
-        viewModel = ViewModelProvider(this, viewModelProviderFactory)[LandingViewModel::class.java]
 
         LocaleModifier.setLocale(this)
         setTitle()

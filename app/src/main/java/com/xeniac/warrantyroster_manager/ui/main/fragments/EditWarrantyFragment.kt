@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import coil.ImageLoader
@@ -25,7 +26,6 @@ import com.google.firebase.ktx.Firebase
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentEditWarrantyBinding
 import com.xeniac.warrantyroster_manager.models.*
-import com.xeniac.warrantyroster_manager.ui.main.MainActivity
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModel
 import com.xeniac.warrantyroster_manager.utils.CategoryHelper.getCategoryTitleMapKey
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
@@ -33,15 +33,17 @@ import com.xeniac.warrantyroster_manager.utils.Constants.FRAGMENT_TAG_EDIT_CALEN
 import com.xeniac.warrantyroster_manager.utils.Constants.FRAGMENT_TAG_EDIT_CALENDAR_STARTING
 import com.xeniac.warrantyroster_manager.utils.DateHelper.getDaysUntilExpiry
 import com.xeniac.warrantyroster_manager.utils.DateHelper.isStartingDateValid
+import dagger.hilt.android.AndroidEntryPoint
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
+@AndroidEntryPoint
 class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
 
     private var _binding: FragmentEditWarrantyBinding? = null
     private val binding get() = _binding!!
-    private lateinit var viewModel: MainViewModel
+    private val viewModel: MainViewModel by viewModels()
 
     private lateinit var imageLoader: ImageLoader
     private lateinit var warranty: Warranty
@@ -57,7 +59,6 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentEditWarrantyBinding.bind(view)
-        viewModel = (activity as MainActivity).viewModel
 
         imageLoader = ImageLoader.Builder(requireContext())
             .componentRegistry { add(SvgDecoder(requireContext())) }.build()

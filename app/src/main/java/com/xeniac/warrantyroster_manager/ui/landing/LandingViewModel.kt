@@ -15,10 +15,13 @@ import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_LOGIN
 import com.xeniac.warrantyroster_manager.utils.Event
 import com.xeniac.warrantyroster_manager.utils.NetworkHelper.hasInternetConnection
 import com.xeniac.warrantyroster_manager.utils.Resource
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import javax.inject.Inject
 
-class LandingViewModel(
+@HiltViewModel
+class LandingViewModel @Inject constructor(
     application: Application,
     private val userRepository: UserRepository
 ) : AndroidViewModel(application) {

@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.get
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import coil.ImageLoader
 import coil.decode.SvgDecoder
@@ -24,7 +25,6 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentAddWarrantyBinding
-import com.xeniac.warrantyroster_manager.ui.main.MainActivity
 import com.xeniac.warrantyroster_manager.models.Category
 import com.xeniac.warrantyroster_manager.models.Status
 import com.xeniac.warrantyroster_manager.models.WarrantyInput
@@ -33,14 +33,16 @@ import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTIO
 import com.xeniac.warrantyroster_manager.utils.Constants.FRAGMENT_TAG_ADD_CALENDAR_EXPIRY
 import com.xeniac.warrantyroster_manager.utils.Constants.FRAGMENT_TAG_ADD_CALENDAR_STARTING
 import com.xeniac.warrantyroster_manager.utils.DateHelper.isStartingDateValid
+import dagger.hilt.android.AndroidEntryPoint
 import java.text.DecimalFormat
 import java.util.*
 
+@AndroidEntryPoint
 class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
 
     private var _binding: FragmentAddWarrantyBinding? = null
     private val binding get() = _binding!!
-    private lateinit var viewModel: MainViewModel
+    private val viewModel: MainViewModel by viewModels()
 
     private val decimalFormat = DecimalFormat("00")
     private var selectedCategory: Category? = null
@@ -52,7 +54,6 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentAddWarrantyBinding.bind(view)
-        viewModel = (activity as MainActivity).viewModel
 
         textInputsBackgroundColor()
         textInputsStrokeColor()

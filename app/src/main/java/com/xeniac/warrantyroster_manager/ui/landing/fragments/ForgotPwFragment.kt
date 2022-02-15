@@ -10,29 +10,30 @@ import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentForgotPwBinding
 import com.xeniac.warrantyroster_manager.models.Status
-import com.xeniac.warrantyroster_manager.ui.landing.LandingActivity
 import com.xeniac.warrantyroster_manager.ui.landing.LandingViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_ACCOUNT_NOT_FOUND
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.UserHelper.isEmailValid
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
 
     private var _binding: FragmentForgotPwBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var viewModel: LandingViewModel
+    private val viewModel: LandingViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentForgotPwBinding.bind(view)
-        viewModel = (activity as LandingActivity).viewModel
 
         textInputsBackgroundColor()
         textInputsStrokeColor()

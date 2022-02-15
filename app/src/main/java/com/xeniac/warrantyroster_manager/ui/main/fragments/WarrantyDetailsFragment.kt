@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import coil.ImageLoader
@@ -27,6 +28,7 @@ import com.xeniac.warrantyroster_manager.models.Warranty
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.Constants.TAPSELL_KEY
+import dagger.hilt.android.AndroidEntryPoint
 import ir.tapsell.plus.TapsellPlus
 import ir.tapsell.plus.TapsellPlusInitListener
 import ir.tapsell.plus.model.AdNetworkError
@@ -35,11 +37,12 @@ import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
+@AndroidEntryPoint
 class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
 
     private var _binding: FragmentWarrantyDetailsBinding? = null
     private val binding get() = _binding!!
-    private lateinit var viewModel: MainViewModel
+    private val viewModel: MainViewModel by viewModels()
 
     private lateinit var warranty: Warranty
 
@@ -50,7 +53,6 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentWarrantyDetailsBinding.bind(view)
-        viewModel = (activity as MainActivity).viewModel
 
         returnToMainActivity()
         handleExtendedFAB()

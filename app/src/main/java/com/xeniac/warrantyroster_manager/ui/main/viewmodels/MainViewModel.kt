@@ -29,10 +29,13 @@ import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_TITLE
 import com.xeniac.warrantyroster_manager.utils.Event
 import com.xeniac.warrantyroster_manager.utils.NetworkHelper.hasInternetConnection
 import com.xeniac.warrantyroster_manager.utils.Resource
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import javax.inject.Inject
 
-class MainViewModel(
+@HiltViewModel
+class MainViewModel @Inject constructor(
     application: Application,
     private val mainRepository: MainRepository
 ) : AndroidViewModel(application) {

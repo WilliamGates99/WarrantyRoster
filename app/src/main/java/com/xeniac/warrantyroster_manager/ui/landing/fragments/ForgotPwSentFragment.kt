@@ -9,23 +9,25 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentForgotPwSentBinding
 import com.xeniac.warrantyroster_manager.models.Status
-import com.xeniac.warrantyroster_manager.ui.landing.LandingActivity
 import com.xeniac.warrantyroster_manager.ui.landing.LandingViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
+import dagger.hilt.android.AndroidEntryPoint
 import java.text.DecimalFormat
 
+@AndroidEntryPoint
 class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
 
     private var _binding: FragmentForgotPwSentBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var viewModel: LandingViewModel
+    private val viewModel: LandingViewModel by viewModels()
 
     private lateinit var email: String
     private var countDownTimer: CountDownTimer? = null
@@ -33,7 +35,6 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentForgotPwSentBinding.bind(view)
-        viewModel = (activity as LandingActivity).viewModel
 
         getEmailFromArgs()
         returnOnClick()

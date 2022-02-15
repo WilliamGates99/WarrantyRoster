@@ -10,30 +10,31 @@ import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentChangePasswordBinding
 import com.xeniac.warrantyroster_manager.models.Status
-import com.xeniac.warrantyroster_manager.ui.main.MainActivity
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.SettingsViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants
 import com.xeniac.warrantyroster_manager.utils.UserHelper.isRetypePasswordValid
 import com.xeniac.warrantyroster_manager.utils.UserHelper.passwordStrength
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
 
     private var _binding: FragmentChangePasswordBinding? = null
     private val binding get() = _binding!!
-    private lateinit var viewModel: SettingsViewModel
+    private val viewModel: SettingsViewModel by viewModels()
 
     private lateinit var newPassword: String
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentChangePasswordBinding.bind(view)
-        viewModel = (activity as MainActivity).settingsViewModel
 
         textInputsBackgroundColor()
         textInputsStrokeColor()
