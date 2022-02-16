@@ -41,7 +41,6 @@ object AppModule {
     fun provideSettingsPrefs(@ApplicationContext context: Context): SharedPreferences =
         context.getSharedPreferences(PREFERENCE_SETTINGS, MODE_PRIVATE)
 
-    @Singleton
     @Provides
     fun provideIsUserLoggedIn(@LoginPrefs loginPrefs: SharedPreferences) =
         loginPrefs.getBoolean(PREFERENCE_IS_LOGGED_IN_KEY, false)
