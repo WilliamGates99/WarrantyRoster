@@ -9,6 +9,7 @@
         <item name="colorSecondaryVariant">@color/navyBlue</item>
         <item name="colorOnSecondary">@color/whiteConstant</item>
         <item name="android:statusBarColor">@color/statusBarV21</item>
+        <item name="android:colorEdgeEffect">@color/skyBlue</item>
         <item name="snackbarStyle">@style/Theme.WarrantyRoster.Snackbar</item>
         <item name="snackbarTextViewStyle">@style/Theme.WarrantyRoster.Snackbar.TextView</item>
         <item name="snackbarButtonStyle">@style/Theme.WarrantyRoster.Snackbar.ActionButton</item>
