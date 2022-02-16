@@ -25,6 +25,7 @@ import com.xeniac.warrantyroster_manager.models.Status
 import com.xeniac.warrantyroster_manager.ui.main.MainActivity
 import com.xeniac.warrantyroster_manager.models.Warranty
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModel
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.Constants.TAPSELL_KEY
 import dagger.hilt.android.AndroidEntryPoint
@@ -278,6 +279,13 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
                                         setAction(requireContext().getString(R.string.network_error_retry)) { deleteWarrantyFromFirestore() }
                                         show()
                                     }
+                                }
+                                it.contains(ERROR_NETWORK_403) -> {
+                                    Snackbar.make(
+                                        binding.root,
+                                        requireContext().getString(R.string.network_error_403),
+                                        LENGTH_LONG
+                                    ).show()
                                 }
                                 else -> {
                                     hideLoadingAnimation()

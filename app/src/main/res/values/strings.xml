@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Warranty Roster</string>
     <string name="network_error_connection">Unable to connect to the internet.</string>
+    <string name="network_error_403">This service is not available in your region. Please consider changing your IP address by using a VPN.</string>
     <string name="network_error_failure">You\'re having network issues. Please try again later.</string>
     <string name="network_error_retry">Retry</string>
     <string name="intent_error_app_not_found">There is no app on the phone to handle this action.</string>

@@ -17,6 +17,7 @@ import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentForgotPwSentBinding
 import com.xeniac.warrantyroster_manager.models.Status
 import com.xeniac.warrantyroster_manager.ui.landing.LandingViewModel
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.DecimalFormat
@@ -87,6 +88,13 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
                                         setAction(requireContext().getString(R.string.network_error_retry)) { resendResetPasswordEmail() }
                                         show()
                                     }
+                                }
+                                it.contains(ERROR_NETWORK_403) -> {
+                                    Snackbar.make(
+                                        binding.root,
+                                        requireContext().getString(R.string.network_error_403),
+                                        LENGTH_LONG
+                                    ).show()
                                 }
                                 else -> {
                                     Snackbar.make(

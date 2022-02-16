@@ -18,7 +18,9 @@ import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentChangePasswordBinding
 import com.xeniac.warrantyroster_manager.models.Status
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.SettingsViewModel
-import com.xeniac.warrantyroster_manager.utils.Constants
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_CREDENTIALS
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_403
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.UserHelper.isRetypePasswordValid
 import com.xeniac.warrantyroster_manager.utils.UserHelper.passwordStrength
 import dagger.hilt.android.AndroidEntryPoint
@@ -198,7 +200,7 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
                         hideLoadingAnimation()
                         response.message?.let {
                             when {
-                                it.contains(Constants.ERROR_NETWORK_CONNECTION) -> {
+                                it.contains(ERROR_NETWORK_CONNECTION) -> {
                                     Snackbar.make(
                                         binding.root,
                                         requireContext().getString(R.string.network_error_connection),
@@ -210,7 +212,14 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
                                         show()
                                     }
                                 }
-                                it.contains(Constants.ERROR_FIREBASE_AUTH_CREDENTIALS) -> {
+                                it.contains(ERROR_NETWORK_403) -> {
+                                    Snackbar.make(
+                                        binding.root,
+                                        requireContext().getString(R.string.network_error_403),
+                                        LENGTH_LONG
+                                    ).show()
+                                }
+                                it.contains(ERROR_FIREBASE_AUTH_CREDENTIALS) -> {
                                     Snackbar.make(
                                         binding.root,
                                         requireContext().getString(R.string.change_password_error_credentials),
@@ -251,7 +260,7 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
                         hideLoadingAnimation()
                         response.message?.let {
                             when {
-                                it.contains(Constants.ERROR_NETWORK_CONNECTION) -> {
+                                it.contains(ERROR_NETWORK_CONNECTION) -> {
                                     Snackbar.make(
                                         binding.root,
                                         requireContext().getString(R.string.network_error_connection),
@@ -262,6 +271,13 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
                                         }
                                         show()
                                     }
+                                }
+                                it.contains(ERROR_NETWORK_403) -> {
+                                    Snackbar.make(
+                                        binding.root,
+                                        requireContext().getString(R.string.network_error_403),
+                                        LENGTH_LONG
+                                    ).show()
                                 }
                                 else -> {
                                     Snackbar.make(

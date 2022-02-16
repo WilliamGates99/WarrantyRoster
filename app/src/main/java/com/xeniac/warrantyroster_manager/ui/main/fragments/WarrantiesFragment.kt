@@ -16,6 +16,7 @@ import com.xeniac.warrantyroster_manager.models.Status
 import com.xeniac.warrantyroster_manager.models.Warranty
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_EMPTY_WARRANTY_LIST
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_403
 import com.xeniac.warrantyroster_manager.utils.Constants.TAPSELL_KEY
 import dagger.hilt.android.AndroidEntryPoint
 import ir.tapsell.plus.TapsellPlus
@@ -92,6 +93,11 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
                             when {
                                 it.contains(ERROR_EMPTY_WARRANTY_LIST) -> {
                                     showWarrantiesEmptyList()
+                                }
+                                it.contains(ERROR_NETWORK_403) -> {
+                                    binding.tvNetworkError.text =
+                                        requireContext().getString(R.string.network_error_403)
+                                    showNetworkError()
                                 }
                                 else -> {
                                     binding.tvNetworkError.text =

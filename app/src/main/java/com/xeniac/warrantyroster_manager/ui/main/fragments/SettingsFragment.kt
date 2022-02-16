@@ -23,6 +23,7 @@ import com.xeniac.warrantyroster_manager.di.CurrentLanguage
 import com.xeniac.warrantyroster_manager.models.Status
 import com.xeniac.warrantyroster_manager.ui.landing.LandingActivity
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.SettingsViewModel
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.Constants.SETTINGS_NATIVE_ZONE_ID
 import com.xeniac.warrantyroster_manager.utils.Constants.TAPSELL_KEY
@@ -250,6 +251,13 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                                         setAction(requireContext().getString(R.string.network_error_retry)) { sendVerificationEmail() }
                                         show()
                                     }
+                                }
+                                it.contains(ERROR_NETWORK_403) -> {
+                                    Snackbar.make(
+                                        binding.root,
+                                        requireContext().getString(R.string.network_error_403),
+                                        LENGTH_LONG
+                                    ).show()
                                 }
                                 else -> {
                                     Snackbar.make(
