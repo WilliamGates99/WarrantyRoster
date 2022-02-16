@@ -23,6 +23,9 @@ import com.xeniac.warrantyroster_manager.ui.main.MainActivity
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
+import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_REGISTER_EMAIL
+import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_REGISTER_PASSWORD
+import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_REGISTER_RETYPE_PASSWORD
 import com.xeniac.warrantyroster_manager.utils.Constants.URL_PRIVACY_POLICY
 import com.xeniac.warrantyroster_manager.utils.UserHelper.isEmailValid
 import com.xeniac.warrantyroster_manager.utils.UserHelper.isRetypePasswordValid
@@ -53,6 +56,45 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        _binding?.let {
+            val email = binding.tiEditEmail.text.toString().trim().lowercase()
+            val password = binding.tiEditPassword.text.toString().trim()
+            val retypePassword = binding.tiEditRetypePassword.text.toString().trim()
+
+            if (email.isNotBlank()) {
+                outState.putString(SAVE_INSTANCE_REGISTER_EMAIL, email)
+            }
+
+            if (password.isNotBlank()) {
+                outState.putString(SAVE_INSTANCE_REGISTER_PASSWORD, password)
+            }
+
+            if (retypePassword.isNotBlank()) {
+                outState.putString(SAVE_INSTANCE_REGISTER_RETYPE_PASSWORD, retypePassword)
+            }
+        }
+
+        super.onSaveInstanceState(outState)
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        savedInstanceState?.let {
+            it.getString(SAVE_INSTANCE_REGISTER_EMAIL)?.let { restoredEmail ->
+                binding.tiEditEmail.setText(restoredEmail)
+            }
+
+            it.getString(SAVE_INSTANCE_REGISTER_PASSWORD)?.let { restoredPassword ->
+                binding.tiEditPassword.setText(restoredPassword)
+            }
+
+            it.getString(SAVE_INSTANCE_REGISTER_RETYPE_PASSWORD)?.let { restoredRetypePassword ->
+                binding.tiEditRetypePassword.setText(restoredRetypePassword)
+            }
+        }
+        super.onViewStateRestored(savedInstanceState)
     }
 
     private fun textInputsBackgroundColor() {

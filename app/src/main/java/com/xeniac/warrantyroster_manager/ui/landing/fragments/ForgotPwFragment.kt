@@ -21,6 +21,7 @@ import com.xeniac.warrantyroster_manager.ui.landing.LandingViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_ACCOUNT_NOT_FOUND
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
+import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_FORGOT_PW_EMAIL
 import com.xeniac.warrantyroster_manager.utils.UserHelper.isEmailValid
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -47,6 +48,27 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        _binding?.let {
+            val email = binding.tiEditEmail.text.toString().trim().lowercase()
+
+            if (email.isNotBlank()) {
+                outState.putString(SAVE_INSTANCE_FORGOT_PW_EMAIL, email)
+            }
+        }
+
+        super.onSaveInstanceState(outState)
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        savedInstanceState?.let {
+            it.getString(SAVE_INSTANCE_FORGOT_PW_EMAIL)?.let { restoredEmail ->
+                binding.tiEditEmail.setText(restoredEmail)
+            }
+        }
+        super.onViewStateRestored(savedInstanceState)
     }
 
     private fun textInputsBackgroundColor() =

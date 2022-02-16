@@ -63,4 +63,16 @@ object Constants {
         "The password is invalid or the user does not have a password"
     const val ERROR_EMPTY_CATEGORY_LIST = "Category list is empty"
     const val ERROR_EMPTY_WARRANTY_LIST = "Warranty list is empty"
+
+    //Login Fragment SaveInstanceState Keys
+    const val SAVE_INSTANCE_LOGIN_EMAIL = "save_instance_login_email"
+    const val SAVE_INSTANCE_LOGIN_PASSWORD = "save_instance_login_password"
+
+    //Register Fragment SaveInstanceState Keys
+    const val SAVE_INSTANCE_REGISTER_EMAIL = "save_instance_register_email"
+    const val SAVE_INSTANCE_REGISTER_PASSWORD = "save_instance_register_password"
+    const val SAVE_INSTANCE_REGISTER_RETYPE_PASSWORD = "save_instance_register_retype_password"
+
+    //Forgot PW Fragment SaveInstanceState Keys
+    const val SAVE_INSTANCE_FORGOT_PW_EMAIL = "save_instance_forgot_pw_email"
 }

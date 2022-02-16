@@ -24,6 +24,8 @@ import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_ACC
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_CREDENTIALS
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
+import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_LOGIN_EMAIL
+import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_LOGIN_PASSWORD
 import com.xeniac.warrantyroster_manager.utils.UserHelper.isEmailValid
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -51,6 +53,36 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        _binding?.let {
+            val email = binding.tiEditEmail.text.toString().trim().lowercase()
+            val password = binding.tiEditPassword.text.toString().trim()
+
+            if (email.isNotBlank()) {
+                outState.putString(SAVE_INSTANCE_LOGIN_EMAIL, email)
+            }
+
+            if (password.isNotBlank()) {
+                outState.putString(SAVE_INSTANCE_LOGIN_PASSWORD, password)
+            }
+        }
+
+        super.onSaveInstanceState(outState)
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        savedInstanceState?.let {
+            it.getString(SAVE_INSTANCE_LOGIN_EMAIL)?.let { restoredEmail ->
+                binding.tiEditEmail.setText(restoredEmail)
+            }
+
+            it.getString(SAVE_INSTANCE_LOGIN_PASSWORD)?.let { restoredPassword ->
+                binding.tiEditPassword.setText(restoredPassword)
+            }
+        }
+        super.onViewStateRestored(savedInstanceState)
     }
 
     private fun textInputsBackgroundColor() {
