@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import coil.ImageLoader
 import coil.load
 import coil.request.CachePolicy
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -24,7 +25,6 @@ import com.xeniac.warrantyroster_manager.models.Status
 import com.xeniac.warrantyroster_manager.ui.main.MainActivity
 import com.xeniac.warrantyroster_manager.models.Warranty
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModel
-import com.xeniac.warrantyroster_manager.utils.CoilHelper.getImageLoader
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.Constants.TAPSELL_KEY
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,6 +35,7 @@ import ir.tapsell.plus.model.AdNetworks
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
@@ -42,6 +43,9 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
     private var _binding: FragmentWarrantyDetailsBinding? = null
     private val binding get() = _binding!!
     private lateinit var viewModel: MainViewModel
+
+    @Inject
+    lateinit var imageLoader: ImageLoader
 
     private lateinit var warranty: Warranty
 
@@ -191,7 +195,7 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
         val category = viewModel.getCategoryById(warranty.categoryId!!)
 
         category?.let {
-            binding.ivIcon.load(it.icon, getImageLoader(requireContext())) {
+            binding.ivIcon.load(it.icon, imageLoader) {
                 memoryCachePolicy(CachePolicy.ENABLED)
                 diskCachePolicy(CachePolicy.ENABLED)
                 networkCachePolicy(CachePolicy.ENABLED)

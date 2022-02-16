@@ -9,21 +9,25 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import coil.ImageLoader
 import coil.load
 import coil.request.CachePolicy
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.ListAdContainerBinding
 import com.xeniac.warrantyroster_manager.databinding.ListWarrantyBinding
+import com.xeniac.warrantyroster_manager.di.CategoryTitleMapKey
 import com.xeniac.warrantyroster_manager.models.ListItemType
 import com.xeniac.warrantyroster_manager.models.Warranty
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModel
-import com.xeniac.warrantyroster_manager.utils.CategoryHelper.getCategoryTitleMapKey
-import com.xeniac.warrantyroster_manager.utils.CoilHelper.getImageLoader
 import com.xeniac.warrantyroster_manager.utils.Constants.VIEW_TYPE_AD
 import com.xeniac.warrantyroster_manager.utils.Constants.VIEW_TYPE_WARRANTY
 import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_NATIVE_ZONE_ID
 import com.xeniac.warrantyroster_manager.utils.DateHelper.getDayWithSuffix
 import com.xeniac.warrantyroster_manager.utils.DateHelper.getDaysUntilExpiry
+import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
+import dagger.hilt.android.EntryPointAccessors
+import dagger.hilt.components.SingletonComponent
 import ir.tapsell.plus.AdHolder
 import ir.tapsell.plus.AdRequestCallback
 import ir.tapsell.plus.AdShowListener
@@ -39,10 +43,36 @@ class WarrantyAdapter(
     private val clickInterface: WarrantyListClickInterface
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
+    private var categoryTitleMapKey: String
+    private var imageLoader: ImageLoader
+
     private var requestAdCounter = 0
 
     companion object {
         private const val TAG = "WarrantyAdapter"
+    }
+
+    @EntryPoint
+    @InstallIn(SingletonComponent::class)
+    interface ImageLoaderProviderEntryPoint {
+        fun getImageLoader(): ImageLoader
+    }
+
+    @EntryPoint
+    @InstallIn(SingletonComponent::class)
+    interface CategoryTitleMapKeyProviderEntryPoint {
+        @CategoryTitleMapKey
+        fun getCategoryTitleMapKey(): String
+    }
+
+    init {
+        val categoryTitleMapKeyProviderEntryPoint = EntryPointAccessors
+            .fromApplication(context, CategoryTitleMapKeyProviderEntryPoint::class.java)
+        val imageLoaderProviderEntryPoint = EntryPointAccessors
+            .fromApplication(context, ImageLoaderProviderEntryPoint::class.java)
+
+        categoryTitleMapKey = categoryTitleMapKeyProviderEntryPoint.getCategoryTitleMapKey()
+        imageLoader = imageLoaderProviderEntryPoint.getImageLoader()
     }
 
     private val diffCallback = object : DiffUtil.ItemCallback<Warranty>() {
@@ -133,9 +163,9 @@ class WarrantyAdapter(
             }
 
             category?.let {
-                binding.categoryTitle = it.title[getCategoryTitleMapKey(context)]
+                binding.categoryTitle = it.title[categoryTitleMapKey]
 
-                binding.ivIcon.load(it.icon, getImageLoader(context)) {
+                binding.ivIcon.load(it.icon, imageLoader) {
                     memoryCachePolicy(CachePolicy.ENABLED)
                     diskCachePolicy(CachePolicy.ENABLED)
                     networkCachePolicy(CachePolicy.ENABLED)

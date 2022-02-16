@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import coil.ImageLoader
 import coil.load
 import coil.request.CachePolicy
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -23,10 +24,9 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentEditWarrantyBinding
+import com.xeniac.warrantyroster_manager.di.CategoryTitleMapKey
 import com.xeniac.warrantyroster_manager.models.*
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModel
-import com.xeniac.warrantyroster_manager.utils.CategoryHelper.getCategoryTitleMapKey
-import com.xeniac.warrantyroster_manager.utils.CoilHelper.getImageLoader
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.Constants.FRAGMENT_TAG_EDIT_CALENDAR_EXPIRY
 import com.xeniac.warrantyroster_manager.utils.Constants.FRAGMENT_TAG_EDIT_CALENDAR_STARTING
@@ -36,6 +36,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
@@ -43,6 +44,13 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
     private var _binding: FragmentEditWarrantyBinding? = null
     private val binding get() = _binding!!
     private lateinit var viewModel: MainViewModel
+
+    @Inject
+    @CategoryTitleMapKey
+    lateinit var categoryTitleMapKey: String
+
+    @Inject
+    lateinit var imageLoader: ImageLoader
 
     private lateinit var warranty: Warranty
 
@@ -183,7 +191,7 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
             selectedCategory = viewModel.getCategoryByTitle(categoryTitle)
 
             selectedCategory?.let {
-                binding.ivIconCategory.load(it.icon, getImageLoader(requireContext())) {
+                binding.ivIconCategory.load(it.icon, imageLoader) {
                     memoryCachePolicy(CachePolicy.ENABLED)
                     diskCachePolicy(CachePolicy.ENABLED)
                     networkCachePolicy(CachePolicy.ENABLED)
@@ -331,8 +339,8 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
         }
 
         selectedCategory?.let {
-            binding.tiDdCategory.setText(it.title[getCategoryTitleMapKey(requireContext())])
-            binding.ivIconCategory.load(it.icon, getImageLoader(requireContext())) {
+            binding.tiDdCategory.setText(it.title[categoryTitleMapKey])
+            binding.ivIconCategory.load(it.icon, imageLoader) {
                 memoryCachePolicy(CachePolicy.ENABLED)
                 diskCachePolicy(CachePolicy.ENABLED)
                 networkCachePolicy(CachePolicy.ENABLED)

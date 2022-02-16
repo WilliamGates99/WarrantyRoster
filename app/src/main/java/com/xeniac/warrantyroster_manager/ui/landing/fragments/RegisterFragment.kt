@@ -12,7 +12,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
@@ -33,11 +33,12 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
 
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: LandingViewModel by viewModels()
+    private lateinit var viewModel: LandingViewModel
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentRegisterBinding.bind(view)
+        viewModel = ViewModelProvider(requireActivity())[LandingViewModel::class.java]
 
         textInputsBackgroundColor()
         textInputsStrokeColor()

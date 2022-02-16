@@ -3,6 +3,8 @@ package com.xeniac.warrantyroster_manager.di
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
+import coil.ImageLoader
+import coil.decode.SvgDecoder
 import com.xeniac.warrantyroster_manager.repositories.MainRepository
 import com.xeniac.warrantyroster_manager.repositories.UserRepository
 import com.xeniac.warrantyroster_manager.utils.Constants
@@ -58,6 +60,18 @@ object AppModule {
     @Provides
     fun provideCurrentTheme(@SettingsPrefs settingsPrefs: SharedPreferences) =
         settingsPrefs.getInt(Constants.PREFERENCE_THEME_KEY, 0)
+
+    @Singleton
+    @Provides
+    fun provideCoilImageLoader(@ApplicationContext context: Context) =
+        ImageLoader.Builder(context).componentRegistry { add(SvgDecoder(context)) }.build()
+
+    @CategoryTitleMapKey
+    @Provides
+    fun provideCategoryTitleMapKey(
+        @CurrentLanguage currentLanguage: String,
+        @CurrentCountry currentCountry: String
+    ) = "${currentLanguage}-${currentCountry}"
 }
 
 @Qualifier
@@ -75,3 +89,7 @@ annotation class CurrentLanguage
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
 annotation class CurrentCountry
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class CategoryTitleMapKey

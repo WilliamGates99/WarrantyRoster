@@ -9,7 +9,7 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
 import com.google.android.material.snackbar.Snackbar
@@ -26,7 +26,7 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
 
     private var _binding: FragmentForgotPwSentBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: LandingViewModel by viewModels()
+    private lateinit var viewModel: LandingViewModel
 
     private lateinit var email: String
     private var countDownTimer: CountDownTimer? = null
@@ -34,6 +34,7 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentForgotPwSentBinding.bind(view)
+        viewModel = ViewModelProvider(requireActivity())[LandingViewModel::class.java]
 
         getEmailFromArgs()
         returnOnClick()
