@@ -6,6 +6,10 @@ import java.util.concurrent.TimeUnit
 
 object DateHelper {
 
+    fun isStartingDateValid(startingDateInMillis: Long, expiryDateInMillis: Long): Boolean =
+        expiryDateInMillis >= startingDateInMillis
+
+    //TODO REMOVE
     fun isStartingDateValid(startingCalendar: Calendar, expiryCalendar: Calendar): Boolean =
         expiryCalendar >= startingCalendar
 
