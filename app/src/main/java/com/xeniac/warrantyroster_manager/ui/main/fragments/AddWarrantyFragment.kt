@@ -176,13 +176,17 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
             }
 
             it.getLong(SAVE_INSTANCE_ADD_WARRANTY_STARTING_DATE_IN_MILLIS).let { restoredDate ->
-                selectedStartingDateInMillis = restoredDate
-                setStartingDate()
+                if (restoredDate != 0L) {
+                    selectedStartingDateInMillis = restoredDate
+                    setStartingDate()
+                }
             }
 
             it.getLong(SAVE_INSTANCE_ADD_WARRANTY_EXPIRY_DATE_IN_MILLIS).let { restoredDate ->
-                selectedExpiryDateInMillis = restoredDate
-                setExpiryDate()
+                if (restoredDate != 0L) {
+                    selectedExpiryDateInMillis = restoredDate
+                    setExpiryDate()
+                }
             }
         }
 
