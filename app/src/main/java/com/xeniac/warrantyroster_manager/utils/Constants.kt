@@ -84,4 +84,12 @@ object Constants {
     const val SAVE_INSTANCE_CHANGE_PASSWORD_CURRENT = "save_instance_change_password_current"
     const val SAVE_INSTANCE_CHANGE_PASSWORD_NEW = "save_instance_change_password_new"
     const val SAVE_INSTANCE_CHANGE_PASSWORD_RETYPE = "save_instance_change_password_retype"
+
+    //Add Warranty Fragment SaveInstanceState Keys
+    const val SAVE_INSTANCE_ADD_WARRANTY_TITLE = "save_instance_add_warranty_title"
+    const val SAVE_INSTANCE_ADD_WARRANTY_BRAND = "save_instance_add_warranty_brand"
+    const val SAVE_INSTANCE_ADD_WARRANTY_MODEL = "save_instance_add_warranty_model"
+    const val SAVE_INSTANCE_ADD_WARRANTY_SERIAL = "save_instance_add_warranty_serial"
+    const val SAVE_INSTANCE_ADD_WARRANTY_DESCRIPTION = "save_instance_add_warranty_description"
+    const val SAVE_INSTANCE_ADD_WARRANTY_CATEGORY_ID = "save_instance_add_warranty_category_id"
 }

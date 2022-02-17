@@ -24,6 +24,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentAddWarrantyBinding
+import com.xeniac.warrantyroster_manager.di.CategoryTitleMapKey
 import com.xeniac.warrantyroster_manager.models.Category
 import com.xeniac.warrantyroster_manager.models.Status
 import com.xeniac.warrantyroster_manager.models.WarrantyInput
@@ -32,6 +33,12 @@ import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.Constants.FRAGMENT_TAG_ADD_CALENDAR_EXPIRY
 import com.xeniac.warrantyroster_manager.utils.Constants.FRAGMENT_TAG_ADD_CALENDAR_STARTING
+import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_ADD_WARRANTY_BRAND
+import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_ADD_WARRANTY_CATEGORY_ID
+import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_ADD_WARRANTY_DESCRIPTION
+import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_ADD_WARRANTY_MODEL
+import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_ADD_WARRANTY_SERIAL
+import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_ADD_WARRANTY_TITLE
 import com.xeniac.warrantyroster_manager.utils.DateHelper.isStartingDateValid
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.DecimalFormat
@@ -47,6 +54,10 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
 
     @Inject
     lateinit var imageLoader: ImageLoader
+
+    @Inject
+    @CategoryTitleMapKey
+    lateinit var categoryTitleMapKey: String
 
     private val decimalFormat = DecimalFormat("00")
     private var selectedCategory: Category? = null
@@ -78,6 +89,84 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
     override fun onResume() {
         super.onResume()
         categoryDropDown()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        _binding?.let {
+            val title = binding.tiEditTitle.text.toString().trim()
+            val brand = binding.tiEditBrand.text.toString().trim()
+            val model = binding.tiEditModel.text.toString().trim()
+            val serialNumber = binding.tiEditSerial.text.toString().trim()
+            val description = binding.tiEditDescription.text.toString().trim()
+            val categoryId = selectedCategory?.id ?: "10"
+
+            //TODO
+//            val startingDate = "asd"
+//            val expiryDate = "asd"
+
+            if (title.isNotBlank()) {
+                outState.putString(SAVE_INSTANCE_ADD_WARRANTY_TITLE, title)
+            }
+
+            if (brand.isNotBlank()) {
+                outState.putString(SAVE_INSTANCE_ADD_WARRANTY_BRAND, brand)
+            }
+
+            if (model.isNotBlank()) {
+                outState.putString(SAVE_INSTANCE_ADD_WARRANTY_MODEL, model)
+            }
+
+            if (serialNumber.isNotBlank()) {
+                outState.putString(SAVE_INSTANCE_ADD_WARRANTY_SERIAL, serialNumber)
+            }
+
+            if (description.isNotBlank()) {
+                outState.putString(SAVE_INSTANCE_ADD_WARRANTY_DESCRIPTION, description)
+            }
+
+            outState.putString(SAVE_INSTANCE_ADD_WARRANTY_CATEGORY_ID, categoryId)
+        }
+
+        super.onSaveInstanceState(outState)
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        savedInstanceState?.let {
+            it.getString(SAVE_INSTANCE_ADD_WARRANTY_TITLE)?.let { restoredTitle ->
+                binding.tiEditTitle.setText(restoredTitle)
+            }
+
+            it.getString(SAVE_INSTANCE_ADD_WARRANTY_BRAND)?.let { restoredBrand ->
+                binding.tiEditBrand.setText(restoredBrand)
+            }
+
+            it.getString(SAVE_INSTANCE_ADD_WARRANTY_MODEL)?.let { restoredModel ->
+                binding.tiEditModel.setText(restoredModel)
+            }
+
+            it.getString(SAVE_INSTANCE_ADD_WARRANTY_SERIAL)?.let { restoredSerial ->
+                binding.tiEditSerial.setText(restoredSerial)
+            }
+
+            it.getString(SAVE_INSTANCE_ADD_WARRANTY_DESCRIPTION)?.let { restoredDescription ->
+                binding.tiEditDescription.setText(restoredDescription)
+            }
+
+            it.getString(SAVE_INSTANCE_ADD_WARRANTY_CATEGORY_ID)?.let { restoredCategoryId ->
+                selectedCategory = viewModel.getCategoryById(restoredCategoryId)
+
+                selectedCategory?.let { category ->
+                    binding.tiDdCategory.setText(category.title[categoryTitleMapKey])
+                    binding.ivIconCategory.load(category.icon, imageLoader) {
+                        memoryCachePolicy(CachePolicy.ENABLED)
+                        diskCachePolicy(CachePolicy.ENABLED)
+                        networkCachePolicy(CachePolicy.ENABLED)
+                    }
+                }
+            }
+        }
+
+        super.onViewStateRestored(savedInstanceState)
     }
 
     private fun textInputsBackgroundColor() {
@@ -301,11 +390,11 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
             binding.tiLayoutTitle.requestFocus()
             binding.tiLayoutTitle.boxStrokeColor =
                 ContextCompat.getColor(requireContext(), R.color.red)
-        } else if (startingCalendar == null) {
+        } else if (startingCalendar == null) { //TODO CHECK THESE TWO CONDITIONS
             binding.tiLayoutDateStarting.requestFocus()
             binding.tiLayoutDateStarting.boxStrokeColor =
                 ContextCompat.getColor(requireContext(), R.color.red)
-        } else if (expiryCalendar == null) {
+        } else if (expiryCalendar == null) { //TODO CHECK THESE TWO CONDITIONS
             binding.tiLayoutDateExpiry.requestFocus()
             binding.tiLayoutDateExpiry.boxStrokeColor =
                 ContextCompat.getColor(requireContext(), R.color.red)
