@@ -75,4 +75,8 @@ object Constants {
 
     //Forgot PW Fragment SaveInstanceState Keys
     const val SAVE_INSTANCE_FORGOT_PW_EMAIL = "save_instance_forgot_pw_email"
+
+    //Change Email Fragment SaveInstanceState Keys
+    const val SAVE_INSTANCE_CHANGE_EMAIL_PASSWORD = "save_instance_change_email_password"
+    const val SAVE_INSTANCE_CHANGE_EMAIL_NEW_EMAIL = "save_instance_change_email_new_email"
 }
