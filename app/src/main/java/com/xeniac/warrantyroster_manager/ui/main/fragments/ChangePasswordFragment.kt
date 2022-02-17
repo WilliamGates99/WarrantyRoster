@@ -21,6 +21,9 @@ import com.xeniac.warrantyroster_manager.ui.main.viewmodels.SettingsViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_CREDENTIALS
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
+import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_CHANGE_PASSWORD_CURRENT
+import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_CHANGE_PASSWORD_NEW
+import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_CHANGE_PASSWORD_RETYPE
 import com.xeniac.warrantyroster_manager.utils.UserHelper.isRetypePasswordValid
 import com.xeniac.warrantyroster_manager.utils.UserHelper.passwordStrength
 import dagger.hilt.android.AndroidEntryPoint
@@ -50,6 +53,45 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        _binding?.let {
+            val currentPassword = binding.tiEditCurrentPassword.text.toString().trim()
+            val newPassword = binding.tiEditNewPassword.text.toString().trim()
+            val retypeNewPassword = binding.tiEditRetypePassword.text.toString().trim()
+
+            if (currentPassword.isNotBlank()) {
+                outState.putString(SAVE_INSTANCE_CHANGE_PASSWORD_CURRENT, currentPassword)
+            }
+
+            if (newPassword.isNotBlank()) {
+                outState.putString(SAVE_INSTANCE_CHANGE_PASSWORD_NEW, newPassword)
+            }
+
+            if (retypeNewPassword.isNotBlank()) {
+                outState.putString(SAVE_INSTANCE_CHANGE_PASSWORD_RETYPE, retypeNewPassword)
+            }
+        }
+
+        super.onSaveInstanceState(outState)
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        savedInstanceState?.let {
+            it.getString(SAVE_INSTANCE_CHANGE_PASSWORD_CURRENT)?.let { restoredCurrentPassword ->
+                binding.tiEditCurrentPassword.setText(restoredCurrentPassword)
+            }
+
+            it.getString(SAVE_INSTANCE_CHANGE_PASSWORD_NEW)?.let { restoredNewPassword ->
+                binding.tiEditNewPassword.setText(restoredNewPassword)
+            }
+
+            it.getString(SAVE_INSTANCE_CHANGE_PASSWORD_RETYPE)?.let { restoredRetypePassword ->
+                binding.tiEditRetypePassword.setText(restoredRetypePassword)
+            }
+        }
+        super.onViewStateRestored(savedInstanceState)
     }
 
     private fun textInputsBackgroundColor() {

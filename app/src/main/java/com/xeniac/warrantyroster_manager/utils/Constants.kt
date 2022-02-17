@@ -79,4 +79,9 @@ object Constants {
     //Change Email Fragment SaveInstanceState Keys
     const val SAVE_INSTANCE_CHANGE_EMAIL_PASSWORD = "save_instance_change_email_password"
     const val SAVE_INSTANCE_CHANGE_EMAIL_NEW_EMAIL = "save_instance_change_email_new_email"
+
+    //Change Password Fragment SaveInstanceState Keys
+    const val SAVE_INSTANCE_CHANGE_PASSWORD_CURRENT = "save_instance_change_password_current"
+    const val SAVE_INSTANCE_CHANGE_PASSWORD_NEW = "save_instance_change_password_new"
+    const val SAVE_INSTANCE_CHANGE_PASSWORD_RETYPE = "save_instance_change_password_retype"
 }
