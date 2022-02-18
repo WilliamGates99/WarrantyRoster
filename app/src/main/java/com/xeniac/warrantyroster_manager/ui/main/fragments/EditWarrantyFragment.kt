@@ -31,6 +31,14 @@ import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.Constants.FRAGMENT_TAG_EDIT_CALENDAR_EXPIRY
 import com.xeniac.warrantyroster_manager.utils.Constants.FRAGMENT_TAG_EDIT_CALENDAR_STARTING
+import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_EDIT_WARRANTY_BRAND
+import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_EDIT_WARRANTY_CATEGORY_ID
+import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_EDIT_WARRANTY_DESCRIPTION
+import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_EDIT_WARRANTY_EXPIRY_DATE_IN_MILLIS
+import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_EDIT_WARRANTY_MODEL
+import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_EDIT_WARRANTY_SERIAL
+import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_EDIT_WARRANTY_STARTING_DATE_IN_MILLIS
+import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_EDIT_WARRANTY_TITLE
 import com.xeniac.warrantyroster_manager.utils.DateHelper.getDaysUntilExpiry
 import com.xeniac.warrantyroster_manager.utils.DateHelper.isStartingDateValid
 import dagger.hilt.android.AndroidEntryPoint
@@ -56,12 +64,13 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
     private lateinit var warranty: Warranty
 
     private val decimalFormat = DecimalFormat("00")
-    private val dateFormat = SimpleDateFormat("yyyy-M-dd", Locale.getDefault())
     private var selectedCategory: Category? = null
-    private var startingCalendarInput: Calendar? = null
-    private var expiryCalendarInput: Calendar? = null
-    private lateinit var startingDateInput: String
-    private lateinit var expiryDateInput: String
+
+    private var selectedStartingDateInMillis = 0L
+    private var startingDateInput: String? = null
+
+    private var selectedExpiryDateInMillis = 0L
+    private var expiryDateInput: String? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -71,8 +80,8 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
         textInputsBackgroundColor()
         textInputsStrokeColor()
         categoryDropDownSelection()
-        startingDatePicker()
-        expiryDatePicker()
+        startingDatePickerOnFocusListener()
+        expiryDatePickerOnFocusListener()
         returnToWarrantyDetailsFragment()
         getWarranty()
         editWarrantyOnClick()
@@ -88,6 +97,104 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
     override fun onResume() {
         super.onResume()
         categoryDropDown()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        _binding?.let {
+            val title = binding.tiEditTitle.text.toString().trim()
+            val brand = binding.tiEditBrand.text.toString().trim()
+            val model = binding.tiEditModel.text.toString().trim()
+            val serialNumber = binding.tiEditSerial.text.toString().trim()
+            val description = binding.tiEditDescription.text.toString().trim()
+            val categoryId = selectedCategory?.id ?: "10"
+
+            if (title.isNotBlank()) {
+                outState.putString(SAVE_INSTANCE_EDIT_WARRANTY_TITLE, title)
+            }
+
+            if (brand.isNotBlank()) {
+                outState.putString(SAVE_INSTANCE_EDIT_WARRANTY_BRAND, brand)
+            }
+
+            if (model.isNotBlank()) {
+                outState.putString(SAVE_INSTANCE_EDIT_WARRANTY_MODEL, model)
+            }
+
+            if (serialNumber.isNotBlank()) {
+                outState.putString(SAVE_INSTANCE_EDIT_WARRANTY_SERIAL, serialNumber)
+            }
+
+            if (description.isNotBlank()) {
+                outState.putString(SAVE_INSTANCE_EDIT_WARRANTY_DESCRIPTION, description)
+            }
+
+            outState.putString(SAVE_INSTANCE_EDIT_WARRANTY_CATEGORY_ID, categoryId)
+
+            outState.putLong(
+                SAVE_INSTANCE_EDIT_WARRANTY_STARTING_DATE_IN_MILLIS,
+                selectedStartingDateInMillis
+            )
+
+            outState.putLong(
+                SAVE_INSTANCE_EDIT_WARRANTY_EXPIRY_DATE_IN_MILLIS,
+                selectedExpiryDateInMillis
+            )
+        }
+
+        super.onSaveInstanceState(outState)
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        savedInstanceState?.let {
+            it.getString(SAVE_INSTANCE_EDIT_WARRANTY_TITLE)?.let { restoredTitle ->
+                binding.tiEditTitle.setText(restoredTitle)
+            }
+
+            it.getString(SAVE_INSTANCE_EDIT_WARRANTY_BRAND)?.let { restoredBrand ->
+                binding.tiEditBrand.setText(restoredBrand)
+            }
+
+            it.getString(SAVE_INSTANCE_EDIT_WARRANTY_MODEL)?.let { restoredModel ->
+                binding.tiEditModel.setText(restoredModel)
+            }
+
+            it.getString(SAVE_INSTANCE_EDIT_WARRANTY_SERIAL)?.let { restoredSerial ->
+                binding.tiEditSerial.setText(restoredSerial)
+            }
+
+            it.getString(SAVE_INSTANCE_EDIT_WARRANTY_DESCRIPTION)?.let { restoredDescription ->
+                binding.tiEditDescription.setText(restoredDescription)
+            }
+
+            it.getString(SAVE_INSTANCE_EDIT_WARRANTY_CATEGORY_ID)?.let { restoredCategoryId ->
+                selectedCategory = viewModel.getCategoryById(restoredCategoryId)
+
+                selectedCategory?.let { category ->
+                    binding.tiDdCategory.setText(category.title[categoryTitleMapKey])
+                    binding.ivIconCategory.load(category.icon, imageLoader) {
+                        memoryCachePolicy(CachePolicy.ENABLED)
+                        diskCachePolicy(CachePolicy.ENABLED)
+                        networkCachePolicy(CachePolicy.ENABLED)
+                    }
+                }
+            }
+
+            it.getLong(SAVE_INSTANCE_EDIT_WARRANTY_STARTING_DATE_IN_MILLIS).let { restoredDate ->
+                if (restoredDate != 0L) {
+                    selectedStartingDateInMillis = restoredDate
+                    setStartingDate()
+                }
+            }
+
+            it.getLong(SAVE_INSTANCE_EDIT_WARRANTY_EXPIRY_DATE_IN_MILLIS).let { restoredDate ->
+                if (restoredDate != 0L) {
+                    selectedExpiryDateInMillis = restoredDate
+                    setExpiryDate()
+                }
+            }
+        }
+
+        super.onViewStateRestored(savedInstanceState)
     }
 
     private fun textInputsBackgroundColor() {
@@ -192,15 +299,11 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
             selectedCategory = viewModel.getCategoryByTitle(categoryTitle)
 
             selectedCategory?.let {
-                binding.ivIconCategory.load(it.icon, imageLoader) {
-                    memoryCachePolicy(CachePolicy.ENABLED)
-                    diskCachePolicy(CachePolicy.ENABLED)
-                    networkCachePolicy(CachePolicy.ENABLED)
-                }
+                loadCategoryIcon(it.icon)
             }
         }
 
-    private fun startingDatePicker() {
+    private fun startingDatePickerOnFocusListener() {
         binding.tiEditDateStarting.inputType = InputType.TYPE_NULL
         binding.tiEditDateStarting.keyListener = null
 
@@ -211,7 +314,7 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
         }
     }
 
-    private fun expiryDatePicker() {
+    private fun expiryDatePickerOnFocusListener() {
         binding.tiEditDateExpiry.inputType = InputType.TYPE_NULL
         binding.tiEditDateExpiry.keyListener = null
 
@@ -223,30 +326,22 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
     }
 
     private fun openStartingDatePicker() {
-        val startingDP = MaterialDatePicker.Builder.datePicker()
-            .setTitleText(requireContext().getString(R.string.edit_warranty_title_date_picker_starting))
-            .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
-            .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
-            .build()
+        val datePickerBuilder = MaterialDatePicker.Builder.datePicker().apply {
+            setTitleText(requireContext().getString(R.string.edit_warranty_title_date_picker_starting))
+            setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
+        }
+
+        val startingDP = if (selectedStartingDateInMillis == 0L) {
+            datePickerBuilder.setSelection(MaterialDatePicker.todayInUtcMilliseconds()).build()
+        } else {
+            datePickerBuilder.setSelection(selectedStartingDateInMillis).build()
+        }
 
         startingDP.show(parentFragmentManager, FRAGMENT_TAG_EDIT_CALENDAR_STARTING)
 
-        startingDP.addOnPositiveButtonClickListener { selection ->
-            startingCalendarInput = Calendar.getInstance()
-            startingCalendarInput?.let {
-                it.timeInMillis = selection
-                startingDateInput = "${it.get(Calendar.YEAR)}-" +
-                        "${decimalFormat.format((it.get(Calendar.MONTH)) + 1)}-" +
-                        decimalFormat.format(it.get(Calendar.DAY_OF_MONTH))
-
-                val startingDateInput =
-                    "${decimalFormat.format((it.get(Calendar.MONTH)) + 1)}/" +
-                            "${decimalFormat.format(it.get(Calendar.DAY_OF_MONTH))}/" +
-                            "${it.get(Calendar.YEAR)}"
-
-                binding.tiEditDateStarting.setText(startingDateInput)
-                binding.tiEditDateStarting.clearFocus()
-            }
+        startingDP.addOnPositiveButtonClickListener { selectionInMillis ->
+            selectedStartingDateInMillis = selectionInMillis
+            setStartingDate()
         }
 
         startingDP.addOnDismissListener {
@@ -255,33 +350,61 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
     }
 
     private fun openExpiryDatePicker() {
-        val expiryDP = MaterialDatePicker.Builder.datePicker()
-            .setTitleText(requireContext().getString(R.string.edit_warranty_title_date_picker_expiry))
-            .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
-            .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
-            .build()
+        val datePickerBuilder = MaterialDatePicker.Builder.datePicker().apply {
+            setTitleText(requireContext().getString(R.string.edit_warranty_title_date_picker_expiry))
+            setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
+        }
+
+        val expiryDP = if (selectedExpiryDateInMillis == 0L) {
+            datePickerBuilder.setSelection(MaterialDatePicker.todayInUtcMilliseconds()).build()
+        } else {
+            datePickerBuilder.setSelection(selectedExpiryDateInMillis).build()
+        }
 
         expiryDP.show(parentFragmentManager, FRAGMENT_TAG_EDIT_CALENDAR_EXPIRY)
 
-        expiryDP.addOnPositiveButtonClickListener { selection ->
-            expiryCalendarInput = Calendar.getInstance()
-            expiryCalendarInput?.let {
-                it.timeInMillis = selection
-                expiryDateInput = "${it.get(Calendar.YEAR)}-" +
-                        "${decimalFormat.format((it.get(Calendar.MONTH)) + 1)}-" +
-                        decimalFormat.format(it.get(Calendar.DAY_OF_MONTH))
-
-                val expiryDateInput =
-                    "${decimalFormat.format((it.get(Calendar.MONTH)) + 1)}/" +
-                            "${decimalFormat.format(it.get(Calendar.DAY_OF_MONTH))}/" +
-                            "${it.get(Calendar.YEAR)}"
-
-                binding.tiEditDateExpiry.setText(expiryDateInput)
-                binding.tiEditDateExpiry.clearFocus()
-            }
+        expiryDP.addOnPositiveButtonClickListener { selectionInMillis ->
+            selectedExpiryDateInMillis = selectionInMillis
+            setExpiryDate()
         }
 
         expiryDP.addOnDismissListener {
+            binding.tiEditDateExpiry.clearFocus()
+        }
+    }
+
+    private fun setStartingDate() {
+        Calendar.getInstance().apply {
+            timeInMillis = selectedStartingDateInMillis
+
+            startingDateInput = "${get(Calendar.YEAR)}-" +
+                    "${decimalFormat.format((get(Calendar.MONTH)) + 1)}-" +
+                    decimalFormat.format(get(Calendar.DAY_OF_MONTH))
+
+            val startingDateText =
+                "${decimalFormat.format((get(Calendar.MONTH)) + 1)}/" +
+                        "${decimalFormat.format(get(Calendar.DAY_OF_MONTH))}/" +
+                        "${get(Calendar.YEAR)}"
+
+            binding.tiEditDateStarting.setText(startingDateText)
+            binding.tiEditDateStarting.clearFocus()
+        }
+    }
+
+    private fun setExpiryDate() {
+        Calendar.getInstance().apply {
+            timeInMillis = selectedExpiryDateInMillis
+
+            expiryDateInput = "${get(Calendar.YEAR)}-" +
+                    "${decimalFormat.format((get(Calendar.MONTH)) + 1)}-" +
+                    decimalFormat.format(get(Calendar.DAY_OF_MONTH))
+
+            val expiryDateText =
+                "${decimalFormat.format((get(Calendar.MONTH)) + 1)}/" +
+                        "${decimalFormat.format(get(Calendar.DAY_OF_MONTH))}/" +
+                        "${get(Calendar.YEAR)}"
+
+            binding.tiEditDateExpiry.setText(expiryDateText)
             binding.tiEditDateExpiry.clearFocus()
         }
     }
@@ -304,36 +427,8 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
         binding.tiEditSerial.setText(warranty.serialNumber)
         binding.tiEditDescription.setText(warranty.description)
 
-        val startingCalendar = Calendar.getInstance()
-        val expiryCalendar = Calendar.getInstance()
-
-        dateFormat.parse(warranty.startingDate!!)?.let {
-            startingCalendar.time = it
-        }
-
-        dateFormat.parse(warranty.expiryDate!!)?.let {
-            expiryCalendar.time = it
-        }
-
-        startingDateInput = "${startingCalendar.get(Calendar.YEAR)}-" +
-                "${decimalFormat.format((startingCalendar.get(Calendar.MONTH)) + 1)}-" +
-                decimalFormat.format(startingCalendar.get(Calendar.DAY_OF_MONTH))
-
-        expiryDateInput = "${expiryCalendar.get(Calendar.YEAR)}-" +
-                "${decimalFormat.format((expiryCalendar.get(Calendar.MONTH)) + 1)}-" +
-                decimalFormat.format(expiryCalendar.get(Calendar.DAY_OF_MONTH))
-
-        val startingDate =
-            "${decimalFormat.format((startingCalendar.get(Calendar.MONTH)) + 1)}/" +
-                    "${decimalFormat.format(startingCalendar.get(Calendar.DAY_OF_MONTH))}/" +
-                    "${startingCalendar.get(Calendar.YEAR)}"
-        binding.tiEditDateStarting.setText(startingDate)
-
-        val expiryDate =
-            "${decimalFormat.format((expiryCalendar.get(Calendar.MONTH)) + 1)}/" +
-                    "${decimalFormat.format(expiryCalendar.get(Calendar.DAY_OF_MONTH))}/" +
-                    "${expiryCalendar.get(Calendar.YEAR)}"
-        binding.tiEditDateExpiry.setText(expiryDate)
+        setStartingDateText(warranty.startingDate!!)
+        setExpiryDateText(warranty.expiryDate!!)
 
         selectedCategory = warranty.categoryId?.let {
             viewModel.getCategoryById(it)
@@ -341,11 +436,51 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
 
         selectedCategory?.let {
             binding.tiDdCategory.setText(it.title[categoryTitleMapKey])
-            binding.ivIconCategory.load(it.icon, imageLoader) {
-                memoryCachePolicy(CachePolicy.ENABLED)
-                diskCachePolicy(CachePolicy.ENABLED)
-                networkCachePolicy(CachePolicy.ENABLED)
-            }
+            loadCategoryIcon(it.icon)
+        }
+    }
+
+    private fun loadCategoryIcon(categoryIcon: String) {
+        binding.ivIconCategory.load(categoryIcon, imageLoader) {
+            memoryCachePolicy(CachePolicy.ENABLED)
+            diskCachePolicy(CachePolicy.ENABLED)
+            networkCachePolicy(CachePolicy.ENABLED)
+        }
+    }
+
+    private fun setStartingDateText(startingDate: String) {
+        val dateFormat = SimpleDateFormat("yyyy-M-dd", Locale.getDefault())
+        Calendar.getInstance().apply {
+            dateFormat.parse(startingDate)?.let { time = it }
+
+            startingDateInput = "${get(Calendar.YEAR)}-" +
+                    "${decimalFormat.format((get(Calendar.MONTH)) + 1)}-" +
+                    decimalFormat.format(get(Calendar.DAY_OF_MONTH))
+
+            val startingDateText =
+                "${decimalFormat.format((get(Calendar.MONTH)) + 1)}/" +
+                        "${decimalFormat.format(get(Calendar.DAY_OF_MONTH))}/" +
+                        "${get(Calendar.YEAR)}"
+
+            binding.tiEditDateStarting.setText(startingDateText)
+        }
+    }
+
+    private fun setExpiryDateText(expiryDate: String) {
+        val dateFormat = SimpleDateFormat("yyyy-M-dd", Locale.getDefault())
+        Calendar.getInstance().apply {
+            dateFormat.parse(expiryDate)?.let { time = it }
+
+            expiryDateInput = "${get(Calendar.YEAR)}-" +
+                    "${decimalFormat.format((get(Calendar.MONTH)) + 1)}-" +
+                    decimalFormat.format(get(Calendar.DAY_OF_MONTH))
+
+            val expiryDateText =
+                "${decimalFormat.format((get(Calendar.MONTH)) + 1)}/" +
+                        "${decimalFormat.format(get(Calendar.DAY_OF_MONTH))}/" +
+                        "${get(Calendar.YEAR)}"
+
+            binding.tiEditDateExpiry.setText(expiryDateText)
         }
     }
 
@@ -366,15 +501,15 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
             binding.tiLayoutTitle.requestFocus()
             binding.tiLayoutTitle.boxStrokeColor =
                 ContextCompat.getColor(requireContext(), R.color.red)
-        } else if (startingCalendarInput == null) {
+        } else if (startingDateInput.isNullOrBlank()) {
             binding.tiLayoutDateStarting.requestFocus()
             binding.tiLayoutDateStarting.boxStrokeColor =
                 ContextCompat.getColor(requireContext(), R.color.red)
-        } else if (expiryCalendarInput == null) {
+        } else if (expiryDateInput.isNullOrBlank()) {
             binding.tiLayoutDateExpiry.requestFocus()
             binding.tiLayoutDateExpiry.boxStrokeColor =
                 ContextCompat.getColor(requireContext(), R.color.red)
-        } else if (!isStartingDateValid(startingCalendarInput!!, expiryCalendarInput!!)) {
+        } else if (!isStartingDateValid(selectedStartingDateInMillis, selectedExpiryDateInMillis)) {
             showDateError()
         } else {
             val brand = binding.tiEditBrand.text?.toString()?.trim()
@@ -384,8 +519,15 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
             val categoryId = selectedCategory?.id ?: "10"
 
             val warrantyInput = WarrantyInput(
-                title, brand, model, serialNumber, startingDateInput,
-                expiryDateInput, description, categoryId, Firebase.auth.currentUser?.uid.toString()
+                title,
+                brand,
+                model,
+                serialNumber,
+                startingDateInput.toString(),
+                expiryDateInput.toString(),
+                description,
+                categoryId,
+                Firebase.auth.currentUser?.uid.toString()
             )
             updateWarrantyInFirestore(warrantyInput)
         }

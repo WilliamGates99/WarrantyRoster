@@ -9,10 +9,6 @@ object DateHelper {
     fun isStartingDateValid(startingDateInMillis: Long, expiryDateInMillis: Long): Boolean =
         expiryDateInMillis >= startingDateInMillis
 
-    //TODO REMOVE
-    fun isStartingDateValid(startingCalendar: Calendar, expiryCalendar: Calendar): Boolean =
-        expiryCalendar >= startingCalendar
-
     fun getDayWithSuffix(day: Int): String {
         if (day in 11..13) {
             return "${day}th"
