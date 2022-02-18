@@ -49,4 +49,6 @@ object DateHelper {
 
         return TimeUnit.MILLISECONDS.toDays(expiryCalendar.timeInMillis - todayCalendar.timeInMillis)
     }
+
+    fun getTimeZoneOffsetInMillis() = TimeZone.getDefault().getOffset(Date().time)
 }

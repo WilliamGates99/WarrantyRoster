@@ -40,6 +40,7 @@ import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_EDIT_WARR
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_EDIT_WARRANTY_STARTING_DATE_IN_MILLIS
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_EDIT_WARRANTY_TITLE
 import com.xeniac.warrantyroster_manager.utils.DateHelper.getDaysUntilExpiry
+import com.xeniac.warrantyroster_manager.utils.DateHelper.getTimeZoneOffsetInMillis
 import com.xeniac.warrantyroster_manager.utils.DateHelper.isStartingDateValid
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.DecimalFormat
@@ -75,6 +76,8 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
 
     private var selectedExpiryDateInMillis = 0L
     private var expiryDateInput: String? = null
+
+    private val offset = getTimeZoneOffsetInMillis()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -379,7 +382,11 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
 
     private fun setStartingDate() {
         Calendar.getInstance().apply {
-            timeInMillis = selectedStartingDateInMillis
+            timeInMillis = if (offset < 0) {
+                selectedStartingDateInMillis - offset
+            } else {
+                selectedStartingDateInMillis
+            }
 
             startingDateInput = "${get(Calendar.YEAR)}-" +
                     "${decimalFormat.format((get(Calendar.MONTH)) + 1)}-" +
@@ -397,7 +404,11 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
 
     private fun setExpiryDate() {
         Calendar.getInstance().apply {
-            timeInMillis = selectedExpiryDateInMillis
+            timeInMillis = if (offset < 0) {
+                selectedExpiryDateInMillis - offset
+            } else {
+                selectedExpiryDateInMillis
+            }
 
             expiryDateInput = "${get(Calendar.YEAR)}-" +
                     "${decimalFormat.format((get(Calendar.MONTH)) + 1)}-" +
@@ -466,6 +477,13 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
                         "${get(Calendar.YEAR)}"
 
             binding.tiEditDateStarting.setText(startingDateText)
+
+            //Add/Subtract offset to Prevent the Calendar to Show the Previous Day
+            selectedStartingDateInMillis = if (offset < 0) {
+                timeInMillis - offset
+            } else {
+                timeInMillis + offset
+            }
         }
     }
 
@@ -483,6 +501,13 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
                         "${get(Calendar.YEAR)}"
 
             binding.tiEditDateExpiry.setText(expiryDateText)
+
+            //Add/Subtract offset to Prevent the Calendar to Show the Previous Day
+            selectedExpiryDateInMillis = if (offset < 0) {
+                timeInMillis - offset
+            } else {
+                timeInMillis + offset
+            }
         }
     }
 
