@@ -61,7 +61,9 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
     @CategoryTitleMapKey
     lateinit var categoryTitleMapKey: String
 
-    private val decimalFormat = DecimalFormat("00")
+    @Inject
+    lateinit var decimalFormat: DecimalFormat
+
     private var selectedCategory: Category? = null
 
     private var selectedStartingDateInMillis = 0L

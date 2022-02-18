@@ -21,6 +21,7 @@ import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.DecimalFormat
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
@@ -31,6 +32,9 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
 
     private lateinit var email: String
     private var countDownTimer: CountDownTimer? = null
+
+    @Inject
+    lateinit var decimalFormat: DecimalFormat
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -124,8 +128,6 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
         updateConstraintToTimer()
         binding.groupResend.visibility = GONE
         binding.groupTimer.visibility = VISIBLE
-
-        val decimalFormat = DecimalFormat("00")
         val startTime = 120 * 1000
 
         countDownTimer = object : CountDownTimer(startTime.toLong(), 1) {

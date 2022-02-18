@@ -48,6 +48,12 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
     @Inject
     lateinit var imageLoader: ImageLoader
 
+    @Inject
+    lateinit var decimalFormat: DecimalFormat
+
+    @Inject
+    lateinit var dateFormat: SimpleDateFormat
+
     private lateinit var warranty: Warranty
 
     companion object {
@@ -141,7 +147,6 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
         val startingCalendar = Calendar.getInstance()
         val expiryCalendar = Calendar.getInstance()
         val dateFormat = SimpleDateFormat("yyyy-M-dd", Locale.getDefault())
-        val decimalFormat = DecimalFormat("00")
 
         dateFormat.parse(warranty.startingDate!!)?.let {
             startingCalendar.time = it

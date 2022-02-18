@@ -45,6 +45,7 @@ class WarrantyAdapter(
 
     private var categoryTitleMapKey: String
     private var imageLoader: ImageLoader
+    private var dateFormat: SimpleDateFormat
 
     private var requestAdCounter = 0
 
@@ -65,14 +66,23 @@ class WarrantyAdapter(
         fun getCategoryTitleMapKey(): String
     }
 
+    @EntryPoint
+    @InstallIn(SingletonComponent::class)
+    interface DateFormatProviderEntryPoint {
+        fun getDateFormat(): SimpleDateFormat
+    }
+
     init {
         val categoryTitleMapKeyProviderEntryPoint = EntryPointAccessors
             .fromApplication(context, CategoryTitleMapKeyProviderEntryPoint::class.java)
         val imageLoaderProviderEntryPoint = EntryPointAccessors
             .fromApplication(context, ImageLoaderProviderEntryPoint::class.java)
+        val dateFormatProviderEntryPoint = EntryPointAccessors
+            .fromApplication(context, DateFormatProviderEntryPoint::class.java)
 
         categoryTitleMapKey = categoryTitleMapKeyProviderEntryPoint.getCategoryTitleMapKey()
         imageLoader = imageLoaderProviderEntryPoint.getImageLoader()
+        dateFormat = dateFormatProviderEntryPoint.getDateFormat()
     }
 
     private val diffCallback = object : DiffUtil.ItemCallback<Warranty>() {
@@ -125,7 +135,6 @@ class WarrantyAdapter(
 
         fun bindView(warranty: Warranty) {
             val expiryCalendar = Calendar.getInstance()
-            val dateFormat = SimpleDateFormat("yyyy-M-dd", Locale.getDefault())
             dateFormat.parse(warranty.expiryDate!!)?.let { expiryCalendar.time = it }
             val daysUntilExpiry = getDaysUntilExpiry(expiryCalendar)
 

@@ -61,9 +61,13 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
     @Inject
     lateinit var imageLoader: ImageLoader
 
-    private lateinit var warranty: Warranty
+    @Inject
+    lateinit var decimalFormat: DecimalFormat
 
-    private val decimalFormat = DecimalFormat("00")
+    @Inject
+    lateinit var dateFormat: SimpleDateFormat
+
+    private lateinit var warranty: Warranty
     private var selectedCategory: Category? = null
 
     private var selectedStartingDateInMillis = 0L
@@ -449,7 +453,6 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
     }
 
     private fun setStartingDateText(startingDate: String) {
-        val dateFormat = SimpleDateFormat("yyyy-M-dd", Locale.getDefault())
         Calendar.getInstance().apply {
             dateFormat.parse(startingDate)?.let { time = it }
 
@@ -467,7 +470,6 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
     }
 
     private fun setExpiryDateText(expiryDate: String) {
-        val dateFormat = SimpleDateFormat("yyyy-M-dd", Locale.getDefault())
         Calendar.getInstance().apply {
             dateFormat.parse(expiryDate)?.let { time = it }
 
@@ -590,7 +592,8 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
                     Status.SUCCESS -> {
                         hideLoadingAnimation()
                         response.data?.let { updatedWarranty ->
-                            val daysUntilExpiry = getDaysUntilExpiry(updatedWarranty.expiryDate!!)
+                            val daysUntilExpiry =
+                                getDaysUntilExpiry(updatedWarranty.expiryDate!!, dateFormat)
 
                             val action = EditWarrantyFragmentDirections
                                 .actionEditWarrantyFragmentToWarrantyDetailsFragment(

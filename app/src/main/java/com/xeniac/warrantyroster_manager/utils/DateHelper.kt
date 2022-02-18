@@ -33,8 +33,7 @@ object DateHelper {
         return TimeUnit.MILLISECONDS.toDays(expiryCalendar.timeInMillis - todayCalendar.timeInMillis)
     }
 
-    fun getDaysUntilExpiry(expiryDate: String): Long {
-        val dateFormat = SimpleDateFormat("yyyy-M-dd", Locale.getDefault())
+    fun getDaysUntilExpiry(expiryDate: String, dateFormat: SimpleDateFormat): Long {
         val expiryCalendar = Calendar.getInstance()
 
         dateFormat.parse(expiryDate)?.let {

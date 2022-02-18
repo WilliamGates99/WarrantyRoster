@@ -16,6 +16,9 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import java.text.DecimalFormat
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Qualifier
 import javax.inject.Singleton
 
@@ -60,6 +63,14 @@ object AppModule {
     @Provides
     fun provideCurrentTheme(@SettingsPrefs settingsPrefs: SharedPreferences) =
         settingsPrefs.getInt(Constants.PREFERENCE_THEME_KEY, 0)
+
+    @Singleton
+    @Provides
+    fun provideDecimalFormat() = DecimalFormat("00")
+
+    @Singleton
+    @Provides
+    fun provideDateFormat() = SimpleDateFormat("yyyy-M-dd", Locale.getDefault())
 
     @Singleton
     @Provides
