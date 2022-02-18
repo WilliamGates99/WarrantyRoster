@@ -374,8 +374,7 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
     }
 
     private fun setStartingDate() {
-        val startingCalendar = Calendar.getInstance()
-        startingCalendar.apply {
+        Calendar.getInstance().apply {
             timeInMillis = selectedStartingDateInMillis
 
             startingDateInput = "${get(Calendar.YEAR)}-" +
@@ -393,8 +392,7 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
     }
 
     private fun setExpiryDate() {
-        val expiryCalendar = Calendar.getInstance()
-        expiryCalendar.apply {
+        Calendar.getInstance().apply {
             timeInMillis = selectedExpiryDateInMillis
 
             expiryDateInput = "${get(Calendar.YEAR)}-" +
