@@ -433,7 +433,6 @@
                             android:fontFamily="@font/nunito_regular"
                             android:gravity="center_vertical"
                             android:hint="@string/add_warranty_hint_category"
-                            android:imeOptions="actionNext"
                             android:inputType="none"
                             android:maxLines="1"
                             android:textColor="@color/black"

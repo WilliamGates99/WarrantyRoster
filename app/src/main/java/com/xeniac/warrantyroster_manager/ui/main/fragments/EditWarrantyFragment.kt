@@ -87,6 +87,7 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
         textInputsBackgroundColor()
         textInputsStrokeColor()
         categoryDropDownSelection()
+        categoryDropDownOnDismiss()
         startingDatePickerOnFocusListener()
         expiryDatePickerOnFocusListener()
         returnToWarrantyDetailsFragment()
@@ -309,6 +310,10 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
                 loadCategoryIcon(it.icon)
             }
         }
+
+    private fun categoryDropDownOnDismiss() = binding.tiDdCategory.setOnDismissListener {
+        binding.tiDdCategory.clearFocus()
+    }
 
     private fun startingDatePickerOnFocusListener() {
         binding.tiEditDateStarting.inputType = InputType.TYPE_NULL
