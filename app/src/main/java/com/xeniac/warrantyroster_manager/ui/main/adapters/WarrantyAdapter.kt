@@ -2,7 +2,6 @@ package com.xeniac.warrantyroster_manager.ui.main.adapters
 
 import android.app.Activity
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -33,6 +32,7 @@ import ir.tapsell.plus.AdRequestCallback
 import ir.tapsell.plus.AdShowListener
 import ir.tapsell.plus.TapsellPlus
 import ir.tapsell.plus.model.TapsellPlusAdModel
+import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -48,10 +48,6 @@ class WarrantyAdapter(
     private var dateFormat: SimpleDateFormat
 
     private var requestAdCounter = 0
-
-    companion object {
-        private const val TAG = "WarrantyAdapter"
-    }
 
     @EntryPoint
     @InstallIn(SingletonComponent::class)
@@ -204,7 +200,7 @@ class WarrantyAdapter(
             object : AdRequestCallback() {
                 override fun response(tapsellPlusAdModel: TapsellPlusAdModel?) {
                     super.response(tapsellPlusAdModel)
-                    Log.i(TAG, "RequestNativeAd Response: $tapsellPlusAdModel")
+                    Timber.i("RequestNativeAd Response: $tapsellPlusAdModel")
                     TapsellPlus.showNativeAd(activity, tapsellPlusAdModel!!.responseId,
                         adHolder, object : AdShowListener() {
                             override fun onOpened(tapsellPlusAdModel: TapsellPlusAdModel?) {
@@ -219,7 +215,7 @@ class WarrantyAdapter(
 
                 override fun error(error: String?) {
                     super.error(error)
-                    Log.e(TAG, "RequestNativeAd Error: $error")
+                    Timber.e("RequestNativeAd Error: $error")
                     if (requestAdCounter < 3) {
                         requestAdCounter++
                         requestNativeAd(adHolder)

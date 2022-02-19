@@ -1,7 +1,6 @@
 package com.xeniac.warrantyroster_manager.ui.main.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -23,6 +22,7 @@ import ir.tapsell.plus.TapsellPlus
 import ir.tapsell.plus.TapsellPlusInitListener
 import ir.tapsell.plus.model.AdNetworkError
 import ir.tapsell.plus.model.AdNetworks
+import timber.log.Timber
 
 @AndroidEntryPoint
 class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListClickInterface {
@@ -32,10 +32,6 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
     private lateinit var viewModel: MainViewModel
 
     private lateinit var warrantyAdapter: WarrantyAdapter
-
-    companion object {
-        private const val TAG = "WarrantiesFragment"
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -56,16 +52,13 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
     private fun adInit() = TapsellPlus.initialize(
         requireContext(), TAPSELL_KEY, object : TapsellPlusInitListener {
             override fun onInitializeSuccess(adNetworks: AdNetworks?) {
-                Log.i(TAG, "onInitializeSuccess: ${adNetworks?.name}")
+                Timber.i("onInitializeSuccess: ${adNetworks?.name}")
             }
 
             override fun onInitializeFailed(
                 adNetworks: AdNetworks?, adNetworkError: AdNetworkError?
             ) {
-                Log.e(
-                    TAG,
-                    "onInitializeFailed: ${adNetworks?.name}, error: ${adNetworkError?.errorMessage}"
-                )
+                Timber.e("onInitializeFailed: ${adNetworks?.name}, error: ${adNetworkError?.errorMessage}")
             }
         })
 

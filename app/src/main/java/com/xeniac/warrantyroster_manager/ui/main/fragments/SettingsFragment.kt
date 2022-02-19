@@ -3,7 +3,6 @@ package com.xeniac.warrantyroster_manager.ui.main.fragments
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -33,6 +32,7 @@ import ir.tapsell.plus.*
 import ir.tapsell.plus.model.AdNetworkError
 import ir.tapsell.plus.model.AdNetworks
 import ir.tapsell.plus.model.TapsellPlusAdModel
+import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -55,10 +55,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
     private var requestAdCounter = 0
     private var responseId: String? = null
-
-    companion object {
-        private const val TAG = "SettingsFragment"
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -303,7 +299,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     private fun adInit() = TapsellPlus.initialize(requireContext(), TAPSELL_KEY,
         object : TapsellPlusInitListener {
             override fun onInitializeSuccess(adNetworks: AdNetworks?) {
-                Log.i(TAG, "onInitializeSuccess: ${adNetworks?.name}")
+                Timber.i("onInitializeSuccess: ${adNetworks?.name}")
                 val adHolder = TapsellPlus.createAdHolder(
                     activity, binding.flAdContainer, R.layout.ad_banner_settings
                 )
@@ -314,10 +310,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             override fun onInitializeFailed(
                 adNetworks: AdNetworks?, adNetworkError: AdNetworkError?
             ) {
-                Log.e(
-                    TAG,
-                    "onInitializeFailed: ${adNetworks?.name}, error: ${adNetworkError?.errorMessage}"
-                )
+                Timber.e("onInitializeFailed: ${adNetworks?.name}, error: ${adNetworkError?.errorMessage}")
             }
         })
 
@@ -326,7 +319,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             SETTINGS_NATIVE_ZONE_ID, object : AdRequestCallback() {
                 override fun response(tapsellPlusAdModel: TapsellPlusAdModel?) {
                     super.response(tapsellPlusAdModel)
-                    Log.i(TAG, "RequestNativeAd Response: ${tapsellPlusAdModel.toString()}")
+                    Timber.i("RequestNativeAd Response: ${tapsellPlusAdModel.toString()}")
                     _binding?.let {
                         tapsellPlusAdModel?.let {
                             responseId = it.responseId
@@ -337,7 +330,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
                 override fun error(error: String?) {
                     super.error(error)
-                    Log.e(TAG, "RequestNativeAd Error: $error")
+                    Timber.e("RequestNativeAd Error: $error")
                     if (requestAdCounter < 3) {
                         requestAdCounter++
                         requestNativeAd(adHolder)

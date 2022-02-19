@@ -1,7 +1,6 @@
 package com.xeniac.warrantyroster_manager.ui.main
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import androidx.appcompat.app.AppCompatActivity
@@ -20,16 +19,13 @@ import ir.tapsell.plus.AdShowListener
 import ir.tapsell.plus.TapsellPlus
 import ir.tapsell.plus.model.TapsellPlusAdModel
 import ir.tapsell.plus.model.TapsellPlusErrorModel
+import timber.log.Timber
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
-
-    companion object {
-        private const val TAG = "MainActivity"
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -98,13 +94,13 @@ class MainActivity : AppCompatActivity() {
         DELETE_WARRANTY_Interstitial_ZONE_ID, object : AdRequestCallback() {
             override fun response(tapsellPlusAdModel: TapsellPlusAdModel?) {
                 super.response(tapsellPlusAdModel)
-                Log.i(TAG, "RequestInterstitialAd Response: $tapsellPlusAdModel")
+                Timber.i("RequestInterstitialAd Response: $tapsellPlusAdModel")
                 tapsellPlusAdModel?.let { showInterstitialAd(it.responseId) }
             }
 
             override fun error(s: String?) {
                 super.error(s)
-                Log.e(TAG, "RequestInterstitialAd Error: $s")
+                Timber.e("RequestInterstitialAd Error: $s")
             }
         })
 

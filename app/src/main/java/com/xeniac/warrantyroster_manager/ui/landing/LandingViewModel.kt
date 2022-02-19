@@ -2,7 +2,6 @@ package com.xeniac.warrantyroster_manager.ui.landing
 
 import android.app.Application
 import android.content.SharedPreferences
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -18,6 +17,7 @@ import com.xeniac.warrantyroster_manager.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -35,10 +35,6 @@ class LandingViewModel @Inject constructor(
 
     private val _forgotPwLiveData: MutableLiveData<Event<Resource<String>>> = MutableLiveData()
     val forgotPwLiveData: LiveData<Event<Resource<String>>> = _forgotPwLiveData
-
-    companion object {
-        private const val TAG = "LandingViewModel"
-    }
 
     fun registerViaEmail(email: String, password: String) = viewModelScope.launch {
         safeRegisterViaEmail(email, password)
@@ -60,15 +56,15 @@ class LandingViewModel @Inject constructor(
                 userRepository.sendVerificationEmail()
                 loginPrefs.edit().putBoolean(PREFERENCE_IS_LOGGED_IN_KEY, true).apply()
                 _registerLiveData.postValue(Event(Resource.success(null)))
-                Log.i(TAG, "$email registered successfully.")
+                Timber.i("$email registered successfully.")
             } else {
-                Log.e(TAG, ERROR_NETWORK_CONNECTION)
+                Timber.e(ERROR_NETWORK_CONNECTION)
                 _registerLiveData.postValue(
                     Event(Resource.error(ERROR_NETWORK_CONNECTION))
                 )
             }
         } catch (e: Exception) {
-            Log.e(TAG, "SafeRegisterViaEmail Exception: ${e.message}")
+            Timber.e("SafeRegisterViaEmail Exception: ${e.message}")
             _registerLiveData.postValue(Event(Resource.error(e.message.toString())))
         }
     }
@@ -81,17 +77,17 @@ class LandingViewModel @Inject constructor(
                     user?.let {
                         loginPrefs.edit().putBoolean(PREFERENCE_IS_LOGGED_IN_KEY, true).apply()
                         _loginLiveData.postValue(Event(Resource.success(null)))
-                        Log.i(TAG, "$email logged in successfully.")
+                        Timber.i("$email logged in successfully.")
                     }
                 }
             } else {
-                Log.e(TAG, ERROR_NETWORK_CONNECTION)
+                Timber.e(ERROR_NETWORK_CONNECTION)
                 _loginLiveData.postValue(
                     Event(Resource.error(ERROR_NETWORK_CONNECTION))
                 )
             }
         } catch (e: Exception) {
-            Log.e(TAG, "SafeLoginViaEmail Exception: ${e.message}")
+            Timber.e("SafeLoginViaEmail Exception: ${e.message}")
             _loginLiveData.postValue(Event(Resource.error(e.message.toString())))
         }
     }
@@ -102,16 +98,16 @@ class LandingViewModel @Inject constructor(
             if (hasInternetConnection(getApplication<BaseApplication>())) {
                 userRepository.sendResetPasswordEmail(email).await().apply {
                     _forgotPwLiveData.postValue(Event(Resource.success(email)))
-                    Log.i(TAG, "Reset password email successfully sent to ${email}.")
+                    Timber.i("Reset password email successfully sent to ${email}.")
                 }
             } else {
-                Log.e(TAG, ERROR_NETWORK_CONNECTION)
+                Timber.e(ERROR_NETWORK_CONNECTION)
                 _forgotPwLiveData.postValue(
                     Event(Resource.error(ERROR_NETWORK_CONNECTION))
                 )
             }
         } catch (e: Exception) {
-            Log.e(TAG, "SafeSendResetPasswordEmail Exception: ${e.message}")
+            Timber.e("SafeSendResetPasswordEmail Exception: ${e.message}")
             _forgotPwLiveData.postValue(Event(Resource.error(e.message.toString())))
         }
     }

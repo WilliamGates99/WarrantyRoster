@@ -93,6 +93,9 @@ dependencies {
     //Firebase Storage
     implementation 'com.google.firebase:firebase-storage-ktx'
 
+    //Timber Library
+    implementation 'com.jakewharton.timber:timber:5.0.1'
+
     //Lottie Library
     implementation 'io.coil-kt:coil:1.4.0'
 

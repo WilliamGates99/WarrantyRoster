@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import com.xeniac.warrantyroster_manager.di.CurrentCountry
 import com.xeniac.warrantyroster_manager.di.CurrentLanguage
 import dagger.hilt.android.HiltAndroidApp
+import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
@@ -24,6 +25,8 @@ class BaseApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        Timber.plant(Timber.DebugTree())
+
         setNightMode()
         setLocale()
     }
