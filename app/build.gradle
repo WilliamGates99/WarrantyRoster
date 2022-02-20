@@ -16,8 +16,8 @@ android {
         applicationId "com.xeniac.warrantyroster_manager"
         minSdkVersion 21
         targetSdkVersion 32
-        versionCode 4
-        versionName "1.2.0"
+        versionCode 5
+        versionName "1.2.5"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
