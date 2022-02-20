@@ -106,4 +106,7 @@ dependencies {
     //Ads Libraries
     implementation 'ir.tapsell.plus:tapsell-plus-sdk-android:2.1.6'
     implementation 'com.google.android.gms:play-services-ads:20.5.0'
+
+    //LeakCanary Library
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.8.1'
 }
