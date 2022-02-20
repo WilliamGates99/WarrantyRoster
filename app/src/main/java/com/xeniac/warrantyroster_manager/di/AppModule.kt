@@ -51,11 +51,13 @@ object AppModule {
         loginPrefs.getBoolean(PREFERENCE_IS_LOGGED_IN_KEY, false)
 
     @CurrentLanguage
+    @Singleton //TODO REMOVE AFTER ADDING PERSIAN
     @Provides
     fun provideCurrentLanguage(@SettingsPrefs settingsPrefs: SharedPreferences) =
         settingsPrefs.getString(Constants.PREFERENCE_LANGUAGE_KEY, "en") ?: "en"
 
     @CurrentCountry
+    @Singleton //TODO REMOVE AFTER ADDING PERSIAN
     @Provides
     fun provideCurrentCountry(@SettingsPrefs settingsPrefs: SharedPreferences) =
         settingsPrefs.getString(Constants.PREFERENCE_COUNTRY_KEY, "US") ?: "US"
@@ -78,6 +80,7 @@ object AppModule {
         ImageLoader.Builder(context).componentRegistry { add(SvgDecoder(context)) }.build()
 
     @CategoryTitleMapKey
+    @Singleton //TODO REMOVE AFTER ADDING PERSIAN
     @Provides
     fun provideCategoryTitleMapKey(
         @CurrentLanguage currentLanguage: String,
