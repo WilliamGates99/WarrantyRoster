@@ -55,8 +55,8 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
     //Dagger - Hilt
-    implementation 'com.google.dagger:hilt-android:2.40.5'
-    kapt 'com.google.dagger:hilt-compiler:2.40.5'
+    implementation 'com.google.dagger:hilt-android:2.41'
+    kapt 'com.google.dagger:hilt-compiler:2.41'
 
     //Architectural Components
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1'
@@ -100,12 +100,12 @@ dependencies {
     implementation 'io.coil-kt:coil:1.4.0'
 
     //Coil Library
-    implementation 'com.airbnb.android:lottie:4.2.2'
+    implementation 'com.airbnb.android:lottie:5.0.1'
     implementation 'io.coil-kt:coil-svg:1.4.0'
 
     //Ads Libraries
     implementation 'ir.tapsell.plus:tapsell-plus-sdk-android:2.1.6'
-    implementation 'com.google.android.gms:play-services-ads:20.5.0'
+    implementation 'com.google.android.gms:play-services-ads:20.6.0'
 
     //LeakCanary Library
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.8.1'
