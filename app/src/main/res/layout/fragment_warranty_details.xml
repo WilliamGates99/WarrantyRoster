@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbar_warranty_details"
+        android:id="@+id/toolbar"
         style="@style/Theme.WarrantyRoster.Toolbar"
         android:layout_width="0dp"
         android:layout_height="?attr/actionBarSize"
@@ -20,7 +20,7 @@
         app:title="Dining Room TV">
 
         <com.google.android.material.progressindicator.CircularProgressIndicator
-            android:id="@+id/cpi_warranty_details"
+            android:id="@+id/cpi_delete"
             style="@style/Theme.WarrantyRoster.LoadingProgressBar.Toolbar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -30,17 +30,17 @@
     </com.google.android.material.appbar.MaterialToolbar>
 
     <androidx.core.widget.NestedScrollView
-        android:id="@+id/sv_warranty_details"
+        android:id="@+id/nsv"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
         android:orientation="vertical"
-        android:overScrollMode="never"
+        android:overScrollMode="ifContentScrolls"
         android:scrollbars="none"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_warranty_details">
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -48,21 +48,22 @@
             android:paddingBottom="80dp">
 
             <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/iv_warranty_details_icon"
+                android:id="@+id/iv_icon"
                 android:layout_width="86dp"
                 android:layout_height="86dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="16dp"
                 android:background="@color/grayLight"
                 android:elevation="12dp"
-                android:src="@drawable/ic_category_accessory"
+                android:src="@drawable/ic_category_miscellaneous"
                 app:contentPadding="12dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:shapeAppearance="@style/Theme.WarrantyRoster.ImageViewShapeAppearance" />
+                app:shapeAppearance="@style/Theme.WarrantyRoster.ImageViewShapeAppearance"
+                app:tint="@color/black" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tv_warranty_details_status"
+                android:id="@+id/tv_status"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
@@ -80,25 +81,25 @@
                 android:textAllCaps="true"
                 android:textColor="@color/orange"
                 android:textSize="10sp"
-                app:layout_constraintBottom_toTopOf="@+id/tv_warranty_details_date_starting_title"
+                app:layout_constraintBottom_toTopOf="@+id/tv_date_starting_title"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/iv_warranty_details_icon"
-                app:layout_constraintTop_toTopOf="@id/iv_warranty_details_icon"
+                app:layout_constraintStart_toEndOf="@+id/iv_icon"
+                app:layout_constraintTop_toTopOf="@id/iv_icon"
                 app:layout_constraintVertical_chainStyle="spread"
                 tools:ignore="SmallSp" />
 
             <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/iv_warranty_details_date_starting"
+                android:id="@+id/iv_date_starting"
                 android:layout_width="14dp"
                 android:layout_height="14dp"
                 android:layout_marginStart="12dp"
                 android:src="@drawable/ic_calendar"
-                app:layout_constraintBottom_toBottomOf="@+id/tv_warranty_details_date_starting_title"
-                app:layout_constraintStart_toEndOf="@+id/iv_warranty_details_icon"
-                app:layout_constraintTop_toTopOf="@id/tv_warranty_details_date_starting_title" />
+                app:layout_constraintBottom_toBottomOf="@+id/tv_date_starting_title"
+                app:layout_constraintStart_toEndOf="@+id/iv_icon"
+                app:layout_constraintTop_toTopOf="@id/tv_date_starting_title" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tv_warranty_details_date_starting_title"
+                android:id="@+id/tv_date_starting_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
@@ -109,12 +110,12 @@
                 android:textAlignment="gravity"
                 android:textColor="@color/grayDark"
                 android:textSize="14sp"
-                app:layout_constraintBottom_toTopOf="@+id/tv_warranty_details_date_expiry_title"
-                app:layout_constraintStart_toEndOf="@+id/iv_warranty_details_date_starting"
-                app:layout_constraintTop_toBottomOf="@+id/tv_warranty_details_status" />
+                app:layout_constraintBottom_toTopOf="@+id/tv_date_expiry_title"
+                app:layout_constraintStart_toEndOf="@+id/iv_date_starting"
+                app:layout_constraintTop_toBottomOf="@+id/tv_status" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tv_warranty_details_date_starting"
+                android:id="@+id/tv_date_starting"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
@@ -128,22 +129,22 @@
                 android:textColor="@color/black"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tv_warranty_details_date_starting_title"
-                app:layout_constraintTop_toTopOf="@+id/tv_warranty_details_date_starting_title"
+                app:layout_constraintStart_toEndOf="@+id/tv_date_starting_title"
+                app:layout_constraintTop_toTopOf="@+id/tv_date_starting_title"
                 tools:ignore="HardcodedText" />
 
             <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/iv_warranty_details_date_expiry"
+                android:id="@+id/iv_date_expiry"
                 android:layout_width="14dp"
                 android:layout_height="14dp"
                 android:layout_marginStart="12dp"
                 android:src="@drawable/ic_calendar"
-                app:layout_constraintBottom_toBottomOf="@+id/tv_warranty_details_date_expiry_title"
-                app:layout_constraintStart_toEndOf="@+id/iv_warranty_details_icon"
-                app:layout_constraintTop_toTopOf="@id/tv_warranty_details_date_expiry_title" />
+                app:layout_constraintBottom_toBottomOf="@+id/tv_date_expiry_title"
+                app:layout_constraintStart_toEndOf="@+id/iv_icon"
+                app:layout_constraintTop_toTopOf="@id/tv_date_expiry_title" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tv_warranty_details_date_expiry_title"
+                android:id="@+id/tv_date_expiry_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
@@ -154,12 +155,12 @@
                 android:textAlignment="gravity"
                 android:textColor="@color/grayDark"
                 android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="@id/iv_warranty_details_icon"
-                app:layout_constraintStart_toEndOf="@+id/iv_warranty_details_date_expiry"
-                app:layout_constraintTop_toBottomOf="@+id/tv_warranty_details_date_starting_title" />
+                app:layout_constraintBottom_toBottomOf="@id/iv_icon"
+                app:layout_constraintStart_toEndOf="@+id/iv_date_expiry"
+                app:layout_constraintTop_toBottomOf="@+id/tv_date_starting_title" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tv_warranty_details_date_expiry"
+                android:id="@+id/tv_date_expiry"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
@@ -173,12 +174,12 @@
                 android:textColor="@color/black"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tv_warranty_details_date_expiry_title"
-                app:layout_constraintTop_toTopOf="@+id/tv_warranty_details_date_expiry_title"
+                app:layout_constraintStart_toEndOf="@+id/tv_date_expiry_title"
+                app:layout_constraintTop_toTopOf="@+id/tv_date_expiry_title"
                 tools:ignore="HardcodedText" />
 
             <View
-                android:id="@+id/divider_warranty_details_first"
+                android:id="@+id/divider_first"
                 android:layout_width="0dp"
                 android:layout_height="1dp"
                 android:layout_marginHorizontal="16dp"
@@ -186,10 +187,10 @@
                 android:background="@color/grayMedium"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/iv_warranty_details_icon" />
+                app:layout_constraintTop_toBottomOf="@+id/iv_icon" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tv_warranty_details_title_device"
+                android:id="@+id/tv_title_device"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
@@ -204,10 +205,10 @@
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider_warranty_details_first" />
+                app:layout_constraintTop_toBottomOf="@+id/divider_first" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tv_warranty_details_brand_title"
+                android:id="@+id/tv_brand_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
@@ -220,10 +221,10 @@
                 android:textColor="@color/grayDark"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_warranty_details_title_device" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_title_device" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tv_warranty_details_brand"
+                android:id="@+id/tv_brand"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
@@ -236,13 +237,13 @@
                 android:textAlignment="gravity"
                 android:textColor="@color/black"
                 android:textSize="16sp"
-                app:layout_constraintBaseline_toBaselineOf="@+id/tv_warranty_details_brand_title"
+                app:layout_constraintBaseline_toBaselineOf="@+id/tv_brand_title"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tv_warranty_details_brand_title"
+                app:layout_constraintStart_toEndOf="@+id/tv_brand_title"
                 tools:ignore="HardcodedText" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tv_warranty_details_model_title"
+                android:id="@+id/tv_model_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
@@ -255,10 +256,10 @@
                 android:textColor="@color/grayDark"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_warranty_details_brand_title" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_brand_title" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tv_warranty_details_model"
+                android:id="@+id/tv_model"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
@@ -271,13 +272,13 @@
                 android:textAlignment="gravity"
                 android:textColor="@color/black"
                 android:textSize="16sp"
-                app:layout_constraintBaseline_toBaselineOf="@+id/tv_warranty_details_model_title"
+                app:layout_constraintBaseline_toBaselineOf="@+id/tv_model_title"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tv_warranty_details_model_title"
+                app:layout_constraintStart_toEndOf="@+id/tv_model_title"
                 tools:ignore="HardcodedText" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tv_warranty_details_serial_title"
+                android:id="@+id/tv_serial_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
@@ -290,10 +291,10 @@
                 android:textColor="@color/grayDark"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_warranty_details_model_title" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_model_title" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tv_warranty_details_serial"
+                android:id="@+id/tv_serial"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
@@ -306,13 +307,13 @@
                 android:textAlignment="gravity"
                 android:textColor="@color/black"
                 android:textSize="16sp"
-                app:layout_constraintBaseline_toBaselineOf="@+id/tv_warranty_details_serial_title"
+                app:layout_constraintBaseline_toBaselineOf="@+id/tv_serial_title"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tv_warranty_details_serial_title"
+                app:layout_constraintStart_toEndOf="@+id/tv_serial_title"
                 tools:ignore="HardcodedText" />
 
             <View
-                android:id="@+id/divider_warranty_details_second"
+                android:id="@+id/divider_second"
                 android:layout_width="0dp"
                 android:layout_height="1dp"
                 android:layout_marginHorizontal="16dp"
@@ -320,10 +321,10 @@
                 android:background="@color/grayMedium"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_warranty_details_serial_title" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_serial_title" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tv_warranty_details_title_description"
+                android:id="@+id/tv_title_description"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
@@ -338,10 +339,10 @@
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider_warranty_details_second" />
+                app:layout_constraintTop_toBottomOf="@+id/divider_second" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tv_warranty_details_description"
+                android:id="@+id/tv_description"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
@@ -354,7 +355,7 @@
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_warranty_details_title_description"
+                app:layout_constraintTop_toBottomOf="@+id/tv_title_description"
                 tools:ignore="HardcodedText" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -362,7 +363,7 @@
     </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/fab_warranty_details"
+        android:id="@+id/fab"
         style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

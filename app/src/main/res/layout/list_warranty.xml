@@ -1,127 +1,152 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/cv_list_warranty"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginHorizontal="8dp"
-    android:layout_marginVertical="4dp"
-    android:background="?attr/selectableItemBackground"
-    android:clickable="true"
-    android:focusable="true"
-    app:cardBackgroundColor="@color/surface"
-    app:cardCornerRadius="12dp">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <data>
+
+        <variable
+            name="title"
+            type="String" />
+
+        <variable
+            name="expiryDate"
+            type="String" />
+
+        <variable
+            name="statusTitle"
+            type="String" />
+
+        <variable
+            name="statusColor"
+            type="int" />
+
+        <variable
+            name="categoryTitle"
+            type="String" />
+
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cv_warranty"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginVertical="4dp"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        app:cardBackgroundColor="@color/surface"
+        app:cardCornerRadius="12dp">
 
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/iv_list_warranty_icon"
-            android:layout_width="52dp"
-            android:layout_height="52dp"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="12dp"
-            android:background="@color/grayLight"
-            android:src="@drawable/ic_category_accessory"
-            app:contentPadding="12dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:shapeAppearance="@style/Theme.WarrantyRoster.ImageViewShapeAppearance" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_list_warranty_title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="12dp"
-            android:ellipsize="end"
-            android:fontFamily="@font/nunito_bold"
-            android:gravity="center_vertical|start"
-            android:maxLines="1"
-            android:text="Dining Room TV"
-            android:textAlignment="gravity"
-            android:textColor="@color/navyBlue"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@+id/tv_list_warranty_expiry_date"
-            app:layout_constraintEnd_toStartOf="@id/tv_list_warranty_status"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/iv_list_warranty_icon"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="packed"
-            tools:ignore="HardcodedText" />
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/iv_icon"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp"
+                android:background="@color/grayLight"
+                app:contentPadding="12dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearance="@style/Theme.WarrantyRoster.ImageViewShapeAppearance"
+                app:tint="@color/black" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_list_warranty_expiry_date"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="12dp"
-            android:layout_marginTop="12dp"
-            android:fontFamily="@font/nunito_regular"
-            android:gravity="center_vertical|start"
-            android:maxLines="1"
-            android:text="January 2nd, 2022"
-            android:textAlignment="gravity"
-            android:textColor="@color/grayDark"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/tv_list_warranty_category"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/iv_list_warranty_icon"
-            app:layout_constraintTop_toBottomOf="@+id/tv_list_warranty_title"
-            tools:ignore="HardcodedText" />
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="12dp"
+                android:ellipsize="end"
+                android:fontFamily="@font/nunito_bold"
+                android:gravity="center_vertical|start"
+                android:maxLines="1"
+                android:text="@{title}"
+                android:textAlignment="gravity"
+                android:textColor="@color/navyBlue"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toTopOf="@+id/tv_expiry_date"
+                app:layout_constraintEnd_toStartOf="@id/tv_status"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/iv_icon"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_list_warranty_status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="2dp"
-            android:fontFamily="@font/nunito_black"
-            android:gravity="center"
-            android:maxLines="1"
-            android:text="@string/warranties_list_status_expired"
-            android:textAlignment="gravity"
-            android:textAllCaps="true"
-            android:textColor="@color/red"
-            android:textSize="10sp"
-            app:layout_constraintBottom_toTopOf="@+id/tv_list_warranty_category"
-            app:layout_constraintEnd_toStartOf="@+id/fl_list_warranty_status"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="packed"
-            app:textAllCaps="true"
-            tools:ignore="SmallSp" />
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_expiry_date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="12dp"
+                android:layout_marginTop="12dp"
+                android:fontFamily="@font/nunito_regular"
+                android:gravity="center_vertical|start"
+                android:maxLines="1"
+                android:text="@{expiryDate}"
+                android:textAlignment="gravity"
+                android:textColor="@color/grayDark"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/tv_category"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/iv_icon"
+                app:layout_constraintTop_toBottomOf="@+id/tv_title" />
 
-        <FrameLayout
-            android:id="@+id/fl_list_warranty_status"
-            android:layout_width="4dp"
-            android:layout_height="4dp"
-            android:layout_marginEnd="12dp"
-            android:background="@drawable/shape_circle"
-            android:backgroundTint="@color/red"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_list_warranty_status"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tv_list_warranty_status" />
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="2dp"
+                android:fontFamily="@font/nunito_black"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="@{statusTitle}"
+                android:textAlignment="gravity"
+                android:textAllCaps="true"
+                android:textColor="@{statusColor}"
+                android:textSize="10sp"
+                app:layout_constraintBottom_toTopOf="@+id/tv_category"
+                app:layout_constraintEnd_toStartOf="@+id/fl_status"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed"
+                app:textAllCaps="true"
+                tools:ignore="SmallSp" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_list_warranty_category"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:layout_marginEnd="12dp"
-            android:fontFamily="@font/nunito_extra_light"
-            android:gravity="center_vertical|end"
-            android:maxLines="1"
-            android:text="Musical Instrument"
-            android:textAlignment="gravity"
-            android:textColor="@color/grayDark"
-            android:textSize="10sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_list_warranty_status"
-            tools:ignore="HardcodedText,SmallSp" />
+            <FrameLayout
+                android:id="@+id/fl_status"
+                android:layout_width="4dp"
+                android:layout_height="4dp"
+                android:layout_marginEnd="12dp"
+                android:background="@drawable/shape_circle"
+                android:backgroundTint="@{statusColor}"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_status"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tv_status" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="12dp"
+                android:fontFamily="@font/nunito_extra_light"
+                android:gravity="center_vertical|end"
+                android:maxLines="1"
+                android:text="@{categoryTitle}"
+                android:textAlignment="gravity"
+                android:textColor="@color/grayDark"
+                android:textSize="10sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_status"
+                tools:ignore="HardcodedText,SmallSp" />
 
-</com.google.android.material.card.MaterialCardView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+</layout>

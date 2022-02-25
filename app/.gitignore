@@ -1,5 +1,5 @@
 /build
-/release/
-/obfuscation/
-/src/main/graphql/
-/src/main/dbschemas/
+/release
+/obfuscation
+/src/main/dbschemas
+google-services.json

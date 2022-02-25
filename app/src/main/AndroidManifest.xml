@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.xeniac.warrantyrostermanager">
+    package="com.xeniac.warrantyroster_manager">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <!--TODO change backup attributes to true before release-->
     <application
-        android:name="com.xeniac.warrantyrostermanager.SubApplication"
+        android:name=".BaseApplication"
         android:allowBackup="false"
         android:fullBackupContent="false"
         android:icon="@mipmap/ic_launcher"
@@ -16,9 +16,8 @@
         android:supportsRtl="false"
         android:theme="@style/Theme.WarrantyRoster">
         <activity
-            android:name="com.xeniac.warrantyrostermanager.landingactivity.LandingActivity"
+            android:name=".ui.landing.LandingActivity"
             android:exported="true"
-            android:screenOrientation="portrait"
             android:theme="@style/Theme.WarrantyRoster.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,8 +25,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.xeniac.warrantyrostermanager.mainactivity.MainActivity"
-            android:screenOrientation="portrait"
+            android:name=".ui.main.MainActivity"
             android:theme="@style/Theme.WarrantyRoster"
             android:windowSoftInputMode="adjustPan|stateHidden" />
     </application>

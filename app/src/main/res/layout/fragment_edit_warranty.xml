@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbar_edit_warranty"
+        android:id="@+id/toolbar"
         style="@style/Theme.WarrantyRoster.Toolbar"
         android:layout_width="0dp"
         android:layout_height="?attr/actionBarSize"
@@ -19,7 +19,7 @@
         app:title="@string/edit_warranty_text_title">
 
         <com.google.android.material.progressindicator.CircularProgressIndicator
-            android:id="@+id/cpi_edit_warranty"
+            android:id="@+id/cpi_edit"
             style="@style/Theme.WarrantyRoster.LoadingProgressBar.Toolbar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -32,19 +32,19 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="vertical"
-        android:overScrollMode="never"
+        android:overScrollMode="ifContentScrolls"
         android:scrollbars="none"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_edit_warranty">
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cv_edit_warranty_title"
+                android:id="@+id/cv_top"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="8dp"
@@ -61,14 +61,14 @@
                     android:paddingBottom="16dp">
 
                     <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/tv_edit_warranty_title_title"
+                        android:id="@+id/tv_title_title"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="24dp"
                         android:layout_marginTop="16dp"
                         android:fontFamily="@font/nunito_bold"
                         android:gravity="center_vertical|start"
-                        android:labelFor="@+id/ti_edit_warranty_layout_title"
+                        android:labelFor="@+id/ti_layout_title"
                         android:maxLines="1"
                         android:text="@string/edit_warranty_title_title"
                         android:textAlignment="gravity"
@@ -79,7 +79,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/ti_edit_warranty_layout_title"
+                        android:id="@+id/ti_layout_title"
                         style="@style/Theme.WarrantyRoster.TextInputLayout"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -87,10 +87,10 @@
                         android:layout_marginTop="4dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_edit_warranty_title_title">
+                        app:layout_constraintTop_toBottomOf="@+id/tv_title_title">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/ti_edit_warranty_edit_title"
+                            android:id="@+id/ti_edit_title"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/nunito_regular"
@@ -106,39 +106,39 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/tv_edit_warranty_title_date_starting"
+                        android:id="@+id/tv_title_date_starting"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="8dp"
                         android:layout_marginTop="16dp"
                         android:fontFamily="@font/nunito_bold"
                         android:gravity="center_vertical|start"
-                        android:labelFor="@+id/ti_edit_warranty_layout_date_starting"
+                        android:labelFor="@+id/ti_layout_date_starting"
                         android:maxLines="1"
                         android:text="@string/edit_warranty_title_date_starting"
                         android:textAlignment="gravity"
                         android:textColor="@color/black"
                         android:textSize="14sp"
-                        app:layout_constraintEnd_toEndOf="@+id/ti_edit_warranty_layout_date_starting"
-                        app:layout_constraintStart_toStartOf="@+id/ti_edit_warranty_layout_date_starting"
-                        app:layout_constraintTop_toBottomOf="@+id/ti_edit_warranty_layout_title" />
+                        app:layout_constraintEnd_toEndOf="@+id/ti_layout_date_starting"
+                        app:layout_constraintStart_toStartOf="@+id/ti_layout_date_starting"
+                        app:layout_constraintTop_toBottomOf="@+id/ti_layout_title" />
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/ti_edit_warranty_layout_date_starting"
+                        android:id="@+id/ti_layout_date_starting"
                         style="@style/Theme.WarrantyRoster.TextInputLayout"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="4dp"
                         android:layout_marginEnd="8dp"
-                        app:layout_constraintEnd_toStartOf="@+id/ti_edit_warranty_layout_date_expiry"
+                        app:layout_constraintEnd_toStartOf="@+id/ti_layout_date_expiry"
                         app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintHorizontal_weight="1"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_edit_warranty_title_date_starting">
+                        app:layout_constraintTop_toBottomOf="@+id/tv_title_date_starting">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/ti_edit_warranty_edit_date_starting"
+                            android:id="@+id/ti_edit_date_starting"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/nunito_regular"
@@ -154,25 +154,25 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/tv_edit_warranty_title_date_expiry"
+                        android:id="@+id/tv_title_date_expiry"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="8dp"
                         android:layout_marginTop="16dp"
                         android:fontFamily="@font/nunito_bold"
                         android:gravity="center_vertical|start"
-                        android:labelFor="@+id/ti_edit_warranty_layout_date_expiry"
+                        android:labelFor="@+id/ti_layout_date_expiry"
                         android:maxLines="1"
                         android:text="@string/edit_warranty_title_date_expiry"
                         android:textAlignment="gravity"
                         android:textColor="@color/black"
                         android:textSize="14sp"
-                        app:layout_constraintEnd_toEndOf="@+id/ti_edit_warranty_layout_date_expiry"
-                        app:layout_constraintStart_toStartOf="@+id/ti_edit_warranty_layout_date_expiry"
-                        app:layout_constraintTop_toBottomOf="@+id/ti_edit_warranty_layout_title" />
+                        app:layout_constraintEnd_toEndOf="@+id/ti_layout_date_expiry"
+                        app:layout_constraintStart_toStartOf="@+id/ti_layout_date_expiry"
+                        app:layout_constraintTop_toBottomOf="@+id/ti_layout_title" />
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/ti_edit_warranty_layout_date_expiry"
+                        android:id="@+id/ti_layout_date_expiry"
                         style="@style/Theme.WarrantyRoster.TextInputLayout"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -182,11 +182,11 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintHorizontal_weight="1"
-                        app:layout_constraintStart_toEndOf="@+id/ti_edit_warranty_layout_date_starting"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_edit_warranty_title_date_expiry">
+                        app:layout_constraintStart_toEndOf="@+id/ti_layout_date_starting"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_title_date_expiry">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/ti_edit_warranty_edit_date_expiry"
+                            android:id="@+id/ti_edit_date_expiry"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/nunito_regular"
@@ -202,7 +202,7 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/tv_edit_warranty_date_error"
+                        android:id="@+id/tv_date_error"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="24dp"
@@ -217,14 +217,14 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/ti_edit_warranty_layout_date_starting" />
+                        app:layout_constraintTop_toBottomOf="@+id/ti_layout_date_starting" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cv_edit_warranty_device"
+                android:id="@+id/cv_middle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="8dp"
@@ -233,21 +233,21 @@
                 app:cardCornerRadius="12dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cv_edit_warranty_title">
+                app:layout_constraintTop_toBottomOf="@+id/cv_top">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
                     <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/tv_edit_warranty_title_brand"
+                        android:id="@+id/tv_title_brand"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="24dp"
                         android:layout_marginTop="16dp"
                         android:fontFamily="@font/nunito_bold"
                         android:gravity="center_vertical|start"
-                        android:labelFor="@+id/ti_edit_warranty_layout_brand"
+                        android:labelFor="@+id/ti_layout_brand"
                         android:maxLines="1"
                         android:text="@string/edit_warranty_title_brand"
                         android:textAlignment="gravity"
@@ -258,7 +258,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/ti_edit_warranty_layout_brand"
+                        android:id="@+id/ti_layout_brand"
                         style="@style/Theme.WarrantyRoster.TextInputLayout"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -266,10 +266,10 @@
                         android:layout_marginTop="4dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_edit_warranty_title_brand">
+                        app:layout_constraintTop_toBottomOf="@+id/tv_title_brand">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/ti_edit_warranty_edit_brand"
+                            android:id="@+id/ti_edit_brand"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/nunito_regular"
@@ -285,14 +285,14 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/tv_edit_warranty_title_model"
+                        android:id="@+id/tv_title_model"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="24dp"
                         android:layout_marginTop="16dp"
                         android:fontFamily="@font/nunito_bold"
                         android:gravity="center_vertical|start"
-                        android:labelFor="@+id/ti_edit_warranty_layout_model"
+                        android:labelFor="@+id/ti_layout_model"
                         android:maxLines="1"
                         android:text="@string/edit_warranty_title_model"
                         android:textAlignment="gravity"
@@ -300,10 +300,10 @@
                         android:textSize="14sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/ti_edit_warranty_layout_brand" />
+                        app:layout_constraintTop_toBottomOf="@+id/ti_layout_brand" />
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/ti_edit_warranty_layout_model"
+                        android:id="@+id/ti_layout_model"
                         style="@style/Theme.WarrantyRoster.TextInputLayout"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -311,10 +311,10 @@
                         android:layout_marginTop="4dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_edit_warranty_title_model">
+                        app:layout_constraintTop_toBottomOf="@+id/tv_title_model">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/ti_edit_warranty_edit_model"
+                            android:id="@+id/ti_edit_model"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/nunito_regular"
@@ -330,14 +330,14 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/tv_edit_warranty_title_serial"
+                        android:id="@+id/tv_title_serial"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="24dp"
                         android:layout_marginTop="16dp"
                         android:fontFamily="@font/nunito_bold"
                         android:gravity="center_vertical|start"
-                        android:labelFor="@+id/ti_edit_warranty_layout_serial"
+                        android:labelFor="@+id/ti_layout_serial"
                         android:maxLines="1"
                         android:text="@string/edit_warranty_title_serial"
                         android:textAlignment="gravity"
@@ -345,10 +345,10 @@
                         android:textSize="14sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/ti_edit_warranty_layout_model" />
+                        app:layout_constraintTop_toBottomOf="@+id/ti_layout_model" />
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/ti_edit_warranty_layout_serial"
+                        android:id="@+id/ti_layout_serial"
                         style="@style/Theme.WarrantyRoster.TextInputLayout"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -358,10 +358,10 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_edit_warranty_title_serial">
+                        app:layout_constraintTop_toBottomOf="@+id/tv_title_serial">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/ti_edit_warranty_edit_serial"
+                            android:id="@+id/ti_edit_serial"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/nunito_regular"
@@ -381,7 +381,7 @@
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cv_edit_warranty_date"
+                android:id="@+id/cv_bottom"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="8dp"
@@ -391,21 +391,21 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cv_edit_warranty_device">
+                app:layout_constraintTop_toBottomOf="@+id/cv_middle">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
                     <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/tv_edit_warranty_title_category"
+                        android:id="@+id/tv_title_category"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="24dp"
                         android:layout_marginTop="16dp"
                         android:fontFamily="@font/nunito_bold"
                         android:gravity="center_vertical|start"
-                        android:labelFor="@+id/ti_edit_warranty_layout_category"
+                        android:labelFor="@+id/ti_layout_category"
                         android:maxLines="1"
                         android:text="@string/edit_warranty_title_category"
                         android:textAlignment="gravity"
@@ -416,24 +416,23 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/ti_edit_warranty_layout_category"
+                        android:id="@+id/ti_layout_category"
                         style="@style/Theme.WarrantyRoster.TextInputLayout.Dropdown"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="16dp"
                         android:layout_marginTop="4dp"
-                        app:layout_constraintEnd_toStartOf="@+id/iv_edit_warranty_icon_category"
+                        app:layout_constraintEnd_toStartOf="@+id/iv_icon_category"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_edit_warranty_title_category">
+                        app:layout_constraintTop_toBottomOf="@+id/tv_title_category">
 
                         <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                            android:id="@+id/ti_edit_warranty_dd_category"
+                            android:id="@+id/ti_dd_category"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/nunito_regular"
                             android:gravity="center_vertical"
                             android:hint="@string/edit_warranty_hint_category"
-                            android:imeOptions="actionNext"
                             android:inputType="none"
                             android:maxLines="1"
                             android:textColor="@color/black"
@@ -443,7 +442,7 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.imageview.ShapeableImageView
-                        android:id="@+id/iv_edit_warranty_icon_category"
+                        android:id="@+id/iv_icon_category"
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:layout_marginEnd="16dp"
@@ -451,20 +450,21 @@
                         android:elevation="8dp"
                         android:src="@drawable/ic_category_miscellaneous"
                         app:contentPadding="12dp"
-                        app:layout_constraintBottom_toBottomOf="@+id/ti_edit_warranty_layout_category"
+                        app:layout_constraintBottom_toBottomOf="@+id/ti_layout_category"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/ti_edit_warranty_layout_category"
-                        app:shapeAppearance="@style/Theme.WarrantyRoster.ImageViewShapeAppearance" />
+                        app:layout_constraintTop_toTopOf="@+id/ti_layout_category"
+                        app:shapeAppearance="@style/Theme.WarrantyRoster.ImageViewShapeAppearance"
+                        app:tint="@color/black" />
 
                     <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/tv_edit_warranty_title_description"
+                        android:id="@+id/tv_title_description"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="24dp"
                         android:layout_marginTop="16dp"
                         android:fontFamily="@font/nunito_bold"
                         android:gravity="center_vertical|start"
-                        android:labelFor="@+id/ti_edit_warranty_layout_description"
+                        android:labelFor="@+id/ti_layout_description"
                         android:maxLines="1"
                         android:text="@string/edit_warranty_title_description"
                         android:textAlignment="gravity"
@@ -472,10 +472,10 @@
                         android:textSize="14sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/ti_edit_warranty_layout_category" />
+                        app:layout_constraintTop_toBottomOf="@+id/ti_layout_category" />
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/ti_edit_warranty_layout_description"
+                        android:id="@+id/ti_layout_description"
                         style="@style/Theme.WarrantyRoster.TextInputLayout"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -485,10 +485,10 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tv_edit_warranty_title_description">
+                        app:layout_constraintTop_toBottomOf="@+id/tv_title_description">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/ti_edit_warranty_edit_description"
+                            android:id="@+id/ti_edit_description"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/nunito_regular"

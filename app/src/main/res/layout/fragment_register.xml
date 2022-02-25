@@ -14,7 +14,7 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_register_description"
+            android:id="@+id/tv_description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="24dp"
@@ -25,41 +25,46 @@
             android:textAlignment="gravity"
             android:textColor="@color/black"
             android:textSize="24sp"
+            app:layout_constraintBottom_toTopOf="@+id/tv_title_email"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0"
+            app:layout_constraintVertical_chainStyle="packed" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_register_title_email"
+            android:id="@+id/tv_title_email"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="32dp"
             android:layout_marginTop="76dp"
             android:fontFamily="@font/nunito_bold"
             android:gravity="start|center_vertical"
-            android:labelFor="@+id/ti_register_layout_email"
+            android:labelFor="@+id/ti_layout_email"
             android:maxLines="1"
             android:text="@string/register_title_email"
             android:textAlignment="gravity"
             android:textColor="@color/black"
             android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@+id/ti_layout_email"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_register_description" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_description" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/ti_register_layout_email"
+            android:id="@+id/ti_layout_email"
             style="@style/Theme.WarrantyRoster.TextInputLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="24dp"
             android:layout_marginTop="4dp"
+            app:layout_constraintBottom_toTopOf="@+id/tv_title_password"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_register_title_email">
+            app:layout_constraintTop_toBottomOf="@+id/tv_title_email">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/ti_register_edit_email"
+                android:id="@+id/ti_edit_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/nunito_regular"
@@ -76,37 +81,39 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_register_title_password"
+            android:id="@+id/tv_title_password"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="32dp"
             android:layout_marginTop="16dp"
             android:fontFamily="@font/nunito_bold"
             android:gravity="start|center_vertical"
-            android:labelFor="@+id/ti_register_layout_password"
+            android:labelFor="@+id/ti_layout_password"
             android:maxLines="1"
             android:text="@string/register_title_password"
             android:textAlignment="gravity"
             android:textColor="@color/black"
             android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@+id/ti_layout_password"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ti_register_layout_email" />
+            app:layout_constraintTop_toBottomOf="@+id/ti_layout_email" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/ti_register_layout_password"
+            android:id="@+id/ti_layout_password"
             style="@style/Theme.WarrantyRoster.TextInputLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="24dp"
             android:layout_marginTop="4dp"
+            app:layout_constraintBottom_toTopOf="@+id/tv_title_retype_password"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_register_title_password"
+            app:layout_constraintTop_toBottomOf="@+id/tv_title_password"
             app:passwordToggleEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/ti_register_edit_password"
+                android:id="@+id/ti_edit_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/nunito_regular"
@@ -123,37 +130,39 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_register_title_retype_password"
+            android:id="@+id/tv_title_retype_password"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="32dp"
             android:layout_marginTop="16dp"
             android:fontFamily="@font/nunito_bold"
             android:gravity="start|center_vertical"
-            android:labelFor="@+id/ti_register_layout_retype_password"
+            android:labelFor="@+id/ti_layout_retype_password"
             android:maxLines="1"
             android:text="@string/register_title_retype_password"
             android:textAlignment="gravity"
             android:textColor="@color/black"
             android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@+id/ti_layout_retype_password"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ti_register_layout_password" />
+            app:layout_constraintTop_toBottomOf="@+id/ti_layout_password" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/ti_register_layout_retype_password"
+            android:id="@+id/ti_layout_retype_password"
             style="@style/Theme.WarrantyRoster.TextInputLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="24dp"
             android:layout_marginTop="4dp"
+            app:layout_constraintBottom_toTopOf="@+id/btn_agreement"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_register_title_retype_password"
+            app:layout_constraintTop_toBottomOf="@+id/tv_title_retype_password"
             app:passwordToggleEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/ti_register_edit_retype_password"
+                android:id="@+id/ti_edit_retype_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/nunito_regular"
@@ -170,7 +179,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_register_agreement"
+            android:id="@+id/btn_agreement"
             style="@style/Theme.WarrantyRoster.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -179,25 +188,31 @@
             android:clickable="true"
             android:focusable="true"
             android:fontFamily="@font/nunito_light"
-            android:gravity="center"
+            android:gravity="center_vertical|start"
+            android:maxLines="2"
             android:text="@string/register_text_agreement"
             android:textAlignment="gravity"
             android:textColor="@color/grayDark"
             android:textSize="12sp"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toTopOf="@+id/btn_register"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ti_register_layout_retype_password" />
+            app:layout_constraintTop_toBottomOf="@+id/ti_layout_retype_password" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_register_register"
+            android:id="@+id/btn_register"
             style="@style/Theme.WarrantyRoster.Button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="24dp"
             android:layout_marginTop="35dp"
             android:text="@string/register_btn_register"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_register_agreement" />
+            app:layout_constraintTop_toBottomOf="@+id/btn_agreement" />
 
         <com.google.android.material.progressindicator.CircularProgressIndicator
             android:id="@+id/cpi_register"
@@ -205,13 +220,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/btn_register_register"
-            app:layout_constraintEnd_toEndOf="@+id/btn_register_register"
-            app:layout_constraintStart_toStartOf="@+id/btn_register_register"
-            app:layout_constraintTop_toTopOf="@+id/btn_register_register" />
+            app:layout_constraintBottom_toBottomOf="@+id/btn_register"
+            app:layout_constraintEnd_toEndOf="@+id/btn_register"
+            app:layout_constraintStart_toStartOf="@+id/btn_register"
+            app:layout_constraintTop_toTopOf="@+id/btn_register" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_register_register_title"
+            android:id="@+id/tv_register_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/nunito_regular"
@@ -221,13 +236,14 @@
             android:textAlignment="gravity"
             android:textColor="@color/black"
             android:textSize="14sp"
-            app:layout_constraintBaseline_toBaselineOf="@+id/btn_register_login"
-            app:layout_constraintEnd_toStartOf="@+id/btn_register_login"
+            app:layout_constraintBaseline_toBaselineOf="@+id/btn_login"
+            app:layout_constraintEnd_toStartOf="@+id/btn_login"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_register_login"
+            android:id="@+id/btn_login"
             style="@style/Theme.WarrantyRoster.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -240,8 +256,10 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toEndOf="@+id/tv_register_register_title"
-            app:layout_constraintTop_toBottomOf="@+id/btn_register_register" />
+            app:layout_constraintStart_toEndOf="@+id/tv_register_title"
+            app:layout_constraintTop_toBottomOf="@+id/btn_register"
+            app:layout_constraintVertical_bias="1"
+            app:layout_constraintVertical_chainStyle="spread" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

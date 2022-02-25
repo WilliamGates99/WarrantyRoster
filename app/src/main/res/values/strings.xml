@@ -1,33 +1,10 @@
 <resources>
     <string name="app_name">Warranty Roster</string>
     <string name="network_error_connection">Unable to connect to the internet.</string>
+    <string name="network_error_403">This service is not available in your region. Please consider changing your IP address by using a VPN.</string>
     <string name="network_error_failure">You\'re having network issues. Please try again later.</string>
     <string name="network_error_retry">Retry</string>
-    <string name="network_error_response">It looks like you encountered an error. Please try again.</string>
     <string name="intent_error_app_not_found">There is no app on the phone to handle this action.</string>
-
-    <!--Category Titles-->
-    <string name="category_accessory">Accessory</string>
-    <string name="category_air_conditioner">Air Conditioner</string>
-    <string name="category_audio_device">Audio Device</string>
-    <string name="category_camera">Camera</string>
-    <string name="category_game_console">Game Console</string>
-    <string name="category_headset">Headset</string>
-    <string name="category_healthcare">Healthcare</string>
-    <string name="category_home_appliance">Home Appliance</string>
-    <string name="category_memory_and_storage">Memory and Storage</string>
-    <string name="category_miscellaneous">Miscellaneous</string>
-    <string name="category_monitor">Monitor</string>
-    <string name="category_musical_instrument">Musical Instrument</string>
-    <string name="category_peripheral_device">Peripheral Device</string>
-    <string name="category_personal_care">Personal Care</string>
-    <string name="category_personal_computer">Personal Computer</string>
-    <string name="category_phone_and_tablet">Phone and Tablet</string>
-    <string name="category_smart_home">Smart Home</string>
-    <string name="category_smart_watch">Smart Watch</string>
-    <string name="category_sport_and_fitness">Sport and Fitness</string>
-    <string name="category_tool">Tool</string>
-    <string name="category_vehicle">Vehicle</string>
 
     <!--Landing Activity-->
     <string name="landing_text_content_description">Header</string>
@@ -44,6 +21,7 @@
     <string name="login_text_register_title">Don’t have an account?</string>
     <string name="login_btn_register">Register</string>
     <string name="login_error_email">Email address is not valid!</string>
+    <string name="login_error_not_found">The account with the provided email does not exist.</string>
     <string name="login_error_credentials">The provided credentials are incorrect.</string>
 
     <!--Register Fragment-->
@@ -63,6 +41,7 @@
     <string name="register_helper_password_mediocre">Mediocre</string>
     <string name="register_helper_password_strong">Strong</string>
     <string name="register_error_email">Email address is not valid!</string>
+    <string name="register_error_password_short">Password should be at least 6 characters!</string>
     <string name="register_error_password">Your password and retype password do not match!</string>
     <string name="register_error_account_exists">An account with the provided email already exists.</string>
 
@@ -82,7 +61,6 @@
     <string name="forgot_pw_sent_text_resend">Didn\'t receive the link?</string>
     <string name="forgot_pw_sent_btn_resend">Resend</string>
     <string name="forgot_pw_sent_text_resent">A new email has been sent.</string>
-    <string name="forgot_pw_sent_error_wait">Please wait a minute before requesting to resend the email.</string>
 
     <!--Main Activity-->
     <string name="main_menu_title_warranties">Warranty List</string>
@@ -91,7 +69,6 @@
 
     <!--Warranties Fragment-->
     <string name="warranties_text_title">Warranty List</string>
-    <string name="warranties_menu_title_search">Search</string>
     <string name="warranties_menu_hint_search">Search by title…</string>
     <string name="warranties_text_empty_list">There is currently no warranty on your list. You can add a warranty by clicking on the <font fgcolor="#1C53F4">Add Button</font>.</string>
     <string name="warranties_list_status_valid">Valid</string>
@@ -187,8 +164,8 @@
 
     <!--Change Password Fragment-->
     <string name="change_password_text_title">Change Password</string>
-    <string name="change_password_title_old">Old Password</string>
-    <string name="change_password_hint_old">Enter your old password</string>
+    <string name="change_password_title_current">Current Password</string>
+    <string name="change_password_hint_current">Enter your current password</string>
     <string name="change_password_title_new">New Password</string>
     <string name="change_password_hint_new">Enter a new password</string>
     <string name="change_password_title_retype">Retype New Password</string>
@@ -197,17 +174,21 @@
     <string name="change_password_helper_password_weak">Weak</string>
     <string name="change_password_helper_password_mediocre">Mediocre</string>
     <string name="change_password_helper_password_strong">Strong</string>
+    <string name="change_password_error_password_short">Password should be at least 6 characters!</string>
     <string name="change_password_error_match">New password and retype new password do not match!</string>
-    <string name="change_password_error_old">The old password is not entered correctly!!</string>
+    <string name="change_password_error_credentials">The provided credentials are incorrect.</string>
     <string name="change_password_dialog_message">Your password has been successfully changed.</string>
     <string name="change_password_dialog_positive">Confirm</string>
 
     <!--Change Email Fragment-->
     <string name="change_email_text_title">Change Email</string>
-    <string name="change_email_title_email">New Email Address</string>
-    <string name="change_email_hint_email">Enter a new email address</string>
+    <string name="change_email_title_password">Password</string>
+    <string name="change_email_hint_password">Enter your password</string>
+    <string name="change_email_title_new_email">New Email Address</string>
+    <string name="change_email_hint_new_email">Enter a new email address</string>
     <string name="change_email_btn_change">Change Email</string>
-    <string name="change_email_error_email">Email address is not valid!</string>
+    <string name="change_email_error_new_email">New email address is not valid!</string>
+    <string name="change_email_error_credentials">The provided credentials are incorrect.</string>
     <string name="change_email_error_email_same">New email cannot be the same as your current email!</string>
     <string name="change_email_error_email_exists">An account with the provided email already exists.</string>
     <string name="change_email_dialog_message">Your email has been successfully changed.</string>

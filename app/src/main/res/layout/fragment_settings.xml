@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbar_settings"
+        android:id="@+id/toolbar"
         style="@style/Theme.WarrantyRoster.Toolbar"
         android:layout_width="0dp"
         android:layout_height="?attr/actionBarSize"
@@ -20,20 +20,21 @@
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginBottom="20dp"
         android:orientation="vertical"
-        android:overScrollMode="never"
+        android:overScrollMode="ifContentScrolls"
         android:scrollbars="none"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_settings">
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tv_settings_title_account"
+                android:id="@+id/tv_title_account"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="24sp"
@@ -45,28 +46,32 @@
                 android:textAllCaps="true"
                 android:textColor="@color/navyBlue"
                 android:textSize="16sp"
+                app:layout_constraintBottom_toTopOf="@+id/cv_account"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0"
+                app:layout_constraintVertical_chainStyle="packed" />
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cv_settings_account"
+                android:id="@+id/cv_account"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="8dp"
                 android:layout_marginTop="8dp"
                 app:cardBackgroundColor="@color/surface"
                 app:cardCornerRadius="12dp"
+                app:layout_constraintBottom_toTopOf="@+id/tv_title_settings"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_settings_title_account">
+                app:layout_constraintTop_toBottomOf="@+id/tv_title_account">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
                     <com.google.android.material.imageview.ShapeableImageView
-                        android:id="@+id/iv_settings_account_email"
+                        android:id="@+id/iv_account_email"
                         android:layout_width="26dp"
                         android:layout_height="26dp"
                         android:layout_marginStart="12dp"
@@ -77,20 +82,20 @@
                         app:shapeAppearance="@style/Theme.WarrantyRoster.ImageViewShapeAppearance.Settings" />
 
                     <com.airbnb.lottie.LottieAnimationView
-                        android:id="@+id/lav_settings_account_email"
+                        android:id="@+id/lav_account_verification"
                         android:layout_width="0dp"
                         android:layout_height="0dp"
-                        app:layout_constraintBottom_toBottomOf="@+id/iv_settings_account_email"
-                        app:layout_constraintEnd_toEndOf="@+id/iv_settings_account_email"
-                        app:layout_constraintStart_toStartOf="@+id/iv_settings_account_email"
-                        app:layout_constraintTop_toTopOf="@+id/iv_settings_account_email"
+                        app:layout_constraintBottom_toBottomOf="@+id/iv_account_email"
+                        app:layout_constraintEnd_toEndOf="@+id/iv_account_email"
+                        app:layout_constraintStart_toStartOf="@+id/iv_account_email"
+                        app:layout_constraintTop_toTopOf="@+id/iv_account_email"
                         app:lottie_autoPlay="true"
                         app:lottie_loop="true"
                         app:lottie_rawRes="@raw/anim_account_not_verified"
                         app:lottie_speed="1.00" />
 
                     <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/tv_settings_account_email"
+                        android:id="@+id/tv_account_email"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="12dp"
@@ -102,15 +107,15 @@
                         android:textAlignment="gravity"
                         android:textColor="@color/black"
                         android:textSize="16sp"
-                        app:layout_constraintBottom_toBottomOf="@+id/iv_settings_account_email"
-                        app:layout_constraintEnd_toStartOf="@+id/btn_settings_account_email"
-                        app:layout_constraintStart_toEndOf="@+id/iv_settings_account_email"
-                        app:layout_constraintTop_toTopOf="@+id/iv_settings_account_email"
+                        app:layout_constraintBottom_toBottomOf="@+id/iv_account_email"
+                        app:layout_constraintEnd_toStartOf="@+id/btn_account_verification"
+                        app:layout_constraintStart_toEndOf="@+id/iv_account_email"
+                        app:layout_constraintTop_toTopOf="@+id/iv_account_email"
                         app:layout_constraintVertical_bias="0.5"
                         tools:ignore="HardcodedText" />
 
                     <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btn_settings_account_email"
+                        android:id="@+id/btn_account_verification"
                         style="@style/Theme.WarrantyRoster.TextButton.Settings"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -118,48 +123,36 @@
                         android:gravity="center"
                         android:text="@string/settings_btn_account_verify"
                         android:textAlignment="gravity"
-                        app:layout_constraintBottom_toBottomOf="@+id/iv_settings_account_email"
+                        app:layout_constraintBottom_toBottomOf="@+id/iv_account_email"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/iv_settings_account_email"
+                        app:layout_constraintTop_toTopOf="@+id/iv_account_email"
                         app:layout_constraintVertical_bias="0.5" />
 
                     <com.google.android.material.progressindicator.CircularProgressIndicator
-                        android:id="@+id/cpi_settings_account_email_verification"
+                        android:id="@+id/cpi_verify"
                         style="@style/Theme.WarrantyRoster.LoadingProgressBar.Verification"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="12dp"
                         android:visibility="gone"
-                        app:layout_constraintBottom_toBottomOf="@+id/iv_settings_account_email"
+                        app:layout_constraintBottom_toBottomOf="@+id/iv_account_email"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintTop_toTopOf="@+id/iv_settings_account_email"
+                        app:layout_constraintTop_toTopOf="@+id/iv_account_email"
                         app:layout_constraintVertical_bias="0.5" />
 
-                    <com.google.android.material.progressindicator.LinearProgressIndicator
-                        android:id="@+id/lpi_settings_account_email"
-                        style="@style/Theme.WarrantyRoster.LoadingProgressBar.Linear"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:visibility="gone"
-                        app:indicatorDirectionLinear="startToEnd"
-                        app:layout_constraintBottom_toTopOf="@+id/divider_settings_account_first"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
                     <View
-                        android:id="@+id/divider_settings_account_first"
+                        android:id="@+id/divider_account_first"
                         android:layout_width="0dp"
                         android:layout_height="1dp"
                         android:layout_marginTop="12dp"
                         android:background="@color/grayLight"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/iv_settings_account_email" />
+                        app:layout_constraintTop_toBottomOf="@+id/iv_account_email" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/cl_settings_account_change_email"
+                        android:id="@+id/cl_account_change_email"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:background="?attr/selectableItemBackground"
@@ -168,10 +161,10 @@
                         android:paddingVertical="12dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/divider_settings_account_first">
+                        app:layout_constraintTop_toBottomOf="@+id/divider_account_first">
 
                         <com.google.android.material.imageview.ShapeableImageView
-                            android:id="@+id/iv_settings_account_change_email"
+                            android:id="@+id/iv_account_change_email"
                             android:layout_width="26dp"
                             android:layout_height="26dp"
                             android:layout_marginStart="12dp"
@@ -183,7 +176,7 @@
                             app:shapeAppearance="@style/Theme.WarrantyRoster.ImageViewShapeAppearance.Settings" />
 
                         <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/tv_settings_account_change_email"
+                            android:id="@+id/tv_account_change_email"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="12dp"
@@ -195,36 +188,36 @@
                             android:textAlignment="gravity"
                             android:textColor="@color/black"
                             android:textSize="16sp"
-                            app:layout_constraintBottom_toBottomOf="@+id/iv_settings_account_change_email"
-                            app:layout_constraintEnd_toStartOf="@+id/iv_settings_account_change_email_arrow"
-                            app:layout_constraintStart_toEndOf="@+id/iv_settings_account_change_email"
-                            app:layout_constraintTop_toTopOf="@+id/iv_settings_account_change_email"
+                            app:layout_constraintBottom_toBottomOf="@+id/iv_account_change_email"
+                            app:layout_constraintEnd_toStartOf="@+id/iv_account_change_email_arrow"
+                            app:layout_constraintStart_toEndOf="@+id/iv_account_change_email"
+                            app:layout_constraintTop_toTopOf="@+id/iv_account_change_email"
                             app:layout_constraintVertical_bias="0.5" />
 
                         <com.google.android.material.imageview.ShapeableImageView
-                            android:id="@+id/iv_settings_account_change_email_arrow"
+                            android:id="@+id/iv_account_change_email_arrow"
                             android:layout_width="18dp"
                             android:layout_height="18dp"
                             android:layout_marginEnd="12dp"
                             android:src="@drawable/ic_settings_arrow"
-                            app:layout_constraintBottom_toBottomOf="@+id/iv_settings_account_change_email"
+                            app:layout_constraintBottom_toBottomOf="@+id/iv_account_change_email"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="@+id/iv_settings_account_change_email"
+                            app:layout_constraintTop_toTopOf="@+id/iv_account_change_email"
                             app:layout_constraintVertical_bias="0.5" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <View
-                        android:id="@+id/divider_settings_account_second"
+                        android:id="@+id/divider_account_second"
                         android:layout_width="0dp"
                         android:layout_height="1dp"
                         android:background="@color/grayLight"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/cl_settings_account_change_email" />
+                        app:layout_constraintTop_toBottomOf="@+id/cl_account_change_email" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/cl_settings_account_change_password"
+                        android:id="@+id/cl_account_change_password"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:background="?attr/selectableItemBackground"
@@ -233,10 +226,10 @@
                         android:paddingVertical="12dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/divider_settings_account_second">
+                        app:layout_constraintTop_toBottomOf="@+id/divider_account_second">
 
                         <com.google.android.material.imageview.ShapeableImageView
-                            android:id="@+id/iv_settings_account_change_password"
+                            android:id="@+id/iv_account_change_password"
                             android:layout_width="26dp"
                             android:layout_height="26dp"
                             android:layout_marginStart="12dp"
@@ -248,7 +241,7 @@
                             app:shapeAppearance="@style/Theme.WarrantyRoster.ImageViewShapeAppearance.Settings" />
 
                         <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/tv_settings_account_changepassword"
+                            android:id="@+id/tv_account_change_password"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="12dp"
@@ -260,38 +253,31 @@
                             android:textAlignment="gravity"
                             android:textColor="@color/black"
                             android:textSize="16sp"
-                            app:layout_constraintBottom_toBottomOf="@+id/iv_settings_account_change_password"
-                            app:layout_constraintEnd_toStartOf="@+id/iv_settings_account_change_password_arrow"
-                            app:layout_constraintStart_toEndOf="@+id/iv_settings_account_change_password"
-                            app:layout_constraintTop_toTopOf="@+id/iv_settings_account_change_password"
+                            app:layout_constraintBottom_toBottomOf="@+id/iv_account_change_password"
+                            app:layout_constraintEnd_toStartOf="@+id/iv_account_change_password_arrow"
+                            app:layout_constraintStart_toEndOf="@+id/iv_account_change_password"
+                            app:layout_constraintTop_toTopOf="@+id/iv_account_change_password"
                             app:layout_constraintVertical_bias="0.5" />
 
                         <com.google.android.material.imageview.ShapeableImageView
-                            android:id="@+id/iv_settings_account_change_password_arrow"
+                            android:id="@+id/iv_account_change_password_arrow"
                             android:layout_width="18dp"
                             android:layout_height="18dp"
                             android:layout_marginEnd="12dp"
                             android:src="@drawable/ic_settings_arrow"
-                            app:layout_constraintBottom_toBottomOf="@+id/iv_settings_account_change_password"
+                            app:layout_constraintBottom_toBottomOf="@+id/iv_account_change_password"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="@+id/iv_settings_account_change_password"
+                            app:layout_constraintTop_toTopOf="@+id/iv_account_change_password"
                             app:layout_constraintVertical_bias="0.5" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <androidx.constraintlayout.widget.Group
-                        android:id="@+id/group_settings_account"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:visibility="gone"
-                        app:constraint_referenced_ids="iv_settings_account_email,lav_settings_account_email,tv_settings_account_email,btn_settings_account_email,divider_settings_account_first,cl_settings_account_change_email,divider_settings_account_second" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/tv_settings_title_settings"
+                android:id="@+id/tv_title_settings"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="24sp"
@@ -303,28 +289,30 @@
                 android:textAllCaps="true"
                 android:textColor="@color/navyBlue"
                 android:textSize="16sp"
+                app:layout_constraintBottom_toTopOf="@+id/cv_settings"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cv_settings_account" />
+                app:layout_constraintTop_toBottomOf="@+id/cv_account" />
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cv_settings_settings"
+                android:id="@+id/cv_settings"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="8dp"
                 android:layout_marginTop="8dp"
                 app:cardBackgroundColor="@color/surface"
                 app:cardCornerRadius="12dp"
+                app:layout_constraintBottom_toTopOf="@+id/btn_logout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_settings_title_settings">
+                app:layout_constraintTop_toBottomOf="@+id/tv_title_settings">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/cl_settings_settings_language"
+                        android:id="@+id/cl_settings_language"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:background="?attr/selectableItemBackground"
@@ -336,7 +324,7 @@
                         app:layout_constraintTop_toTopOf="parent">
 
                         <com.google.android.material.imageview.ShapeableImageView
-                            android:id="@+id/iv_settings_settings_language"
+                            android:id="@+id/iv_settings_language"
                             android:layout_width="26dp"
                             android:layout_height="26dp"
                             android:layout_marginStart="12dp"
@@ -348,7 +336,7 @@
                             app:shapeAppearance="@style/Theme.WarrantyRoster.ImageViewShapeAppearance.Settings" />
 
                         <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/tv_settings_settings_language"
+                            android:id="@+id/tv_settings_language"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="12dp"
@@ -360,14 +348,14 @@
                             android:textAlignment="gravity"
                             android:textColor="@color/black"
                             android:textSize="16sp"
-                            app:layout_constraintBottom_toBottomOf="@+id/iv_settings_settings_language"
-                            app:layout_constraintEnd_toStartOf="@+id/tv_settings_settings_language_current"
-                            app:layout_constraintStart_toEndOf="@+id/iv_settings_settings_language"
-                            app:layout_constraintTop_toTopOf="@+id/iv_settings_settings_language"
+                            app:layout_constraintBottom_toBottomOf="@+id/iv_settings_language"
+                            app:layout_constraintEnd_toStartOf="@+id/tv_settings_language_current"
+                            app:layout_constraintStart_toEndOf="@+id/iv_settings_language"
+                            app:layout_constraintTop_toTopOf="@+id/iv_settings_language"
                             app:layout_constraintVertical_bias="0.5" />
 
                         <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/tv_settings_settings_language_current"
+                            android:id="@+id/tv_settings_language_current"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="12dp"
@@ -380,24 +368,24 @@
                             android:textAllCaps="true"
                             android:textColor="@color/grayDark"
                             android:textSize="12sp"
-                            app:layout_constraintBottom_toBottomOf="@+id/iv_settings_settings_language"
+                            app:layout_constraintBottom_toBottomOf="@+id/iv_settings_language"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="@+id/iv_settings_settings_language"
+                            app:layout_constraintTop_toTopOf="@+id/iv_settings_language"
                             app:layout_constraintVertical_bias="0.5" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <View
-                        android:id="@+id/divider_settings_settings_first"
+                        android:id="@+id/divider_settings_first"
                         android:layout_width="0dp"
                         android:layout_height="1dp"
                         android:background="@color/grayLight"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/cl_settings_settings_language" />
+                        app:layout_constraintTop_toBottomOf="@+id/cl_settings_language" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/cl_settings_settings_theme"
+                        android:id="@+id/cl_settings_theme"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:background="?attr/selectableItemBackground"
@@ -406,10 +394,10 @@
                         android:paddingVertical="12dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/divider_settings_settings_first">
+                        app:layout_constraintTop_toBottomOf="@+id/divider_settings_first">
 
                         <com.google.android.material.imageview.ShapeableImageView
-                            android:id="@+id/iv_settings_settings_theme"
+                            android:id="@+id/iv_settings_theme"
                             android:layout_width="26dp"
                             android:layout_height="26dp"
                             android:layout_marginStart="12dp"
@@ -421,7 +409,7 @@
                             app:shapeAppearance="@style/Theme.WarrantyRoster.ImageViewShapeAppearance.Settings" />
 
                         <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/tv_settings_settings_theme"
+                            android:id="@+id/tv_settings_theme"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="12dp"
@@ -433,14 +421,14 @@
                             android:textAlignment="gravity"
                             android:textColor="@color/black"
                             android:textSize="16sp"
-                            app:layout_constraintBottom_toBottomOf="@+id/iv_settings_settings_theme"
-                            app:layout_constraintEnd_toStartOf="@+id/tv_settings_settings_theme_current"
-                            app:layout_constraintStart_toEndOf="@+id/iv_settings_settings_theme"
-                            app:layout_constraintTop_toTopOf="@+id/iv_settings_settings_theme"
+                            app:layout_constraintBottom_toBottomOf="@+id/iv_settings_theme"
+                            app:layout_constraintEnd_toStartOf="@+id/tv_settings_theme_current"
+                            app:layout_constraintStart_toEndOf="@+id/iv_settings_theme"
+                            app:layout_constraintTop_toTopOf="@+id/iv_settings_theme"
                             app:layout_constraintVertical_bias="0.5" />
 
                         <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/tv_settings_settings_theme_current"
+                            android:id="@+id/tv_settings_theme_current"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="12dp"
@@ -453,24 +441,24 @@
                             android:textAllCaps="true"
                             android:textColor="@color/grayDark"
                             android:textSize="12sp"
-                            app:layout_constraintBottom_toBottomOf="@+id/iv_settings_settings_theme"
+                            app:layout_constraintBottom_toBottomOf="@+id/iv_settings_theme"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="@+id/iv_settings_settings_theme"
+                            app:layout_constraintTop_toTopOf="@+id/iv_settings_theme"
                             app:layout_constraintVertical_bias="0.5" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <View
-                        android:id="@+id/divider_settings_settings_second"
+                        android:id="@+id/divider_settings_second"
                         android:layout_width="0dp"
                         android:layout_height="1dp"
                         android:background="@color/grayLight"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/cl_settings_settings_theme" />
+                        app:layout_constraintTop_toBottomOf="@+id/cl_settings_theme" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/cl_settings_settings_privacy_policy"
+                        android:id="@+id/cl_settings_privacy_policy"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:background="?attr/selectableItemBackground"
@@ -479,10 +467,10 @@
                         android:paddingVertical="12dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/divider_settings_settings_second">
+                        app:layout_constraintTop_toBottomOf="@+id/divider_settings_second">
 
                         <com.google.android.material.imageview.ShapeableImageView
-                            android:id="@+id/iv_settings_settings_privacy_policy"
+                            android:id="@+id/iv_settings_privacy_policy"
                             android:layout_width="26dp"
                             android:layout_height="26dp"
                             android:layout_marginStart="12dp"
@@ -494,7 +482,7 @@
                             app:shapeAppearance="@style/Theme.WarrantyRoster.ImageViewShapeAppearance.Settings" />
 
                         <com.google.android.material.textview.MaterialTextView
-                            android:id="@+id/tv_settings_settings_privacy_policy"
+                            android:id="@+id/tv_settings_privacy_policy"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="12dp"
@@ -506,76 +494,78 @@
                             android:textAlignment="gravity"
                             android:textColor="@color/black"
                             android:textSize="16sp"
-                            app:layout_constraintBottom_toBottomOf="@+id/iv_settings_settings_privacy_policy"
-                            app:layout_constraintEnd_toStartOf="@+id/iv_settings_settings_privacy_policy_arrow"
-                            app:layout_constraintStart_toEndOf="@+id/iv_settings_settings_privacy_policy"
-                            app:layout_constraintTop_toTopOf="@+id/iv_settings_settings_privacy_policy"
+                            app:layout_constraintBottom_toBottomOf="@+id/iv_settings_privacy_policy"
+                            app:layout_constraintEnd_toStartOf="@+id/iv_settings_privacy_policy_arrow"
+                            app:layout_constraintStart_toEndOf="@+id/iv_settings_privacy_policy"
+                            app:layout_constraintTop_toTopOf="@+id/iv_settings_privacy_policy"
                             app:layout_constraintVertical_bias="0.5" />
 
                         <com.google.android.material.imageview.ShapeableImageView
-                            android:id="@+id/iv_settings_settings_privacy_policy_arrow"
+                            android:id="@+id/iv_settings_privacy_policy_arrow"
                             android:layout_width="18dp"
                             android:layout_height="18dp"
                             android:layout_marginEnd="12dp"
                             android:src="@drawable/ic_settings_arrow"
-                            app:layout_constraintBottom_toBottomOf="@+id/iv_settings_settings_privacy_policy"
+                            app:layout_constraintBottom_toBottomOf="@+id/iv_settings_privacy_policy"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="@+id/iv_settings_settings_privacy_policy"
+                            app:layout_constraintTop_toTopOf="@+id/iv_settings_privacy_policy"
                             app:layout_constraintVertical_bias="0.5" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <View
-                        android:id="@+id/divider_settings_settings_third"
+                        android:id="@+id/divider_settings_third"
                         android:layout_width="0dp"
                         android:layout_height="1dp"
                         android:background="@color/grayLight"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/cl_settings_settings_privacy_policy" />
+                        app:layout_constraintTop_toBottomOf="@+id/cl_settings_privacy_policy" />
 
                     <FrameLayout
-                        android:id="@+id/fl_settings_ad_container"
+                        android:id="@+id/fl_ad_container"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/divider_settings_settings_third" />
+                        app:layout_constraintTop_toBottomOf="@+id/divider_settings_third" />
 
                     <androidx.constraintlayout.widget.Group
-                        android:id="@+id/group_settings_ad"
+                        android:id="@+id/group_ad"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:visibility="gone"
-                        app:constraint_referenced_ids="divider_settings_settings_third,fl_settings_ad_container" />
+                        app:constraint_referenced_ids="divider_settings_third,fl_ad_container" />
 
                     <!--TODO remove after adding change language feature-->
                     <androidx.constraintlayout.widget.Group
-                        android:id="@+id/group_settings_language"
+                        android:id="@+id/group_language"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:visibility="gone"
-                        app:constraint_referenced_ids="cl_settings_settings_language,divider_settings_settings_first" />
+                        app:constraint_referenced_ids="cl_settings_language,divider_settings_first" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </com.google.android.material.card.MaterialCardView>
 
+            <!--84dp bottom margin to align with fab-->
+            <!--84+6=90dp bottom margin-->
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_settings_logout"
+                android:id="@+id/btn_logout"
                 style="@style/Theme.WarrantyRoster.Button.Settings"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="8dp"
                 android:layout_marginTop="24dp"
-                android:layout_marginBottom="80dp"
+                android:layout_marginBottom="70dp"
                 android:text="@string/settings_btn_logout"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cv_settings_settings" />
+                app:layout_constraintTop_toBottomOf="@+id/cv_settings" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
