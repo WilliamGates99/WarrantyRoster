@@ -6,9 +6,6 @@
     <string name="network_error_retry">Retry</string>
     <string name="intent_error_app_not_found">There is no app on the phone to handle this action.</string>
 
-    <!--Landing Activity-->
-    <string name="landing_text_content_description">Header</string>
-
     <!--Login Fragment-->
     <string name="login_text_title">Login</string>
     <string name="login_text_description">Let’s log you in.</string>
