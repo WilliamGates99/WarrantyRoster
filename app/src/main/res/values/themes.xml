@@ -84,6 +84,11 @@
         <item name="android:textSize">12sp</item>
     </style>
 
+    <style name="Theme.WarrantyRoster.CheckBox" parent="Widget.AppCompat.CompoundButton.CheckBox">
+        <item name="android:minWidth">0dp</item>
+        <item name="android:minHeight">0dp</item>
+    </style>
+
     <style name="Theme.WarrantyRoster.LoadingProgressBar" parent="Widget.MaterialComponents.CircularProgressIndicator">
         <item name="android:indeterminate">true</item>
         <item name="indicatorColor">@color/grayMedium</item>

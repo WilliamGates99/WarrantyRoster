@@ -57,8 +57,7 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:paddingBottom="16dp">
+                    android:layout_height="match_parent">
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/tv_title_title"
@@ -99,7 +98,6 @@
                             android:imeOptions="actionDone"
                             android:inputType="textCapWords"
                             android:maxLines="1"
-                            android:textColor="@color/black"
                             android:textColorHint="@color/grayDark"
                             android:textSize="16sp" />
 
@@ -147,7 +145,6 @@
                             android:imeOptions="actionNext"
                             android:inputType="none"
                             android:maxLines="1"
-                            android:textColor="@color/black"
                             android:textColorHint="@color/grayDark"
                             android:textSize="16sp" />
 
@@ -195,7 +192,6 @@
                             android:imeOptions="actionNext"
                             android:inputType="none"
                             android:maxLines="1"
-                            android:textColor="@color/black"
                             android:textColorHint="@color/grayDark"
                             android:textSize="16sp" />
 
@@ -214,10 +210,42 @@
                         android:textColor="@color/red"
                         android:textSize="12sp"
                         android:visibility="gone"
-                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/ti_layout_date_starting" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/tv_checkbox_lifetime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="24dp"
+                        android:fontFamily="@font/nunito_extra_light"
+                        android:gravity="center_vertical|end"
+                        android:text="@string/add_warranty_checkbox_lifetime"
+                        android:textAlignment="gravity"
+                        android:textColor="@color/black"
+                        android:textSize="12sp"
+                        app:layout_constrainedWidth="true"
+                        app:layout_constraintBaseline_toBaselineOf="@+id/cb_lifetime"
+                        app:layout_constraintEnd_toStartOf="@+id/cb_lifetime"
+                        app:layout_constraintHorizontal_bias="1"
+                        app:layout_constraintHorizontal_chainStyle="packed"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_date_error" />
+
+                    <com.google.android.material.checkbox.MaterialCheckBox
+                        android:id="@+id/cb_lifetime"
+                        style="@style/Theme.WarrantyRoster.CheckBox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="24dp"
+                        android:layout_marginBottom="16dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/tv_checkbox_lifetime"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_date_error" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -278,7 +306,6 @@
                             android:imeOptions="actionNext"
                             android:inputType="textCapWords"
                             android:maxLines="1"
-                            android:textColor="@color/black"
                             android:textColorHint="@color/grayDark"
                             android:textSize="16sp" />
 
@@ -323,7 +350,6 @@
                             android:imeOptions="actionNext"
                             android:inputType="textCapWords"
                             android:maxLines="1"
-                            android:textColor="@color/black"
                             android:textColorHint="@color/grayDark"
                             android:textSize="16sp" />
 
@@ -370,7 +396,6 @@
                             android:imeOptions="actionDone"
                             android:inputType="textCapCharacters"
                             android:maxLines="1"
-                            android:textColor="@color/black"
                             android:textColorHint="@color/grayDark"
                             android:textSize="16sp" />
 
@@ -435,7 +460,6 @@
                             android:hint="@string/add_warranty_hint_category"
                             android:inputType="none"
                             android:maxLines="1"
-                            android:textColor="@color/black"
                             android:textColorHint="@color/grayDark"
                             android:textSize="16sp" />
 
@@ -496,7 +520,6 @@
                             android:hint="@string/add_warranty_hint_description"
                             android:imeOptions="actionDone"
                             android:inputType="textCapSentences|textMultiLine"
-                            android:textColor="@color/black"
                             android:textColorHint="@color/grayDark"
                             android:textSize="16sp" />
 
