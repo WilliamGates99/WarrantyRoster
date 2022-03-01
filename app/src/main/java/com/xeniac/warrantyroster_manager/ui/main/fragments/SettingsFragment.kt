@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.adcolony.sdk.*
 import com.airbnb.lottie.LottieDrawable
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
@@ -22,15 +23,13 @@ import com.xeniac.warrantyroster_manager.di.CurrentLanguage
 import com.xeniac.warrantyroster_manager.models.Status
 import com.xeniac.warrantyroster_manager.ui.landing.LandingActivity
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.SettingsViewModel
+import com.xeniac.warrantyroster_manager.utils.Constants.ADCOLONY_BANNER_ZONE_ID
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
-import com.xeniac.warrantyroster_manager.utils.Constants.SETTINGS_NATIVE_ZONE_ID
-import com.xeniac.warrantyroster_manager.utils.Constants.TAPSELL_KEY
+import com.xeniac.warrantyroster_manager.utils.Constants.TAPSELL_SETTINGS_NATIVE_ZONE_ID
 import com.xeniac.warrantyroster_manager.utils.Constants.URL_PRIVACY_POLICY
 import dagger.hilt.android.AndroidEntryPoint
 import ir.tapsell.plus.*
-import ir.tapsell.plus.model.AdNetworkError
-import ir.tapsell.plus.model.AdNetworks
 import ir.tapsell.plus.model.TapsellPlusAdModel
 import timber.log.Timber
 import javax.inject.Inject
@@ -56,6 +55,8 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     private var requestAdCounter = 0
     private var responseId: String? = null
 
+    private var adColonyBanner: AdColonyAdView? = null
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentSettingsBinding.bind(view)
@@ -73,7 +74,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         logoutOnClick()
         sendVerificationEmailObserver()
         logoutObserver()
-        adInit()
+        requestAdColonyBanner()
     }
 
     override fun onDestroyView() {
@@ -296,30 +297,44 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         binding.btnAccountVerification.visibility = VISIBLE
     }
 
-    private fun adInit() = TapsellPlus.initialize(requireContext(), TAPSELL_KEY,
-        object : TapsellPlusInitListener {
-            override fun onInitializeSuccess(adNetworks: AdNetworks?) {
-                Timber.i("onInitializeSuccess: ${adNetworks?.name}")
-                val adHolder = TapsellPlus.createAdHolder(
-                    activity, binding.flAdContainer, R.layout.ad_banner_settings
-                )
-                requestAdCounter = 0
-                adHolder?.let { requestNativeAd(it) }
+    private fun requestAdColonyBanner() = AdColony.requestAdView(
+        ADCOLONY_BANNER_ZONE_ID,
+        object : AdColonyAdViewListener() {
+            override fun onRequestFilled(ad: AdColonyAdView?) {
+                Timber.i("Banner request filled.")
+                adColonyBanner = ad
+                adColonyBanner?.let {
+                    showAdColonyContainer()
+                    binding.flAdContainerAdcolony.addView(it)
+                }
             }
 
-            override fun onInitializeFailed(
-                adNetworks: AdNetworks?, adNetworkError: AdNetworkError?
-            ) {
-                Timber.e("onInitializeFailed: ${adNetworks?.name}, error: ${adNetworkError?.errorMessage}")
+            override fun onRequestNotFilled(zone: AdColonyZone?) {
+                super.onRequestNotFilled(zone)
+                Timber.e("Banner request did not fill.")
+                initTapsellAdHolder()
             }
-        })
+        }, AdColonyAdSize.BANNER
+    )
 
-    private fun requestNativeAd(adHolder: AdHolder) {
+    @Suppress("SpellCheckingInspection")
+    private fun initTapsellAdHolder() {
+        val adHolder = TapsellPlus.createAdHolder(
+            requireActivity(), binding.flAdContainerTapsell, R.layout.ad_banner_settings
+        )
+
+        requestAdCounter = 0
+        adHolder?.let { requestTapsellNativeAd(it) }
+    }
+
+    @Suppress("SpellCheckingInspection")
+    private fun requestTapsellNativeAd(adHolder: AdHolder) {
         TapsellPlus.requestNativeAd(requireActivity(),
-            SETTINGS_NATIVE_ZONE_ID, object : AdRequestCallback() {
+            TAPSELL_SETTINGS_NATIVE_ZONE_ID, object : AdRequestCallback() {
                 override fun response(tapsellPlusAdModel: TapsellPlusAdModel?) {
                     super.response(tapsellPlusAdModel)
                     Timber.i("RequestNativeAd Response: ${tapsellPlusAdModel.toString()}")
+                    requestAdCounter = 0
                     _binding?.let {
                         tapsellPlusAdModel?.let {
                             responseId = it.responseId
@@ -333,14 +348,14 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                     Timber.e("RequestNativeAd Error: $error")
                     if (requestAdCounter < 3) {
                         requestAdCounter++
-                        requestNativeAd(adHolder)
+                        requestTapsellNativeAd(adHolder)
                     }
                 }
             })
     }
 
     private fun showNativeAd(adHolder: AdHolder, responseId: String) {
-        binding.groupAd.visibility = VISIBLE
+        showTapsellContainer()
         TapsellPlus.showNativeAd(requireActivity(),
             responseId, adHolder, object : AdShowListener() {
                 override fun onOpened(tapsellPlusAdModel: TapsellPlusAdModel?) {
@@ -353,7 +368,24 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             })
     }
 
-    private fun destroyAd() = responseId?.let {
-        TapsellPlus.destroyNativeBanner(requireActivity(), it)
+    private fun showAdColonyContainer() {
+        binding.flAdContainerTapsell.visibility = GONE
+        binding.flAdContainerAdcolony.visibility = VISIBLE
+        binding.dividerSettingsThird.visibility = VISIBLE
+    }
+
+    @Suppress("SpellCheckingInspection")
+    private fun showTapsellContainer() {
+        binding.flAdContainerAdcolony.visibility = GONE
+        binding.flAdContainerTapsell.visibility = VISIBLE
+        binding.dividerSettingsThird.visibility = VISIBLE
+    }
+
+    private fun destroyAd() {
+        adColonyBanner?.destroy()
+
+        responseId?.let {
+            TapsellPlus.destroyNativeBanner(requireActivity(), it)
+        }
     }
 }

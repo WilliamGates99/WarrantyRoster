@@ -3,6 +3,7 @@ package com.xeniac.warrantyroster_manager.ui.main.adapters
 import android.app.Activity
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.AsyncListDiffer
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.ImageLoader
 import coil.load
 import coil.request.CachePolicy
+import com.adcolony.sdk.*
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.ListAdContainerBinding
 import com.xeniac.warrantyroster_manager.databinding.ListWarrantyBinding
@@ -18,9 +20,10 @@ import com.xeniac.warrantyroster_manager.di.CategoryTitleMapKey
 import com.xeniac.warrantyroster_manager.models.ListItemType
 import com.xeniac.warrantyroster_manager.models.Warranty
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModel
+import com.xeniac.warrantyroster_manager.utils.Constants.ADCOLONY_BANNER_ZONE_ID
 import com.xeniac.warrantyroster_manager.utils.Constants.VIEW_TYPE_AD
 import com.xeniac.warrantyroster_manager.utils.Constants.VIEW_TYPE_WARRANTY
-import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_NATIVE_ZONE_ID
+import com.xeniac.warrantyroster_manager.utils.Constants.TAPSELL_WARRANTIES_NATIVE_ZONE_ID
 import com.xeniac.warrantyroster_manager.utils.DateHelper.getDayWithSuffix
 import com.xeniac.warrantyroster_manager.utils.DateHelper.getDaysUntilExpiry
 import dagger.hilt.EntryPoint
@@ -46,8 +49,6 @@ class WarrantyAdapter(
     private var categoryTitleMapKey: String
     private var imageLoader: ImageLoader
     private var dateFormat: SimpleDateFormat
-
-    private var requestAdCounter = 0
 
     @EntryPoint
     @InstallIn(SingletonComponent::class)
@@ -186,41 +187,78 @@ class WarrantyAdapter(
     inner class AdViewHolder(val binding: ListAdContainerBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        private val adHolder = TapsellPlus
-            .createAdHolder(activity, binding.cvAdContainer, R.layout.list_ad_banner)
+        private var requestAdCounter = 0
 
         fun bindView() {
-            requestAdCounter = 0
-            adHolder?.let { requestNativeAd(it) }
+            requestAdColonyBanner()
         }
-    }
 
-    private fun requestNativeAd(adHolder: AdHolder) {
-        TapsellPlus.requestNativeAd(activity, WARRANTIES_NATIVE_ZONE_ID,
-            object : AdRequestCallback() {
-                override fun response(tapsellPlusAdModel: TapsellPlusAdModel?) {
-                    super.response(tapsellPlusAdModel)
-                    Timber.i("RequestNativeAd Response: $tapsellPlusAdModel")
-                    TapsellPlus.showNativeAd(activity, tapsellPlusAdModel!!.responseId,
-                        adHolder, object : AdShowListener() {
-                            override fun onOpened(tapsellPlusAdModel: TapsellPlusAdModel?) {
-                                super.onOpened(tapsellPlusAdModel)
-                            }
-
-                            override fun onClosed(tapsellPlusAdModel: TapsellPlusAdModel?) {
-                                super.onClosed(tapsellPlusAdModel)
-                            }
-                        })
+        private fun requestAdColonyBanner() = AdColony.requestAdView(
+            ADCOLONY_BANNER_ZONE_ID,
+            object : AdColonyAdViewListener() {
+                override fun onRequestFilled(ad: AdColonyAdView?) {
+                    Timber.i("Banner request filled.")
+                    showAdColonyContainer()
+                    ad?.let { binding.rlAdContainer.addView(it) }
                 }
 
-                override fun error(error: String?) {
-                    super.error(error)
-                    Timber.e("RequestNativeAd Error: $error")
-                    if (requestAdCounter < 3) {
-                        requestAdCounter++
-                        requestNativeAd(adHolder)
+                override fun onRequestNotFilled(zone: AdColonyZone?) {
+                    super.onRequestNotFilled(zone)
+                    Timber.e("Banner request did not fill.")
+
+                    requestAdCounter = 0
+                    val adHolder = TapsellPlus
+                        .createAdHolder(activity, binding.cvAdContainer, R.layout.list_ad_banner)
+                    adHolder?.let { requestTapsellNativeAd(it) }
+                }
+            }, AdColonyAdSize.BANNER
+        )
+
+        @Suppress("SpellCheckingInspection")
+        private fun requestTapsellNativeAd(adHolder: AdHolder) {
+            TapsellPlus.requestNativeAd(activity, TAPSELL_WARRANTIES_NATIVE_ZONE_ID,
+                object : AdRequestCallback() {
+                    override fun response(tapsellPlusAdModel: TapsellPlusAdModel?) {
+                        super.response(tapsellPlusAdModel)
+                        Timber.i("RequestNativeAd Response: $tapsellPlusAdModel")
+                        requestAdCounter = 0
+                        showNativeAd(adHolder, tapsellPlusAdModel!!.responseId)
                     }
-                }
-            })
+
+                    override fun error(error: String?) {
+                        super.error(error)
+                        Timber.e("RequestNativeAd Error: $error")
+                        if (requestAdCounter < 3) {
+                            requestAdCounter++
+                            requestTapsellNativeAd(adHolder)
+                        }
+                    }
+                })
+        }
+
+        private fun showNativeAd(adHolder: AdHolder, responseId: String) {
+            showTapsellContainer()
+            TapsellPlus.showNativeAd(activity, responseId,
+                adHolder, object : AdShowListener() {
+                    override fun onOpened(tapsellPlusAdModel: TapsellPlusAdModel?) {
+                        super.onOpened(tapsellPlusAdModel)
+                    }
+
+                    override fun onClosed(tapsellPlusAdModel: TapsellPlusAdModel?) {
+                        super.onClosed(tapsellPlusAdModel)
+                    }
+                })
+        }
+
+        private fun showAdColonyContainer() {
+            binding.cvAdContainer.visibility = View.GONE
+            binding.rlAdContainer.visibility = View.VISIBLE
+        }
+
+        @Suppress("SpellCheckingInspection")
+        private fun showTapsellContainer() {
+            binding.rlAdContainer.visibility = View.GONE
+            binding.cvAdContainer.visibility = View.VISIBLE
+        }
     }
 }

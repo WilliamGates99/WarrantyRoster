@@ -26,13 +26,11 @@ import com.xeniac.warrantyroster_manager.models.Warranty
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
-import com.xeniac.warrantyroster_manager.utils.Constants.TAPSELL_KEY
 import dagger.hilt.android.AndroidEntryPoint
+import ir.tapsell.plus.AdShowListener
 import ir.tapsell.plus.TapsellPlus
-import ir.tapsell.plus.TapsellPlusInitListener
-import ir.tapsell.plus.model.AdNetworkError
-import ir.tapsell.plus.model.AdNetworks
-import timber.log.Timber
+import ir.tapsell.plus.model.TapsellPlusAdModel
+import ir.tapsell.plus.model.TapsellPlusErrorModel
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -64,7 +62,6 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
         returnToMainActivity()
         handleExtendedFAB()
         getWarranty()
-        adInit()
         editWarrantyOnClick()
         deleteWarrantyOnClick()
         deleteWarrantyObserver()
@@ -205,19 +202,6 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
         }
     }
 
-    private fun adInit() = TapsellPlus.initialize(
-        requireContext(), TAPSELL_KEY, object : TapsellPlusInitListener {
-            override fun onInitializeSuccess(adNetworks: AdNetworks?) {
-                Timber.i("onInitializeSuccess: ${adNetworks?.name}")
-            }
-
-            override fun onInitializeFailed(
-                adNetworks: AdNetworks?, adNetworkError: AdNetworkError?
-            ) {
-                Timber.e("onInitializeFailed: ${adNetworks?.name}, error: ${adNetworkError?.errorMessage}")
-            }
-        })
-
     private fun editWarrantyOnClick() = binding.fab.setOnClickListener {
         val action = WarrantyDetailsFragmentDirections
             .actionWarrantyDetailsFragmentToEditWarrantyFragment(warranty)
@@ -261,8 +245,19 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
                                 )
                             ), Toast.LENGTH_LONG
                         ).show()
-                        (requireActivity() as MainActivity).requestInterstitialAd()
+
+                        when {
+                            (requireActivity() as MainActivity).adColonyAd != null -> {
+                                (requireActivity() as MainActivity).adColonyAd?.show()
+                            }
+                            (requireActivity() as MainActivity).tapsellResponseId != null -> {
+                                (requireActivity() as MainActivity).tapsellResponseId?.let {
+                                    showInterstitialAd(it)
+                                }
+                            }
+                        }
                         requireActivity().onBackPressed()
+                        (requireActivity() as MainActivity).requestAdColonyInterstitial()
                     }
                     Status.ERROR -> {
                         hideLoadingAnimation()
@@ -311,4 +306,21 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
         binding.toolbar.menu.getItem(0).isVisible = true
         binding.fab.isClickable = true
     }
+
+    private fun showInterstitialAd(responseId: String) = TapsellPlus.showInterstitialAd(
+        requireActivity(),
+        responseId,
+        object : AdShowListener() {
+            override fun onOpened(tapsellPlusAdModel: TapsellPlusAdModel?) {
+                super.onOpened(tapsellPlusAdModel)
+            }
+
+            override fun onClosed(tapsellPlusAdModel: TapsellPlusAdModel?) {
+                super.onClosed(tapsellPlusAdModel)
+            }
+
+            override fun onError(tapsellPlusErrorModel: TapsellPlusErrorModel?) {
+                super.onError(tapsellPlusErrorModel)
+            }
+        })
 }

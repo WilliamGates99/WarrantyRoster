@@ -62,10 +62,6 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.4.1'
 
-    //Architectural Components for Dagger - Hilt
-    implementation 'androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03'
-    kapt 'androidx.hilt:hilt-compiler:1.0.0'
-
     //Activity KTX for viewModels()
     implementation 'androidx.activity:activity-ktx:1.4.0'
 
@@ -97,16 +93,20 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:5.0.1'
 
     //Lottie Library
-    implementation 'io.coil-kt:coil:1.4.0'
+    implementation 'com.airbnb.android:lottie:5.0.2'
 
     //Coil Library
-    implementation 'com.airbnb.android:lottie:5.0.1'
+    implementation 'io.coil-kt:coil:1.4.0'
     implementation 'io.coil-kt:coil-svg:1.4.0'
 
-    //Ads Libraries
+    //Tapsell Libraries
     implementation 'ir.tapsell.plus:tapsell-plus-sdk-android:2.1.6'
     implementation 'com.google.android.gms:play-services-ads:20.6.0'
 
+    //AdColony Libraries
+    implementation 'com.adcolony:sdk:4.6.5'
+    implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'
+
     //LeakCanary Library
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.8.1'
+    //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.8.1' TODO UNCOMMENT BEFORE RELEASE
 }
