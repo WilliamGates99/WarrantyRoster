@@ -297,75 +297,83 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         binding.btnAccountVerification.visibility = VISIBLE
     }
 
-    private fun requestAdColonyBanner() = AdColony.requestAdView(
-        ADCOLONY_BANNER_ZONE_ID,
-        object : AdColonyAdViewListener() {
-            override fun onRequestFilled(ad: AdColonyAdView?) {
-                Timber.i("Banner request filled.")
-                adColonyBanner = ad
-                adColonyBanner?.let {
-                    showAdColonyContainer()
-                    binding.flAdContainerAdcolony.addView(it)
+    private fun requestAdColonyBanner() = _binding?.let {
+        AdColony.requestAdView(
+            ADCOLONY_BANNER_ZONE_ID,
+            object : AdColonyAdViewListener() {
+                override fun onRequestFilled(ad: AdColonyAdView?) {
+                    Timber.i("Banner request filled.")
+                    adColonyBanner = ad
+                    adColonyBanner?.let {
+                        showAdColonyContainer()
+                        binding.flAdContainerAdcolony.addView(it)
+                    }
                 }
-            }
 
-            override fun onRequestNotFilled(zone: AdColonyZone?) {
-                super.onRequestNotFilled(zone)
-                Timber.e("Banner request did not fill.")
-                initTapsellAdHolder()
-            }
-        }, AdColonyAdSize.BANNER
-    )
+                override fun onRequestNotFilled(zone: AdColonyZone?) {
+                    super.onRequestNotFilled(zone)
+                    Timber.e("Banner request did not fill.")
+                    initTapsellAdHolder()
+                }
+            }, AdColonyAdSize.BANNER
+        )
+    }
 
     @Suppress("SpellCheckingInspection")
     private fun initTapsellAdHolder() {
-        val adHolder = TapsellPlus.createAdHolder(
-            requireActivity(), binding.flAdContainerTapsell, R.layout.ad_banner_settings
-        )
+        _binding?.let {
+            val adHolder = TapsellPlus.createAdHolder(
+                requireActivity(), binding.flAdContainerTapsell, R.layout.ad_banner_settings
+            )
 
-        requestAdCounter = 0
-        adHolder?.let { requestTapsellNativeAd(it) }
+            requestAdCounter = 0
+            adHolder?.let { requestTapsellNativeAd(it) }
+        }
     }
 
     @Suppress("SpellCheckingInspection")
     private fun requestTapsellNativeAd(adHolder: AdHolder) {
-        TapsellPlus.requestNativeAd(requireActivity(),
-            TAPSELL_SETTINGS_NATIVE_ZONE_ID, object : AdRequestCallback() {
-                override fun response(tapsellPlusAdModel: TapsellPlusAdModel?) {
-                    super.response(tapsellPlusAdModel)
-                    Timber.i("RequestNativeAd Response: ${tapsellPlusAdModel.toString()}")
-                    requestAdCounter = 0
-                    _binding?.let {
-                        tapsellPlusAdModel?.let {
-                            responseId = it.responseId
-                            showNativeAd(adHolder, responseId!!)
+        _binding?.let {
+            TapsellPlus.requestNativeAd(requireActivity(),
+                TAPSELL_SETTINGS_NATIVE_ZONE_ID, object : AdRequestCallback() {
+                    override fun response(tapsellPlusAdModel: TapsellPlusAdModel?) {
+                        super.response(tapsellPlusAdModel)
+                        Timber.i("RequestNativeAd Response: ${tapsellPlusAdModel.toString()}")
+                        requestAdCounter = 0
+                        _binding?.let {
+                            tapsellPlusAdModel?.let {
+                                responseId = it.responseId
+                                showNativeAd(adHolder, responseId!!)
+                            }
                         }
                     }
-                }
 
-                override fun error(error: String?) {
-                    super.error(error)
-                    Timber.e("RequestNativeAd Error: $error")
-                    if (requestAdCounter < 3) {
-                        requestAdCounter++
-                        requestTapsellNativeAd(adHolder)
+                    override fun error(error: String?) {
+                        super.error(error)
+                        Timber.e("RequestNativeAd Error: $error")
+                        if (requestAdCounter < 3) {
+                            requestAdCounter++
+                            requestTapsellNativeAd(adHolder)
+                        }
                     }
-                }
-            })
+                })
+        }
     }
 
     private fun showNativeAd(adHolder: AdHolder, responseId: String) {
-        showTapsellContainer()
-        TapsellPlus.showNativeAd(requireActivity(),
-            responseId, adHolder, object : AdShowListener() {
-                override fun onOpened(tapsellPlusAdModel: TapsellPlusAdModel?) {
-                    super.onOpened(tapsellPlusAdModel)
-                }
+        _binding?.let {
+            showTapsellContainer()
+            TapsellPlus.showNativeAd(requireActivity(),
+                responseId, adHolder, object : AdShowListener() {
+                    override fun onOpened(tapsellPlusAdModel: TapsellPlusAdModel?) {
+                        super.onOpened(tapsellPlusAdModel)
+                    }
 
-                override fun onClosed(tapsellPlusAdModel: TapsellPlusAdModel?) {
-                    super.onClosed(tapsellPlusAdModel)
-                }
-            })
+                    override fun onClosed(tapsellPlusAdModel: TapsellPlusAdModel?) {
+                        super.onClosed(tapsellPlusAdModel)
+                    }
+                })
+        }
     }
 
     private fun showAdColonyContainer() {
