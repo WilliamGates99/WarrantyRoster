@@ -2,8 +2,6 @@ package com.xeniac.warrantyroster_manager.ui.landing.fragments
 
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.os.Handler
-import android.os.Looper
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -19,7 +17,9 @@ import com.xeniac.warrantyroster_manager.models.Status
 import com.xeniac.warrantyroster_manager.ui.landing.LandingViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_TIMER_IS_NOT_ZERO
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.*
 import java.text.DecimalFormat
 import javax.inject.Inject
 
@@ -44,7 +44,7 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
         getEmailFromArgs()
         returnOnClick()
         resendOnClick()
-        forgotPwSentObserver()
+        subscribeToObservers()
     }
 
     override fun onDestroyView() {
@@ -68,6 +68,11 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
 
     private fun resendResetPasswordEmail() = viewModel.sendResetPasswordEmail(email)
 
+    private fun subscribeToObservers() {
+        forgotPwSentObserver()
+        timerObserver()
+    }
+
     private fun forgotPwSentObserver() =
         viewModel.forgotPwLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
@@ -76,7 +81,6 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
                     Status.LOADING -> showLoadingAnimation()
                     Status.SUCCESS -> {
                         hideLoadingAnimation()
-                        countdown()
                         binding.lavSent.playAnimation()
                     }
                     Status.ERROR -> {
@@ -91,6 +95,28 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
                                     ).apply {
                                         setAction(requireContext().getString(R.string.network_error_retry)) { resendResetPasswordEmail() }
                                         show()
+                                    }
+                                }
+                                it.contains(ERROR_TIMER_IS_NOT_ZERO) -> {
+                                    val seconds = viewModel.timerInMillis / 1000
+                                    if (seconds <= 1L) {
+                                        Snackbar.make(
+                                            binding.root,
+                                            requireContext().getString(
+                                                R.string.forgot_pw_error_timer_is_not_zero_one,
+                                                seconds
+                                            ),
+                                            LENGTH_LONG
+                                        ).show()
+                                    } else {
+                                        Snackbar.make(
+                                            binding.root,
+                                            requireContext().getString(
+                                                R.string.forgot_pw_error_timer_is_not_zero_other,
+                                                seconds
+                                            ),
+                                            LENGTH_LONG
+                                        ).show()
                                     }
                                 }
                                 it.contains(ERROR_NETWORK_403) -> {
@@ -114,6 +140,39 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
             }
         }
 
+    private fun timerObserver() =
+        viewModel.timerLiveData.observe(viewLifecycleOwner) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { millisUntilFinished ->
+                when (millisUntilFinished) {
+                    0L -> {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            delay(500)
+                            resetConstraintToDefault()
+                            binding.groupTimer.visibility = GONE
+                            binding.groupResend.visibility = VISIBLE
+                        }
+                    }
+                    else -> {
+                        binding.tvResent.text = if (viewModel.isFirstSentEmail)
+                            requireContext().getString(R.string.forgot_pw_sent_text_first_time)
+                        else
+                            requireContext().getString(R.string.forgot_pw_sent_text_resent)
+
+                        updateConstraintToTimer()
+                        binding.groupResend.visibility = GONE
+                        binding.groupTimer.visibility = VISIBLE
+
+                        val minutes = millisUntilFinished / 60000
+                        val seconds = (millisUntilFinished / 1000) % 60
+
+                        val time =
+                            "(${decimalFormat.format(minutes)}:${decimalFormat.format(seconds)})"
+                        binding.tvTimer.text = time
+                    }
+                }
+            }
+        }
+
     private fun showLoadingAnimation() {
         binding.btnResend.visibility = GONE
         binding.cpiResend.visibility = VISIBLE
@@ -122,31 +181,6 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
     private fun hideLoadingAnimation() {
         binding.cpiResend.visibility = GONE
         binding.btnResend.visibility = VISIBLE
-    }
-
-    private fun countdown() {
-        updateConstraintToTimer()
-        binding.groupResend.visibility = GONE
-        binding.groupTimer.visibility = VISIBLE
-        val startTime = 120 * 1000
-
-        countDownTimer = object : CountDownTimer(startTime.toLong(), 1) {
-            override fun onTick(millisUntilFinished: Long) {
-                val minutes = millisUntilFinished / 60000
-                val seconds = (millisUntilFinished / 1000) % 60
-
-                val time = "(${decimalFormat.format(minutes)}:${decimalFormat.format(seconds)})"
-                binding.tvTimer.text = time
-            }
-
-            override fun onFinish() {
-                Handler(Looper.getMainLooper()).postDelayed({
-                    resetConstraintToDefault()
-                    binding.groupTimer.visibility = GONE
-                    binding.groupResend.visibility = VISIBLE
-                }, 500)
-            }
-        }.start()
     }
 
     private fun updateConstraintToTimer() {

@@ -49,6 +49,8 @@
     <string name="forgot_pw_hint_email">Enter your email address</string>
     <string name="forgot_pw_btn_send">Send Email</string>
     <string name="forgot_pw_btn_return">Return To Login</string>
+    <string name="forgot_pw_error_timer_is_not_zero_one">Please wait for %1$d second before requesting again…</string>
+    <string name="forgot_pw_error_timer_is_not_zero_other">Please wait for %1$d seconds before requesting again…</string>
     <string name="forgot_pw_error_email">Email address is not valid!</string>
     <string name="forgot_pw_error_not_found">The account with the provided email does not exist.</string>
 
@@ -57,6 +59,7 @@
     <string name="forgot_pw_sent_text_description">Please check your inbox and click on the received link to reset your password.</string>
     <string name="forgot_pw_sent_text_resend">Didn\'t receive the link?</string>
     <string name="forgot_pw_sent_btn_resend">Resend</string>
+    <string name="forgot_pw_sent_text_first_time">The email has been sent.</string>
     <string name="forgot_pw_sent_text_resent">A new email has been sent.</string>
 
     <!--Main Activity-->

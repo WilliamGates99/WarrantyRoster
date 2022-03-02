@@ -2,6 +2,7 @@ package com.xeniac.warrantyroster_manager.ui.landing
 
 import android.app.Application
 import android.content.SharedPreferences
+import android.os.CountDownTimer
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -10,6 +11,7 @@ import com.xeniac.warrantyroster_manager.BaseApplication
 import com.xeniac.warrantyroster_manager.di.LoginPrefs
 import com.xeniac.warrantyroster_manager.repositories.UserRepository
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_TIMER_IS_NOT_ZERO
 import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_IS_LOGGED_IN_KEY
 import com.xeniac.warrantyroster_manager.utils.Event
 import com.xeniac.warrantyroster_manager.utils.NetworkHelper.hasInternetConnection
@@ -35,6 +37,12 @@ class LandingViewModel @Inject constructor(
 
     private val _forgotPwLiveData: MutableLiveData<Event<Resource<String>>> = MutableLiveData()
     val forgotPwLiveData: LiveData<Event<Resource<String>>> = _forgotPwLiveData
+
+    private val _timerLiveData: MutableLiveData<Event<Long>> = MutableLiveData()
+    val timerLiveData: LiveData<Event<Long>> = _timerLiveData
+
+    var isFirstSentEmail = true
+    var timerInMillis: Long = 0
 
     fun registerViaEmail(email: String, password: String) = viewModelScope.launch {
         safeRegisterViaEmail(email, password)
@@ -96,19 +104,44 @@ class LandingViewModel @Inject constructor(
         _forgotPwLiveData.postValue(Event(Resource.loading()))
         try {
             if (hasInternetConnection(getApplication<BaseApplication>())) {
-                userRepository.sendResetPasswordEmail(email).await().apply {
-                    _forgotPwLiveData.postValue(Event(Resource.success(email)))
-                    Timber.i("Reset password email successfully sent to ${email}.")
+                when (timerInMillis) {
+                    0L -> {
+                        userRepository.sendResetPasswordEmail(email).await().apply {
+                            _forgotPwLiveData.postValue(Event(Resource.success(email)))
+                            startCountdown()
+                            Timber.i("Reset password email successfully sent to ${email}.")
+                        }
+                    }
+                    else -> {
+                        Timber.e(ERROR_TIMER_IS_NOT_ZERO)
+                        _forgotPwLiveData.postValue(Event(Resource.error(ERROR_TIMER_IS_NOT_ZERO)))
+                    }
                 }
             } else {
                 Timber.e(ERROR_NETWORK_CONNECTION)
-                _forgotPwLiveData.postValue(
-                    Event(Resource.error(ERROR_NETWORK_CONNECTION))
-                )
+                _forgotPwLiveData.postValue(Event(Resource.error(ERROR_NETWORK_CONNECTION)))
             }
         } catch (e: Exception) {
             Timber.e("SafeSendResetPasswordEmail Exception: ${e.message}")
             _forgotPwLiveData.postValue(Event(Resource.error(e.message.toString())))
         }
+    }
+
+    private fun startCountdown() {
+        val startTimeInMillis = 120 * 1000L //120 Seconds
+        val countDownIntervalInMillis = 1000L //1 Second
+
+        object : CountDownTimer(startTimeInMillis, countDownIntervalInMillis) {
+            override fun onTick(millisUntilFinished: Long) {
+                timerInMillis = millisUntilFinished
+                _timerLiveData.postValue(Event(millisUntilFinished))
+            }
+
+            override fun onFinish() {
+                isFirstSentEmail = false
+                timerInMillis = 0
+                _timerLiveData.postValue(Event(0))
+            }
+        }.start()
     }
 }
