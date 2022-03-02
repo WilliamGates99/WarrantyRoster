@@ -42,8 +42,9 @@ class MainViewModel @Inject constructor(
     @CategoryTitleMapKey private val categoryTitleMapKey: String
 ) : AndroidViewModel(application) {
 
-    private val categoriesLiveData:
+    private val _categoriesLiveData:
             MutableLiveData<Event<Resource<List<Category>>>> = MutableLiveData()
+    val categoriesLiveData: LiveData<Event<Resource<List<Category>>>> = _categoriesLiveData
 
     private val _warrantiesLiveData:
             MutableLiveData<Event<Resource<MutableList<Warranty>>>> = MutableLiveData()
@@ -104,6 +105,37 @@ class MainViewModel @Inject constructor(
             }
         }
         return category
+    }
+
+    fun getCategoriesFromFirestore() = viewModelScope.launch {
+        _categoriesLiveData.postValue(Event(Resource.loading()))
+        mainRepository.getCategoriesFromFirestore().addSnapshotListener { value, error ->
+            error?.let {
+                Timber.e("GetCategoriesFromFirestore Error: ${it.message}")
+                _categoriesLiveData.postValue(Event(Resource.error(it.message.toString())))
+            }
+
+            value?.let {
+                if (it.documents.size == 0) {
+                    Timber.e("GetCategoriesFromFirestore Error: $ERROR_EMPTY_CATEGORY_LIST")
+                    _categoriesLiveData.postValue(Event(Resource.error(ERROR_EMPTY_CATEGORY_LIST)))
+                } else {
+                    val categoriesList = mutableListOf<Category>()
+
+                    for (document in it.documents) {
+                        @Suppress("UNCHECKED_CAST")
+                        val category = Category(
+                            document.id,
+                            document.get(CATEGORIES_TITLE) as Map<String, String>,
+                            document.get(CATEGORIES_ICON).toString()
+                        )
+                        categoriesList.add(category)
+                    }
+                    _categoriesLiveData.postValue(Event(Resource.success(categoriesList)))
+                    Timber.i("Categories List successfully retrieved.")
+                }
+            }
+        }
     }
 
     fun getWarrantiesListFromFirestore() = viewModelScope.launch {
@@ -169,37 +201,6 @@ class MainViewModel @Inject constructor(
 
     fun getUpdatedWarrantyFromFirestore(warrantyId: String) = viewModelScope.launch {
         safeGetUpdatedWarrantyFromFirestore(warrantyId)
-    }
-
-    private fun getCategoriesFromFirestore() = viewModelScope.launch {
-        categoriesLiveData.postValue(Event(Resource.loading()))
-        mainRepository.getCategoriesFromFirestore().addSnapshotListener { value, error ->
-            error?.let {
-                Timber.e("GetCategoriesFromFirestore Error: ${it.message}")
-                categoriesLiveData.postValue(Event(Resource.error(it.message.toString())))
-            }
-
-            value?.let {
-                if (it.documents.size == 0) {
-                    Timber.e("GetCategoriesFromFirestore Error: $ERROR_EMPTY_CATEGORY_LIST")
-                    categoriesLiveData.postValue(Event(Resource.error(ERROR_EMPTY_CATEGORY_LIST)))
-                } else {
-                    val categoriesList = mutableListOf<Category>()
-
-                    for (document in it.documents) {
-                        @Suppress("UNCHECKED_CAST")
-                        val category = Category(
-                            document.id,
-                            document.get(CATEGORIES_TITLE) as Map<String, String>,
-                            document.get(CATEGORIES_ICON).toString()
-                        )
-                        categoriesList.add(category)
-                    }
-                    categoriesLiveData.postValue(Event(Resource.success(categoriesList)))
-                    Timber.i("Categories List successfully retrieved.")
-                }
-            }
-        }
     }
 
     private suspend fun safeAddWarrantyToFirestore(warrantyInput: WarrantyInput) {

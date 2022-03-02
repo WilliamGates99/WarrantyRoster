@@ -14,15 +14,10 @@ import com.xeniac.warrantyroster_manager.databinding.FragmentWarrantiesBinding
 import com.xeniac.warrantyroster_manager.models.Status
 import com.xeniac.warrantyroster_manager.models.Warranty
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModel
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_EMPTY_CATEGORY_LIST
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_EMPTY_WARRANTY_LIST
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_403
-import com.xeniac.warrantyroster_manager.utils.Constants.TAPSELL_KEY
 import dagger.hilt.android.AndroidEntryPoint
-import ir.tapsell.plus.TapsellPlus
-import ir.tapsell.plus.TapsellPlusInitListener
-import ir.tapsell.plus.model.AdNetworkError
-import ir.tapsell.plus.model.AdNetworks
-import timber.log.Timber
 
 @AndroidEntryPoint
 class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListClickInterface {
@@ -38,10 +33,8 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
         _binding = FragmentWarrantiesBinding.bind(view)
         viewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
 
-        adInit()
         setupRecyclerView()
-        getWarrantiesListFromFirestore()
-        warrantiesListObserver()
+        subscribeToObservers()
     }
 
     override fun onDestroyView() {
@@ -49,25 +42,49 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
         _binding = null
     }
 
-    private fun adInit() = TapsellPlus.initialize(
-        requireContext(), TAPSELL_KEY, object : TapsellPlusInitListener {
-            override fun onInitializeSuccess(adNetworks: AdNetworks?) {
-                Timber.i("onInitializeSuccess: ${adNetworks?.name}")
-            }
-
-            override fun onInitializeFailed(
-                adNetworks: AdNetworks?, adNetworkError: AdNetworkError?
-            ) {
-                Timber.e("onInitializeFailed: ${adNetworks?.name}, error: ${adNetworkError?.errorMessage}")
-            }
-        })
-
     private fun setupRecyclerView() {
         warrantyAdapter = WarrantyAdapter(requireActivity(), requireContext(), viewModel, this)
         binding.rv.adapter = warrantyAdapter
     }
 
+    private fun getCategoriesFromFirestore() = viewModel.getCategoriesFromFirestore()
+
     private fun getWarrantiesListFromFirestore() = viewModel.getWarrantiesListFromFirestore()
+
+    private fun subscribeToObservers() {
+        categoriesListObserver()
+        warrantiesListObserver()
+    }
+
+    private fun categoriesListObserver() {
+        viewModel.categoriesLiveData.observe(viewLifecycleOwner) { responseEvent ->
+            responseEvent.peekContent().let { response ->
+                when (response.status) {
+                    Status.LOADING -> showLoadingAnimation()
+                    Status.SUCCESS -> getWarrantiesListFromFirestore()
+                    Status.ERROR -> {
+                        response.message?.let {
+                            when {
+                                it.contains(ERROR_EMPTY_CATEGORY_LIST) -> {
+                                    getCategoriesFromFirestore()
+                                }
+                                it.contains(ERROR_NETWORK_403) -> {
+                                    binding.tvNetworkError.text =
+                                        requireContext().getString(R.string.network_error_403)
+                                    showNetworkError()
+                                }
+                                else -> {
+                                    binding.tvNetworkError.text =
+                                        requireContext().getString(R.string.network_error_connection)
+                                    showNetworkError()
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     private fun warrantiesListObserver() {
         viewModel.warrantiesLiveData.observe(viewLifecycleOwner) { responseEvent ->
