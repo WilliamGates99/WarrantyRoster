@@ -131,37 +131,45 @@ class WarrantyAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         fun bindView(warranty: Warranty) {
-            val expiryCalendar = Calendar.getInstance()
-            dateFormat.parse(warranty.expiryDate!!)?.let { expiryCalendar.time = it }
-            val daysUntilExpiry = getDaysUntilExpiry(expiryCalendar)
+            val isLifetime = warranty.isLifetime ?: false
+            if (isLifetime) {
+                val expiryDate = context.getString(R.string.warranties_list_is_lifetime)
+                binding.expiryDate = expiryDate
+                binding.statusColor = ContextCompat.getColor(context, R.color.green)
+                binding.statusTitle = context.getString(R.string.warranties_list_status_valid)
+            } else {
+                warranty.expiryDate?.let { date ->
+                    val expiryCalendar = Calendar.getInstance().apply {
+                        dateFormat.parse(date)?.let { time = it }
+                        val expiryDate = "${
+                            getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault())
+                        } ${getDayWithSuffix(get(Calendar.DAY_OF_MONTH))}, ${get(Calendar.YEAR)}"
+                        binding.expiryDate = expiryDate
+                    }
 
-            val expiryDate = "${
-                expiryCalendar.getDisplayName(
-                    Calendar.MONTH, Calendar.LONG, Locale.getDefault()
-                )
-            } ${getDayWithSuffix(expiryCalendar.get(Calendar.DAY_OF_MONTH))}, " +
-                    "${expiryCalendar.get(Calendar.YEAR)}"
-
-            when {
-                daysUntilExpiry < 0 -> {
-                    binding.statusColor = ContextCompat.getColor(context, R.color.red)
-                    binding.statusTitle =
-                        context.getString(R.string.warranties_list_status_expired)
-                }
-                daysUntilExpiry <= 30 -> {
-                    binding.statusColor = ContextCompat.getColor(context, R.color.orange)
-                    binding.statusTitle =
-                        context.getString(R.string.warranties_list_status_soon)
-                }
-                else -> {
-                    binding.statusColor = ContextCompat.getColor(context, R.color.green)
-                    binding.statusTitle =
-                        context.getString(R.string.warranties_list_status_valid)
+                    val daysUntilExpiry = getDaysUntilExpiry(expiryCalendar)
+                    when {
+                        daysUntilExpiry < 0 -> {
+                            binding.statusColor = ContextCompat.getColor(context, R.color.red)
+                            binding.statusTitle =
+                                context.getString(R.string.warranties_list_status_expired)
+                        }
+                        daysUntilExpiry <= 30 -> {
+                            binding.statusColor =
+                                ContextCompat.getColor(context, R.color.orange)
+                            binding.statusTitle =
+                                context.getString(R.string.warranties_list_status_soon)
+                        }
+                        else -> {
+                            binding.statusColor = ContextCompat.getColor(context, R.color.green)
+                            binding.statusTitle =
+                                context.getString(R.string.warranties_list_status_valid)
+                        }
+                    }
                 }
             }
 
             binding.title = warranty.title
-            binding.expiryDate = expiryDate
             binding.executePendingBindings()
 
             val category = warranty.categoryId?.let {
@@ -178,9 +186,7 @@ class WarrantyAdapter(
                 }
             }
 
-            binding.cvWarranty.setOnClickListener {
-                clickInterface.onItemClick(warranty, daysUntilExpiry)
-            }
+            binding.cvWarranty.setOnClickListener { clickInterface.onItemClick(warranty) }
         }
     }
 

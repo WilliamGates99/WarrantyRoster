@@ -52,6 +52,7 @@ object Constants {
     const val WARRANTIES_BRAND = "brand"
     const val WARRANTIES_MODEL = "model"
     const val WARRANTIES_SERIAL_NUMBER = "serialNumber"
+    const val WARRANTIES_LIFETIME = "lifetime"
     const val WARRANTIES_STARTING_DATE = "startingDate"
     const val WARRANTIES_EXPIRY_DATE = "expiryDate"
     const val WARRANTIES_DESCRIPTION = "description"

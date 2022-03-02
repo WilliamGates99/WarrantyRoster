@@ -451,6 +451,7 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
         )
 
         val title = binding.tiEditTitle.text.toString().trim()
+        val isLifetime = binding.cbLifetime.isChecked
 
         if (title.isBlank()) {
             binding.tiLayoutTitle.requestFocus()
@@ -460,11 +461,13 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
             binding.tiLayoutDateStarting.requestFocus()
             binding.tiLayoutDateStarting.boxStrokeColor =
                 ContextCompat.getColor(requireContext(), R.color.red)
-        } else if (expiryDateInput.isNullOrBlank()) {
+        } else if (!isLifetime && expiryDateInput.isNullOrBlank()) {
             binding.tiLayoutDateExpiry.requestFocus()
             binding.tiLayoutDateExpiry.boxStrokeColor =
                 ContextCompat.getColor(requireContext(), R.color.red)
-        } else if (!isStartingDateValid(selectedStartingDateInMillis, selectedExpiryDateInMillis)) {
+        } else if (!isLifetime &&
+            !isStartingDateValid(selectedStartingDateInMillis, selectedExpiryDateInMillis)
+        ) {
             showDateError()
         } else {
             val brand = binding.tiEditBrand.text?.toString()?.trim()
@@ -478,8 +481,9 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
                 brand,
                 model,
                 serialNumber,
-                startingDateInput.toString(),
-                expiryDateInput.toString(),
+                isLifetime,
+                startingDateInput!!,
+                expiryDateInput,
                 description,
                 categoryId,
                 Firebase.auth.currentUser?.uid.toString()

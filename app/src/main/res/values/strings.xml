@@ -71,6 +71,7 @@
     <string name="warranties_list_status_valid">Valid</string>
     <string name="warranties_list_status_soon">Soon</string>
     <string name="warranties_list_status_expired">Expired</string>
+    <string name="warranties_list_is_lifetime">Lifetime Warranty</string>
     <string name="warranties_list_ad_logo_content_description">Ad Logo</string>
     <string name="warranties_list_ad_indicator">Ad</string>
 
@@ -110,6 +111,7 @@
     <string name="warranty_details_status_valid">Warranty is valid</string>
     <string name="warranty_details_status_soon">Warranty will expire soon</string>
     <string name="warranty_details_status_expired">Warranty is expired</string>
+    <string name="warranty_details_is_lifetime">Lifetime</string>
     <string name="warranty_details_empty_device" translatable="false">•</string>
     <string name="warranty_details_empty_description">No description is provided.</string>
     <string name="warranty_details_delete_dialog_title">Delete Warranty?</string>

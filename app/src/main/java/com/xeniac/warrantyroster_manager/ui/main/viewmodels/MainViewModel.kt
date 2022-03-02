@@ -21,6 +21,7 @@ import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_BRAND
 import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_CATEGORY_ID
 import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_DESCRIPTION
 import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_EXPIRY_DATE
+import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_LIFETIME
 import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_MODEL
 import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_SERIAL_NUMBER
 import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_STARTING_DATE
@@ -128,6 +129,7 @@ class MainViewModel @Inject constructor(
                             document.get(WARRANTIES_BRAND).toString(),
                             document.get(WARRANTIES_MODEL).toString(),
                             document.get(WARRANTIES_SERIAL_NUMBER).toString(),
+                            document.get(WARRANTIES_LIFETIME) as Boolean?,
                             document.get(WARRANTIES_STARTING_DATE).toString(),
                             document.get(WARRANTIES_EXPIRY_DATE).toString(),
                             document.get(WARRANTIES_DESCRIPTION).toString(),
@@ -139,7 +141,7 @@ class MainViewModel @Inject constructor(
                             adIndex += 6
                             val nativeAd = Warranty(
                                 adIndex.toString(), null, null, null,
-                                null, null, null,
+                                null, null, null, null,
                                 null, null, ListItemType.AD
                             )
                             warrantiesList.add(nativeAd)
@@ -266,6 +268,7 @@ class MainViewModel @Inject constructor(
                     warrantySnapshot.get(WARRANTIES_BRAND).toString(),
                     warrantySnapshot.get(WARRANTIES_MODEL).toString(),
                     warrantySnapshot.get(WARRANTIES_SERIAL_NUMBER).toString(),
+                    warrantySnapshot.get(WARRANTIES_LIFETIME) as Boolean?,
                     warrantySnapshot.get(WARRANTIES_STARTING_DATE).toString(),
                     warrantySnapshot.get(WARRANTIES_EXPIRY_DATE).toString(),
                     warrantySnapshot.get(WARRANTIES_DESCRIPTION).toString(),

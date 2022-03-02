@@ -145,9 +145,9 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
 //        searchWarrantiesList();
     }
 
-    override fun onItemClick(warranty: Warranty, daysUntilExpiry: Long) {
+    override fun onItemClick(warranty: Warranty) {
         val action = WarrantiesFragmentDirections
-            .actionWarrantiesFragmentToWarrantyDetailsFragment(warranty, daysUntilExpiry)
+            .actionWarrantiesFragmentToWarrantyDetailsFragment(warranty)
         findNavController().navigate(action)
     }
 

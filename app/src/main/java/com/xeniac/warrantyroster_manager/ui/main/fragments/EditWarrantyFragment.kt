@@ -40,7 +40,6 @@ import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_EDIT_WARR
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_EDIT_WARRANTY_SERIAL
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_EDIT_WARRANTY_STARTING_DATE_IN_MILLIS
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_EDIT_WARRANTY_TITLE
-import com.xeniac.warrantyroster_manager.utils.DateHelper.getDaysUntilExpiry
 import com.xeniac.warrantyroster_manager.utils.DateHelper.getTimeZoneOffsetInMillis
 import com.xeniac.warrantyroster_manager.utils.DateHelper.isStartingDateValid
 import dagger.hilt.android.AndroidEntryPoint
@@ -463,12 +462,9 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
         binding.tiEditDescription.setText(warranty.description)
 
         setStartingDateText(warranty.startingDate!!)
-        setExpiryDateText(warranty.expiryDate!!)
+        setExpiryDateText()
 
-        selectedCategory = warranty.categoryId?.let {
-            viewModel.getCategoryById(it)
-        }
-
+        selectedCategory = viewModel.getCategoryById(warranty.categoryId!!)
         selectedCategory?.let {
             binding.tiDdCategory.setText(it.title[categoryTitleMapKey])
             loadCategoryIcon(it.icon)
@@ -507,26 +503,32 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
         }
     }
 
-    private fun setExpiryDateText(expiryDate: String) {
-        Calendar.getInstance().apply {
-            dateFormat.parse(expiryDate)?.let { time = it }
+    private fun setExpiryDateText() {
+        val isLifetime = warranty.isLifetime ?: false
+        if (isLifetime) {
+            binding.cbLifetime.isChecked = true
+        } else {
+            binding.cbLifetime.isChecked = false
+            Calendar.getInstance().apply {
+                dateFormat.parse(warranty.expiryDate!!)?.let { time = it }
 
-            expiryDateInput = "${get(Calendar.YEAR)}-" +
-                    "${decimalFormat.format((get(Calendar.MONTH)) + 1)}-" +
-                    decimalFormat.format(get(Calendar.DAY_OF_MONTH))
+                expiryDateInput = "${get(Calendar.YEAR)}-" +
+                        "${decimalFormat.format((get(Calendar.MONTH)) + 1)}-" +
+                        decimalFormat.format(get(Calendar.DAY_OF_MONTH))
 
-            val expiryDateText =
-                "${decimalFormat.format((get(Calendar.MONTH)) + 1)}/" +
-                        "${decimalFormat.format(get(Calendar.DAY_OF_MONTH))}/" +
-                        "${get(Calendar.YEAR)}"
+                val expiryDateText =
+                    "${decimalFormat.format((get(Calendar.MONTH)) + 1)}/" +
+                            "${decimalFormat.format(get(Calendar.DAY_OF_MONTH))}/" +
+                            "${get(Calendar.YEAR)}"
 
-            binding.tiEditDateExpiry.setText(expiryDateText)
+                binding.tiEditDateExpiry.setText(expiryDateText)
 
-            //Add/Subtract offset to Prevent the Calendar to Show the Previous Day
-            selectedExpiryDateInMillis = if (offset < 0) {
-                timeInMillis - offset
-            } else {
-                timeInMillis + offset
+                //Add/Subtract offset to Prevent the Calendar to Show the Previous Day
+                selectedExpiryDateInMillis = if (offset < 0) {
+                    timeInMillis - offset
+                } else {
+                    timeInMillis + offset
+                }
             }
         }
     }
@@ -543,6 +545,7 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
         inputMethodManager.hideSoftInputFromWindow(binding.root.applicationWindowToken, 0)
 
         val title = binding.tiEditTitle.text.toString().trim()
+        val isLifetime = binding.cbLifetime.isChecked
 
         if (title.isBlank()) {
             binding.tiLayoutTitle.requestFocus()
@@ -552,11 +555,13 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
             binding.tiLayoutDateStarting.requestFocus()
             binding.tiLayoutDateStarting.boxStrokeColor =
                 ContextCompat.getColor(requireContext(), R.color.red)
-        } else if (expiryDateInput.isNullOrBlank()) {
+        } else if (!isLifetime && expiryDateInput.isNullOrBlank()) {
             binding.tiLayoutDateExpiry.requestFocus()
             binding.tiLayoutDateExpiry.boxStrokeColor =
                 ContextCompat.getColor(requireContext(), R.color.red)
-        } else if (!isStartingDateValid(selectedStartingDateInMillis, selectedExpiryDateInMillis)) {
+        } else if (!isLifetime &&
+            !isStartingDateValid(selectedStartingDateInMillis, selectedExpiryDateInMillis)
+        ) {
             showDateError()
         } else {
             val brand = binding.tiEditBrand.text?.toString()?.trim()
@@ -570,8 +575,9 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
                 brand,
                 model,
                 serialNumber,
-                startingDateInput.toString(),
-                expiryDateInput.toString(),
+                isLifetime,
+                startingDateInput!!,
+                expiryDateInput,
                 description,
                 categoryId,
                 Firebase.auth.currentUser?.uid.toString()
@@ -637,13 +643,8 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
                     Status.SUCCESS -> {
                         hideLoadingAnimation()
                         response.data?.let { updatedWarranty ->
-                            val daysUntilExpiry =
-                                getDaysUntilExpiry(updatedWarranty.expiryDate!!, dateFormat)
-
                             val action = EditWarrantyFragmentDirections
-                                .actionEditWarrantyFragmentToWarrantyDetailsFragment(
-                                    updatedWarranty, daysUntilExpiry
-                                )
+                                .actionEditWarrantyFragmentToWarrantyDetailsFragment(updatedWarranty)
                             findNavController().navigate(action)
                         }
                     }
