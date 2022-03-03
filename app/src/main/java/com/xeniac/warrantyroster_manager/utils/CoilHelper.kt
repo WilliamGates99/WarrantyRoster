@@ -4,11 +4,11 @@ import android.content.Context
 import android.view.View.*
 import android.widget.ImageView
 import android.widget.ProgressBar
-import androidx.core.view.isVisible
+import androidx.core.content.ContextCompat
 import coil.ImageLoader
 import coil.request.CachePolicy
 import coil.request.ImageRequest
-import timber.log.Timber
+import com.xeniac.warrantyroster_manager.R
 
 object CoilHelper {
     fun loadCategoryImage(
@@ -21,15 +21,19 @@ object CoilHelper {
         val request = ImageRequest.Builder(context).apply {
             data(categoryIcon)
             target(imageView)
+            error(R.drawable.ic_coil_error)
             listener(
                 onStart = {
                     progressBar.visibility = VISIBLE
                 },
                 onSuccess = { _, _ ->
+                    imageView.imageTintList =
+                        ContextCompat.getColorStateList(context, R.color.black)
                     progressBar.visibility = GONE
                 },
-                onError = { _, throwable ->
-                    Timber.e("loading error: $throwable")
+                onError = { _, _ ->
+                    imageView.imageTintList = ContextCompat.getColorStateList(context, R.color.red)
+                    progressBar.visibility = GONE
                 }
             )
             crossfade(true)
