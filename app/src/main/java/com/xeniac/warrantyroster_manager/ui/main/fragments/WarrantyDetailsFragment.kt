@@ -13,8 +13,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import coil.ImageLoader
-import coil.load
-import coil.request.CachePolicy
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
 import com.google.android.material.snackbar.Snackbar
@@ -24,6 +22,7 @@ import com.xeniac.warrantyroster_manager.models.Status
 import com.xeniac.warrantyroster_manager.ui.main.MainActivity
 import com.xeniac.warrantyroster_manager.models.Warranty
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModel
+import com.xeniac.warrantyroster_manager.utils.CoilHelper.loadCategoryImage
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.DateHelper.getDaysUntilExpiry
@@ -139,11 +138,9 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
 
         val category = viewModel.getCategoryById(warranty.categoryId!!)
         category?.let {
-            binding.ivIcon.load(it.icon, imageLoader) {
-                memoryCachePolicy(CachePolicy.ENABLED)
-                diskCachePolicy(CachePolicy.ENABLED)
-                networkCachePolicy(CachePolicy.ENABLED)
-            }
+            loadCategoryImage(
+                requireContext(), it.icon, imageLoader, binding.ivIcon, binding.cpiIcon
+            )
         }
 
         val dateFormat = SimpleDateFormat("yyyy-M-dd", Locale.getDefault())

@@ -480,6 +480,18 @@
                         app:shapeAppearance="@style/Theme.WarrantyRoster.ImageViewShapeAppearance"
                         app:tint="@color/black" />
 
+                    <com.google.android.material.progressindicator.CircularProgressIndicator
+                        android:id="@+id/cpi_icon_category"
+                        style="@style/Theme.WarrantyRoster.LoadingProgressBar.Category"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:elevation="9dp"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="@+id/iv_icon_category"
+                        app:layout_constraintEnd_toEndOf="@+id/iv_icon_category"
+                        app:layout_constraintStart_toStartOf="@+id/iv_icon_category"
+                        app:layout_constraintTop_toTopOf="@+id/iv_icon_category" />
+
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/tv_title_description"
                         android:layout_width="0dp"

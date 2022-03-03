@@ -95,6 +95,12 @@
         <item name="trackCornerRadius">12dp</item>
     </style>
 
+    <style name="Theme.WarrantyRoster.LoadingProgressBar.Category" parent="Widget.MaterialComponents.CircularProgressIndicator.Small">
+        <item name="android:indeterminate">true</item>
+        <item name="indicatorColor">@color/grayMedium</item>
+        <item name="trackCornerRadius">12dp</item>
+    </style>
+
     <style name="Theme.WarrantyRoster.LoadingProgressBar.TextButton" parent="Widget.MaterialComponents.CircularProgressIndicator.Small">
         <item name="android:indeterminate">true</item>
         <item name="indicatorColor">@color/grayMedium</item>

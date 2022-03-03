@@ -15,8 +15,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import coil.ImageLoader
-import coil.load
-import coil.request.CachePolicy
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
 import com.google.android.material.snackbar.Snackbar
@@ -29,6 +27,7 @@ import com.xeniac.warrantyroster_manager.models.Category
 import com.xeniac.warrantyroster_manager.models.Status
 import com.xeniac.warrantyroster_manager.models.WarrantyInput
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModel
+import com.xeniac.warrantyroster_manager.utils.CoilHelper.loadCategoryImage
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.Constants.FRAGMENT_TAG_ADD_CALENDAR_EXPIRY
@@ -175,11 +174,7 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
 
                 selectedCategory?.let { category ->
                     binding.tiDdCategory.setText(category.title[categoryTitleMapKey])
-                    binding.ivIconCategory.load(category.icon, imageLoader) {
-                        memoryCachePolicy(CachePolicy.ENABLED)
-                        diskCachePolicy(CachePolicy.ENABLED)
-                        networkCachePolicy(CachePolicy.ENABLED)
-                    }
+                    loadCategoryIcon(category.icon)
                 }
             }
 
@@ -306,14 +301,7 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
         binding.tiDdCategory.setOnItemClickListener { adapterView, _, position, _ ->
             val categoryTitle = adapterView.getItemAtPosition(position).toString()
             selectedCategory = viewModel.getCategoryByTitle(categoryTitle)
-
-            selectedCategory?.let {
-                binding.ivIconCategory.load(it.icon, imageLoader) {
-                    memoryCachePolicy(CachePolicy.ENABLED)
-                    diskCachePolicy(CachePolicy.ENABLED)
-                    networkCachePolicy(CachePolicy.ENABLED)
-                }
-            }
+            selectedCategory?.let { loadCategoryIcon(it.icon) }
         }
 
     private fun categoryDropDownOnDismiss() = binding.tiDdCategory.setOnDismissListener {
@@ -430,6 +418,10 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
             binding.tiEditDateExpiry.clearFocus()
         }
     }
+
+    private fun loadCategoryIcon(categoryIcon: String) = loadCategoryImage(
+        requireContext(), categoryIcon, imageLoader, binding.ivIconCategory, binding.cpiIconCategory
+    )
 
     private fun returnToMainActivity() =
         binding.toolbar.setNavigationOnClickListener {

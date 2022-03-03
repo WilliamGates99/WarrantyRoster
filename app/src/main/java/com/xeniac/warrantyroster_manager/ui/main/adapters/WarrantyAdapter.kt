@@ -10,8 +10,6 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.ImageLoader
-import coil.load
-import coil.request.CachePolicy
 import com.adcolony.sdk.*
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.ListAdContainerBinding
@@ -20,6 +18,7 @@ import com.xeniac.warrantyroster_manager.di.CategoryTitleMapKey
 import com.xeniac.warrantyroster_manager.models.ListItemType
 import com.xeniac.warrantyroster_manager.models.Warranty
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModel
+import com.xeniac.warrantyroster_manager.utils.CoilHelper.loadCategoryImage
 import com.xeniac.warrantyroster_manager.utils.Constants.ADCOLONY_BANNER_ZONE_ID
 import com.xeniac.warrantyroster_manager.utils.Constants.VIEW_TYPE_AD
 import com.xeniac.warrantyroster_manager.utils.Constants.VIEW_TYPE_WARRANTY
@@ -178,12 +177,7 @@ class WarrantyAdapter(
 
             category?.let {
                 binding.categoryTitle = it.title[categoryTitleMapKey]
-
-                binding.ivIcon.load(it.icon, imageLoader) {
-                    memoryCachePolicy(CachePolicy.ENABLED)
-                    diskCachePolicy(CachePolicy.ENABLED)
-                    networkCachePolicy(CachePolicy.ENABLED)
-                }
+                loadCategoryImage(context, it.icon, imageLoader, binding.ivIcon, binding.cpiIcon)
             }
 
             binding.cvWarranty.setOnClickListener { clickInterface.onItemClick(warranty) }

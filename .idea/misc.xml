@@ -55,6 +55,7 @@
         <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/drawable/ic_menu_tick.xml" value="0.2462962962962963" />
         <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/drawable/ic_menu_warranties.xml" value="0.2462962962962963" />
         <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/drawable/ic_settings_arrow.xml" value="0.27708333333333335" />
+        <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/drawable/ic_settings_donate.xml" value="0.178" />
         <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/drawable/ic_settings_email.xml" value="0.27708333333333335" />
         <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/drawable/ic_settings_language.xml" value="0.27708333333333335" />
         <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/drawable/ic_settings_password.xml" value="0.27708333333333335" />
@@ -107,14 +108,14 @@
         <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/layout/fragment_temp_login.xml" value="0.23194444444444445" />
         <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/layout/fragment_temp_register.xml" value="0.23194444444444445" />
         <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/layout/fragment_warranties.xml" value="0.141015625" />
-        <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/layout/fragment_warranty_details.xml" value="0.16655405405405405" />
+        <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/layout/fragment_warranty_details.xml" value="0.22824074074074074" />
         <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/layout/list_ad.xml" value="0.16655405405405405" />
         <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/layout/list_ad_banner.xml" value="0.16655405405405405" />
         <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/layout/list_ad_container.xml" value="0.22824074074074074" />
         <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/layout/list_ad_container_adcolony.xml" value="0.22824074074074074" />
         <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/layout/list_ad_holder.xml" value="0.16655405405405405" />
         <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/layout/list_ad_native.xml" value="0.16655405405405405" />
-        <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/layout/list_warranty.xml" value="0.12195945945945946" />
+        <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/layout/list_warranty.xml" value="0.22824074074074074" />
         <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/menu/menu_add_warranty.xml" value="0.23194444444444445" />
         <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/menu/menu_bottom_nav.xml" value="0.23194444444444445" />
         <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/menu/menu_edit_warranty.xml" value="0.22567567567567567" />
