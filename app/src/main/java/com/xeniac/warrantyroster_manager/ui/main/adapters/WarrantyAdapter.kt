@@ -3,7 +3,7 @@ package com.xeniac.warrantyroster_manager.ui.main.adapters
 import android.app.Activity
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
+import android.view.View.*
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.AsyncListDiffer
@@ -251,14 +251,14 @@ class WarrantyAdapter(
         }
 
         private fun showAdColonyContainer() {
-            binding.cvAdContainer.visibility = View.GONE
-            binding.rlAdContainer.visibility = View.VISIBLE
+            binding.cvAdContainer.visibility = GONE
+            binding.rlAdContainer.visibility = VISIBLE
         }
 
         @Suppress("SpellCheckingInspection")
         private fun showTapsellContainer() {
-            binding.rlAdContainer.visibility = View.GONE
-            binding.cvAdContainer.visibility = View.VISIBLE
+            binding.rlAdContainer.visibility = GONE
+            binding.cvAdContainer.visibility = VISIBLE
         }
     }
 }
