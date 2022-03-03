@@ -27,6 +27,7 @@ import com.xeniac.warrantyroster_manager.utils.Constants.ADCOLONY_BANNER_ZONE_ID
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.Constants.TAPSELL_SETTINGS_NATIVE_ZONE_ID
+import com.xeniac.warrantyroster_manager.utils.Constants.URL_DONATE
 import com.xeniac.warrantyroster_manager.utils.Constants.URL_PRIVACY_POLICY
 import dagger.hilt.android.AndroidEntryPoint
 import ir.tapsell.plus.*
@@ -70,6 +71,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         changePasswordOnClick()
         languageOnClick()
         themeOnClick()
+        donateOnClick()
         privacyPolicyOnClick()
         logoutOnClick()
         sendVerificationEmailObserver()
@@ -201,6 +203,19 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             }
         }.show()
     }
+
+    private fun donateOnClick() =
+        binding.clSettingsDonate.setOnClickListener {
+            Intent(Intent.ACTION_VIEW, Uri.parse(URL_DONATE)).apply {
+                this.resolveActivity(requireContext().packageManager)?.let {
+                    startActivity(this)
+                } ?: Snackbar.make(
+                    binding.root,
+                    requireContext().getString(R.string.intent_error_app_not_found),
+                    LENGTH_LONG
+                ).show()
+            }
+        }
 
     private fun privacyPolicyOnClick() =
         binding.clSettingsPrivacyPolicy.setOnClickListener {

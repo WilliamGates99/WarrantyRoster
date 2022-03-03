@@ -161,6 +161,7 @@
     <string name="settings_text_settings_theme_default">System Default</string>
     <string name="settings_text_settings_theme_light">Light</string>
     <string name="settings_text_settings_theme_dark">Dark</string>
+    <string name="settings_text_settings_donate">Donate</string>
     <string name="settings_text_settings_privacy_policy">Privacy Policy</string>
     <string name="settings_btn_logout">Logout</string>
     <string name="settings_dialog_message">The verification email has been successfully sent to your inbox.</string>
