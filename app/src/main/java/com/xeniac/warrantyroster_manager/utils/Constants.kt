@@ -4,6 +4,7 @@ package com.xeniac.warrantyroster_manager.utils
 object Constants {
     //Web URLs
     const val URL_PRIVACY_POLICY = "https://warranty-roster.herokuapp.com/privacy-policy"
+    const val URL_DONATE = "https://bio.link/WarrantyRoster"
 
     //AdColony Constants
     const val ADCOLONY_APP_ID = "appf8bfbe0ff94542289c"
