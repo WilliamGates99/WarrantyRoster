@@ -21,6 +21,7 @@ import com.xeniac.warrantyroster_manager.models.Status
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.SettingsViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_CREDENTIALS
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_CHANGE_EMAIL_NEW_EMAIL
@@ -46,8 +47,7 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
         returnToMainActivity()
         changeEmailOnClick()
         changeEmailActionDone()
-        reAuthenticateUserObserver()
-        changeUserEmailObserver()
+        subscribeToObservers()
     }
 
     override fun onDestroyView() {
@@ -168,6 +168,11 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
         }
     }
 
+    private fun subscribeToObservers() {
+        reAuthenticateUserObserver()
+        changeUserEmailObserver()
+    }
+
     private fun reAuthenticateUser(password: String) = viewModel.reAuthenticateUser(password)
 
     private fun reAuthenticateUserObserver() =
@@ -198,6 +203,13 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
                                     Snackbar.make(
                                         binding.root,
                                         requireContext().getString(R.string.network_error_403),
+                                        LENGTH_LONG
+                                    ).show()
+                                }
+                                it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
+                                    Snackbar.make(
+                                        binding.root,
+                                        requireContext().getString(R.string.firebase_error_device_blocked),
                                         LENGTH_LONG
                                     ).show()
                                 }
@@ -258,6 +270,13 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
                                     Snackbar.make(
                                         binding.root,
                                         requireContext().getString(R.string.network_error_403),
+                                        LENGTH_LONG
+                                    ).show()
+                                }
+                                it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
+                                    Snackbar.make(
+                                        binding.root,
+                                        requireContext().getString(R.string.firebase_error_device_blocked),
                                         LENGTH_LONG
                                     ).show()
                                 }

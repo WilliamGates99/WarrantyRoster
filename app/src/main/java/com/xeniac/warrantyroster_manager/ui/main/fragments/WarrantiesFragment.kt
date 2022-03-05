@@ -7,6 +7,8 @@ import android.view.View.VISIBLE
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.BaseTransientBottomBar
+import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.ui.main.adapters.WarrantyAdapter
 import com.xeniac.warrantyroster_manager.ui.main.adapters.WarrantyListClickInterface
@@ -16,6 +18,7 @@ import com.xeniac.warrantyroster_manager.models.Warranty
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_EMPTY_CATEGORY_LIST
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_EMPTY_WARRANTY_LIST
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_403
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -47,14 +50,14 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
         binding.rv.adapter = warrantyAdapter
     }
 
-    private fun getCategoriesFromFirestore() = viewModel.getCategoriesFromFirestore()
-
-    private fun getWarrantiesListFromFirestore() = viewModel.getWarrantiesListFromFirestore()
-
     private fun subscribeToObservers() {
         categoriesListObserver()
         warrantiesListObserver()
     }
+
+    private fun getCategoriesFromFirestore() = viewModel.getCategoriesFromFirestore()
+
+    private fun getWarrantiesListFromFirestore() = viewModel.getWarrantiesListFromFirestore()
 
     private fun categoriesListObserver() {
         viewModel.categoriesLiveData.observe(viewLifecycleOwner) { responseEvent ->
@@ -72,6 +75,13 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
                                     binding.tvNetworkError.text =
                                         requireContext().getString(R.string.network_error_403)
                                     showNetworkError()
+                                }
+                                it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
+                                    Snackbar.make(
+                                        binding.root,
+                                        requireContext().getString(R.string.firebase_error_device_blocked),
+                                        BaseTransientBottomBar.LENGTH_LONG
+                                    ).show()
                                 }
                                 else -> {
                                     binding.tvNetworkError.text =
@@ -108,6 +118,13 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
                                     binding.tvNetworkError.text =
                                         requireContext().getString(R.string.network_error_403)
                                     showNetworkError()
+                                }
+                                it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
+                                    Snackbar.make(
+                                        binding.root,
+                                        requireContext().getString(R.string.firebase_error_device_blocked),
+                                        BaseTransientBottomBar.LENGTH_LONG
+                                    ).show()
                                 }
                                 else -> {
                                     binding.tvNetworkError.text =

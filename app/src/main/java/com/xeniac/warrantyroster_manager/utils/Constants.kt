@@ -63,6 +63,8 @@ object Constants {
     const val ERROR_NETWORK_CONNECTION = "Unable to connect to the internet"
     const val ERROR_NETWORK_403 = "403"
     const val ERROR_TIMER_IS_NOT_ZERO = "Timer is not zero"
+    const val ERROR_FIREBASE_DEVICE_BLOCKED =
+        "We have blocked all requests from this device due to unusual activity"
     const val ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS =
         "The email address is already in use by another account"
     const val ERROR_FIREBASE_AUTH_ACCOUNT_NOT_FOUND =

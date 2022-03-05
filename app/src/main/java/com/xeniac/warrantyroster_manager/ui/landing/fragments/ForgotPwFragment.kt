@@ -19,6 +19,7 @@ import com.xeniac.warrantyroster_manager.databinding.FragmentForgotPwBinding
 import com.xeniac.warrantyroster_manager.models.Status
 import com.xeniac.warrantyroster_manager.ui.landing.LandingViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_ACCOUNT_NOT_FOUND
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_TIMER_IS_NOT_ZERO
@@ -183,6 +184,13 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
                                     Snackbar.make(
                                         binding.root,
                                         requireContext().getString(R.string.network_error_403),
+                                        LENGTH_LONG
+                                    ).show()
+                                }
+                                it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
+                                    Snackbar.make(
+                                        binding.root,
+                                        requireContext().getString(R.string.firebase_error_device_blocked),
                                         LENGTH_LONG
                                     ).show()
                                 }

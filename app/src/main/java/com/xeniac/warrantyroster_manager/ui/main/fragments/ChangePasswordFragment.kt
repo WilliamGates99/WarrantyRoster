@@ -19,6 +19,7 @@ import com.xeniac.warrantyroster_manager.databinding.FragmentChangePasswordBindi
 import com.xeniac.warrantyroster_manager.models.Status
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.SettingsViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_CREDENTIALS
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_CHANGE_PASSWORD_CURRENT
@@ -46,8 +47,7 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
         returnToMainActivity()
         changePasswordOnClick()
         changePasswordActionDone()
-        reAuthenticateUserObserver()
-        changeUserPasswordObserver()
+        subscribeToObservers()
     }
 
     override fun onDestroyView() {
@@ -190,6 +190,11 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
             false
         }
 
+    private fun subscribeToObservers() {
+        reAuthenticateUserObserver()
+        changeUserPasswordObserver()
+    }
+
     private fun getChangeUserPasswordInputs() {
         val inputMethodManager = requireContext()
             .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -261,6 +266,13 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
                                         LENGTH_LONG
                                     ).show()
                                 }
+                                it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
+                                    Snackbar.make(
+                                        binding.root,
+                                        requireContext().getString(R.string.firebase_error_device_blocked),
+                                        LENGTH_LONG
+                                    ).show()
+                                }
                                 it.contains(ERROR_FIREBASE_AUTH_CREDENTIALS) -> {
                                     Snackbar.make(
                                         binding.root,
@@ -318,6 +330,13 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
                                     Snackbar.make(
                                         binding.root,
                                         requireContext().getString(R.string.network_error_403),
+                                        LENGTH_LONG
+                                    ).show()
+                                }
+                                it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
+                                    Snackbar.make(
+                                        binding.root,
+                                        requireContext().getString(R.string.firebase_error_device_blocked),
                                         LENGTH_LONG
                                     ).show()
                                 }

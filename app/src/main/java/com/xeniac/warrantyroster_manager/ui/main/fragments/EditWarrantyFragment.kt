@@ -26,6 +26,7 @@ import com.xeniac.warrantyroster_manager.di.CategoryTitleMapKey
 import com.xeniac.warrantyroster_manager.models.*
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModel
 import com.xeniac.warrantyroster_manager.utils.CoilHelper.loadCategoryImage
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.Constants.FRAGMENT_TAG_EDIT_CALENDAR_EXPIRY
@@ -93,8 +94,7 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
         returnToWarrantyDetailsFragment()
         getWarranty()
         editWarrantyOnClick()
-        updateWarrantyObserver()
-        getUpdatedWarrantyObserver()
+        subscribeToObservers()
     }
 
     override fun onDestroyView() {
@@ -530,6 +530,11 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
             false
         }
 
+    private fun subscribeToObservers() {
+        updateWarrantyObserver()
+        getUpdatedWarrantyObserver()
+    }
+
     private fun getWarrantyInput() {
         val inputMethodManager = requireContext()
             .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -609,6 +614,13 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
                                         LENGTH_LONG
                                     ).show()
                                 }
+                                it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
+                                    Snackbar.make(
+                                        binding.root,
+                                        requireContext().getString(R.string.firebase_error_device_blocked),
+                                        LENGTH_LONG
+                                    ).show()
+                                }
                                 else -> {
                                     Snackbar.make(
                                         binding.root,
@@ -659,6 +671,13 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
                                     Snackbar.make(
                                         binding.root,
                                         requireContext().getString(R.string.network_error_403),
+                                        LENGTH_LONG
+                                    ).show()
+                                }
+                                it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
+                                    Snackbar.make(
+                                        binding.root,
+                                        requireContext().getString(R.string.firebase_error_device_blocked),
                                         LENGTH_LONG
                                     ).show()
                                 }

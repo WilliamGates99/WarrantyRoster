@@ -24,6 +24,7 @@ import com.xeniac.warrantyroster_manager.models.Status
 import com.xeniac.warrantyroster_manager.ui.landing.LandingActivity
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.SettingsViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.ADCOLONY_BANNER_ZONE_ID
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.Constants.TAPSELL_SETTINGS_NATIVE_ZONE_ID
@@ -74,8 +75,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         donateOnClick()
         privacyPolicyOnClick()
         logoutOnClick()
-        sendVerificationEmailObserver()
-        logoutObserver()
+        subscribeToObservers()
         requestAdColonyBanner()
     }
 
@@ -234,6 +234,11 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         logout()
     }
 
+    private fun subscribeToObservers() {
+        sendVerificationEmailObserver()
+        logoutObserver()
+    }
+
     private fun setAppTheme(index: Int) = viewModel.setAppTheme(index)
 
     private fun sendVerificationEmail() = viewModel.sendVerificationEmail()
@@ -268,6 +273,13 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                                     Snackbar.make(
                                         binding.root,
                                         requireContext().getString(R.string.network_error_403),
+                                        LENGTH_LONG
+                                    ).show()
+                                }
+                                it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
+                                    Snackbar.make(
+                                        binding.root,
+                                        requireContext().getString(R.string.firebase_error_device_blocked),
                                         LENGTH_LONG
                                     ).show()
                                 }
