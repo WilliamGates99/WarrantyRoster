@@ -7,6 +7,7 @@ plugins {
     id 'com.google.gms.google-services'
     id 'dagger.hilt.android.plugin'
     id 'com.google.firebase.crashlytics'
+    id 'com.google.firebase.firebase-perf'
 }
 
 android {
@@ -87,6 +88,9 @@ dependencies {
     //Firebase Crashlytics
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
     implementation 'com.google.firebase:firebase-analytics-ktx'
+
+    //Firebase Performance Monitoring
+    implementation 'com.google.firebase:firebase-perf-ktx'
 
     //Firebase Auth
     implementation 'com.google.firebase:firebase-auth-ktx'
