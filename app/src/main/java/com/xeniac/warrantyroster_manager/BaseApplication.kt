@@ -4,6 +4,10 @@ import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
 import com.adcolony.sdk.AdColony
 import com.adcolony.sdk.AdColonyAppOptions
+import com.google.firebase.FirebaseApp
+import com.google.firebase.appcheck.FirebaseAppCheck
+import com.google.firebase.appcheck.debug.DebugAppCheckProviderFactory
+import com.google.firebase.appcheck.safetynet.SafetyNetAppCheckProviderFactory
 import com.xeniac.warrantyroster_manager.di.CurrentCountry
 import com.xeniac.warrantyroster_manager.di.CurrentLanguage
 import com.xeniac.warrantyroster_manager.utils.Constants.ADCOLONY_APP_ID
@@ -35,12 +39,23 @@ class BaseApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        Timber.plant(Timber.DebugTree())
-
+        setupTimber()
+        initFirebaseAppCheck()
         setNightMode()
         setLocale()
         initAdColony()
         initTapsell()
+    }
+
+    private fun setupTimber() = Timber.plant(Timber.DebugTree())
+
+    private fun initFirebaseAppCheck() {
+        FirebaseApp.initializeApp(this)
+        val firebaseAppCheck = FirebaseAppCheck.getInstance()
+        firebaseAppCheck.installAppCheckProviderFactory(SafetyNetAppCheckProviderFactory.getInstance())
+
+        //TODO COMMENT FOR RELEASE
+        firebaseAppCheck.installAppCheckProviderFactory(DebugAppCheckProviderFactory.getInstance())
     }
 
     private fun setNightMode() {
