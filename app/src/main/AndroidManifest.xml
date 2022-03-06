@@ -1,20 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.xeniac.warrantyroster_manager">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
-    <!--TODO change backup attributes to true before release-->
+    <!--TODO CHANGE SUPPORT_RTL AFTER ADDING PERSIAN-->
     <application
         android:name=".BaseApplication"
         android:allowBackup="false"
+        android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="false"
-        android:theme="@style/Theme.WarrantyRoster">
+        android:theme="@style/Theme.WarrantyRoster"
+        tools:targetApi="s">
         <activity
             android:name=".ui.landing.LandingActivity"
             android:exported="true"
