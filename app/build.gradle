@@ -78,27 +78,21 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment-ktx:2.4.1'
     implementation 'androidx.navigation:navigation-ui-ktx:2.4.1'
 
-    //Firebase
+    //Firebase BoM and Analytics
     implementation platform('com.google.firebase:firebase-bom:29.1.0')
+    implementation 'com.google.firebase:firebase-analytics-ktx'
 
     //Firebase App Check TODO USE BoM AFTER RELEASE OF THE STABLE VERSION
     implementation 'com.google.firebase:firebase-appcheck-safetynet:16.0.0-beta04'
     implementation 'com.google.firebase:firebase-appcheck-debug:16.0.0-beta04'
 
-    //Firebase Crashlytics
+    //Firebase Release & Monitor
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
-    implementation 'com.google.firebase:firebase-analytics-ktx'
-
-    //Firebase Performance Monitoring
     implementation 'com.google.firebase:firebase-perf-ktx'
 
-    //Firebase Auth
+    //Firebase Auth, Firestore, Storage
     implementation 'com.google.firebase:firebase-auth-ktx'
-
-    //Firebase Firestore
     implementation 'com.google.firebase:firebase-firestore-ktx'
-
-    //Firebase Storage
     implementation 'com.google.firebase:firebase-storage-ktx'
 
     //Timber Library
