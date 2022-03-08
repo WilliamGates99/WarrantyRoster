@@ -406,14 +406,14 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     private fun showAdColonyContainer() {
         binding.flAdContainerTapsell.visibility = GONE
         binding.flAdContainerAdcolony.visibility = VISIBLE
-        binding.dividerSettingsThird.visibility = VISIBLE
+        binding.dividerSettingsFourth.visibility = VISIBLE
     }
 
     @Suppress("SpellCheckingInspection")
     private fun showTapsellContainer() {
         binding.flAdContainerAdcolony.visibility = GONE
         binding.flAdContainerTapsell.visibility = VISIBLE
-        binding.dividerSettingsThird.visibility = VISIBLE
+        binding.dividerSettingsFourth.visibility = VISIBLE
     }
 
     private fun destroyAd() {
