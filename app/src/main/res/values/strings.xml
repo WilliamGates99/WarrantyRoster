@@ -1,13 +1,13 @@
 <resources>
     <string name="app_name">Warranty Roster</string>
+
+    <!--Errors-->
     <string name="network_error_connection">Unable to connect to the internet.</string>
     <string name="network_error_403">This service is not available in your region. Please consider changing your IP address by using a VPN.</string>
     <string name="network_error_failure">You\'re having network issues. Please try again later.</string>
     <string name="network_error_retry">Retry</string>
     <string name="intent_error_app_not_found">There is no app on the phone to handle this action.</string>
-
-    <!--Landing Activity-->
-    <string name="landing_text_content_description">Header</string>
+    <string name="firebase_error_device_blocked">We have blocked all requests from this device due to unusual activity. Try again later.</string>
 
     <!--Login Fragment-->
     <string name="login_text_title">Login</string>
@@ -52,6 +52,8 @@
     <string name="forgot_pw_hint_email">Enter your email address</string>
     <string name="forgot_pw_btn_send">Send Email</string>
     <string name="forgot_pw_btn_return">Return To Login</string>
+    <string name="forgot_pw_error_timer_is_not_zero_one">Please wait for %1$d second before requesting again…</string>
+    <string name="forgot_pw_error_timer_is_not_zero_other">Please wait for %1$d seconds before requesting again…</string>
     <string name="forgot_pw_error_email">Email address is not valid!</string>
     <string name="forgot_pw_error_not_found">The account with the provided email does not exist.</string>
 
@@ -60,6 +62,7 @@
     <string name="forgot_pw_sent_text_description">Please check your inbox and click on the received link to reset your password.</string>
     <string name="forgot_pw_sent_text_resend">Didn\'t receive the link?</string>
     <string name="forgot_pw_sent_btn_resend">Resend</string>
+    <string name="forgot_pw_sent_text_first_time">The email has been sent.</string>
     <string name="forgot_pw_sent_text_resent">A new email has been sent.</string>
 
     <!--Main Activity-->
@@ -74,6 +77,7 @@
     <string name="warranties_list_status_valid">Valid</string>
     <string name="warranties_list_status_soon">Soon</string>
     <string name="warranties_list_status_expired">Expired</string>
+    <string name="warranties_list_is_lifetime">Lifetime Warranty</string>
     <string name="warranties_list_ad_logo_content_description">Ad Logo</string>
     <string name="warranties_list_ad_indicator">Ad</string>
 
@@ -90,14 +94,15 @@
     <string name="add_warranty_hint_model">Enter the device model</string>
     <string name="add_warranty_title_serial">Serial Number</string>
     <string name="add_warranty_hint_serial">Enter the serial number of the device</string>
+    <string name="add_warranty_title_description">Description</string>
+    <string name="add_warranty_hint_description">Enter description</string>
     <string name="add_warranty_title_date_starting">Starting Date</string>
     <string name="add_warranty_title_date_expiry">Expiry Date</string>
     <string name="add_warranty_hint_date">mm/dd/yyyy</string>
-    <string name="add_warranty_title_description">Description</string>
-    <string name="add_warranty_hint_description">Enter description</string>
     <string name="add_warranty_title_date_picker_starting">Select Starting Date</string>
     <string name="add_warranty_title_date_picker_expiry">Select Expiry Date</string>
     <string name="add_warranty_error_date">Starting Date can\'t be after the Expiry Date!</string>
+    <string name="add_warranty_checkbox_lifetime">Lifetime Warranty</string>
 
     <!--Warranty Details Fragment-->
     <string name="warranty_details_fab_edit">Edit</string>
@@ -112,6 +117,7 @@
     <string name="warranty_details_status_valid">Warranty is valid</string>
     <string name="warranty_details_status_soon">Warranty will expire soon</string>
     <string name="warranty_details_status_expired">Warranty is expired</string>
+    <string name="warranty_details_is_lifetime">Lifetime</string>
     <string name="warranty_details_empty_device" translatable="false">•</string>
     <string name="warranty_details_empty_description">No description is provided.</string>
     <string name="warranty_details_delete_dialog_title">Delete Warranty?</string>
@@ -133,14 +139,15 @@
     <string name="edit_warranty_hint_model">Enter the device model</string>
     <string name="edit_warranty_title_serial">Serial Number</string>
     <string name="edit_warranty_hint_serial">Enter the serial number of the device</string>
+    <string name="edit_warranty_title_description">Description</string>
+    <string name="edit_warranty_hint_description">Enter description</string>
     <string name="edit_warranty_title_date_starting">Starting Date</string>
     <string name="edit_warranty_title_date_expiry">Expiry Date</string>
     <string name="edit_warranty_hint_date">mm/dd/yyyy</string>
-    <string name="edit_warranty_title_description">Description</string>
-    <string name="edit_warranty_hint_description">Enter description</string>
     <string name="edit_warranty_title_date_picker_starting">Select Starting Date</string>
     <string name="edit_warranty_title_date_picker_expiry">Select Expiry Date</string>
     <string name="edit_warranty_error_date">Starting Date can\'t be after the Expiry Date!</string>
+    <string name="edit_warranty_checkbox_lifetime">Lifetime Warranty</string>
 
     <!--Settings Fragment-->
     <string name="settings_text_title">Settings</string>
@@ -157,6 +164,7 @@
     <string name="settings_text_settings_theme_default">System Default</string>
     <string name="settings_text_settings_theme_light">Light</string>
     <string name="settings_text_settings_theme_dark">Dark</string>
+    <string name="settings_text_settings_donate">Donate</string>
     <string name="settings_text_settings_privacy_policy">Privacy Policy</string>
     <string name="settings_btn_logout">Logout</string>
     <string name="settings_dialog_message">The verification email has been successfully sent to your inbox.</string>

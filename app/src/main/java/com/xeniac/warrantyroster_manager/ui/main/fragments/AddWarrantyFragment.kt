@@ -15,8 +15,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import coil.ImageLoader
-import coil.load
-import coil.request.CachePolicy
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
 import com.google.android.material.snackbar.Snackbar
@@ -29,6 +27,8 @@ import com.xeniac.warrantyroster_manager.models.Category
 import com.xeniac.warrantyroster_manager.models.Status
 import com.xeniac.warrantyroster_manager.models.WarrantyInput
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModel
+import com.xeniac.warrantyroster_manager.utils.CoilHelper.loadCategoryImage
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.Constants.FRAGMENT_TAG_ADD_CALENDAR_EXPIRY
@@ -37,6 +37,7 @@ import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_ADD_WARRA
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_ADD_WARRANTY_CATEGORY_ID
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_ADD_WARRANTY_DESCRIPTION
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_ADD_WARRANTY_EXPIRY_DATE_IN_MILLIS
+import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_ADD_WARRANTY_IS_LIFETIME
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_ADD_WARRANTY_MODEL
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_ADD_WARRANTY_SERIAL
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_ADD_WARRANTY_STARTING_DATE_IN_MILLIS
@@ -81,6 +82,7 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
         textInputsStrokeColor()
         categoryDropDownSelection()
         categoryDropDownOnDismiss()
+        lifetimeWarrantyCheckBoxListener()
         startingDatePickerOnFocusListener()
         expiryDatePickerOnFocusListener()
         returnToMainActivity()
@@ -106,6 +108,7 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
             val serialNumber = binding.tiEditSerial.text.toString().trim()
             val description = binding.tiEditDescription.text.toString().trim()
             val categoryId = selectedCategory?.id ?: "10"
+            val isLifetime = binding.cbLifetime.isChecked
 
             if (title.isNotBlank()) {
                 outState.putString(SAVE_INSTANCE_ADD_WARRANTY_TITLE, title)
@@ -128,6 +131,8 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
             }
 
             outState.putString(SAVE_INSTANCE_ADD_WARRANTY_CATEGORY_ID, categoryId)
+
+            outState.putBoolean(SAVE_INSTANCE_ADD_WARRANTY_IS_LIFETIME, isLifetime)
 
             outState.putLong(
                 SAVE_INSTANCE_ADD_WARRANTY_STARTING_DATE_IN_MILLIS,
@@ -170,12 +175,13 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
 
                 selectedCategory?.let { category ->
                     binding.tiDdCategory.setText(category.title[categoryTitleMapKey])
-                    binding.ivIconCategory.load(category.icon, imageLoader) {
-                        memoryCachePolicy(CachePolicy.ENABLED)
-                        diskCachePolicy(CachePolicy.ENABLED)
-                        networkCachePolicy(CachePolicy.ENABLED)
-                    }
+                    loadCategoryIcon(category.icon)
                 }
+            }
+
+            it.getBoolean(SAVE_INSTANCE_ADD_WARRANTY_IS_LIFETIME).let { restoredIsLifetime ->
+                binding.cbLifetime.isChecked = restoredIsLifetime
+                setExpiryDateActivation(restoredIsLifetime)
             }
 
             it.getLong(SAVE_INSTANCE_ADD_WARRANTY_STARTING_DATE_IN_MILLIS).let { restoredDate ->
@@ -296,19 +302,17 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
         binding.tiDdCategory.setOnItemClickListener { adapterView, _, position, _ ->
             val categoryTitle = adapterView.getItemAtPosition(position).toString()
             selectedCategory = viewModel.getCategoryByTitle(categoryTitle)
-
-            selectedCategory?.let {
-                binding.ivIconCategory.load(it.icon, imageLoader) {
-                    memoryCachePolicy(CachePolicy.ENABLED)
-                    diskCachePolicy(CachePolicy.ENABLED)
-                    networkCachePolicy(CachePolicy.ENABLED)
-                }
-            }
+            selectedCategory?.let { loadCategoryIcon(it.icon) }
         }
 
     private fun categoryDropDownOnDismiss() = binding.tiDdCategory.setOnDismissListener {
         binding.tiDdCategory.clearFocus()
     }
+
+    private fun lifetimeWarrantyCheckBoxListener() =
+        binding.cbLifetime.setOnCheckedChangeListener { _, isChecked ->
+            setExpiryDateActivation(isChecked)
+        }
 
     private fun startingDatePickerOnFocusListener() {
         binding.tiEditDateStarting.inputType = InputType.TYPE_NULL
@@ -416,6 +420,10 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
         }
     }
 
+    private fun loadCategoryIcon(categoryIcon: String) = loadCategoryImage(
+        requireContext(), categoryIcon, imageLoader, binding.ivIconCategory, binding.cpiIconCategory
+    )
+
     private fun returnToMainActivity() =
         binding.toolbar.setNavigationOnClickListener {
             requireActivity().onBackPressed()
@@ -436,6 +444,7 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
         )
 
         val title = binding.tiEditTitle.text.toString().trim()
+        val isLifetime = binding.cbLifetime.isChecked
 
         if (title.isBlank()) {
             binding.tiLayoutTitle.requestFocus()
@@ -445,11 +454,13 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
             binding.tiLayoutDateStarting.requestFocus()
             binding.tiLayoutDateStarting.boxStrokeColor =
                 ContextCompat.getColor(requireContext(), R.color.red)
-        } else if (expiryDateInput.isNullOrBlank()) {
+        } else if (!isLifetime && expiryDateInput.isNullOrBlank()) {
             binding.tiLayoutDateExpiry.requestFocus()
             binding.tiLayoutDateExpiry.boxStrokeColor =
                 ContextCompat.getColor(requireContext(), R.color.red)
-        } else if (!isStartingDateValid(selectedStartingDateInMillis, selectedExpiryDateInMillis)) {
+        } else if (!isLifetime &&
+            !isStartingDateValid(selectedStartingDateInMillis, selectedExpiryDateInMillis)
+        ) {
             showDateError()
         } else {
             val brand = binding.tiEditBrand.text?.toString()?.trim()
@@ -463,8 +474,9 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
                 brand,
                 model,
                 serialNumber,
-                startingDateInput.toString(),
-                expiryDateInput.toString(),
+                isLifetime,
+                startingDateInput!!,
+                expiryDateInput,
                 description,
                 categoryId,
                 Firebase.auth.currentUser?.uid.toString()
@@ -503,6 +515,13 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
                                     Snackbar.make(
                                         binding.root,
                                         requireContext().getString(R.string.network_error_403),
+                                        LENGTH_LONG
+                                    ).show()
+                                }
+                                it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
+                                    Snackbar.make(
+                                        binding.root,
+                                        requireContext().getString(R.string.firebase_error_device_blocked),
                                         LENGTH_LONG
                                     ).show()
                                 }
@@ -557,5 +576,9 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
         binding.tiLayoutDateStarting.boxStrokeColor =
             ContextCompat.getColor(requireContext(), R.color.blue)
         binding.tvDateError.visibility = GONE
+    }
+
+    private fun setExpiryDateActivation(isLifeTime: Boolean) {
+        binding.tiLayoutDateExpiry.isEnabled = !isLifeTime
     }
 }

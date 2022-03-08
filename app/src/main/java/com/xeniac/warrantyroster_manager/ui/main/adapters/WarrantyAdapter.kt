@@ -3,14 +3,14 @@ package com.xeniac.warrantyroster_manager.ui.main.adapters
 import android.app.Activity
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View.*
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.ImageLoader
-import coil.load
-import coil.request.CachePolicy
+import com.adcolony.sdk.*
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.ListAdContainerBinding
 import com.xeniac.warrantyroster_manager.databinding.ListWarrantyBinding
@@ -18,9 +18,11 @@ import com.xeniac.warrantyroster_manager.di.CategoryTitleMapKey
 import com.xeniac.warrantyroster_manager.models.ListItemType
 import com.xeniac.warrantyroster_manager.models.Warranty
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModel
+import com.xeniac.warrantyroster_manager.utils.CoilHelper.loadCategoryImage
+import com.xeniac.warrantyroster_manager.utils.Constants.ADCOLONY_BANNER_ZONE_ID
 import com.xeniac.warrantyroster_manager.utils.Constants.VIEW_TYPE_AD
 import com.xeniac.warrantyroster_manager.utils.Constants.VIEW_TYPE_WARRANTY
-import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_NATIVE_ZONE_ID
+import com.xeniac.warrantyroster_manager.utils.Constants.TAPSELL_WARRANTIES_NATIVE_ZONE_ID
 import com.xeniac.warrantyroster_manager.utils.DateHelper.getDayWithSuffix
 import com.xeniac.warrantyroster_manager.utils.DateHelper.getDaysUntilExpiry
 import dagger.hilt.EntryPoint
@@ -46,8 +48,6 @@ class WarrantyAdapter(
     private var categoryTitleMapKey: String
     private var imageLoader: ImageLoader
     private var dateFormat: SimpleDateFormat
-
-    private var requestAdCounter = 0
 
     @EntryPoint
     @InstallIn(SingletonComponent::class)
@@ -130,37 +130,45 @@ class WarrantyAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         fun bindView(warranty: Warranty) {
-            val expiryCalendar = Calendar.getInstance()
-            dateFormat.parse(warranty.expiryDate!!)?.let { expiryCalendar.time = it }
-            val daysUntilExpiry = getDaysUntilExpiry(expiryCalendar)
+            val isLifetime = warranty.isLifetime ?: false
+            if (isLifetime) {
+                val expiryDate = context.getString(R.string.warranties_list_is_lifetime)
+                binding.expiryDate = expiryDate
+                binding.statusColor = ContextCompat.getColor(context, R.color.green)
+                binding.statusTitle = context.getString(R.string.warranties_list_status_valid)
+            } else {
+                warranty.expiryDate?.let { date ->
+                    val expiryCalendar = Calendar.getInstance().apply {
+                        dateFormat.parse(date)?.let { time = it }
+                        val expiryDate = "${
+                            getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault())
+                        } ${getDayWithSuffix(get(Calendar.DAY_OF_MONTH))}, ${get(Calendar.YEAR)}"
+                        binding.expiryDate = expiryDate
+                    }
 
-            val expiryDate = "${
-                expiryCalendar.getDisplayName(
-                    Calendar.MONTH, Calendar.LONG, Locale.getDefault()
-                )
-            } ${getDayWithSuffix(expiryCalendar.get(Calendar.DAY_OF_MONTH))}, " +
-                    "${expiryCalendar.get(Calendar.YEAR)}"
-
-            when {
-                daysUntilExpiry < 0 -> {
-                    binding.statusColor = ContextCompat.getColor(context, R.color.red)
-                    binding.statusTitle =
-                        context.getString(R.string.warranties_list_status_expired)
-                }
-                daysUntilExpiry <= 30 -> {
-                    binding.statusColor = ContextCompat.getColor(context, R.color.orange)
-                    binding.statusTitle =
-                        context.getString(R.string.warranties_list_status_soon)
-                }
-                else -> {
-                    binding.statusColor = ContextCompat.getColor(context, R.color.green)
-                    binding.statusTitle =
-                        context.getString(R.string.warranties_list_status_valid)
+                    val daysUntilExpiry = getDaysUntilExpiry(expiryCalendar)
+                    when {
+                        daysUntilExpiry < 0 -> {
+                            binding.statusColor = ContextCompat.getColor(context, R.color.red)
+                            binding.statusTitle =
+                                context.getString(R.string.warranties_list_status_expired)
+                        }
+                        daysUntilExpiry <= 30 -> {
+                            binding.statusColor =
+                                ContextCompat.getColor(context, R.color.orange)
+                            binding.statusTitle =
+                                context.getString(R.string.warranties_list_status_soon)
+                        }
+                        else -> {
+                            binding.statusColor = ContextCompat.getColor(context, R.color.green)
+                            binding.statusTitle =
+                                context.getString(R.string.warranties_list_status_valid)
+                        }
+                    }
                 }
             }
 
             binding.title = warranty.title
-            binding.expiryDate = expiryDate
             binding.executePendingBindings()
 
             val category = warranty.categoryId?.let {
@@ -169,58 +177,88 @@ class WarrantyAdapter(
 
             category?.let {
                 binding.categoryTitle = it.title[categoryTitleMapKey]
-
-                binding.ivIcon.load(it.icon, imageLoader) {
-                    memoryCachePolicy(CachePolicy.ENABLED)
-                    diskCachePolicy(CachePolicy.ENABLED)
-                    networkCachePolicy(CachePolicy.ENABLED)
-                }
+                loadCategoryImage(context, it.icon, imageLoader, binding.ivIcon, binding.cpiIcon)
             }
 
-            binding.cvWarranty.setOnClickListener {
-                clickInterface.onItemClick(warranty, daysUntilExpiry)
-            }
+            binding.cvWarranty.setOnClickListener { clickInterface.onItemClick(warranty) }
         }
     }
 
     inner class AdViewHolder(val binding: ListAdContainerBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        private val adHolder = TapsellPlus
-            .createAdHolder(activity, binding.cvAdContainer, R.layout.list_ad_banner)
+        private var requestAdCounter = 0
 
         fun bindView() {
-            requestAdCounter = 0
-            adHolder?.let { requestNativeAd(it) }
+            requestAdColonyBanner()
         }
-    }
 
-    private fun requestNativeAd(adHolder: AdHolder) {
-        TapsellPlus.requestNativeAd(activity, WARRANTIES_NATIVE_ZONE_ID,
-            object : AdRequestCallback() {
-                override fun response(tapsellPlusAdModel: TapsellPlusAdModel?) {
-                    super.response(tapsellPlusAdModel)
-                    Timber.i("RequestNativeAd Response: $tapsellPlusAdModel")
-                    TapsellPlus.showNativeAd(activity, tapsellPlusAdModel!!.responseId,
-                        adHolder, object : AdShowListener() {
-                            override fun onOpened(tapsellPlusAdModel: TapsellPlusAdModel?) {
-                                super.onOpened(tapsellPlusAdModel)
-                            }
-
-                            override fun onClosed(tapsellPlusAdModel: TapsellPlusAdModel?) {
-                                super.onClosed(tapsellPlusAdModel)
-                            }
-                        })
+        private fun requestAdColonyBanner() = AdColony.requestAdView(
+            ADCOLONY_BANNER_ZONE_ID,
+            object : AdColonyAdViewListener() {
+                override fun onRequestFilled(ad: AdColonyAdView?) {
+                    Timber.i("Banner request filled.")
+                    showAdColonyContainer()
+                    ad?.let { binding.rlAdContainer.addView(it) }
                 }
 
-                override fun error(error: String?) {
-                    super.error(error)
-                    Timber.e("RequestNativeAd Error: $error")
-                    if (requestAdCounter < 3) {
-                        requestAdCounter++
-                        requestNativeAd(adHolder)
+                override fun onRequestNotFilled(zone: AdColonyZone?) {
+                    super.onRequestNotFilled(zone)
+                    Timber.e("Banner request did not fill.")
+
+                    requestAdCounter = 0
+                    val adHolder = TapsellPlus
+                        .createAdHolder(activity, binding.cvAdContainer, R.layout.list_ad_banner)
+                    adHolder?.let { requestTapsellNativeAd(it) }
+                }
+            }, AdColonyAdSize.BANNER
+        )
+
+        @Suppress("SpellCheckingInspection")
+        private fun requestTapsellNativeAd(adHolder: AdHolder) {
+            TapsellPlus.requestNativeAd(activity, TAPSELL_WARRANTIES_NATIVE_ZONE_ID,
+                object : AdRequestCallback() {
+                    override fun response(tapsellPlusAdModel: TapsellPlusAdModel?) {
+                        super.response(tapsellPlusAdModel)
+                        Timber.i("RequestNativeAd Response: $tapsellPlusAdModel")
+                        requestAdCounter = 0
+                        showNativeAd(adHolder, tapsellPlusAdModel!!.responseId)
                     }
-                }
-            })
+
+                    override fun error(error: String?) {
+                        super.error(error)
+                        Timber.e("RequestNativeAd Error: $error")
+                        if (requestAdCounter < 3) {
+                            requestAdCounter++
+                            requestTapsellNativeAd(adHolder)
+                        }
+                    }
+                })
+        }
+
+        private fun showNativeAd(adHolder: AdHolder, responseId: String) {
+            showTapsellContainer()
+            TapsellPlus.showNativeAd(activity, responseId,
+                adHolder, object : AdShowListener() {
+                    override fun onOpened(tapsellPlusAdModel: TapsellPlusAdModel?) {
+                        super.onOpened(tapsellPlusAdModel)
+                    }
+
+                    override fun onClosed(tapsellPlusAdModel: TapsellPlusAdModel?) {
+                        super.onClosed(tapsellPlusAdModel)
+                    }
+                })
+        }
+
+        private fun showAdColonyContainer() {
+            binding.cvAdContainer.visibility = GONE
+            binding.rlAdContainer.visibility = VISIBLE
+        }
+
+        @Suppress("SpellCheckingInspection")
+        private fun showTapsellContainer() {
+            binding.rlAdContainer.visibility = GONE
+            binding.cvAdContainer.visibility = VISIBLE
+        }
     }
 }

@@ -49,10 +49,6 @@
             android:name="warranty"
             app:argType="com.xeniac.warrantyroster_manager.models.Warranty"
             app:nullable="false" />
-        <argument
-            android:name="daysUntilExpiry"
-            app:argType="long"
-            app:nullable="false" />
         <action
             android:id="@+id/action_warrantyDetailsFragment_to_editWarrantyFragment"
             app:destination="@id/editWarrantyFragment"

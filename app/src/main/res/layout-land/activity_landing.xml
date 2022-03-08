@@ -6,35 +6,35 @@
     android:layout_height="match_parent"
     tools:context=".ui.landing.LandingActivity">
 
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/iv_header"
-        android:layout_width="0dp"
-        android:layout_height="100dp"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
         android:adjustViewBounds="true"
         android:alpha="0.80"
-        android:contentDescription="@string/landing_text_content_description"
+        android:rotationY="180"
         android:scaleType="centerCrop"
         android:src="@drawable/ic_landing_header"
         android:tintMode="multiply"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline_header"
         app:tint="@color/blue" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_title"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="28dp"
-        android:layout_marginVertical="4dp"
+        android:layout_margin="12dp"
         android:fontFamily="@font/nunito_black"
         android:gravity="start|center_vertical"
-        android:text="@string/forgot_pw_text_title"
+        android:text="@string/login_text_title"
         android:textAlignment="gravity"
         android:textColor="@color/whiteConstant"
-        android:textSize="28sp"
-        app:layout_constraintBottom_toTopOf="@+id/fcv"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:textSize="34sp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toTopOf="@+id/iv_header"
+        app:layout_constraintEnd_toStartOf="@+id/fcv"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -43,14 +43,27 @@
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="-20dp"
         android:background="@drawable/shape_rounded_landing"
         android:elevation="4dp"
         app:defaultNavHost="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/iv_header"
+        app:layout_constraintStart_toStartOf="@+id/guideline"
+        app:layout_constraintTop_toTopOf="parent"
         app:navGraph="@navigation/nav_graph_landing" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.3" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.45" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -37,7 +37,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="32dp"
-            android:layout_marginTop="76dp"
+            android:layout_marginTop="44dp"
             android:fontFamily="@font/nunito_bold"
             android:gravity="start|center_vertical"
             android:labelFor="@+id/ti_layout_email"
@@ -73,7 +73,6 @@
                 android:imeOptions="actionNext"
                 android:inputType="textEmailAddress"
                 android:maxLines="1"
-                android:textColor="@color/black"
                 android:textColorHint="@color/grayDark"
                 android:textDirection="ltr"
                 android:textSize="16sp" />
@@ -122,7 +121,6 @@
                 android:imeOptions="actionDone"
                 android:inputType="textPassword"
                 android:maxLines="1"
-                android:textColor="@color/black"
                 android:textColorHint="@color/grayDark"
                 android:textDirection="ltr"
                 android:textSize="16sp" />
@@ -174,6 +172,7 @@
             android:id="@+id/tv_register_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
             android:fontFamily="@font/nunito_regular"
             android:gravity="center"
             android:maxLines="1"

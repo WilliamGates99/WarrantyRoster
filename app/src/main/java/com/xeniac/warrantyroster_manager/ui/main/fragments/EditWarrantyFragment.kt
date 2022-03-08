@@ -15,8 +15,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import coil.ImageLoader
-import coil.load
-import coil.request.CachePolicy
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
 import com.google.android.material.snackbar.Snackbar
@@ -27,6 +25,8 @@ import com.xeniac.warrantyroster_manager.databinding.FragmentEditWarrantyBinding
 import com.xeniac.warrantyroster_manager.di.CategoryTitleMapKey
 import com.xeniac.warrantyroster_manager.models.*
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModel
+import com.xeniac.warrantyroster_manager.utils.CoilHelper.loadCategoryImage
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.Constants.FRAGMENT_TAG_EDIT_CALENDAR_EXPIRY
@@ -35,11 +35,11 @@ import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_EDIT_WARR
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_EDIT_WARRANTY_CATEGORY_ID
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_EDIT_WARRANTY_DESCRIPTION
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_EDIT_WARRANTY_EXPIRY_DATE_IN_MILLIS
+import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_EDIT_WARRANTY_IS_LIFETIME
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_EDIT_WARRANTY_MODEL
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_EDIT_WARRANTY_SERIAL
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_EDIT_WARRANTY_STARTING_DATE_IN_MILLIS
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_EDIT_WARRANTY_TITLE
-import com.xeniac.warrantyroster_manager.utils.DateHelper.getDaysUntilExpiry
 import com.xeniac.warrantyroster_manager.utils.DateHelper.getTimeZoneOffsetInMillis
 import com.xeniac.warrantyroster_manager.utils.DateHelper.isStartingDateValid
 import dagger.hilt.android.AndroidEntryPoint
@@ -88,13 +88,13 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
         textInputsStrokeColor()
         categoryDropDownSelection()
         categoryDropDownOnDismiss()
+        lifetimeWarrantyCheckBoxListener()
         startingDatePickerOnFocusListener()
         expiryDatePickerOnFocusListener()
         returnToWarrantyDetailsFragment()
         getWarranty()
         editWarrantyOnClick()
-        updateWarrantyObserver()
-        getUpdatedWarrantyObserver()
+        subscribeToObservers()
     }
 
     override fun onDestroyView() {
@@ -115,6 +115,7 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
             val serialNumber = binding.tiEditSerial.text.toString().trim()
             val description = binding.tiEditDescription.text.toString().trim()
             val categoryId = selectedCategory?.id ?: "10"
+            val isLifetime = binding.cbLifetime.isChecked
 
             if (title.isNotBlank()) {
                 outState.putString(SAVE_INSTANCE_EDIT_WARRANTY_TITLE, title)
@@ -137,6 +138,8 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
             }
 
             outState.putString(SAVE_INSTANCE_EDIT_WARRANTY_CATEGORY_ID, categoryId)
+
+            outState.putBoolean(SAVE_INSTANCE_EDIT_WARRANTY_IS_LIFETIME, isLifetime)
 
             outState.putLong(
                 SAVE_INSTANCE_EDIT_WARRANTY_STARTING_DATE_IN_MILLIS,
@@ -179,12 +182,13 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
 
                 selectedCategory?.let { category ->
                     binding.tiDdCategory.setText(category.title[categoryTitleMapKey])
-                    binding.ivIconCategory.load(category.icon, imageLoader) {
-                        memoryCachePolicy(CachePolicy.ENABLED)
-                        diskCachePolicy(CachePolicy.ENABLED)
-                        networkCachePolicy(CachePolicy.ENABLED)
-                    }
+                    loadCategoryIcon(category.icon)
                 }
+            }
+
+            it.getBoolean(SAVE_INSTANCE_EDIT_WARRANTY_IS_LIFETIME).let { restoredIsLifetime ->
+                binding.cbLifetime.isChecked = restoredIsLifetime
+                setExpiryDateActivation(restoredIsLifetime)
             }
 
             it.getLong(SAVE_INSTANCE_EDIT_WARRANTY_STARTING_DATE_IN_MILLIS).let { restoredDate ->
@@ -314,6 +318,11 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
     private fun categoryDropDownOnDismiss() = binding.tiDdCategory.setOnDismissListener {
         binding.tiDdCategory.clearFocus()
     }
+
+    private fun lifetimeWarrantyCheckBoxListener() =
+        binding.cbLifetime.setOnCheckedChangeListener { _, isChecked ->
+            setExpiryDateActivation(isChecked)
+        }
 
     private fun startingDatePickerOnFocusListener() {
         binding.tiEditDateStarting.inputType = InputType.TYPE_NULL
@@ -448,25 +457,18 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
         binding.tiEditDescription.setText(warranty.description)
 
         setStartingDateText(warranty.startingDate!!)
-        setExpiryDateText(warranty.expiryDate!!)
+        setExpiryDateText()
 
-        selectedCategory = warranty.categoryId?.let {
-            viewModel.getCategoryById(it)
-        }
-
+        selectedCategory = viewModel.getCategoryById(warranty.categoryId!!)
         selectedCategory?.let {
             binding.tiDdCategory.setText(it.title[categoryTitleMapKey])
             loadCategoryIcon(it.icon)
         }
     }
 
-    private fun loadCategoryIcon(categoryIcon: String) {
-        binding.ivIconCategory.load(categoryIcon, imageLoader) {
-            memoryCachePolicy(CachePolicy.ENABLED)
-            diskCachePolicy(CachePolicy.ENABLED)
-            networkCachePolicy(CachePolicy.ENABLED)
-        }
-    }
+    private fun loadCategoryIcon(categoryIcon: String) = loadCategoryImage(
+        requireContext(), categoryIcon, imageLoader, binding.ivIconCategory, binding.cpiIconCategory
+    )
 
     private fun setStartingDateText(startingDate: String) {
         Calendar.getInstance().apply {
@@ -492,26 +494,32 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
         }
     }
 
-    private fun setExpiryDateText(expiryDate: String) {
-        Calendar.getInstance().apply {
-            dateFormat.parse(expiryDate)?.let { time = it }
+    private fun setExpiryDateText() {
+        val isLifetime = warranty.isLifetime ?: false
+        if (isLifetime) {
+            binding.cbLifetime.isChecked = true
+        } else {
+            binding.cbLifetime.isChecked = false
+            Calendar.getInstance().apply {
+                dateFormat.parse(warranty.expiryDate!!)?.let { time = it }
 
-            expiryDateInput = "${get(Calendar.YEAR)}-" +
-                    "${decimalFormat.format((get(Calendar.MONTH)) + 1)}-" +
-                    decimalFormat.format(get(Calendar.DAY_OF_MONTH))
+                expiryDateInput = "${get(Calendar.YEAR)}-" +
+                        "${decimalFormat.format((get(Calendar.MONTH)) + 1)}-" +
+                        decimalFormat.format(get(Calendar.DAY_OF_MONTH))
 
-            val expiryDateText =
-                "${decimalFormat.format((get(Calendar.MONTH)) + 1)}/" +
-                        "${decimalFormat.format(get(Calendar.DAY_OF_MONTH))}/" +
-                        "${get(Calendar.YEAR)}"
+                val expiryDateText =
+                    "${decimalFormat.format((get(Calendar.MONTH)) + 1)}/" +
+                            "${decimalFormat.format(get(Calendar.DAY_OF_MONTH))}/" +
+                            "${get(Calendar.YEAR)}"
 
-            binding.tiEditDateExpiry.setText(expiryDateText)
+                binding.tiEditDateExpiry.setText(expiryDateText)
 
-            //Add/Subtract offset to Prevent the Calendar to Show the Previous Day
-            selectedExpiryDateInMillis = if (offset < 0) {
-                timeInMillis - offset
-            } else {
-                timeInMillis + offset
+                //Add/Subtract offset to Prevent the Calendar to Show the Previous Day
+                selectedExpiryDateInMillis = if (offset < 0) {
+                    timeInMillis - offset
+                } else {
+                    timeInMillis + offset
+                }
             }
         }
     }
@@ -522,12 +530,18 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
             false
         }
 
+    private fun subscribeToObservers() {
+        updateWarrantyObserver()
+        getUpdatedWarrantyObserver()
+    }
+
     private fun getWarrantyInput() {
         val inputMethodManager = requireContext()
             .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(binding.root.applicationWindowToken, 0)
 
         val title = binding.tiEditTitle.text.toString().trim()
+        val isLifetime = binding.cbLifetime.isChecked
 
         if (title.isBlank()) {
             binding.tiLayoutTitle.requestFocus()
@@ -537,11 +551,13 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
             binding.tiLayoutDateStarting.requestFocus()
             binding.tiLayoutDateStarting.boxStrokeColor =
                 ContextCompat.getColor(requireContext(), R.color.red)
-        } else if (expiryDateInput.isNullOrBlank()) {
+        } else if (!isLifetime && expiryDateInput.isNullOrBlank()) {
             binding.tiLayoutDateExpiry.requestFocus()
             binding.tiLayoutDateExpiry.boxStrokeColor =
                 ContextCompat.getColor(requireContext(), R.color.red)
-        } else if (!isStartingDateValid(selectedStartingDateInMillis, selectedExpiryDateInMillis)) {
+        } else if (!isLifetime &&
+            !isStartingDateValid(selectedStartingDateInMillis, selectedExpiryDateInMillis)
+        ) {
             showDateError()
         } else {
             val brand = binding.tiEditBrand.text?.toString()?.trim()
@@ -555,8 +571,9 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
                 brand,
                 model,
                 serialNumber,
-                startingDateInput.toString(),
-                expiryDateInput.toString(),
+                isLifetime,
+                startingDateInput!!,
+                expiryDateInput,
                 description,
                 categoryId,
                 Firebase.auth.currentUser?.uid.toString()
@@ -597,6 +614,13 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
                                         LENGTH_LONG
                                     ).show()
                                 }
+                                it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
+                                    Snackbar.make(
+                                        binding.root,
+                                        requireContext().getString(R.string.firebase_error_device_blocked),
+                                        LENGTH_LONG
+                                    ).show()
+                                }
                                 else -> {
                                     Snackbar.make(
                                         binding.root,
@@ -622,13 +646,8 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
                     Status.SUCCESS -> {
                         hideLoadingAnimation()
                         response.data?.let { updatedWarranty ->
-                            val daysUntilExpiry =
-                                getDaysUntilExpiry(updatedWarranty.expiryDate!!, dateFormat)
-
                             val action = EditWarrantyFragmentDirections
-                                .actionEditWarrantyFragmentToWarrantyDetailsFragment(
-                                    updatedWarranty, daysUntilExpiry
-                                )
+                                .actionEditWarrantyFragmentToWarrantyDetailsFragment(updatedWarranty)
                             findNavController().navigate(action)
                         }
                     }
@@ -652,6 +671,13 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
                                     Snackbar.make(
                                         binding.root,
                                         requireContext().getString(R.string.network_error_403),
+                                        LENGTH_LONG
+                                    ).show()
+                                }
+                                it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
+                                    Snackbar.make(
+                                        binding.root,
+                                        requireContext().getString(R.string.firebase_error_device_blocked),
                                         LENGTH_LONG
                                     ).show()
                                 }
@@ -706,5 +732,9 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
         binding.tiLayoutDateStarting.boxStrokeColor =
             ContextCompat.getColor(requireContext(), R.color.blue)
         binding.tvDateError.visibility = GONE
+    }
+
+    private fun setExpiryDateActivation(isLifeTime: Boolean) {
+        binding.tiLayoutDateExpiry.isEnabled = !isLifeTime
     }
 }

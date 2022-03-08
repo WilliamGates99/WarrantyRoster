@@ -7,25 +7,31 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
+import com.adcolony.sdk.*
 import com.google.android.material.shape.CornerFamily.ROUNDED
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.ActivityMainBinding
-import com.xeniac.warrantyroster_manager.utils.Constants.DELETE_WARRANTY_Interstitial_ZONE_ID
+import com.xeniac.warrantyroster_manager.utils.Constants.ADCOLONY_INTERSTITIAL_ZONE_ID
+import com.xeniac.warrantyroster_manager.utils.Constants.TAPSELL_INTERSTITIAL_ZONE_ID
 import com.xeniac.warrantyroster_manager.utils.LocaleModifier
 import dagger.hilt.android.AndroidEntryPoint
 import ir.tapsell.plus.AdRequestCallback
-import ir.tapsell.plus.AdShowListener
 import ir.tapsell.plus.TapsellPlus
 import ir.tapsell.plus.model.TapsellPlusAdModel
-import ir.tapsell.plus.model.TapsellPlusErrorModel
 import timber.log.Timber
 
+@Suppress("SpellCheckingInspection")
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
+
+    var adColonyAd: AdColonyInterstitial? = null
+    var tapsellResponseId: String? = null
+
+    private var requestAdCounter = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +45,7 @@ class MainActivity : AppCompatActivity() {
         bottomAppBarStyle()
         bottomNavActions()
         fabOnClick()
+        requestAdColonyInterstitial()
     }
 
     private fun bottomAppBarStyle() {
@@ -90,32 +97,42 @@ class MainActivity : AppCompatActivity() {
         binding.appbar.visibility = GONE
     }
 
-    fun requestInterstitialAd() = TapsellPlus.requestInterstitialAd(this,
-        DELETE_WARRANTY_Interstitial_ZONE_ID, object : AdRequestCallback() {
-            override fun response(tapsellPlusAdModel: TapsellPlusAdModel?) {
-                super.response(tapsellPlusAdModel)
-                Timber.i("RequestInterstitialAd Response: $tapsellPlusAdModel")
-                tapsellPlusAdModel?.let { showInterstitialAd(it.responseId) }
-            }
+    fun requestAdColonyInterstitial() {
+        AdColony.requestInterstitial(
+            ADCOLONY_INTERSTITIAL_ZONE_ID,
+            object : AdColonyInterstitialListener() {
+                override fun onRequestFilled(ad: AdColonyInterstitial?) {
+                    Timber.i("Interstitial request filled.")
+                    adColonyAd = ad
+                }
 
-            override fun error(s: String?) {
-                super.error(s)
-                Timber.e("RequestInterstitialAd Error: $s")
+                override fun onRequestNotFilled(zone: AdColonyZone?) {
+                    super.onRequestNotFilled(zone)
+                    Timber.e("Interstitial request did not fill.")
+                    requestTapsellInterstitial()
+                }
             }
-        })
+        )
+    }
 
-    private fun showInterstitialAd(responseId: String) = TapsellPlus.showInterstitialAd(this,
-        responseId, object : AdShowListener() {
-            override fun onOpened(tapsellPlusAdModel: TapsellPlusAdModel?) {
-                super.onOpened(tapsellPlusAdModel)
-            }
+    private fun requestTapsellInterstitial() {
+        TapsellPlus.requestInterstitialAd(this,
+            TAPSELL_INTERSTITIAL_ZONE_ID, object : AdRequestCallback() {
+                override fun response(tapsellPlusAdModel: TapsellPlusAdModel?) {
+                    super.response(tapsellPlusAdModel)
+                    Timber.i("RequestInterstitialAd Response: $tapsellPlusAdModel")
+                    requestAdCounter = 0
+                    tapsellPlusAdModel?.let { tapsellResponseId = it.responseId }
+                }
 
-            override fun onClosed(tapsellPlusAdModel: TapsellPlusAdModel?) {
-                super.onClosed(tapsellPlusAdModel)
-            }
-
-            override fun onError(tapsellPlusErrorModel: TapsellPlusErrorModel?) {
-                super.onError(tapsellPlusErrorModel)
-            }
-        })
+                override fun error(s: String?) {
+                    super.error(s)
+                    Timber.e("RequestInterstitialAd Error: $s")
+                    if (requestAdCounter < 3) {
+                        requestAdCounter++
+                        requestTapsellInterstitial()
+                    }
+                }
+            })
+    }
 }

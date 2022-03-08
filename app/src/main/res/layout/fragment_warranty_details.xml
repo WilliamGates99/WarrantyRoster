@@ -62,6 +62,18 @@
                 app:shapeAppearance="@style/Theme.WarrantyRoster.ImageViewShapeAppearance"
                 app:tint="@color/black" />
 
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/cpi_icon"
+                style="@style/Theme.WarrantyRoster.LoadingProgressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:elevation="13dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_icon"
+                app:layout_constraintEnd_toEndOf="@+id/iv_icon"
+                app:layout_constraintStart_toStartOf="@+id/iv_icon"
+                app:layout_constraintTop_toTopOf="@+id/iv_icon" />
+
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_status"
                 android:layout_width="0dp"

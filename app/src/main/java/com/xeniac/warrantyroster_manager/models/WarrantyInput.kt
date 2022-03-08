@@ -8,9 +8,10 @@ data class WarrantyInput(
     val brand: String?,
     val model: String?,
     val serialNumber: String?,
+    val lifetime: Boolean = false,
     val startingDate: String,
-    val expiryDate: String,
+    val expiryDate: String?,
     val description: String?,
-    val categoryId: String,
+    val categoryId: String = "10",
     val uuid: String
 )

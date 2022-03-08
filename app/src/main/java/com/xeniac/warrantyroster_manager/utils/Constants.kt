@@ -1,15 +1,22 @@
 package com.xeniac.warrantyroster_manager.utils
 
+@Suppress("SpellCheckingInspection")
 object Constants {
     //Web URLs
     const val URL_PRIVACY_POLICY = "https://warranty-roster.herokuapp.com/privacy-policy"
+    const val URL_DONATE = "https://bio.link/WarrantyRoster"
 
-    //Tapsell Ads Constants
+    //AdColony Constants
+    const val ADCOLONY_APP_ID = "appf8bfbe0ff94542289c"
+    const val ADCOLONY_INTERSTITIAL_ZONE_ID = "vz306262cccba8424fb7"
+    const val ADCOLONY_BANNER_ZONE_ID = "vzb0843944e79645c3be"
+
+    //Tapsell Constants
     const val TAPSELL_KEY =
         "phbftfiakptpjbkegafmqmmkdsjcjmkldcahhapfssfftdnbgpqeimkjiitfpcoingqkad"
-    const val WARRANTIES_NATIVE_ZONE_ID = "61647159b2c8056d868b66c6"
-    const val SETTINGS_NATIVE_ZONE_ID = "616b0d4cb2c8056d868b6a1a"
-    const val DELETE_WARRANTY_Interstitial_ZONE_ID = "616476f7b2c8056d868b66cb"
+    const val TAPSELL_INTERSTITIAL_ZONE_ID = "616476f7b2c8056d868b66cb"
+    const val TAPSELL_WARRANTIES_NATIVE_ZONE_ID = "61647159b2c8056d868b66c6"
+    const val TAPSELL_SETTINGS_NATIVE_ZONE_ID = "616b0d4cb2c8056d868b6a1a"
 
     //SharedPreference Settings Constants
     const val PREFERENCE_SETTINGS = "preference_settings"
@@ -46,6 +53,7 @@ object Constants {
     const val WARRANTIES_BRAND = "brand"
     const val WARRANTIES_MODEL = "model"
     const val WARRANTIES_SERIAL_NUMBER = "serialNumber"
+    const val WARRANTIES_LIFETIME = "lifetime"
     const val WARRANTIES_STARTING_DATE = "startingDate"
     const val WARRANTIES_EXPIRY_DATE = "expiryDate"
     const val WARRANTIES_DESCRIPTION = "description"
@@ -55,6 +63,9 @@ object Constants {
     //Response Errors
     const val ERROR_NETWORK_CONNECTION = "Unable to connect to the internet"
     const val ERROR_NETWORK_403 = "403"
+    const val ERROR_TIMER_IS_NOT_ZERO = "Timer is not zero"
+    const val ERROR_FIREBASE_DEVICE_BLOCKED =
+        "We have blocked all requests from this device due to unusual activity"
     const val ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS =
         "The email address is already in use by another account"
     const val ERROR_FIREBASE_AUTH_ACCOUNT_NOT_FOUND =
@@ -92,6 +103,7 @@ object Constants {
     const val SAVE_INSTANCE_ADD_WARRANTY_SERIAL = "save_instance_add_warranty_serial"
     const val SAVE_INSTANCE_ADD_WARRANTY_DESCRIPTION = "save_instance_add_warranty_description"
     const val SAVE_INSTANCE_ADD_WARRANTY_CATEGORY_ID = "save_instance_add_warranty_category_id"
+    const val SAVE_INSTANCE_ADD_WARRANTY_IS_LIFETIME = "save_instance_add_warranty_is_lifetime"
     const val SAVE_INSTANCE_ADD_WARRANTY_STARTING_DATE_IN_MILLIS =
         "save_instance_add_warranty_starting_date_in_millis"
     const val SAVE_INSTANCE_ADD_WARRANTY_EXPIRY_DATE_IN_MILLIS =
@@ -104,6 +116,7 @@ object Constants {
     const val SAVE_INSTANCE_EDIT_WARRANTY_SERIAL = "save_instance_edit_warranty_serial"
     const val SAVE_INSTANCE_EDIT_WARRANTY_DESCRIPTION = "save_instance_edit_warranty_description"
     const val SAVE_INSTANCE_EDIT_WARRANTY_CATEGORY_ID = "save_instance_edit_warranty_category_id"
+    const val SAVE_INSTANCE_EDIT_WARRANTY_IS_LIFETIME = "save_instance_edit_warranty_is_lifetime"
     const val SAVE_INSTANCE_EDIT_WARRANTY_STARTING_DATE_IN_MILLIS =
         "save_instance_edit_warranty_starting_date_in_millis"
     const val SAVE_INSTANCE_EDIT_WARRANTY_EXPIRY_DATE_IN_MILLIS =
