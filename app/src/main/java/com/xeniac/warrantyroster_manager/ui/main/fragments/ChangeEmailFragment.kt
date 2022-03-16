@@ -245,6 +245,7 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
                         hideLoadingAnimation()
                         MaterialAlertDialogBuilder(requireContext()).apply {
                             setMessage(requireContext().getString(R.string.change_email_dialog_message))
+                            setCancelable(false)
                             setPositiveButton(requireContext().getString(R.string.change_email_dialog_positive)) { _, _ -> }
                             setOnDismissListener { requireActivity().onBackPressed() }
                             show()

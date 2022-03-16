@@ -252,6 +252,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                         hideLoadingAnimation()
                         MaterialAlertDialogBuilder(requireContext()).apply {
                             setMessage(requireContext().getString(R.string.settings_dialog_message))
+                            setCancelable(false)
                             setPositiveButton(requireContext().getString(R.string.settings_dialog_positive)) { _, _ -> }
                         }.show()
                     }

@@ -305,6 +305,7 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
                         hideLoadingAnimation()
                         MaterialAlertDialogBuilder(requireContext()).apply {
                             setMessage(requireContext().getString(R.string.change_password_dialog_message))
+                            setCancelable(false)
                             setPositiveButton(requireContext().getString(R.string.change_password_dialog_positive)) { _, _ -> }
                             setOnDismissListener { requireActivity().onBackPressed() }
                             show()

@@ -225,6 +225,7 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
                 warranty.title
             )
         )
+        setCancelable(false)
         setPositiveButton(requireContext().getString(R.string.warranty_details_delete_dialog_positive)) { _, _ -> deleteWarrantyFromFirestore() }
         setNegativeButton(requireContext().getText(R.string.warranty_details_delete_dialog_negative)) { _, _ -> }
         show()
