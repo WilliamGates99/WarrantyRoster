@@ -6,11 +6,13 @@ import com.adcolony.sdk.AdColony
 import com.adcolony.sdk.AdColonyAppOptions
 import com.google.firebase.FirebaseApp
 import com.google.firebase.appcheck.FirebaseAppCheck
+import com.google.firebase.appcheck.debug.DebugAppCheckProviderFactory
 import com.google.firebase.appcheck.safetynet.SafetyNetAppCheckProviderFactory
 import com.xeniac.warrantyroster_manager.di.CurrentCountry
 import com.xeniac.warrantyroster_manager.di.CurrentLanguage
 import com.xeniac.warrantyroster_manager.utils.Constants.ADCOLONY_APP_ID
-import com.xeniac.warrantyroster_manager.utils.Constants.ADCOLONY_BANNER_ZONE_ID
+import com.xeniac.warrantyroster_manager.utils.Constants.ADCOLONY_BANNER_LIST_ZONE_ID
+import com.xeniac.warrantyroster_manager.utils.Constants.ADCOLONY_BANNER_SETTINGS_ZONE_ID
 import com.xeniac.warrantyroster_manager.utils.Constants.ADCOLONY_INTERSTITIAL_ZONE_ID
 import com.xeniac.warrantyroster_manager.utils.Constants.TAPSELL_KEY
 import dagger.hilt.android.HiltAndroidApp
@@ -54,7 +56,7 @@ class BaseApplication : Application() {
         firebaseAppCheck.installAppCheckProviderFactory(SafetyNetAppCheckProviderFactory.getInstance())
 
         //TODO COMMENT FOR RELEASE
-        //firebaseAppCheck.installAppCheckProviderFactory(DebugAppCheckProviderFactory.getInstance())
+        firebaseAppCheck.installAppCheckProviderFactory(DebugAppCheckProviderFactory.getInstance())
     }
 
     private fun setNightMode() {
@@ -80,7 +82,8 @@ class BaseApplication : Application() {
         AdColonyAppOptions().setKeepScreenOn(true),
         ADCOLONY_APP_ID,
         ADCOLONY_INTERSTITIAL_ZONE_ID,
-        ADCOLONY_BANNER_ZONE_ID
+        ADCOLONY_BANNER_LIST_ZONE_ID,
+        ADCOLONY_BANNER_SETTINGS_ZONE_ID
     )
 
     @Suppress("SpellCheckingInspection")

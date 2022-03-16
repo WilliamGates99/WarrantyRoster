@@ -23,7 +23,7 @@ import com.xeniac.warrantyroster_manager.di.CurrentLanguage
 import com.xeniac.warrantyroster_manager.models.Status
 import com.xeniac.warrantyroster_manager.ui.landing.LandingActivity
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.SettingsViewModel
-import com.xeniac.warrantyroster_manager.utils.Constants.ADCOLONY_BANNER_ZONE_ID
+import com.xeniac.warrantyroster_manager.utils.Constants.ADCOLONY_BANNER_SETTINGS_ZONE_ID
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
@@ -326,7 +326,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
     private fun requestAdColonyBanner() = _binding?.let {
         AdColony.requestAdView(
-            ADCOLONY_BANNER_ZONE_ID,
+            ADCOLONY_BANNER_SETTINGS_ZONE_ID,
             object : AdColonyAdViewListener() {
                 override fun onRequestFilled(ad: AdColonyAdView?) {
                     Timber.i("Banner request filled.")

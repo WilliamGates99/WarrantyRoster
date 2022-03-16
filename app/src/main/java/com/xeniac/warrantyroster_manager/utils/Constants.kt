@@ -9,7 +9,8 @@ object Constants {
     //AdColony Constants
     const val ADCOLONY_APP_ID = "appf8bfbe0ff94542289c"
     const val ADCOLONY_INTERSTITIAL_ZONE_ID = "vz306262cccba8424fb7"
-    const val ADCOLONY_BANNER_ZONE_ID = "vzb0843944e79645c3be"
+    const val ADCOLONY_BANNER_LIST_ZONE_ID = "vze72e147772504c8693"
+    const val ADCOLONY_BANNER_SETTINGS_ZONE_ID = "vz5d5dae933e204b668e"
 
     //Tapsell Constants
     const val TAPSELL_KEY =

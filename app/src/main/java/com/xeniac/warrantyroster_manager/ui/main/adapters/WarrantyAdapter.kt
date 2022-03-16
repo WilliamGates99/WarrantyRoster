@@ -19,7 +19,7 @@ import com.xeniac.warrantyroster_manager.models.ListItemType
 import com.xeniac.warrantyroster_manager.models.Warranty
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModel
 import com.xeniac.warrantyroster_manager.utils.CoilHelper.loadCategoryImage
-import com.xeniac.warrantyroster_manager.utils.Constants.ADCOLONY_BANNER_ZONE_ID
+import com.xeniac.warrantyroster_manager.utils.Constants.ADCOLONY_BANNER_LIST_ZONE_ID
 import com.xeniac.warrantyroster_manager.utils.Constants.VIEW_TYPE_AD
 import com.xeniac.warrantyroster_manager.utils.Constants.VIEW_TYPE_WARRANTY
 import com.xeniac.warrantyroster_manager.utils.Constants.TAPSELL_WARRANTIES_NATIVE_ZONE_ID
@@ -194,7 +194,7 @@ class WarrantyAdapter(
         }
 
         private fun requestAdColonyBanner() = AdColony.requestAdView(
-            ADCOLONY_BANNER_ZONE_ID,
+            ADCOLONY_BANNER_LIST_ZONE_ID,
             object : AdColonyAdViewListener() {
                 override fun onRequestFilled(ad: AdColonyAdView?) {
                     Timber.i("Banner request filled.")
