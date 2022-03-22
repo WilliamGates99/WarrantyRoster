@@ -12,7 +12,7 @@ plugins {
 
 android {
     compileSdkVersion 32
-    buildToolsVersion '33.0.0 rc1'
+    buildToolsVersion '33.0.0 rc2'
 
     defaultConfig {
         applicationId "com.xeniac.warrantyroster_manager"
