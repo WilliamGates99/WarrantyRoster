@@ -31,6 +31,11 @@
             android:name=".ui.main.MainActivity"
             android:theme="@style/Theme.WarrantyRoster"
             android:windowSoftInputMode="adjustPan|stateHidden" />
+
+        <meta-data
+            android:name="applovin.sdk.key"
+            android:value="hmVNBfwsMg8e9UdPEe6ZOWwE83xd2y2KUkDTlGBqx3DMlb0CUOK4f7AeBRRxh-QmzJneB-DPUA-cJuPFEZ7qWA"
+            tools:replace="android:value" />
     </application>
 
 </manifest>

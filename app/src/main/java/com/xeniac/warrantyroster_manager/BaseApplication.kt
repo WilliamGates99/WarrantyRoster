@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
 import com.adcolony.sdk.AdColony
 import com.adcolony.sdk.AdColonyAppOptions
+import com.applovin.sdk.AppLovinSdk
 import com.google.firebase.FirebaseApp
 import com.google.firebase.appcheck.FirebaseAppCheck
 import com.google.firebase.appcheck.debug.DebugAppCheckProviderFactory
@@ -45,6 +46,7 @@ class BaseApplication : Application() {
         initFirebaseAppCheck()
         setNightMode()
         setLocale()
+        initAppLovin()
         initAdColony()
         initTapsell()
     }
@@ -76,6 +78,11 @@ class BaseApplication : Application() {
         Locale.setDefault(newLocale)
         configuration.setLocale(newLocale)
         resources.updateConfiguration(configuration, displayMetrics)
+    }
+
+    private fun initAppLovin() {
+        AppLovinSdk.getInstance(this).mediationProvider = "max"
+        AppLovinSdk.getInstance(this).initializeSdk {}
     }
 
     private fun initAdColony() = AdColony.configure(

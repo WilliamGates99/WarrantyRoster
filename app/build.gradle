@@ -8,6 +8,11 @@ plugins {
     id 'dagger.hilt.android.plugin'
     id 'com.google.firebase.crashlytics'
     id 'com.google.firebase.firebase-perf'
+    id 'applovin-quality-service'
+}
+
+applovin {
+    apiKey "wPNW70TAHp3xrcTl2HOeZEpvt5kn19fKosui1hEugVWrFDKCh_411hghugSX5ln5ewRrMMRB8W1Ce_S3hcPh4c"
 }
 
 android {
@@ -79,7 +84,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui-ktx:2.4.1'
 
     //Firebase BoM and Analytics
-    implementation platform('com.google.firebase:firebase-bom:29.1.0')
+    implementation platform('com.google.firebase:firebase-bom:29.2.1')
     implementation 'com.google.firebase:firebase-analytics-ktx'
 
     //Firebase App Check TODO USE BoM AFTER RELEASE OF THE STABLE VERSION
@@ -99,7 +104,7 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:5.0.1'
 
     //Lottie Library
-    implementation 'com.airbnb.android:lottie:5.0.2'
+    implementation 'com.airbnb.android:lottie:5.0.3'
 
     //Coil Library
     implementation 'io.coil-kt:coil:1.4.0'
@@ -109,8 +114,9 @@ dependencies {
     implementation 'ir.tapsell.plus:tapsell-plus-sdk-android:2.1.6'
     implementation 'com.google.android.gms:play-services-ads:20.6.0'
 
-    //AdColony Libraries
-    implementation 'com.adcolony:sdk:4.6.5'
+    //AppLovin & AdColony Libraries
+    implementation 'com.applovin:applovin-sdk:11.3.1'
+    implementation 'com.adcolony:sdk:4.7.0'
     implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'
 
     //LeakCanary Library
