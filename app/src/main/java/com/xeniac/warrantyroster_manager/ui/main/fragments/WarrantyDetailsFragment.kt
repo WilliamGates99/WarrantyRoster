@@ -251,6 +251,9 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
                         ).show()
 
                         when {
+                            (requireActivity() as MainActivity).appLovinAd.isReady -> {
+                                (requireActivity() as MainActivity).appLovinAd.showAd()
+                            }
                             (requireActivity() as MainActivity).adColonyAd != null -> {
                                 (requireActivity() as MainActivity).adColonyAd?.show()
                             }
@@ -261,7 +264,7 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
                             }
                         }
                         requireActivity().onBackPressed()
-                        (requireActivity() as MainActivity).requestAdColonyInterstitial()
+                        (requireActivity() as MainActivity).requestAppLovinInterstitial()
                     }
                     Status.ERROR -> {
                         hideLoadingAnimation()

@@ -8,11 +8,16 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.adcolony.sdk.*
+import com.applovin.mediation.MaxAd
+import com.applovin.mediation.MaxAdListener
+import com.applovin.mediation.MaxError
+import com.applovin.mediation.ads.MaxInterstitialAd
 import com.google.android.material.shape.CornerFamily.ROUNDED
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.ActivityMainBinding
 import com.xeniac.warrantyroster_manager.utils.Constants.ADCOLONY_INTERSTITIAL_ZONE_ID
+import com.xeniac.warrantyroster_manager.utils.Constants.APPLOVIN_INTERSTITIAL_UNIT_ID
 import com.xeniac.warrantyroster_manager.utils.Constants.TAPSELL_INTERSTITIAL_ZONE_ID
 import com.xeniac.warrantyroster_manager.utils.LocaleModifier
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,15 +28,18 @@ import timber.log.Timber
 
 @Suppress("SpellCheckingInspection")
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), MaxAdListener {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
 
+    lateinit var appLovinAd: MaxInterstitialAd
     var adColonyAd: AdColonyInterstitial? = null
     var tapsellResponseId: String? = null
 
-    private var requestAdCounter = 0
+    private var appLovinAdRequestCounter = 0
+    private var adColonyRequestCounter = 0
+    private var tapsellRequestCounter = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +53,7 @@ class MainActivity : AppCompatActivity() {
         bottomAppBarStyle()
         bottomNavActions()
         fabOnClick()
-        requestAdColonyInterstitial()
+        requestAppLovinInterstitial()
     }
 
     private fun bottomAppBarStyle() {
@@ -97,19 +105,78 @@ class MainActivity : AppCompatActivity() {
         binding.appbar.visibility = GONE
     }
 
-    fun requestAdColonyInterstitial() {
+    fun requestAppLovinInterstitial() {
+        appLovinAd = MaxInterstitialAd(APPLOVIN_INTERSTITIAL_UNIT_ID, this)
+        appLovinAd.setListener(this)
+        appLovinAd.loadAd()
+    }
+
+    override fun onAdLoaded(ad: MaxAd?) {
+        /**
+         * Interstitial ad is ready to be shown.
+         * interstitialAd.isReady() will now return 'true'
+         */
+        Timber.i("AppLovin onAdLoaded")
+        appLovinAdRequestCounter = 0
+    }
+
+    override fun onAdLoadFailed(adUnitId: String?, error: MaxError?) {
+        /**
+         * Interstitial ad failed to load
+         */
+        Timber.e("AppLovin onAdLoadFailed: $error")
+        if (appLovinAdRequestCounter < 3) {
+            appLovinAdRequestCounter++
+            appLovinAd.loadAd()
+        } else {
+            requestAdColonyInterstitial()
+        }
+    }
+
+    override fun onAdDisplayFailed(ad: MaxAd?, error: MaxError?) {
+        /**
+         * Interstitial ad failed to display.
+         * AppLovin recommends that you load the next ad.
+         */
+        Timber.e("AppLovin onAdDisplayFailed: $error")
+        appLovinAd.loadAd()
+    }
+
+    override fun onAdHidden(ad: MaxAd?) {
+        /**
+         * Interstitial ad is hidden.
+         * Pre-load the next ad
+         */
+        Timber.i("AppLovin onAdHidden")
+        appLovinAd.loadAd()
+    }
+
+    override fun onAdDisplayed(ad: MaxAd?) {
+        Timber.i("AppLovin onAdDisplayed")
+    }
+
+    override fun onAdClicked(ad: MaxAd?) {
+        Timber.i("AppLovin onAdClicked")
+    }
+
+    private fun requestAdColonyInterstitial() {
         AdColony.requestInterstitial(
             ADCOLONY_INTERSTITIAL_ZONE_ID,
             object : AdColonyInterstitialListener() {
                 override fun onRequestFilled(ad: AdColonyInterstitial?) {
-                    Timber.i("Interstitial request filled.")
+                    Timber.i("AdColony Interstitial onRequestFilled")
                     adColonyAd = ad
                 }
 
                 override fun onRequestNotFilled(zone: AdColonyZone?) {
                     super.onRequestNotFilled(zone)
-                    Timber.e("Interstitial request did not fill.")
-                    requestTapsellInterstitial()
+                    Timber.e("AdColony Interstitial onRequestNotFilled")
+                    if (adColonyRequestCounter < 3) {
+                        adColonyRequestCounter++
+                        requestAdColonyInterstitial()
+                    } else {
+                        requestTapsellInterstitial()
+                    }
                 }
             }
         )
@@ -120,16 +187,16 @@ class MainActivity : AppCompatActivity() {
             TAPSELL_INTERSTITIAL_ZONE_ID, object : AdRequestCallback() {
                 override fun response(tapsellPlusAdModel: TapsellPlusAdModel?) {
                     super.response(tapsellPlusAdModel)
-                    Timber.i("RequestInterstitialAd Response: $tapsellPlusAdModel")
-                    requestAdCounter = 0
+                    Timber.i("requestTapsellInterstitial onResponse")
+                    tapsellRequestCounter = 0
                     tapsellPlusAdModel?.let { tapsellResponseId = it.responseId }
                 }
 
                 override fun error(s: String?) {
                     super.error(s)
-                    Timber.e("RequestInterstitialAd Error: $s")
-                    if (requestAdCounter < 3) {
-                        requestAdCounter++
+                    Timber.e("requestTapsellInterstitial onError: $s")
+                    if (tapsellRequestCounter < 3) {
+                        tapsellRequestCounter++
                         requestTapsellInterstitial()
                     }
                 }

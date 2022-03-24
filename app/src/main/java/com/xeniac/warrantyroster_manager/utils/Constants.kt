@@ -6,6 +6,9 @@ object Constants {
     const val URL_PRIVACY_POLICY = "https://warranty-roster.herokuapp.com/privacy-policy"
     const val URL_DONATE = "https://bio.link/WarrantyRoster"
 
+    //AppLovin Constants
+    const val APPLOVIN_INTERSTITIAL_UNIT_ID = "c9d93a2239fc9743"
+
     //AdColony Constants
     const val ADCOLONY_APP_ID = "appf8bfbe0ff94542289c"
     const val ADCOLONY_INTERSTITIAL_ZONE_ID = "vz306262cccba8424fb7"
