@@ -73,11 +73,11 @@ dependencies {
     implementation 'androidx.activity:activity-ktx:1.4.0'
 
     //Coroutines
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0-native-mt'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0-native-mt'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0'
 
     //Coroutines for Firebase
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.0-native-mt'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.0'
 
     //Navigation Component
     implementation 'androidx.navigation:navigation-fragment-ktx:2.4.1'
@@ -107,8 +107,8 @@ dependencies {
     implementation 'com.airbnb.android:lottie:5.0.3'
 
     //Coil Library
-    implementation 'io.coil-kt:coil:1.4.0'
-    implementation 'io.coil-kt:coil-svg:1.4.0'
+    implementation 'io.coil-kt:coil:2.0.0-rc02'
+    implementation 'io.coil-kt:coil-svg:2.0.0-rc02'
 
     //Tapsell Libraries
     implementation 'ir.tapsell.plus:tapsell-plus-sdk-android:2.1.6'

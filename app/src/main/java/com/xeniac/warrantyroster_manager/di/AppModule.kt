@@ -5,6 +5,10 @@ import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import coil.ImageLoader
 import coil.decode.SvgDecoder
+import coil.disk.DiskCache
+import coil.memory.MemoryCache
+import coil.util.DebugLogger
+import com.xeniac.warrantyroster_manager.BuildConfig
 import com.xeniac.warrantyroster_manager.repositories.MainRepository
 import com.xeniac.warrantyroster_manager.repositories.UserRepository
 import com.xeniac.warrantyroster_manager.utils.Constants
@@ -16,6 +20,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import okhttp3.Dispatcher
+import okhttp3.OkHttpClient
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -77,7 +83,28 @@ object AppModule {
     @Singleton
     @Provides
     fun provideCoilImageLoader(@ApplicationContext context: Context) =
-        ImageLoader.Builder(context).componentRegistry { add(SvgDecoder(context)) }.build()
+        ImageLoader.Builder(context).apply {
+            components { add(SvgDecoder.Factory()) }
+            memoryCache {
+                MemoryCache.Builder(context)
+                    //Set the max size to 25% of the app's available memory.
+                    .maxSizePercent(0.25)
+                    .build()
+            }
+            okHttpClient {
+                //Don't limit concurrent network requests by host.
+                val dispatcher = Dispatcher().apply { maxRequestsPerHost = maxRequests }
+
+                //Lazily create the OkHttpClient that is used for network operations.
+                OkHttpClient.Builder()
+                    .dispatcher(dispatcher)
+                    .build()
+            }
+            //Ignore the network cache headers and always read from/write to the disk cache.
+            respectCacheHeaders(false)
+            crossfade(true)
+            if (BuildConfig.DEBUG) logger(DebugLogger())
+        }.build()
 
     @CategoryTitleMapKey
     @Singleton //TODO REMOVE AFTER ADDING PERSIAN

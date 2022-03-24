@@ -35,7 +35,6 @@ object CoilHelper {
                     progressBar.visibility = GONE
                 }
             )
-            crossfade(true)
         }.build()
         imageLoader.enqueue(request)
     }
