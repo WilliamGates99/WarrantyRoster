@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -13,6 +14,13 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.adcolony.sdk.*
 import com.airbnb.lottie.LottieDrawable
+import com.applovin.mediation.MaxAd
+import com.applovin.mediation.MaxAdRevenueListener
+import com.applovin.mediation.MaxError
+import com.applovin.mediation.nativeAds.MaxNativeAdListener
+import com.applovin.mediation.nativeAds.MaxNativeAdLoader
+import com.applovin.mediation.nativeAds.MaxNativeAdView
+import com.applovin.mediation.nativeAds.MaxNativeAdViewBinder
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
 import com.google.android.material.snackbar.Snackbar
@@ -23,7 +31,8 @@ import com.xeniac.warrantyroster_manager.di.CurrentLanguage
 import com.xeniac.warrantyroster_manager.models.Status
 import com.xeniac.warrantyroster_manager.ui.landing.LandingActivity
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.SettingsViewModel
-import com.xeniac.warrantyroster_manager.utils.Constants.ADCOLONY_BANNER_TEST_ZONE_ID
+import com.xeniac.warrantyroster_manager.utils.Constants.ADCOLONY_BANNER_SETTINGS_ZONE_ID
+import com.xeniac.warrantyroster_manager.utils.Constants.APPLOVIN_SETTINGS_NATIVE_UNIT_ID
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
@@ -36,8 +45,9 @@ import ir.tapsell.plus.model.TapsellPlusAdModel
 import timber.log.Timber
 import javax.inject.Inject
 
+@Suppress("SpellCheckingInspection")
 @AndroidEntryPoint
-class SettingsFragment : Fragment(R.layout.fragment_settings) {
+class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListener {
 
     private var _binding: FragmentSettingsBinding? = null
     private val binding get() = _binding!!
@@ -54,10 +64,15 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     @set:Inject
     var currentTheme = 0
 
-    private var requestAdCounter = 0
-    private var responseId: String? = null
-
+    private lateinit var appLovinNativeAdContainer: ViewGroup
+    private lateinit var appLovinAdLoader: MaxNativeAdLoader
+    private var appLovinNativeAd: MaxAd? = null
     private var adColonyBanner: AdColonyAdView? = null
+    private var tapsellResponseId: String? = null
+
+    private var appLovinAdRequestCounter = 0
+    private var adColonyRequestCounter = 0
+    private var tapsellRequestCounter = 0
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -76,7 +91,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         privacyPolicyOnClick()
         logoutOnClick()
         subscribeToObservers()
-        requestAdColonyBanner()
+        requestAppLovinNativeAd()
     }
 
     override fun onDestroyView() {
@@ -325,63 +340,129 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         binding.btnAccountVerification.visibility = VISIBLE
     }
 
-    //TODO REPLACE ADCOLONY_BANNER_SETTINGS_ZONE_ID FOR RELEASE
-    private fun requestAdColonyBanner() = _binding?.let {
-        AdColony.requestAdView(
-            ADCOLONY_BANNER_TEST_ZONE_ID,
-            object : AdColonyAdViewListener() {
-                override fun onRequestFilled(ad: AdColonyAdView?) {
-                    Timber.i("Banner request filled.")
-                    adColonyBanner = ad
-                    adColonyBanner?.let {
-                        showAdColonyContainer()
-                        binding.flAdContainerAdcolony.addView(it)
-                    }
-                }
-
-                override fun onRequestNotFilled(zone: AdColonyZone?) {
-                    super.onRequestNotFilled(zone)
-                    Timber.e("Banner request did not fill.")
-                    initTapsellAdHolder()
-                }
-            }, AdColonyAdSize.BANNER
-        )
+    private fun requestAppLovinNativeAd() {
+        appLovinNativeAdContainer = binding.flAdContainerNative
+        appLovinAdLoader =
+            MaxNativeAdLoader(APPLOVIN_SETTINGS_NATIVE_UNIT_ID, requireContext()).apply {
+                setRevenueListener(this@SettingsFragment)
+                setNativeAdListener(AppLovinNativeAdListener())
+                loadAd(createNativeAdView())
+            }
     }
 
-    @Suppress("SpellCheckingInspection")
+    private fun createNativeAdView(): MaxNativeAdView {
+        val nativeAdBinder: MaxNativeAdViewBinder =
+            MaxNativeAdViewBinder.Builder(R.layout.ad_banner_settings_applovin).apply {
+                setIconImageViewId(R.id.iv_banner_icon)
+                setTitleTextViewId(R.id.tv_banner_title)
+                setBodyTextViewId(R.id.tv_banner_body)
+            }.build()
+        return MaxNativeAdView(nativeAdBinder, requireContext())
+    }
+
+    private inner class AppLovinNativeAdListener : MaxNativeAdListener() {
+        override fun onNativeAdLoaded(nativeAdView: MaxNativeAdView?, nativeAd: MaxAd?) {
+            super.onNativeAdLoaded(nativeAdView, nativeAd)
+            Timber.i("AppLovin onNativeAdLoaded")
+            /**
+             * Clean up any pre-existing native ad to prevent memory leaks.
+             */
+            appLovinNativeAd?.let {
+                appLovinAdLoader.destroy(it)
+            }
+
+            /**
+             * Save ad for cleanup.
+             */
+            showNativeAdContainer()
+            appLovinNativeAd = nativeAd
+            appLovinNativeAdContainer.removeAllViews()
+            appLovinNativeAdContainer.addView(nativeAdView)
+        }
+
+        override fun onNativeAdLoadFailed(adUnitId: String?, error: MaxError?) {
+            super.onNativeAdLoadFailed(adUnitId, error)
+            /**
+             * Native ad failed to load
+             */
+            Timber.e("AppLovin onNativeAdLoadFailed: ${error?.message}")
+            if (appLovinAdRequestCounter < 3) {
+                appLovinAdRequestCounter++
+                appLovinAdLoader.loadAd(createNativeAdView())
+            } else {
+                requestAdColonyBanner()
+            }
+        }
+
+        override fun onNativeAdClicked(nativeAd: MaxAd?) {
+            super.onNativeAdClicked(nativeAd)
+            Timber.i("AppLovin onNativeAdClicked")
+        }
+    }
+
+    override fun onAdRevenuePaid(ad: MaxAd?) {
+        Timber.i("AppLovin onAdRevenuePaid")
+    }
+
+    private fun requestAdColonyBanner() {
+        _binding?.let {
+            AdColony.requestAdView(
+                ADCOLONY_BANNER_SETTINGS_ZONE_ID,
+                object : AdColonyAdViewListener() {
+                    override fun onRequestFilled(ad: AdColonyAdView?) {
+                        Timber.i("AdColony Banner onRequestFilled")
+                        adColonyBanner = ad
+                        adColonyBanner?.let {
+                            showAdColonyContainer()
+                            binding.flAdContainerAdcolony.addView(it)
+                        }
+                    }
+
+                    override fun onRequestNotFilled(zone: AdColonyZone?) {
+                        super.onRequestNotFilled(zone)
+                        Timber.e("AdColony Banner onRequestNotFilled")
+                        if (adColonyRequestCounter < 3) {
+                            adColonyRequestCounter++
+                            requestAdColonyBanner()
+                        } else {
+                            initTapsellAdHolder()
+                        }
+                    }
+                }, AdColonyAdSize.BANNER
+            )
+        }
+    }
+
     private fun initTapsellAdHolder() {
         _binding?.let {
             val adHolder = TapsellPlus.createAdHolder(
-                requireActivity(), binding.flAdContainerTapsell, R.layout.ad_banner_settings
+                requireActivity(), binding.flAdContainerNative, R.layout.ad_banner_settings_tapsell
             )
-
-            requestAdCounter = 0
             adHolder?.let { requestTapsellNativeAd(it) }
         }
     }
 
-    @Suppress("SpellCheckingInspection")
     private fun requestTapsellNativeAd(adHolder: AdHolder) {
         _binding?.let {
             TapsellPlus.requestNativeAd(requireActivity(),
                 TAPSELL_SETTINGS_NATIVE_ZONE_ID, object : AdRequestCallback() {
                     override fun response(tapsellPlusAdModel: TapsellPlusAdModel?) {
                         super.response(tapsellPlusAdModel)
-                        Timber.i("RequestNativeAd Response: ${tapsellPlusAdModel.toString()}")
-                        requestAdCounter = 0
+                        Timber.i("requestTapsellNativeAd onResponse")
+                        tapsellRequestCounter = 0
                         _binding?.let {
                             tapsellPlusAdModel?.let {
-                                responseId = it.responseId
-                                showNativeAd(adHolder, responseId!!)
+                                tapsellResponseId = it.responseId
+                                showNativeAd(adHolder, tapsellResponseId!!)
                             }
                         }
                     }
 
                     override fun error(error: String?) {
                         super.error(error)
-                        Timber.e("RequestNativeAd Error: $error")
-                        if (requestAdCounter < 3) {
-                            requestAdCounter++
+                        Timber.e("requestTapsellNativeAd onError: $error")
+                        if (tapsellRequestCounter < 3) {
+                            tapsellRequestCounter++
                             requestTapsellNativeAd(adHolder)
                         }
                     }
@@ -391,7 +472,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
     private fun showNativeAd(adHolder: AdHolder, responseId: String) {
         _binding?.let {
-            showTapsellContainer()
+            showNativeAdContainer()
             TapsellPlus.showNativeAd(requireActivity(),
                 responseId, adHolder, object : AdShowListener() {
                     override fun onOpened(tapsellPlusAdModel: TapsellPlusAdModel?) {
@@ -406,22 +487,25 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     }
 
     private fun showAdColonyContainer() {
-        binding.flAdContainerTapsell.visibility = GONE
+        binding.flAdContainerNative.visibility = GONE
         binding.flAdContainerAdcolony.visibility = VISIBLE
         binding.dividerSettingsFourth.visibility = VISIBLE
     }
 
-    @Suppress("SpellCheckingInspection")
-    private fun showTapsellContainer() {
+    private fun showNativeAdContainer() {
         binding.flAdContainerAdcolony.visibility = GONE
-        binding.flAdContainerTapsell.visibility = VISIBLE
+        binding.flAdContainerNative.visibility = VISIBLE
         binding.dividerSettingsFourth.visibility = VISIBLE
     }
 
     private fun destroyAd() {
+        appLovinNativeAd?.let {
+            appLovinAdLoader.destroy(it)
+        }
+
         adColonyBanner?.destroy()
 
-        responseId?.let {
+        tapsellResponseId?.let {
             TapsellPlus.destroyNativeBanner(requireActivity(), it)
         }
     }
