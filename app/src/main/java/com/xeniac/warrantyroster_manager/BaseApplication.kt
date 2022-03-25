@@ -14,7 +14,6 @@ import com.xeniac.warrantyroster_manager.di.CurrentLanguage
 import com.xeniac.warrantyroster_manager.utils.Constants.ADCOLONY_APP_ID
 import com.xeniac.warrantyroster_manager.utils.Constants.ADCOLONY_BANNER_LIST_ZONE_ID
 import com.xeniac.warrantyroster_manager.utils.Constants.ADCOLONY_BANNER_SETTINGS_ZONE_ID
-import com.xeniac.warrantyroster_manager.utils.Constants.ADCOLONY_BANNER_TEST_ZONE_ID
 import com.xeniac.warrantyroster_manager.utils.Constants.ADCOLONY_INTERSTITIAL_ZONE_ID
 import com.xeniac.warrantyroster_manager.utils.Constants.TAPSELL_KEY
 import dagger.hilt.android.HiltAndroidApp
@@ -91,8 +90,7 @@ class BaseApplication : Application() {
         ADCOLONY_APP_ID,
         ADCOLONY_INTERSTITIAL_ZONE_ID,
         ADCOLONY_BANNER_LIST_ZONE_ID,
-        ADCOLONY_BANNER_SETTINGS_ZONE_ID,
-        ADCOLONY_BANNER_TEST_ZONE_ID
+        ADCOLONY_BANNER_SETTINGS_ZONE_ID
     )
 
     @Suppress("SpellCheckingInspection")
