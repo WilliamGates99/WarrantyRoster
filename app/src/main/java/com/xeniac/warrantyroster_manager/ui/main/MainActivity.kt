@@ -192,9 +192,9 @@ class MainActivity : AppCompatActivity(), MaxAdListener {
                     tapsellPlusAdModel?.let { tapsellResponseId = it.responseId }
                 }
 
-                override fun error(s: String?) {
-                    super.error(s)
-                    Timber.e("requestTapsellInterstitial onError: $s")
+                override fun error(error: String?) {
+                    super.error(error)
+                    Timber.e("requestTapsellInterstitial onError: $error")
                     if (tapsellRequestCounter < 3) {
                         tapsellRequestCounter++
                         requestTapsellInterstitial()
