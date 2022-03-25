@@ -106,9 +106,10 @@ class MainActivity : AppCompatActivity(), MaxAdListener {
     }
 
     fun requestAppLovinInterstitial() {
-        appLovinAd = MaxInterstitialAd(APPLOVIN_INTERSTITIAL_UNIT_ID, this)
-        appLovinAd.setListener(this)
-        appLovinAd.loadAd()
+        appLovinAd = MaxInterstitialAd(APPLOVIN_INTERSTITIAL_UNIT_ID, this).apply {
+            setListener(this@MainActivity)
+            loadAd()
+        }
     }
 
     override fun onAdLoaded(ad: MaxAd?) {
