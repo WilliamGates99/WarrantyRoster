@@ -41,6 +41,7 @@ class LandingViewModel @Inject constructor(
     private val _timerLiveData: MutableLiveData<Event<Long>> = MutableLiveData()
     val timerLiveData: LiveData<Event<Long>> = _timerLiveData
 
+    private lateinit var countDownTimer: CountDownTimer
     var isFirstSentEmail = true
     var timerInMillis: Long = 0
 
@@ -131,10 +132,11 @@ class LandingViewModel @Inject constructor(
         val startTimeInMillis = 120 * 1000L // 120 Seconds
         val countDownIntervalInMillis = 1000L // 1 Second
 
-        object : CountDownTimer(startTimeInMillis, countDownIntervalInMillis) {
+        countDownTimer = object : CountDownTimer(startTimeInMillis, countDownIntervalInMillis) {
             override fun onTick(millisUntilFinished: Long) {
                 timerInMillis = millisUntilFinished
                 _timerLiveData.postValue(Event(millisUntilFinished))
+                Timber.i("timer: $millisUntilFinished")
             }
 
             override fun onFinish() {
@@ -144,4 +146,6 @@ class LandingViewModel @Inject constructor(
             }
         }.start()
     }
+
+    fun cancelCountdown() = countDownTimer.cancel()
 }

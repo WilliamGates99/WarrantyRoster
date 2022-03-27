@@ -1,7 +1,6 @@
 package com.xeniac.warrantyroster_manager.ui.landing.fragments
 
 import android.os.Bundle
-import android.os.CountDownTimer
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
@@ -32,7 +31,6 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
     private lateinit var viewModel: LandingViewModel
 
     private lateinit var email: String
-    private var countDownTimer: CountDownTimer? = null
 
     @Inject
     lateinit var decimalFormat: DecimalFormat
@@ -50,7 +48,7 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        countDownTimer?.cancel()
+        viewModel.cancelCountdown()
         _binding = null
     }
 
