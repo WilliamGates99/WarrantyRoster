@@ -124,7 +124,7 @@ class SettingsViewModel @Inject constructor(
                 }
             }
         } catch (e: Exception) {
-            Timber.e("SafeGetAccountDetails Exception: ${e.message}")
+            Timber.e("safeGetAccountDetails Exception: ${e.message}")
             _accountDetailsLiveData.postValue(Event(Resource.error(e.message.toString())))
         }
     }
@@ -143,7 +143,7 @@ class SettingsViewModel @Inject constructor(
                 )
             }
         } catch (e: Exception) {
-            Timber.e("SafeSendVerificationEmail Exception: ${e.message}")
+            Timber.e("safeSendVerificationEmail Exception: ${e.message}")
             _sendVerificationEmailLiveData.postValue(Event(Resource.error(e.message.toString())))
         }
     }
@@ -156,7 +156,7 @@ class SettingsViewModel @Inject constructor(
             _logoutLiveData.postValue(Event(Resource.success(null)))
             Timber.i("User successfully logged out.")
         } catch (e: Exception) {
-            Timber.e("SafeLogoutUser Exception: ${e.message}")
+            Timber.e("safeLogoutUser Exception: ${e.message}")
             _logoutLiveData.postValue(Event(Resource.error(e.message.toString())))
         }
     }
@@ -175,7 +175,7 @@ class SettingsViewModel @Inject constructor(
                 )
             }
         } catch (e: Exception) {
-            Timber.e("SafeReAuthenticateUser Exception: ${e.message}")
+            Timber.e("safeReAuthenticateUser Exception: ${e.message}")
             _reAuthenticateUserLiveData.postValue(Event(Resource.error(e.message.toString())))
         }
     }
@@ -194,7 +194,7 @@ class SettingsViewModel @Inject constructor(
                 )
             }
         } catch (e: Exception) {
-            Timber.e("SafeChangeUserEmail Exception: ${e.message}")
+            Timber.e("safeChangeUserEmail Exception: ${e.message}")
             _changeUserEmailLiveData.postValue(Event(Resource.error(e.message.toString())))
         }
     }
@@ -213,7 +213,7 @@ class SettingsViewModel @Inject constructor(
                 )
             }
         } catch (e: Exception) {
-            Timber.e("SafeChangeUserPassword Exception: ${e.message}")
+            Timber.e("safeChangeUserPassword Exception: ${e.message}")
             _changeUserPasswordLiveData.postValue(Event(Resource.error(e.message.toString())))
         }
     }

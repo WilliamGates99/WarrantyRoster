@@ -111,13 +111,13 @@ class MainViewModel @Inject constructor(
         _categoriesLiveData.postValue(Event(Resource.loading()))
         mainRepository.getCategoriesFromFirestore().addSnapshotListener { value, error ->
             error?.let {
-                Timber.e("GetCategoriesFromFirestore Error: ${it.message}")
+                Timber.e("getCategoriesFromFirestore Error: ${it.message}")
                 _categoriesLiveData.postValue(Event(Resource.error(it.message.toString())))
             }
 
             value?.let {
                 if (it.documents.size == 0) {
-                    Timber.e("GetCategoriesFromFirestore Error: $ERROR_EMPTY_CATEGORY_LIST")
+                    Timber.e("getCategoriesFromFirestore Error: $ERROR_EMPTY_CATEGORY_LIST")
                     _categoriesLiveData.postValue(Event(Resource.error(ERROR_EMPTY_CATEGORY_LIST)))
                 } else {
                     val categoriesList = mutableListOf<Category>()
@@ -142,13 +142,13 @@ class MainViewModel @Inject constructor(
         _warrantiesLiveData.postValue(Event(Resource.loading()))
         mainRepository.getWarrantiesFromFirestore().addSnapshotListener { value, error ->
             error?.let {
-                Timber.e("GetWarrantiesListFromFirestore Error: ${it.message}")
+                Timber.e("getWarrantiesListFromFirestore Error: ${it.message}")
                 _warrantiesLiveData.postValue(Event(Resource.error(it.message.toString())))
             }
 
             value?.let {
                 if (it.documents.size == 0) {
-                    Timber.e("GetWarrantiesListFromFirestore Error: $ERROR_EMPTY_WARRANTY_LIST")
+                    Timber.e("getWarrantiesListFromFirestore Error: $ERROR_EMPTY_WARRANTY_LIST")
                     _warrantiesLiveData.postValue(Event(Resource.error(ERROR_EMPTY_WARRANTY_LIST)))
                 } else {
                     val warrantiesList = mutableListOf<Warranty>()
@@ -215,7 +215,7 @@ class MainViewModel @Inject constructor(
                 _addWarrantyLiveData.postValue(Event(Resource.error(ERROR_NETWORK_CONNECTION)))
             }
         } catch (e: Exception) {
-            Timber.e("SafeAddWarrantyToFirestore Exception: ${e.message}")
+            Timber.e("safeAddWarrantyToFirestore Exception: ${e.message}")
             _addWarrantyLiveData.postValue(Event(Resource.error(e.message.toString())))
         }
     }
@@ -232,7 +232,7 @@ class MainViewModel @Inject constructor(
                 _deleteWarrantyLiveData.postValue(Event(Resource.error(ERROR_NETWORK_CONNECTION)))
             }
         } catch (e: Exception) {
-            Timber.e("SafeDeleteWarrantyFromFirestore Exception: ${e.message}")
+            Timber.e("safeDeleteWarrantyFromFirestore Exception: ${e.message}")
             _deleteWarrantyLiveData.postValue(Event(Resource.error(e.message.toString())))
         }
     }
@@ -251,7 +251,7 @@ class MainViewModel @Inject constructor(
                 _updateWarrantyLiveData.postValue(Event(Resource.error(ERROR_NETWORK_CONNECTION)))
             }
         } catch (e: Exception) {
-            Timber.e("SafeUpdateWarrantyInFirestore Exception: ${e.message}")
+            Timber.e("safeUpdateWarrantyInFirestore Exception: ${e.message}")
             _updateWarrantyLiveData.postValue(Event(Resource.error(e.message.toString())))
         }
     }
@@ -283,7 +283,7 @@ class MainViewModel @Inject constructor(
                 _updatedWarrantyLiveData.postValue(Event(Resource.error(ERROR_NETWORK_CONNECTION)))
             }
         } catch (e: Exception) {
-            Timber.e("SafeGetUpdatedWarrantyFromFirestore Exception: ${e.message}")
+            Timber.e("safeGetUpdatedWarrantyFromFirestore Exception: ${e.message}")
             _updatedWarrantyLiveData.postValue(Event(Resource.error(e.message.toString())))
         }
     }

@@ -3,7 +3,7 @@ buildscript {
     repositories {
         google()
         mavenCentral()
-        maven { url 'https://artifacts.applovin.com/android' } //Applovin Ad Review Repo
+        maven { url 'https://artifacts.applovin.com/android' } // Applovin Ad Review Repo
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:7.1.2'

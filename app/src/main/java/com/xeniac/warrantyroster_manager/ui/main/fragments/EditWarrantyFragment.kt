@@ -485,7 +485,7 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
 
             binding.tiEditDateStarting.setText(startingDateText)
 
-            //Add/Subtract offset to Prevent the Calendar to Show the Previous Day
+            // Add/Subtract offset to Prevent the Calendar to Show the Previous Day
             selectedStartingDateInMillis = if (offset < 0) {
                 timeInMillis - offset
             } else {
@@ -514,7 +514,7 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
 
                 binding.tiEditDateExpiry.setText(expiryDateText)
 
-                //Add/Subtract offset to Prevent the Calendar to Show the Previous Day
+                // Add/Subtract offset to Prevent the Calendar to Show the Previous Day
                 selectedExpiryDateInMillis = if (offset < 0) {
                     timeInMillis - offset
                 } else {

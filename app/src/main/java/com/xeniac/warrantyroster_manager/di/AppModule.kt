@@ -87,20 +87,20 @@ object AppModule {
             components { add(SvgDecoder.Factory()) }
             memoryCache {
                 MemoryCache.Builder(context)
-                    //Set the max size to 25% of the app's available memory.
+                    // Set the max size to 25% of the app's available memory.
                     .maxSizePercent(0.25)
                     .build()
             }
             okHttpClient {
-                //Don't limit concurrent network requests by host.
+                // Don't limit concurrent network requests by host.
                 val dispatcher = Dispatcher().apply { maxRequestsPerHost = maxRequests }
 
-                //Lazily create the OkHttpClient that is used for network operations.
+                // Lazily create the OkHttpClient that is used for network operations.
                 OkHttpClient.Builder()
                     .dispatcher(dispatcher)
                     .build()
             }
-            //Ignore the network cache headers and always read from/write to the disk cache.
+            // Ignore the network cache headers and always read from/write to the disk cache.
             respectCacheHeaders(false)
             crossfade(true)
             if (BuildConfig.DEBUG) logger(DebugLogger())

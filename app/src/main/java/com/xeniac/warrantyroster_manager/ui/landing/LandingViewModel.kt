@@ -72,7 +72,7 @@ class LandingViewModel @Inject constructor(
                 )
             }
         } catch (e: Exception) {
-            Timber.e("SafeRegisterViaEmail Exception: ${e.message}")
+            Timber.e("safeRegisterViaEmail Exception: ${e.message}")
             _registerLiveData.postValue(Event(Resource.error(e.message.toString())))
         }
     }
@@ -95,7 +95,7 @@ class LandingViewModel @Inject constructor(
                 )
             }
         } catch (e: Exception) {
-            Timber.e("SafeLoginViaEmail Exception: ${e.message}")
+            Timber.e("safeLoginViaEmail Exception: ${e.message}")
             _loginLiveData.postValue(Event(Resource.error(e.message.toString())))
         }
     }
@@ -122,14 +122,14 @@ class LandingViewModel @Inject constructor(
                 _forgotPwLiveData.postValue(Event(Resource.error(ERROR_NETWORK_CONNECTION)))
             }
         } catch (e: Exception) {
-            Timber.e("SafeSendResetPasswordEmail Exception: ${e.message}")
+            Timber.e("safeSendResetPasswordEmail Exception: ${e.message}")
             _forgotPwLiveData.postValue(Event(Resource.error(e.message.toString())))
         }
     }
 
     private fun startCountdown() {
-        val startTimeInMillis = 120 * 1000L //120 Seconds
-        val countDownIntervalInMillis = 1000L //1 Second
+        val startTimeInMillis = 120 * 1000L // 120 Seconds
+        val countDownIntervalInMillis = 1000L // 1 Second
 
         object : CountDownTimer(startTimeInMillis, countDownIntervalInMillis) {
             override fun onTick(millisUntilFinished: Long) {
