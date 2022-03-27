@@ -206,7 +206,7 @@ class WarrantyAdapter(
         }
 
         private fun requestAppLovinNativeAd() {
-            appLovinNativeAdContainer = binding.root
+            appLovinNativeAdContainer = binding.cvAdContainer
             appLovinAdLoader =
                 MaxNativeAdLoader(APPLOVIN_WARRANTIES_NATIVE_UNIT_ID, context).apply {
                     setRevenueListener(this@AdViewHolder)
@@ -263,7 +263,7 @@ class WarrantyAdapter(
 
         private fun initTapsellAdHolder() {
             val adHolder = TapsellPlus
-                .createAdHolder(activity, binding.root, R.layout.ad_banner_list_tapsell)
+                .createAdHolder(activity, binding.cvAdContainer, R.layout.ad_banner_list_tapsell)
             adHolder?.let { requestTapsellNativeAd(it) }
         }
 
@@ -303,7 +303,7 @@ class WarrantyAdapter(
         }
 
         private fun showNativeAdContainer() {
-            binding.root.visibility = VISIBLE
+            binding.cvAdContainer.visibility = VISIBLE
         }
     }
 }
