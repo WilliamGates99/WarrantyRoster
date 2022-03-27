@@ -2,8 +2,6 @@ package com.xeniac.warrantyroster_manager
 
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
-import com.adcolony.sdk.AdColony
-import com.adcolony.sdk.AdColonyAppOptions
 import com.applovin.sdk.AppLovinPrivacySettings
 import com.applovin.sdk.AppLovinSdk
 import com.google.firebase.FirebaseApp
@@ -12,7 +10,6 @@ import com.google.firebase.appcheck.debug.DebugAppCheckProviderFactory
 import com.google.firebase.appcheck.safetynet.SafetyNetAppCheckProviderFactory
 import com.xeniac.warrantyroster_manager.di.CurrentCountry
 import com.xeniac.warrantyroster_manager.di.CurrentLanguage
-import com.xeniac.warrantyroster_manager.utils.Constants.ADCOLONY_APP_ID
 import com.xeniac.warrantyroster_manager.utils.Constants.TAPSELL_KEY
 import dagger.hilt.android.HiltAndroidApp
 import ir.tapsell.plus.TapsellPlus
@@ -44,7 +41,6 @@ class BaseApplication : Application() {
         setNightMode()
         setLocale()
         initAppLovin()
-        initAdColony()
         initTapsell()
     }
 
@@ -83,21 +79,18 @@ class BaseApplication : Application() {
         AppLovinPrivacySettings.setHasUserConsent(true, this)
     }
 
-    private fun initAdColony() = AdColony.configure(
-        this,
-        AdColonyAppOptions().setKeepScreenOn(true),
-        ADCOLONY_APP_ID
-    )
-
     @Suppress("SpellCheckingInspection")
-    private fun initTapsell() = TapsellPlus.initialize(
-        this, TAPSELL_KEY, object : TapsellPlusInitListener {
-            override fun onInitializeSuccess(adNetworks: AdNetworks?) {
-                Timber.i("onInitializeSuccess: ${adNetworks?.name}")
-            }
+    private fun initTapsell() {
+        TapsellPlus.initialize(
+            this, TAPSELL_KEY, object : TapsellPlusInitListener {
+                override fun onInitializeSuccess(adNetworks: AdNetworks?) {
+                    Timber.i("onInitializeSuccess: ${adNetworks?.name}")
+                }
 
-            override fun onInitializeFailed(adNetworks: AdNetworks?, error: AdNetworkError?) {
-                Timber.e("onInitializeFailed: ${adNetworks?.name}, error: ${error?.errorMessage}")
-            }
-        })
+                override fun onInitializeFailed(adNetworks: AdNetworks?, error: AdNetworkError?) {
+                    Timber.e("onInitializeFailed: ${adNetworks?.name}, error: ${error?.errorMessage}")
+                }
+            })
+        TapsellPlus.setGDPRConsent(this, true)
+    }
 }

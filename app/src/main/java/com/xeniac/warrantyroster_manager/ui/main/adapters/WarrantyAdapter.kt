@@ -19,13 +19,13 @@ import com.applovin.mediation.nativeAds.MaxNativeAdView
 import com.applovin.mediation.nativeAds.MaxNativeAdViewBinder
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.AdContainerListBinding
-import com.xeniac.warrantyroster_manager.databinding.ListWarrantyBinding
+import com.xeniac.warrantyroster_manager.databinding.ListItemWarrantyBinding
 import com.xeniac.warrantyroster_manager.di.CategoryTitleMapKey
 import com.xeniac.warrantyroster_manager.models.ListItemType
 import com.xeniac.warrantyroster_manager.models.Warranty
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModel
 import com.xeniac.warrantyroster_manager.utils.CoilHelper.loadCategoryImage
-import com.xeniac.warrantyroster_manager.utils.Constants
+import com.xeniac.warrantyroster_manager.utils.Constants.APPLOVIN_WARRANTIES_NATIVE_UNIT_ID
 import com.xeniac.warrantyroster_manager.utils.Constants.VIEW_TYPE_AD
 import com.xeniac.warrantyroster_manager.utils.Constants.VIEW_TYPE_WARRANTY
 import com.xeniac.warrantyroster_manager.utils.Constants.TAPSELL_WARRANTIES_NATIVE_ZONE_ID
@@ -107,7 +107,7 @@ class WarrantyAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return if (viewType == VIEW_TYPE_WARRANTY) {
-            val warrantyBinding = ListWarrantyBinding.inflate(inflater, parent, false)
+            val warrantyBinding = ListItemWarrantyBinding.inflate(inflater, parent, false)
             WarrantyViewHolder(warrantyBinding)
         } else {
             val adContainerBinding = AdContainerListBinding.inflate(inflater, parent, false)
@@ -133,7 +133,7 @@ class WarrantyAdapter(
 
     override fun getItemCount(): Int = warrantiesList.size
 
-    inner class WarrantyViewHolder(val binding: ListWarrantyBinding) :
+    inner class WarrantyViewHolder(val binding: ListItemWarrantyBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bindView(warranty: Warranty) {
@@ -197,18 +197,18 @@ class WarrantyAdapter(
         private lateinit var appLovinNativeAdContainer: ViewGroup
         private lateinit var appLovinAdLoader: MaxNativeAdLoader
         private var appLovinNativeAd: MaxAd? = null
-        private var appLovinAdRequestCounter = 0
+        private var appLovinAdRequestCounter = 1
 
-        private var tapsellRequestCounter = 0
+        private var tapsellRequestCounter = 1
 
         fun bindView() {
             requestAppLovinNativeAd()
         }
 
         private fun requestAppLovinNativeAd() {
-            appLovinNativeAdContainer = binding.cvAdContainer
+            appLovinNativeAdContainer = binding.root
             appLovinAdLoader =
-                MaxNativeAdLoader(Constants.APPLOVIN_SETTINGS_NATIVE_UNIT_ID, context).apply {
+                MaxNativeAdLoader(APPLOVIN_WARRANTIES_NATIVE_UNIT_ID, context).apply {
                     setRevenueListener(this@AdViewHolder)
                     setNativeAdListener(AppLovinNativeAdListener())
                     loadAd(createNativeAdView())
@@ -217,7 +217,7 @@ class WarrantyAdapter(
 
         private fun createNativeAdView(): MaxNativeAdView {
             val nativeAdBinder: MaxNativeAdViewBinder =
-                MaxNativeAdViewBinder.Builder(R.layout.ad_banner_settings_applovin).apply {
+                MaxNativeAdViewBinder.Builder(R.layout.ad_banner_list_applovin).apply {
                     setIconImageViewId(R.id.iv_banner_list_icon)
                     setTitleTextViewId(R.id.tv_banner_list_title)
                     setBodyTextViewId(R.id.tv_banner_list_body)
@@ -243,11 +243,10 @@ class WarrantyAdapter(
             override fun onNativeAdLoadFailed(adUnitId: String?, error: MaxError?) {
                 super.onNativeAdLoadFailed(adUnitId, error)
                 Timber.e("AppLovin onNativeAdLoadFailed: ${error?.message}")
-                if (appLovinAdRequestCounter < 3) {
+                if (appLovinAdRequestCounter < 2) {
                     appLovinAdRequestCounter++
                     appLovinAdLoader.loadAd(createNativeAdView())
                 } else {
-//                requestAdColonyBanner()
                     initTapsellAdHolder()
                 }
             }
@@ -262,32 +261,9 @@ class WarrantyAdapter(
             Timber.i("AppLovin onAdRevenuePaid")
         }
 
-        /*
-        private fun requestAdColonyBanner() = AdColony.requestAdView(
-            ADCOLONY_BANNER_LIST_ZONE_ID,
-            object : AdColonyAdViewListener() {
-                override fun onRequestFilled(ad: AdColonyAdView?) {
-                    Timber.i("Banner request filled.")
-                    showAdColonyContainer()
-                    ad?.let { binding.rlAdContainer.addView(it) }
-                }
-
-                override fun onRequestNotFilled(zone: AdColonyZone?) {
-                    super.onRequestNotFilled(zone)
-                    Timber.e("Banner request did not fill.")
-
-                    requestAdCounter = 0
-                    val adHolder = TapsellPlus
-                        .createAdHolder(activity, binding.cvAdContainer, R.layout.list_ad_banner)
-                    adHolder?.let { requestTapsellNativeAd(it) }
-                }
-            }, AdColonyAdSize.BANNER
-        )
-         */
-
         private fun initTapsellAdHolder() {
             val adHolder = TapsellPlus
-                .createAdHolder(activity, binding.cvAdContainer, R.layout.ad_banner_list_tapsell)
+                .createAdHolder(activity, binding.root, R.layout.ad_banner_list_tapsell)
             adHolder?.let { requestTapsellNativeAd(it) }
         }
 
@@ -305,7 +281,7 @@ class WarrantyAdapter(
                     override fun error(error: String?) {
                         super.error(error)
                         Timber.e("requestTapsellNativeAd onError: $error")
-                        if (tapsellRequestCounter < 3) {
+                        if (tapsellRequestCounter < 2) {
                             tapsellRequestCounter++
                             requestTapsellNativeAd(adHolder)
                         }
@@ -315,28 +291,19 @@ class WarrantyAdapter(
 
         private fun showNativeAd(adHolder: AdHolder, responseId: String) {
             showNativeAdContainer()
-            TapsellPlus.showNativeAd(activity, responseId,
-                adHolder, object : AdShowListener() {
-                    override fun onOpened(tapsellPlusAdModel: TapsellPlusAdModel?) {
-                        super.onOpened(tapsellPlusAdModel)
-                    }
+            TapsellPlus.showNativeAd(activity, responseId, adHolder, object : AdShowListener() {
+                override fun onOpened(tapsellPlusAdModel: TapsellPlusAdModel?) {
+                    super.onOpened(tapsellPlusAdModel)
+                }
 
-                    override fun onClosed(tapsellPlusAdModel: TapsellPlusAdModel?) {
-                        super.onClosed(tapsellPlusAdModel)
-                    }
-                })
+                override fun onClosed(tapsellPlusAdModel: TapsellPlusAdModel?) {
+                    super.onClosed(tapsellPlusAdModel)
+                }
+            })
         }
-
-        /*
-        private fun showAdColonyContainer() {
-            binding.cvAdContainer.visibility = GONE
-            binding.rlAdContainer.visibility = VISIBLE
-        }
-         */
 
         private fun showNativeAdContainer() {
-            binding.rlAdContainer.visibility = GONE
-            binding.cvAdContainer.visibility = VISIBLE
+            binding.root.visibility = VISIBLE
         }
     }
 }

@@ -254,9 +254,6 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
                             (requireActivity() as MainActivity).appLovinAd.isReady -> {
                                 (requireActivity() as MainActivity).appLovinAd.showAd()
                             }
-                            (requireActivity() as MainActivity).adColonyAd != null -> {
-                                (requireActivity() as MainActivity).adColonyAd?.show()
-                            }
                             (requireActivity() as MainActivity).tapsellResponseId != null -> {
                                 (requireActivity() as MainActivity).tapsellResponseId?.let {
                                     showInterstitialAd(it)
@@ -322,9 +319,7 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
     }
 
     private fun showInterstitialAd(responseId: String) = TapsellPlus.showInterstitialAd(
-        requireActivity(),
-        responseId,
-        object : AdShowListener() {
+        requireActivity(), responseId, object : AdShowListener() {
             override fun onOpened(tapsellPlusAdModel: TapsellPlusAdModel?) {
                 super.onOpened(tapsellPlusAdModel)
             }

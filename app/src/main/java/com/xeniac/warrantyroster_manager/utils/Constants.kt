@@ -9,12 +9,7 @@ object Constants {
     //AppLovin Constants
     const val APPLOVIN_INTERSTITIAL_UNIT_ID = "c9d93a2239fc9743"
     const val APPLOVIN_SETTINGS_NATIVE_UNIT_ID = "a9fa57c943b79d48"
-
-    //AdColony Constants
-    const val ADCOLONY_APP_ID = "appf8bfbe0ff94542289c"
-    const val ADCOLONY_INTERSTITIAL_ZONE_ID = "vz306262cccba8424fb7"
-    const val ADCOLONY_BANNER_LIST_ZONE_ID = "vze72e147772504c8693"
-    const val ADCOLONY_BANNER_SETTINGS_ZONE_ID = "vz5d5dae933e204b668e"
+    const val APPLOVIN_WARRANTIES_NATIVE_UNIT_ID = "f7095c429a9d7575"
 
     //Tapsell Constants
     const val TAPSELL_KEY =

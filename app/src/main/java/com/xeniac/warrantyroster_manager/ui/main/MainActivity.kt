@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
-import com.adcolony.sdk.*
 import com.applovin.mediation.MaxAd
 import com.applovin.mediation.MaxAdListener
 import com.applovin.mediation.MaxError
@@ -16,7 +15,6 @@ import com.google.android.material.shape.CornerFamily.ROUNDED
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.ActivityMainBinding
-import com.xeniac.warrantyroster_manager.utils.Constants.ADCOLONY_INTERSTITIAL_ZONE_ID
 import com.xeniac.warrantyroster_manager.utils.Constants.APPLOVIN_INTERSTITIAL_UNIT_ID
 import com.xeniac.warrantyroster_manager.utils.Constants.TAPSELL_INTERSTITIAL_ZONE_ID
 import com.xeniac.warrantyroster_manager.utils.LocaleModifier
@@ -34,12 +32,10 @@ class MainActivity : AppCompatActivity(), MaxAdListener {
     private lateinit var navController: NavController
 
     lateinit var appLovinAd: MaxInterstitialAd
-    var adColonyAd: AdColonyInterstitial? = null
-    var tapsellResponseId: String? = null
+    private var appLovinAdRequestCounter = 1
 
-    private var appLovinAdRequestCounter = 0
-    private var adColonyRequestCounter = 0
-    private var tapsellRequestCounter = 0
+    var tapsellResponseId: String? = null
+    private var tapsellRequestCounter = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -113,41 +109,26 @@ class MainActivity : AppCompatActivity(), MaxAdListener {
     }
 
     override fun onAdLoaded(ad: MaxAd?) {
-        /**
-         * Interstitial ad is ready to be shown.
-         * interstitialAd.isReady() will now return 'true'
-         */
         Timber.i("AppLovin onAdLoaded")
         appLovinAdRequestCounter = 0
     }
 
     override fun onAdLoadFailed(adUnitId: String?, error: MaxError?) {
-        /**
-         * Interstitial ad failed to load
-         */
         Timber.e("AppLovin onAdLoadFailed: $error")
-        if (appLovinAdRequestCounter < 3) {
+        if (appLovinAdRequestCounter < 2) {
             appLovinAdRequestCounter++
             appLovinAd.loadAd()
         } else {
-            requestAdColonyInterstitial()
+            requestTapsellInterstitial()
         }
     }
 
     override fun onAdDisplayFailed(ad: MaxAd?, error: MaxError?) {
-        /**
-         * Interstitial ad failed to display.
-         * AppLovin recommends that you load the next ad.
-         */
         Timber.e("AppLovin onAdDisplayFailed: $error")
         appLovinAd.loadAd()
     }
 
     override fun onAdHidden(ad: MaxAd?) {
-        /**
-         * Interstitial ad is hidden.
-         * Pre-load the next ad
-         */
         Timber.i("AppLovin onAdHidden")
         appLovinAd.loadAd()
     }
@@ -158,29 +139,6 @@ class MainActivity : AppCompatActivity(), MaxAdListener {
 
     override fun onAdClicked(ad: MaxAd?) {
         Timber.i("AppLovin onAdClicked")
-    }
-
-    private fun requestAdColonyInterstitial() {
-        AdColony.requestInterstitial(
-            ADCOLONY_INTERSTITIAL_ZONE_ID,
-            object : AdColonyInterstitialListener() {
-                override fun onRequestFilled(ad: AdColonyInterstitial?) {
-                    Timber.i("AdColony Interstitial onRequestFilled")
-                    adColonyAd = ad
-                }
-
-                override fun onRequestNotFilled(zone: AdColonyZone?) {
-                    super.onRequestNotFilled(zone)
-                    Timber.e("AdColony Interstitial onRequestNotFilled")
-                    if (adColonyRequestCounter < 3) {
-                        adColonyRequestCounter++
-                        requestAdColonyInterstitial()
-                    } else {
-                        requestTapsellInterstitial()
-                    }
-                }
-            }
-        )
     }
 
     private fun requestTapsellInterstitial() {
@@ -196,7 +154,7 @@ class MainActivity : AppCompatActivity(), MaxAdListener {
                 override fun error(error: String?) {
                     super.error(error)
                     Timber.e("requestTapsellInterstitial onError: $error")
-                    if (tapsellRequestCounter < 3) {
+                    if (tapsellRequestCounter < 2) {
                         tapsellRequestCounter++
                         requestTapsellInterstitial()
                     }
