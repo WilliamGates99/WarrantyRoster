@@ -17,7 +17,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentChangeEmailBinding
-import com.xeniac.warrantyroster_manager.models.Status
+import com.xeniac.warrantyroster_manager.models.Resource
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.SettingsViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_CREDENTIALS
@@ -178,12 +178,10 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
     private fun reAuthenticateUserObserver() =
         viewModel.reAuthenticateUserLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
-                when (response.status) {
-                    Status.LOADING -> showLoadingAnimation()
-                    Status.SUCCESS -> {
-                        changeUserEmail()
-                    }
-                    Status.ERROR -> {
+                when (response) {
+                    is Resource.Loading -> showLoadingAnimation()
+                    is Resource.Success -> changeUserEmail()
+                    is Resource.Error -> {
                         hideLoadingAnimation()
                         response.message?.let {
                             when {
@@ -239,9 +237,9 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
     private fun changeUserEmailObserver() =
         viewModel.changeUserEmailLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
-                when (response.status) {
-                    Status.LOADING -> showLoadingAnimation()
-                    Status.SUCCESS -> {
+                when (response) {
+                    is Resource.Loading -> showLoadingAnimation()
+                    is Resource.Success -> {
                         hideLoadingAnimation()
                         MaterialAlertDialogBuilder(requireContext()).apply {
                             setMessage(requireContext().getString(R.string.change_email_dialog_message))
@@ -251,7 +249,7 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
                             show()
                         }
                     }
-                    Status.ERROR -> {
+                    is Resource.Error -> {
                         hideLoadingAnimation()
                         response.message?.let {
                             when {

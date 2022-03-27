@@ -1,4 +1,4 @@
-package com.xeniac.warrantyroster_manager.utils
+package com.xeniac.warrantyroster_manager.models
 
 open class Event<out T>(private val data: T) {
 

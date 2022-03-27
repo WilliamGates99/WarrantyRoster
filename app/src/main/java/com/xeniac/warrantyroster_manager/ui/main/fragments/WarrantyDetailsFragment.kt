@@ -18,7 +18,7 @@ import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentWarrantyDetailsBinding
-import com.xeniac.warrantyroster_manager.models.Status
+import com.xeniac.warrantyroster_manager.models.Resource
 import com.xeniac.warrantyroster_manager.ui.main.MainActivity
 import com.xeniac.warrantyroster_manager.models.Warranty
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModel
@@ -236,9 +236,9 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
     private fun deleteWarrantyObserver() =
         viewModel.deleteWarrantyLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
-                when (response.status) {
-                    Status.LOADING -> showLoadingAnimation()
-                    Status.SUCCESS -> {
+                when (response) {
+                    is Resource.Loading -> showLoadingAnimation()
+                    is Resource.Success -> {
                         hideLoadingAnimation()
                         Toast.makeText(
                             requireContext(),
@@ -263,7 +263,7 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
                         requireActivity().onBackPressed()
                         (requireActivity() as MainActivity).requestAppLovinInterstitial()
                     }
-                    Status.ERROR -> {
+                    is Resource.Error -> {
                         hideLoadingAnimation()
                         response.message?.let {
                             when {

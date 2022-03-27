@@ -588,12 +588,10 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
     private fun updateWarrantyObserver() =
         viewModel.updateWarrantyLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
-                when (response.status) {
-                    Status.LOADING -> showLoadingAnimation()
-                    Status.SUCCESS -> {
-                        getUpdatedWarrantyFromFirestore()
-                    }
-                    Status.ERROR -> {
+                when (response) {
+                    is Resource.Loading -> showLoadingAnimation()
+                    is Resource.Success -> getUpdatedWarrantyFromFirestore()
+                    is Resource.Error -> {
                         hideLoadingAnimation()
                         response.message?.let {
                             when {
@@ -641,9 +639,9 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
     private fun getUpdatedWarrantyObserver() =
         viewModel.updatedWarrantyLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
-                when (response.status) {
-                    Status.LOADING -> showLoadingAnimation()
-                    Status.SUCCESS -> {
+                when (response) {
+                    is Resource.Loading -> showLoadingAnimation()
+                    is Resource.Success -> {
                         hideLoadingAnimation()
                         response.data?.let { updatedWarranty ->
                             val action = EditWarrantyFragmentDirections
@@ -651,7 +649,7 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
                             findNavController().navigate(action)
                         }
                     }
-                    Status.ERROR -> {
+                    is Resource.Error -> {
                         hideLoadingAnimation()
                         response.message?.let {
                             when {

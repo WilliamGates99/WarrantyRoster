@@ -26,9 +26,9 @@ import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_MODEL
 import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_SERIAL_NUMBER
 import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_STARTING_DATE
 import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_TITLE
-import com.xeniac.warrantyroster_manager.utils.Event
+import com.xeniac.warrantyroster_manager.models.Event
 import com.xeniac.warrantyroster_manager.utils.NetworkHelper.hasInternetConnection
-import com.xeniac.warrantyroster_manager.utils.Resource
+import com.xeniac.warrantyroster_manager.models.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -108,17 +108,17 @@ class MainViewModel @Inject constructor(
     }
 
     fun getCategoriesFromFirestore() = viewModelScope.launch {
-        _categoriesLiveData.postValue(Event(Resource.loading()))
+        _categoriesLiveData.postValue(Event(Resource.Loading()))
         mainRepository.getCategoriesFromFirestore().addSnapshotListener { value, error ->
             error?.let {
                 Timber.e("getCategoriesFromFirestore Error: ${it.message}")
-                _categoriesLiveData.postValue(Event(Resource.error(it.message.toString())))
+                _categoriesLiveData.postValue(Event(Resource.Error(it.message.toString())))
             }
 
             value?.let {
                 if (it.documents.size == 0) {
                     Timber.e("getCategoriesFromFirestore Error: $ERROR_EMPTY_CATEGORY_LIST")
-                    _categoriesLiveData.postValue(Event(Resource.error(ERROR_EMPTY_CATEGORY_LIST)))
+                    _categoriesLiveData.postValue(Event(Resource.Error(ERROR_EMPTY_CATEGORY_LIST)))
                 } else {
                     val categoriesList = mutableListOf<Category>()
 
@@ -131,7 +131,7 @@ class MainViewModel @Inject constructor(
                         )
                         categoriesList.add(category)
                     }
-                    _categoriesLiveData.postValue(Event(Resource.success(categoriesList)))
+                    _categoriesLiveData.postValue(Event(Resource.Success(categoriesList)))
                     Timber.i("Categories List successfully retrieved.")
                 }
             }
@@ -139,17 +139,17 @@ class MainViewModel @Inject constructor(
     }
 
     fun getWarrantiesListFromFirestore() = viewModelScope.launch {
-        _warrantiesLiveData.postValue(Event(Resource.loading()))
+        _warrantiesLiveData.postValue(Event(Resource.Loading()))
         mainRepository.getWarrantiesFromFirestore().addSnapshotListener { value, error ->
             error?.let {
                 Timber.e("getWarrantiesListFromFirestore Error: ${it.message}")
-                _warrantiesLiveData.postValue(Event(Resource.error(it.message.toString())))
+                _warrantiesLiveData.postValue(Event(Resource.Error(it.message.toString())))
             }
 
             value?.let {
                 if (it.documents.size == 0) {
                     Timber.e("getWarrantiesListFromFirestore Error: $ERROR_EMPTY_WARRANTY_LIST")
-                    _warrantiesLiveData.postValue(Event(Resource.error(ERROR_EMPTY_WARRANTY_LIST)))
+                    _warrantiesLiveData.postValue(Event(Resource.Error(ERROR_EMPTY_WARRANTY_LIST)))
                 } else {
                     val warrantiesList = mutableListOf<Warranty>()
                     var adIndex = 5
@@ -179,7 +179,7 @@ class MainViewModel @Inject constructor(
                             warrantiesList.add(nativeAd)
                         }
                     }
-                    _warrantiesLiveData.postValue(Event(Resource.success(warrantiesList)))
+                    _warrantiesLiveData.postValue(Event(Resource.Success(warrantiesList)))
                     Timber.i("Warranties List successfully retrieved.")
                 }
             }
@@ -204,60 +204,60 @@ class MainViewModel @Inject constructor(
     }
 
     private suspend fun safeAddWarrantyToFirestore(warrantyInput: WarrantyInput) {
-        _addWarrantyLiveData.postValue(Event(Resource.loading()))
+        _addWarrantyLiveData.postValue(Event(Resource.Loading()))
         try {
             if (hasInternetConnection(getApplication<BaseApplication>())) {
                 mainRepository.addWarrantyToFirestore(warrantyInput).await()
-                _addWarrantyLiveData.postValue(Event(Resource.success(null)))
+                _addWarrantyLiveData.postValue(Event(Resource.Success(null)))
                 Timber.i("Warranty successfully added.")
             } else {
                 Timber.e(ERROR_NETWORK_CONNECTION)
-                _addWarrantyLiveData.postValue(Event(Resource.error(ERROR_NETWORK_CONNECTION)))
+                _addWarrantyLiveData.postValue(Event(Resource.Error(ERROR_NETWORK_CONNECTION)))
             }
         } catch (e: Exception) {
             Timber.e("safeAddWarrantyToFirestore Exception: ${e.message}")
-            _addWarrantyLiveData.postValue(Event(Resource.error(e.message.toString())))
+            _addWarrantyLiveData.postValue(Event(Resource.Error(e.message.toString())))
         }
     }
 
     private suspend fun safeDeleteWarrantyFromFirestore(warrantyId: String) {
-        _deleteWarrantyLiveData.postValue(Event(Resource.loading()))
+        _deleteWarrantyLiveData.postValue(Event(Resource.Loading()))
         try {
             if (hasInternetConnection(getApplication<BaseApplication>())) {
                 mainRepository.deleteWarrantyFromFirestore(warrantyId).await()
-                _deleteWarrantyLiveData.postValue(Event(Resource.success(null)))
+                _deleteWarrantyLiveData.postValue(Event(Resource.Success(null)))
                 Timber.i("$warrantyId successfully deleted.")
             } else {
                 Timber.e(ERROR_NETWORK_CONNECTION)
-                _deleteWarrantyLiveData.postValue(Event(Resource.error(ERROR_NETWORK_CONNECTION)))
+                _deleteWarrantyLiveData.postValue(Event(Resource.Error(ERROR_NETWORK_CONNECTION)))
             }
         } catch (e: Exception) {
             Timber.e("safeDeleteWarrantyFromFirestore Exception: ${e.message}")
-            _deleteWarrantyLiveData.postValue(Event(Resource.error(e.message.toString())))
+            _deleteWarrantyLiveData.postValue(Event(Resource.Error(e.message.toString())))
         }
     }
 
     private suspend fun safeUpdateWarrantyInFirestore(
         warrantyId: String, warrantyInput: WarrantyInput
     ) {
-        _updateWarrantyLiveData.postValue(Event(Resource.loading()))
+        _updateWarrantyLiveData.postValue(Event(Resource.Loading()))
         try {
             if (hasInternetConnection(getApplication<BaseApplication>())) {
                 mainRepository.updateWarrantyInFirestore(warrantyId, warrantyInput).await()
-                _updateWarrantyLiveData.postValue(Event(Resource.success(null)))
+                _updateWarrantyLiveData.postValue(Event(Resource.Success(null)))
                 Timber.i("Warranty successfully updated.")
             } else {
                 Timber.e(ERROR_NETWORK_CONNECTION)
-                _updateWarrantyLiveData.postValue(Event(Resource.error(ERROR_NETWORK_CONNECTION)))
+                _updateWarrantyLiveData.postValue(Event(Resource.Error(ERROR_NETWORK_CONNECTION)))
             }
         } catch (e: Exception) {
             Timber.e("safeUpdateWarrantyInFirestore Exception: ${e.message}")
-            _updateWarrantyLiveData.postValue(Event(Resource.error(e.message.toString())))
+            _updateWarrantyLiveData.postValue(Event(Resource.Error(e.message.toString())))
         }
     }
 
     private suspend fun safeGetUpdatedWarrantyFromFirestore(warrantyId: String) {
-        _updatedWarrantyLiveData.postValue(Event(Resource.loading()))
+        _updatedWarrantyLiveData.postValue(Event(Resource.Loading()))
         try {
             if (hasInternetConnection(getApplication<BaseApplication>())) {
                 val warrantySnapshot = mainRepository
@@ -276,15 +276,15 @@ class MainViewModel @Inject constructor(
                     warrantySnapshot.get(WARRANTIES_CATEGORY_ID).toString()
                 )
 
-                _updatedWarrantyLiveData.postValue(Event(Resource.success(updatedWarranty)))
+                _updatedWarrantyLiveData.postValue(Event(Resource.Success(updatedWarranty)))
                 Timber.i("DocumentSnapshot: $warrantySnapshot")
             } else {
                 Timber.e(ERROR_NETWORK_CONNECTION)
-                _updatedWarrantyLiveData.postValue(Event(Resource.error(ERROR_NETWORK_CONNECTION)))
+                _updatedWarrantyLiveData.postValue(Event(Resource.Error(ERROR_NETWORK_CONNECTION)))
             }
         } catch (e: Exception) {
             Timber.e("safeGetUpdatedWarrantyFromFirestore Exception: ${e.message}")
-            _updatedWarrantyLiveData.postValue(Event(Resource.error(e.message.toString())))
+            _updatedWarrantyLiveData.postValue(Event(Resource.Error(e.message.toString())))
         }
     }
 }

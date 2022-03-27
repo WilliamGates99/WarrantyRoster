@@ -24,7 +24,7 @@ import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentAddWarrantyBinding
 import com.xeniac.warrantyroster_manager.di.CategoryTitleMapKey
 import com.xeniac.warrantyroster_manager.models.Category
-import com.xeniac.warrantyroster_manager.models.Status
+import com.xeniac.warrantyroster_manager.models.Resource
 import com.xeniac.warrantyroster_manager.models.WarrantyInput
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModel
 import com.xeniac.warrantyroster_manager.utils.CoilHelper.loadCategoryImage
@@ -491,13 +491,13 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
     private fun addWarrantyObserver() =
         viewModel.addWarrantyLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
-                when (response.status) {
-                    Status.LOADING -> showLoadingAnimation()
-                    Status.SUCCESS -> {
+                when (response) {
+                    is Resource.Loading -> showLoadingAnimation()
+                    is Resource.Success -> {
                         hideLoadingAnimation()
                         findNavController().navigate(R.id.action_addWarrantyFragment_to_warrantiesFragment)
                     }
-                    Status.ERROR -> {
+                    is Resource.Error -> {
                         hideLoadingAnimation()
                         response.message?.let {
                             when {

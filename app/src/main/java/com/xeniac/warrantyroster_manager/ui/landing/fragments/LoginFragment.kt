@@ -17,7 +17,7 @@ import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentLoginBinding
-import com.xeniac.warrantyroster_manager.models.Status
+import com.xeniac.warrantyroster_manager.models.Resource
 import com.xeniac.warrantyroster_manager.ui.landing.LandingViewModel
 import com.xeniac.warrantyroster_manager.ui.main.MainActivity
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_ACCOUNT_NOT_FOUND
@@ -177,16 +177,16 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     private fun loginObserver() =
         viewModel.loginLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
-                when (response.status) {
-                    Status.LOADING -> showLoadingAnimation()
-                    Status.SUCCESS -> {
+                when (response) {
+                    is Resource.Loading -> showLoadingAnimation()
+                    is Resource.Success -> {
                         hideLoadingAnimation()
                         Intent(requireContext(), MainActivity::class.java).apply {
                             startActivity(this)
                             requireActivity().finish()
                         }
                     }
-                    Status.ERROR -> {
+                    is Resource.Error -> {
                         hideLoadingAnimation()
                         response.message?.let {
                             when {

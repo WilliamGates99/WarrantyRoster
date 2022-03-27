@@ -13,7 +13,7 @@ import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentForgotPwSentBinding
-import com.xeniac.warrantyroster_manager.models.Status
+import com.xeniac.warrantyroster_manager.models.Resource
 import com.xeniac.warrantyroster_manager.ui.landing.LandingViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_403
@@ -78,13 +78,13 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
         viewModel.forgotPwLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 showLoadingAnimation()
-                when (response.status) {
-                    Status.LOADING -> showLoadingAnimation()
-                    Status.SUCCESS -> {
+                when (response) {
+                    is Resource.Loading -> showLoadingAnimation()
+                    is Resource.Success -> {
                         hideLoadingAnimation()
                         binding.lavSent.playAnimation()
                     }
-                    Status.ERROR -> {
+                    is Resource.Error -> {
                         hideLoadingAnimation()
                         response.message?.let {
                             when {

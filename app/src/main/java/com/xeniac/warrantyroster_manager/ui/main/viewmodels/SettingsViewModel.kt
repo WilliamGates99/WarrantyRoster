@@ -15,9 +15,9 @@ import com.xeniac.warrantyroster_manager.repositories.UserRepository
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_IS_LOGGED_IN_KEY
 import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_THEME_KEY
-import com.xeniac.warrantyroster_manager.utils.Event
+import com.xeniac.warrantyroster_manager.models.Event
 import com.xeniac.warrantyroster_manager.utils.NetworkHelper.hasInternetConnection
-import com.xeniac.warrantyroster_manager.utils.Resource
+import com.xeniac.warrantyroster_manager.models.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -104,13 +104,13 @@ class SettingsViewModel @Inject constructor(
     }
 
     private suspend fun safeGetAccountDetails() {
-        _accountDetailsLiveData.postValue(Event(Resource.loading()))
+        _accountDetailsLiveData.postValue(Event(Resource.Loading()))
         try {
             val currentUser = userRepository.getCurrentUser()
             currentUser?.let { user ->
                 var email = user.email
                 var isVerified = user.isEmailVerified
-                _accountDetailsLiveData.postValue(Event(Resource.success(user)))
+                _accountDetailsLiveData.postValue(Event(Resource.Success(user)))
                 Timber.i("Current user is $email and isVerified: $isVerified")
 
                 if (hasInternetConnection(getApplication<BaseApplication>())) {
@@ -118,103 +118,103 @@ class SettingsViewModel @Inject constructor(
                     if (email != user.email || isVerified != user.isEmailVerified) {
                         email = user.email
                         isVerified = user.isEmailVerified
-                        _accountDetailsLiveData.postValue(Event(Resource.success(user)))
+                        _accountDetailsLiveData.postValue(Event(Resource.Success(user)))
                         Timber.i("Updated user is $email and isVerified: $isVerified")
                     }
                 }
             }
         } catch (e: Exception) {
             Timber.e("safeGetAccountDetails Exception: ${e.message}")
-            _accountDetailsLiveData.postValue(Event(Resource.error(e.message.toString())))
+            _accountDetailsLiveData.postValue(Event(Resource.Error(e.message.toString())))
         }
     }
 
     private suspend fun safeSendVerificationEmail() {
-        _sendVerificationEmailLiveData.postValue(Event(Resource.loading()))
+        _sendVerificationEmailLiveData.postValue(Event(Resource.Loading()))
         try {
             if (hasInternetConnection(getApplication<BaseApplication>())) {
                 userRepository.sendVerificationEmail().await()
-                _sendVerificationEmailLiveData.postValue(Event(Resource.success(null)))
+                _sendVerificationEmailLiveData.postValue(Event(Resource.Success(null)))
                 Timber.i("Verification email sent.")
             } else {
                 Timber.e(ERROR_NETWORK_CONNECTION)
                 _sendVerificationEmailLiveData.postValue(
-                    Event(Resource.error(ERROR_NETWORK_CONNECTION))
+                    Event(Resource.Error(ERROR_NETWORK_CONNECTION))
                 )
             }
         } catch (e: Exception) {
             Timber.e("safeSendVerificationEmail Exception: ${e.message}")
-            _sendVerificationEmailLiveData.postValue(Event(Resource.error(e.message.toString())))
+            _sendVerificationEmailLiveData.postValue(Event(Resource.Error(e.message.toString())))
         }
     }
 
     private fun safeLogoutUser() {
-        _logoutLiveData.postValue(Event(Resource.loading()))
+        _logoutLiveData.postValue(Event(Resource.Loading()))
         try {
             userRepository.logoutUser()
             loginPrefs.edit().remove(PREFERENCE_IS_LOGGED_IN_KEY).apply()
-            _logoutLiveData.postValue(Event(Resource.success(null)))
+            _logoutLiveData.postValue(Event(Resource.Success(null)))
             Timber.i("User successfully logged out.")
         } catch (e: Exception) {
             Timber.e("safeLogoutUser Exception: ${e.message}")
-            _logoutLiveData.postValue(Event(Resource.error(e.message.toString())))
+            _logoutLiveData.postValue(Event(Resource.Error(e.message.toString())))
         }
     }
 
     private suspend fun safeReAuthenticateUser(password: String) {
-        _reAuthenticateUserLiveData.postValue(Event(Resource.loading()))
+        _reAuthenticateUserLiveData.postValue(Event(Resource.Loading()))
         try {
             if (hasInternetConnection(getApplication<BaseApplication>())) {
                 userRepository.reAuthenticateUser(password).await()
-                _reAuthenticateUserLiveData.postValue(Event(Resource.success(null)))
+                _reAuthenticateUserLiveData.postValue(Event(Resource.Success(null)))
                 Timber.i("User re-authenticated.")
             } else {
                 Timber.e(ERROR_NETWORK_CONNECTION)
                 _reAuthenticateUserLiveData.postValue(
-                    Event(Resource.error(ERROR_NETWORK_CONNECTION))
+                    Event(Resource.Error(ERROR_NETWORK_CONNECTION))
                 )
             }
         } catch (e: Exception) {
             Timber.e("safeReAuthenticateUser Exception: ${e.message}")
-            _reAuthenticateUserLiveData.postValue(Event(Resource.error(e.message.toString())))
+            _reAuthenticateUserLiveData.postValue(Event(Resource.Error(e.message.toString())))
         }
     }
 
     private suspend fun safeChangeUserEmail(newEmail: String) {
-        _changeUserEmailLiveData.postValue(Event(Resource.loading()))
+        _changeUserEmailLiveData.postValue(Event(Resource.Loading()))
         try {
             if (hasInternetConnection(getApplication<BaseApplication>())) {
                 userRepository.updateUserEmail(newEmail).await()
-                _changeUserEmailLiveData.postValue(Event(Resource.success(null)))
+                _changeUserEmailLiveData.postValue(Event(Resource.Success(null)))
                 Timber.i("User email updated to ${newEmail}.")
             } else {
                 Timber.e(ERROR_NETWORK_CONNECTION)
                 _changeUserEmailLiveData.postValue(
-                    Event(Resource.error(ERROR_NETWORK_CONNECTION))
+                    Event(Resource.Error(ERROR_NETWORK_CONNECTION))
                 )
             }
         } catch (e: Exception) {
             Timber.e("safeChangeUserEmail Exception: ${e.message}")
-            _changeUserEmailLiveData.postValue(Event(Resource.error(e.message.toString())))
+            _changeUserEmailLiveData.postValue(Event(Resource.Error(e.message.toString())))
         }
     }
 
     private suspend fun safeChangeUserPassword(newPassword: String) {
-        _changeUserPasswordLiveData.postValue(Event(Resource.loading()))
+        _changeUserPasswordLiveData.postValue(Event(Resource.Loading()))
         try {
             if (hasInternetConnection(getApplication<BaseApplication>())) {
                 userRepository.updateUserPassword(newPassword).await()
-                _changeUserPasswordLiveData.postValue(Event(Resource.success(null)))
+                _changeUserPasswordLiveData.postValue(Event(Resource.Success(null)))
                 Timber.i("User password updated.")
             } else {
                 Timber.e(ERROR_NETWORK_CONNECTION)
                 _changeUserPasswordLiveData.postValue(
-                    Event(Resource.error(ERROR_NETWORK_CONNECTION))
+                    Event(Resource.Error(ERROR_NETWORK_CONNECTION))
                 )
             }
         } catch (e: Exception) {
             Timber.e("safeChangeUserPassword Exception: ${e.message}")
-            _changeUserPasswordLiveData.postValue(Event(Resource.error(e.message.toString())))
+            _changeUserPasswordLiveData.postValue(Event(Resource.Error(e.message.toString())))
         }
     }
 }
