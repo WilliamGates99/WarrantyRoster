@@ -20,3 +20,4 @@ local.properties
 /app/obfuscation
 /app/src/main/dbschemas
 /app/google-services.json
+.safedk
