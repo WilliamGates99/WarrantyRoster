@@ -38,6 +38,7 @@
     <style name="Theme.WarrantyRoster.Snackbar.TextView" parent="Widget.MaterialComponents.Snackbar.TextView">
         <item name="android:textColor">@color/whiteConstant</item>
         <item name="android:fontFamily">@font/nunito_semi_bold</item>
+        <item name="android:maxLines">10</item>
     </style>
 
     <style name="Theme.WarrantyRoster.Snackbar.ActionButton" parent="Widget.MaterialComponents.Button.TextButton.Snackbar">
