@@ -156,10 +156,12 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
         binding.groupEmptyList.visibility = GONE
         binding.rv.visibility = GONE
         binding.cpi.visibility = VISIBLE
+        binding.cpi.show()
     }
 
     private fun hideLoadingAnimation() {
-        binding.cpi.visibility = GONE
+        binding.cpi.hide()
+        binding.cpi.setVisibilityAfterHide(GONE)
     }
 
     private fun showWarrantiesEmptyList() {
