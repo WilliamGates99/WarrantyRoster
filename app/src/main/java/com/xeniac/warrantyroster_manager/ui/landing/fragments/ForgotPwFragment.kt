@@ -34,6 +34,8 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
     private val binding get() = _binding!!
     private lateinit var viewModel: LandingViewModel
 
+    private var snackbar: Snackbar? = null
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentForgotPwBinding.bind(view)
@@ -49,6 +51,7 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        snackbar?.dismiss()
         _binding = null
     }
 
@@ -149,7 +152,7 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
                         response.message?.let {
                             when {
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
-                                    Snackbar.make(
+                                    snackbar = Snackbar.make(
                                         binding.root,
                                         requireContext().getString(R.string.network_error_connection),
                                         LENGTH_LONG
@@ -161,52 +164,64 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
                                 it.contains(ERROR_TIMER_IS_NOT_ZERO) -> {
                                     val seconds = viewModel.timerInMillis / 1000
                                     if (seconds <= 1L) {
-                                        Snackbar.make(
+                                        snackbar = Snackbar.make(
                                             binding.root,
                                             requireContext().getString(
                                                 R.string.forgot_pw_error_timer_is_not_zero_one,
                                                 seconds
                                             ),
                                             LENGTH_LONG
-                                        ).show()
+                                        ).apply {
+                                            show()
+                                        }
                                     } else {
-                                        Snackbar.make(
+                                        snackbar = Snackbar.make(
                                             binding.root,
                                             requireContext().getString(
                                                 R.string.forgot_pw_error_timer_is_not_zero_other,
                                                 seconds
                                             ),
                                             LENGTH_LONG
-                                        ).show()
+                                        ).apply {
+                                            show()
+                                        }
                                     }
                                 }
                                 it.contains(ERROR_NETWORK_403) -> {
-                                    Snackbar.make(
+                                    snackbar = Snackbar.make(
                                         binding.root,
                                         requireContext().getString(R.string.network_error_403),
                                         LENGTH_LONG
-                                    ).show()
+                                    ).apply {
+                                        show()
+                                    }
                                 }
                                 it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
-                                    Snackbar.make(
+                                    snackbar = Snackbar.make(
                                         binding.root,
                                         requireContext().getString(R.string.firebase_error_device_blocked),
                                         LENGTH_LONG
-                                    ).show()
+                                    ).apply {
+                                        show()
+                                    }
                                 }
                                 it.contains(ERROR_FIREBASE_AUTH_ACCOUNT_NOT_FOUND) -> {
-                                    Snackbar.make(
+                                    snackbar = Snackbar.make(
                                         binding.root,
                                         requireContext().getString(R.string.forgot_pw_error_not_found),
                                         LENGTH_LONG
-                                    ).show()
+                                    ).apply {
+                                        show()
+                                    }
                                 }
                                 else -> {
-                                    Snackbar.make(
+                                    snackbar = Snackbar.make(
                                         binding.root,
                                         requireContext().getString(R.string.network_error_failure),
                                         LENGTH_LONG
-                                    ).show()
+                                    ).apply {
+                                        show()
+                                    }
                                 }
                             }
                         }

@@ -31,6 +31,8 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
 
     private lateinit var warrantyAdapter: WarrantyAdapter
 
+    private var snackbar: Snackbar? = null
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentWarrantiesBinding.bind(view)
@@ -42,6 +44,7 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
 
     override fun onDestroyView() {
         super.onDestroyView()
+        snackbar?.dismiss()
         _binding = null
     }
 
@@ -77,11 +80,13 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
                                     showNetworkError()
                                 }
                                 it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
-                                    Snackbar.make(
+                                    snackbar = Snackbar.make(
                                         binding.root,
                                         requireContext().getString(R.string.firebase_error_device_blocked),
                                         BaseTransientBottomBar.LENGTH_LONG
-                                    ).show()
+                                    ).apply {
+                                        show()
+                                    }
                                 }
                                 else -> {
                                     binding.tvNetworkError.text =
@@ -120,11 +125,13 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
                                     showNetworkError()
                                 }
                                 it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
-                                    Snackbar.make(
+                                    snackbar = Snackbar.make(
                                         binding.root,
                                         requireContext().getString(R.string.firebase_error_device_blocked),
                                         BaseTransientBottomBar.LENGTH_LONG
-                                    ).show()
+                                    ).apply {
+                                        show()
+                                    }
                                 }
                                 else -> {
                                     binding.tvNetworkError.text =

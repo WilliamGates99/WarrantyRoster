@@ -70,6 +70,8 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
     private var tapsellResponseId: String? = null
     private var tapsellRequestCounter = 1
 
+    private var snackbar: Snackbar? = null
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentSettingsBinding.bind(view)
@@ -92,6 +94,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
 
     override fun onDestroyView() {
         super.onDestroyView()
+        snackbar?.dismiss()
         destroyAd()
         _binding = null
     }
@@ -194,7 +197,9 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
         }
 
     private fun languageOnClick() = binding.clSettingsLanguage.setOnClickListener {
-        Toast.makeText(requireContext(), "Language", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), "Language", Toast.LENGTH_SHORT).apply {
+            show()
+        }
     }
 
     private fun themeOnClick() = binding.clSettingsTheme.setOnClickListener {
@@ -272,7 +277,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
                         response.message?.let {
                             when {
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
-                                    Snackbar.make(
+                                    snackbar = Snackbar.make(
                                         binding.root,
                                         requireContext().getString(R.string.network_error_connection),
                                         LENGTH_LONG
@@ -282,25 +287,31 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
                                     }
                                 }
                                 it.contains(ERROR_NETWORK_403) -> {
-                                    Snackbar.make(
+                                    snackbar = Snackbar.make(
                                         binding.root,
                                         requireContext().getString(R.string.network_error_403),
                                         LENGTH_LONG
-                                    ).show()
+                                    ).apply {
+                                        show()
+                                    }
                                 }
                                 it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
-                                    Snackbar.make(
+                                    snackbar = Snackbar.make(
                                         binding.root,
                                         requireContext().getString(R.string.firebase_error_device_blocked),
                                         LENGTH_LONG
-                                    ).show()
+                                    ).apply {
+                                        show()
+                                    }
                                 }
                                 else -> {
-                                    Snackbar.make(
+                                    snackbar = Snackbar.make(
                                         binding.root,
                                         requireContext().getString(R.string.network_error_failure),
                                         LENGTH_LONG
-                                    ).show()
+                                    ).apply {
+                                        show()
+                                    }
                                 }
                             }
                         }

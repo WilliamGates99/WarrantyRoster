@@ -35,6 +35,8 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
     @Inject
     lateinit var decimalFormat: DecimalFormat
 
+    private var snackbar: Snackbar? = null
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentForgotPwSentBinding.bind(view)
@@ -49,6 +51,7 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
     override fun onDestroyView() {
         super.onDestroyView()
         viewModel.cancelCountdown()
+        snackbar?.dismiss()
         _binding = null
     }
 
@@ -87,7 +90,7 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
                         response.message?.let {
                             when {
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
-                                    Snackbar.make(
+                                    snackbar = Snackbar.make(
                                         binding.root,
                                         requireContext().getString(R.string.network_error_connection),
                                         LENGTH_LONG
@@ -99,45 +102,55 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
                                 it.contains(ERROR_TIMER_IS_NOT_ZERO) -> {
                                     val seconds = viewModel.timerInMillis / 1000
                                     if (seconds <= 1L) {
-                                        Snackbar.make(
+                                        snackbar = Snackbar.make(
                                             binding.root,
                                             requireContext().getString(
                                                 R.string.forgot_pw_error_timer_is_not_zero_one,
                                                 seconds
                                             ),
                                             LENGTH_LONG
-                                        ).show()
+                                        ).apply {
+                                            show()
+                                        }
                                     } else {
-                                        Snackbar.make(
+                                        snackbar = Snackbar.make(
                                             binding.root,
                                             requireContext().getString(
                                                 R.string.forgot_pw_error_timer_is_not_zero_other,
                                                 seconds
                                             ),
                                             LENGTH_LONG
-                                        ).show()
+                                        ).apply {
+                                            show()
+                                        }
                                     }
                                 }
                                 it.contains(ERROR_NETWORK_403) -> {
-                                    Snackbar.make(
+                                    snackbar = Snackbar.make(
                                         binding.root,
                                         requireContext().getString(R.string.network_error_403),
                                         LENGTH_LONG
-                                    ).show()
+                                    ).apply {
+                                        show()
+                                    }
                                 }
                                 it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
-                                    Snackbar.make(
+                                    snackbar = Snackbar.make(
                                         binding.root,
                                         requireContext().getString(R.string.firebase_error_device_blocked),
                                         LENGTH_LONG
-                                    ).show()
+                                    ).apply {
+                                        show()
+                                    }
                                 }
                                 else -> {
-                                    Snackbar.make(
+                                    snackbar = Snackbar.make(
                                         binding.root,
                                         requireContext().getString(R.string.network_error_failure),
                                         LENGTH_LONG
-                                    ).show()
+                                    ).apply {
+                                        show()
+                                    }
                                 }
                             }
                         }

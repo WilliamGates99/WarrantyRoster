@@ -55,6 +55,8 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
 
     private lateinit var warranty: Warranty
 
+    private var snackbar: Snackbar? = null
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentWarrantyDetailsBinding.bind(view)
@@ -70,6 +72,7 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        snackbar?.dismiss()
         _binding = null
     }
 
@@ -248,7 +251,9 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
                                     warranty.title
                                 )
                             ), Toast.LENGTH_LONG
-                        ).show()
+                        ).apply {
+                            show()
+                        }
 
                         when {
                             (requireActivity() as MainActivity).appLovinAd.isReady -> {
@@ -268,7 +273,7 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
                         response.message?.let {
                             when {
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
-                                    Snackbar.make(
+                                    snackbar = Snackbar.make(
                                         binding.root,
                                         requireContext().getString(R.string.network_error_connection),
                                         LENGTH_LONG
@@ -278,26 +283,32 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
                                     }
                                 }
                                 it.contains(ERROR_NETWORK_403) -> {
-                                    Snackbar.make(
+                                    snackbar = Snackbar.make(
                                         binding.root,
                                         requireContext().getString(R.string.network_error_403),
                                         LENGTH_LONG
-                                    ).show()
+                                    ).apply {
+                                        show()
+                                    }
                                 }
                                 it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
-                                    Snackbar.make(
+                                    snackbar = Snackbar.make(
                                         binding.root,
                                         requireContext().getString(R.string.firebase_error_device_blocked),
                                         LENGTH_LONG
-                                    ).show()
+                                    ).apply {
+                                        show()
+                                    }
                                 }
                                 else -> {
                                     hideLoadingAnimation()
-                                    Snackbar.make(
+                                    snackbar = Snackbar.make(
                                         binding.root,
                                         requireContext().getString(R.string.network_error_failure),
                                         LENGTH_LONG
-                                    ).show()
+                                    ).apply {
+                                        show()
+                                    }
                                 }
                             }
                         }
