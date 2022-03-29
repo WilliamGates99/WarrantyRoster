@@ -3,16 +3,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="?attr/selectableItemBackground"
-    android:clickable="true"
-    android:focusable="true"
-    android:paddingVertical="12dp">
+    android:layout_height="wrap_content">
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_banner_action"
+        style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="?attr/selectableItemBackground"
+        android:elevation="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/iv_banner_icon"
         android:layout_width="32dp"
         android:layout_height="32dp"
+        android:layout_marginVertical="12dp"
         android:layout_marginStart="12dp"
         android:background="@color/navyBlue10"
         android:scaleType="centerCrop"
@@ -27,6 +36,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="12dp"
+        android:layout_marginTop="12dp"
         android:ellipsize="end"
         android:fontFamily="@font/nunito_semi_bold"
         android:gravity="center_vertical|start"
@@ -49,6 +59,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="12dp"
         android:layout_marginTop="4dp"
+        android:layout_marginBottom="12dp"
         android:ellipsize="end"
         android:fontFamily="@font/nunito_regular"
         android:gravity="center_vertical|start"

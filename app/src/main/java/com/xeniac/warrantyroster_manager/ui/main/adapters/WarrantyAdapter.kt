@@ -221,6 +221,7 @@ class WarrantyAdapter(
                     setIconImageViewId(R.id.iv_banner_list_icon)
                     setTitleTextViewId(R.id.tv_banner_list_title)
                     setBodyTextViewId(R.id.tv_banner_list_body)
+                    setCallToActionButtonId(R.id.btn_banner_list_action)
                 }.build()
             return MaxNativeAdView(nativeAdBinder, context)
         }

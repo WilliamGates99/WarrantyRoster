@@ -352,6 +352,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
                 setIconImageViewId(R.id.iv_banner_icon)
                 setTitleTextViewId(R.id.tv_banner_title)
                 setBodyTextViewId(R.id.tv_banner_body)
+                setCallToActionButtonId(R.id.btn_banner_action)
             }.build()
         return MaxNativeAdView(nativeAdBinder, requireContext())
     }
