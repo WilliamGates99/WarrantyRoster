@@ -13,7 +13,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_INDEFINITE
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
@@ -23,12 +22,17 @@ import com.xeniac.warrantyroster_manager.ui.landing.LandingViewModel
 import com.xeniac.warrantyroster_manager.ui.main.MainActivity
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
-import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_403
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_REGISTER_EMAIL
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_REGISTER_PASSWORD
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_REGISTER_RETYPE_PASSWORD
 import com.xeniac.warrantyroster_manager.utils.Constants.URL_PRIVACY_POLICY
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.show403Error
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseAuthAccountExists
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseDeviceBlockedError
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkConnectionError
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkFailureError
 import com.xeniac.warrantyroster_manager.utils.UserHelper.isEmailValid
 import com.xeniac.warrantyroster_manager.utils.UserHelper.isRetypePasswordValid
 import com.xeniac.warrantyroster_manager.utils.UserHelper.passwordStrength
@@ -269,55 +273,27 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                     is Resource.Error -> {
                         hideLoadingAnimation()
                         response.message?.let {
-                            when {
+                            snackbar = when {
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
-                                    snackbar = Snackbar.make(
-                                        binding.root,
-                                        requireContext().getString(R.string.error_network_connection),
-                                        LENGTH_INDEFINITE
-                                    ).apply {
-                                        setAction(requireContext().getString(R.string.error_btn_retry)) { getRegisterInputs() }
-                                        show()
-                                    }
+                                    showNetworkConnectionError(
+                                        requireContext(), binding.root
+                                    ) { getRegisterInputs() }
                                 }
-                                it.contains(ERROR_NETWORK_403) -> {
-                                    snackbar = Snackbar.make(
-                                        binding.root,
-                                        requireContext().getString(R.string.error_firebase_403),
-                                        LENGTH_INDEFINITE
-                                    ).apply {
-                                        setAction(requireContext().getString(R.string.error_btn_confirm)) { dismiss() }
-                                        show()
-                                    }
+                                it.contains(ERROR_FIREBASE_403) -> {
+                                    show403Error(requireContext(), binding.root)
                                 }
                                 it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
-                                    snackbar = Snackbar.make(
-                                        binding.root,
-                                        requireContext().getString(R.string.error_firebase_device_blocked),
-                                        LENGTH_INDEFINITE
-                                    ).apply {
-                                        setAction(requireContext().getString(R.string.error_btn_confirm)) { dismiss() }
-                                        show()
-                                    }
+                                    showFirebaseDeviceBlockedError(requireContext(), binding.root)
                                 }
                                 it.contains(ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS) -> {
-                                    snackbar = Snackbar.make(
+                                    showFirebaseAuthAccountExists(
                                         binding.root,
                                         requireContext().getString(R.string.register_error_account_exists),
-                                        LENGTH_INDEFINITE
-                                    ).apply {
-                                        setAction(requireContext().getString(R.string.register_btn_login)) { requireActivity().onBackPressed() }
-                                        show()
-                                    }
+                                        requireContext().getString(R.string.register_btn_login)
+                                    ) { requireActivity().onBackPressed() }
                                 }
                                 else -> {
-                                    snackbar = Snackbar.make(
-                                        binding.root,
-                                        requireContext().getString(R.string.error_network_failure),
-                                        LENGTH_LONG
-                                    ).apply {
-                                        show()
-                                    }
+                                    showNetworkFailureError(requireContext(), binding.root)
                                 }
                             }
                         }

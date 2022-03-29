@@ -8,17 +8,20 @@ import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
-import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_INDEFINITE
-import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentForgotPwSentBinding
 import com.xeniac.warrantyroster_manager.models.Resource
 import com.xeniac.warrantyroster_manager.ui.landing.LandingViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
-import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_403
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_TIMER_IS_NOT_ZERO
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.show403Error
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseDeviceBlockedError
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkConnectionError
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkFailureError
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showTimerIsNotZeroError
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import java.text.DecimalFormat
@@ -89,71 +92,24 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
                     is Resource.Error -> {
                         hideLoadingAnimation()
                         response.message?.let {
-                            when {
+                            snackbar = when {
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
-                                    snackbar = Snackbar.make(
-                                        binding.root,
-                                        requireContext().getString(R.string.error_network_connection),
-                                        LENGTH_INDEFINITE
-                                    ).apply {
-                                        setAction(requireContext().getString(R.string.error_btn_retry)) { resendResetPasswordEmail() }
-                                        show()
-                                    }
+                                    showNetworkConnectionError(
+                                        requireContext(), binding.root
+                                    ) { resendResetPasswordEmail() }
                                 }
-                                it.contains(ERROR_NETWORK_403) -> {
-                                    snackbar = Snackbar.make(
-                                        binding.root,
-                                        requireContext().getString(R.string.error_firebase_403),
-                                        LENGTH_INDEFINITE
-                                    ).apply {
-                                        setAction(requireContext().getString(R.string.error_btn_confirm)) { dismiss() }
-                                        show()
-                                    }
+                                it.contains(ERROR_FIREBASE_403) -> {
+                                    show403Error(requireContext(), binding.root)
                                 }
                                 it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
-                                    snackbar = Snackbar.make(
-                                        binding.root,
-                                        requireContext().getString(R.string.error_firebase_device_blocked),
-                                        LENGTH_INDEFINITE
-                                    ).apply {
-                                        setAction(requireContext().getString(R.string.error_btn_confirm)) { dismiss() }
-                                        show()
-                                    }
+                                    showFirebaseDeviceBlockedError(requireContext(), binding.root)
                                 }
                                 it.contains(ERROR_TIMER_IS_NOT_ZERO) -> {
                                     val seconds = viewModel.timerInMillis / 1000
-                                    if (seconds <= 1L) {
-                                        snackbar = Snackbar.make(
-                                            binding.root,
-                                            requireContext().getString(
-                                                R.string.forgot_pw_error_timer_is_not_zero_one,
-                                                seconds
-                                            ),
-                                            LENGTH_LONG
-                                        ).apply {
-                                            show()
-                                        }
-                                    } else {
-                                        snackbar = Snackbar.make(
-                                            binding.root,
-                                            requireContext().getString(
-                                                R.string.forgot_pw_error_timer_is_not_zero_other,
-                                                seconds
-                                            ),
-                                            LENGTH_LONG
-                                        ).apply {
-                                            show()
-                                        }
-                                    }
+                                    showTimerIsNotZeroError(requireContext(), binding.root, seconds)
                                 }
                                 else -> {
-                                    snackbar = Snackbar.make(
-                                        binding.root,
-                                        requireContext().getString(R.string.error_network_failure),
-                                        LENGTH_LONG
-                                    ).apply {
-                                        show()
-                                    }
+                                    showNetworkFailureError(requireContext(), binding.root)
                                 }
                             }
                         }

@@ -8,11 +8,10 @@ import android.view.View.VISIBLE
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_INDEFINITE
-import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.xeniac.warrantyroster_manager.R
@@ -22,10 +21,16 @@ import com.xeniac.warrantyroster_manager.ui.main.viewmodels.SettingsViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_CREDENTIALS
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
-import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_403
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_CHANGE_EMAIL_NEW_EMAIL
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_CHANGE_EMAIL_PASSWORD
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.show403Error
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseAuthAccountExists
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseAuthCredentialsError
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseDeviceBlockedError
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkConnectionError
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkFailureError
 import com.xeniac.warrantyroster_manager.utils.UserHelper.isEmailValid
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -187,56 +192,27 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
                     is Resource.Error -> {
                         hideLoadingAnimation()
                         response.message?.let {
-                            when {
+                            snackbar = when {
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
-                                    snackbar = Snackbar.make(
-                                        binding.root,
-                                        requireContext().getString(R.string.error_network_connection),
-                                        LENGTH_INDEFINITE
-                                    ).apply {
-                                        setAction(requireContext().getString(R.string.error_btn_retry)) {
-                                            getChangeUserEmailInputs()
-                                        }
-                                        show()
-                                    }
+                                    showNetworkConnectionError(
+                                        requireContext(), binding.root
+                                    ) { getChangeUserEmailInputs() }
                                 }
-                                it.contains(ERROR_NETWORK_403) -> {
-                                    snackbar = Snackbar.make(
-                                        binding.root,
-                                        requireContext().getString(R.string.error_firebase_403),
-                                        LENGTH_INDEFINITE
-                                    ).apply {
-                                        setAction(requireContext().getString(R.string.error_btn_confirm)) { dismiss() }
-                                        show()
-                                    }
+                                it.contains(ERROR_FIREBASE_403) -> {
+
+                                    show403Error(requireContext(), binding.root)
                                 }
                                 it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
-                                    snackbar = Snackbar.make(
-                                        binding.root,
-                                        requireContext().getString(R.string.error_firebase_device_blocked),
-                                        LENGTH_INDEFINITE
-                                    ).apply {
-                                        setAction(requireContext().getString(R.string.error_btn_confirm)) { dismiss() }
-                                        show()
-                                    }
+                                    showFirebaseDeviceBlockedError(requireContext(), binding.root)
                                 }
                                 it.contains(ERROR_FIREBASE_AUTH_CREDENTIALS) -> {
-                                    snackbar = Snackbar.make(
+                                    showFirebaseAuthCredentialsError(
                                         binding.root,
-                                        requireContext().getString(R.string.change_email_error_credentials),
-                                        LENGTH_LONG
-                                    ).apply {
-                                        show()
-                                    }
+                                        requireContext().getString(R.string.change_email_error_credentials)
+                                    )
                                 }
                                 else -> {
-                                    snackbar = Snackbar.make(
-                                        binding.root,
-                                        requireContext().getString(R.string.error_network_failure),
-                                        LENGTH_LONG
-                                    ).apply {
-                                        show()
-                                    }
+                                    showNetworkFailureError(requireContext(), binding.root)
                                 }
                             }
                         }
@@ -265,57 +241,27 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
                     is Resource.Error -> {
                         hideLoadingAnimation()
                         response.message?.let {
-                            when {
+                            snackbar = when {
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
-                                    snackbar = Snackbar.make(
-                                        binding.root,
-                                        requireContext().getString(R.string.error_network_connection),
-                                        LENGTH_INDEFINITE
-                                    ).apply {
-                                        setAction(requireContext().getString(R.string.error_btn_retry)) {
-                                            getChangeUserEmailInputs()
-                                        }
-                                        show()
-                                    }
+                                    showNetworkConnectionError(
+                                        requireContext(), binding.root
+                                    ) { getChangeUserEmailInputs() }
                                 }
-                                it.contains(ERROR_NETWORK_403) -> {
-                                    snackbar = Snackbar.make(
-                                        binding.root,
-                                        requireContext().getString(R.string.error_firebase_403),
-                                        LENGTH_INDEFINITE
-                                    ).apply {
-                                        setAction(requireContext().getString(R.string.error_btn_confirm)) { dismiss() }
-                                        show()
-                                    }
+                                it.contains(ERROR_FIREBASE_403) -> {
+                                    show403Error(requireContext(), binding.root)
                                 }
                                 it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
-                                    snackbar = Snackbar.make(
-                                        binding.root,
-                                        requireContext().getString(R.string.error_firebase_device_blocked),
-                                        LENGTH_INDEFINITE
-                                    ).apply {
-                                        setAction(requireContext().getString(R.string.error_btn_confirm)) { dismiss() }
-                                        show()
-                                    }
+                                    showFirebaseDeviceBlockedError(requireContext(), binding.root)
                                 }
                                 it.contains(ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS) -> {
-                                    snackbar = Snackbar.make(
+                                    showFirebaseAuthAccountExists(
                                         binding.root,
                                         requireContext().getString(R.string.change_email_error_email_exists),
-                                        LENGTH_INDEFINITE
-                                    ).apply {
-                                        setAction(requireContext().getString(R.string.error_btn_confirm)) { dismiss() }
-                                        show()
-                                    }
+                                        requireContext().getString(R.string.error_btn_confirm)
+                                    ) { snackbar?.dismiss() }
                                 }
                                 else -> {
-                                    snackbar = Snackbar.make(
-                                        binding.root,
-                                        requireContext().getString(R.string.error_network_failure),
-                                        LENGTH_LONG
-                                    ).apply {
-                                        show()
-                                    }
+                                    showNetworkFailureError(requireContext(), binding.root)
                                 }
                             }
                         }

@@ -7,7 +7,6 @@ import android.view.View.VISIBLE
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_INDEFINITE
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.ui.main.adapters.WarrantyAdapter
@@ -19,7 +18,8 @@ import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_EMPTY_CATEGORY_LIST
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_EMPTY_WARRANTY_LIST
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
-import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_403
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseDeviceBlockedError
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -74,20 +74,14 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
                                 it.contains(ERROR_EMPTY_CATEGORY_LIST) -> {
                                     getCategoriesFromFirestore()
                                 }
-                                it.contains(ERROR_NETWORK_403) -> {
+                                it.contains(ERROR_FIREBASE_403) -> {
                                     binding.tvNetworkError.text =
                                         requireContext().getString(R.string.error_firebase_403)
                                     showNetworkError()
                                 }
                                 it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
-                                    snackbar = Snackbar.make(
-                                        binding.root,
-                                        requireContext().getString(R.string.error_firebase_device_blocked),
-                                        LENGTH_INDEFINITE
-                                    ).apply {
-                                        setAction(requireContext().getString(R.string.error_btn_confirm)) { dismiss() }
-                                        show()
-                                    }
+                                    snackbar = showFirebaseDeviceBlockedError(
+                                        requireContext(), binding.root)
                                 }
                                 else -> {
                                     binding.tvNetworkError.text =
@@ -120,20 +114,15 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
                                 it.contains(ERROR_EMPTY_WARRANTY_LIST) -> {
                                     showWarrantiesEmptyList()
                                 }
-                                it.contains(ERROR_NETWORK_403) -> {
+                                it.contains(ERROR_FIREBASE_403) -> {
                                     binding.tvNetworkError.text =
                                         requireContext().getString(R.string.error_firebase_403)
                                     showNetworkError()
                                 }
                                 it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
-                                    snackbar = Snackbar.make(
-                                        binding.root,
-                                        requireContext().getString(R.string.error_firebase_device_blocked),
-                                        LENGTH_INDEFINITE
-                                    ).apply {
-                                        setAction(requireContext().getString(R.string.error_btn_confirm)) { dismiss() }
-                                        show()
-                                    }
+                                    snackbar = showFirebaseDeviceBlockedError(
+                                        requireContext(), binding.root
+                                    )
                                 }
                                 else -> {
                                     binding.tvNetworkError.text =

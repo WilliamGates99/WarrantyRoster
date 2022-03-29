@@ -12,8 +12,6 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_INDEFINITE
-import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentForgotPwBinding
@@ -21,10 +19,16 @@ import com.xeniac.warrantyroster_manager.models.Resource
 import com.xeniac.warrantyroster_manager.ui.landing.LandingViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_ACCOUNT_NOT_FOUND
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
-import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_403
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_TIMER_IS_NOT_ZERO
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_FORGOT_PW_EMAIL
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.show403Error
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseAuthAccountNotFoundError
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseDeviceBlockedError
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkConnectionError
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkFailureError
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showTimerIsNotZeroError
 import com.xeniac.warrantyroster_manager.utils.UserHelper.isEmailValid
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -141,7 +145,6 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
                     is Resource.Loading -> showLoadingAnimation()
                     is Resource.Success -> {
                         hideLoadingAnimation()
-
                         response.data?.let { email ->
                             val action = ForgotPwFragmentDirections
                                 .actionForgotPasswordFragmentToForgotPwSentFragment(email)
@@ -151,81 +154,31 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
                     is Resource.Error -> {
                         hideLoadingAnimation()
                         response.message?.let {
-                            when {
+                            snackbar = when {
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
-                                    snackbar = Snackbar.make(
-                                        binding.root,
-                                        requireContext().getString(R.string.error_network_connection),
-                                        LENGTH_INDEFINITE
-                                    ).apply {
-                                        setAction(requireContext().getString(R.string.error_btn_retry)) { getResetPasswordInput() }
-                                        show()
-                                    }
+                                    showNetworkConnectionError(
+                                        requireContext(), binding.root
+                                    ) { getResetPasswordInput() }
                                 }
-                                it.contains(ERROR_NETWORK_403) -> {
-                                    snackbar = Snackbar.make(
-                                        binding.root,
-                                        requireContext().getString(R.string.error_firebase_403),
-                                        LENGTH_INDEFINITE
-                                    ).apply {
-                                        setAction(requireContext().getString(R.string.error_btn_confirm)) { dismiss() }
-                                        show()
-                                    }
+                                it.contains(ERROR_FIREBASE_403) -> {
+                                    show403Error(requireContext(), binding.root)
                                 }
                                 it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
-                                    snackbar = Snackbar.make(
-                                        binding.root,
-                                        requireContext().getString(R.string.error_firebase_device_blocked),
-                                        LENGTH_INDEFINITE
-                                    ).apply {
-                                        setAction(requireContext().getString(R.string.error_btn_confirm)) { dismiss() }
-                                        show()
-                                    }
+                                    showFirebaseDeviceBlockedError(requireContext(), binding.root)
                                 }
                                 it.contains(ERROR_FIREBASE_AUTH_ACCOUNT_NOT_FOUND) -> {
-                                    snackbar = Snackbar.make(
+                                    showFirebaseAuthAccountNotFoundError(
                                         binding.root,
                                         requireContext().getString(R.string.forgot_pw_error_not_found),
-                                        LENGTH_INDEFINITE
-                                    ).apply {
-                                        setAction(requireContext().getString(R.string.error_btn_confirm)) { dismiss() }
-                                        show()
-                                    }
+                                        requireContext().getString(R.string.error_btn_confirm)
+                                    ) { snackbar?.dismiss() }
                                 }
                                 it.contains(ERROR_TIMER_IS_NOT_ZERO) -> {
                                     val seconds = viewModel.timerInMillis / 1000
-                                    if (seconds <= 1L) {
-                                        snackbar = Snackbar.make(
-                                            binding.root,
-                                            requireContext().getString(
-                                                R.string.forgot_pw_error_timer_is_not_zero_one,
-                                                seconds
-                                            ),
-                                            LENGTH_LONG
-                                        ).apply {
-                                            show()
-                                        }
-                                    } else {
-                                        snackbar = Snackbar.make(
-                                            binding.root,
-                                            requireContext().getString(
-                                                R.string.forgot_pw_error_timer_is_not_zero_other,
-                                                seconds
-                                            ),
-                                            LENGTH_LONG
-                                        ).apply {
-                                            show()
-                                        }
-                                    }
+                                    showTimerIsNotZeroError(requireContext(), binding.root, seconds)
                                 }
                                 else -> {
-                                    snackbar = Snackbar.make(
-                                        binding.root,
-                                        requireContext().getString(R.string.error_network_failure),
-                                        LENGTH_LONG
-                                    ).apply {
-                                        show()
-                                    }
+                                    showNetworkFailureError(requireContext(), binding.root)
                                 }
                             }
                         }

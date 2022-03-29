@@ -62,8 +62,7 @@ object Constants {
 
     // Response Errors
     const val ERROR_NETWORK_CONNECTION = "Unable to connect to the internet"
-    const val ERROR_NETWORK_403 = "403"
-    const val ERROR_TIMER_IS_NOT_ZERO = "Timer is not zero"
+    const val ERROR_FIREBASE_403 = "403"
     const val ERROR_FIREBASE_DEVICE_BLOCKED =
         "We have blocked all requests from this device due to unusual activity"
     const val ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS =
@@ -72,6 +71,7 @@ object Constants {
         "There is no user record corresponding to this identifier"
     const val ERROR_FIREBASE_AUTH_CREDENTIALS =
         "The password is invalid or the user does not have a password"
+    const val ERROR_TIMER_IS_NOT_ZERO = "Timer is not zero"
     const val ERROR_EMPTY_CATEGORY_LIST = "Category list is empty"
     const val ERROR_EMPTY_WARRANTY_LIST = "Warranty list is empty"
 
