@@ -41,7 +41,7 @@ class LandingViewModel @Inject constructor(
     private val _timerLiveData: MutableLiveData<Event<Long>> = MutableLiveData()
     val timerLiveData: LiveData<Event<Long>> = _timerLiveData
 
-    private lateinit var countDownTimer: CountDownTimer
+    private var forgotPwEmail: String? = null
     var isFirstSentEmail = true
     var timerInMillis: Long = 0
 
@@ -105,17 +105,15 @@ class LandingViewModel @Inject constructor(
         _forgotPwLiveData.postValue(Event(Resource.Loading()))
         try {
             if (hasInternetConnection(getApplication<BaseApplication>())) {
-                when (timerInMillis) {
-                    0L -> {
-                        userRepository.sendResetPasswordEmail(email).await().apply {
-                            _forgotPwLiveData.postValue(Event(Resource.Success(email)))
-                            startCountdown()
-                            Timber.i("Reset password email successfully sent to ${email}.")
-                        }
-                    }
-                    else -> {
-                        Timber.e(ERROR_TIMER_IS_NOT_ZERO)
-                        _forgotPwLiveData.postValue(Event(Resource.Error(ERROR_TIMER_IS_NOT_ZERO)))
+                if (email == forgotPwEmail && timerInMillis != 0L) {
+                    Timber.e(ERROR_TIMER_IS_NOT_ZERO)
+                    _forgotPwLiveData.postValue(Event(Resource.Error(ERROR_TIMER_IS_NOT_ZERO)))
+                } else {
+                    userRepository.sendResetPasswordEmail(email).await().apply {
+                        _forgotPwLiveData.postValue(Event(Resource.Success(email)))
+                        forgotPwEmail = email
+                        startCountdown()
+                        Timber.i("Reset password email successfully sent to ${email}.")
                     }
                 }
             } else {
@@ -132,7 +130,7 @@ class LandingViewModel @Inject constructor(
         val startTimeInMillis = 120 * 1000L // 120 Seconds
         val countDownIntervalInMillis = 1000L // 1 Second
 
-        countDownTimer = object : CountDownTimer(startTimeInMillis, countDownIntervalInMillis) {
+        object : CountDownTimer(startTimeInMillis, countDownIntervalInMillis) {
             override fun onTick(millisUntilFinished: Long) {
                 timerInMillis = millisUntilFinished
                 _timerLiveData.postValue(Event(millisUntilFinished))
@@ -146,6 +144,4 @@ class LandingViewModel @Inject constructor(
             }
         }.start()
     }
-
-    fun cancelCountdown() = countDownTimer.cancel()
 }

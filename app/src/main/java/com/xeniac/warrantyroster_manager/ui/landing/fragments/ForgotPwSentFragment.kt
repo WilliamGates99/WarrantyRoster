@@ -54,7 +54,6 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        viewModel.cancelCountdown()
         snackbar?.dismiss()
         _binding = null
     }
