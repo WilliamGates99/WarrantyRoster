@@ -197,28 +197,30 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
                                     snackbar = Snackbar.make(
                                         binding.root,
-                                        requireContext().getString(R.string.network_error_connection),
+                                        requireContext().getString(R.string.error_network_connection),
                                         LENGTH_INDEFINITE
                                     ).apply {
-                                        setAction(requireContext().getString(R.string.network_error_retry)) { getLoginInputs() }
+                                        setAction(requireContext().getString(R.string.error_btn_retry)) { getLoginInputs() }
                                         show()
                                     }
                                 }
                                 it.contains(ERROR_NETWORK_403) -> {
                                     snackbar = Snackbar.make(
                                         binding.root,
-                                        requireContext().getString(R.string.network_error_403),
-                                        LENGTH_LONG
+                                        requireContext().getString(R.string.error_firebase_403),
+                                        LENGTH_INDEFINITE
                                     ).apply {
+                                        setAction(requireContext().getString(R.string.error_btn_confirm)) { dismiss() }
                                         show()
                                     }
                                 }
                                 it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
                                     snackbar = Snackbar.make(
                                         binding.root,
-                                        requireContext().getString(R.string.firebase_error_device_blocked),
-                                        LENGTH_LONG
+                                        requireContext().getString(R.string.error_firebase_device_blocked),
+                                        LENGTH_INDEFINITE
                                     ).apply {
+                                        setAction(requireContext().getString(R.string.error_btn_confirm)) { dismiss() }
                                         show()
                                     }
                                 }
@@ -226,7 +228,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                                     snackbar = Snackbar.make(
                                         binding.root,
                                         requireContext().getString(R.string.login_error_not_found),
-                                        LENGTH_LONG
+                                        LENGTH_INDEFINITE
                                     ).apply {
                                         setAction(requireContext().getString(R.string.login_btn_register)) { navigateToRegister() }
                                         show()
@@ -244,7 +246,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                                 else -> {
                                     snackbar = Snackbar.make(
                                         binding.root,
-                                        requireContext().getString(R.string.network_error_failure),
+                                        requireContext().getString(R.string.error_network_failure),
                                         LENGTH_LONG
                                     ).apply {
                                         show()

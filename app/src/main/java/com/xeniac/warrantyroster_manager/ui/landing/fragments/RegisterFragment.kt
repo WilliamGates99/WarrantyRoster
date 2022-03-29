@@ -13,6 +13,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_INDEFINITE
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
@@ -188,7 +189,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                 startActivity(this)
             } ?: Snackbar.make(
                 binding.root,
-                getString(R.string.intent_error_app_not_found),
+                getString(R.string.error_intent_app_not_found),
                 LENGTH_LONG
             ).show()
         }
@@ -272,28 +273,30 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
                                     snackbar = Snackbar.make(
                                         binding.root,
-                                        requireContext().getString(R.string.network_error_connection),
-                                        LENGTH_LONG
+                                        requireContext().getString(R.string.error_network_connection),
+                                        LENGTH_INDEFINITE
                                     ).apply {
-                                        setAction(requireContext().getString(R.string.network_error_retry)) { getRegisterInputs() }
+                                        setAction(requireContext().getString(R.string.error_btn_retry)) { getRegisterInputs() }
                                         show()
                                     }
                                 }
                                 it.contains(ERROR_NETWORK_403) -> {
                                     snackbar = Snackbar.make(
                                         binding.root,
-                                        requireContext().getString(R.string.network_error_403),
-                                        LENGTH_LONG
+                                        requireContext().getString(R.string.error_firebase_403),
+                                        LENGTH_INDEFINITE
                                     ).apply {
+                                        setAction(requireContext().getString(R.string.error_btn_confirm)) { dismiss() }
                                         show()
                                     }
                                 }
                                 it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
                                     snackbar = Snackbar.make(
                                         binding.root,
-                                        requireContext().getString(R.string.firebase_error_device_blocked),
-                                        LENGTH_LONG
+                                        requireContext().getString(R.string.error_firebase_device_blocked),
+                                        LENGTH_INDEFINITE
                                     ).apply {
+                                        setAction(requireContext().getString(R.string.error_btn_confirm)) { dismiss() }
                                         show()
                                     }
                                 }
@@ -301,7 +304,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                                     snackbar = Snackbar.make(
                                         binding.root,
                                         requireContext().getString(R.string.register_error_account_exists),
-                                        LENGTH_LONG
+                                        LENGTH_INDEFINITE
                                     ).apply {
                                         setAction(requireContext().getString(R.string.register_btn_login)) { requireActivity().onBackPressed() }
                                         show()
@@ -310,7 +313,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                                 else -> {
                                     snackbar = Snackbar.make(
                                         binding.root,
-                                        requireContext().getString(R.string.network_error_failure),
+                                        requireContext().getString(R.string.error_network_failure),
                                         LENGTH_LONG
                                     ).apply {
                                         show()

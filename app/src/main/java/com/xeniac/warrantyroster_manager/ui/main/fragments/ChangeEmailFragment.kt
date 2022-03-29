@@ -8,10 +8,10 @@ import android.view.View.VISIBLE
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_INDEFINITE
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
@@ -191,10 +191,10 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
                                     snackbar = Snackbar.make(
                                         binding.root,
-                                        requireContext().getString(R.string.network_error_connection),
-                                        LENGTH_LONG
+                                        requireContext().getString(R.string.error_network_connection),
+                                        LENGTH_INDEFINITE
                                     ).apply {
-                                        setAction(requireContext().getString(R.string.network_error_retry)) {
+                                        setAction(requireContext().getString(R.string.error_btn_retry)) {
                                             getChangeUserEmailInputs()
                                         }
                                         show()
@@ -203,18 +203,20 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
                                 it.contains(ERROR_NETWORK_403) -> {
                                     snackbar = Snackbar.make(
                                         binding.root,
-                                        requireContext().getString(R.string.network_error_403),
-                                        LENGTH_LONG
+                                        requireContext().getString(R.string.error_firebase_403),
+                                        LENGTH_INDEFINITE
                                     ).apply {
+                                        setAction(requireContext().getString(R.string.error_btn_confirm)) { dismiss() }
                                         show()
                                     }
                                 }
                                 it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
                                     snackbar = Snackbar.make(
                                         binding.root,
-                                        requireContext().getString(R.string.firebase_error_device_blocked),
-                                        LENGTH_LONG
+                                        requireContext().getString(R.string.error_firebase_device_blocked),
+                                        LENGTH_INDEFINITE
                                     ).apply {
+                                        setAction(requireContext().getString(R.string.error_btn_confirm)) { dismiss() }
                                         show()
                                     }
                                 }
@@ -230,7 +232,7 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
                                 else -> {
                                     snackbar = Snackbar.make(
                                         binding.root,
-                                        requireContext().getString(R.string.network_error_failure),
+                                        requireContext().getString(R.string.error_network_failure),
                                         LENGTH_LONG
                                     ).apply {
                                         show()
@@ -267,10 +269,10 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
                                     snackbar = Snackbar.make(
                                         binding.root,
-                                        requireContext().getString(R.string.network_error_connection),
-                                        LENGTH_LONG
+                                        requireContext().getString(R.string.error_network_connection),
+                                        LENGTH_INDEFINITE
                                     ).apply {
-                                        setAction(requireContext().getString(R.string.network_error_retry)) {
+                                        setAction(requireContext().getString(R.string.error_btn_retry)) {
                                             getChangeUserEmailInputs()
                                         }
                                         show()
@@ -279,18 +281,20 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
                                 it.contains(ERROR_NETWORK_403) -> {
                                     snackbar = Snackbar.make(
                                         binding.root,
-                                        requireContext().getString(R.string.network_error_403),
-                                        LENGTH_LONG
+                                        requireContext().getString(R.string.error_firebase_403),
+                                        LENGTH_INDEFINITE
                                     ).apply {
+                                        setAction(requireContext().getString(R.string.error_btn_confirm)) { dismiss() }
                                         show()
                                     }
                                 }
                                 it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
                                     snackbar = Snackbar.make(
                                         binding.root,
-                                        requireContext().getString(R.string.firebase_error_device_blocked),
-                                        LENGTH_LONG
+                                        requireContext().getString(R.string.error_firebase_device_blocked),
+                                        LENGTH_INDEFINITE
                                     ).apply {
+                                        setAction(requireContext().getString(R.string.error_btn_confirm)) { dismiss() }
                                         show()
                                     }
                                 }
@@ -298,15 +302,16 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
                                     snackbar = Snackbar.make(
                                         binding.root,
                                         requireContext().getString(R.string.change_email_error_email_exists),
-                                        LENGTH_LONG
+                                        LENGTH_INDEFINITE
                                     ).apply {
+                                        setAction(requireContext().getString(R.string.error_btn_confirm)) { dismiss() }
                                         show()
                                     }
                                 }
                                 else -> {
                                     snackbar = Snackbar.make(
                                         binding.root,
-                                        requireContext().getString(R.string.network_error_failure),
+                                        requireContext().getString(R.string.error_network_failure),
                                         LENGTH_LONG
                                     ).apply {
                                         show()

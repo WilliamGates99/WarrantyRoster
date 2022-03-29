@@ -21,6 +21,7 @@ import com.applovin.mediation.nativeAds.MaxNativeAdLoader
 import com.applovin.mediation.nativeAds.MaxNativeAdView
 import com.applovin.mediation.nativeAds.MaxNativeAdViewBinder
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_INDEFINITE
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
@@ -227,7 +228,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
                     startActivity(this)
                 } ?: Snackbar.make(
                     binding.root,
-                    requireContext().getString(R.string.intent_error_app_not_found),
+                    requireContext().getString(R.string.error_intent_app_not_found),
                     LENGTH_LONG
                 ).show()
             }
@@ -240,7 +241,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
                     startActivity(this)
                 } ?: Snackbar.make(
                     binding.root,
-                    requireContext().getString(R.string.intent_error_app_not_found),
+                    requireContext().getString(R.string.error_intent_app_not_found),
                     LENGTH_LONG
                 ).show()
             }
@@ -279,35 +280,37 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
                                     snackbar = Snackbar.make(
                                         binding.root,
-                                        requireContext().getString(R.string.network_error_connection),
-                                        LENGTH_LONG
+                                        requireContext().getString(R.string.error_network_connection),
+                                        LENGTH_INDEFINITE
                                     ).apply {
-                                        setAction(requireContext().getString(R.string.network_error_retry)) { sendVerificationEmail() }
+                                        setAction(requireContext().getString(R.string.error_btn_retry)) { sendVerificationEmail() }
                                         show()
                                     }
                                 }
                                 it.contains(ERROR_NETWORK_403) -> {
                                     snackbar = Snackbar.make(
                                         binding.root,
-                                        requireContext().getString(R.string.network_error_403),
-                                        LENGTH_LONG
+                                        requireContext().getString(R.string.error_firebase_403),
+                                        LENGTH_INDEFINITE
                                     ).apply {
+                                        setAction(requireContext().getString(R.string.error_btn_confirm)) { dismiss() }
                                         show()
                                     }
                                 }
                                 it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
                                     snackbar = Snackbar.make(
                                         binding.root,
-                                        requireContext().getString(R.string.firebase_error_device_blocked),
-                                        LENGTH_LONG
+                                        requireContext().getString(R.string.error_firebase_device_blocked),
+                                        LENGTH_INDEFINITE
                                     ).apply {
+                                        setAction(requireContext().getString(R.string.error_btn_confirm)) { dismiss() }
                                         show()
                                     }
                                 }
                                 else -> {
                                     snackbar = Snackbar.make(
                                         binding.root,
-                                        requireContext().getString(R.string.network_error_failure),
+                                        requireContext().getString(R.string.error_network_failure),
                                         LENGTH_LONG
                                     ).apply {
                                         show()

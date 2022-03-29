@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import coil.ImageLoader
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_INDEFINITE
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
@@ -275,28 +276,30 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
                                     snackbar = Snackbar.make(
                                         binding.root,
-                                        requireContext().getString(R.string.network_error_connection),
-                                        LENGTH_LONG
+                                        requireContext().getString(R.string.error_network_connection),
+                                        LENGTH_INDEFINITE
                                     ).apply {
-                                        setAction(requireContext().getString(R.string.network_error_retry)) { deleteWarrantyFromFirestore() }
+                                        setAction(requireContext().getString(R.string.error_btn_retry)) { deleteWarrantyFromFirestore() }
                                         show()
                                     }
                                 }
                                 it.contains(ERROR_NETWORK_403) -> {
                                     snackbar = Snackbar.make(
                                         binding.root,
-                                        requireContext().getString(R.string.network_error_403),
-                                        LENGTH_LONG
+                                        requireContext().getString(R.string.error_firebase_403),
+                                        LENGTH_INDEFINITE
                                     ).apply {
+                                        setAction(requireContext().getString(R.string.error_btn_confirm)) { dismiss() }
                                         show()
                                     }
                                 }
                                 it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
                                     snackbar = Snackbar.make(
                                         binding.root,
-                                        requireContext().getString(R.string.firebase_error_device_blocked),
-                                        LENGTH_LONG
+                                        requireContext().getString(R.string.error_firebase_device_blocked),
+                                        LENGTH_INDEFINITE
                                     ).apply {
+                                        setAction(requireContext().getString(R.string.error_btn_confirm)) { dismiss() }
                                         show()
                                     }
                                 }
@@ -304,7 +307,7 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
                                     hideLoadingAnimation()
                                     snackbar = Snackbar.make(
                                         binding.root,
-                                        requireContext().getString(R.string.network_error_failure),
+                                        requireContext().getString(R.string.error_network_failure),
                                         LENGTH_LONG
                                     ).apply {
                                         show()

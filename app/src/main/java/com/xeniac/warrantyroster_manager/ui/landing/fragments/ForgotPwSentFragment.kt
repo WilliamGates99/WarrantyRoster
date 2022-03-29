@@ -8,6 +8,7 @@ import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_INDEFINITE
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
@@ -92,10 +93,30 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
                                     snackbar = Snackbar.make(
                                         binding.root,
-                                        requireContext().getString(R.string.network_error_connection),
-                                        LENGTH_LONG
+                                        requireContext().getString(R.string.error_network_connection),
+                                        LENGTH_INDEFINITE
                                     ).apply {
-                                        setAction(requireContext().getString(R.string.network_error_retry)) { resendResetPasswordEmail() }
+                                        setAction(requireContext().getString(R.string.error_btn_retry)) { resendResetPasswordEmail() }
+                                        show()
+                                    }
+                                }
+                                it.contains(ERROR_NETWORK_403) -> {
+                                    snackbar = Snackbar.make(
+                                        binding.root,
+                                        requireContext().getString(R.string.error_firebase_403),
+                                        LENGTH_INDEFINITE
+                                    ).apply {
+                                        setAction(requireContext().getString(R.string.error_btn_confirm)) { dismiss() }
+                                        show()
+                                    }
+                                }
+                                it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
+                                    snackbar = Snackbar.make(
+                                        binding.root,
+                                        requireContext().getString(R.string.error_firebase_device_blocked),
+                                        LENGTH_INDEFINITE
+                                    ).apply {
+                                        setAction(requireContext().getString(R.string.error_btn_confirm)) { dismiss() }
                                         show()
                                     }
                                 }
@@ -125,28 +146,10 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
                                         }
                                     }
                                 }
-                                it.contains(ERROR_NETWORK_403) -> {
-                                    snackbar = Snackbar.make(
-                                        binding.root,
-                                        requireContext().getString(R.string.network_error_403),
-                                        LENGTH_LONG
-                                    ).apply {
-                                        show()
-                                    }
-                                }
-                                it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
-                                    snackbar = Snackbar.make(
-                                        binding.root,
-                                        requireContext().getString(R.string.firebase_error_device_blocked),
-                                        LENGTH_LONG
-                                    ).apply {
-                                        show()
-                                    }
-                                }
                                 else -> {
                                     snackbar = Snackbar.make(
                                         binding.root,
-                                        requireContext().getString(R.string.network_error_failure),
+                                        requireContext().getString(R.string.error_network_failure),
                                         LENGTH_LONG
                                     ).apply {
                                         show()

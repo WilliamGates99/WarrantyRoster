@@ -7,7 +7,7 @@ import android.view.View.VISIBLE
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.snackbar.BaseTransientBottomBar
+import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_INDEFINITE
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.ui.main.adapters.WarrantyAdapter
@@ -76,21 +76,22 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
                                 }
                                 it.contains(ERROR_NETWORK_403) -> {
                                     binding.tvNetworkError.text =
-                                        requireContext().getString(R.string.network_error_403)
+                                        requireContext().getString(R.string.error_firebase_403)
                                     showNetworkError()
                                 }
                                 it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
                                     snackbar = Snackbar.make(
                                         binding.root,
-                                        requireContext().getString(R.string.firebase_error_device_blocked),
-                                        BaseTransientBottomBar.LENGTH_LONG
+                                        requireContext().getString(R.string.error_firebase_device_blocked),
+                                        LENGTH_INDEFINITE
                                     ).apply {
+                                        setAction(requireContext().getString(R.string.error_btn_confirm)) { dismiss() }
                                         show()
                                     }
                                 }
                                 else -> {
                                     binding.tvNetworkError.text =
-                                        requireContext().getString(R.string.network_error_connection)
+                                        requireContext().getString(R.string.error_network_connection)
                                     showNetworkError()
                                 }
                             }
@@ -121,21 +122,22 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
                                 }
                                 it.contains(ERROR_NETWORK_403) -> {
                                     binding.tvNetworkError.text =
-                                        requireContext().getString(R.string.network_error_403)
+                                        requireContext().getString(R.string.error_firebase_403)
                                     showNetworkError()
                                 }
                                 it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
                                     snackbar = Snackbar.make(
                                         binding.root,
-                                        requireContext().getString(R.string.firebase_error_device_blocked),
-                                        BaseTransientBottomBar.LENGTH_LONG
+                                        requireContext().getString(R.string.error_firebase_device_blocked),
+                                        LENGTH_INDEFINITE
                                     ).apply {
+                                        setAction(requireContext().getString(R.string.error_btn_confirm)) { dismiss() }
                                         show()
                                     }
                                 }
                                 else -> {
                                     binding.tvNetworkError.text =
-                                        requireContext().getString(R.string.network_error_connection)
+                                        requireContext().getString(R.string.error_network_connection)
                                     showNetworkError()
                                 }
                             }
