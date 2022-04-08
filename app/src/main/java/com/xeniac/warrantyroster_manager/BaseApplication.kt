@@ -6,10 +6,10 @@ import com.applovin.sdk.AppLovinPrivacySettings
 import com.applovin.sdk.AppLovinSdk
 import com.google.firebase.FirebaseApp
 import com.google.firebase.appcheck.FirebaseAppCheck
+import com.google.firebase.appcheck.debug.DebugAppCheckProviderFactory
 import com.google.firebase.appcheck.safetynet.SafetyNetAppCheckProviderFactory
 import com.xeniac.warrantyroster_manager.di.CurrentCountry
 import com.xeniac.warrantyroster_manager.di.CurrentLanguage
-import com.xeniac.warrantyroster_manager.utils.Constants.TAPSELL_KEY
 import dagger.hilt.android.HiltAndroidApp
 import ir.tapsell.plus.TapsellPlus
 import ir.tapsell.plus.TapsellPlusInitListener
@@ -51,7 +51,7 @@ class BaseApplication : Application() {
         firebaseAppCheck.installAppCheckProviderFactory(SafetyNetAppCheckProviderFactory.getInstance())
 
         //TODO COMMENT FOR RELEASE
-//        firebaseAppCheck.installAppCheckProviderFactory(DebugAppCheckProviderFactory.getInstance())
+        firebaseAppCheck.installAppCheckProviderFactory(DebugAppCheckProviderFactory.getInstance())
     }
 
     private fun setNightMode() {
@@ -81,7 +81,7 @@ class BaseApplication : Application() {
     @Suppress("SpellCheckingInspection")
     private fun initTapsell() {
         TapsellPlus.initialize(
-            this, TAPSELL_KEY, object : TapsellPlusInitListener {
+            this, BuildConfig.TAPSELL_KEY, object : TapsellPlusInitListener {
                 override fun onInitializeSuccess(adNetworks: AdNetworks?) {
                     Timber.i("onInitializeSuccess: ${adNetworks?.name}")
                 }

@@ -23,17 +23,16 @@ import com.applovin.mediation.nativeAds.MaxNativeAdViewBinder
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
 import com.google.android.material.snackbar.Snackbar
+import com.xeniac.warrantyroster_manager.BuildConfig
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentSettingsBinding
 import com.xeniac.warrantyroster_manager.di.CurrentCountry
 import com.xeniac.warrantyroster_manager.di.CurrentLanguage
 import com.xeniac.warrantyroster_manager.ui.landing.LandingActivity
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.SettingsViewModel
-import com.xeniac.warrantyroster_manager.utils.Constants.APPLOVIN_SETTINGS_NATIVE_UNIT_ID
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
-import com.xeniac.warrantyroster_manager.utils.Constants.TAPSELL_SETTINGS_NATIVE_ZONE_ID
 import com.xeniac.warrantyroster_manager.utils.Constants.URL_DONATE
 import com.xeniac.warrantyroster_manager.utils.Constants.URL_PRIVACY_POLICY
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.show403Error
@@ -335,7 +334,10 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
     private fun requestAppLovinNativeAd() {
         appLovinNativeAdContainer = binding.flAdContainerNative
         appLovinAdLoader =
-            MaxNativeAdLoader(APPLOVIN_SETTINGS_NATIVE_UNIT_ID, requireContext()).apply {
+            MaxNativeAdLoader(
+                BuildConfig.APPLOVIN_SETTINGS_NATIVE_UNIT_ID,
+                requireContext()
+            ).apply {
                 setRevenueListener(this@SettingsFragment)
                 setNativeAdListener(AppLovinNativeAdListener())
                 loadAd(createNativeAdView())
@@ -401,7 +403,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
     private fun requestTapsellNativeAd(adHolder: AdHolder) {
         _binding?.let {
             TapsellPlus.requestNativeAd(requireActivity(),
-                TAPSELL_SETTINGS_NATIVE_ZONE_ID, object : AdRequestCallback() {
+                BuildConfig.TAPSELL_SETTINGS_NATIVE_ZONE_ID, object : AdRequestCallback() {
                     override fun response(tapsellPlusAdModel: TapsellPlusAdModel?) {
                         super.response(tapsellPlusAdModel)
                         Timber.i("requestTapsellNativeAd onResponse")

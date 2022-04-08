@@ -26,6 +26,14 @@ android {
         versionCode 9
         versionName "1.3.3"
 
+        buildConfigField("String", "APPLOVIN_INTERSTITIAL_UNIT_ID", APPLOVIN_INTERSTITIAL_UNIT_ID)
+        buildConfigField("String", "APPLOVIN_SETTINGS_NATIVE_UNIT_ID", APPLOVIN_SETTINGS_NATIVE_UNIT_ID)
+        buildConfigField("String", "APPLOVIN_WARRANTIES_NATIVE_UNIT_ID", APPLOVIN_WARRANTIES_NATIVE_UNIT_ID)
+        buildConfigField("String", "TAPSELL_KEY", TAPSELL_KEY)
+        buildConfigField("String", "TAPSELL_INTERSTITIAL_ZONE_ID", TAPSELL_INTERSTITIAL_ZONE_ID)
+        buildConfigField("String", "TAPSELL_WARRANTIES_NATIVE_ZONE_ID", TAPSELL_WARRANTIES_NATIVE_ZONE_ID)
+        buildConfigField("String", "TAPSELL_SETTINGS_NATIVE_ZONE_ID", TAPSELL_SETTINGS_NATIVE_ZONE_ID)
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 

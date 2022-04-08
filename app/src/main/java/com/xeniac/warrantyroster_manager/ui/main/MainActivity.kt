@@ -13,10 +13,9 @@ import com.applovin.mediation.MaxError
 import com.applovin.mediation.ads.MaxInterstitialAd
 import com.google.android.material.shape.CornerFamily.ROUNDED
 import com.google.android.material.shape.MaterialShapeDrawable
+import com.xeniac.warrantyroster_manager.BuildConfig
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.ActivityMainBinding
-import com.xeniac.warrantyroster_manager.utils.Constants.APPLOVIN_INTERSTITIAL_UNIT_ID
-import com.xeniac.warrantyroster_manager.utils.Constants.TAPSELL_INTERSTITIAL_ZONE_ID
 import com.xeniac.warrantyroster_manager.utils.LocaleModifier
 import dagger.hilt.android.AndroidEntryPoint
 import ir.tapsell.plus.AdRequestCallback
@@ -102,7 +101,7 @@ class MainActivity : AppCompatActivity(), MaxAdListener {
     }
 
     fun requestAppLovinInterstitial() {
-        appLovinAd = MaxInterstitialAd(APPLOVIN_INTERSTITIAL_UNIT_ID, this).apply {
+        appLovinAd = MaxInterstitialAd(BuildConfig.APPLOVIN_INTERSTITIAL_UNIT_ID, this).apply {
             setListener(this@MainActivity)
             loadAd()
         }
@@ -143,7 +142,7 @@ class MainActivity : AppCompatActivity(), MaxAdListener {
 
     private fun requestTapsellInterstitial() {
         TapsellPlus.requestInterstitialAd(this,
-            TAPSELL_INTERSTITIAL_ZONE_ID, object : AdRequestCallback() {
+            BuildConfig.TAPSELL_INTERSTITIAL_ZONE_ID, object : AdRequestCallback() {
                 override fun response(tapsellPlusAdModel: TapsellPlusAdModel?) {
                     super.response(tapsellPlusAdModel)
                     Timber.i("requestTapsellInterstitial onResponse")

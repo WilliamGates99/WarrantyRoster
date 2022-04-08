@@ -17,6 +17,7 @@ import com.applovin.mediation.nativeAds.MaxNativeAdListener
 import com.applovin.mediation.nativeAds.MaxNativeAdLoader
 import com.applovin.mediation.nativeAds.MaxNativeAdView
 import com.applovin.mediation.nativeAds.MaxNativeAdViewBinder
+import com.xeniac.warrantyroster_manager.BuildConfig
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.AdContainerListBinding
 import com.xeniac.warrantyroster_manager.databinding.ListItemWarrantyBinding
@@ -25,10 +26,8 @@ import com.xeniac.warrantyroster_manager.data.remote.models.ListItemType
 import com.xeniac.warrantyroster_manager.data.remote.models.Warranty
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModel
 import com.xeniac.warrantyroster_manager.utils.CoilHelper.loadCategoryImage
-import com.xeniac.warrantyroster_manager.utils.Constants.APPLOVIN_WARRANTIES_NATIVE_UNIT_ID
 import com.xeniac.warrantyroster_manager.utils.Constants.VIEW_TYPE_AD
 import com.xeniac.warrantyroster_manager.utils.Constants.VIEW_TYPE_WARRANTY
-import com.xeniac.warrantyroster_manager.utils.Constants.TAPSELL_WARRANTIES_NATIVE_ZONE_ID
 import com.xeniac.warrantyroster_manager.utils.DateHelper.getDayWithSuffix
 import com.xeniac.warrantyroster_manager.utils.DateHelper.getDaysUntilExpiry
 import dagger.hilt.EntryPoint
@@ -208,7 +207,7 @@ class WarrantyAdapter(
         private fun requestAppLovinNativeAd() {
             appLovinNativeAdContainer = binding.cvAdContainer
             appLovinAdLoader =
-                MaxNativeAdLoader(APPLOVIN_WARRANTIES_NATIVE_UNIT_ID, context).apply {
+                MaxNativeAdLoader(BuildConfig.APPLOVIN_WARRANTIES_NATIVE_UNIT_ID, context).apply {
                     setRevenueListener(this@AdViewHolder)
                     setNativeAdListener(AppLovinNativeAdListener())
                     loadAd(createNativeAdView())
@@ -269,7 +268,7 @@ class WarrantyAdapter(
         }
 
         private fun requestTapsellNativeAd(adHolder: AdHolder) {
-            TapsellPlus.requestNativeAd(activity, TAPSELL_WARRANTIES_NATIVE_ZONE_ID,
+            TapsellPlus.requestNativeAd(activity, BuildConfig.TAPSELL_WARRANTIES_NATIVE_ZONE_ID,
                 object : AdRequestCallback() {
                     override fun response(tapsellPlusAdModel: TapsellPlusAdModel?) {
                         super.response(tapsellPlusAdModel)

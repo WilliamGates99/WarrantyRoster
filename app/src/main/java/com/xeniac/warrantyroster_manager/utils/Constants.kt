@@ -6,18 +6,6 @@ object Constants {
     const val URL_PRIVACY_POLICY = "https://warranty-roster.herokuapp.com/privacy-policy"
     const val URL_DONATE = "https://bio.link/WarrantyRoster"
 
-    // AppLovin Constants
-    const val APPLOVIN_INTERSTITIAL_UNIT_ID = "c9d93a2239fc9743"
-    const val APPLOVIN_SETTINGS_NATIVE_UNIT_ID = "a9fa57c943b79d48"
-    const val APPLOVIN_WARRANTIES_NATIVE_UNIT_ID = "f7095c429a9d7575"
-
-    // Tapsell Constants
-    const val TAPSELL_KEY =
-        "phbftfiakptpjbkegafmqmmkdsjcjmkldcahhapfssfftdnbgpqeimkjiitfpcoingqkad"
-    const val TAPSELL_INTERSTITIAL_ZONE_ID = "616476f7b2c8056d868b66cb"
-    const val TAPSELL_WARRANTIES_NATIVE_ZONE_ID = "61647159b2c8056d868b66c6"
-    const val TAPSELL_SETTINGS_NATIVE_ZONE_ID = "616b0d4cb2c8056d868b6a1a"
-
     // SharedPreference Settings Constants
     const val PREFERENCE_SETTINGS = "preference_settings"
     const val PREFERENCE_THEME_KEY = "theme"
