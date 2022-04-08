@@ -8,10 +8,15 @@ import coil.decode.SvgDecoder
 import coil.disk.DiskCache
 import coil.memory.MemoryCache
 import coil.util.DebugLogger
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.xeniac.warrantyroster_manager.BuildConfig
 import com.xeniac.warrantyroster_manager.repositories.MainRepository
 import com.xeniac.warrantyroster_manager.repositories.UserRepository
-import com.xeniac.warrantyroster_manager.utils.Constants
+import com.xeniac.warrantyroster_manager.utils.Constants.COLLECTION_CATEGORIES
+import com.xeniac.warrantyroster_manager.utils.Constants.COLLECTION_WARRANTIES
 import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_IS_LOGGED_IN_KEY
 import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_LOGIN
 import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_SETTINGS
@@ -31,6 +36,22 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
+
+    @Singleton
+    @Provides
+    fun provideFirebaseAuthInstance(): FirebaseAuth = FirebaseAuth.getInstance()
+
+    @CategoriesCollection
+    @Singleton
+    @Provides
+    fun provideFirestoreCategoriesCollectionRef(): CollectionReference =
+        Firebase.firestore.collection(COLLECTION_CATEGORIES)
+
+    @WarrantiesCollection
+    @Singleton
+    @Provides
+    fun provideFirestoreWarrantiesCollectionRef(): CollectionReference =
+        Firebase.firestore.collection(COLLECTION_WARRANTIES)
 
     @Singleton
     @Provides
@@ -60,17 +81,17 @@ object AppModule {
     @Singleton //TODO REMOVE AFTER ADDING PERSIAN
     @Provides
     fun provideCurrentLanguage(@SettingsPrefs settingsPrefs: SharedPreferences) =
-        settingsPrefs.getString(Constants.PREFERENCE_LANGUAGE_KEY, "en") ?: "en"
+        settingsPrefs.getString(PREFERENCE_LANGUAGE_KEY, "en") ?: "en"
 
     @CurrentCountry
     @Singleton //TODO REMOVE AFTER ADDING PERSIAN
     @Provides
     fun provideCurrentCountry(@SettingsPrefs settingsPrefs: SharedPreferences) =
-        settingsPrefs.getString(Constants.PREFERENCE_COUNTRY_KEY, "US") ?: "US"
+        settingsPrefs.getString(PREFERENCE_COUNTRY_KEY, "US") ?: "US"
 
     @Provides
     fun provideCurrentTheme(@SettingsPrefs settingsPrefs: SharedPreferences) =
-        settingsPrefs.getInt(Constants.PREFERENCE_THEME_KEY, 0)
+        settingsPrefs.getInt(PREFERENCE_THEME_KEY, 0)
 
     @Singleton
     @Provides
@@ -114,6 +135,14 @@ object AppModule {
         @CurrentCountry currentCountry: String
     ) = "${currentLanguage}-${currentCountry}"
 }
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class CategoriesCollection
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class WarrantiesCollection
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
