@@ -21,8 +21,8 @@ import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.AdContainerListBinding
 import com.xeniac.warrantyroster_manager.databinding.ListItemWarrantyBinding
 import com.xeniac.warrantyroster_manager.di.CategoryTitleMapKey
-import com.xeniac.warrantyroster_manager.models.ListItemType
-import com.xeniac.warrantyroster_manager.models.Warranty
+import com.xeniac.warrantyroster_manager.data.remote.models.ListItemType
+import com.xeniac.warrantyroster_manager.data.remote.models.Warranty
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModel
 import com.xeniac.warrantyroster_manager.utils.CoilHelper.loadCategoryImage
 import com.xeniac.warrantyroster_manager.utils.Constants.APPLOVIN_WARRANTIES_NATIVE_UNIT_ID
