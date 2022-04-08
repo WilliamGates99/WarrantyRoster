@@ -15,7 +15,6 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentForgotPwBinding
-import com.xeniac.warrantyroster_manager.models.Resource
 import com.xeniac.warrantyroster_manager.ui.landing.LandingViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_ACCOUNT_NOT_FOUND
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
@@ -29,6 +28,7 @@ import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseDevice
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkConnectionError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkFailureError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showTimerIsNotZeroError
+import com.xeniac.warrantyroster_manager.utils.Status
 import com.xeniac.warrantyroster_manager.utils.UserHelper.isEmailValid
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -141,9 +141,9 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
     private fun forgotPwObserver() =
         viewModel.forgotPwLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
-                when (response) {
-                    is Resource.Loading -> showLoadingAnimation()
-                    is Resource.Success -> {
+                when (response.status) {
+                    Status.LOADING -> showLoadingAnimation()
+                    Status.SUCCESS -> {
                         hideLoadingAnimation()
                         response.data?.let { email ->
                             val action = ForgotPwFragmentDirections
@@ -151,7 +151,7 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
                             findNavController().navigate(action)
                         }
                     }
-                    is Resource.Error -> {
+                    Status.ERROR -> {
                         hideLoadingAnimation()
                         response.message?.let {
                             snackbar = when {

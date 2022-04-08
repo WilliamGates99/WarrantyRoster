@@ -15,7 +15,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentChangePasswordBinding
-import com.xeniac.warrantyroster_manager.models.Resource
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.SettingsViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_CREDENTIALS
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
@@ -29,6 +28,7 @@ import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseAuthCr
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseDeviceBlockedError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkConnectionError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkFailureError
+import com.xeniac.warrantyroster_manager.utils.Status
 import com.xeniac.warrantyroster_manager.utils.UserHelper.isRetypePasswordValid
 import com.xeniac.warrantyroster_manager.utils.UserHelper.passwordStrength
 import dagger.hilt.android.AndroidEntryPoint
@@ -245,10 +245,10 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
     private fun reAuthenticateUserObserver() =
         viewModel.reAuthenticateUserLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
-                when (response) {
-                    is Resource.Loading -> showLoadingAnimation()
-                    is Resource.Success -> changeUserPassword()
-                    is Resource.Error -> {
+                when (response.status) {
+                    Status.LOADING -> showLoadingAnimation()
+                    Status.SUCCESS -> changeUserPassword()
+                    Status.ERROR -> {
                         hideLoadingAnimation()
                         response.message?.let {
                             snackbar = when {
@@ -284,9 +284,9 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
     private fun changeUserPasswordObserver() =
         viewModel.changeUserPasswordLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
-                when (response) {
-                    is Resource.Loading -> showLoadingAnimation()
-                    is Resource.Success -> {
+                when (response.status) {
+                    Status.LOADING -> showLoadingAnimation()
+                    Status.SUCCESS -> {
                         hideLoadingAnimation()
                         MaterialAlertDialogBuilder(requireContext()).apply {
                             setMessage(requireContext().getString(R.string.change_password_dialog_message))
@@ -296,7 +296,7 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
                             show()
                         }
                     }
-                    is Resource.Error -> {
+                    Status.ERROR -> {
                         hideLoadingAnimation()
                         response.message?.let {
                             snackbar = when {

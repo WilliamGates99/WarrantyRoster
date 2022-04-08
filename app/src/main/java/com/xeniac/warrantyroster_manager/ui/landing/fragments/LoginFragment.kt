@@ -16,7 +16,6 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentLoginBinding
-import com.xeniac.warrantyroster_manager.models.Resource
 import com.xeniac.warrantyroster_manager.ui.landing.LandingViewModel
 import com.xeniac.warrantyroster_manager.ui.main.MainActivity
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_ACCOUNT_NOT_FOUND
@@ -32,6 +31,7 @@ import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseAuthAc
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseAuthCredentialsError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkConnectionError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkFailureError
+import com.xeniac.warrantyroster_manager.utils.Status
 import com.xeniac.warrantyroster_manager.utils.UserHelper.isEmailValid
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -185,16 +185,16 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     private fun loginObserver() =
         viewModel.loginLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
-                when (response) {
-                    is Resource.Loading -> showLoadingAnimation()
-                    is Resource.Success -> {
+                when (response.status) {
+                    Status.LOADING -> showLoadingAnimation()
+                    Status.SUCCESS -> {
                         hideLoadingAnimation()
                         Intent(requireContext(), MainActivity::class.java).apply {
                             startActivity(this)
                             requireActivity().finish()
                         }
                     }
-                    is Resource.Error -> {
+                    Status.ERROR -> {
                         hideLoadingAnimation()
                         response.message?.let {
                             snackbar = when {

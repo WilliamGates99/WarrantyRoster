@@ -22,7 +22,7 @@ import com.google.firebase.ktx.Firebase
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentEditWarrantyBinding
 import com.xeniac.warrantyroster_manager.di.CategoryTitleMapKey
-import com.xeniac.warrantyroster_manager.models.*
+import com.xeniac.warrantyroster_manager.data.remote.models.*
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModel
 import com.xeniac.warrantyroster_manager.utils.CoilHelper.loadCategoryImage
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
@@ -45,6 +45,7 @@ import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.show403Error
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseDeviceBlockedError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkConnectionError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkFailureError
+import com.xeniac.warrantyroster_manager.utils.Status
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
@@ -594,10 +595,10 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
     private fun updateWarrantyObserver() =
         viewModel.updateWarrantyLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
-                when (response) {
-                    is Resource.Loading -> showLoadingAnimation()
-                    is Resource.Success -> getUpdatedWarrantyFromFirestore()
-                    is Resource.Error -> {
+                when (response.status) {
+                    Status.LOADING -> showLoadingAnimation()
+                    Status.SUCCESS -> getUpdatedWarrantyFromFirestore()
+                    Status.ERROR -> {
                         hideLoadingAnimation()
                         response.message?.let {
                             snackbar = when {
@@ -628,9 +629,9 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
     private fun getUpdatedWarrantyObserver() =
         viewModel.updatedWarrantyLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
-                when (response) {
-                    is Resource.Loading -> showLoadingAnimation()
-                    is Resource.Success -> {
+                when (response.status) {
+                    Status.LOADING -> showLoadingAnimation()
+                    Status.SUCCESS -> {
                         hideLoadingAnimation()
                         response.data?.let { updatedWarranty ->
                             val action = EditWarrantyFragmentDirections
@@ -638,7 +639,7 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
                             findNavController().navigate(action)
                         }
                     }
-                    is Resource.Error -> {
+                    Status.ERROR -> {
                         hideLoadingAnimation()
                         response.message?.let {
                             snackbar = when {

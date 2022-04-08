@@ -22,9 +22,8 @@ import com.google.firebase.ktx.Firebase
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentAddWarrantyBinding
 import com.xeniac.warrantyroster_manager.di.CategoryTitleMapKey
-import com.xeniac.warrantyroster_manager.models.Category
-import com.xeniac.warrantyroster_manager.models.Resource
-import com.xeniac.warrantyroster_manager.models.WarrantyInput
+import com.xeniac.warrantyroster_manager.data.remote.models.Category
+import com.xeniac.warrantyroster_manager.data.remote.models.WarrantyInput
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModel
 import com.xeniac.warrantyroster_manager.utils.CoilHelper.loadCategoryImage
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
@@ -46,6 +45,7 @@ import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.show403Error
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseDeviceBlockedError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkConnectionError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkFailureError
+import com.xeniac.warrantyroster_manager.utils.Status
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.DecimalFormat
 import java.util.*
@@ -497,13 +497,13 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
     private fun addWarrantyObserver() =
         viewModel.addWarrantyLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
-                when (response) {
-                    is Resource.Loading -> showLoadingAnimation()
-                    is Resource.Success -> {
+                when (response.status) {
+                    Status.LOADING -> showLoadingAnimation()
+                    Status.SUCCESS -> {
                         hideLoadingAnimation()
                         findNavController().navigate(R.id.action_addWarrantyFragment_to_warrantiesFragment)
                     }
-                    is Resource.Error -> {
+                    Status.ERROR -> {
                         hideLoadingAnimation()
                         response.message?.let {
                             snackbar = when {

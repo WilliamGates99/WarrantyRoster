@@ -27,7 +27,6 @@ import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentSettingsBinding
 import com.xeniac.warrantyroster_manager.di.CurrentCountry
 import com.xeniac.warrantyroster_manager.di.CurrentLanguage
-import com.xeniac.warrantyroster_manager.models.Resource
 import com.xeniac.warrantyroster_manager.ui.landing.LandingActivity
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.SettingsViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.APPLOVIN_SETTINGS_NATIVE_UNIT_ID
@@ -41,6 +40,7 @@ import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.show403Error
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseDeviceBlockedError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkConnectionError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkFailureError
+import com.xeniac.warrantyroster_manager.utils.Status
 import dagger.hilt.android.AndroidEntryPoint
 import ir.tapsell.plus.*
 import ir.tapsell.plus.model.TapsellPlusAdModel
@@ -108,14 +108,14 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
     private fun accountDetailsObserver() =
         viewModel.accountDetailsLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
-                when (response) {
-                    is Resource.Success -> {
+                when (response.status) {
+                    Status.SUCCESS -> {
                         response.data?.let { user ->
                             setAccountDetails(user.email.toString(), user.isEmailVerified)
                         }
                     }
-                    is Resource.Error -> Unit
-                    is Resource.Loading -> Unit
+                    Status.ERROR -> Unit
+                    Status.LOADING -> Unit
                 }
             }
         }
@@ -266,9 +266,9 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
     private fun sendVerificationEmailObserver() =
         viewModel.sendVerificationEmailLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
-                when (response) {
-                    is Resource.Loading -> showLoadingAnimation()
-                    is Resource.Success -> {
+                when (response.status) {
+                    Status.LOADING -> showLoadingAnimation()
+                    Status.SUCCESS -> {
                         hideLoadingAnimation()
                         MaterialAlertDialogBuilder(requireContext()).apply {
                             setMessage(requireContext().getString(R.string.settings_dialog_message))
@@ -276,7 +276,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
                             setPositiveButton(requireContext().getString(R.string.settings_dialog_positive)) { _, _ -> }
                         }.show()
                     }
-                    is Resource.Error -> {
+                    Status.ERROR -> {
                         hideLoadingAnimation()
                         response.message?.let {
                             snackbar = when {
@@ -306,15 +306,15 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
     private fun logoutObserver() =
         viewModel.logoutLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
-                when (response) {
-                    is Resource.Success -> {
+                when (response.status) {
+                    Status.SUCCESS -> {
                         startActivity(Intent(requireContext(), LandingActivity::class.java))
                         requireActivity().finish()
                     }
-                    is Resource.Error -> {
+                    Status.ERROR -> {
                         /* NO-OP */
                     }
-                    is Resource.Loading -> {
+                    Status.LOADING -> {
                         /* NO-OP */
                     }
                 }

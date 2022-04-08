@@ -12,14 +12,14 @@ import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.ui.main.adapters.WarrantyAdapter
 import com.xeniac.warrantyroster_manager.ui.main.adapters.WarrantyListClickInterface
 import com.xeniac.warrantyroster_manager.databinding.FragmentWarrantiesBinding
-import com.xeniac.warrantyroster_manager.models.Resource
-import com.xeniac.warrantyroster_manager.models.Warranty
+import com.xeniac.warrantyroster_manager.data.remote.models.Warranty
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_EMPTY_CATEGORY_LIST
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_EMPTY_WARRANTY_LIST
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseDeviceBlockedError
+import com.xeniac.warrantyroster_manager.utils.Status
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -65,10 +65,10 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
     private fun categoriesListObserver() {
         viewModel.categoriesLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.peekContent().let { response ->
-                when (response) {
-                    is Resource.Loading -> showLoadingAnimation()
-                    is Resource.Success -> getWarrantiesListFromFirestore()
-                    is Resource.Error -> {
+                when (response.status) {
+                    Status.LOADING -> showLoadingAnimation()
+                    Status.SUCCESS -> getWarrantiesListFromFirestore()
+                    Status.ERROR -> {
                         response.message?.let {
                             when {
                                 it.contains(ERROR_EMPTY_CATEGORY_LIST) -> {
@@ -81,7 +81,8 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
                                 }
                                 it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
                                     snackbar = showFirebaseDeviceBlockedError(
-                                        requireContext(), binding.root)
+                                        requireContext(), binding.root
+                                    )
                                 }
                                 else -> {
                                     binding.tvNetworkError.text =
@@ -99,15 +100,15 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
     private fun warrantiesListObserver() {
         viewModel.warrantiesLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
-                when (response) {
-                    is Resource.Loading -> showLoadingAnimation()
-                    is Resource.Success -> {
+                when (response.status) {
+                    Status.LOADING -> showLoadingAnimation()
+                    Status.SUCCESS -> {
                         hideLoadingAnimation()
                         response.data?.let { warrantiesList ->
                             showWarrantiesList(warrantiesList)
                         }
                     }
-                    is Resource.Error -> {
+                    Status.ERROR -> {
                         hideLoadingAnimation()
                         response.message?.let {
                             when {
