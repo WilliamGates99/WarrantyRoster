@@ -31,7 +31,6 @@
         app:lottie_rawRes="@raw/anim_keyboard" />
 
     <ScrollView
-        android:id="@+id/sv"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
