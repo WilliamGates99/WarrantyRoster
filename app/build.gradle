@@ -56,7 +56,7 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'com.google.android.material:material:1.5.0'
-    implementation 'androidx.core:core-splashscreen:1.0.0-beta01'
+    implementation 'androidx.core:core-splashscreen:1.0.0-beta02'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
@@ -73,23 +73,23 @@ dependencies {
     implementation 'androidx.activity:activity-ktx:1.4.0'
 
     // Coroutines
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1-native-mt'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1-native-mt'
 
     // Coroutines for Firebase
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.1-native-mt'
 
     // Navigation Component
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.4.1'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.4.1'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.4.2'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.4.2'
 
     // Firebase BoM and Analytics
-    implementation platform('com.google.firebase:firebase-bom:29.2.1')
+    implementation platform('com.google.firebase:firebase-bom:29.3.0')
     implementation 'com.google.firebase:firebase-analytics-ktx'
 
     // Firebase App Check TODO USE BoM AFTER RELEASE OF THE STABLE VERSION
-    implementation 'com.google.firebase:firebase-appcheck-safetynet:16.0.0-beta04'
-    implementation 'com.google.firebase:firebase-appcheck-debug:16.0.0-beta04'
+    implementation 'com.google.firebase:firebase-appcheck-safetynet:16.0.0-beta05'
+    implementation 'com.google.firebase:firebase-appcheck-debug:16.0.0-beta05'
 
     // Firebase Release & Monitor
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
@@ -111,8 +111,8 @@ dependencies {
     implementation 'io.coil-kt:coil-svg:2.0.0-rc02'
 
     // Ad Services Libraries
-    implementation 'ir.tapsell.plus:tapsell-plus-sdk-android:2.1.6'
-    implementation 'com.applovin:applovin-sdk:11.3.1'
+    implementation 'ir.tapsell.plus:tapsell-plus-sdk-android:2.1.7'
+    implementation 'com.applovin:applovin-sdk:11.3.3'
     implementation 'com.google.android.gms:play-services-ads:20.6.0'
     implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'
 
