@@ -311,8 +311,12 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
                         startActivity(Intent(requireContext(), LandingActivity::class.java))
                         requireActivity().finish()
                     }
-                    is Resource.Error -> Unit
-                    is Resource.Loading -> Unit
+                    is Resource.Error -> {
+                        /* NO-OP */
+                    }
+                    is Resource.Loading -> {
+                        /* NO-OP */
+                    }
                 }
             }
         }
