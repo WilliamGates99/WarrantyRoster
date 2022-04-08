@@ -20,6 +20,9 @@ import com.xeniac.warrantyroster_manager.utils.Constants.COLLECTION_WARRANTIES
 import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_IS_LOGGED_IN_KEY
 import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_LOGIN
 import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_SETTINGS
+import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_LANGUAGE_KEY
+import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_COUNTRY_KEY
+import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_THEME_KEY
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -39,27 +42,31 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideFirebaseAuthInstance(): FirebaseAuth = FirebaseAuth.getInstance()
+    fun provideFirebaseAuthInstance() = FirebaseAuth.getInstance()
 
     @CategoriesCollection
     @Singleton
     @Provides
-    fun provideFirestoreCategoriesCollectionRef(): CollectionReference =
+    fun provideFirestoreCategoriesCollectionRef() =
         Firebase.firestore.collection(COLLECTION_CATEGORIES)
 
     @WarrantiesCollection
     @Singleton
     @Provides
-    fun provideFirestoreWarrantiesCollectionRef(): CollectionReference =
+    fun provideFirestoreWarrantiesCollectionRef() =
         Firebase.firestore.collection(COLLECTION_WARRANTIES)
 
     @Singleton
     @Provides
-    fun provideUserRepository() = UserRepository()
+    fun provideUserRepository(firebaseAuth: FirebaseAuth) = UserRepository(firebaseAuth)
 
     @Singleton
     @Provides
-    fun provideMainRepository() = MainRepository()
+    fun provideMainRepository(
+        firebaseAuth: FirebaseAuth,
+        @CategoriesCollection categoriesCollectionRef: CollectionReference,
+        @WarrantiesCollection warrantiesCollectionRef: CollectionReference
+    ) = MainRepository(firebaseAuth, categoriesCollectionRef, warrantiesCollectionRef)
 
     @LoginPrefs
     @Singleton
