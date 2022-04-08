@@ -76,6 +76,7 @@
         <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/drawable/state_pressed_ripple.xml" value="0.17543859649122806" />
         <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/layout-land/activity_landing.xml" value="0.12283384301732926" />
         <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/layout-land/ad_banner_list_applovin.xml" value="0.21554054054054053" />
+        <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/layout-land/fragment_change_email.xml" value="0.1439814814814815" />
         <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/layout-land/fragment_forgot_pw.xml" value="0.165625" />
         <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/layout-land/fragment_forgot_pw_sent.xml" value="0.165625" />
         <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/layout-land/fragment_login.xml" value="0.165625" />
@@ -100,7 +101,7 @@
         <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/layout/blank_fragment.xml" value="0.2609375" />
         <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/layout/content_main.xml" value="0.23194444444444445" />
         <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/layout/dropdown_category.xml" value="0.23194444444444445" />
-        <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/layout/fragment_add_warranty.xml" value="0.12195945945945946" />
+        <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/layout/fragment_add_warranty.xml" value="0.16655405405405405" />
         <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/layout/fragment_change_email.xml" value="0.195703125" />
         <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/layout/fragment_change_password.xml" value="0.16655405405405405" />
         <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/layout/fragment_edit_warranty.xml" value="0.22824074074074074" />
