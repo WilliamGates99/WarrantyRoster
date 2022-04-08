@@ -1,5 +1,6 @@
 *.iml
 .gradle
+/gradle.properties
 /local.properties
 /.idea/shelf
 /.idea/caches
@@ -21,4 +22,3 @@ local.properties
 /app/src/main/dbschemas
 /app/google-services.json
 .safedk
-gradle.properties
