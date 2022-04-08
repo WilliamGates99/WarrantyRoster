@@ -16,7 +16,6 @@
 /captures
 .externalNativeBuild
 .cxx
-local.properties
 /app/release
 /app/obfuscation
 /app/src/main/dbschemas
