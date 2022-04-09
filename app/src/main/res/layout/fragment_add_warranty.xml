@@ -7,10 +7,10 @@
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         style="@style/Theme.WarrantyRoster.Toolbar"
-        android:layout_width="0dp"
+        android:layout_width="@dimen/width_0dp"
         android:layout_height="?attr/actionBarSize"
-        app:contentInsetEnd="12dp"
-        app:contentInsetStart="12dp"
+        app:contentInsetEnd="@dimen/content_inset_12dp"
+        app:contentInsetStart="@dimen/content_inset_12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -29,8 +29,8 @@
     </com.google.android.material.appbar.MaterialToolbar>
 
     <ScrollView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="@dimen/width_0dp"
+        android:layout_height="@dimen/height_0dp"
         android:orientation="vertical"
         android:overScrollMode="ifContentScrolls"
         android:scrollbars="none"
@@ -45,12 +45,12 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cv_top"
-                android:layout_width="0dp"
+                android:layout_width="@dimen/width_0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginHorizontal="@dimen/margin_8dp"
+                android:layout_marginTop="@dimen/margin_8dp"
                 app:cardBackgroundColor="@color/surface"
-                app:cardCornerRadius="12dp"
+                app:cardCornerRadius="@dimen/radius_12dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -61,10 +61,10 @@
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/tv_title_title"
-                        android:layout_width="0dp"
+                        android:layout_width="@dimen/width_0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="24dp"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginHorizontal="@dimen/margin_24dp"
+                        android:layout_marginTop="@dimen/margin_16dp"
                         android:fontFamily="@font/nunito_bold"
                         android:gravity="center_vertical|start"
                         android:labelFor="@+id/ti_layout_title"
@@ -72,7 +72,7 @@
                         android:text="@string/add_warranty_title_title"
                         android:textAlignment="gravity"
                         android:textColor="@color/black"
-                        android:textSize="14sp"
+                        android:textSize="@dimen/text_size_14sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -80,10 +80,10 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ti_layout_title"
                         style="@style/Theme.WarrantyRoster.TextInputLayout"
-                        android:layout_width="0dp"
+                        android:layout_width="@dimen/width_0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="16dp"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginHorizontal="@dimen/margin_16dp"
+                        android:layout_marginTop="@dimen/margin_4dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tv_title_title">
@@ -99,16 +99,16 @@
                             android:inputType="textCapWords"
                             android:maxLines="1"
                             android:textColorHint="@color/grayDark"
-                            android:textSize="16sp" />
+                            android:textSize="@dimen/text_size_16sp" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/tv_title_date_starting"
-                        android:layout_width="0dp"
+                        android:layout_width="@dimen/width_0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="8dp"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginHorizontal="@dimen/margin_8dp"
+                        android:layout_marginTop="@dimen/margin_16dp"
                         android:fontFamily="@font/nunito_bold"
                         android:gravity="center_vertical|start"
                         android:labelFor="@+id/ti_layout_date_starting"
@@ -116,7 +116,7 @@
                         android:text="@string/add_warranty_title_date_starting"
                         android:textAlignment="gravity"
                         android:textColor="@color/black"
-                        android:textSize="14sp"
+                        android:textSize="@dimen/text_size_14sp"
                         app:layout_constraintEnd_toEndOf="@+id/ti_layout_date_starting"
                         app:layout_constraintStart_toStartOf="@+id/ti_layout_date_starting"
                         app:layout_constraintTop_toBottomOf="@+id/ti_layout_title" />
@@ -124,11 +124,11 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ti_layout_date_starting"
                         style="@style/Theme.WarrantyRoster.TextInputLayout"
-                        android:layout_width="0dp"
+                        android:layout_width="@dimen/width_0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginEnd="8dp"
+                        android:layout_marginStart="@dimen/margin_16dp"
+                        android:layout_marginTop="@dimen/margin_4dp"
+                        android:layout_marginEnd="@dimen/margin_8dp"
                         app:layout_constraintEnd_toStartOf="@+id/ti_layout_date_expiry"
                         app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintHorizontal_weight="1"
@@ -146,16 +146,16 @@
                             android:inputType="none"
                             android:maxLines="1"
                             android:textColorHint="@color/grayDark"
-                            android:textSize="16sp" />
+                            android:textSize="@dimen/text_size_16sp" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/tv_title_date_expiry"
-                        android:layout_width="0dp"
+                        android:layout_width="@dimen/width_0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="8dp"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginHorizontal="@dimen/margin_8dp"
+                        android:layout_marginTop="@dimen/margin_16dp"
                         android:fontFamily="@font/nunito_bold"
                         android:gravity="center_vertical|start"
                         android:labelFor="@+id/ti_layout_date_expiry"
@@ -163,7 +163,7 @@
                         android:text="@string/add_warranty_title_date_expiry"
                         android:textAlignment="gravity"
                         android:textColor="@color/black"
-                        android:textSize="14sp"
+                        android:textSize="@dimen/text_size_14sp"
                         app:layout_constraintEnd_toEndOf="@+id/ti_layout_date_expiry"
                         app:layout_constraintStart_toStartOf="@+id/ti_layout_date_expiry"
                         app:layout_constraintTop_toBottomOf="@+id/ti_layout_title" />
@@ -171,11 +171,11 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ti_layout_date_expiry"
                         style="@style/Theme.WarrantyRoster.TextInputLayout"
-                        android:layout_width="0dp"
+                        android:layout_width="@dimen/width_0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginEnd="16dp"
+                        android:layout_marginStart="@dimen/margin_8dp"
+                        android:layout_marginTop="@dimen/margin_4dp"
+                        android:layout_marginEnd="@dimen/margin_16dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintHorizontal_weight="1"
@@ -193,22 +193,22 @@
                             android:inputType="none"
                             android:maxLines="1"
                             android:textColorHint="@color/grayDark"
-                            android:textSize="16sp" />
+                            android:textSize="@dimen/text_size_16sp" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/tv_date_error"
-                        android:layout_width="0dp"
+                        android:layout_width="@dimen/width_0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="24dp"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginHorizontal="@dimen/margin_24dp"
+                        android:layout_marginTop="@dimen/margin_4dp"
                         android:fontFamily="@font/nunito_semi_bold"
                         android:gravity="center_vertical|start"
                         android:text="@string/add_warranty_error_date"
                         android:textAlignment="gravity"
                         android:textColor="@color/red"
-                        android:textSize="12sp"
+                        android:textSize="@dimen/text_size_12sp"
                         android:visibility="gone"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -218,13 +218,13 @@
                         android:id="@+id/tv_checkbox_lifetime"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="24dp"
+                        android:layout_marginStart="@dimen/margin_24dp"
                         android:fontFamily="@font/nunito_extra_light"
                         android:gravity="center_vertical|end"
                         android:text="@string/add_warranty_checkbox_lifetime"
                         android:textAlignment="gravity"
                         android:textColor="@color/black"
-                        android:textSize="12sp"
+                        android:textSize="@dimen/text_size_12sp"
                         app:layout_constrainedWidth="true"
                         app:layout_constraintBaseline_toBaselineOf="@+id/cb_lifetime"
                         app:layout_constraintEnd_toStartOf="@+id/cb_lifetime"
@@ -238,10 +238,10 @@
                         style="@style/Theme.WarrantyRoster.CheckBox"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="4dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="24dp"
-                        android:layout_marginBottom="16dp"
+                        android:layout_marginStart="@dimen/margin_4dp"
+                        android:layout_marginTop="@dimen/margin_8dp"
+                        android:layout_marginEnd="@dimen/margin_24dp"
+                        android:layout_marginBottom="@dimen/margin_16dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/tv_checkbox_lifetime"
@@ -253,12 +253,12 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cv_middle"
-                android:layout_width="0dp"
+                android:layout_width="@dimen/width_0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginHorizontal="@dimen/margin_8dp"
+                android:layout_marginTop="@dimen/margin_8dp"
                 app:cardBackgroundColor="@color/surface"
-                app:cardCornerRadius="12dp"
+                app:cardCornerRadius="@dimen/radius_12dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cv_top">
@@ -269,10 +269,10 @@
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/tv_title_brand"
-                        android:layout_width="0dp"
+                        android:layout_width="@dimen/width_0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="24dp"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginHorizontal="@dimen/margin_24dp"
+                        android:layout_marginTop="@dimen/margin_16dp"
                         android:fontFamily="@font/nunito_bold"
                         android:gravity="center_vertical|start"
                         android:labelFor="@+id/ti_layout_brand"
@@ -280,7 +280,7 @@
                         android:text="@string/add_warranty_title_brand"
                         android:textAlignment="gravity"
                         android:textColor="@color/black"
-                        android:textSize="14sp"
+                        android:textSize="@dimen/text_size_14sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -288,10 +288,10 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ti_layout_brand"
                         style="@style/Theme.WarrantyRoster.TextInputLayout"
-                        android:layout_width="0dp"
+                        android:layout_width="@dimen/width_0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="16dp"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginHorizontal="@dimen/margin_16dp"
+                        android:layout_marginTop="@dimen/margin_4dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tv_title_brand">
@@ -307,16 +307,16 @@
                             android:inputType="textCapWords"
                             android:maxLines="1"
                             android:textColorHint="@color/grayDark"
-                            android:textSize="16sp" />
+                            android:textSize="@dimen/text_size_16sp" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/tv_title_model"
-                        android:layout_width="0dp"
+                        android:layout_width="@dimen/width_0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="24dp"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginHorizontal="@dimen/margin_24dp"
+                        android:layout_marginTop="@dimen/margin_16dp"
                         android:fontFamily="@font/nunito_bold"
                         android:gravity="center_vertical|start"
                         android:labelFor="@+id/ti_layout_model"
@@ -324,7 +324,7 @@
                         android:text="@string/add_warranty_title_model"
                         android:textAlignment="gravity"
                         android:textColor="@color/black"
-                        android:textSize="14sp"
+                        android:textSize="@dimen/text_size_14sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/ti_layout_brand" />
@@ -332,10 +332,10 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ti_layout_model"
                         style="@style/Theme.WarrantyRoster.TextInputLayout"
-                        android:layout_width="0dp"
+                        android:layout_width="@dimen/width_0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="16dp"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginHorizontal="@dimen/margin_16dp"
+                        android:layout_marginTop="@dimen/margin_4dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tv_title_model">
@@ -351,16 +351,16 @@
                             android:inputType="textCapWords"
                             android:maxLines="1"
                             android:textColorHint="@color/grayDark"
-                            android:textSize="16sp" />
+                            android:textSize="@dimen/text_size_16sp" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/tv_title_serial"
-                        android:layout_width="0dp"
+                        android:layout_width="@dimen/width_0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="24dp"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginHorizontal="@dimen/margin_24dp"
+                        android:layout_marginTop="@dimen/margin_16dp"
                         android:fontFamily="@font/nunito_bold"
                         android:gravity="center_vertical|start"
                         android:labelFor="@+id/ti_layout_serial"
@@ -368,7 +368,7 @@
                         android:text="@string/add_warranty_title_serial"
                         android:textAlignment="gravity"
                         android:textColor="@color/black"
-                        android:textSize="14sp"
+                        android:textSize="@dimen/text_size_14sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/ti_layout_model" />
@@ -376,11 +376,11 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ti_layout_serial"
                         style="@style/Theme.WarrantyRoster.TextInputLayout"
-                        android:layout_width="0dp"
+                        android:layout_width="@dimen/width_0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="16dp"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginBottom="16dp"
+                        android:layout_marginHorizontal="@dimen/margin_16dp"
+                        android:layout_marginTop="@dimen/margin_4dp"
+                        android:layout_marginBottom="@dimen/margin_16dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -397,7 +397,7 @@
                             android:inputType="textCapCharacters"
                             android:maxLines="1"
                             android:textColorHint="@color/grayDark"
-                            android:textSize="16sp" />
+                            android:textSize="@dimen/text_size_16sp" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -407,12 +407,12 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cv_bottom"
-                android:layout_width="0dp"
+                android:layout_width="@dimen/width_0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="8dp"
-                android:layout_marginVertical="8dp"
+                android:layout_marginHorizontal="@dimen/margin_8dp"
+                android:layout_marginVertical="@dimen/margin_8dp"
                 app:cardBackgroundColor="@color/surface"
-                app:cardCornerRadius="12dp"
+                app:cardCornerRadius="@dimen/radius_12dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -424,10 +424,10 @@
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/tv_title_category"
-                        android:layout_width="0dp"
+                        android:layout_width="@dimen/width_0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="24dp"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginHorizontal="@dimen/margin_24dp"
+                        android:layout_marginTop="@dimen/margin_16dp"
                         android:fontFamily="@font/nunito_bold"
                         android:gravity="center_vertical|start"
                         android:labelFor="@+id/ti_layout_category"
@@ -435,7 +435,7 @@
                         android:text="@string/add_warranty_title_category"
                         android:textAlignment="gravity"
                         android:textColor="@color/black"
-                        android:textSize="14sp"
+                        android:textSize="@dimen/text_size_14sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -443,10 +443,10 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ti_layout_category"
                         style="@style/Theme.WarrantyRoster.TextInputLayout.Dropdown"
-                        android:layout_width="0dp"
+                        android:layout_width="@dimen/width_0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="16dp"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginHorizontal="@dimen/margin_16dp"
+                        android:layout_marginTop="@dimen/margin_4dp"
                         app:layout_constraintEnd_toStartOf="@+id/iv_icon_category"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tv_title_category">
@@ -461,7 +461,7 @@
                             android:inputType="none"
                             android:maxLines="1"
                             android:textColorHint="@color/grayDark"
-                            android:textSize="16sp" />
+                            android:textSize="@dimen/text_size_16sp" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -469,11 +469,11 @@
                         android:id="@+id/iv_icon_category"
                         android:layout_width="48dp"
                         android:layout_height="48dp"
-                        android:layout_marginEnd="16dp"
+                        android:layout_marginEnd="@dimen/margin_16dp"
                         android:background="@color/grayLight"
-                        android:elevation="8dp"
+                        android:elevation="@dimen/elevation_8dp"
                         android:src="@drawable/ic_category_miscellaneous"
-                        app:contentPadding="12dp"
+                        app:contentPadding="@dimen/padding_12dp"
                         app:layout_constraintBottom_toBottomOf="@+id/ti_layout_category"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/ti_layout_category"
@@ -485,7 +485,7 @@
                         style="@style/Theme.WarrantyRoster.LoadingProgressBar.Category"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:elevation="9dp"
+                        android:elevation="@dimen/padding_9dp"
                         android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="@+id/iv_icon_category"
                         app:layout_constraintEnd_toEndOf="@+id/iv_icon_category"
@@ -494,10 +494,10 @@
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/tv_title_description"
-                        android:layout_width="0dp"
+                        android:layout_width="@dimen/width_0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="24dp"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginHorizontal="@dimen/margin_24dp"
+                        android:layout_marginTop="@dimen/margin_16dp"
                         android:fontFamily="@font/nunito_bold"
                         android:gravity="center_vertical|start"
                         android:labelFor="@+id/ti_layout_description"
@@ -505,7 +505,7 @@
                         android:text="@string/add_warranty_title_description"
                         android:textAlignment="gravity"
                         android:textColor="@color/black"
-                        android:textSize="14sp"
+                        android:textSize="@dimen/text_size_14sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/ti_layout_category" />
@@ -513,11 +513,11 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/ti_layout_description"
                         style="@style/Theme.WarrantyRoster.TextInputLayout"
-                        android:layout_width="0dp"
+                        android:layout_width="@dimen/width_0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="16dp"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginBottom="16dp"
+                        android:layout_marginHorizontal="@dimen/margin_16dp"
+                        android:layout_marginTop="@dimen/margin_4dp"
+                        android:layout_marginBottom="@dimen/margin_16dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -533,7 +533,7 @@
                             android:imeOptions="actionDone"
                             android:inputType="textCapSentences|textMultiLine"
                             android:textColorHint="@color/grayDark"
-                            android:textSize="16sp" />
+                            android:textSize="@dimen/text_size_16sp" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 

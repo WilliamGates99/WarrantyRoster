@@ -7,10 +7,10 @@
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         style="@style/Theme.WarrantyRoster.Toolbar"
-        android:layout_width="0dp"
+        android:layout_width="@dimen/width_0dp"
         android:layout_height="?attr/actionBarSize"
-        app:contentInsetEnd="12dp"
-        app:contentInsetStart="12dp"
+        app:contentInsetEnd="@dimen/content_inset_12dp"
+        app:contentInsetStart="@dimen/content_inset_12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -19,8 +19,8 @@
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/lav_keyboard"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="@dimen/width_0dp"
+        android:layout_height="@dimen/height_0dp"
         android:scaleType="centerInside"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/guideline"
@@ -31,8 +31,8 @@
         app:lottie_rawRes="@raw/anim_keyboard" />
 
     <ScrollView
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="@dimen/width_0dp"
+        android:layout_height="@dimen/height_0dp"
         android:fillViewport="true"
         android:orientation="vertical"
         android:overScrollMode="never"
@@ -45,14 +45,14 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="24dp">
+            android:paddingBottom="@dimen/padding_24dp">
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_title_password"
-                android:layout_width="0dp"
+                android:layout_width="@dimen/width_0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="52dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginHorizontal="@dimen/margin_52dp"
+                android:layout_marginTop="@dimen/margin_24dp"
                 android:fontFamily="@font/nunito_bold"
                 android:gravity="start|center_vertical"
                 android:labelFor="@+id/ti_layout_password"
@@ -60,7 +60,7 @@
                 android:text="@string/change_email_title_password"
                 android:textAlignment="gravity"
                 android:textColor="@color/black"
-                android:textSize="14sp"
+                android:textSize="@dimen/text_size_14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -68,10 +68,10 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/ti_layout_password"
                 style="@style/Theme.WarrantyRoster.TextInputLayout"
-                android:layout_width="0dp"
+                android:layout_width="@dimen/width_0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="44dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginHorizontal="@dimen/margin_44dp"
+                android:layout_marginTop="@dimen/margin_4dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_title_password"
@@ -89,16 +89,16 @@
                     android:maxLines="1"
                     android:textColorHint="@color/grayDark"
                     android:textDirection="ltr"
-                    android:textSize="16sp" />
+                    android:textSize="@dimen/text_size_16sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_title_new_email"
-                android:layout_width="0dp"
+                android:layout_width="@dimen/width_0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="52dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginHorizontal="@dimen/margin_52dp"
+                android:layout_marginTop="@dimen/margin_8dp"
                 android:fontFamily="@font/nunito_bold"
                 android:gravity="start|center_vertical"
                 android:labelFor="@+id/ti_layout_new_email"
@@ -106,7 +106,7 @@
                 android:text="@string/change_email_title_new_email"
                 android:textAlignment="gravity"
                 android:textColor="@color/black"
-                android:textSize="14sp"
+                android:textSize="@dimen/text_size_14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ti_layout_password" />
@@ -114,10 +114,10 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/ti_layout_new_email"
                 style="@style/Theme.WarrantyRoster.TextInputLayout"
-                android:layout_width="0dp"
+                android:layout_width="@dimen/width_0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="44dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginHorizontal="@dimen/margin_44dp"
+                android:layout_marginTop="@dimen/margin_4dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_title_new_email">
@@ -134,17 +134,17 @@
                     android:maxLines="1"
                     android:textColorHint="@color/grayDark"
                     android:textDirection="ltr"
-                    android:textSize="16sp" />
+                    android:textSize="@dimen/text_size_16sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_change_email"
                 style="@style/Theme.WarrantyRoster.Button"
-                android:layout_width="0dp"
+                android:layout_width="@dimen/width_0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="44dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginHorizontal="@dimen/margin_44dp"
+                android:layout_marginTop="@dimen/margin_24dp"
                 android:text="@string/change_email_btn_change"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

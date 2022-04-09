@@ -21,11 +21,11 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:backgroundTint="@color/surface"
-        app:contentInsetEnd="16dp"
-        app:contentInsetStart="16dp"
-        app:elevation="3dp"
-        app:fabCradleMargin="8dp"
-        app:fabCradleRoundedCornerRadius="20dp">
+        app:contentInsetEnd="@dimen/content_inset_16dp"
+        app:contentInsetStart="@dimen/content_inset_16dp"
+        app:elevation="@dimen/elevation_3dp"
+        app:fabCradleMargin="@dimen/margin_8dp"
+        app:fabCradleRoundedCornerRadius="@dimen/radius_20dp">
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bnv"

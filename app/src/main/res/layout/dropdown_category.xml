@@ -7,9 +7,8 @@
     android:fontFamily="@font/nunito_regular"
     android:gravity="center"
     android:maxLines="1"
-    android:paddingHorizontal="8dp"
-    android:paddingVertical="8dp"
+    android:padding="@dimen/padding_8dp"
     android:text="Accessory"
     android:textColor="@color/black"
-    android:textSize="16sp"
+    android:textSize="@dimen/text_size_16sp"
     tools:ignore="HardcodedText" />
