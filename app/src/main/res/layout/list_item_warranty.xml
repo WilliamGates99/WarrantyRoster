@@ -130,8 +130,8 @@
 
             <FrameLayout
                 android:id="@+id/fl_status"
-                android:layout_width="@dimen/width_14dp"
-                android:layout_height="@dimen/height_14dp"
+                android:layout_width="@dimen/width_4dp"
+                android:layout_height="@dimen/height_4dp"
                 android:layout_marginEnd="@dimen/margin_12dp"
                 android:background="@drawable/shape_circle"
                 android:backgroundTint="@{statusColor}"

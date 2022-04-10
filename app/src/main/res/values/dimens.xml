@@ -3,6 +3,7 @@
     <!--Width-->
     <dimen name="width_0dp">0dp</dimen>
     <dimen name="width_2dp">2dp</dimen>
+    <dimen name="width_4dp">4dp</dimen>
     <dimen name="width_14dp">14dp</dimen>
     <dimen name="width_18dp">18dp</dimen>
     <dimen name="width_26dp">26dp</dimen>
@@ -16,6 +17,7 @@
     <!--Height-->
     <dimen name="height_0dp">0dp</dimen>
     <dimen name="height_1dp">1dp</dimen>
+    <dimen name="height_4dp">4dp</dimen>
     <dimen name="height_14dp">14dp</dimen>
     <dimen name="height_18dp">18dp</dimen>
     <dimen name="height_26dp">26dp</dimen>
