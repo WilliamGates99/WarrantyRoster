@@ -2,58 +2,97 @@
 <resources>
     <!--Width-->
     <dimen name="width_0dp">0dp</dimen>
+    <dimen name="width_2dp">2dp</dimen>
+    <dimen name="width_14dp">14dp</dimen>
+    <dimen name="width_18dp">18dp</dimen>
+    <dimen name="width_26dp">26dp</dimen>
     <dimen name="width_32dp">32dp</dimen>
+    <dimen name="width_48dp">48dp</dimen>
     <dimen name="width_52dp">52dp</dimen>
+    <dimen name="width_86dp">86dp</dimen>
+    <dimen name="width_125dp">125dp</dimen>
     <dimen name="width_250dp">250dp</dimen>
 
     <!--Height-->
     <dimen name="height_0dp">0dp</dimen>
+    <dimen name="height_1dp">1dp</dimen>
+    <dimen name="height_14dp">14dp</dimen>
+    <dimen name="height_18dp">18dp</dimen>
+    <dimen name="height_26dp">26dp</dimen>
     <dimen name="height_32dp">32dp</dimen>
+    <dimen name="height_48dp">48dp</dimen>
     <dimen name="height_52dp">52dp</dimen>
+    <dimen name="height_86dp">86dp</dimen>
+    <dimen name="height_125dp">125dp</dimen>
     <dimen name="height_250dp">250dp</dimen>
 
     <!--Margin-->
+    <dimen name="margin_2dp">2dp</dimen>
+    <dimen name="margin_3dp">3dp</dimen>
     <dimen name="margin_4dp">4dp</dimen>
     <dimen name="margin_8dp">8dp</dimen>
     <dimen name="margin_12dp">12dp</dimen>
     <dimen name="margin_16dp">16dp</dimen>
+    <dimen name="margin_19dp">19dp</dimen>
+    <dimen name="margin_20dp">20dp</dimen>
     <dimen name="margin_24dp">24dp</dimen>
+    <dimen name="margin_27dp">27dp</dimen>
     <dimen name="margin_28dp">28dp</dimen>
     <dimen name="margin_32dp">32dp</dimen>
+    <dimen name="margin_34dp">34dp</dimen>
+    <dimen name="margin_35dp">35dp</dimen>
     <dimen name="margin_40dp">40dp</dimen>
     <dimen name="margin_44dp">44dp</dimen>
+    <dimen name="margin_47dp">47dp</dimen>
     <dimen name="margin_52dp">52dp</dimen>
+    <dimen name="margin_60dp">60dp</dimen>
+    <dimen name="margin_70dp">70dp</dimen>
+    <dimen name="margin_71dp">71dp</dimen>
+    <dimen name="margin_79dp">79dp</dimen>
 
     <!--Padding-->
     <dimen name="padding_2dp">2dp</dimen>
     <dimen name="padding_4dp">4dp</dimen>
+    <dimen name="padding_5dp">5dp</dimen>
     <dimen name="padding_8dp">8dp</dimen>
     <dimen name="padding_9dp">9dp</dimen>
     <dimen name="padding_12dp">12dp</dimen>
+    <dimen name="padding_16dp">16dp</dimen>
     <dimen name="padding_24dp">24dp</dimen>
+    <dimen name="padding_80dp">80dp</dimen>
 
     <!--Elevation-->
     <dimen name="elevation_3dp">3dp</dimen>
     <dimen name="elevation_4dp">4dp</dimen>
     <dimen name="elevation_8dp">8dp</dimen>
+    <dimen name="elevation_9dp">9dp</dimen>
     <dimen name="elevation_10dp">10dp</dimen>
+    <dimen name="elevation_12dp">12dp</dimen>
+    <dimen name="elevation_13dp">13dp</dimen>
 
     <!--Radius-->
     <dimen name="radius_4dp">4dp</dimen>
+    <dimen name="radius_8dp">8dp</dimen>
     <dimen name="radius_12dp">12dp</dimen>
     <dimen name="radius_20dp">20dp</dimen>
     <dimen name="radius_40dp">40dp</dimen>
 
     <!--Miscellaneous-->
-    <dimen name="dimen_bottom_nav_radius">20dp</dimen>
+    <dimen name="min_width_0dp">0dp</dimen>
+    <dimen name="min_height_0dp">0dp</dimen>
+    <dimen name="max_width_1000dp">1000dp</dimen>
+    <dimen name="content_inset_0dp">0dp</dimen>
     <dimen name="content_inset_12dp">12dp</dimen>
     <dimen name="content_inset_16dp">16dp</dimen>
+    <dimen name="dimen_bottom_nav_radius">20dp</dimen>
 
     <!--Text Size-->
     <dimen name="text_size_10sp">10sp</dimen>
     <dimen name="text_size_12sp">12sp</dimen>
     <dimen name="text_size_14sp">14sp</dimen>
     <dimen name="text_size_16sp">16sp</dimen>
+    <dimen name="text_size_20sp">20sp</dimen>
+    <dimen name="text_size_24sp">24sp</dimen>
     <dimen name="text_size_34sp">34sp</dimen>
 
 </resources>

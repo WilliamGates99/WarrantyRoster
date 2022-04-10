@@ -6,7 +6,7 @@
     android:fillViewport="true"
     android:orientation="vertical"
     android:overScrollMode="never"
-    android:paddingTop="4dp"
+    android:paddingTop="@dimen/padding_4dp"
     android:scrollbars="none">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -15,16 +15,16 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_description"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/width_0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="44dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginHorizontal="@dimen/margin_44dp"
+            android:layout_marginTop="@dimen/margin_20dp"
             android:fontFamily="@font/nunito_extra_bold"
             android:gravity="start|center_vertical"
             android:text="@string/forgot_pw_text_description"
             android:textAlignment="gravity"
             android:textColor="@color/black"
-            android:textSize="24sp"
+            android:textSize="@dimen/text_size_24sp"
             app:layout_constraintBottom_toTopOf="@+id/tv_title_email"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -34,10 +34,10 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_title_email"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/width_0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="52dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginHorizontal="@dimen/margin_52dp"
+            android:layout_marginTop="@dimen/margin_24dp"
             android:fontFamily="@font/nunito_bold"
             android:gravity="start|center_vertical"
             android:labelFor="@+id/ti_layout_email"
@@ -45,7 +45,7 @@
             android:text="@string/forgot_pw_title_email"
             android:textAlignment="gravity"
             android:textColor="@color/black"
-            android:textSize="14sp"
+            android:textSize="@dimen/text_size_14sp"
             app:layout_constraintBottom_toTopOf="@+id/ti_layout_email"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -54,10 +54,10 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/ti_layout_email"
             style="@style/Theme.WarrantyRoster.TextInputLayout"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/width_0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="44dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginHorizontal="@dimen/margin_44dp"
+            android:layout_marginTop="@dimen/margin_4dp"
             app:layout_constraintBottom_toTopOf="@+id/btn_send"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -75,17 +75,17 @@
                 android:maxLines="1"
                 android:textColorHint="@color/grayDark"
                 android:textDirection="ltr"
-                android:textSize="16sp" />
+                android:textSize="@dimen/text_size_16sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_send"
             style="@style/Theme.WarrantyRoster.Button"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/width_0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="44dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginHorizontal="@dimen/margin_44dp"
+            android:layout_marginTop="@dimen/margin_24dp"
             android:text="@string/forgot_pw_btn_send"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -108,8 +108,8 @@
             style="@style/Theme.WarrantyRoster.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="4dp"
-            android:layout_marginVertical="19dp"
+            android:layout_marginHorizontal="@dimen/margin_4dp"
+            android:layout_marginVertical="@dimen/margin_19dp"
             android:gravity="center"
             android:text="@string/forgot_pw_btn_return"
             android:textAlignment="gravity"

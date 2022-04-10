@@ -6,7 +6,7 @@
     android:fillViewport="true"
     android:orientation="vertical"
     android:overScrollMode="never"
-    android:paddingTop="4dp"
+    android:paddingTop="@dimen/padding_4dp"
     android:scrollbars="none">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -15,16 +15,16 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_description"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/width_0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="44dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginHorizontal="@dimen/margin_44dp"
+            android:layout_marginTop="@dimen/margin_20dp"
             android:fontFamily="@font/nunito_extra_bold"
             android:gravity="start|center_vertical"
             android:text="@string/register_text_description"
             android:textAlignment="gravity"
             android:textColor="@color/black"
-            android:textSize="24sp"
+            android:textSize="@dimen/text_size_24sp"
             app:layout_constraintBottom_toTopOf="@+id/tv_title_email"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -34,10 +34,10 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_title_email"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/width_0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="52dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginHorizontal="@dimen/margin_52dp"
+            android:layout_marginTop="@dimen/margin_24dp"
             android:fontFamily="@font/nunito_bold"
             android:gravity="start|center_vertical"
             android:labelFor="@+id/ti_layout_email"
@@ -45,7 +45,7 @@
             android:text="@string/register_title_email"
             android:textAlignment="gravity"
             android:textColor="@color/black"
-            android:textSize="14sp"
+            android:textSize="@dimen/text_size_14sp"
             app:layout_constraintBottom_toTopOf="@+id/ti_layout_email"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -54,10 +54,10 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/ti_layout_email"
             style="@style/Theme.WarrantyRoster.TextInputLayout"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/width_0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="44dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginHorizontal="@dimen/margin_44dp"
+            android:layout_marginTop="@dimen/margin_4dp"
             app:layout_constraintBottom_toTopOf="@+id/tv_title_password"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -75,16 +75,16 @@
                 android:maxLines="1"
                 android:textColorHint="@color/grayDark"
                 android:textDirection="ltr"
-                android:textSize="16sp" />
+                android:textSize="@dimen/text_size_16sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_title_password"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/width_0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="52dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginHorizontal="@dimen/margin_52dp"
+            android:layout_marginTop="@dimen/margin_16dp"
             android:fontFamily="@font/nunito_bold"
             android:gravity="start|center_vertical"
             android:labelFor="@+id/ti_layout_password"
@@ -92,7 +92,7 @@
             android:text="@string/register_title_password"
             android:textAlignment="gravity"
             android:textColor="@color/black"
-            android:textSize="14sp"
+            android:textSize="@dimen/text_size_14sp"
             app:layout_constraintBottom_toTopOf="@+id/ti_layout_password"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -101,10 +101,10 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/ti_layout_password"
             style="@style/Theme.WarrantyRoster.TextInputLayout"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/width_0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="44dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginHorizontal="@dimen/margin_44dp"
+            android:layout_marginTop="@dimen/margin_4dp"
             app:layout_constraintBottom_toTopOf="@+id/tv_title_retype_password"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -123,16 +123,16 @@
                 android:maxLines="1"
                 android:textColorHint="@color/grayDark"
                 android:textDirection="ltr"
-                android:textSize="16sp" />
+                android:textSize="@dimen/text_size_16sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_title_retype_password"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/width_0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="52dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginHorizontal="@dimen/margin_52dp"
+            android:layout_marginTop="@dimen/margin_16dp"
             android:fontFamily="@font/nunito_bold"
             android:gravity="start|center_vertical"
             android:labelFor="@+id/ti_layout_retype_password"
@@ -140,7 +140,7 @@
             android:text="@string/register_title_retype_password"
             android:textAlignment="gravity"
             android:textColor="@color/black"
-            android:textSize="14sp"
+            android:textSize="@dimen/text_size_14sp"
             app:layout_constraintBottom_toTopOf="@+id/ti_layout_retype_password"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -149,10 +149,10 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/ti_layout_retype_password"
             style="@style/Theme.WarrantyRoster.TextInputLayout"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/width_0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="44dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginHorizontal="@dimen/margin_44dp"
+            android:layout_marginTop="@dimen/margin_4dp"
             app:layout_constraintBottom_toTopOf="@+id/btn_agreement"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -171,7 +171,7 @@
                 android:maxLines="1"
                 android:textColorHint="@color/grayDark"
                 android:textDirection="ltr"
-                android:textSize="16sp" />
+                android:textSize="@dimen/text_size_16sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -180,8 +180,8 @@
             style="@style/Theme.WarrantyRoster.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="47dp"
-            android:layout_marginTop="3dp"
+            android:layout_marginHorizontal="@dimen/margin_47dp"
+            android:layout_marginTop="@dimen/margin_3dp"
             android:clickable="true"
             android:focusable="true"
             android:fontFamily="@font/nunito_light"
@@ -190,7 +190,7 @@
             android:text="@string/register_text_agreement"
             android:textAlignment="gravity"
             android:textColor="@color/grayDark"
-            android:textSize="12sp"
+            android:textSize="@dimen/text_size_12sp"
             app:layout_constrainedWidth="true"
             app:layout_constraintBottom_toTopOf="@+id/btn_register"
             app:layout_constraintEnd_toEndOf="parent"
@@ -201,10 +201,10 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_register"
             style="@style/Theme.WarrantyRoster.Button"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/width_0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="44dp"
-            android:layout_marginTop="19dp"
+            android:layout_marginHorizontal="@dimen/margin_44dp"
+            android:layout_marginTop="@dimen/margin_19dp"
             android:text="@string/register_btn_register"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -226,14 +226,14 @@
             android:id="@+id/tv_register_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
+            android:layout_marginStart="@dimen/margin_4dp"
             android:fontFamily="@font/nunito_regular"
             android:gravity="center"
             android:maxLines="1"
             android:text="@string/register_text_login_title"
             android:textAlignment="gravity"
             android:textColor="@color/black"
-            android:textSize="14sp"
+            android:textSize="@dimen/text_size_14sp"
             app:layout_constraintBaseline_toBaselineOf="@+id/btn_login"
             app:layout_constraintEnd_toStartOf="@+id/btn_login"
             app:layout_constraintHorizontal_bias="0.5"
@@ -245,9 +245,9 @@
             style="@style/Theme.WarrantyRoster.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="19dp"
-            android:layout_marginEnd="4dp"
-            android:layout_marginBottom="19dp"
+            android:layout_marginTop="@dimen/margin_19dp"
+            android:layout_marginEnd="@dimen/margin_4dp"
+            android:layout_marginBottom="@dimen/margin_19dp"
             android:gravity="center"
             android:text="@string/register_btn_login"
             android:textAlignment="gravity"

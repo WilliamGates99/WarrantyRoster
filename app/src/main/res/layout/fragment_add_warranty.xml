@@ -467,8 +467,8 @@
 
                     <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/iv_icon_category"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
+                        android:layout_width="@dimen/width_48dp"
+                        android:layout_height="@dimen/height_48dp"
                         android:layout_marginEnd="@dimen/margin_16dp"
                         android:background="@color/grayLight"
                         android:elevation="@dimen/elevation_8dp"
@@ -485,7 +485,7 @@
                         style="@style/Theme.WarrantyRoster.LoadingProgressBar.Category"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:elevation="@dimen/padding_9dp"
+                        android:elevation="@dimen/elevation_9dp"
                         android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="@+id/iv_icon_category"
                         app:layout_constraintEnd_toEndOf="@+id/iv_icon_category"
