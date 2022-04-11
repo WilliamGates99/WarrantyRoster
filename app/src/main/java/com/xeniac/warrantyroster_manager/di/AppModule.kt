@@ -3,9 +3,14 @@ package com.xeniac.warrantyroster_manager.di
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
+import androidx.datastore.core.DataStore
+import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
+import androidx.datastore.preferences.core.PreferenceDataStoreFactory
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.emptyPreferences
+import androidx.datastore.preferences.preferencesDataStoreFile
 import coil.ImageLoader
 import coil.decode.SvgDecoder
-import coil.disk.DiskCache
 import coil.memory.MemoryCache
 import coil.util.DebugLogger
 import com.google.firebase.auth.FirebaseAuth
@@ -14,11 +19,11 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.xeniac.warrantyroster_manager.BuildConfig
 import com.xeniac.warrantyroster_manager.repositories.MainRepository
+import com.xeniac.warrantyroster_manager.repositories.PreferencesRepository
 import com.xeniac.warrantyroster_manager.repositories.UserRepository
 import com.xeniac.warrantyroster_manager.utils.Constants.COLLECTION_CATEGORIES
 import com.xeniac.warrantyroster_manager.utils.Constants.COLLECTION_WARRANTIES
-import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_IS_LOGGED_IN_KEY
-import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_LOGIN
+import com.xeniac.warrantyroster_manager.utils.Constants.DATASTORE_NAME_SETTINGS
 import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_SETTINGS
 import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_LANGUAGE_KEY
 import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_COUNTRY_KEY
@@ -28,6 +33,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.*
 import okhttp3.Dispatcher
 import okhttp3.OkHttpClient
 import java.text.DecimalFormat
@@ -68,34 +74,42 @@ object AppModule {
         @WarrantiesCollection warrantiesCollectionRef: CollectionReference
     ) = MainRepository(firebaseAuth, categoriesCollectionRef, warrantiesCollectionRef)
 
-    @LoginPrefs
     @Singleton
     @Provides
-    fun provideLoginPrefs(@ApplicationContext context: Context): SharedPreferences =
-        context.getSharedPreferences(PREFERENCE_LOGIN, MODE_PRIVATE)
+    fun providePreferencesRepository(settingsDataStore: DataStore<Preferences>) =
+        PreferencesRepository(settingsDataStore)
 
+    @Singleton
+    @Provides
+    fun provideLoginDataStore(@ApplicationContext context: Context): DataStore<Preferences> =
+        PreferenceDataStoreFactory.create(
+            corruptionHandler = ReplaceFileCorruptionHandler { emptyPreferences() },
+            scope = CoroutineScope(Dispatchers.IO + SupervisorJob()),
+            produceFile = { context.preferencesDataStoreFile(DATASTORE_NAME_SETTINGS) }
+        )
+
+    //TODO REMOVE
     @SettingsPrefs
     @Singleton
     @Provides
     fun provideSettingsPrefs(@ApplicationContext context: Context): SharedPreferences =
         context.getSharedPreferences(PREFERENCE_SETTINGS, MODE_PRIVATE)
 
-    @Provides
-    fun provideIsUserLoggedIn(@LoginPrefs loginPrefs: SharedPreferences) =
-        loginPrefs.getBoolean(PREFERENCE_IS_LOGGED_IN_KEY, false)
-
+    //TODO REMOVE
     @CurrentLanguage
     @Singleton //TODO REMOVE AFTER ADDING PERSIAN
     @Provides
     fun provideCurrentLanguage(@SettingsPrefs settingsPrefs: SharedPreferences) =
         settingsPrefs.getString(PREFERENCE_LANGUAGE_KEY, "en") ?: "en"
 
+    //TODO REMOVE
     @CurrentCountry
     @Singleton //TODO REMOVE AFTER ADDING PERSIAN
     @Provides
     fun provideCurrentCountry(@SettingsPrefs settingsPrefs: SharedPreferences) =
         settingsPrefs.getString(PREFERENCE_COUNTRY_KEY, "US") ?: "US"
 
+    //TODO REMOVE
     @Provides
     fun provideCurrentTheme(@SettingsPrefs settingsPrefs: SharedPreferences) =
         settingsPrefs.getInt(PREFERENCE_THEME_KEY, 0)
@@ -151,10 +165,7 @@ annotation class CategoriesCollection
 @Retention(AnnotationRetention.BINARY)
 annotation class WarrantiesCollection
 
-@Qualifier
-@Retention(AnnotationRetention.BINARY)
-annotation class LoginPrefs
-
+//TODO REMOVE
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
 annotation class SettingsPrefs

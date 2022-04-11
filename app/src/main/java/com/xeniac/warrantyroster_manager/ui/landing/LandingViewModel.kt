@@ -1,18 +1,16 @@
 package com.xeniac.warrantyroster_manager.ui.landing
 
 import android.app.Application
-import android.content.SharedPreferences
 import android.os.CountDownTimer
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.xeniac.warrantyroster_manager.BaseApplication
-import com.xeniac.warrantyroster_manager.di.LoginPrefs
+import com.xeniac.warrantyroster_manager.repositories.PreferencesRepository
 import com.xeniac.warrantyroster_manager.repositories.UserRepository
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_TIMER_IS_NOT_ZERO
-import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_IS_LOGGED_IN_KEY
 import com.xeniac.warrantyroster_manager.utils.Event
 import com.xeniac.warrantyroster_manager.utils.NetworkHelper.hasInternetConnection
 import com.xeniac.warrantyroster_manager.utils.Resource
@@ -26,7 +24,7 @@ import javax.inject.Inject
 class LandingViewModel @Inject constructor(
     application: Application,
     private val userRepository: UserRepository,
-    @LoginPrefs private val loginPrefs: SharedPreferences
+    private val preferencesRepository: PreferencesRepository
 ) : AndroidViewModel(application) {
 
     private val _registerLiveData: MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
@@ -63,7 +61,7 @@ class LandingViewModel @Inject constructor(
             if (hasInternetConnection(getApplication<BaseApplication>())) {
                 userRepository.registerViaEmail(email, password).await()
                 userRepository.sendVerificationEmail()
-                loginPrefs.edit().putBoolean(PREFERENCE_IS_LOGGED_IN_KEY, true).apply()
+                preferencesRepository.setIsUserLoggedIn(true)
                 _registerLiveData.postValue(Event(Resource.success(null)))
                 Timber.i("$email registered successfully.")
             } else {
@@ -84,7 +82,7 @@ class LandingViewModel @Inject constructor(
             if (hasInternetConnection(getApplication<BaseApplication>())) {
                 userRepository.loginViaEmail(email, password).await().apply {
                     user?.let {
-                        loginPrefs.edit().putBoolean(PREFERENCE_IS_LOGGED_IN_KEY, true).apply()
+                        preferencesRepository.setIsUserLoggedIn(true)
                         _loginLiveData.postValue(Event(Resource.success(null)))
                         Timber.i("$email logged in successfully.")
                     }

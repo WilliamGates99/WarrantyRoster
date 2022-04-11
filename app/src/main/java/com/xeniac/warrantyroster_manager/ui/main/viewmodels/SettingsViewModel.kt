@@ -9,11 +9,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseUser
 import com.xeniac.warrantyroster_manager.BaseApplication
-import com.xeniac.warrantyroster_manager.di.LoginPrefs
 import com.xeniac.warrantyroster_manager.di.SettingsPrefs
+import com.xeniac.warrantyroster_manager.repositories.PreferencesRepository
 import com.xeniac.warrantyroster_manager.repositories.UserRepository
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
-import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_IS_LOGGED_IN_KEY
 import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_THEME_KEY
 import com.xeniac.warrantyroster_manager.utils.Event
 import com.xeniac.warrantyroster_manager.utils.NetworkHelper.hasInternetConnection
@@ -28,8 +27,8 @@ import javax.inject.Inject
 class SettingsViewModel @Inject constructor(
     application: Application,
     private val userRepository: UserRepository,
-    @SettingsPrefs private val settingsPrefs: SharedPreferences,
-    @LoginPrefs private val loginPrefs: SharedPreferences
+    private val preferencesRepository: PreferencesRepository,
+    @SettingsPrefs private val settingsPrefs: SharedPreferences
 ) : AndroidViewModel(application) {
 
     private val _accountDetailsLiveData:
@@ -148,11 +147,11 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    private fun safeLogoutUser() {
+    private suspend fun safeLogoutUser() {
         _logoutLiveData.postValue(Event(Resource.loading()))
         try {
             userRepository.logoutUser()
-            loginPrefs.edit().remove(PREFERENCE_IS_LOGGED_IN_KEY).apply()
+            preferencesRepository.setIsUserLoggedIn(false)
             _logoutLiveData.postValue(Event(Resource.success(null)))
             Timber.i("User successfully logged out.")
         } catch (e: Exception) {

@@ -84,8 +84,11 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1-native-mt'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1-native-mt'
 
-    // Coroutines for Firebase
+    // Coroutines Support for Firebase
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.1-native-mt'
+
+    // Preferences DataStore
+    implementation 'androidx.datastore:datastore-preferences:1.0.0'
 
     // Navigation Component
     implementation 'androidx.navigation:navigation-fragment-ktx:2.4.2'

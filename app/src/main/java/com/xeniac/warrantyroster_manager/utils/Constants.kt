@@ -6,15 +6,17 @@ object Constants {
     const val URL_PRIVACY_POLICY = "https://warranty-roster.herokuapp.com/privacy-policy"
     const val URL_DONATE = "https://bio.link/WarrantyRoster"
 
-    // SharedPreference Settings Constants
-    const val PREFERENCE_SETTINGS = "preference_settings"
-    const val PREFERENCE_THEME_KEY = "theme"
-    const val PREFERENCE_LANGUAGE_KEY = "language"
-    const val PREFERENCE_COUNTRY_KEY = "country"
+    // DataStore Constants
+    const val DATASTORE_NAME_SETTINGS = "settings"
+    const val DATASTORE_IS_LOGGED_IN_KEY = "isLoggedIn"
+    const val DATASTORE_THEME_KEY = "theme"
+    const val DATASTORE_LANGUAGE_KEY = "language"
+    const val DATASTORE_COUNTRY_KEY = "country"
 
-    // SharedPreference Login Constants
-    const val PREFERENCE_LOGIN = "preference_login"
-    const val PREFERENCE_IS_LOGGED_IN_KEY = "is_logged_in"
+    const val PREFERENCE_SETTINGS = "preference_settings" //TODO REMOVE
+    const val PREFERENCE_THEME_KEY = "theme" //TODO REMOVE
+    const val PREFERENCE_LANGUAGE_KEY = "language" //TODO REMOVE
+    const val PREFERENCE_COUNTRY_KEY = "country" //TODO REMOVE
 
     // Warranty Adapter View Type Constants
     const val VIEW_TYPE_WARRANTY = 0

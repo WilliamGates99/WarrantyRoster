@@ -4,19 +4,26 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.ActivityLandingBinding
 import com.xeniac.warrantyroster_manager.ui.main.MainActivity
+import com.xeniac.warrantyroster_manager.utils.Constants.DATASTORE_IS_LOGGED_IN_KEY
 import com.xeniac.warrantyroster_manager.utils.LocaleModifier
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class LandingActivity : AppCompatActivity() {
 
-    @set:Inject
-    var isUserLoggedIn = false
+    @Inject
+    lateinit var settingsDataStore: DataStore<Preferences>
 
     private lateinit var binding: ActivityLandingBinding
 
@@ -25,11 +32,11 @@ class LandingActivity : AppCompatActivity() {
         splashScreen()
     }
 
-    private fun splashScreen() {
+    private fun splashScreen() = lifecycleScope.launch {
         installSplashScreen()
 
-        if (isUserLoggedIn) {
-            Intent(this, MainActivity::class.java).apply {
+        if (isUserLoggedIn()) {
+            Intent(this@LandingActivity, MainActivity::class.java).apply {
                 startActivity(this)
                 finish()
             }
@@ -37,6 +44,9 @@ class LandingActivity : AppCompatActivity() {
             landingInit()
         }
     }
+
+    private suspend fun isUserLoggedIn(): Boolean =
+        settingsDataStore.data.first()[booleanPreferencesKey(DATASTORE_IS_LOGGED_IN_KEY)] ?: false
 
     private fun landingInit() {
         binding = ActivityLandingBinding.inflate(layoutInflater)
