@@ -26,8 +26,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.BuildConfig
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentSettingsBinding
-import com.xeniac.warrantyroster_manager.di.CurrentCountry
-import com.xeniac.warrantyroster_manager.di.CurrentLanguage
 import com.xeniac.warrantyroster_manager.ui.landing.LandingActivity
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.SettingsViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
@@ -44,7 +42,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import ir.tapsell.plus.*
 import ir.tapsell.plus.model.TapsellPlusAdModel
 import timber.log.Timber
-import javax.inject.Inject
 
 @Suppress("SpellCheckingInspection")
 @AndroidEntryPoint
@@ -54,16 +51,17 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
     private val binding get() = _binding!!
     private val viewModel: SettingsViewModel by viewModels()
 
-    @Inject
-    @CurrentLanguage
-    lateinit var currentLanguage: String
+    //TODO EDIT
+//    @Inject
+//    @CurrentLanguage
+//    lateinit var currentLanguage: String
 
-    @Inject
-    @CurrentCountry
-    lateinit var currentCountry: String
+    //TODO EDIT
+//    @Inject
+//    @CurrentCountry
+//    lateinit var currentCountry: String
 
-    @set:Inject
-    var currentTheme = 0
+    private var currentAppTheme = 0
 
     private lateinit var appLovinNativeAdContainer: ViewGroup
     private lateinit var appLovinAdLoader: MaxNativeAdLoader
@@ -79,10 +77,9 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentSettingsBinding.bind(view)
 
+        subscribeToObservers()
         getAccountDetails()
-        accountDetailsObserver()
-        setCurrentLanguageText()
-        setCurrentThemeText()
+        getCurrentApptheme()
         verifyOnClick()
         changeEmailOnClick()
         changePasswordOnClick()
@@ -91,7 +88,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
         donateOnClick()
         privacyPolicyOnClick()
         logoutOnClick()
-        subscribeToObservers()
         requestAppLovinNativeAd()
     }
 
@@ -100,6 +96,13 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
         snackbar?.dismiss()
         destroyAd()
         _binding = null
+    }
+
+    private fun subscribeToObservers() {
+        accountDetailsObserver()
+        currentAppThemeObserver()
+        sendVerificationEmailObserver()
+        logoutObserver()
     }
 
     private fun getAccountDetails() = viewModel.getAccountDetails()
@@ -113,8 +116,12 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
                             setAccountDetails(user.email.toString(), user.isEmailVerified)
                         }
                     }
-                    Status.ERROR -> Unit
-                    Status.LOADING -> Unit
+                    Status.ERROR -> {
+                        /* NO-OP */
+                    }
+                    Status.LOADING -> {
+                        /* NO-OP */
+                    }
                 }
             }
         }
@@ -156,21 +163,18 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
         binding.lavAccountVerification.playAnimation()
     }
 
-    private fun setCurrentLanguageText() {
-        when (currentLanguage) {
-            "en" -> {
-                binding.tvSettingsLanguageCurrent.text =
-                    requireContext().getString(R.string.settings_text_settings_language_english)
-            }
-            "fa" -> {
-                binding.tvSettingsLanguageCurrent.text =
-                    requireContext().getString(R.string.settings_text_settings_language_persian)
+    private fun getCurrentApptheme() = viewModel.getCurrentAppTheme()
+
+    private fun currentAppThemeObserver() =
+        viewModel.currentAppTheme.observe(viewLifecycleOwner) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { response ->
+                currentAppTheme = response
+                setCurrentThemeText()
             }
         }
-    }
 
     private fun setCurrentThemeText() {
-        when (currentTheme) {
+        when (currentAppTheme) {
             0 -> {
                 binding.tvSettingsThemeCurrent.text =
                     requireContext().getString(R.string.settings_text_settings_theme_default)
@@ -185,6 +189,20 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
             }
         }
     }
+
+    //TOTO EDIT LIKE CHANGE THEME
+//    private fun setCurrentLanguageText() {
+//        when (currentLanguage) {
+//            "en" -> {
+//                binding.tvSettingsLanguageCurrent.text =
+//                    requireContext().getString(R.string.settings_text_settings_language_english)
+//            }
+//            "fa" -> {
+//                binding.tvSettingsLanguageCurrent.text =
+//                    requireContext().getString(R.string.settings_text_settings_language_persian)
+//            }
+//        }
+//    }
 
     private fun verifyOnClick() = binding.btnAccountVerification.setOnClickListener {
         sendVerificationEmail()
@@ -214,10 +232,8 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
 
         MaterialAlertDialogBuilder(requireContext()).apply {
             setTitle(requireContext().getString(R.string.settings_text_settings_theme))
-            setSingleChoiceItems(themeItems, currentTheme) { dialogInterface, index ->
+            setSingleChoiceItems(themeItems, currentAppTheme) { dialogInterface, index ->
                 setAppTheme(index)
-                currentTheme = index
-                setCurrentThemeText()
                 dialogInterface.dismiss()
             }
         }.show()
@@ -251,11 +267,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
 
     private fun logoutOnClick() = binding.btnLogout.setOnClickListener {
         logout()
-    }
-
-    private fun subscribeToObservers() {
-        sendVerificationEmailObserver()
-        logoutObserver()
     }
 
     private fun setAppTheme(index: Int) = viewModel.setAppTheme(index)

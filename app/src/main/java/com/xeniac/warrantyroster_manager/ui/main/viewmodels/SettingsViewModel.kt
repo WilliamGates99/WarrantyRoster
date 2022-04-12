@@ -1,19 +1,16 @@
 package com.xeniac.warrantyroster_manager.ui.main.viewmodels
 
 import android.app.Application
-import android.content.SharedPreferences
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseUser
 import com.xeniac.warrantyroster_manager.BaseApplication
-import com.xeniac.warrantyroster_manager.di.SettingsPrefs
 import com.xeniac.warrantyroster_manager.repositories.PreferencesRepository
 import com.xeniac.warrantyroster_manager.repositories.UserRepository
+import com.xeniac.warrantyroster_manager.utils.SettingsHelper
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
-import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_THEME_KEY
 import com.xeniac.warrantyroster_manager.utils.Event
 import com.xeniac.warrantyroster_manager.utils.NetworkHelper.hasInternetConnection
 import com.xeniac.warrantyroster_manager.utils.Resource
@@ -27,9 +24,11 @@ import javax.inject.Inject
 class SettingsViewModel @Inject constructor(
     application: Application,
     private val userRepository: UserRepository,
-    private val preferencesRepository: PreferencesRepository,
-    @SettingsPrefs private val settingsPrefs: SharedPreferences
+    private val preferencesRepository: PreferencesRepository
 ) : AndroidViewModel(application) {
+
+    private val _currentAppTheme: MutableLiveData<Event<Int>> = MutableLiveData()
+    val currentAppTheme: MutableLiveData<Event<Int>> = _currentAppTheme
 
     private val _accountDetailsLiveData:
             MutableLiveData<Event<Resource<FirebaseUser>>> = MutableLiveData()
@@ -56,26 +55,13 @@ class SettingsViewModel @Inject constructor(
     val changeUserPasswordLiveData: LiveData<Event<Resource<Nothing>>> = _changeUserPasswordLiveData
 
     fun setAppTheme(index: Int) = viewModelScope.launch {
-        when (index) {
-            0 -> {
-                if (AppCompatDelegate.getDefaultNightMode() != AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM) {
-                    settingsPrefs.edit().putInt(PREFERENCE_THEME_KEY, index).apply()
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
-                }
-            }
-            1 -> {
-                if (AppCompatDelegate.getDefaultNightMode() != AppCompatDelegate.MODE_NIGHT_NO) {
-                    settingsPrefs.edit().putInt(PREFERENCE_THEME_KEY, index).apply()
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                }
-            }
-            2 -> {
-                if (AppCompatDelegate.getDefaultNightMode() != AppCompatDelegate.MODE_NIGHT_YES) {
-                    settingsPrefs.edit().putInt(PREFERENCE_THEME_KEY, index).apply()
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                }
-            }
-        }
+        preferencesRepository.setAppTheme(index)
+        _currentAppTheme.postValue(Event(index))
+        SettingsHelper.setAppTheme(index)
+    }
+
+    fun getCurrentAppTheme() = viewModelScope.launch {
+        safeGetCurrentAppTheme()
     }
 
     fun getAccountDetails() = viewModelScope.launch {
@@ -100,6 +86,10 @@ class SettingsViewModel @Inject constructor(
 
     fun changeUserPassword(newPassword: String) = viewModelScope.launch {
         safeChangeUserPassword(newPassword)
+    }
+
+    private suspend fun safeGetCurrentAppTheme() {
+        _currentAppTheme.postValue(Event(preferencesRepository.getCurrentAppTheme()))
     }
 
     private suspend fun safeGetAccountDetails() {
@@ -151,7 +141,7 @@ class SettingsViewModel @Inject constructor(
         _logoutLiveData.postValue(Event(Resource.loading()))
         try {
             userRepository.logoutUser()
-            preferencesRepository.setIsUserLoggedIn(false)
+            preferencesRepository.isUserLoggedIn(false)
             _logoutLiveData.postValue(Event(Resource.success(null)))
             Timber.i("User successfully logged out.")
         } catch (e: Exception) {

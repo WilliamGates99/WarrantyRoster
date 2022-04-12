@@ -27,6 +27,9 @@ class LandingViewModel @Inject constructor(
     private val preferencesRepository: PreferencesRepository
 ) : AndroidViewModel(application) {
 
+    private val _isUserLoggedIn: MutableLiveData<Event<Boolean>> = MutableLiveData()
+    val isUserLoggedIn: MutableLiveData<Event<Boolean>> = _isUserLoggedIn
+
     private val _registerLiveData: MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
     val registerLiveData: LiveData<Event<Resource<Nothing>>> = _registerLiveData
 
@@ -43,6 +46,10 @@ class LandingViewModel @Inject constructor(
     var isFirstSentEmail = true
     var timerInMillis: Long = 0
 
+    fun isUserLoggedIn() = viewModelScope.launch {
+        safeIsUserLoggedIn()
+    }
+
     fun registerViaEmail(email: String, password: String) = viewModelScope.launch {
         safeRegisterViaEmail(email, password)
     }
@@ -55,13 +62,17 @@ class LandingViewModel @Inject constructor(
         safeSendResetPasswordEmail(email)
     }
 
+    private suspend fun safeIsUserLoggedIn() {
+        _isUserLoggedIn.postValue(Event(preferencesRepository.isUserLoggedIn()))
+    }
+
     private suspend fun safeRegisterViaEmail(email: String, password: String) {
         _registerLiveData.postValue(Event(Resource.loading()))
         try {
             if (hasInternetConnection(getApplication<BaseApplication>())) {
                 userRepository.registerViaEmail(email, password).await()
                 userRepository.sendVerificationEmail()
-                preferencesRepository.setIsUserLoggedIn(true)
+                preferencesRepository.isUserLoggedIn(true)
                 _registerLiveData.postValue(Event(Resource.success(null)))
                 Timber.i("$email registered successfully.")
             } else {
@@ -82,7 +93,7 @@ class LandingViewModel @Inject constructor(
             if (hasInternetConnection(getApplication<BaseApplication>())) {
                 userRepository.loginViaEmail(email, password).await().apply {
                     user?.let {
-                        preferencesRepository.setIsUserLoggedIn(true)
+                        preferencesRepository.isUserLoggedIn(true)
                         _loginLiveData.postValue(Event(Resource.success(null)))
                         Timber.i("$email logged in successfully.")
                     }

@@ -21,9 +21,9 @@ import com.xeniac.warrantyroster_manager.BuildConfig
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.AdContainerListBinding
 import com.xeniac.warrantyroster_manager.databinding.ListItemWarrantyBinding
-import com.xeniac.warrantyroster_manager.di.CategoryTitleMapKey
 import com.xeniac.warrantyroster_manager.data.remote.models.ListItemType
 import com.xeniac.warrantyroster_manager.data.remote.models.Warranty
+import com.xeniac.warrantyroster_manager.repositories.PreferencesRepository
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModel
 import com.xeniac.warrantyroster_manager.utils.CoilHelper.loadCategoryImage
 import com.xeniac.warrantyroster_manager.utils.Constants.VIEW_TYPE_AD
@@ -39,6 +39,9 @@ import ir.tapsell.plus.AdRequestCallback
 import ir.tapsell.plus.AdShowListener
 import ir.tapsell.plus.TapsellPlus
 import ir.tapsell.plus.model.TapsellPlusAdModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
@@ -51,7 +54,7 @@ class WarrantyAdapter(
     private val clickInterface: WarrantyListClickInterface
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var categoryTitleMapKey: String
+    private var preferencesRepository: PreferencesRepository
     private var imageLoader: ImageLoader
     private var dateFormat: SimpleDateFormat
 
@@ -63,9 +66,8 @@ class WarrantyAdapter(
 
     @EntryPoint
     @InstallIn(SingletonComponent::class)
-    interface CategoryTitleMapKeyProviderEntryPoint {
-        @CategoryTitleMapKey
-        fun getCategoryTitleMapKey(): String
+    interface PreferencesRepositoryProviderEntryPoint {
+        fun getPreferencesRepository(): PreferencesRepository
     }
 
     @EntryPoint
@@ -75,14 +77,14 @@ class WarrantyAdapter(
     }
 
     init {
-        val categoryTitleMapKeyProviderEntryPoint = EntryPointAccessors
-            .fromApplication(context, CategoryTitleMapKeyProviderEntryPoint::class.java)
+        val preferencesRepositoryProviderEntryPoint = EntryPointAccessors
+            .fromApplication(context, PreferencesRepositoryProviderEntryPoint::class.java)
         val imageLoaderProviderEntryPoint = EntryPointAccessors
             .fromApplication(context, ImageLoaderProviderEntryPoint::class.java)
         val dateFormatProviderEntryPoint = EntryPointAccessors
             .fromApplication(context, DateFormatProviderEntryPoint::class.java)
 
-        categoryTitleMapKey = categoryTitleMapKeyProviderEntryPoint.getCategoryTitleMapKey()
+        preferencesRepository = preferencesRepositoryProviderEntryPoint.getPreferencesRepository()
         imageLoader = imageLoaderProviderEntryPoint.getImageLoader()
         dateFormat = dateFormatProviderEntryPoint.getDateFormat()
     }
@@ -135,7 +137,7 @@ class WarrantyAdapter(
     inner class WarrantyViewHolder(val binding: ListItemWarrantyBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bindView(warranty: Warranty) {
+        fun bindView(warranty: Warranty) = CoroutineScope(Dispatchers.Main).launch {
             val isLifetime = warranty.isLifetime ?: false
             if (isLifetime) {
                 val expiryDate = context.getString(R.string.warranties_list_is_lifetime)
@@ -182,7 +184,7 @@ class WarrantyAdapter(
             }
 
             category?.let {
-                binding.categoryTitle = it.title[categoryTitleMapKey]
+                binding.categoryTitle = it.title[preferencesRepository.getCategoryTitleMapKey()]
                 loadCategoryImage(context, it.icon, imageLoader, binding.ivIcon, binding.cpiIcon)
             }
 

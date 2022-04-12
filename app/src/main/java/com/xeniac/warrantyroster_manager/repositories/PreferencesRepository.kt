@@ -7,6 +7,7 @@ import com.xeniac.warrantyroster_manager.utils.Constants.DATASTORE_IS_LOGGED_IN_
 import com.xeniac.warrantyroster_manager.utils.Constants.DATASTORE_LANGUAGE_KEY
 import com.xeniac.warrantyroster_manager.utils.Constants.DATASTORE_THEME_KEY
 import kotlinx.coroutines.flow.first
+import timber.log.Timber
 import javax.inject.Inject
 
 class PreferencesRepository @Inject constructor(
@@ -15,24 +16,77 @@ class PreferencesRepository @Inject constructor(
 
     private object PreferencesKeys {
         val IS_USER_LOGGED_IN = booleanPreferencesKey(DATASTORE_IS_LOGGED_IN_KEY)
-        val CURRENT_THEME = intPreferencesKey(DATASTORE_THEME_KEY)
-        val CURRENT_LANGUAGE = stringPreferencesKey(DATASTORE_LANGUAGE_KEY)
-        val CURRENT_COUNTRY = stringPreferencesKey(DATASTORE_COUNTRY_KEY)
+        val CURRENT_APP_THEME = intPreferencesKey(DATASTORE_THEME_KEY)
+        val CURRENT_APP_LANGUAGE = stringPreferencesKey(DATASTORE_LANGUAGE_KEY)
+        val CURRENT_APP_COUNTRY = stringPreferencesKey(DATASTORE_COUNTRY_KEY)
     }
 
-    suspend fun getIsUserLoggedIn(): Boolean =
+    suspend fun isUserLoggedIn(): Boolean = try {
         settingsDataStore.data.first()[PreferencesKeys.IS_USER_LOGGED_IN] ?: false
-
-    suspend fun setIsUserLoggedIn(value: Boolean) = settingsDataStore.edit { loginPreferences ->
-        loginPreferences[PreferencesKeys.IS_USER_LOGGED_IN] = value
+    } catch (e: Exception) {
+        Timber.e("isUserLoggedIn Exception: $e")
+        false
     }
 
-    suspend fun setIsUserLoggedIn2(value: Boolean) {
+    suspend fun getCurrentAppTheme(): Int = try {
+        settingsDataStore.data.first()[PreferencesKeys.CURRENT_APP_THEME] ?: 0
+    } catch (e: Exception) {
+        Timber.e("getCurrentAppTheme Exception: $e")
+        0
+    }
+
+    suspend fun getCurrentAppLanguage(): String = try {
+        settingsDataStore.data.first()[PreferencesKeys.CURRENT_APP_LANGUAGE] ?: "en"
+    } catch (e: Exception) {
+        Timber.e("getCurrentAppLanguage Exception: $e")
+        "en"
+    }
+
+    suspend fun getCurrentAppCountry(): String = try {
+        settingsDataStore.data.first()[PreferencesKeys.CURRENT_APP_COUNTRY] ?: "US"
+    } catch (e: Exception) {
+        Timber.e("getCurrentAppCountry Exception: $e")
+        "US"
+    }
+
+    suspend fun getCategoryTitleMapKey() = "${getCurrentAppLanguage()}-${getCurrentAppCountry()}"
+
+    suspend fun isUserLoggedIn(value: Boolean) = try {
         settingsDataStore.edit { loginPreferences ->
             when (value) {
                 true -> loginPreferences[PreferencesKeys.IS_USER_LOGGED_IN] = value
                 false -> loginPreferences.remove(PreferencesKeys.IS_USER_LOGGED_IN)
             }
+            Timber.i("isUserLoggedIn edited to $value")
         }
+    } catch (e: Exception) {
+        Timber.e("isUserLoggedIn Exception: $e")
+    }
+
+    suspend fun setAppTheme(index: Int) = try {
+        settingsDataStore.edit { settingsPreferences ->
+            settingsPreferences[PreferencesKeys.CURRENT_APP_THEME] = index
+            Timber.i("AppTheme edited to $index")
+        }
+    } catch (e: Exception) {
+        Timber.e("setAppTheme Exception: $e")
+    }
+
+    suspend fun setCurrentAppLanguage(language: String) = try {
+        settingsDataStore.edit { settingsPreferences ->
+            settingsPreferences[PreferencesKeys.CURRENT_APP_LANGUAGE] = language
+            Timber.i("CurrentAppLanguage edited to $language")
+        }
+    } catch (e: Exception) {
+        Timber.e("setCurrentAppLanguage Exception: $e")
+    }
+
+    suspend fun setCurrentAppCountry(country: String) = try {
+        settingsDataStore.edit { settingsPreferences ->
+            settingsPreferences[PreferencesKeys.CURRENT_APP_COUNTRY] = country
+            Timber.i("CurrentAppCountry edited to $country")
+        }
+    } catch (e: Exception) {
+        Timber.e("setCurrentAppCountry Exception: $e")
     }
 }

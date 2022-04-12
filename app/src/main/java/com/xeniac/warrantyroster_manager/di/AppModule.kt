@@ -1,8 +1,6 @@
 package com.xeniac.warrantyroster_manager.di
 
 import android.content.Context
-import android.content.Context.MODE_PRIVATE
-import android.content.SharedPreferences
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
@@ -24,10 +22,6 @@ import com.xeniac.warrantyroster_manager.repositories.UserRepository
 import com.xeniac.warrantyroster_manager.utils.Constants.COLLECTION_CATEGORIES
 import com.xeniac.warrantyroster_manager.utils.Constants.COLLECTION_WARRANTIES
 import com.xeniac.warrantyroster_manager.utils.Constants.DATASTORE_NAME_SETTINGS
-import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_SETTINGS
-import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_LANGUAGE_KEY
-import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_COUNTRY_KEY
-import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_THEME_KEY
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -84,35 +78,14 @@ object AppModule {
     fun provideLoginDataStore(@ApplicationContext context: Context): DataStore<Preferences> =
         PreferenceDataStoreFactory.create(
             corruptionHandler = ReplaceFileCorruptionHandler { emptyPreferences() },
+            //TODO UNCOMMENT
+//            migrations = listOf(
+//                SharedPreferencesMigration(context, PREFERENCE_SETTINGS),
+//                SharedPreferencesMigration(context, PREFERENCE_LOGIN)
+//            ),
             scope = CoroutineScope(Dispatchers.IO + SupervisorJob()),
             produceFile = { context.preferencesDataStoreFile(DATASTORE_NAME_SETTINGS) }
         )
-
-    //TODO REMOVE
-    @SettingsPrefs
-    @Singleton
-    @Provides
-    fun provideSettingsPrefs(@ApplicationContext context: Context): SharedPreferences =
-        context.getSharedPreferences(PREFERENCE_SETTINGS, MODE_PRIVATE)
-
-    //TODO REMOVE
-    @CurrentLanguage
-    @Singleton //TODO REMOVE AFTER ADDING PERSIAN
-    @Provides
-    fun provideCurrentLanguage(@SettingsPrefs settingsPrefs: SharedPreferences) =
-        settingsPrefs.getString(PREFERENCE_LANGUAGE_KEY, "en") ?: "en"
-
-    //TODO REMOVE
-    @CurrentCountry
-    @Singleton //TODO REMOVE AFTER ADDING PERSIAN
-    @Provides
-    fun provideCurrentCountry(@SettingsPrefs settingsPrefs: SharedPreferences) =
-        settingsPrefs.getString(PREFERENCE_COUNTRY_KEY, "US") ?: "US"
-
-    //TODO REMOVE
-    @Provides
-    fun provideCurrentTheme(@SettingsPrefs settingsPrefs: SharedPreferences) =
-        settingsPrefs.getInt(PREFERENCE_THEME_KEY, 0)
 
     @Singleton
     @Provides
@@ -147,14 +120,6 @@ object AppModule {
             crossfade(true)
             if (BuildConfig.DEBUG) logger(DebugLogger())
         }.build()
-
-    @CategoryTitleMapKey
-    @Singleton //TODO REMOVE AFTER ADDING PERSIAN
-    @Provides
-    fun provideCategoryTitleMapKey(
-        @CurrentLanguage currentLanguage: String,
-        @CurrentCountry currentCountry: String
-    ) = "${currentLanguage}-${currentCountry}"
 }
 
 @Qualifier
@@ -164,20 +129,3 @@ annotation class CategoriesCollection
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
 annotation class WarrantiesCollection
-
-//TODO REMOVE
-@Qualifier
-@Retention(AnnotationRetention.BINARY)
-annotation class SettingsPrefs
-
-@Qualifier
-@Retention(AnnotationRetention.BINARY)
-annotation class CurrentLanguage
-
-@Qualifier
-@Retention(AnnotationRetention.BINARY)
-annotation class CurrentCountry
-
-@Qualifier
-@Retention(AnnotationRetention.BINARY)
-annotation class CategoryTitleMapKey

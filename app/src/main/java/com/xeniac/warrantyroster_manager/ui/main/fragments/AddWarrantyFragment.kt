@@ -13,6 +13,7 @@ import androidx.core.view.get
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import coil.ImageLoader
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -21,9 +22,9 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentAddWarrantyBinding
-import com.xeniac.warrantyroster_manager.di.CategoryTitleMapKey
 import com.xeniac.warrantyroster_manager.data.remote.models.Category
 import com.xeniac.warrantyroster_manager.data.remote.models.WarrantyInput
+import com.xeniac.warrantyroster_manager.repositories.PreferencesRepository
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModel
 import com.xeniac.warrantyroster_manager.utils.CoilHelper.loadCategoryImage
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
@@ -47,6 +48,7 @@ import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkConnect
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkFailureError
 import com.xeniac.warrantyroster_manager.utils.Status
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import java.text.DecimalFormat
 import java.util.*
 import javax.inject.Inject
@@ -59,11 +61,10 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
     private lateinit var viewModel: MainViewModel
 
     @Inject
-    lateinit var imageLoader: ImageLoader
+    lateinit var preferencesRepository: PreferencesRepository
 
     @Inject
-    @CategoryTitleMapKey
-    lateinit var categoryTitleMapKey: String
+    lateinit var imageLoader: ImageLoader
 
     @Inject
     lateinit var decimalFormat: DecimalFormat
@@ -155,56 +156,57 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
     }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        savedInstanceState?.let {
-            it.getString(SAVE_INSTANCE_ADD_WARRANTY_TITLE)?.let { restoredTitle ->
-                binding.tiEditTitle.setText(restoredTitle)
-            }
-
-            it.getString(SAVE_INSTANCE_ADD_WARRANTY_BRAND)?.let { restoredBrand ->
-                binding.tiEditBrand.setText(restoredBrand)
-            }
-
-            it.getString(SAVE_INSTANCE_ADD_WARRANTY_MODEL)?.let { restoredModel ->
-                binding.tiEditModel.setText(restoredModel)
-            }
-
-            it.getString(SAVE_INSTANCE_ADD_WARRANTY_SERIAL)?.let { restoredSerial ->
-                binding.tiEditSerial.setText(restoredSerial)
-            }
-
-            it.getString(SAVE_INSTANCE_ADD_WARRANTY_DESCRIPTION)?.let { restoredDescription ->
-                binding.tiEditDescription.setText(restoredDescription)
-            }
-
-            it.getString(SAVE_INSTANCE_ADD_WARRANTY_CATEGORY_ID)?.let { restoredCategoryId ->
-                selectedCategory = viewModel.getCategoryById(restoredCategoryId)
-
-                selectedCategory?.let { category ->
-                    binding.tiDdCategory.setText(category.title[categoryTitleMapKey])
-                    loadCategoryIcon(category.icon)
+        lifecycleScope.launch {
+            savedInstanceState?.let {
+                it.getString(SAVE_INSTANCE_ADD_WARRANTY_TITLE)?.let { restoredTitle ->
+                    binding.tiEditTitle.setText(restoredTitle)
                 }
-            }
 
-            it.getBoolean(SAVE_INSTANCE_ADD_WARRANTY_IS_LIFETIME).let { restoredIsLifetime ->
-                binding.cbLifetime.isChecked = restoredIsLifetime
-                setExpiryDateActivation(restoredIsLifetime)
-            }
-
-            it.getLong(SAVE_INSTANCE_ADD_WARRANTY_STARTING_DATE_IN_MILLIS).let { restoredDate ->
-                if (restoredDate != 0L) {
-                    selectedStartingDateInMillis = restoredDate
-                    setStartingDate()
+                it.getString(SAVE_INSTANCE_ADD_WARRANTY_BRAND)?.let { restoredBrand ->
+                    binding.tiEditBrand.setText(restoredBrand)
                 }
-            }
 
-            it.getLong(SAVE_INSTANCE_ADD_WARRANTY_EXPIRY_DATE_IN_MILLIS).let { restoredDate ->
-                if (restoredDate != 0L) {
-                    selectedExpiryDateInMillis = restoredDate
-                    setExpiryDate()
+                it.getString(SAVE_INSTANCE_ADD_WARRANTY_MODEL)?.let { restoredModel ->
+                    binding.tiEditModel.setText(restoredModel)
+                }
+
+                it.getString(SAVE_INSTANCE_ADD_WARRANTY_SERIAL)?.let { restoredSerial ->
+                    binding.tiEditSerial.setText(restoredSerial)
+                }
+
+                it.getString(SAVE_INSTANCE_ADD_WARRANTY_DESCRIPTION)?.let { restoredDescription ->
+                    binding.tiEditDescription.setText(restoredDescription)
+                }
+
+                it.getString(SAVE_INSTANCE_ADD_WARRANTY_CATEGORY_ID)?.let { restoredCategoryId ->
+                    selectedCategory = viewModel.getCategoryById(restoredCategoryId)
+
+                    selectedCategory?.let { category ->
+                        binding.tiDdCategory.setText(category.title[preferencesRepository.getCategoryTitleMapKey()])
+                        loadCategoryIcon(category.icon)
+                    }
+                }
+
+                it.getBoolean(SAVE_INSTANCE_ADD_WARRANTY_IS_LIFETIME).let { restoredIsLifetime ->
+                    binding.cbLifetime.isChecked = restoredIsLifetime
+                    setExpiryDateActivation(restoredIsLifetime)
+                }
+
+                it.getLong(SAVE_INSTANCE_ADD_WARRANTY_STARTING_DATE_IN_MILLIS).let { restoredDate ->
+                    if (restoredDate != 0L) {
+                        selectedStartingDateInMillis = restoredDate
+                        setStartingDate()
+                    }
+                }
+
+                it.getLong(SAVE_INSTANCE_ADD_WARRANTY_EXPIRY_DATE_IN_MILLIS).let { restoredDate ->
+                    if (restoredDate != 0L) {
+                        selectedExpiryDateInMillis = restoredDate
+                        setExpiryDate()
+                    }
                 }
             }
         }
-
         super.onViewStateRestored(savedInstanceState)
     }
 

@@ -1,43 +1,45 @@
 package com.xeniac.warrantyroster_manager
 
 import android.app.Application
-import androidx.appcompat.app.AppCompatDelegate
 import com.applovin.sdk.AppLovinPrivacySettings
 import com.applovin.sdk.AppLovinSdk
 import com.google.firebase.FirebaseApp
 import com.google.firebase.appcheck.FirebaseAppCheck
 import com.google.firebase.appcheck.debug.DebugAppCheckProviderFactory
 import com.google.firebase.appcheck.safetynet.SafetyNetAppCheckProviderFactory
-import com.xeniac.warrantyroster_manager.di.CurrentCountry
-import com.xeniac.warrantyroster_manager.di.CurrentLanguage
+import com.xeniac.warrantyroster_manager.repositories.PreferencesRepository
+import com.xeniac.warrantyroster_manager.utils.SettingsHelper
+import com.xeniac.warrantyroster_manager.utils.LocaleModifier
 import dagger.hilt.android.HiltAndroidApp
 import ir.tapsell.plus.TapsellPlus
 import ir.tapsell.plus.TapsellPlusInitListener
 import ir.tapsell.plus.model.AdNetworkError
 import ir.tapsell.plus.model.AdNetworks
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.util.*
 import javax.inject.Inject
 
 @HiltAndroidApp
 class BaseApplication : Application() {
 
-    @set:Inject
-    var currentTheme = 0
+//    @Inject
+//    @CurrentLanguage
+//    lateinit var currentLanguage: String
+
+//    @Inject
+//    @CurrentCountry
+//    lateinit var currentCountry: String
 
     @Inject
-    @CurrentLanguage
-    lateinit var currentLanguage: String
-
-    @Inject
-    @CurrentCountry
-    lateinit var currentCountry: String
+    lateinit var preferencesRepository: PreferencesRepository
 
     override fun onCreate() {
         super.onCreate()
         setupTimber()
         initFirebaseAppCheck()
-        setNightMode()
+        setAppTheme()
         setLocale()
         initAppLovin()
         initTapsell()
@@ -54,22 +56,19 @@ class BaseApplication : Application() {
         firebaseAppCheck.installAppCheckProviderFactory(DebugAppCheckProviderFactory.getInstance())
     }
 
-    private fun setNightMode() {
-        when (currentTheme) {
-            0 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
-            1 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            2 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-        }
+    private fun setAppTheme() = CoroutineScope(Dispatchers.Main).launch {
+        SettingsHelper.setAppTheme(preferencesRepository.getCurrentAppTheme())
     }
 
     private fun setLocale() {
-        val resources = resources
-        val displayMetrics = resources.displayMetrics
-        val configuration = resources.configuration
-        val newLocale = Locale(currentLanguage, currentCountry)
-        Locale.setDefault(newLocale)
-        configuration.setLocale(newLocale)
-        resources.updateConfiguration(configuration, displayMetrics)
+        LocaleModifier.setLocale(this)
+//        val resources = resources
+//        val displayMetrics = resources.displayMetrics
+//        val configuration = resources.configuration
+//        val newLocale = Locale(currentLanguage, currentCountry)
+//        Locale.setDefault(newLocale)
+//        configuration.setLocale(newLocale)
+//        resources.updateConfiguration(configuration, displayMetrics)
     }
 
     private fun initAppLovin() {

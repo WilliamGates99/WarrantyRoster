@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import coil.ImageLoader
@@ -21,8 +22,8 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentEditWarrantyBinding
-import com.xeniac.warrantyroster_manager.di.CategoryTitleMapKey
 import com.xeniac.warrantyroster_manager.data.remote.models.*
+import com.xeniac.warrantyroster_manager.repositories.PreferencesRepository
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModel
 import com.xeniac.warrantyroster_manager.utils.CoilHelper.loadCategoryImage
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
@@ -47,6 +48,7 @@ import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkConnect
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkFailureError
 import com.xeniac.warrantyroster_manager.utils.Status
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -60,8 +62,7 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
     private lateinit var viewModel: MainViewModel
 
     @Inject
-    @CategoryTitleMapKey
-    lateinit var categoryTitleMapKey: String
+    lateinit var preferencesRepository: PreferencesRepository
 
     @Inject
     lateinit var imageLoader: ImageLoader
@@ -163,56 +164,58 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
     }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        savedInstanceState?.let {
-            it.getString(SAVE_INSTANCE_EDIT_WARRANTY_TITLE)?.let { restoredTitle ->
-                binding.tiEditTitle.setText(restoredTitle)
-            }
-
-            it.getString(SAVE_INSTANCE_EDIT_WARRANTY_BRAND)?.let { restoredBrand ->
-                binding.tiEditBrand.setText(restoredBrand)
-            }
-
-            it.getString(SAVE_INSTANCE_EDIT_WARRANTY_MODEL)?.let { restoredModel ->
-                binding.tiEditModel.setText(restoredModel)
-            }
-
-            it.getString(SAVE_INSTANCE_EDIT_WARRANTY_SERIAL)?.let { restoredSerial ->
-                binding.tiEditSerial.setText(restoredSerial)
-            }
-
-            it.getString(SAVE_INSTANCE_EDIT_WARRANTY_DESCRIPTION)?.let { restoredDescription ->
-                binding.tiEditDescription.setText(restoredDescription)
-            }
-
-            it.getString(SAVE_INSTANCE_EDIT_WARRANTY_CATEGORY_ID)?.let { restoredCategoryId ->
-                selectedCategory = viewModel.getCategoryById(restoredCategoryId)
-
-                selectedCategory?.let { category ->
-                    binding.tiDdCategory.setText(category.title[categoryTitleMapKey])
-                    loadCategoryIcon(category.icon)
+        lifecycleScope.launch {
+            savedInstanceState?.let {
+                it.getString(SAVE_INSTANCE_EDIT_WARRANTY_TITLE)?.let { restoredTitle ->
+                    binding.tiEditTitle.setText(restoredTitle)
                 }
-            }
 
-            it.getBoolean(SAVE_INSTANCE_EDIT_WARRANTY_IS_LIFETIME).let { restoredIsLifetime ->
-                binding.cbLifetime.isChecked = restoredIsLifetime
-                setExpiryDateActivation(restoredIsLifetime)
-            }
-
-            it.getLong(SAVE_INSTANCE_EDIT_WARRANTY_STARTING_DATE_IN_MILLIS).let { restoredDate ->
-                if (restoredDate != 0L) {
-                    selectedStartingDateInMillis = restoredDate
-                    setStartingDate()
+                it.getString(SAVE_INSTANCE_EDIT_WARRANTY_BRAND)?.let { restoredBrand ->
+                    binding.tiEditBrand.setText(restoredBrand)
                 }
-            }
 
-            it.getLong(SAVE_INSTANCE_EDIT_WARRANTY_EXPIRY_DATE_IN_MILLIS).let { restoredDate ->
-                if (restoredDate != 0L) {
-                    selectedExpiryDateInMillis = restoredDate
-                    setExpiryDate()
+                it.getString(SAVE_INSTANCE_EDIT_WARRANTY_MODEL)?.let { restoredModel ->
+                    binding.tiEditModel.setText(restoredModel)
+                }
+
+                it.getString(SAVE_INSTANCE_EDIT_WARRANTY_SERIAL)?.let { restoredSerial ->
+                    binding.tiEditSerial.setText(restoredSerial)
+                }
+
+                it.getString(SAVE_INSTANCE_EDIT_WARRANTY_DESCRIPTION)?.let { restoredDescription ->
+                    binding.tiEditDescription.setText(restoredDescription)
+                }
+
+                it.getString(SAVE_INSTANCE_EDIT_WARRANTY_CATEGORY_ID)?.let { restoredCategoryId ->
+                    selectedCategory = viewModel.getCategoryById(restoredCategoryId)
+
+                    selectedCategory?.let { category ->
+                        binding.tiDdCategory.setText(category.title[preferencesRepository.getCategoryTitleMapKey()])
+                        loadCategoryIcon(category.icon)
+                    }
+                }
+
+                it.getBoolean(SAVE_INSTANCE_EDIT_WARRANTY_IS_LIFETIME).let { restoredIsLifetime ->
+                    binding.cbLifetime.isChecked = restoredIsLifetime
+                    setExpiryDateActivation(restoredIsLifetime)
+                }
+
+                it.getLong(SAVE_INSTANCE_EDIT_WARRANTY_STARTING_DATE_IN_MILLIS)
+                    .let { restoredDate ->
+                        if (restoredDate != 0L) {
+                            selectedStartingDateInMillis = restoredDate
+                            setStartingDate()
+                        }
+                    }
+
+                it.getLong(SAVE_INSTANCE_EDIT_WARRANTY_EXPIRY_DATE_IN_MILLIS).let { restoredDate ->
+                    if (restoredDate != 0L) {
+                        selectedExpiryDateInMillis = restoredDate
+                        setExpiryDate()
+                    }
                 }
             }
         }
-
         super.onViewStateRestored(savedInstanceState)
     }
 
@@ -316,10 +319,7 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
         binding.tiDdCategory.setOnItemClickListener { adapterView, _, position, _ ->
             val categoryTitle = adapterView.getItemAtPosition(position).toString()
             selectedCategory = viewModel.getCategoryByTitle(categoryTitle)
-
-            selectedCategory?.let {
-                loadCategoryIcon(it.icon)
-            }
+            selectedCategory?.let { loadCategoryIcon(it.icon) }
         }
 
     private fun categoryDropDownOnDismiss() = binding.tiDdCategory.setOnDismissListener {
@@ -456,7 +456,7 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
         setWarrantyDetails()
     }
 
-    private fun setWarrantyDetails() {
+    private fun setWarrantyDetails() = lifecycleScope.launch {
         binding.tiEditTitle.setText(warranty.title)
         binding.tiEditBrand.setText(warranty.brand)
         binding.tiEditModel.setText(warranty.model)
@@ -468,7 +468,7 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
 
         selectedCategory = viewModel.getCategoryById(warranty.categoryId!!)
         selectedCategory?.let {
-            binding.tiDdCategory.setText(it.title[categoryTitleMapKey])
+            binding.tiDdCategory.setText(it.title[preferencesRepository.getCategoryTitleMapKey()])
             loadCategoryIcon(it.icon)
         }
     }

@@ -6,12 +6,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.xeniac.warrantyroster_manager.BaseApplication
-import com.xeniac.warrantyroster_manager.di.CategoryTitleMapKey
 import com.xeniac.warrantyroster_manager.data.remote.models.Category
 import com.xeniac.warrantyroster_manager.data.remote.models.ListItemType
 import com.xeniac.warrantyroster_manager.data.remote.models.Warranty
 import com.xeniac.warrantyroster_manager.data.remote.models.WarrantyInput
 import com.xeniac.warrantyroster_manager.repositories.MainRepository
+import com.xeniac.warrantyroster_manager.repositories.PreferencesRepository
 import com.xeniac.warrantyroster_manager.utils.Constants.CATEGORIES_ICON
 import com.xeniac.warrantyroster_manager.utils.Constants.CATEGORIES_TITLE
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_EMPTY_CATEGORY_LIST
@@ -39,7 +39,7 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     application: Application,
     private val mainRepository: MainRepository,
-    @CategoryTitleMapKey private val categoryTitleMapKey: String
+    private val preferencesRepository: PreferencesRepository
 ) : AndroidViewModel(application) {
 
     private val _categoriesLiveData:
@@ -71,11 +71,13 @@ class MainViewModel @Inject constructor(
 
     fun getAllCategoryTitles(): List<String> {
         val titleList = mutableListOf<String>()
-        categoriesLiveData.value?.let { responseEvent ->
-            responseEvent.peekContent().let { response ->
-                response.data?.let { categoriesList ->
-                    for (category in categoriesList) {
-                        titleList.add(category.title[categoryTitleMapKey].toString())
+        viewModelScope.launch {
+            categoriesLiveData.value?.let { responseEvent ->
+                responseEvent.peekContent().let { response ->
+                    response.data?.let { categoriesList ->
+                        for (category in categoriesList) {
+                            titleList.add(category.title[preferencesRepository.getCategoryTitleMapKey()].toString())
+                        }
                     }
                 }
             }

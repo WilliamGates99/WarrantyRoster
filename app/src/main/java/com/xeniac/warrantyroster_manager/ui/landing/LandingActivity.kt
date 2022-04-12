@@ -2,51 +2,43 @@ package com.xeniac.warrantyroster_manager.ui.landing
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.booleanPreferencesKey
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.ActivityLandingBinding
 import com.xeniac.warrantyroster_manager.ui.main.MainActivity
-import com.xeniac.warrantyroster_manager.utils.Constants.DATASTORE_IS_LOGGED_IN_KEY
 import com.xeniac.warrantyroster_manager.utils.LocaleModifier
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class LandingActivity : AppCompatActivity() {
 
-    @Inject
-    lateinit var settingsDataStore: DataStore<Preferences>
-
     private lateinit var binding: ActivityLandingBinding
+    private val viewModel by viewModels<LandingViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        splashScreen()
+        installSplashScreen()
+        getIsUserLoggedIn()
+        isUserLoggedInObserver()
     }
 
-    private fun splashScreen() = lifecycleScope.launch {
-        installSplashScreen()
+    private fun getIsUserLoggedIn() = viewModel.isUserLoggedIn()
 
-        if (isUserLoggedIn()) {
-            Intent(this@LandingActivity, MainActivity::class.java).apply {
-                startActivity(this)
-                finish()
+    private fun isUserLoggedInObserver() = viewModel.isUserLoggedIn.observe(this) { responseEvent ->
+        responseEvent.getContentIfNotHandled()?.let { isUserLoggedIn ->
+            if (isUserLoggedIn) {
+                Intent(this@LandingActivity, MainActivity::class.java).apply {
+                    startActivity(this)
+                    finish()
+                }
+            } else {
+                landingInit()
             }
-        } else {
-            landingInit()
         }
     }
-
-    private suspend fun isUserLoggedIn(): Boolean =
-        settingsDataStore.data.first()[booleanPreferencesKey(DATASTORE_IS_LOGGED_IN_KEY)] ?: false
 
     private fun landingInit() {
         binding = ActivityLandingBinding.inflate(layoutInflater)
