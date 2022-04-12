@@ -12,6 +12,7 @@
         android:layout_height="@dimen/height_0dp"
         android:background="?attr/selectableItemBackground"
         android:elevation="@dimen/elevation_10dp"
+        android:textColor="@android:color/transparent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
