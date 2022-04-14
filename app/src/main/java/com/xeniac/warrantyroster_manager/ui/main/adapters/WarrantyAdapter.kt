@@ -60,14 +60,14 @@ class WarrantyAdapter(
 
     @EntryPoint
     @InstallIn(SingletonComponent::class)
-    interface ImageLoaderProviderEntryPoint {
-        fun getImageLoader(): ImageLoader
+    interface PreferencesRepositoryProviderEntryPoint {
+        fun getPreferencesRepository(): PreferencesRepository
     }
 
     @EntryPoint
     @InstallIn(SingletonComponent::class)
-    interface PreferencesRepositoryProviderEntryPoint {
-        fun getPreferencesRepository(): PreferencesRepository
+    interface ImageLoaderProviderEntryPoint {
+        fun getImageLoader(): ImageLoader
     }
 
     @EntryPoint
