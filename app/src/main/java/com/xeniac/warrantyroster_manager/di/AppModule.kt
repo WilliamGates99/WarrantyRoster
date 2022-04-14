@@ -78,11 +78,6 @@ object AppModule {
     fun provideLoginDataStore(@ApplicationContext context: Context): DataStore<Preferences> =
         PreferenceDataStoreFactory.create(
             corruptionHandler = ReplaceFileCorruptionHandler { emptyPreferences() },
-            //TODO UNCOMMENT
-//            migrations = listOf(
-//                SharedPreferencesMigration(context, PREFERENCE_SETTINGS),
-//                SharedPreferencesMigration(context, PREFERENCE_LOGIN)
-//            ),
             scope = CoroutineScope(Dispatchers.IO + SupervisorJob()),
             produceFile = { context.preferencesDataStoreFile(DATASTORE_NAME_SETTINGS) }
         )
