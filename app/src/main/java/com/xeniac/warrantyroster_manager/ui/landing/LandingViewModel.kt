@@ -27,9 +27,6 @@ class LandingViewModel @Inject constructor(
     private val preferencesRepository: PreferencesRepository
 ) : AndroidViewModel(application) {
 
-    private val _isUserLoggedIn: MutableLiveData<Event<Boolean>> = MutableLiveData()
-    val isUserLoggedIn: MutableLiveData<Event<Boolean>> = _isUserLoggedIn
-
     private val _registerLiveData: MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
     val registerLiveData: LiveData<Event<Resource<Nothing>>> = _registerLiveData
 
@@ -46,10 +43,6 @@ class LandingViewModel @Inject constructor(
     var isFirstSentEmail = true
     var timerInMillis: Long = 0
 
-    fun isUserLoggedIn() = viewModelScope.launch {
-        safeIsUserLoggedIn()
-    }
-
     fun registerViaEmail(email: String, password: String) = viewModelScope.launch {
         safeRegisterViaEmail(email, password)
     }
@@ -60,10 +53,6 @@ class LandingViewModel @Inject constructor(
 
     fun sendResetPasswordEmail(email: String) = viewModelScope.launch {
         safeSendResetPasswordEmail(email)
-    }
-
-    private suspend fun safeIsUserLoggedIn() {
-        _isUserLoggedIn.postValue(Event(preferencesRepository.isUserLoggedIn()))
     }
 
     private suspend fun safeRegisterViaEmail(email: String, password: String) {
