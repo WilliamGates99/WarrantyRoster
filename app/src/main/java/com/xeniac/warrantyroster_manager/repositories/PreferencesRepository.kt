@@ -6,7 +6,10 @@ import com.xeniac.warrantyroster_manager.utils.Constants.DATASTORE_COUNTRY_KEY
 import com.xeniac.warrantyroster_manager.utils.Constants.DATASTORE_IS_LOGGED_IN_KEY
 import com.xeniac.warrantyroster_manager.utils.Constants.DATASTORE_LANGUAGE_KEY
 import com.xeniac.warrantyroster_manager.utils.Constants.DATASTORE_THEME_KEY
+import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_COUNTRY_UNITED_STATES
+import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_LANGUAGE_ENGLISH
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -36,20 +39,42 @@ class PreferencesRepository @Inject constructor(
     }
 
     suspend fun getCurrentAppLanguage(): String = try {
-        settingsDataStore.data.first()[PreferencesKeys.CURRENT_APP_LANGUAGE] ?: "en"
+        settingsDataStore.data
+            .first()[PreferencesKeys.CURRENT_APP_LANGUAGE] ?: LOCALE_LANGUAGE_ENGLISH
     } catch (e: Exception) {
         Timber.e("getCurrentAppLanguage Exception: $e")
-        "en"
+        LOCALE_LANGUAGE_ENGLISH
     }
 
     suspend fun getCurrentAppCountry(): String = try {
-        settingsDataStore.data.first()[PreferencesKeys.CURRENT_APP_COUNTRY] ?: "US"
+        settingsDataStore.data
+            .first()[PreferencesKeys.CURRENT_APP_COUNTRY] ?: LOCALE_COUNTRY_UNITED_STATES
     } catch (e: Exception) {
         Timber.e("getCurrentAppCountry Exception: $e")
-        "US"
+        LOCALE_COUNTRY_UNITED_STATES
     }
 
     suspend fun getCategoryTitleMapKey() = "${getCurrentAppLanguage()}-${getCurrentAppCountry()}"
+
+    fun getCurrentAppLanguageSynchronously() = runBlocking {
+        try {
+            settingsDataStore.data
+                .first()[PreferencesKeys.CURRENT_APP_LANGUAGE] ?: LOCALE_LANGUAGE_ENGLISH
+        } catch (e: Exception) {
+            Timber.e("getCurrentAppLanguageSynchronously Exception: $e")
+            LOCALE_LANGUAGE_ENGLISH
+        }
+    }
+
+    fun getCurrentAppCountrySynchronously() = runBlocking {
+        try {
+            settingsDataStore.data
+                .first()[PreferencesKeys.CURRENT_APP_COUNTRY] ?: LOCALE_COUNTRY_UNITED_STATES
+        } catch (e: Exception) {
+            Timber.e("getCurrentAppCountrySynchronously Exception: $e")
+            LOCALE_COUNTRY_UNITED_STATES
+        }
+    }
 
     suspend fun isUserLoggedIn(value: Boolean) = try {
         settingsDataStore.edit { loginPreferences ->
