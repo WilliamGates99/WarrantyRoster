@@ -7,7 +7,6 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -51,16 +50,8 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
     private val binding get() = _binding!!
     private val viewModel: SettingsViewModel by viewModels()
 
-    //TODO EDIT
-//    @Inject
-//    @CurrentLanguage
-//    lateinit var currentLanguage: String
-
-    //TODO EDIT
-//    @Inject
-//    @CurrentCountry
-//    lateinit var currentCountry: String
-
+    private lateinit var currentAppLanguage: String
+    private lateinit var currentAppCountry: String
     private var currentAppTheme = 0
 
     private lateinit var appLovinNativeAdContainer: ViewGroup
@@ -79,6 +70,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
 
         subscribeToObservers()
         getAccountDetails()
+        getCurrentAppLocale()
         getCurrentApptheme()
         verifyOnClick()
         changeEmailOnClick()
@@ -100,6 +92,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
 
     private fun subscribeToObservers() {
         accountDetailsObserver()
+        currentAppLocaleObserver()
         currentAppThemeObserver()
         sendVerificationEmailObserver()
         logoutObserver()
@@ -163,12 +156,37 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
         binding.lavAccountVerification.playAnimation()
     }
 
+    private fun getCurrentAppLocale() = viewModel.getCurrentAppLocale()
+
+    private fun currentAppLocaleObserver() =
+        viewModel.currentAppLocale.observe(viewLifecycleOwner) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { currentLocale ->
+                currentAppLanguage = currentLocale[0]
+                currentAppCountry = currentLocale[1]
+                setCurrentLanguageText()
+            }
+        }
+
+    private fun setCurrentLanguageText() {
+        //TODO EDIT AFTER ADDING BRITISH ENGLISH
+        when (currentAppLanguage) {
+            "en" -> {
+                binding.tvSettingsLanguageCurrent.text =
+                    requireContext().getString(R.string.settings_text_settings_language_english)
+            }
+            "fa" -> {
+                binding.tvSettingsLanguageCurrent.text =
+                    requireContext().getString(R.string.settings_text_settings_language_persian)
+            }
+        }
+    }
+
     private fun getCurrentApptheme() = viewModel.getCurrentAppTheme()
 
     private fun currentAppThemeObserver() =
         viewModel.currentAppTheme.observe(viewLifecycleOwner) { responseEvent ->
-            responseEvent.getContentIfNotHandled()?.let { response ->
-                currentAppTheme = response
+            responseEvent.getContentIfNotHandled()?.let { currentThemeIndex ->
+                currentAppTheme = currentThemeIndex
                 setCurrentThemeText()
             }
         }
@@ -190,20 +208,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
         }
     }
 
-    //TOTO EDIT LIKE CHANGE THEME
-//    private fun setCurrentLanguageText() {
-//        when (currentLanguage) {
-//            "en" -> {
-//                binding.tvSettingsLanguageCurrent.text =
-//                    requireContext().getString(R.string.settings_text_settings_language_english)
-//            }
-//            "fa" -> {
-//                binding.tvSettingsLanguageCurrent.text =
-//                    requireContext().getString(R.string.settings_text_settings_language_persian)
-//            }
-//        }
-//    }
-
     private fun verifyOnClick() = binding.btnAccountVerification.setOnClickListener {
         sendVerificationEmail()
     }
@@ -218,9 +222,24 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
         }
 
     private fun languageOnClick() = binding.clSettingsLanguage.setOnClickListener {
-        Toast.makeText(requireContext(), "Language", Toast.LENGTH_SHORT).apply {
-            show()
+        val currentAppLanguageIndex = when (currentAppLanguage) {
+            "en" -> 0
+            "fa" -> 1
+            else -> 0
         }
+
+        val languageItems = arrayOf(
+            requireContext().getString(R.string.settings_text_settings_language_english),
+            requireContext().getString(R.string.settings_text_settings_language_persian)
+        )
+
+        MaterialAlertDialogBuilder(requireContext()).apply {
+            setTitle(requireContext().getString(R.string.settings_text_settings_language))
+            setSingleChoiceItems(languageItems, currentAppLanguageIndex) { dialogInterface, index ->
+                setAppLocale(index)
+                dialogInterface.dismiss()
+            }
+        }.show()
     }
 
     private fun themeOnClick() = binding.clSettingsTheme.setOnClickListener {
@@ -268,6 +287,8 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
     private fun logoutOnClick() = binding.btnLogout.setOnClickListener {
         logout()
     }
+
+    private fun setAppLocale(index: Int) = viewModel.setAppLocale(index, requireActivity())
 
     private fun setAppTheme(index: Int) = viewModel.setAppTheme(index)
 

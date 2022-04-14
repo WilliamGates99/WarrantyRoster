@@ -8,7 +8,6 @@
 
     <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
 
-    <!--TODO CHANGE SUPPORT_RTL AFTER ADDING PERSIAN-->
     <application
         android:name=".BaseApplication"
         android:allowBackup="false"
@@ -17,7 +16,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="false"
+        android:supportsRtl="true"
         android:theme="@style/Theme.WarrantyRoster"
         tools:targetApi="s">
         <activity

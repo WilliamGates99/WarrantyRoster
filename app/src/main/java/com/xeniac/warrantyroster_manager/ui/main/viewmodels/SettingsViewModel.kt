@@ -1,6 +1,8 @@
 package com.xeniac.warrantyroster_manager.ui.main.viewmodels
 
+import android.app.Activity
 import android.app.Application
+import android.content.Intent
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -9,8 +11,13 @@ import com.google.firebase.auth.FirebaseUser
 import com.xeniac.warrantyroster_manager.BaseApplication
 import com.xeniac.warrantyroster_manager.repositories.PreferencesRepository
 import com.xeniac.warrantyroster_manager.repositories.UserRepository
+import com.xeniac.warrantyroster_manager.ui.landing.LandingActivity
 import com.xeniac.warrantyroster_manager.utils.SettingsHelper
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
+import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_COUNTRY_IRAN
+import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_COUNTRY_UNITED_STATES
+import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_LANGUAGE_ENGLISH
+import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_LANGUAGE_PERSIAN
 import com.xeniac.warrantyroster_manager.utils.Event
 import com.xeniac.warrantyroster_manager.utils.NetworkHelper.hasInternetConnection
 import com.xeniac.warrantyroster_manager.utils.Resource
@@ -29,6 +36,12 @@ class SettingsViewModel @Inject constructor(
 
     private val _currentAppTheme: MutableLiveData<Event<Int>> = MutableLiveData()
     val currentAppTheme: MutableLiveData<Event<Int>> = _currentAppTheme
+
+    private val _isUserLoggedIn: MutableLiveData<Event<Boolean>> = MutableLiveData()
+    val isUserLoggedIn: MutableLiveData<Event<Boolean>> = _isUserLoggedIn
+
+    private val _currentAppLocale: MutableLiveData<Event<Array<String>>> = MutableLiveData()
+    val currentAppLocale: MutableLiveData<Event<Array<String>>> = _currentAppLocale
 
     private val _accountDetailsLiveData:
             MutableLiveData<Event<Resource<FirebaseUser>>> = MutableLiveData()
@@ -56,12 +69,45 @@ class SettingsViewModel @Inject constructor(
 
     fun setAppTheme(index: Int) = viewModelScope.launch {
         preferencesRepository.setAppTheme(index)
-        _currentAppTheme.postValue(Event(index))
         SettingsHelper.setAppTheme(index)
+    }
+
+    fun setAppLocale(index: Int, activity: Activity) = viewModelScope.launch {
+        var newLanguage = LOCALE_LANGUAGE_ENGLISH
+        var newCountry = LOCALE_COUNTRY_UNITED_STATES
+
+        //TODO CHANGE AFTER ADDING BRITISH ENGLISH
+        when (index) {
+            0 -> {
+                newLanguage = LOCALE_LANGUAGE_ENGLISH
+                newCountry = LOCALE_COUNTRY_UNITED_STATES
+            }
+            1 -> {
+                newLanguage = LOCALE_LANGUAGE_PERSIAN
+                newCountry = LOCALE_COUNTRY_IRAN
+            }
+        }
+
+        preferencesRepository.setCurrentAppLanguage(newLanguage)
+        preferencesRepository.setCurrentAppCountry(newCountry)
+        SettingsHelper.setAppLocale(getApplication<BaseApplication>(), newLanguage, newCountry)
+
+        activity.apply {
+            startActivity(Intent(this, LandingActivity::class.java))
+            finish()
+        }
     }
 
     fun getCurrentAppTheme() = viewModelScope.launch {
         safeGetCurrentAppTheme()
+    }
+
+    fun isUserLoggedIn() = viewModelScope.launch {
+        safeIsUserLoggedIn()
+    }
+
+    fun getCurrentAppLocale() = viewModelScope.launch {
+        safeGetCurrentAppLocale()
     }
 
     fun getAccountDetails() = viewModelScope.launch {
@@ -90,6 +136,17 @@ class SettingsViewModel @Inject constructor(
 
     private suspend fun safeGetCurrentAppTheme() {
         _currentAppTheme.postValue(Event(preferencesRepository.getCurrentAppTheme()))
+    }
+
+    private suspend fun safeIsUserLoggedIn() {
+        _isUserLoggedIn.postValue(Event(preferencesRepository.isUserLoggedIn()))
+    }
+
+    private suspend fun safeGetCurrentAppLocale() {
+        val currentLanguage = preferencesRepository.getCurrentAppLanguage()
+        val currentCountry = preferencesRepository.getCurrentAppCountry()
+        val currentLocale = arrayOf(currentLanguage, currentCountry)
+        _currentAppLocale.postValue(Event(currentLocale))
     }
 
     private suspend fun safeGetAccountDetails() {

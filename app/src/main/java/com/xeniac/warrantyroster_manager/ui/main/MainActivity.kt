@@ -3,7 +3,6 @@ package com.xeniac.warrantyroster_manager.ui.main
 import android.os.Bundle
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
@@ -16,7 +15,7 @@ import com.google.android.material.shape.MaterialShapeDrawable
 import com.xeniac.warrantyroster_manager.BuildConfig
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.ActivityMainBinding
-import com.xeniac.warrantyroster_manager.utils.LocaleModifier
+import com.xeniac.warrantyroster_manager.ui.BaseActivity
 import dagger.hilt.android.AndroidEntryPoint
 import ir.tapsell.plus.AdRequestCallback
 import ir.tapsell.plus.TapsellPlus
@@ -25,7 +24,7 @@ import timber.log.Timber
 
 @Suppress("SpellCheckingInspection")
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(), MaxAdListener {
+class MainActivity : BaseActivity(), MaxAdListener {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
@@ -44,7 +43,6 @@ class MainActivity : AppCompatActivity(), MaxAdListener {
     }
 
     private fun mainInit() {
-        LocaleModifier.setLocale(this)
         bottomAppBarStyle()
         bottomNavActions()
         fabOnClick()

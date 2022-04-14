@@ -13,8 +13,14 @@ object Constants {
     const val DATASTORE_LANGUAGE_KEY = "language"
     const val DATASTORE_COUNTRY_KEY = "country"
 
-    const val PREFERENCE_SETTINGS = "preference_settings" //TODO REMOVE IF MIGRATION DID NOT WORK
-    const val PREFERENCE_LOGIN = "preference_login" //TODO REMOVE IF MIGRATION DID NOT WORK
+    // App Language Constants
+    const val LOCALE_LANGUAGE_ENGLISH = "en"
+    const val LOCALE_LANGUAGE_PERSIAN = "fa"
+
+    // App Country Constants
+    const val LOCALE_COUNTRY_UNITED_STATES = "US"
+    const val LOCALE_COUNTRY_IRAN = "IR"
+    //const val LOCALE_COUNTRY_GREAT_BRITAIN = "GB" TODO UNCOMMENT AFTER ADDING BRITISH ENGLISH
 
     // Warranty Adapter View Type Constants
     const val VIEW_TYPE_WARRANTY = 0

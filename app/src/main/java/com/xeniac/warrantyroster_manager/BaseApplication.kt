@@ -9,7 +9,6 @@ import com.google.firebase.appcheck.debug.DebugAppCheckProviderFactory
 import com.google.firebase.appcheck.safetynet.SafetyNetAppCheckProviderFactory
 import com.xeniac.warrantyroster_manager.repositories.PreferencesRepository
 import com.xeniac.warrantyroster_manager.utils.SettingsHelper
-import com.xeniac.warrantyroster_manager.utils.LocaleModifier
 import dagger.hilt.android.HiltAndroidApp
 import ir.tapsell.plus.TapsellPlus
 import ir.tapsell.plus.TapsellPlusInitListener
@@ -24,14 +23,6 @@ import javax.inject.Inject
 @HiltAndroidApp
 class BaseApplication : Application() {
 
-//    @Inject
-//    @CurrentLanguage
-//    lateinit var currentLanguage: String
-
-//    @Inject
-//    @CurrentCountry
-//    lateinit var currentCountry: String
-
     @Inject
     lateinit var preferencesRepository: PreferencesRepository
 
@@ -40,7 +31,6 @@ class BaseApplication : Application() {
         setupTimber()
         initFirebaseAppCheck()
         setAppTheme()
-        setLocale()
         initAppLovin()
         initTapsell()
     }
@@ -58,17 +48,6 @@ class BaseApplication : Application() {
 
     private fun setAppTheme() = CoroutineScope(Dispatchers.Main).launch {
         SettingsHelper.setAppTheme(preferencesRepository.getCurrentAppTheme())
-    }
-
-    private fun setLocale() {
-        LocaleModifier.setLocale(this)
-//        val resources = resources
-//        val displayMetrics = resources.displayMetrics
-//        val configuration = resources.configuration
-//        val newLocale = Locale(currentLanguage, currentCountry)
-//        Locale.setDefault(newLocale)
-//        configuration.setLocale(newLocale)
-//        resources.updateConfiguration(configuration, displayMetrics)
     }
 
     private fun initAppLovin() {
