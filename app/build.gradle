@@ -99,8 +99,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics-ktx'
 
     // Firebase App Check TODO USE BoM AFTER RELEASE OF THE STABLE VERSION
-    implementation 'com.google.firebase:firebase-appcheck-safetynet:16.0.0-beta05'
-    implementation 'com.google.firebase:firebase-appcheck-debug:16.0.0-beta05'
+    implementation 'com.google.firebase:firebase-appcheck-safetynet:16.0.0-beta06'
+    implementation 'com.google.firebase:firebase-appcheck-debug:16.0.0-beta06'
 
     // Firebase Release & Monitor
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
