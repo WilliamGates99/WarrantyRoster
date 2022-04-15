@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <item name="LocalizedFontExtraLight" type="font">@font/vazir_extra_light</item>
+
+    <item name="LocalizedFontLight" type="font">@font/vazir_light</item>
+
+    <item name="LocalizedFontRegular" type="font">@font/vazir_regular</item>
+
+    <item name="LocalizedFontSemiBold" type="font">@font/vazir_semi_bold</item>
+
+    <item name="LocalizedFontBold" type="font">@font/vazir_bold</item>
+
+    <item name="LocalizedFontExtraBold" type="font">@font/vazir_extra_bold</item>
+
+    <item name="LocalizedFontBlack" type="font">@font/vazir_black</item>
+
+</resources>

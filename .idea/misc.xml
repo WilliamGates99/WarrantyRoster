@@ -59,7 +59,7 @@
         <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/drawable/ic_menu_settings.xml" value="0.27708333333333335" />
         <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/drawable/ic_menu_tick.xml" value="0.2462962962962963" />
         <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/drawable/ic_menu_warranties.xml" value="0.2462962962962963" />
-        <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/drawable/ic_settings_arrow.xml" value="0.27708333333333335" />
+        <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/drawable/ic_settings_arrow.xml" value="0.135" />
         <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/drawable/ic_settings_donate.xml" value="0.178" />
         <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/drawable/ic_settings_email.xml" value="0.27708333333333335" />
         <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/drawable/ic_settings_language.xml" value="0.27708333333333335" />
@@ -78,6 +78,12 @@
         <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/drawable/shape_rounded_top.xml" value="0.23963963963963963" />
         <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/drawable/shape_warranty_list_icon.xml" value="0.2462962962962963" />
         <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/drawable/state_pressed_ripple.xml" value="0.17543859649122806" />
+        <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/font-en-rUS/test_font.xml" value="0.19398148148148148" />
+        <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/font-en/custom.xml" value="0.19398148148148148" />
+        <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/font-en/localized_bold.xml" value="0.19398148148148148" />
+        <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/font-fa-rIR/test_font.xml" value="0.19398148148148148" />
+        <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/font-fa/localized_bold.xml" value="0.19398148148148148" />
+        <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/font/localized_bold.xml" value="0.19398148148148148" />
         <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/layout-land/activity_landing.xml" value="0.12283384301732926" />
         <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/layout-land/ad_banner_list_applovin.xml" value="0.21554054054054053" />
         <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/layout-land/fragment_change_email.xml" value="0.1439814814814815" />

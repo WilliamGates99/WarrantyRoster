@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <item name="LocalizedFontExtraLight" type="font">@font/nunito_extra_light</item>
+
+    <item name="LocalizedFontLight" type="font">@font/nunito_light</item>
+
+    <item name="LocalizedFontRegular" type="font">@font/nunito_regular</item>
+
+    <item name="LocalizedFontSemiBold" type="font">@font/nunito_semi_bold</item>
+
+    <item name="LocalizedFontBold" type="font">@font/nunito_bold</item>
+
+    <item name="LocalizedFontExtraBold" type="font">@font/nunito_extra_bold</item>
+
+    <item name="LocalizedFontBlack" type="font">@font/nunito_black</item>
+
+</resources>
