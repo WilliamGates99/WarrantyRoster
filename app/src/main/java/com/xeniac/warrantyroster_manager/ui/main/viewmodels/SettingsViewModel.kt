@@ -37,9 +37,6 @@ class SettingsViewModel @Inject constructor(
     private val _currentAppTheme: MutableLiveData<Event<Int>> = MutableLiveData()
     val currentAppTheme: MutableLiveData<Event<Int>> = _currentAppTheme
 
-    private val _isUserLoggedIn: MutableLiveData<Event<Boolean>> = MutableLiveData()
-    val isUserLoggedIn: MutableLiveData<Event<Boolean>> = _isUserLoggedIn
-
     private val _currentAppLocale: MutableLiveData<Event<Array<String>>> = MutableLiveData()
     val currentAppLocale: MutableLiveData<Event<Array<String>>> = _currentAppLocale
 
@@ -67,9 +64,14 @@ class SettingsViewModel @Inject constructor(
             MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
     val changeUserPasswordLiveData: LiveData<Event<Resource<Nothing>>> = _changeUserPasswordLiveData
 
-    fun setAppTheme(index: Int) = viewModelScope.launch {
-        preferencesRepository.setAppTheme(index)
-        SettingsHelper.setAppTheme(index)
+    fun isUserLoggedIn() = preferencesRepository.isUserLoggedInSynchronously()
+
+    fun getCurrentAppLocale() = viewModelScope.launch {
+        safeGetCurrentAppLocale()
+    }
+
+    fun getCurrentAppTheme() = viewModelScope.launch {
+        safeGetCurrentAppTheme()
     }
 
     fun setAppLocale(index: Int, activity: Activity) = viewModelScope.launch {
@@ -98,16 +100,9 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    fun getCurrentAppTheme() = viewModelScope.launch {
-        safeGetCurrentAppTheme()
-    }
-
-    fun isUserLoggedIn() = viewModelScope.launch {
-        safeIsUserLoggedIn()
-    }
-
-    fun getCurrentAppLocale() = viewModelScope.launch {
-        safeGetCurrentAppLocale()
+    fun setAppTheme(index: Int) = viewModelScope.launch {
+        preferencesRepository.setAppTheme(index)
+        SettingsHelper.setAppTheme(index)
     }
 
     fun getAccountDetails() = viewModelScope.launch {
@@ -134,19 +129,15 @@ class SettingsViewModel @Inject constructor(
         safeChangeUserPassword(newPassword)
     }
 
-    private suspend fun safeGetCurrentAppTheme() {
-        _currentAppTheme.postValue(Event(preferencesRepository.getCurrentAppTheme()))
-    }
-
-    private suspend fun safeIsUserLoggedIn() {
-        _isUserLoggedIn.postValue(Event(preferencesRepository.isUserLoggedIn()))
-    }
-
     private suspend fun safeGetCurrentAppLocale() {
         val currentLanguage = preferencesRepository.getCurrentAppLanguage()
         val currentCountry = preferencesRepository.getCurrentAppCountry()
         val currentLocale = arrayOf(currentLanguage, currentCountry)
         _currentAppLocale.postValue(Event(currentLocale))
+    }
+
+    private suspend fun safeGetCurrentAppTheme() {
+        _currentAppTheme.postValue(Event(preferencesRepository.getCurrentAppTheme()))
     }
 
     private suspend fun safeGetAccountDetails() {

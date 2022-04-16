@@ -24,11 +24,13 @@ class PreferencesRepository @Inject constructor(
         val CURRENT_APP_COUNTRY = stringPreferencesKey(DATASTORE_COUNTRY_KEY)
     }
 
-    suspend fun isUserLoggedIn(): Boolean = try {
-        settingsDataStore.data.first()[PreferencesKeys.IS_USER_LOGGED_IN] ?: false
-    } catch (e: Exception) {
-        Timber.e("isUserLoggedIn Exception: $e")
-        false
+    fun isUserLoggedInSynchronously(): Boolean = runBlocking {
+        try {
+            settingsDataStore.data.first()[PreferencesKeys.IS_USER_LOGGED_IN] ?: false
+        } catch (e: Exception) {
+            Timber.e("isUserLoggedInSynchronously Exception: $e")
+            false
+        }
     }
 
     suspend fun getCurrentAppTheme(): Int = try {

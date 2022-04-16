@@ -22,26 +22,22 @@ class LandingActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        splashScreen()
+    }
+
+    private fun splashScreen() {
         val splashScreen = installSplashScreen()
         splashScreen.setKeepOnScreenCondition { shouldShowSplashScreen }
 
-        getIsUserLoggedIn()
-        isUserLoggedInObserver()
-    }
-
-    private fun getIsUserLoggedIn() = viewModel.isUserLoggedIn()
-
-    private fun isUserLoggedInObserver() = viewModel.isUserLoggedIn.observe(this) { responseEvent ->
-        responseEvent.getContentIfNotHandled()?.let { isUserLoggedIn ->
+        if (viewModel.isUserLoggedIn()) {
             shouldShowSplashScreen = false
-            if (isUserLoggedIn) {
-                Intent(this@LandingActivity, MainActivity::class.java).apply {
-                    startActivity(this)
-                    finish()
-                }
-            } else {
-                landingInit()
+            Intent(this, MainActivity::class.java).apply {
+                startActivity(this)
+                finish()
             }
+        } else {
+            shouldShowSplashScreen = false
+            landingInit()
         }
     }
 
