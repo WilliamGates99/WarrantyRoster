@@ -129,7 +129,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
             binding.btnAccountVerification.text =
                 requireContext().getString(R.string.settings_btn_account_verified)
             binding.btnAccountVerification.setTextColor(
-                ContextCompat.getColor(requireContext(), R.color.green)
+                ContextCompat.getColor(requireContext(), R.color.greenStatic)
             )
             binding.btnAccountVerification.backgroundTintList =
                 ContextCompat.getColorStateList(requireContext(), R.color.green20)

@@ -78,7 +78,7 @@
             android:gravity="start|center_vertical"
             android:text="@string/login_text_title"
             android:textAlignment="gravity"
-            android:textColor="@color/whiteConstant"
+            android:textColor="@color/whiteStatic"
             android:textSize="@dimen/text_size_34sp"
             app:layout_constrainedWidth="true"
             app:layout_constraintBottom_toTopOf="@+id/iv_header"

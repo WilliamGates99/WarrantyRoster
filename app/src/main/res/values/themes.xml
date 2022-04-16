@@ -4,10 +4,10 @@
         <item name="android:colorBackground">@color/background</item>
         <item name="colorPrimary">@color/blue</item>
         <item name="colorPrimaryVariant">@color/navyBlue</item>
-        <item name="colorOnPrimary">@color/whiteConstant</item>
+        <item name="colorOnPrimary">@color/whiteStatic</item>
         <item name="colorSecondary">@color/blue</item>
         <item name="colorSecondaryVariant">@color/navyBlue</item>
-        <item name="colorOnSecondary">@color/whiteConstant</item>
+        <item name="colorOnSecondary">@color/whiteStatic</item>
         <item name="android:statusBarColor">@color/statusBarV21</item>
         <item name="android:colorEdgeEffect">@color/skyBlue</item>
         <item name="snackbarStyle">@style/Theme.WarrantyRoster.Snackbar</item>
@@ -37,7 +37,7 @@
     </style>
 
     <style name="Theme.WarrantyRoster.Snackbar.TextView" parent="Widget.MaterialComponents.Snackbar.TextView">
-        <item name="android:textColor">@color/whiteConstant</item>
+        <item name="android:textColor">@color/whiteStatic</item>
         <item name="android:fontFamily">@font/localized_semi_bold</item>
         <item name="android:maxLines">10</item>
     </style>
@@ -111,7 +111,7 @@
 
     <style name="Theme.WarrantyRoster.LoadingProgressBar.Button" parent="Widget.MaterialComponents.CircularProgressIndicator.Small">
         <item name="android:indeterminate">true</item>
-        <item name="indicatorColor">@color/whiteConstant</item>
+        <item name="indicatorColor">@color/whiteStatic</item>
         <item name="trackCornerRadius">@dimen/radius_12dp</item>
     </style>
 
@@ -130,7 +130,7 @@
 
     <style name="Theme.WarrantyRoster.Button" parent="Widget.MaterialComponents.Button.UnelevatedButton">
         <item name="shapeAppearance">@style/Theme.WarrantyRoster.Button.Appearance</item>
-        <item name="android:textColor">@color/whiteConstant</item>
+        <item name="android:textColor">@color/whiteStatic</item>
         <item name="android:textSize">@dimen/text_size_16sp</item>
         <item name="android:fontFamily">@font/localized_bold</item>
         <item name="textAllCaps">false</item>

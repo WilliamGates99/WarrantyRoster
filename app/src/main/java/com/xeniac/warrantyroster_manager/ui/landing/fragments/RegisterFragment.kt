@@ -169,11 +169,11 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                     }
                     (1).toByte() -> {
                         binding.tiLayoutPassword.boxStrokeColor =
-                            ContextCompat.getColor(requireContext(), R.color.green)
+                            ContextCompat.getColor(requireContext(), R.color.greenStatic)
                         binding.tiLayoutPassword.helperText =
                             getString(R.string.register_helper_password_strong)
                         binding.tiLayoutPassword.setHelperTextColor(
-                            ContextCompat.getColorStateList(requireContext(), R.color.green)
+                            ContextCompat.getColorStateList(requireContext(), R.color.greenStatic)
                         )
                     }
                 }

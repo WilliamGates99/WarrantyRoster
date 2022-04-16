@@ -9,8 +9,6 @@ import android.view.View.VISIBLE
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
-import androidx.core.view.get
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope

@@ -4,10 +4,10 @@
         <item name="android:colorBackground">@color/background</item>
         <item name="colorPrimary">@color/blue</item>
         <item name="colorPrimaryVariant">@color/navyBlue</item>
-        <item name="colorOnPrimary">@color/whiteConstant</item>
+        <item name="colorOnPrimary">@color/whiteStatic</item>
         <item name="colorSecondary">@color/blue</item>
         <item name="colorSecondaryVariant">@color/navyBlue</item>
-        <item name="colorOnSecondary">@color/whiteConstant</item>
+        <item name="colorOnSecondary">@color/whiteStatic</item>
         <item name="android:statusBarColor">@color/statusBar</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:colorEdgeEffect">@color/skyBlue</item>
