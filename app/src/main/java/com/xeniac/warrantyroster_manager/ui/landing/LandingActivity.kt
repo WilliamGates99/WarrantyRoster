@@ -106,6 +106,7 @@ class LandingActivity : BaseActivity() {
     }
 
     private fun languageOnClick() = binding.clLanguage.setOnClickListener {
+        //TODO EDIT AFTER ADDING BRITISH ENGLISH
         val currentAppLanguageIndex = when (currentAppLanguage) {
             LOCALE_LANGUAGE_ENGLISH -> 0
             LOCALE_LANGUAGE_PERSIAN -> 1

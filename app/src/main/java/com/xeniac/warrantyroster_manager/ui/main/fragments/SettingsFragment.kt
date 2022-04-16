@@ -224,6 +224,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
         }
 
     private fun languageOnClick() = binding.clSettingsLanguage.setOnClickListener {
+        //TODO EDIT AFTER ADDING BRITISH ENGLISH
         val currentAppLanguageIndex = when (currentAppLanguage) {
             LOCALE_LANGUAGE_ENGLISH -> 0
             LOCALE_LANGUAGE_PERSIAN -> 1
