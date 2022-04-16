@@ -51,7 +51,7 @@ class MainActivity : BaseActivity(), MaxAdListener {
 
     private fun bottomAppBarStyle() {
         binding.bnv.background = null
-        val radius = resources.getDimension(R.dimen.dimen_bottom_nav_radius)
+        val radius = resources.getDimension(R.dimen.radius_20dp)
 
         val shapeDrawable = binding.appbar.background as MaterialShapeDrawable
         shapeDrawable.shapeAppearanceModel = shapeDrawable.shapeAppearanceModel.toBuilder().apply {
