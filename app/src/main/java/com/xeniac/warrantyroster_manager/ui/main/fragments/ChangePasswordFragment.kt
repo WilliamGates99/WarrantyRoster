@@ -163,11 +163,11 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
                     }
                     (1).toByte() -> {
                         binding.tiLayoutNewPassword.boxStrokeColor =
-                            ContextCompat.getColor(requireContext(), R.color.greenStatic)
+                            ContextCompat.getColor(requireContext(), R.color.green)
                         binding.tiLayoutNewPassword.helperText =
                             getString(R.string.change_password_helper_password_strong)
                         binding.tiLayoutNewPassword.setHelperTextColor(
-                            ContextCompat.getColorStateList(requireContext(), R.color.greenStatic)
+                            ContextCompat.getColorStateList(requireContext(), R.color.green)
                         )
                     }
                 }

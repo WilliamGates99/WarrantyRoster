@@ -142,7 +142,7 @@ class WarrantyAdapter(
             if (isLifetime) {
                 val expiryDate = context.getString(R.string.warranties_list_is_lifetime)
                 binding.expiryDate = expiryDate
-                binding.statusColor = ContextCompat.getColor(context, R.color.greenStatic)
+                binding.statusColor = ContextCompat.getColor(context, R.color.green)
                 binding.statusTitle = context.getString(R.string.warranties_list_status_valid)
             } else {
                 warranty.expiryDate?.let { date ->
@@ -168,7 +168,7 @@ class WarrantyAdapter(
                                 context.getString(R.string.warranties_list_status_soon)
                         }
                         else -> {
-                            binding.statusColor = ContextCompat.getColor(context, R.color.greenStatic)
+                            binding.statusColor = ContextCompat.getColor(context, R.color.green)
                             binding.statusTitle =
                                 context.getString(R.string.warranties_list_status_valid)
                         }

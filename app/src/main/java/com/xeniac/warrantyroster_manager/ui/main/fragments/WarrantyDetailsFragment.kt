@@ -166,7 +166,7 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
             binding.tvDateExpiry.text = expiryDate
             binding.tvStatus.text =
                 requireContext().getString(R.string.warranty_details_status_valid)
-            binding.tvStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.greenStatic))
+            binding.tvStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.green))
             binding.tvStatus.backgroundTintList =
                 ContextCompat.getColorStateList(requireContext(), R.color.green20)
         } else {
@@ -202,7 +202,7 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
                     binding.tvStatus.text =
                         requireContext().getString(R.string.warranty_details_status_valid)
                     binding.tvStatus.setTextColor(
-                        ContextCompat.getColor(requireContext(), R.color.greenStatic)
+                        ContextCompat.getColor(requireContext(), R.color.green)
                     )
                     binding.tvStatus.backgroundTintList =
                         ContextCompat.getColorStateList(requireContext(), R.color.green20)
