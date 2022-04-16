@@ -74,7 +74,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_28dp"
             android:layout_marginVertical="@dimen/margin_12dp"
-            android:fontFamily="@font/nunito_black"
+            android:fontFamily="@font/localized_black"
             android:gravity="start|center_vertical"
             android:text="@string/login_text_title"
             android:textAlignment="gravity"

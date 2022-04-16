@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:ellipsize="end"
-    android:fontFamily="@font/nunito_regular"
+    android:fontFamily="@font/localized_regular"
     android:gravity="center"
     android:maxLines="1"
     android:padding="@dimen/padding_8dp"
