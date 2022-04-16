@@ -10,6 +10,11 @@
     <string name="error_btn_retry">Retry</string>
     <string name="error_btn_confirm">Confirm</string>
 
+    <!--Landing Activity-->
+    <string name="landing_text_language">Language</string>
+    <string name="landing_text_language_english">English</string>
+    <string name="landing_text_language_persian">Persian</string>
+
     <!--Login Fragment-->
     <string name="login_text_title">Login</string>
     <string name="login_text_description">Let’s log you in.</string>

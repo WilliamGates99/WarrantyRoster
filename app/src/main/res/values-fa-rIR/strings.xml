@@ -11,6 +11,11 @@
     <string name="error_btn_retry">Retry</string>
     <string name="error_btn_confirm">Confirm</string>
 
+    <!--Landing Activity-->
+    <string name="landing_text_language">زبان</string>
+    <string name="landing_text_language_english">انگلیسی</string>
+    <string name="landing_text_language_persian">فارسی</string>
+
     <!--Login Fragment-->
     <string name="login_text_title">ورود</string>
     <string name="login_text_description">Let’s log you in.</string>

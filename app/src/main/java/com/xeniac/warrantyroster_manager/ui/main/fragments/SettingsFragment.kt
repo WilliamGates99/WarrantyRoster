@@ -30,6 +30,8 @@ import com.xeniac.warrantyroster_manager.ui.main.viewmodels.SettingsViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
+import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_LANGUAGE_ENGLISH
+import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_LANGUAGE_PERSIAN
 import com.xeniac.warrantyroster_manager.utils.Constants.URL_DONATE
 import com.xeniac.warrantyroster_manager.utils.Constants.URL_PRIVACY_POLICY
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.show403Error
@@ -170,11 +172,11 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
     private fun setCurrentLanguageText() {
         //TODO EDIT AFTER ADDING BRITISH ENGLISH
         when (currentAppLanguage) {
-            "en" -> {
+            LOCALE_LANGUAGE_ENGLISH -> {
                 binding.tvSettingsLanguageCurrent.text =
                     requireContext().getString(R.string.settings_text_settings_language_english)
             }
-            "fa" -> {
+            LOCALE_LANGUAGE_PERSIAN -> {
                 binding.tvSettingsLanguageCurrent.text =
                     requireContext().getString(R.string.settings_text_settings_language_persian)
             }
@@ -223,8 +225,8 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
 
     private fun languageOnClick() = binding.clSettingsLanguage.setOnClickListener {
         val currentAppLanguageIndex = when (currentAppLanguage) {
-            "en" -> 0
-            "fa" -> 1
+            LOCALE_LANGUAGE_ENGLISH -> 0
+            LOCALE_LANGUAGE_PERSIAN -> 1
             else -> 0
         }
 
