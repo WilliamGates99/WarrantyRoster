@@ -6,6 +6,7 @@
     <dimen name="width_4dp">4dp</dimen>
     <dimen name="width_14dp">14dp</dimen>
     <dimen name="width_18dp">18dp</dimen>
+    <dimen name="width_20dp">20dp</dimen>
     <dimen name="width_26dp">26dp</dimen>
     <dimen name="width_32dp">32dp</dimen>
     <dimen name="width_48dp">48dp</dimen>
@@ -20,6 +21,7 @@
     <dimen name="height_4dp">4dp</dimen>
     <dimen name="height_14dp">14dp</dimen>
     <dimen name="height_18dp">18dp</dimen>
+    <dimen name="height_20dp">20dp</dimen>
     <dimen name="height_26dp">26dp</dimen>
     <dimen name="height_32dp">32dp</dimen>
     <dimen name="height_48dp">48dp</dimen>
@@ -78,6 +80,7 @@
     <dimen name="radius_12dp">12dp</dimen>
     <dimen name="radius_20dp">20dp</dimen>
     <dimen name="radius_40dp">40dp</dimen>
+    <dimen name="radius_50percent">50%</dimen>
 
     <!--Miscellaneous-->
     <dimen name="min_width_0dp">0dp</dimen>
@@ -86,7 +89,6 @@
     <dimen name="content_inset_0dp">0dp</dimen>
     <dimen name="content_inset_12dp">12dp</dimen>
     <dimen name="content_inset_16dp">16dp</dimen>
-    <dimen name="dimen_bottom_nav_radius">20dp</dimen>
 
     <!--Text Size-->
     <dimen name="text_size_10sp">10sp</dimen>
