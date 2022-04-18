@@ -20,7 +20,6 @@
     <!--Static Colors-->
     <color name="appIconBackground">#1C53F4</color>
     <color name="whiteStatic">#FFFFFF</color>
-    <color name="skyBlueStatic">#DEF4FD</color>
     <color name="blue">#1C53F4</color>
     <color name="green">#00BD62</color>
     <color name="red">#FF3442</color>
