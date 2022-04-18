@@ -235,7 +235,7 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_brand"
-                android:layout_width="@dimen/width_0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_4dp"
                 android:layout_marginEnd="@dimen/margin_20dp"
@@ -247,8 +247,10 @@
                 android:textAlignment="gravity"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_16sp"
+                app:layout_constrainedWidth="true"
                 app:layout_constraintBaseline_toBaselineOf="@+id/tv_brand_title"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1"
                 app:layout_constraintStart_toEndOf="@+id/tv_brand_title"
                 tools:ignore="HardcodedText" />
 
@@ -270,7 +272,7 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_model"
-                android:layout_width="@dimen/width_0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_4dp"
                 android:layout_marginEnd="@dimen/margin_20dp"
@@ -282,8 +284,10 @@
                 android:textAlignment="gravity"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_16sp"
+                app:layout_constrainedWidth="true"
                 app:layout_constraintBaseline_toBaselineOf="@+id/tv_model_title"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1"
                 app:layout_constraintStart_toEndOf="@+id/tv_model_title"
                 tools:ignore="HardcodedText" />
 
@@ -305,7 +309,7 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_serial"
-                android:layout_width="@dimen/width_0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_4dp"
                 android:layout_marginEnd="@dimen/margin_20dp"
@@ -317,8 +321,10 @@
                 android:textAlignment="gravity"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_16sp"
+                app:layout_constrainedWidth="true"
                 app:layout_constraintBaseline_toBaselineOf="@+id/tv_serial_title"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1"
                 app:layout_constraintStart_toEndOf="@+id/tv_serial_title"
                 tools:ignore="HardcodedText" />
 

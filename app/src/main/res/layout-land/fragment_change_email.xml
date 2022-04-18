@@ -86,7 +86,6 @@
                     android:inputType="textPassword"
                     android:maxLines="1"
                     android:textColorHint="@color/grayDark"
-                    android:textDirection="ltr"
                     android:textSize="@dimen/text_size_16sp" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -131,7 +130,6 @@
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
                     android:textColorHint="@color/grayDark"
-                    android:textDirection="ltr"
                     android:textSize="@dimen/text_size_16sp" />
 
             </com.google.android.material.textfield.TextInputLayout>

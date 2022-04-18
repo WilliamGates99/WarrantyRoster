@@ -71,7 +71,7 @@
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_title"
-                android:layout_width="@dimen/width_0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/margin_12dp"
                 android:ellipsize="end"
@@ -82,9 +82,10 @@
                 android:textAlignment="gravity"
                 android:textColor="@color/navyBlue"
                 android:textSize="@dimen/text_size_16sp"
+                app:layout_constrainedWidth="true"
                 app:layout_constraintBottom_toTopOf="@+id/tv_expiry_date"
                 app:layout_constraintEnd_toStartOf="@id/tv_status"
-                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_bias="0"
                 app:layout_constraintStart_toEndOf="@+id/iv_icon"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_chainStyle="packed" />
