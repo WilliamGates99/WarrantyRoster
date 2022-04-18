@@ -102,6 +102,7 @@ class SettingsViewModel @Inject constructor(
 
     fun setAppTheme(index: Int) = viewModelScope.launch {
         preferencesRepository.setAppTheme(index)
+        _currentAppTheme.postValue(Event(index))
         SettingsHelper.setAppTheme(index)
     }
 
