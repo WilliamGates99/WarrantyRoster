@@ -65,7 +65,7 @@
     <string name="forgot_pw_error_not_found">The account with the provided email does not exist.</string>
 
     <!--Forgot Password Sent Fragment-->
-    <string name="forgot_pw_sent_text_title">Check\nYour\nEmail</string>
+    <string name="forgot_pw_sent_text_title">Check\nYour\nInbox</string>
     <string name="forgot_pw_sent_text_description">Please check your inbox and click on the received link to reset your password.</string>
     <string name="forgot_pw_sent_text_resend">Didn\'t receive the link?</string>
     <string name="forgot_pw_sent_btn_resend">Resend</string>
