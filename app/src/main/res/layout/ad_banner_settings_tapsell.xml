@@ -82,7 +82,7 @@
             android:maxLines="1"
             android:paddingHorizontal="@dimen/padding_4dp"
             android:paddingVertical="@dimen/padding_2dp"
-            android:text="@string/warranties_list_ad_indicator"
+            android:text="@string/settings_ad_indicator"
             android:textAlignment="gravity"
             android:textAllCaps="true"
             android:textColor="@color/navyBlue"

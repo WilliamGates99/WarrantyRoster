@@ -85,7 +85,7 @@
     <string name="warranties_list_status_soon">Soon</string>
     <string name="warranties_list_status_expired">Expired</string>
     <string name="warranties_list_is_lifetime">Lifetime Warranty</string>
-    <string name="warranties_list_ad_indicator">Ad</string>
+    <string name="warranties_list_ad_indicator" translatable="false">Ad</string>
 
     <!--Add Warranty Fragment-->
     <string name="add_warranty_text_title">Add Warranty</string>
@@ -175,6 +175,7 @@
     <string name="settings_btn_logout">Logout</string>
     <string name="settings_dialog_message">The verification email has been successfully sent to your inbox.</string>
     <string name="settings_dialog_positive">Confirm</string>
+    <string name="settings_ad_indicator" translatable="false">Ad</string>
 
     <!--Change Password Fragment-->
     <string name="change_password_text_title">Change Password</string>
