@@ -6,7 +6,7 @@
     <string name="error_network_connection">Unable to connect to the internet.</string>
     <string name="error_network_failure">You\'re having network issues. Please try again later.</string>
     <string name="error_firebase_403">This service is not available in your region. Please consider changing your IP address by using a VPN.</string>
-    <string name="error_firebase_device_blocked">We have blocked all requests from this device due to unusual activity. Try again later.</string>
+    <string name="error_firebase_device_blocked">We have blocked all requests from this device due to unusual activity. Please try again later.</string>
     <string name="error_intent_app_not_found">There is no app on the phone to handle this action.</string>
     <string name="error_btn_retry">Retry</string>
     <string name="error_btn_confirm">Confirm</string>
@@ -42,7 +42,7 @@
     <string name="register_title_retype_password">Retype Password</string>
     <string name="register_hint_retype_password">Re-enter your password</string>
     <string name="register_btn_register">Register</string>
-    <string name="register_text_login_title">Already have and account?</string>
+    <string name="register_text_login_title">Already have an account?</string>
     <string name="register_btn_login">Login</string>
     <string name="register_helper_password_weak">Weak</string>
     <string name="register_helper_password_mediocre">Mediocre</string>
@@ -71,6 +71,7 @@
     <string name="forgot_pw_sent_btn_resend">Resend</string>
     <string name="forgot_pw_sent_text_first_time">The email has been sent.</string>
     <string name="forgot_pw_sent_text_resent">A new email has been sent.</string>
+    <string name="forgot_pw_sent_btn_return">Return To Login</string>
 
     <!--Main Activity-->
     <string name="main_menu_title_warranties">Warranty Lis</string>
