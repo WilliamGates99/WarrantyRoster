@@ -85,7 +85,6 @@
     <string name="warranties_list_status_soon">Soon</string>
     <string name="warranties_list_status_expired">Expired</string>
     <string name="warranties_list_is_lifetime">Lifetime Warranty</string>
-    <string name="warranties_list_ad_logo_content_description">Ad Logo</string>
     <string name="warranties_list_ad_indicator">Ad</string>
 
     <!--Add Warranty Fragment-->
