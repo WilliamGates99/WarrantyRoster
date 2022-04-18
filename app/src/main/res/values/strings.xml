@@ -52,7 +52,7 @@
     <string name="register_error_account_exists">An account with the provided email already exists.</string>
 
     <!--Forgot Password Fragment-->
-    <string name="forgot_pw_text_title">Forgot\nYour\nPassword?</string>
+    <string name="forgot_pw_text_title">Reset\nPassword</string>
     <string name="forgot_pw_text_description">Enter your verified email to receive password reset instructions.</string>
     <string name="forgot_pw_title_email">Email Address</string>
     <string name="forgot_pw_hint_email">Enter your email address</string>
