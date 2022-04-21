@@ -41,6 +41,7 @@ object SettingsHelper {
 
         val configuration = context.resources.configuration
         configuration.setLocales(newLocaleList)
+        configuration.setLayoutDirection(newLocaleList[0])
 
         return context.createConfigurationContext(configuration)
     }
@@ -55,6 +56,7 @@ object SettingsHelper {
         val resources = context.resources
         val configuration = resources.configuration
         configuration.setLocale(newLocale)
+        configuration.setLayoutDirection(newLocale)
         resources.updateConfiguration(configuration, resources.displayMetrics)
 
         return context
