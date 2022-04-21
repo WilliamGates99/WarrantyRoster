@@ -109,6 +109,7 @@
     <string name="add_warranty_title_date_picker_expiry">Select Expiry Date</string>
     <string name="add_warranty_error_date">Starting Date can\'t be after the Expiry Date!</string>
     <string name="add_warranty_checkbox_lifetime">Lifetime Warranty</string>
+    <string name="add_warranty_format_date">%1$s/%2$s/%3$d</string> <!--mm/dd/yyyy-->
 
     <!--Warranty Details Fragment-->
     <string name="warranty_details_fab_edit">Edit</string>
@@ -130,6 +131,7 @@
     <string name="warranty_details_delete_dialog_positive">Delete</string>
     <string name="warranty_details_delete_dialog_negative">Cancel</string>
     <string name="warranty_details_delete_success">%s has been successfully deleted.</string>
+    <string name="warranty_details_format_date">%1$s/%2$s/%3$d</string> <!--mm/dd/yyyy-->
 
     <!--Edit Warranty Fragment-->
     <string name="edit_warranty_text_title">Edit Warranty</string>
@@ -153,6 +155,7 @@
     <string name="edit_warranty_title_date_picker_expiry">Select Expiry Date</string>
     <string name="edit_warranty_error_date">Starting Date can\'t be after the Expiry Date!</string>
     <string name="edit_warranty_checkbox_lifetime">Lifetime Warranty</string>
+    <string name="edit_warranty_format_date">%1$s/%2$s/%3$d</string> <!--mm/dd/yyyy-->
 
     <!--Settings Fragment-->
     <string name="settings_text_title">Settings</string>

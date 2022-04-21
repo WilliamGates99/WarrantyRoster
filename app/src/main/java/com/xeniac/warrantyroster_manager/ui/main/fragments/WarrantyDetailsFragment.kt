@@ -150,13 +150,18 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
             )
         }
 
-        val dateFormat = SimpleDateFormat("yyyy-M-dd", Locale.getDefault())
-
         Calendar.getInstance().apply {
             dateFormat.parse(warranty.startingDate!!)?.let { time = it }
-            val startingDate = "${decimalFormat.format((get(Calendar.MONTH)) + 1)}/" +
-                    "${decimalFormat.format(get(Calendar.DAY_OF_MONTH))}/" +
-                    "${get(Calendar.YEAR)}"
+
+            val day = decimalFormat.format(get(Calendar.DAY_OF_MONTH))
+            val month = decimalFormat.format((get(Calendar.MONTH)) + 1)
+            val year = get(Calendar.YEAR)
+
+            val startingDate = requireContext().getString(
+                R.string.warranty_details_format_date,
+                month, day, year
+            )
+
             binding.tvDateStarting.text = startingDate
         }
 
@@ -172,9 +177,16 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
         } else {
             val expiryCalendar = Calendar.getInstance().apply {
                 dateFormat.parse(warranty.expiryDate!!)?.let { time = it }
-                val expiryDate = "${decimalFormat.format((get(Calendar.MONTH)) + 1)}/" +
-                        "${decimalFormat.format(get(Calendar.DAY_OF_MONTH))}/" +
-                        "${get(Calendar.YEAR)}"
+
+                val day = decimalFormat.format(get(Calendar.DAY_OF_MONTH))
+                val month = decimalFormat.format((get(Calendar.MONTH)) + 1)
+                val year = get(Calendar.YEAR)
+
+                val expiryDate = requireContext().getString(
+                    R.string.warranty_details_format_date,
+                    month, day, year
+                )
+
                 binding.tvDateExpiry.text = expiryDate
             }
 

@@ -396,14 +396,16 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
         Calendar.getInstance().apply {
             timeInMillis = selectedStartingDateInMillis
 
-            startingDateInput = "${get(Calendar.YEAR)}-" +
-                    "${decimalFormat.format((get(Calendar.MONTH)) + 1)}-" +
-                    decimalFormat.format(get(Calendar.DAY_OF_MONTH))
+            val day = decimalFormat.format(get(Calendar.DAY_OF_MONTH))
+            val month = decimalFormat.format((get(Calendar.MONTH)) + 1)
+            val year = get(Calendar.YEAR)
 
-            val startingDateText =
-                "${decimalFormat.format((get(Calendar.MONTH)) + 1)}/" +
-                        "${decimalFormat.format(get(Calendar.DAY_OF_MONTH))}/" +
-                        "${get(Calendar.YEAR)}"
+            startingDateInput = "$year-$month-$day"
+
+            val startingDateText = requireContext().getString(
+                R.string.add_warranty_format_date,
+                month, day, year
+            )
 
             binding.tiEditDateStarting.setText(startingDateText)
             binding.tiEditDateStarting.clearFocus()
@@ -414,14 +416,16 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
         Calendar.getInstance().apply {
             timeInMillis = selectedExpiryDateInMillis
 
-            expiryDateInput = "${get(Calendar.YEAR)}-" +
-                    "${decimalFormat.format((get(Calendar.MONTH)) + 1)}-" +
-                    decimalFormat.format(get(Calendar.DAY_OF_MONTH))
+            val day = decimalFormat.format(get(Calendar.DAY_OF_MONTH))
+            val month = decimalFormat.format((get(Calendar.MONTH)) + 1)
+            val year = get(Calendar.YEAR)
 
-            val expiryDateText =
-                "${decimalFormat.format((get(Calendar.MONTH)) + 1)}/" +
-                        "${decimalFormat.format(get(Calendar.DAY_OF_MONTH))}/" +
-                        "${get(Calendar.YEAR)}"
+            expiryDateInput = "$year-$month-$day"
+
+            val expiryDateText = requireContext().getString(
+                R.string.add_warranty_format_date,
+                month, day, year
+            )
 
             binding.tiEditDateExpiry.setText(expiryDateText)
             binding.tiEditDateExpiry.clearFocus()

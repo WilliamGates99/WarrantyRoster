@@ -409,14 +409,16 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
                 selectedStartingDateInMillis
             }
 
-            startingDateInput = "${get(Calendar.YEAR)}-" +
-                    "${decimalFormat.format((get(Calendar.MONTH)) + 1)}-" +
-                    decimalFormat.format(get(Calendar.DAY_OF_MONTH))
+            val day = decimalFormat.format(get(Calendar.DAY_OF_MONTH))
+            val month = decimalFormat.format((get(Calendar.MONTH)) + 1)
+            val year = get(Calendar.YEAR)
 
-            val startingDateText =
-                "${decimalFormat.format((get(Calendar.MONTH)) + 1)}/" +
-                        "${decimalFormat.format(get(Calendar.DAY_OF_MONTH))}/" +
-                        "${get(Calendar.YEAR)}"
+            startingDateInput = "$year-$month-$day"
+
+            val startingDateText = requireContext().getString(
+                R.string.edit_warranty_format_date,
+                month, day, year
+            )
 
             binding.tiEditDateStarting.setText(startingDateText)
             binding.tiEditDateStarting.clearFocus()
@@ -431,14 +433,16 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
                 selectedExpiryDateInMillis
             }
 
-            expiryDateInput = "${get(Calendar.YEAR)}-" +
-                    "${decimalFormat.format((get(Calendar.MONTH)) + 1)}-" +
-                    decimalFormat.format(get(Calendar.DAY_OF_MONTH))
+            val day = decimalFormat.format(get(Calendar.DAY_OF_MONTH))
+            val month = decimalFormat.format((get(Calendar.MONTH)) + 1)
+            val year = get(Calendar.YEAR)
 
-            val expiryDateText =
-                "${decimalFormat.format((get(Calendar.MONTH)) + 1)}/" +
-                        "${decimalFormat.format(get(Calendar.DAY_OF_MONTH))}/" +
-                        "${get(Calendar.YEAR)}"
+            expiryDateInput = "$year-$month-$day"
+
+            val expiryDateText = requireContext().getString(
+                R.string.edit_warranty_format_date,
+                month, day, year
+            )
 
             binding.tiEditDateExpiry.setText(expiryDateText)
             binding.tiEditDateExpiry.clearFocus()
@@ -481,14 +485,16 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
         Calendar.getInstance().apply {
             dateFormat.parse(startingDate)?.let { time = it }
 
-            startingDateInput = "${get(Calendar.YEAR)}-" +
-                    "${decimalFormat.format((get(Calendar.MONTH)) + 1)}-" +
-                    decimalFormat.format(get(Calendar.DAY_OF_MONTH))
+            val day = decimalFormat.format(get(Calendar.DAY_OF_MONTH))
+            val month = decimalFormat.format((get(Calendar.MONTH)) + 1)
+            val year = get(Calendar.YEAR)
 
-            val startingDateText =
-                "${decimalFormat.format((get(Calendar.MONTH)) + 1)}/" +
-                        "${decimalFormat.format(get(Calendar.DAY_OF_MONTH))}/" +
-                        "${get(Calendar.YEAR)}"
+            startingDateInput = "$year-$month-$day"
+
+            val startingDateText = requireContext().getString(
+                R.string.edit_warranty_format_date,
+                month, day, year
+            )
 
             binding.tiEditDateStarting.setText(startingDateText)
 
@@ -510,14 +516,16 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
             Calendar.getInstance().apply {
                 dateFormat.parse(warranty.expiryDate!!)?.let { time = it }
 
-                expiryDateInput = "${get(Calendar.YEAR)}-" +
-                        "${decimalFormat.format((get(Calendar.MONTH)) + 1)}-" +
-                        decimalFormat.format(get(Calendar.DAY_OF_MONTH))
+                val day = decimalFormat.format(get(Calendar.DAY_OF_MONTH))
+                val month = decimalFormat.format((get(Calendar.MONTH)) + 1)
+                val year = get(Calendar.YEAR)
 
-                val expiryDateText =
-                    "${decimalFormat.format((get(Calendar.MONTH)) + 1)}/" +
-                            "${decimalFormat.format(get(Calendar.DAY_OF_MONTH))}/" +
-                            "${get(Calendar.YEAR)}"
+                expiryDateInput = "$year-$month-$day"
+
+                val expiryDateText = requireContext().getString(
+                    R.string.edit_warranty_format_date,
+                    month, day, year
+                )
 
                 binding.tiEditDateExpiry.setText(expiryDateText)
 

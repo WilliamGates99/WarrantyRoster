@@ -109,6 +109,7 @@
     <string name="add_warranty_title_date_picker_expiry">تاریخ اتمام را انتخاب کنید</string>
     <string name="add_warranty_error_date">تاریخ شروع نمی‌تواند بعد از تاریخ اتمام باشد!</string>
     <string name="add_warranty_checkbox_lifetime">گارانتی مادام‌العمر</string>
+    <string name="add_warranty_format_date">%3$d/%1$s/%2$s</string> <!--yyyy/mm/dd-->
 
     <!--Warranty Details Fragment-->
     <string name="warranty_details_fab_edit">ویرایش</string>
@@ -130,6 +131,7 @@
     <string name="warranty_details_delete_dialog_positive">حذف</string>
     <string name="warranty_details_delete_dialog_negative">لغو</string>
     <string name="warranty_details_delete_success">%s با موفقیت حذف شد.</string>
+    <string name="warranty_details_format_date">%3$d/%1$s/%2$s</string> <!--yyyy/mm/dd-->
 
     <!--Edit Warranty Fragment-->
     <string name="edit_warranty_text_title">ویرایش گارانتی</string>
@@ -153,6 +155,7 @@
     <string name="edit_warranty_title_date_picker_expiry">تاریخ اتمام را انتخاب کنید</string>
     <string name="edit_warranty_error_date">تاریخ شروع نمی‌تواند بعد از تاریخ اتمام باشد!</string>
     <string name="edit_warranty_checkbox_lifetime">گارانتی مادام‌العمر</string>
+    <string name="edit_warranty_format_date">%3$d/%1$s/%2$s</string> <!--yyyy/mm/dd-->
 
     <!--Settings Fragment-->
     <string name="settings_text_title">تنظیمات</string>
