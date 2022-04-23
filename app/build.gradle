@@ -95,7 +95,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui-ktx:2.4.2'
 
     // Firebase BoM and Analytics
-    implementation platform('com.google.firebase:firebase-bom:29.3.0')
+    implementation platform('com.google.firebase:firebase-bom:29.3.1')
     implementation 'com.google.firebase:firebase-analytics-ktx'
 
     // Firebase App Check TODO USE BoM AFTER RELEASE OF THE STABLE VERSION
