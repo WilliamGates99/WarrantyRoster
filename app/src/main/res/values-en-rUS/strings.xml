@@ -74,7 +74,7 @@
     <string name="forgot_pw_sent_btn_return">Return To Login</string>
 
     <!--Main Activity-->
-    <string name="main_menu_title_warranties">Warranty Lis</string>
+    <string name="main_menu_title_warranties">Warranty List</string>
     <string name="main_menu_title_settings">Settings</string>
     <string name="main_text_content_description">Add Warranty</string>
 
