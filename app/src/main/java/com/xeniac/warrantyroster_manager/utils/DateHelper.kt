@@ -8,19 +8,6 @@ object DateHelper {
     fun isStartingDateValid(startingDateInMillis: Long, expiryDateInMillis: Long): Boolean =
         expiryDateInMillis >= startingDateInMillis
 
-    fun getDayWithSuffix(day: Int): String {
-        if (day in 11..13) {
-            return "${day}th"
-        }
-
-        return when (day % 10) {
-            1 -> "${day}st"
-            2 -> "${day}nd"
-            3 -> "${day}rd"
-            else -> "${day}th"
-        }
-    }
-
     fun getDaysUntilExpiry(expiryCalendar: Calendar): Long {
         val todayCalendar = Calendar.getInstance().apply {
             set(Calendar.HOUR_OF_DAY, 0)

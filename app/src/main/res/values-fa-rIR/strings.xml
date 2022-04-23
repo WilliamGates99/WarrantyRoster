@@ -86,6 +86,54 @@
     <string name="warranties_list_status_soon">به‌زودی</string>
     <string name="warranties_list_status_expired">منقضی‌شده</string>
     <string name="warranties_list_is_lifetime">گارانتی مادام‌العمر</string>
+    <string name="warranties_list_format_date">%2$s %1$s، %3$d</string> <!--day_with_suffix month_name, yyyy-->
+    <string-array name="warranties_list_day_with_suffix">
+        <item>اول</item>
+        <item>دوم</item>
+        <item>سوم</item>
+        <item>چهارم</item>
+        <item>پنجم</item>
+        <item>ششم</item>
+        <item>هفتم</item>
+        <item>هشتم</item>
+        <item>نهم</item>
+        <item>دهم</item>
+        <item>یازدهم</item>
+        <item>دوازدهم</item>
+        <item>سیزدهم</item>
+        <item>چهاردهم</item>
+        <item>پانزدهم</item>
+        <item>شانزدهم</item>
+        <item>هفدهم</item>
+        <item>هجدهم</item>
+        <item>نوزدهم</item>
+        <item>بیستم</item>
+        <item>بیست و یکم</item>
+        <item>بیست و دوم</item>
+        <item>بیست و سوم</item>
+        <item>بیست و چهارم</item>
+        <item>بیست و پنجم</item>
+        <item>بیست و ششم</item>
+        <item>بیست و هفتم</item>
+        <item>بیست و هشتم</item>
+        <item>بیست و نهم</item>
+        <item>سی‌ام</item>
+        <item>سی و یکم</item>
+    </string-array>
+    <string-array name="warranties_list_month_name">
+        <item>ژانویه</item>
+        <item>فوریه</item>
+        <item>مارس</item>
+        <item>آوریل</item>
+        <item>مه</item>
+        <item>ژوئن</item>
+        <item>جولای</item>
+        <item>اوت</item>
+        <item>سپتامبر</item>
+        <item>اکتبر</item>
+        <item>نوامبر</item>
+        <item>دسامبر</item>
+    </string-array>
 
     <!--Add Warranty Fragment-->
     <string name="add_warranty_text_title">افزودن گارانتی</string>

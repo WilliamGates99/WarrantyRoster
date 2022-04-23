@@ -28,7 +28,6 @@ import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModel
 import com.xeniac.warrantyroster_manager.utils.CoilHelper.loadCategoryImage
 import com.xeniac.warrantyroster_manager.utils.Constants.VIEW_TYPE_AD
 import com.xeniac.warrantyroster_manager.utils.Constants.VIEW_TYPE_WARRANTY
-import com.xeniac.warrantyroster_manager.utils.DateHelper.getDayWithSuffix
 import com.xeniac.warrantyroster_manager.utils.DateHelper.getDaysUntilExpiry
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
@@ -148,9 +147,20 @@ class WarrantyAdapter(
                 warranty.expiryDate?.let { date ->
                     val expiryCalendar = Calendar.getInstance().apply {
                         dateFormat.parse(date)?.let { time = it }
-                        val expiryDate = "${
-                            getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault())
-                        } ${getDayWithSuffix(get(Calendar.DAY_OF_MONTH))}, ${get(Calendar.YEAR)}"
+
+                        val dayWithSuffix = context.resources.getStringArray(
+                            R.array.warranties_list_day_with_suffix
+                        )[get(Calendar.DAY_OF_MONTH) - 1]
+                        val monthName = context.resources.getStringArray(
+                            R.array.warranties_list_month_name
+                        )[get(Calendar.MONTH)]
+                        val year = get(Calendar.YEAR)
+
+                        val expiryDate = context.getString(
+                            R.string.warranties_list_format_date,
+                            monthName, dayWithSuffix, year
+                        )
+
                         binding.expiryDate = expiryDate
                     }
 

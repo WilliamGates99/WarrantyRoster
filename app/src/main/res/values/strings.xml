@@ -81,11 +81,59 @@
     <string name="warranties_text_title">Warranty List</string>
     <string name="warranties_menu_hint_search">Search by title…</string>
     <string name="warranties_text_empty_list">There is currently no warranty on your list. You can add a warranty by clicking on the <font fgcolor="#1C53F4">Add Button</font>.</string>
+    <string name="warranties_list_ad_indicator" translatable="false">Ad</string>
     <string name="warranties_list_status_valid">Valid</string>
     <string name="warranties_list_status_soon">Soon</string>
     <string name="warranties_list_status_expired">Expired</string>
     <string name="warranties_list_is_lifetime">Lifetime Warranty</string>
-    <string name="warranties_list_ad_indicator" translatable="false">Ad</string>
+    <string name="warranties_list_format_date">%1$s %2$s, %3$d</string> <!--month_name day_with_suffix, yyyy-->
+    <string-array name="warranties_list_day_with_suffix">
+        <item>1st</item>
+        <item>2nd</item>
+        <item>3rd</item>
+        <item>4th</item>
+        <item>5th</item>
+        <item>6th</item>
+        <item>7th</item>
+        <item>8th</item>
+        <item>9th</item>
+        <item>10th</item>
+        <item>11th</item>
+        <item>12th</item>
+        <item>13th</item>
+        <item>14th</item>
+        <item>15th</item>
+        <item>16th</item>
+        <item>17th</item>
+        <item>18th</item>
+        <item>19th</item>
+        <item>20th</item>
+        <item>21st</item>
+        <item>22nd</item>
+        <item>23rd</item>
+        <item>24th</item>
+        <item>25th</item>
+        <item>26th</item>
+        <item>27th</item>
+        <item>28th</item>
+        <item>29th</item>
+        <item>30th</item>
+        <item>31st</item>
+    </string-array>
+    <string-array name="warranties_list_month_name">
+        <item>January</item>
+        <item>February</item>
+        <item>March</item>
+        <item>April</item>
+        <item>May</item>
+        <item>June</item>
+        <item>July</item>
+        <item>August</item>
+        <item>September</item>
+        <item>October</item>
+        <item>November</item>
+        <item>December</item>
+    </string-array>
 
     <!--Add Warranty Fragment-->
     <string name="add_warranty_text_title">Add Warranty</string>
