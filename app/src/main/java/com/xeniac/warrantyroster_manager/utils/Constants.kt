@@ -3,7 +3,7 @@ package com.xeniac.warrantyroster_manager.utils
 @Suppress("SpellCheckingInspection")
 object Constants {
     // Web URLs
-    const val URL_PRIVACY_POLICY = "https://xeniacdev.github.io/WarrantyRoster/privacy_policy.html"
+    const val URL_PRIVACY_POLICY = "https://xeniacdev.github.io/WarrantyRoster/privacy_policy"
     const val URL_DONATE = "https://bio.link/WarrantyRoster"
 
     // DataStore Constants
