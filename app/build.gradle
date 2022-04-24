@@ -23,8 +23,8 @@ android {
         applicationId "com.xeniac.warrantyroster_manager"
         minSdkVersion 21
         targetSdkVersion 32
-        versionCode 10
-        versionName "1.4.0"
+        versionCode 11
+        versionName "1.4.1"
 
         buildConfigField("String", "APPLOVIN_INTERSTITIAL_UNIT_ID", APPLOVIN_INTERSTITIAL_UNIT_ID)
         buildConfigField("String", "APPLOVIN_SETTINGS_NATIVE_UNIT_ID", APPLOVIN_SETTINGS_NATIVE_UNIT_ID)
@@ -57,6 +57,16 @@ android {
 
     kotlinOptions {
         jvmTarget = '1.8'
+    }
+
+    bundle {
+        language {
+            /**
+             * Specifies that the app bundle should not support configuration APKs for language resources.
+             * These resources are instead packaged with each base and dynamic feature APK.
+             */
+            enableSplit false
+        }
     }
 }
 
