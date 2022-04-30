@@ -17,7 +17,7 @@ applovin {
 
 android {
     compileSdkVersion 32
-    buildToolsVersion '33.0.0 rc2'
+    buildToolsVersion '33.0.0 rc3'
 
     defaultConfig {
         applicationId "com.xeniac.warrantyroster_manager"
@@ -91,11 +91,11 @@ dependencies {
     implementation 'androidx.activity:activity-ktx:1.4.0'
 
     // Coroutines
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1-native-mt'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1-native-mt'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1'
 
     // Coroutines Support for Firebase
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.1-native-mt'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.1'
 
     // Preferences DataStore
     implementation 'androidx.datastore:datastore-preferences:1.0.0'
@@ -128,8 +128,8 @@ dependencies {
     implementation 'com.airbnb.android:lottie:5.0.3'
 
     // Coil Library
-    implementation 'io.coil-kt:coil:2.0.0-rc02'
-    implementation 'io.coil-kt:coil-svg:2.0.0-rc02'
+    implementation 'io.coil-kt:coil:2.0.0-rc03'
+    implementation 'io.coil-kt:coil-svg:2.0.0-rc03'
 
     // Ad Services Libraries
     implementation 'ir.tapsell.plus:tapsell-plus-sdk-android:2.1.7'
