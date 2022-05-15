@@ -6,7 +6,7 @@ import com.applovin.sdk.AppLovinSdk
 import com.google.firebase.FirebaseApp
 import com.google.firebase.appcheck.FirebaseAppCheck
 import com.google.firebase.appcheck.debug.DebugAppCheckProviderFactory
-import com.google.firebase.appcheck.safetynet.SafetyNetAppCheckProviderFactory
+import com.google.firebase.appcheck.playintegrity.PlayIntegrityAppCheckProviderFactory
 import com.xeniac.warrantyroster_manager.repositories.PreferencesRepository
 import com.xeniac.warrantyroster_manager.utils.SettingsHelper
 import dagger.hilt.android.HiltAndroidApp
@@ -40,7 +40,7 @@ class BaseApplication : Application() {
     private fun initFirebaseAppCheck() {
         FirebaseApp.initializeApp(this)
         val firebaseAppCheck = FirebaseAppCheck.getInstance()
-        firebaseAppCheck.installAppCheckProviderFactory(SafetyNetAppCheckProviderFactory.getInstance())
+        firebaseAppCheck.installAppCheckProviderFactory(PlayIntegrityAppCheckProviderFactory.getInstance())
 
         //TODO COMMENT FOR RELEASE
         firebaseAppCheck.installAppCheckProviderFactory(DebugAppCheckProviderFactory.getInstance())

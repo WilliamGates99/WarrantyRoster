@@ -17,7 +17,7 @@ applovin {
 
 android {
     compileSdkVersion 32
-    buildToolsVersion '33.0.0 rc3'
+    buildToolsVersion '33.0.0 rc4'
 
     defaultConfig {
         applicationId "com.xeniac.warrantyroster_manager"
@@ -105,12 +105,12 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui-ktx:2.4.2'
 
     // Firebase BoM and Analytics
-    implementation platform('com.google.firebase:firebase-bom:30.0.0')
+    implementation platform('com.google.firebase:firebase-bom:30.0.1')
     implementation 'com.google.firebase:firebase-analytics-ktx'
 
-    // Firebase App Check TODO USE BoM AFTER RELEASE OF THE STABLE VERSION
-    implementation 'com.google.firebase:firebase-appcheck-safetynet:16.0.0'
-    implementation 'com.google.firebase:firebase-appcheck-debug:16.0.0'
+    // Firebase App Check
+    implementation 'com.google.firebase:firebase-appcheck-playintegrity'
+    implementation 'com.google.firebase:firebase-appcheck-debug'
 
     // Firebase Release & Monitor
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
@@ -136,7 +136,4 @@ dependencies {
     implementation 'com.applovin:applovin-sdk:11.3.3'
     implementation 'com.google.android.gms:play-services-ads:20.6.0'
     implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'
-
-    // LeakCanary Library
-    //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.8.1' TODO UNCOMMENT BEFORE RELEASE
 }
