@@ -131,9 +131,18 @@ dependencies {
     implementation 'io.coil-kt:coil:2.0.0'
     implementation 'io.coil-kt:coil-svg:2.0.0'
 
-    // Ad Services Libraries
-    implementation 'ir.tapsell.plus:tapsell-plus-sdk-android:2.1.7'
-    implementation 'com.applovin:applovin-sdk:11.3.3'
+    // AppLovin Libraries
+    implementation 'com.applovin:applovin-sdk:11.4.0'
+    implementation 'com.applovin.mediation:adcolony-adapter:4.7.1.1'
+    implementation 'com.applovin.mediation:google-adapter:20.6.0.11'
+
+    // Google AdMob Library
     implementation 'com.google.android.gms:play-services-ads:20.6.0'
+
+    // AdColony Libraries
+    implementation 'com.adcolony:sdk:4.7.1'
     implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'
+
+    // Tapsell Library
+    implementation 'ir.tapsell.plus:tapsell-plus-sdk-android:2.1.7'
 }

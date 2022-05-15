@@ -15,6 +15,7 @@
         android:fullBackupContent="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.WarrantyRoster"
@@ -37,6 +38,10 @@
             android:name="applovin.sdk.key"
             android:value="hmVNBfwsMg8e9UdPEe6ZOWwE83xd2y2KUkDTlGBqx3DMlb0CUOK4f7AeBRRxh-QmzJneB-DPUA-cJuPFEZ7qWA"
             tools:replace="android:value" />
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-4429657659293031~7535647965" />
     </application>
 
 </manifest>
