@@ -6,6 +6,7 @@
         <entry key="..\:/Users/Willi/.gradle/caches/transforms-3/8683ddc6b10b0466d89258ae69cba0ed/transformed/jetified-tapsell-plus-sdk-android-2.1.3/res/layout/native_banner.xml" value="0.16655405405405405" />
         <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/drawable-fa-land/shape_rounded_landing.xml" value="0.1825" />
         <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/drawable-fa-port/shape_rounded_landing.xml" value="0.171" />
+        <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/drawable-fa/shape_rounded_ad_indicator.xml" value="0.156" />
         <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/drawable-fa/shape_rounded_landing.xml" value="0.183" />
         <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/drawable-land/ic_launcher_monochrome.xml" value="0.1785" />
         <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/drawable-land/shape_rounded_landing.xml" value="0.182" />
@@ -110,7 +111,7 @@
         <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/layout/activity_landing_temp.xml" value="0.23194444444444445" />
         <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/layout/activity_main.xml" value="0.16655405405405405" />
         <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/layout/ad_banner_list_applovin.xml" value="0.16655405405405405" />
-        <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/layout/ad_banner_list_tapsell.xml" value="0.16655405405405405" />
+        <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/layout/ad_banner_list_tapsell.xml" value="0.22511415525114156" />
         <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/layout/ad_banner_settings.xml" value="0.16655405405405405" />
         <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/layout/ad_banner_settings_applovin.xml" value="0.22824074074074074" />
         <entry key="..\:/Users/Willi/AndroidStudioProjects/WarrantyRoster/app/src/main/res/layout/ad_banner_settings_tapsell.xml" value="0.16655405405405405" />
