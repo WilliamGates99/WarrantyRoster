@@ -4,7 +4,7 @@ package com.xeniac.warrantyroster_manager.utils
 object Constants {
     // Web URLs
     const val URL_PRIVACY_POLICY = "https://xeniacdev.github.io/WarrantyRoster/privacy_policy"
-    const val URL_DONATE = "https://bio.link/WarrantyRoster"
+    const val URL_DONATE = "https://xeniacdev.github.io/WarrantyRoster/donate"
 
     // DataStore Constants
     const val DATASTORE_NAME_SETTINGS = "settings"
