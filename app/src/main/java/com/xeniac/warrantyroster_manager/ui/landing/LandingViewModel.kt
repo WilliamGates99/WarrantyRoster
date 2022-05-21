@@ -1,18 +1,16 @@
 package com.xeniac.warrantyroster_manager.ui.landing
 
 import android.app.Application
-import android.content.SharedPreferences
 import android.os.CountDownTimer
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.xeniac.warrantyroster_manager.BaseApplication
-import com.xeniac.warrantyroster_manager.di.LoginPrefs
+import com.xeniac.warrantyroster_manager.repositories.PreferencesRepository
 import com.xeniac.warrantyroster_manager.repositories.UserRepository
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_TIMER_IS_NOT_ZERO
-import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_IS_LOGGED_IN_KEY
 import com.xeniac.warrantyroster_manager.utils.Event
 import com.xeniac.warrantyroster_manager.utils.NetworkHelper.hasInternetConnection
 import com.xeniac.warrantyroster_manager.utils.Resource
@@ -26,7 +24,7 @@ import javax.inject.Inject
 class LandingViewModel @Inject constructor(
     application: Application,
     private val userRepository: UserRepository,
-    @LoginPrefs private val loginPrefs: SharedPreferences
+    private val preferencesRepository: PreferencesRepository
 ) : AndroidViewModel(application) {
 
     private val _registerLiveData: MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
@@ -41,6 +39,7 @@ class LandingViewModel @Inject constructor(
     private val _timerLiveData: MutableLiveData<Event<Long>> = MutableLiveData()
     val timerLiveData: LiveData<Event<Long>> = _timerLiveData
 
+    private var forgotPwEmail: String? = null
     var isFirstSentEmail = true
     var timerInMillis: Long = 0
 
@@ -62,7 +61,7 @@ class LandingViewModel @Inject constructor(
             if (hasInternetConnection(getApplication<BaseApplication>())) {
                 userRepository.registerViaEmail(email, password).await()
                 userRepository.sendVerificationEmail()
-                loginPrefs.edit().putBoolean(PREFERENCE_IS_LOGGED_IN_KEY, true).apply()
+                preferencesRepository.isUserLoggedIn(true)
                 _registerLiveData.postValue(Event(Resource.success(null)))
                 Timber.i("$email registered successfully.")
             } else {
@@ -72,7 +71,7 @@ class LandingViewModel @Inject constructor(
                 )
             }
         } catch (e: Exception) {
-            Timber.e("SafeRegisterViaEmail Exception: ${e.message}")
+            Timber.e("safeRegisterViaEmail Exception: ${e.message}")
             _registerLiveData.postValue(Event(Resource.error(e.message.toString())))
         }
     }
@@ -83,7 +82,7 @@ class LandingViewModel @Inject constructor(
             if (hasInternetConnection(getApplication<BaseApplication>())) {
                 userRepository.loginViaEmail(email, password).await().apply {
                     user?.let {
-                        loginPrefs.edit().putBoolean(PREFERENCE_IS_LOGGED_IN_KEY, true).apply()
+                        preferencesRepository.isUserLoggedIn(true)
                         _loginLiveData.postValue(Event(Resource.success(null)))
                         Timber.i("$email logged in successfully.")
                     }
@@ -95,7 +94,7 @@ class LandingViewModel @Inject constructor(
                 )
             }
         } catch (e: Exception) {
-            Timber.e("SafeLoginViaEmail Exception: ${e.message}")
+            Timber.e("safeLoginViaEmail Exception: ${e.message}")
             _loginLiveData.postValue(Event(Resource.error(e.message.toString())))
         }
     }
@@ -104,17 +103,15 @@ class LandingViewModel @Inject constructor(
         _forgotPwLiveData.postValue(Event(Resource.loading()))
         try {
             if (hasInternetConnection(getApplication<BaseApplication>())) {
-                when (timerInMillis) {
-                    0L -> {
-                        userRepository.sendResetPasswordEmail(email).await().apply {
-                            _forgotPwLiveData.postValue(Event(Resource.success(email)))
-                            startCountdown()
-                            Timber.i("Reset password email successfully sent to ${email}.")
-                        }
-                    }
-                    else -> {
-                        Timber.e(ERROR_TIMER_IS_NOT_ZERO)
-                        _forgotPwLiveData.postValue(Event(Resource.error(ERROR_TIMER_IS_NOT_ZERO)))
+                if (email == forgotPwEmail && timerInMillis != 0L) {
+                    Timber.e(ERROR_TIMER_IS_NOT_ZERO)
+                    _forgotPwLiveData.postValue(Event(Resource.error(ERROR_TIMER_IS_NOT_ZERO)))
+                } else {
+                    userRepository.sendResetPasswordEmail(email).await().apply {
+                        _forgotPwLiveData.postValue(Event(Resource.success(email)))
+                        forgotPwEmail = email
+                        startCountdown()
+                        Timber.i("Reset password email successfully sent to ${email}.")
                     }
                 }
             } else {
@@ -122,19 +119,20 @@ class LandingViewModel @Inject constructor(
                 _forgotPwLiveData.postValue(Event(Resource.error(ERROR_NETWORK_CONNECTION)))
             }
         } catch (e: Exception) {
-            Timber.e("SafeSendResetPasswordEmail Exception: ${e.message}")
+            Timber.e("safeSendResetPasswordEmail Exception: ${e.message}")
             _forgotPwLiveData.postValue(Event(Resource.error(e.message.toString())))
         }
     }
 
     private fun startCountdown() {
-        val startTimeInMillis = 120 * 1000L //120 Seconds
-        val countDownIntervalInMillis = 1000L //1 Second
+        val startTimeInMillis = 120 * 1000L // 120 Seconds
+        val countDownIntervalInMillis = 1000L // 1 Second
 
         object : CountDownTimer(startTimeInMillis, countDownIntervalInMillis) {
             override fun onTick(millisUntilFinished: Long) {
                 timerInMillis = millisUntilFinished
                 _timerLiveData.postValue(Event(millisUntilFinished))
+                Timber.i("timer: $millisUntilFinished")
             }
 
             override fun onFinish() {

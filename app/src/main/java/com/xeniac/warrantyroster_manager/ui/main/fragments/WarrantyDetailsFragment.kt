@@ -14,19 +14,22 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import coil.ImageLoader
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentWarrantyDetailsBinding
-import com.xeniac.warrantyroster_manager.models.Status
 import com.xeniac.warrantyroster_manager.ui.main.MainActivity
-import com.xeniac.warrantyroster_manager.models.Warranty
+import com.xeniac.warrantyroster_manager.data.remote.models.Warranty
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModel
 import com.xeniac.warrantyroster_manager.utils.CoilHelper.loadCategoryImage
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
-import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_403
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.DateHelper.getDaysUntilExpiry
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.show403Error
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseDeviceBlockedError
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkConnectionError
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkFailureError
+import com.xeniac.warrantyroster_manager.utils.Status
 import dagger.hilt.android.AndroidEntryPoint
 import ir.tapsell.plus.AdShowListener
 import ir.tapsell.plus.TapsellPlus
@@ -55,6 +58,8 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
 
     private lateinit var warranty: Warranty
 
+    private var snackbar: Snackbar? = null
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentWarrantyDetailsBinding.bind(view)
@@ -70,6 +75,7 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        snackbar?.dismiss()
         _binding = null
     }
 
@@ -144,13 +150,18 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
             )
         }
 
-        val dateFormat = SimpleDateFormat("yyyy-M-dd", Locale.getDefault())
-
         Calendar.getInstance().apply {
             dateFormat.parse(warranty.startingDate!!)?.let { time = it }
-            val startingDate = "${decimalFormat.format((get(Calendar.MONTH)) + 1)}/" +
-                    "${decimalFormat.format(get(Calendar.DAY_OF_MONTH))}/" +
-                    "${get(Calendar.YEAR)}"
+
+            val day = decimalFormat.format(get(Calendar.DAY_OF_MONTH))
+            val month = decimalFormat.format((get(Calendar.MONTH)) + 1)
+            val year = get(Calendar.YEAR)
+
+            val startingDate = requireContext().getString(
+                R.string.warranty_details_format_date,
+                month, day, year
+            )
+
             binding.tvDateStarting.text = startingDate
         }
 
@@ -166,9 +177,16 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
         } else {
             val expiryCalendar = Calendar.getInstance().apply {
                 dateFormat.parse(warranty.expiryDate!!)?.let { time = it }
-                val expiryDate = "${decimalFormat.format((get(Calendar.MONTH)) + 1)}/" +
-                        "${decimalFormat.format(get(Calendar.DAY_OF_MONTH))}/" +
-                        "${get(Calendar.YEAR)}"
+
+                val day = decimalFormat.format(get(Calendar.DAY_OF_MONTH))
+                val month = decimalFormat.format((get(Calendar.MONTH)) + 1)
+                val year = get(Calendar.YEAR)
+
+                val expiryDate = requireContext().getString(
+                    R.string.warranty_details_format_date,
+                    month, day, year
+                )
+
                 binding.tvDateExpiry.text = expiryDate
             }
 
@@ -225,6 +243,7 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
                 warranty.title
             )
         )
+        setCancelable(false)
         setPositiveButton(requireContext().getString(R.string.warranty_details_delete_dialog_positive)) { _, _ -> deleteWarrantyFromFirestore() }
         setNegativeButton(requireContext().getText(R.string.warranty_details_delete_dialog_negative)) { _, _ -> }
         show()
@@ -247,11 +266,13 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
                                     warranty.title
                                 )
                             ), Toast.LENGTH_LONG
-                        ).show()
+                        ).apply {
+                            show()
+                        }
 
                         when {
-                            (requireActivity() as MainActivity).adColonyAd != null -> {
-                                (requireActivity() as MainActivity).adColonyAd?.show()
+                            (requireActivity() as MainActivity).appLovinAd.isReady -> {
+                                (requireActivity() as MainActivity).appLovinAd.showAd()
                             }
                             (requireActivity() as MainActivity).tapsellResponseId != null -> {
                                 (requireActivity() as MainActivity).tapsellResponseId?.let {
@@ -260,43 +281,25 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
                             }
                         }
                         requireActivity().onBackPressed()
-                        (requireActivity() as MainActivity).requestAdColonyInterstitial()
+                        (requireActivity() as MainActivity).requestAppLovinInterstitial()
                     }
                     Status.ERROR -> {
                         hideLoadingAnimation()
                         response.message?.let {
-                            when {
+                            snackbar = when {
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
-                                    Snackbar.make(
-                                        binding.root,
-                                        requireContext().getString(R.string.network_error_connection),
-                                        LENGTH_LONG
-                                    ).apply {
-                                        setAction(requireContext().getString(R.string.network_error_retry)) { deleteWarrantyFromFirestore() }
-                                        show()
-                                    }
+                                    showNetworkConnectionError(
+                                        requireContext(), binding.root
+                                    ) { deleteWarrantyFromFirestore() }
                                 }
-                                it.contains(ERROR_NETWORK_403) -> {
-                                    Snackbar.make(
-                                        binding.root,
-                                        requireContext().getString(R.string.network_error_403),
-                                        LENGTH_LONG
-                                    ).show()
+                                it.contains(ERROR_FIREBASE_403) -> {
+                                    show403Error(requireContext(), binding.root)
                                 }
                                 it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
-                                    Snackbar.make(
-                                        binding.root,
-                                        requireContext().getString(R.string.firebase_error_device_blocked),
-                                        LENGTH_LONG
-                                    ).show()
+                                    showFirebaseDeviceBlockedError(requireContext(), binding.root)
                                 }
                                 else -> {
-                                    hideLoadingAnimation()
-                                    Snackbar.make(
-                                        binding.root,
-                                        requireContext().getString(R.string.network_error_failure),
-                                        LENGTH_LONG
-                                    ).show()
+                                    showNetworkFailureError(requireContext(), binding.root)
                                 }
                             }
                         }
@@ -318,9 +321,7 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
     }
 
     private fun showInterstitialAd(responseId: String) = TapsellPlus.showInterstitialAd(
-        requireActivity(),
-        responseId,
-        object : AdShowListener() {
+        requireActivity(), responseId, object : AdShowListener() {
             override fun onOpened(tapsellPlusAdModel: TapsellPlusAdModel?) {
                 super.onOpened(tapsellPlusAdModel)
             }

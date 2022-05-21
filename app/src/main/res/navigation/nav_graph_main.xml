@@ -47,7 +47,7 @@
         tools:layout="@layout/fragment_warranty_details">
         <argument
             android:name="warranty"
-            app:argType="com.xeniac.warrantyroster_manager.models.Warranty"
+            app:argType="com.xeniac.warrantyroster_manager.data.remote.models.Warranty"
             app:nullable="false" />
         <action
             android:id="@+id/action_warrantyDetailsFragment_to_editWarrantyFragment"
@@ -81,7 +81,7 @@
         tools:layout="@layout/fragment_edit_warranty">
         <argument
             android:name="warranty"
-            app:argType="com.xeniac.warrantyroster_manager.models.Warranty"
+            app:argType="com.xeniac.warrantyroster_manager.data.remote.models.Warranty"
             app:nullable="false" />
         <action
             android:id="@+id/action_editWarrantyFragment_to_warrantyDetailsFragment"

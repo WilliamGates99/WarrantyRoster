@@ -1,21 +1,35 @@
 package com.xeniac.warrantyroster_manager.di
 
 import android.content.Context
-import android.content.Context.MODE_PRIVATE
-import android.content.SharedPreferences
+import androidx.datastore.core.DataStore
+import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
+import androidx.datastore.preferences.core.PreferenceDataStoreFactory
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.emptyPreferences
+import androidx.datastore.preferences.preferencesDataStoreFile
 import coil.ImageLoader
 import coil.decode.SvgDecoder
+import coil.memory.MemoryCache
+import coil.util.DebugLogger
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import com.xeniac.warrantyroster_manager.BuildConfig
 import com.xeniac.warrantyroster_manager.repositories.MainRepository
+import com.xeniac.warrantyroster_manager.repositories.PreferencesRepository
 import com.xeniac.warrantyroster_manager.repositories.UserRepository
-import com.xeniac.warrantyroster_manager.utils.Constants
-import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_IS_LOGGED_IN_KEY
-import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_LOGIN
-import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_SETTINGS
+import com.xeniac.warrantyroster_manager.utils.Constants.COLLECTION_CATEGORIES
+import com.xeniac.warrantyroster_manager.utils.Constants.COLLECTION_WARRANTIES
+import com.xeniac.warrantyroster_manager.utils.Constants.DATASTORE_NAME_SETTINGS
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.*
+import okhttp3.Dispatcher
+import okhttp3.OkHttpClient
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -28,43 +42,45 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideUserRepository() = UserRepository()
+    fun provideFirebaseAuthInstance() = FirebaseAuth.getInstance()
+
+    @CategoriesCollection
+    @Singleton
+    @Provides
+    fun provideFirestoreCategoriesCollectionRef() =
+        Firebase.firestore.collection(COLLECTION_CATEGORIES)
+
+    @WarrantiesCollection
+    @Singleton
+    @Provides
+    fun provideFirestoreWarrantiesCollectionRef() =
+        Firebase.firestore.collection(COLLECTION_WARRANTIES)
 
     @Singleton
     @Provides
-    fun provideMainRepository() = MainRepository()
+    fun provideUserRepository(firebaseAuth: FirebaseAuth) = UserRepository(firebaseAuth)
 
-    @LoginPrefs
     @Singleton
     @Provides
-    fun provideLoginPrefs(@ApplicationContext context: Context): SharedPreferences =
-        context.getSharedPreferences(PREFERENCE_LOGIN, MODE_PRIVATE)
+    fun provideMainRepository(
+        firebaseAuth: FirebaseAuth,
+        @CategoriesCollection categoriesCollectionRef: CollectionReference,
+        @WarrantiesCollection warrantiesCollectionRef: CollectionReference
+    ) = MainRepository(firebaseAuth, categoriesCollectionRef, warrantiesCollectionRef)
 
-    @SettingsPrefs
     @Singleton
     @Provides
-    fun provideSettingsPrefs(@ApplicationContext context: Context): SharedPreferences =
-        context.getSharedPreferences(PREFERENCE_SETTINGS, MODE_PRIVATE)
+    fun providePreferencesRepository(settingsDataStore: DataStore<Preferences>) =
+        PreferencesRepository(settingsDataStore)
 
+    @Singleton
     @Provides
-    fun provideIsUserLoggedIn(@LoginPrefs loginPrefs: SharedPreferences) =
-        loginPrefs.getBoolean(PREFERENCE_IS_LOGGED_IN_KEY, false)
-
-    @CurrentLanguage
-    @Singleton //TODO REMOVE AFTER ADDING PERSIAN
-    @Provides
-    fun provideCurrentLanguage(@SettingsPrefs settingsPrefs: SharedPreferences) =
-        settingsPrefs.getString(Constants.PREFERENCE_LANGUAGE_KEY, "en") ?: "en"
-
-    @CurrentCountry
-    @Singleton //TODO REMOVE AFTER ADDING PERSIAN
-    @Provides
-    fun provideCurrentCountry(@SettingsPrefs settingsPrefs: SharedPreferences) =
-        settingsPrefs.getString(Constants.PREFERENCE_COUNTRY_KEY, "US") ?: "US"
-
-    @Provides
-    fun provideCurrentTheme(@SettingsPrefs settingsPrefs: SharedPreferences) =
-        settingsPrefs.getInt(Constants.PREFERENCE_THEME_KEY, 0)
+    fun provideLoginDataStore(@ApplicationContext context: Context): DataStore<Preferences> =
+        PreferenceDataStoreFactory.create(
+            corruptionHandler = ReplaceFileCorruptionHandler { emptyPreferences() },
+            scope = CoroutineScope(Dispatchers.IO + SupervisorJob()),
+            produceFile = { context.preferencesDataStoreFile(DATASTORE_NAME_SETTINGS) }
+        )
 
     @Singleton
     @Provides
@@ -77,33 +93,34 @@ object AppModule {
     @Singleton
     @Provides
     fun provideCoilImageLoader(@ApplicationContext context: Context) =
-        ImageLoader.Builder(context).componentRegistry { add(SvgDecoder(context)) }.build()
+        ImageLoader.Builder(context).apply {
+            components { add(SvgDecoder.Factory()) }
+            memoryCache {
+                MemoryCache.Builder(context)
+                    // Set the max size to 25% of the app's available memory.
+                    .maxSizePercent(0.25)
+                    .build()
+            }
+            okHttpClient {
+                // Don't limit concurrent network requests by host.
+                val dispatcher = Dispatcher().apply { maxRequestsPerHost = maxRequests }
 
-    @CategoryTitleMapKey
-    @Singleton //TODO REMOVE AFTER ADDING PERSIAN
-    @Provides
-    fun provideCategoryTitleMapKey(
-        @CurrentLanguage currentLanguage: String,
-        @CurrentCountry currentCountry: String
-    ) = "${currentLanguage}-${currentCountry}"
+                // Lazily create the OkHttpClient that is used for network operations.
+                OkHttpClient.Builder()
+                    .dispatcher(dispatcher)
+                    .build()
+            }
+            // Ignore the network cache headers and always read from/write to the disk cache.
+            respectCacheHeaders(false)
+            crossfade(true)
+            if (BuildConfig.DEBUG) logger(DebugLogger())
+        }.build()
 }
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
-annotation class LoginPrefs
+annotation class CategoriesCollection
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
-annotation class SettingsPrefs
-
-@Qualifier
-@Retention(AnnotationRetention.BINARY)
-annotation class CurrentLanguage
-
-@Qualifier
-@Retention(AnnotationRetention.BINARY)
-annotation class CurrentCountry
-
-@Qualifier
-@Retention(AnnotationRetention.BINARY)
-annotation class CategoryTitleMapKey
+annotation class WarrantiesCollection

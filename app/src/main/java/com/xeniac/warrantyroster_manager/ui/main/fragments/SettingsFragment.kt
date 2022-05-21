@@ -6,67 +6,74 @@ import android.os.Bundle
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.widget.Toast
+import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.adcolony.sdk.*
 import com.airbnb.lottie.LottieDrawable
+import com.applovin.mediation.MaxAd
+import com.applovin.mediation.MaxAdRevenueListener
+import com.applovin.mediation.MaxError
+import com.applovin.mediation.nativeAds.MaxNativeAdListener
+import com.applovin.mediation.nativeAds.MaxNativeAdLoader
+import com.applovin.mediation.nativeAds.MaxNativeAdView
+import com.applovin.mediation.nativeAds.MaxNativeAdViewBinder
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
 import com.google.android.material.snackbar.Snackbar
+import com.xeniac.warrantyroster_manager.BuildConfig
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentSettingsBinding
-import com.xeniac.warrantyroster_manager.di.CurrentCountry
-import com.xeniac.warrantyroster_manager.di.CurrentLanguage
-import com.xeniac.warrantyroster_manager.models.Status
 import com.xeniac.warrantyroster_manager.ui.landing.LandingActivity
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.SettingsViewModel
-import com.xeniac.warrantyroster_manager.utils.Constants.ADCOLONY_BANNER_ZONE_ID
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
-import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_403
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
-import com.xeniac.warrantyroster_manager.utils.Constants.TAPSELL_SETTINGS_NATIVE_ZONE_ID
+import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_LANGUAGE_ENGLISH
+import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_LANGUAGE_PERSIAN
 import com.xeniac.warrantyroster_manager.utils.Constants.URL_DONATE
 import com.xeniac.warrantyroster_manager.utils.Constants.URL_PRIVACY_POLICY
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.show403Error
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseDeviceBlockedError
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkConnectionError
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkFailureError
+import com.xeniac.warrantyroster_manager.utils.Status
 import dagger.hilt.android.AndroidEntryPoint
 import ir.tapsell.plus.*
 import ir.tapsell.plus.model.TapsellPlusAdModel
 import timber.log.Timber
-import javax.inject.Inject
 
+@Suppress("SpellCheckingInspection")
 @AndroidEntryPoint
-class SettingsFragment : Fragment(R.layout.fragment_settings) {
+class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListener {
 
     private var _binding: FragmentSettingsBinding? = null
     private val binding get() = _binding!!
     private val viewModel: SettingsViewModel by viewModels()
 
-    @Inject
-    @CurrentLanguage
-    lateinit var currentLanguage: String
+    private lateinit var currentAppLanguage: String
+    private lateinit var currentAppCountry: String
+    private var currentAppTheme = 0
 
-    @Inject
-    @CurrentCountry
-    lateinit var currentCountry: String
+    private lateinit var appLovinNativeAdContainer: ViewGroup
+    private lateinit var appLovinAdLoader: MaxNativeAdLoader
+    private var appLovinNativeAd: MaxAd? = null
+    private var appLovinAdRequestCounter = 1
 
-    @set:Inject
-    var currentTheme = 0
+    private var tapsellResponseId: String? = null
+    private var tapsellRequestCounter = 1
 
-    private var requestAdCounter = 0
-    private var responseId: String? = null
-
-    private var adColonyBanner: AdColonyAdView? = null
+    private var snackbar: Snackbar? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentSettingsBinding.bind(view)
 
+        subscribeToObservers()
         getAccountDetails()
-        accountDetailsObserver()
-        setCurrentLanguageText()
-        setCurrentThemeText()
+        getCurrentAppLocale()
+        getCurrentApptheme()
         verifyOnClick()
         changeEmailOnClick()
         changePasswordOnClick()
@@ -75,14 +82,22 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         donateOnClick()
         privacyPolicyOnClick()
         logoutOnClick()
-        subscribeToObservers()
-        requestAdColonyBanner()
+        requestAppLovinNativeAd()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
+        snackbar?.dismiss()
         destroyAd()
         _binding = null
+    }
+
+    private fun subscribeToObservers() {
+        accountDetailsObserver()
+        currentAppLocaleObserver()
+        currentAppThemeObserver()
+        sendVerificationEmailObserver()
+        logoutObserver()
     }
 
     private fun getAccountDetails() = viewModel.getAccountDetails()
@@ -96,8 +111,12 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                             setAccountDetails(user.email.toString(), user.isEmailVerified)
                         }
                     }
-                    Status.ERROR -> Unit
-                    Status.LOADING -> Unit
+                    Status.ERROR -> {
+                        /* NO-OP */
+                    }
+                    Status.LOADING -> {
+                        /* NO-OP */
+                    }
                 }
             }
         }
@@ -139,21 +158,43 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         binding.lavAccountVerification.playAnimation()
     }
 
+    private fun getCurrentAppLocale() = viewModel.getCurrentAppLocale()
+
+    private fun currentAppLocaleObserver() =
+        viewModel.currentAppLocale.observe(viewLifecycleOwner) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { currentLocale ->
+                currentAppLanguage = currentLocale[0]
+                currentAppCountry = currentLocale[1]
+                setCurrentLanguageText()
+            }
+        }
+
     private fun setCurrentLanguageText() {
-        when (currentLanguage) {
-            "en" -> {
+        //TODO EDIT AFTER ADDING BRITISH ENGLISH
+        when (currentAppLanguage) {
+            LOCALE_LANGUAGE_ENGLISH -> {
                 binding.tvSettingsLanguageCurrent.text =
                     requireContext().getString(R.string.settings_text_settings_language_english)
             }
-            "fa" -> {
+            LOCALE_LANGUAGE_PERSIAN -> {
                 binding.tvSettingsLanguageCurrent.text =
                     requireContext().getString(R.string.settings_text_settings_language_persian)
             }
         }
     }
 
+    private fun getCurrentApptheme() = viewModel.getCurrentAppTheme()
+
+    private fun currentAppThemeObserver() =
+        viewModel.currentAppTheme.observe(viewLifecycleOwner) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { currentThemeIndex ->
+                currentAppTheme = currentThemeIndex
+                setCurrentThemeText()
+            }
+        }
+
     private fun setCurrentThemeText() {
-        when (currentTheme) {
+        when (currentAppTheme) {
             0 -> {
                 binding.tvSettingsThemeCurrent.text =
                     requireContext().getString(R.string.settings_text_settings_theme_default)
@@ -183,7 +224,25 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         }
 
     private fun languageOnClick() = binding.clSettingsLanguage.setOnClickListener {
-        Toast.makeText(requireContext(), "Language", Toast.LENGTH_SHORT).show()
+        //TODO EDIT AFTER ADDING BRITISH ENGLISH
+        val currentAppLanguageIndex = when (currentAppLanguage) {
+            LOCALE_LANGUAGE_ENGLISH -> 0
+            LOCALE_LANGUAGE_PERSIAN -> 1
+            else -> 0
+        }
+
+        val languageItems = arrayOf(
+            requireContext().getString(R.string.settings_text_settings_language_english),
+            requireContext().getString(R.string.settings_text_settings_language_persian)
+        )
+
+        MaterialAlertDialogBuilder(requireContext()).apply {
+            setTitle(requireContext().getString(R.string.settings_text_settings_language))
+            setSingleChoiceItems(languageItems, currentAppLanguageIndex) { dialogInterface, index ->
+                setAppLocale(index)
+                dialogInterface.dismiss()
+            }
+        }.show()
     }
 
     private fun themeOnClick() = binding.clSettingsTheme.setOnClickListener {
@@ -195,10 +254,8 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
         MaterialAlertDialogBuilder(requireContext()).apply {
             setTitle(requireContext().getString(R.string.settings_text_settings_theme))
-            setSingleChoiceItems(themeItems, currentTheme) { dialogInterface, index ->
+            setSingleChoiceItems(themeItems, currentAppTheme) { dialogInterface, index ->
                 setAppTheme(index)
-                currentTheme = index
-                setCurrentThemeText()
                 dialogInterface.dismiss()
             }
         }.show()
@@ -211,7 +268,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                     startActivity(this)
                 } ?: Snackbar.make(
                     binding.root,
-                    requireContext().getString(R.string.intent_error_app_not_found),
+                    requireContext().getString(R.string.error_intent_app_not_found),
                     LENGTH_LONG
                 ).show()
             }
@@ -224,7 +281,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                     startActivity(this)
                 } ?: Snackbar.make(
                     binding.root,
-                    requireContext().getString(R.string.intent_error_app_not_found),
+                    requireContext().getString(R.string.error_intent_app_not_found),
                     LENGTH_LONG
                 ).show()
             }
@@ -234,10 +291,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         logout()
     }
 
-    private fun subscribeToObservers() {
-        sendVerificationEmailObserver()
-        logoutObserver()
-    }
+    private fun setAppLocale(index: Int) = viewModel.setAppLocale(index, requireActivity())
 
     private fun setAppTheme(index: Int) = viewModel.setAppTheme(index)
 
@@ -252,43 +306,27 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                         hideLoadingAnimation()
                         MaterialAlertDialogBuilder(requireContext()).apply {
                             setMessage(requireContext().getString(R.string.settings_dialog_message))
+                            setCancelable(false)
                             setPositiveButton(requireContext().getString(R.string.settings_dialog_positive)) { _, _ -> }
                         }.show()
                     }
                     Status.ERROR -> {
                         hideLoadingAnimation()
                         response.message?.let {
-                            when {
+                            snackbar = when {
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
-                                    Snackbar.make(
-                                        binding.root,
-                                        requireContext().getString(R.string.network_error_connection),
-                                        LENGTH_LONG
-                                    ).apply {
-                                        setAction(requireContext().getString(R.string.network_error_retry)) { sendVerificationEmail() }
-                                        show()
-                                    }
+                                    showNetworkConnectionError(
+                                        requireContext(), binding.root
+                                    ) { sendVerificationEmail() }
                                 }
-                                it.contains(ERROR_NETWORK_403) -> {
-                                    Snackbar.make(
-                                        binding.root,
-                                        requireContext().getString(R.string.network_error_403),
-                                        LENGTH_LONG
-                                    ).show()
+                                it.contains(ERROR_FIREBASE_403) -> {
+                                    show403Error(requireContext(), binding.root)
                                 }
                                 it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
-                                    Snackbar.make(
-                                        binding.root,
-                                        requireContext().getString(R.string.firebase_error_device_blocked),
-                                        LENGTH_LONG
-                                    ).show()
+                                    showFirebaseDeviceBlockedError(requireContext(), binding.root)
                                 }
                                 else -> {
-                                    Snackbar.make(
-                                        binding.root,
-                                        requireContext().getString(R.string.network_error_failure),
-                                        LENGTH_LONG
-                                    ).show()
+                                    showNetworkFailureError(requireContext(), binding.root)
                                 }
                             }
                         }
@@ -307,8 +345,12 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                         startActivity(Intent(requireContext(), LandingActivity::class.java))
                         requireActivity().finish()
                     }
-                    Status.ERROR -> Unit
-                    Status.LOADING -> Unit
+                    Status.ERROR -> {
+                        /* NO-OP */
+                    }
+                    Status.LOADING -> {
+                        /* NO-OP */
+                    }
                 }
             }
         }
@@ -324,62 +366,96 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         binding.btnAccountVerification.visibility = VISIBLE
     }
 
-    private fun requestAdColonyBanner() = _binding?.let {
-        AdColony.requestAdView(
-            ADCOLONY_BANNER_ZONE_ID,
-            object : AdColonyAdViewListener() {
-                override fun onRequestFilled(ad: AdColonyAdView?) {
-                    Timber.i("Banner request filled.")
-                    adColonyBanner = ad
-                    adColonyBanner?.let {
-                        showAdColonyContainer()
-                        binding.flAdContainerAdcolony.addView(it)
-                    }
-                }
-
-                override fun onRequestNotFilled(zone: AdColonyZone?) {
-                    super.onRequestNotFilled(zone)
-                    Timber.e("Banner request did not fill.")
-                    initTapsellAdHolder()
-                }
-            }, AdColonyAdSize.BANNER
-        )
+    private fun requestAppLovinNativeAd() {
+        appLovinNativeAdContainer = binding.flAdContainerNative
+        appLovinAdLoader =
+            MaxNativeAdLoader(
+                BuildConfig.APPLOVIN_SETTINGS_NATIVE_UNIT_ID,
+                requireContext()
+            ).apply {
+                setRevenueListener(this@SettingsFragment)
+                setNativeAdListener(AppLovinNativeAdListener())
+                loadAd(createNativeAdView())
+            }
     }
 
-    @Suppress("SpellCheckingInspection")
+    private fun createNativeAdView(): MaxNativeAdView {
+        val nativeAdBinder: MaxNativeAdViewBinder =
+            MaxNativeAdViewBinder.Builder(R.layout.ad_banner_settings_applovin).apply {
+                setIconImageViewId(R.id.iv_banner_icon)
+                setTitleTextViewId(R.id.tv_banner_title)
+                setBodyTextViewId(R.id.tv_banner_body)
+                setCallToActionButtonId(R.id.btn_banner_action)
+            }.build()
+        return MaxNativeAdView(nativeAdBinder, requireContext())
+    }
+
+    private inner class AppLovinNativeAdListener : MaxNativeAdListener() {
+        override fun onNativeAdLoaded(nativeAdView: MaxNativeAdView?, nativeAd: MaxAd?) {
+            super.onNativeAdLoaded(nativeAdView, nativeAd)
+            Timber.i("AppLovin onNativeAdLoaded")
+            appLovinNativeAd?.let {
+                // Clean up any pre-existing native ad to prevent memory leaks.
+                appLovinAdLoader.destroy(it)
+            }
+
+            showNativeAdContainer()
+            appLovinNativeAd = nativeAd
+            appLovinNativeAdContainer.removeAllViews()
+            appLovinNativeAdContainer.addView(nativeAdView)
+        }
+
+        override fun onNativeAdLoadFailed(adUnitId: String?, error: MaxError?) {
+            super.onNativeAdLoadFailed(adUnitId, error)
+            Timber.e("AppLovin onNativeAdLoadFailed: ${error?.message}")
+            if (appLovinAdRequestCounter < 3) {
+                appLovinAdRequestCounter++
+                appLovinAdLoader.loadAd(createNativeAdView())
+            } else {
+                initTapsellAdHolder()
+            }
+        }
+
+        override fun onNativeAdClicked(nativeAd: MaxAd?) {
+            super.onNativeAdClicked(nativeAd)
+            Timber.i("AppLovin onNativeAdClicked")
+        }
+    }
+
+    override fun onAdRevenuePaid(ad: MaxAd?) {
+        Timber.i("AppLovin onAdRevenuePaid")
+    }
+
     private fun initTapsellAdHolder() {
         _binding?.let {
             val adHolder = TapsellPlus.createAdHolder(
-                requireActivity(), binding.flAdContainerTapsell, R.layout.ad_banner_settings
+                requireActivity(), binding.flAdContainerNative, R.layout.ad_banner_settings_tapsell
             )
-
-            requestAdCounter = 0
             adHolder?.let { requestTapsellNativeAd(it) }
         }
     }
 
-    @Suppress("SpellCheckingInspection")
     private fun requestTapsellNativeAd(adHolder: AdHolder) {
         _binding?.let {
             TapsellPlus.requestNativeAd(requireActivity(),
-                TAPSELL_SETTINGS_NATIVE_ZONE_ID, object : AdRequestCallback() {
+                BuildConfig.TAPSELL_SETTINGS_NATIVE_ZONE_ID, object : AdRequestCallback() {
                     override fun response(tapsellPlusAdModel: TapsellPlusAdModel?) {
                         super.response(tapsellPlusAdModel)
-                        Timber.i("RequestNativeAd Response: ${tapsellPlusAdModel.toString()}")
-                        requestAdCounter = 0
+                        Timber.i("requestTapsellNativeAd onResponse")
+                        tapsellRequestCounter = 0
                         _binding?.let {
                             tapsellPlusAdModel?.let {
-                                responseId = it.responseId
-                                showNativeAd(adHolder, responseId!!)
+                                tapsellResponseId = it.responseId
+                                showNativeAd(adHolder, tapsellResponseId!!)
                             }
                         }
                     }
 
                     override fun error(error: String?) {
                         super.error(error)
-                        Timber.e("RequestNativeAd Error: $error")
-                        if (requestAdCounter < 3) {
-                            requestAdCounter++
+                        Timber.e("requestTapsellNativeAd onError: $error")
+                        if (tapsellRequestCounter < 3) {
+                            tapsellRequestCounter++
                             requestTapsellNativeAd(adHolder)
                         }
                     }
@@ -389,7 +465,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
     private fun showNativeAd(adHolder: AdHolder, responseId: String) {
         _binding?.let {
-            showTapsellContainer()
+            showNativeAdContainer()
             TapsellPlus.showNativeAd(requireActivity(),
                 responseId, adHolder, object : AdShowListener() {
                     override fun onOpened(tapsellPlusAdModel: TapsellPlusAdModel?) {
@@ -403,23 +479,17 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         }
     }
 
-    private fun showAdColonyContainer() {
-        binding.flAdContainerTapsell.visibility = GONE
-        binding.flAdContainerAdcolony.visibility = VISIBLE
-        binding.dividerSettingsThird.visibility = VISIBLE
-    }
-
-    @Suppress("SpellCheckingInspection")
-    private fun showTapsellContainer() {
-        binding.flAdContainerAdcolony.visibility = GONE
-        binding.flAdContainerTapsell.visibility = VISIBLE
-        binding.dividerSettingsThird.visibility = VISIBLE
+    private fun showNativeAdContainer() {
+        binding.flAdContainerNative.visibility = VISIBLE
+        binding.dividerSettingsFourth.visibility = VISIBLE
     }
 
     private fun destroyAd() {
-        adColonyBanner?.destroy()
+        appLovinNativeAd?.let {
+            appLovinAdLoader.destroy(it)
+        }
 
-        responseId?.let {
+        tapsellResponseId?.let {
             TapsellPlus.destroyNativeBanner(requireActivity(), it)
         }
     }

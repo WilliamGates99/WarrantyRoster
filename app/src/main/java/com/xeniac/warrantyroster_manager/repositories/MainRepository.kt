@@ -1,29 +1,36 @@
 package com.xeniac.warrantyroster_manager.repositories
 
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.Query
-import com.xeniac.warrantyroster_manager.firebase.FirebaseAuthInstance
-import com.xeniac.warrantyroster_manager.firebase.FirestoreInstance
-import com.xeniac.warrantyroster_manager.models.WarrantyInput
+import com.xeniac.warrantyroster_manager.data.remote.models.WarrantyInput
+import com.xeniac.warrantyroster_manager.di.CategoriesCollection
+import com.xeniac.warrantyroster_manager.di.WarrantiesCollection
 import com.xeniac.warrantyroster_manager.utils.Constants
+import javax.inject.Inject
 
-class MainRepository {
+class MainRepository @Inject constructor(
+    private val firebaseAuth: FirebaseAuth,
+    @CategoriesCollection private val categoriesCollectionRef: CollectionReference,
+    @WarrantiesCollection private val warrantiesCollectionRef: CollectionReference
+) {
 
-    fun getCategoriesFromFirestore() = FirestoreInstance.categoriesCollectionRef
+    fun getCategoriesFromFirestore() = categoriesCollectionRef
         .orderBy(Constants.CATEGORIES_TITLE, Query.Direction.ASCENDING)
 
-    fun getWarrantiesFromFirestore() = FirestoreInstance.warrantiesCollectionRef
-        .whereEqualTo(Constants.WARRANTIES_UUID, FirebaseAuthInstance.auth.currentUser?.uid)
+    fun getWarrantiesFromFirestore() = warrantiesCollectionRef
+        .whereEqualTo(Constants.WARRANTIES_UUID, firebaseAuth.currentUser?.uid)
         .orderBy(Constants.WARRANTIES_TITLE, Query.Direction.ASCENDING)
 
     fun addWarrantyToFirestore(warrantyInput: WarrantyInput) =
-        FirestoreInstance.warrantiesCollectionRef.add(warrantyInput)
+        warrantiesCollectionRef.add(warrantyInput)
 
     fun deleteWarrantyFromFirestore(warrantyId: String) =
-        FirestoreInstance.warrantiesCollectionRef.document(warrantyId).delete()
+        warrantiesCollectionRef.document(warrantyId).delete()
 
     fun updateWarrantyInFirestore(warrantyId: String, warrantyInput: WarrantyInput) =
-        FirestoreInstance.warrantiesCollectionRef.document(warrantyId).set(warrantyInput)
+        warrantiesCollectionRef.document(warrantyId).set(warrantyInput)
 
     fun getUpdatedWarrantyFromFirestore(warrantyId: String) =
-        FirestoreInstance.warrantiesCollectionRef.document(warrantyId).get()
+        warrantiesCollectionRef.document(warrantyId).get()
 }

@@ -1,20 +1,23 @@
 package com.xeniac.warrantyroster_manager.ui.main.viewmodels
 
+import android.app.Activity
 import android.app.Application
-import android.content.SharedPreferences
-import androidx.appcompat.app.AppCompatDelegate
+import android.content.Intent
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseUser
 import com.xeniac.warrantyroster_manager.BaseApplication
-import com.xeniac.warrantyroster_manager.di.LoginPrefs
-import com.xeniac.warrantyroster_manager.di.SettingsPrefs
+import com.xeniac.warrantyroster_manager.repositories.PreferencesRepository
 import com.xeniac.warrantyroster_manager.repositories.UserRepository
+import com.xeniac.warrantyroster_manager.ui.landing.LandingActivity
+import com.xeniac.warrantyroster_manager.utils.SettingsHelper
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
-import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_IS_LOGGED_IN_KEY
-import com.xeniac.warrantyroster_manager.utils.Constants.PREFERENCE_THEME_KEY
+import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_COUNTRY_IRAN
+import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_COUNTRY_UNITED_STATES
+import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_LANGUAGE_ENGLISH
+import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_LANGUAGE_PERSIAN
 import com.xeniac.warrantyroster_manager.utils.Event
 import com.xeniac.warrantyroster_manager.utils.NetworkHelper.hasInternetConnection
 import com.xeniac.warrantyroster_manager.utils.Resource
@@ -28,9 +31,14 @@ import javax.inject.Inject
 class SettingsViewModel @Inject constructor(
     application: Application,
     private val userRepository: UserRepository,
-    @SettingsPrefs private val settingsPrefs: SharedPreferences,
-    @LoginPrefs private val loginPrefs: SharedPreferences
+    private val preferencesRepository: PreferencesRepository
 ) : AndroidViewModel(application) {
+
+    private val _currentAppTheme: MutableLiveData<Event<Int>> = MutableLiveData()
+    val currentAppTheme: MutableLiveData<Event<Int>> = _currentAppTheme
+
+    private val _currentAppLocale: MutableLiveData<Event<Array<String>>> = MutableLiveData()
+    val currentAppLocale: MutableLiveData<Event<Array<String>>> = _currentAppLocale
 
     private val _accountDetailsLiveData:
             MutableLiveData<Event<Resource<FirebaseUser>>> = MutableLiveData()
@@ -56,27 +64,46 @@ class SettingsViewModel @Inject constructor(
             MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
     val changeUserPasswordLiveData: LiveData<Event<Resource<Nothing>>> = _changeUserPasswordLiveData
 
-    fun setAppTheme(index: Int) = viewModelScope.launch {
+    fun isUserLoggedIn() = preferencesRepository.isUserLoggedInSynchronously()
+
+    fun getCurrentAppLocale() = viewModelScope.launch {
+        safeGetCurrentAppLocale()
+    }
+
+    fun getCurrentAppTheme() = viewModelScope.launch {
+        safeGetCurrentAppTheme()
+    }
+
+    fun setAppLocale(index: Int, activity: Activity) = viewModelScope.launch {
+        var newLanguage = LOCALE_LANGUAGE_ENGLISH
+        var newCountry = LOCALE_COUNTRY_UNITED_STATES
+
+        //TODO CHANGE AFTER ADDING BRITISH ENGLISH
         when (index) {
             0 -> {
-                if (AppCompatDelegate.getDefaultNightMode() != AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM) {
-                    settingsPrefs.edit().putInt(PREFERENCE_THEME_KEY, index).apply()
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
-                }
+                newLanguage = LOCALE_LANGUAGE_ENGLISH
+                newCountry = LOCALE_COUNTRY_UNITED_STATES
             }
             1 -> {
-                if (AppCompatDelegate.getDefaultNightMode() != AppCompatDelegate.MODE_NIGHT_NO) {
-                    settingsPrefs.edit().putInt(PREFERENCE_THEME_KEY, index).apply()
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                }
-            }
-            2 -> {
-                if (AppCompatDelegate.getDefaultNightMode() != AppCompatDelegate.MODE_NIGHT_YES) {
-                    settingsPrefs.edit().putInt(PREFERENCE_THEME_KEY, index).apply()
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                }
+                newLanguage = LOCALE_LANGUAGE_PERSIAN
+                newCountry = LOCALE_COUNTRY_IRAN
             }
         }
+
+        preferencesRepository.setCurrentAppLanguage(newLanguage)
+        preferencesRepository.setCurrentAppCountry(newCountry)
+        SettingsHelper.setAppLocale(getApplication<BaseApplication>(), newLanguage, newCountry)
+
+        activity.apply {
+            startActivity(Intent(this, LandingActivity::class.java))
+            finish()
+        }
+    }
+
+    fun setAppTheme(index: Int) = viewModelScope.launch {
+        preferencesRepository.setAppTheme(index)
+        _currentAppTheme.postValue(Event(index))
+        SettingsHelper.setAppTheme(index)
     }
 
     fun getAccountDetails() = viewModelScope.launch {
@@ -103,6 +130,17 @@ class SettingsViewModel @Inject constructor(
         safeChangeUserPassword(newPassword)
     }
 
+    private suspend fun safeGetCurrentAppLocale() {
+        val currentLanguage = preferencesRepository.getCurrentAppLanguage()
+        val currentCountry = preferencesRepository.getCurrentAppCountry()
+        val currentLocale = arrayOf(currentLanguage, currentCountry)
+        _currentAppLocale.postValue(Event(currentLocale))
+    }
+
+    private suspend fun safeGetCurrentAppTheme() {
+        _currentAppTheme.postValue(Event(preferencesRepository.getCurrentAppTheme()))
+    }
+
     private suspend fun safeGetAccountDetails() {
         _accountDetailsLiveData.postValue(Event(Resource.loading()))
         try {
@@ -124,7 +162,7 @@ class SettingsViewModel @Inject constructor(
                 }
             }
         } catch (e: Exception) {
-            Timber.e("SafeGetAccountDetails Exception: ${e.message}")
+            Timber.e("safeGetAccountDetails Exception: ${e.message}")
             _accountDetailsLiveData.postValue(Event(Resource.error(e.message.toString())))
         }
     }
@@ -143,20 +181,20 @@ class SettingsViewModel @Inject constructor(
                 )
             }
         } catch (e: Exception) {
-            Timber.e("SafeSendVerificationEmail Exception: ${e.message}")
+            Timber.e("safeSendVerificationEmail Exception: ${e.message}")
             _sendVerificationEmailLiveData.postValue(Event(Resource.error(e.message.toString())))
         }
     }
 
-    private fun safeLogoutUser() {
+    private suspend fun safeLogoutUser() {
         _logoutLiveData.postValue(Event(Resource.loading()))
         try {
             userRepository.logoutUser()
-            loginPrefs.edit().remove(PREFERENCE_IS_LOGGED_IN_KEY).apply()
+            preferencesRepository.isUserLoggedIn(false)
             _logoutLiveData.postValue(Event(Resource.success(null)))
             Timber.i("User successfully logged out.")
         } catch (e: Exception) {
-            Timber.e("SafeLogoutUser Exception: ${e.message}")
+            Timber.e("safeLogoutUser Exception: ${e.message}")
             _logoutLiveData.postValue(Event(Resource.error(e.message.toString())))
         }
     }
@@ -175,7 +213,7 @@ class SettingsViewModel @Inject constructor(
                 )
             }
         } catch (e: Exception) {
-            Timber.e("SafeReAuthenticateUser Exception: ${e.message}")
+            Timber.e("safeReAuthenticateUser Exception: ${e.message}")
             _reAuthenticateUserLiveData.postValue(Event(Resource.error(e.message.toString())))
         }
     }
@@ -194,7 +232,7 @@ class SettingsViewModel @Inject constructor(
                 )
             }
         } catch (e: Exception) {
-            Timber.e("SafeChangeUserEmail Exception: ${e.message}")
+            Timber.e("safeChangeUserEmail Exception: ${e.message}")
             _changeUserEmailLiveData.postValue(Event(Resource.error(e.message.toString())))
         }
     }
@@ -213,7 +251,7 @@ class SettingsViewModel @Inject constructor(
                 )
             }
         } catch (e: Exception) {
-            Timber.e("SafeChangeUserPassword Exception: ${e.message}")
+            Timber.e("safeChangeUserPassword Exception: ${e.message}")
             _changeUserPasswordLiveData.postValue(Event(Resource.error(e.message.toString())))
         }
     }

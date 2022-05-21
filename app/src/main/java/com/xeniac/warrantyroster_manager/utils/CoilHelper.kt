@@ -6,7 +6,6 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import androidx.core.content.ContextCompat
 import coil.ImageLoader
-import coil.request.CachePolicy
 import coil.request.ImageRequest
 import com.xeniac.warrantyroster_manager.R
 
@@ -36,10 +35,6 @@ object CoilHelper {
                     progressBar.visibility = GONE
                 }
             )
-            crossfade(true)
-            memoryCachePolicy(CachePolicy.ENABLED)
-            diskCachePolicy(CachePolicy.ENABLED)
-            networkCachePolicy(CachePolicy.ENABLED)
         }.build()
         imageLoader.enqueue(request)
     }

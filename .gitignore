@@ -1,5 +1,6 @@
 *.iml
 .gradle
+/gradle.properties
 /local.properties
 /.idea/shelf
 /.idea/caches
@@ -15,8 +16,8 @@
 /captures
 .externalNativeBuild
 .cxx
-local.properties
 /app/release
 /app/obfuscation
 /app/src/main/dbschemas
 /app/google-services.json
+.safedk

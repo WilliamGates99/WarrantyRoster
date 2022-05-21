@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!--Dynamic Colors-->
     <color name="background">#101010</color>
     <color name="surface">#191919</color>
     <color name="statusBar">#191919</color>
@@ -7,21 +9,12 @@
     <color name="white">#000000</color>
     <color name="black">#FFFFFF</color>
     <color name="navyBlue">#DEF4FD</color>
-    <color name="blue">#1C53F4</color>
     <color name="skyBlue">#01040F</color>
-    <color name="green">#00BD62</color>
-    <color name="red">#FF3442</color>
-    <color name="orange">#FF9100</color>
+    <color name="dialogButton">#0095E3</color>
     <color name="grayLight">#1F1F1F</color>
     <color name="grayMedium">#2E2E2E</color>
     <color name="grayDark">#808080</color>
-    <color name="whiteConstant">#FFFFFF</color>
     <color name="navyBlue10">#1ADEF4FD</color>
     <color name="navyBlue20">#33DEF4FD</color>
-    <color name="green10">#1A00BD62</color>
-    <color name="green20">#3300BD62</color>
-    <color name="red10">#1AFF3442</color>
-    <color name="blue20">#331C53F4</color>
-    <color name="red20">#33FF3442</color>
-    <color name="orange20">#33FF9100</color>
+
 </resources>

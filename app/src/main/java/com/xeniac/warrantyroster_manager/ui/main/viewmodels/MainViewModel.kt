@@ -6,12 +6,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.xeniac.warrantyroster_manager.BaseApplication
-import com.xeniac.warrantyroster_manager.di.CategoryTitleMapKey
-import com.xeniac.warrantyroster_manager.models.Category
-import com.xeniac.warrantyroster_manager.models.ListItemType
-import com.xeniac.warrantyroster_manager.models.Warranty
-import com.xeniac.warrantyroster_manager.models.WarrantyInput
+import com.xeniac.warrantyroster_manager.data.remote.models.Category
+import com.xeniac.warrantyroster_manager.data.remote.models.ListItemType
+import com.xeniac.warrantyroster_manager.data.remote.models.Warranty
+import com.xeniac.warrantyroster_manager.data.remote.models.WarrantyInput
 import com.xeniac.warrantyroster_manager.repositories.MainRepository
+import com.xeniac.warrantyroster_manager.repositories.PreferencesRepository
 import com.xeniac.warrantyroster_manager.utils.Constants.CATEGORIES_ICON
 import com.xeniac.warrantyroster_manager.utils.Constants.CATEGORIES_TITLE
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_EMPTY_CATEGORY_LIST
@@ -39,7 +39,7 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     application: Application,
     private val mainRepository: MainRepository,
-    @CategoryTitleMapKey private val categoryTitleMapKey: String
+    private val preferencesRepository: PreferencesRepository
 ) : AndroidViewModel(application) {
 
     private val _categoriesLiveData:
@@ -71,11 +71,13 @@ class MainViewModel @Inject constructor(
 
     fun getAllCategoryTitles(): List<String> {
         val titleList = mutableListOf<String>()
-        categoriesLiveData.value?.let { responseEvent ->
-            responseEvent.peekContent().let { response ->
-                response.data?.let { categoriesList ->
-                    for (category in categoriesList) {
-                        titleList.add(category.title[categoryTitleMapKey].toString())
+        viewModelScope.launch {
+            categoriesLiveData.value?.let { responseEvent ->
+                responseEvent.peekContent().let { response ->
+                    response.data?.let { categoriesList ->
+                        for (category in categoriesList) {
+                            titleList.add(category.title[preferencesRepository.getCategoryTitleMapKey()].toString())
+                        }
                     }
                 }
             }
@@ -111,13 +113,13 @@ class MainViewModel @Inject constructor(
         _categoriesLiveData.postValue(Event(Resource.loading()))
         mainRepository.getCategoriesFromFirestore().addSnapshotListener { value, error ->
             error?.let {
-                Timber.e("GetCategoriesFromFirestore Error: ${it.message}")
+                Timber.e("getCategoriesFromFirestore Error: ${it.message}")
                 _categoriesLiveData.postValue(Event(Resource.error(it.message.toString())))
             }
 
             value?.let {
                 if (it.documents.size == 0) {
-                    Timber.e("GetCategoriesFromFirestore Error: $ERROR_EMPTY_CATEGORY_LIST")
+                    Timber.e("getCategoriesFromFirestore Error: $ERROR_EMPTY_CATEGORY_LIST")
                     _categoriesLiveData.postValue(Event(Resource.error(ERROR_EMPTY_CATEGORY_LIST)))
                 } else {
                     val categoriesList = mutableListOf<Category>()
@@ -142,13 +144,13 @@ class MainViewModel @Inject constructor(
         _warrantiesLiveData.postValue(Event(Resource.loading()))
         mainRepository.getWarrantiesFromFirestore().addSnapshotListener { value, error ->
             error?.let {
-                Timber.e("GetWarrantiesListFromFirestore Error: ${it.message}")
+                Timber.e("getWarrantiesListFromFirestore Error: ${it.message}")
                 _warrantiesLiveData.postValue(Event(Resource.error(it.message.toString())))
             }
 
             value?.let {
                 if (it.documents.size == 0) {
-                    Timber.e("GetWarrantiesListFromFirestore Error: $ERROR_EMPTY_WARRANTY_LIST")
+                    Timber.e("getWarrantiesListFromFirestore Error: $ERROR_EMPTY_WARRANTY_LIST")
                     _warrantiesLiveData.postValue(Event(Resource.error(ERROR_EMPTY_WARRANTY_LIST)))
                 } else {
                     val warrantiesList = mutableListOf<Warranty>()
@@ -215,7 +217,7 @@ class MainViewModel @Inject constructor(
                 _addWarrantyLiveData.postValue(Event(Resource.error(ERROR_NETWORK_CONNECTION)))
             }
         } catch (e: Exception) {
-            Timber.e("SafeAddWarrantyToFirestore Exception: ${e.message}")
+            Timber.e("safeAddWarrantyToFirestore Exception: ${e.message}")
             _addWarrantyLiveData.postValue(Event(Resource.error(e.message.toString())))
         }
     }
@@ -232,7 +234,7 @@ class MainViewModel @Inject constructor(
                 _deleteWarrantyLiveData.postValue(Event(Resource.error(ERROR_NETWORK_CONNECTION)))
             }
         } catch (e: Exception) {
-            Timber.e("SafeDeleteWarrantyFromFirestore Exception: ${e.message}")
+            Timber.e("safeDeleteWarrantyFromFirestore Exception: ${e.message}")
             _deleteWarrantyLiveData.postValue(Event(Resource.error(e.message.toString())))
         }
     }
@@ -251,7 +253,7 @@ class MainViewModel @Inject constructor(
                 _updateWarrantyLiveData.postValue(Event(Resource.error(ERROR_NETWORK_CONNECTION)))
             }
         } catch (e: Exception) {
-            Timber.e("SafeUpdateWarrantyInFirestore Exception: ${e.message}")
+            Timber.e("safeUpdateWarrantyInFirestore Exception: ${e.message}")
             _updateWarrantyLiveData.postValue(Event(Resource.error(e.message.toString())))
         }
     }
@@ -283,7 +285,7 @@ class MainViewModel @Inject constructor(
                 _updatedWarrantyLiveData.postValue(Event(Resource.error(ERROR_NETWORK_CONNECTION)))
             }
         } catch (e: Exception) {
-            Timber.e("SafeGetUpdatedWarrantyFromFirestore Exception: ${e.message}")
+            Timber.e("safeGetUpdatedWarrantyFromFirestore Exception: ${e.message}")
             _updatedWarrantyLiveData.postValue(Event(Resource.error(e.message.toString())))
         }
     }

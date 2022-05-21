@@ -1,4 +1,4 @@
-package com.xeniac.warrantyroster_manager.models
+package com.xeniac.warrantyroster_manager.data.remote.models
 
 data class Category(
     val id: String,

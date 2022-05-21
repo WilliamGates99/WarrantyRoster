@@ -7,19 +7,19 @@ import android.view.View.VISIBLE
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.ui.main.adapters.WarrantyAdapter
 import com.xeniac.warrantyroster_manager.ui.main.adapters.WarrantyListClickInterface
 import com.xeniac.warrantyroster_manager.databinding.FragmentWarrantiesBinding
-import com.xeniac.warrantyroster_manager.models.Status
-import com.xeniac.warrantyroster_manager.models.Warranty
+import com.xeniac.warrantyroster_manager.data.remote.models.Warranty
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_EMPTY_CATEGORY_LIST
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_EMPTY_WARRANTY_LIST
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
-import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_403
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseDeviceBlockedError
+import com.xeniac.warrantyroster_manager.utils.Status
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -30,6 +30,8 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
     private lateinit var viewModel: MainViewModel
 
     private lateinit var warrantyAdapter: WarrantyAdapter
+
+    private var snackbar: Snackbar? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -42,6 +44,7 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
 
     override fun onDestroyView() {
         super.onDestroyView()
+        snackbar?.dismiss()
         _binding = null
     }
 
@@ -71,21 +74,19 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
                                 it.contains(ERROR_EMPTY_CATEGORY_LIST) -> {
                                     getCategoriesFromFirestore()
                                 }
-                                it.contains(ERROR_NETWORK_403) -> {
+                                it.contains(ERROR_FIREBASE_403) -> {
                                     binding.tvNetworkError.text =
-                                        requireContext().getString(R.string.network_error_403)
+                                        requireContext().getString(R.string.error_firebase_403)
                                     showNetworkError()
                                 }
                                 it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
-                                    Snackbar.make(
-                                        binding.root,
-                                        requireContext().getString(R.string.firebase_error_device_blocked),
-                                        BaseTransientBottomBar.LENGTH_LONG
-                                    ).show()
+                                    snackbar = showFirebaseDeviceBlockedError(
+                                        requireContext(), binding.root
+                                    )
                                 }
                                 else -> {
                                     binding.tvNetworkError.text =
-                                        requireContext().getString(R.string.network_error_connection)
+                                        requireContext().getString(R.string.error_network_connection)
                                     showNetworkError()
                                 }
                             }
@@ -114,21 +115,19 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
                                 it.contains(ERROR_EMPTY_WARRANTY_LIST) -> {
                                     showWarrantiesEmptyList()
                                 }
-                                it.contains(ERROR_NETWORK_403) -> {
+                                it.contains(ERROR_FIREBASE_403) -> {
                                     binding.tvNetworkError.text =
-                                        requireContext().getString(R.string.network_error_403)
+                                        requireContext().getString(R.string.error_firebase_403)
                                     showNetworkError()
                                 }
                                 it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
-                                    Snackbar.make(
-                                        binding.root,
-                                        requireContext().getString(R.string.firebase_error_device_blocked),
-                                        BaseTransientBottomBar.LENGTH_LONG
-                                    ).show()
+                                    snackbar = showFirebaseDeviceBlockedError(
+                                        requireContext(), binding.root
+                                    )
                                 }
                                 else -> {
                                     binding.tvNetworkError.text =
-                                        requireContext().getString(R.string.network_error_connection)
+                                        requireContext().getString(R.string.error_network_connection)
                                     showNetworkError()
                                 }
                             }
@@ -156,10 +155,12 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
         binding.groupEmptyList.visibility = GONE
         binding.rv.visibility = GONE
         binding.cpi.visibility = VISIBLE
+        binding.cpi.show()
     }
 
     private fun hideLoadingAnimation() {
-        binding.cpi.visibility = GONE
+        binding.cpi.hide()
+        binding.cpi.setVisibilityAfterHide(GONE)
     }
 
     private fun showWarrantiesEmptyList() {
