@@ -9,6 +9,7 @@ import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.preferencesDataStoreFile
 import coil.ImageLoader
 import coil.decode.SvgDecoder
+import coil.disk.DiskCache
 import coil.memory.MemoryCache
 import coil.util.DebugLogger
 import com.google.firebase.auth.FirebaseAuth
@@ -95,6 +96,12 @@ object AppModule {
     fun provideCoilImageLoader(@ApplicationContext context: Context) =
         ImageLoader.Builder(context).apply {
             components { add(SvgDecoder.Factory()) }
+            diskCache {
+                DiskCache.Builder()
+                    // Set cache directory folder name
+                    .directory(context.cacheDir.resolve("image_cache"))
+                    .build()
+            }
             memoryCache {
                 MemoryCache.Builder(context)
                     // Set the max size to 25% of the app's available memory.
