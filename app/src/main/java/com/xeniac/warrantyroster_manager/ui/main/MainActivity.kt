@@ -107,7 +107,7 @@ class MainActivity : BaseActivity(), MaxAdListener {
 
     override fun onAdLoaded(ad: MaxAd?) {
         Timber.i("AppLovin onAdLoaded")
-        appLovinAdRequestCounter = 0
+        appLovinAdRequestCounter = 1
     }
 
     override fun onAdLoadFailed(adUnitId: String?, error: MaxError?) {
@@ -144,7 +144,7 @@ class MainActivity : BaseActivity(), MaxAdListener {
                 override fun response(tapsellPlusAdModel: TapsellPlusAdModel?) {
                     super.response(tapsellPlusAdModel)
                     Timber.i("requestTapsellInterstitial onResponse")
-                    tapsellRequestCounter = 0
+                    tapsellRequestCounter = 1
                     tapsellPlusAdModel?.let { tapsellResponseId = it.responseId }
                 }
 

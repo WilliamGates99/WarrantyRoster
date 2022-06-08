@@ -394,6 +394,8 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
         override fun onNativeAdLoaded(nativeAdView: MaxNativeAdView?, nativeAd: MaxAd?) {
             super.onNativeAdLoaded(nativeAdView, nativeAd)
             Timber.i("AppLovin onNativeAdLoaded")
+            appLovinAdRequestCounter = 1
+
             appLovinNativeAd?.let {
                 // Clean up any pre-existing native ad to prevent memory leaks.
                 appLovinAdLoader.destroy(it)
@@ -408,7 +410,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
         override fun onNativeAdLoadFailed(adUnitId: String?, error: MaxError?) {
             super.onNativeAdLoadFailed(adUnitId, error)
             Timber.e("AppLovin onNativeAdLoadFailed: ${error?.message}")
-            if (appLovinAdRequestCounter < 3) {
+            if (appLovinAdRequestCounter < 2) {
                 appLovinAdRequestCounter++
                 appLovinAdLoader.loadAd(createNativeAdView())
             } else {
@@ -442,7 +444,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
                     override fun response(tapsellPlusAdModel: TapsellPlusAdModel?) {
                         super.response(tapsellPlusAdModel)
                         Timber.i("requestTapsellNativeAd onResponse")
-                        tapsellRequestCounter = 0
+                        tapsellRequestCounter = 1
                         _binding?.let {
                             tapsellPlusAdModel?.let {
                                 tapsellResponseId = it.responseId
@@ -454,7 +456,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
                     override fun error(error: String?) {
                         super.error(error)
                         Timber.e("requestTapsellNativeAd onError: $error")
-                        if (tapsellRequestCounter < 3) {
+                        if (tapsellRequestCounter < 2) {
                             tapsellRequestCounter++
                             requestTapsellNativeAd(adHolder)
                         }

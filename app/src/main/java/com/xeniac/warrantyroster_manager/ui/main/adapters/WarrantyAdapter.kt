@@ -241,6 +241,8 @@ class WarrantyAdapter(
             override fun onNativeAdLoaded(nativeAdView: MaxNativeAdView?, nativeAd: MaxAd?) {
                 super.onNativeAdLoaded(nativeAdView, nativeAd)
                 Timber.i("AppLovin onNativeAdLoaded")
+                appLovinAdRequestCounter = 1
+
                 appLovinNativeAd?.let {
                     // Clean up any pre-existing native ad to prevent memory leaks.
                     appLovinAdLoader.destroy(it)
@@ -285,6 +287,7 @@ class WarrantyAdapter(
                     override fun response(tapsellPlusAdModel: TapsellPlusAdModel?) {
                         super.response(tapsellPlusAdModel)
                         Timber.i("requestTapsellNativeAd onResponse")
+                        tapsellRequestCounter = 1
                         tapsellPlusAdModel?.let {
                             showNativeAd(adHolder, it.responseId)
                         }
