@@ -55,7 +55,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
 
         textInputsBackgroundColor()
         textInputsStrokeColor()
-        passwordInputHintRtl()
+        passwordInputsInputType()
         agreementOnclick()
         loginOnClick()
         registerOnClick()
@@ -189,23 +189,21 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         }
     }
 
-    private fun passwordInputHintRtl() {
-        if (requireContext().resources.configuration.layoutDirection == LAYOUT_DIRECTION_RTL) {
-            binding.apply {
-                tiEditPassword.setOnFocusChangeListener { _, isFocused ->
-                    if (isFocused) {
-                        tiEditPassword.inputType = TYPE_TEXT_VARIATION_PASSWORD
-                    } else {
-                        tiEditPassword.inputType = TYPE_TEXT_FLAG_NO_SUGGESTIONS
-                    }
+    private fun passwordInputsInputType() {
+        binding.apply {
+            tiEditPassword.setOnFocusChangeListener { _, isFocused ->
+                if (isFocused) {
+                    tiEditPassword.inputType = TYPE_TEXT_VARIATION_PASSWORD
+                } else {
+                    tiEditPassword.inputType = TYPE_TEXT_FLAG_NO_SUGGESTIONS
                 }
+            }
 
-                tiEditRetypePassword.setOnFocusChangeListener { _, isFocused ->
-                    if (isFocused) {
-                        tiEditRetypePassword.inputType = TYPE_TEXT_VARIATION_PASSWORD
-                    } else {
-                        tiEditRetypePassword.inputType = TYPE_TEXT_FLAG_NO_SUGGESTIONS
-                    }
+            tiEditRetypePassword.setOnFocusChangeListener { _, isFocused ->
+                if (isFocused) {
+                    tiEditRetypePassword.inputType = TYPE_TEXT_VARIATION_PASSWORD
+                } else {
+                    tiEditRetypePassword.inputType = TYPE_TEXT_FLAG_NO_SUGGESTIONS
                 }
             }
         }

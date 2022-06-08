@@ -51,7 +51,7 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
 
         textInputsBackgroundColor()
         textInputsStrokeColor()
-        passwordInputHintRtl()
+        passwordInputsInputType()
         returnToMainActivity()
         changePasswordOnClick()
         changePasswordActionDone()
@@ -183,31 +183,29 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
         }
     }
 
-    private fun passwordInputHintRtl() {
-        if (requireContext().resources.configuration.layoutDirection == LAYOUT_DIRECTION_RTL) {
-            binding.apply {
-                tiEditCurrentPassword.setOnFocusChangeListener { _, isFocused ->
-                    if (isFocused) {
-                        tiEditCurrentPassword.inputType = TYPE_TEXT_VARIATION_PASSWORD
-                    } else {
-                        tiEditCurrentPassword.inputType = TYPE_TEXT_FLAG_NO_SUGGESTIONS
-                    }
+    private fun passwordInputsInputType() {
+        binding.apply {
+            tiEditCurrentPassword.setOnFocusChangeListener { _, isFocused ->
+                if (isFocused) {
+                    tiEditCurrentPassword.inputType = TYPE_TEXT_VARIATION_PASSWORD
+                } else {
+                    tiEditCurrentPassword.inputType = TYPE_TEXT_FLAG_NO_SUGGESTIONS
                 }
+            }
 
-                tiEditNewPassword.setOnFocusChangeListener { _, isFocused ->
-                    if (isFocused) {
-                        tiEditNewPassword.inputType = TYPE_TEXT_VARIATION_PASSWORD
-                    } else {
-                        tiEditNewPassword.inputType = TYPE_TEXT_FLAG_NO_SUGGESTIONS
-                    }
+            tiEditNewPassword.setOnFocusChangeListener { _, isFocused ->
+                if (isFocused) {
+                    tiEditNewPassword.inputType = TYPE_TEXT_VARIATION_PASSWORD
+                } else {
+                    tiEditNewPassword.inputType = TYPE_TEXT_FLAG_NO_SUGGESTIONS
                 }
+            }
 
-                tiEditRetypePassword.setOnFocusChangeListener { _, isFocused ->
-                    if (isFocused) {
-                        tiEditRetypePassword.inputType = TYPE_TEXT_VARIATION_PASSWORD
-                    } else {
-                        tiEditRetypePassword.inputType = TYPE_TEXT_FLAG_NO_SUGGESTIONS
-                    }
+            tiEditRetypePassword.setOnFocusChangeListener { _, isFocused ->
+                if (isFocused) {
+                    tiEditRetypePassword.inputType = TYPE_TEXT_VARIATION_PASSWORD
+                } else {
+                    tiEditRetypePassword.inputType = TYPE_TEXT_FLAG_NO_SUGGESTIONS
                 }
             }
         }

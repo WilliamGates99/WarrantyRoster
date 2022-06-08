@@ -2,8 +2,7 @@ package com.xeniac.warrantyroster_manager.ui.main.fragments
 
 import android.content.Context
 import android.os.Bundle
-import android.text.InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
-import android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
+import android.text.InputType.*
 import android.view.View
 import android.view.View.*
 import android.view.inputmethod.EditorInfo
@@ -52,7 +51,7 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
 
         textInputsBackgroundColor()
         textInputsStrokeColor()
-        passwordInputHintRtl()
+        passwordInputsInputType()
         returnToMainActivity()
         changeEmailOnClick()
         changeEmailActionDone()
@@ -130,15 +129,13 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
         }
     }
 
-    private fun passwordInputHintRtl() {
-        if (requireContext().resources.configuration.layoutDirection == LAYOUT_DIRECTION_RTL) {
-            binding.apply {
-                tiEditPassword.setOnFocusChangeListener { _, isFocused ->
-                    if (isFocused) {
-                        tiEditPassword.inputType = TYPE_TEXT_VARIATION_PASSWORD
-                    } else {
-                        tiEditPassword.inputType = TYPE_TEXT_FLAG_NO_SUGGESTIONS
-                    }
+    private fun passwordInputsInputType() {
+        binding.apply {
+            tiEditPassword.setOnFocusChangeListener { _, isFocused ->
+                if (isFocused) {
+                    tiEditPassword.inputType = TYPE_TEXT_VARIATION_PASSWORD
+                } else {
+                    tiEditPassword.inputType = TYPE_NULL
                 }
             }
         }

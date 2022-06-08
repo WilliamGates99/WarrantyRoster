@@ -52,7 +52,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
         textInputsBackgroundColor()
         textInputsStrokeColor()
-        passwordInputHintRtl()
+        passwordInputsInputType()
         forgotPwOnClick()
         registerOnClick()
         loginOnClick()
@@ -131,15 +131,13 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         }
     }
 
-    private fun passwordInputHintRtl() {
-        if (requireContext().resources.configuration.layoutDirection == LAYOUT_DIRECTION_RTL) {
-            binding.apply {
-                tiEditPassword.setOnFocusChangeListener { _, isFocused ->
-                    if (isFocused) {
-                        tiEditPassword.inputType = TYPE_TEXT_VARIATION_PASSWORD
-                    } else {
-                        tiEditPassword.inputType = TYPE_TEXT_FLAG_NO_SUGGESTIONS
-                    }
+    private fun passwordInputsInputType() {
+        binding.apply {
+            tiEditPassword.setOnFocusChangeListener { _, isFocused ->
+                if (isFocused) {
+                    tiEditPassword.inputType = TYPE_TEXT_VARIATION_PASSWORD
+                } else {
+                    tiEditPassword.inputType = TYPE_TEXT_FLAG_NO_SUGGESTIONS
                 }
             }
         }
