@@ -4,9 +4,10 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.text.InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
+import android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
+import android.view.View.*
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat
@@ -54,6 +55,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
 
         textInputsBackgroundColor()
         textInputsStrokeColor()
+        passwordInputHintRtl()
         agreementOnclick()
         loginOnClick()
         registerOnClick()
@@ -184,6 +186,28 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
             binding.tiLayoutRetypePassword.isErrorEnabled = false
             binding.tiLayoutRetypePassword.boxStrokeColor =
                 ContextCompat.getColor(requireContext(), R.color.blue)
+        }
+    }
+
+    private fun passwordInputHintRtl() {
+        if (requireContext().resources.configuration.layoutDirection == LAYOUT_DIRECTION_RTL) {
+            binding.apply {
+                tiEditPassword.setOnFocusChangeListener { _, isFocused ->
+                    if (isFocused) {
+                        tiEditPassword.inputType = TYPE_TEXT_VARIATION_PASSWORD
+                    } else {
+                        tiEditPassword.inputType = TYPE_TEXT_FLAG_NO_SUGGESTIONS
+                    }
+                }
+
+                tiEditRetypePassword.setOnFocusChangeListener { _, isFocused ->
+                    if (isFocused) {
+                        tiEditRetypePassword.inputType = TYPE_TEXT_VARIATION_PASSWORD
+                    } else {
+                        tiEditRetypePassword.inputType = TYPE_TEXT_FLAG_NO_SUGGESTIONS
+                    }
+                }
+            }
         }
     }
 
