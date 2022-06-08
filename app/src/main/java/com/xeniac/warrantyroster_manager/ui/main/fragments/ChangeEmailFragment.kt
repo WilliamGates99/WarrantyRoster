@@ -135,7 +135,7 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
                 if (isFocused) {
                     tiEditPassword.inputType = TYPE_TEXT_VARIATION_PASSWORD
                 } else {
-                    tiEditPassword.inputType = TYPE_NULL
+                    tiEditPassword.inputType = TYPE_TEXT_FLAG_NO_SUGGESTIONS
                 }
             }
         }
