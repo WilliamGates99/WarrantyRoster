@@ -34,7 +34,7 @@ android {
         buildConfigField("String", "TAPSELL_WARRANTIES_NATIVE_ZONE_ID", TAPSELL_WARRANTIES_NATIVE_ZONE_ID)
         buildConfigField("String", "TAPSELL_SETTINGS_NATIVE_ZONE_ID", TAPSELL_SETTINGS_NATIVE_ZONE_ID)
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "com.xeniac.warrantyroster_manager.HiltTestRunner"
     }
 
     buildFeatures {
