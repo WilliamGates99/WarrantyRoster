@@ -33,7 +33,7 @@ class PreferencesRepository @Inject constructor(
         }
     }
 
-    fun getCurrentAppLanguageSynchronously() = runBlocking {
+    fun getCurrentAppLanguageSynchronously(): String = runBlocking {
         try {
             settingsDataStore.data
                 .first()[PreferencesKeys.CURRENT_APP_LANGUAGE] ?: LOCALE_LANGUAGE_ENGLISH
@@ -43,7 +43,7 @@ class PreferencesRepository @Inject constructor(
         }
     }
 
-    fun getCurrentAppCountrySynchronously() = runBlocking {
+    fun getCurrentAppCountrySynchronously(): String = runBlocking {
         try {
             settingsDataStore.data
                 .first()[PreferencesKeys.CURRENT_APP_COUNTRY] ?: LOCALE_COUNTRY_UNITED_STATES
@@ -76,44 +76,53 @@ class PreferencesRepository @Inject constructor(
         LOCALE_COUNTRY_UNITED_STATES
     }
 
-    suspend fun getCategoryTitleMapKey() = "${getCurrentAppLanguage()}-${getCurrentAppCountry()}"
+    suspend fun getCategoryTitleMapKey(): String =
+        "${getCurrentAppLanguage()}-${getCurrentAppCountry()}"
 
-    suspend fun setIsUserLoggedIn(value: Boolean) = try {
-        settingsDataStore.edit { loginPreferences ->
-            when (value) {
-                true -> loginPreferences[PreferencesKeys.IS_USER_LOGGED_IN] = value
-                false -> loginPreferences.remove(PreferencesKeys.IS_USER_LOGGED_IN)
+    suspend fun setIsUserLoggedIn(value: Boolean) {
+        try {
+            settingsDataStore.edit { loginPreferences ->
+                when (value) {
+                    true -> loginPreferences[PreferencesKeys.IS_USER_LOGGED_IN] = value
+                    false -> loginPreferences.remove(PreferencesKeys.IS_USER_LOGGED_IN)
+                }
+                Timber.i("isUserLoggedIn edited to $value")
             }
-            Timber.i("isUserLoggedIn edited to $value")
+        } catch (e: Exception) {
+            Timber.e("isUserLoggedIn Exception: $e")
         }
-    } catch (e: Exception) {
-        Timber.e("isUserLoggedIn Exception: $e")
     }
 
-    suspend fun setAppTheme(index: Int) = try {
-        settingsDataStore.edit { settingsPreferences ->
-            settingsPreferences[PreferencesKeys.CURRENT_APP_THEME] = index
-            Timber.i("AppTheme edited to $index")
+    suspend fun setAppTheme(index: Int) {
+        try {
+            settingsDataStore.edit { settingsPreferences ->
+                settingsPreferences[PreferencesKeys.CURRENT_APP_THEME] = index
+                Timber.i("AppTheme edited to $index")
+            }
+        } catch (e: Exception) {
+            Timber.e("setAppTheme Exception: $e")
         }
-    } catch (e: Exception) {
-        Timber.e("setAppTheme Exception: $e")
     }
 
-    suspend fun setCurrentAppLanguage(language: String) = try {
-        settingsDataStore.edit { settingsPreferences ->
-            settingsPreferences[PreferencesKeys.CURRENT_APP_LANGUAGE] = language
-            Timber.i("CurrentAppLanguage edited to $language")
+    suspend fun setCurrentAppLanguage(language: String) {
+        try {
+            settingsDataStore.edit { settingsPreferences ->
+                settingsPreferences[PreferencesKeys.CURRENT_APP_LANGUAGE] = language
+                Timber.i("CurrentAppLanguage edited to $language")
+            }
+        } catch (e: Exception) {
+            Timber.e("setCurrentAppLanguage Exception: $e")
         }
-    } catch (e: Exception) {
-        Timber.e("setCurrentAppLanguage Exception: $e")
     }
 
-    suspend fun setCurrentAppCountry(country: String) = try {
-        settingsDataStore.edit { settingsPreferences ->
-            settingsPreferences[PreferencesKeys.CURRENT_APP_COUNTRY] = country
-            Timber.i("CurrentAppCountry edited to $country")
+    suspend fun setCurrentAppCountry(country: String) {
+        try {
+            settingsDataStore.edit { settingsPreferences ->
+                settingsPreferences[PreferencesKeys.CURRENT_APP_COUNTRY] = country
+                Timber.i("CurrentAppCountry edited to $country")
+            }
+        } catch (e: Exception) {
+            Timber.e("setCurrentAppCountry Exception: $e")
         }
-    } catch (e: Exception) {
-        Timber.e("setCurrentAppCountry Exception: $e")
     }
 }
