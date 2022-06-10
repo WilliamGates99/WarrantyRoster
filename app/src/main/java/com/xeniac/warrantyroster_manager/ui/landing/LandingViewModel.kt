@@ -61,7 +61,7 @@ class LandingViewModel @Inject constructor(
             if (hasInternetConnection(getApplication<BaseApplication>())) {
                 userRepository.registerViaEmail(email, password).await()
                 userRepository.sendVerificationEmail()
-                preferencesRepository.isUserLoggedIn(true)
+                preferencesRepository.setIsUserLoggedIn(true)
                 _registerLiveData.postValue(Event(Resource.success(null)))
                 Timber.i("$email registered successfully.")
             } else {
@@ -82,7 +82,7 @@ class LandingViewModel @Inject constructor(
             if (hasInternetConnection(getApplication<BaseApplication>())) {
                 userRepository.loginViaEmail(email, password).await().apply {
                     user?.let {
-                        preferencesRepository.isUserLoggedIn(true)
+                        preferencesRepository.setIsUserLoggedIn(true)
                         _loginLiveData.postValue(Event(Resource.success(null)))
                         Timber.i("$email logged in successfully.")
                     }

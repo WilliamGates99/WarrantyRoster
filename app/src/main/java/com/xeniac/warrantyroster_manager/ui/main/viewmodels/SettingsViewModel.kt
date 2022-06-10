@@ -64,7 +64,7 @@ class SettingsViewModel @Inject constructor(
             MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
     val changeUserPasswordLiveData: LiveData<Event<Resource<Nothing>>> = _changeUserPasswordLiveData
 
-    fun isUserLoggedIn() = preferencesRepository.isUserLoggedInSynchronously()
+    fun isUserLoggedIn() = preferencesRepository.getIsUserLoggedInSynchronously()
 
     fun getCurrentAppLocale() = viewModelScope.launch {
         safeGetCurrentAppLocale()
@@ -145,20 +145,18 @@ class SettingsViewModel @Inject constructor(
         _accountDetailsLiveData.postValue(Event(Resource.loading()))
         try {
             val currentUser = userRepository.getCurrentUser()
-            currentUser?.let { user ->
-                var email = user.email
-                var isVerified = user.isEmailVerified
-                _accountDetailsLiveData.postValue(Event(Resource.success(user)))
-                Timber.i("Current user is $email and isVerified: $isVerified")
+            var email = currentUser.email
+            var isVerified = currentUser.isEmailVerified
+            _accountDetailsLiveData.postValue(Event(Resource.success(currentUser)))
+            Timber.i("Current user is $email and isVerified: $isVerified")
 
-                if (hasInternetConnection(getApplication<BaseApplication>())) {
-                    userRepository.reloadCurrentUser(user).await()
-                    if (email != user.email || isVerified != user.isEmailVerified) {
-                        email = user.email
-                        isVerified = user.isEmailVerified
-                        _accountDetailsLiveData.postValue(Event(Resource.success(user)))
-                        Timber.i("Updated user is $email and isVerified: $isVerified")
-                    }
+            if (hasInternetConnection(getApplication<BaseApplication>())) {
+                userRepository.reloadCurrentUser(currentUser).await()
+                if (email != currentUser.email || isVerified != currentUser.isEmailVerified) {
+                    email = currentUser.email
+                    isVerified = currentUser.isEmailVerified
+                    _accountDetailsLiveData.postValue(Event(Resource.success(currentUser)))
+                    Timber.i("Updated user is $email and isVerified: $isVerified")
                 }
             }
         } catch (e: Exception) {
@@ -190,7 +188,7 @@ class SettingsViewModel @Inject constructor(
         _logoutLiveData.postValue(Event(Resource.loading()))
         try {
             userRepository.logoutUser()
-            preferencesRepository.isUserLoggedIn(false)
+            preferencesRepository.setIsUserLoggedIn(false)
             _logoutLiveData.postValue(Event(Resource.success(null)))
             Timber.i("User successfully logged out.")
         } catch (e: Exception) {

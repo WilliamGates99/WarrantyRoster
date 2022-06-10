@@ -24,12 +24,32 @@ class PreferencesRepository @Inject constructor(
         val CURRENT_APP_COUNTRY = stringPreferencesKey(DATASTORE_COUNTRY_KEY)
     }
 
-    fun isUserLoggedInSynchronously(): Boolean = runBlocking {
+    fun getIsUserLoggedInSynchronously(): Boolean = runBlocking {
         try {
             settingsDataStore.data.first()[PreferencesKeys.IS_USER_LOGGED_IN] ?: false
         } catch (e: Exception) {
             Timber.e("isUserLoggedInSynchronously Exception: $e")
             false
+        }
+    }
+
+    fun getCurrentAppLanguageSynchronously() = runBlocking {
+        try {
+            settingsDataStore.data
+                .first()[PreferencesKeys.CURRENT_APP_LANGUAGE] ?: LOCALE_LANGUAGE_ENGLISH
+        } catch (e: Exception) {
+            Timber.e("getCurrentAppLanguageSynchronously Exception: $e")
+            LOCALE_LANGUAGE_ENGLISH
+        }
+    }
+
+    fun getCurrentAppCountrySynchronously() = runBlocking {
+        try {
+            settingsDataStore.data
+                .first()[PreferencesKeys.CURRENT_APP_COUNTRY] ?: LOCALE_COUNTRY_UNITED_STATES
+        } catch (e: Exception) {
+            Timber.e("getCurrentAppCountrySynchronously Exception: $e")
+            LOCALE_COUNTRY_UNITED_STATES
         }
     }
 
@@ -58,27 +78,7 @@ class PreferencesRepository @Inject constructor(
 
     suspend fun getCategoryTitleMapKey() = "${getCurrentAppLanguage()}-${getCurrentAppCountry()}"
 
-    fun getCurrentAppLanguageSynchronously() = runBlocking {
-        try {
-            settingsDataStore.data
-                .first()[PreferencesKeys.CURRENT_APP_LANGUAGE] ?: LOCALE_LANGUAGE_ENGLISH
-        } catch (e: Exception) {
-            Timber.e("getCurrentAppLanguageSynchronously Exception: $e")
-            LOCALE_LANGUAGE_ENGLISH
-        }
-    }
-
-    fun getCurrentAppCountrySynchronously() = runBlocking {
-        try {
-            settingsDataStore.data
-                .first()[PreferencesKeys.CURRENT_APP_COUNTRY] ?: LOCALE_COUNTRY_UNITED_STATES
-        } catch (e: Exception) {
-            Timber.e("getCurrentAppCountrySynchronously Exception: $e")
-            LOCALE_COUNTRY_UNITED_STATES
-        }
-    }
-
-    suspend fun isUserLoggedIn(value: Boolean) = try {
+    suspend fun setIsUserLoggedIn(value: Boolean) = try {
         settingsDataStore.edit { loginPreferences ->
             when (value) {
                 true -> loginPreferences[PreferencesKeys.IS_USER_LOGGED_IN] = value

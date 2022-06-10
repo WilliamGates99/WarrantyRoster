@@ -18,20 +18,20 @@ class UserRepository @Inject constructor(
     fun sendResetPasswordEmail(email: String) =
         firebaseAuth.sendPasswordResetEmail(email)
 
-    fun getCurrentUser() = firebaseAuth.currentUser
+    fun getCurrentUser() = firebaseAuth.currentUser!!
 
-    fun sendVerificationEmail() = getCurrentUser()!!.sendEmailVerification()
+    fun sendVerificationEmail() = getCurrentUser().sendEmailVerification()
 
     fun reloadCurrentUser(user: FirebaseUser) = user.reload()
 
     fun logoutUser() = firebaseAuth.signOut()
 
-    fun reAuthenticateUser(password: String) = getCurrentUser()!!.let {
+    fun reAuthenticateUser(password: String) = getCurrentUser().let {
         val credential = EmailAuthProvider.getCredential(it.email.toString(), password)
-        getCurrentUser()!!.reauthenticate(credential)
+        it.reauthenticate(credential)
     }
 
-    fun updateUserEmail(newEmail: String) = getCurrentUser()!!.updateEmail(newEmail)
+    fun updateUserEmail(newEmail: String) = getCurrentUser().updateEmail(newEmail)
 
-    fun updateUserPassword(newPassword: String) = getCurrentUser()!!.updatePassword(newPassword)
+    fun updateUserPassword(newPassword: String) = getCurrentUser().updatePassword(newPassword)
 }
