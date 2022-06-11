@@ -45,15 +45,15 @@ object AppModule {
     @Provides
     fun provideFirebaseAuthInstance() = FirebaseAuth.getInstance()
 
-    @CategoriesCollection
     @Singleton
     @Provides
+    @CategoriesCollection
     fun provideFirestoreCategoriesCollectionRef() =
         Firebase.firestore.collection(COLLECTION_CATEGORIES)
 
-    @WarrantiesCollection
     @Singleton
     @Provides
+    @WarrantiesCollection
     fun provideFirestoreWarrantiesCollectionRef() =
         Firebase.firestore.collection(COLLECTION_WARRANTIES)
 
@@ -69,9 +69,9 @@ object AppModule {
         @WarrantiesCollection warrantiesCollectionRef: CollectionReference
     ) = MainRepository(firebaseAuth, categoriesCollectionRef, warrantiesCollectionRef)
 
-    @DefaultPreferencesRepository
     @Singleton
     @Provides
+    @DefaultPreferencesRepository
     fun providePreferencesRepository(settingsDataStore: DataStore<Preferences>) =
         PreferencesRepository(settingsDataStore)
 

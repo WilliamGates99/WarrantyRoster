@@ -19,18 +19,18 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object TestAppModule {
 
-    @TestDataStore
-    @ExperimentalCoroutinesApi
     @Provides
     @Singleton
+    @TestDataStore
+    @ExperimentalCoroutinesApi
     fun provideTestDataStore(@ApplicationContext context: Context) =
         PreferenceDataStoreFactory.create(
             produceFile = { context.preferencesDataStoreFile("settings_test") }
         )
 
-    @TestPreferencesRepository
     @Provides
     @Singleton
+    @TestPreferencesRepository
     fun provideTestPreferencesRepository(@TestDataStore testDataStore: DataStore<Preferences>) =
         PreferencesRepository(testDataStore)
 }
