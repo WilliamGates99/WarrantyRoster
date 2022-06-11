@@ -6,7 +6,6 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStoreFile
 import com.xeniac.warrantyroster_manager.repositories.PreferencesRepository
-import com.xeniac.warrantyroster_manager.utils.Constants.DATASTORE_NAME_SETTINGS_TEST
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,7 +25,7 @@ object TestAppModule {
     @Singleton
     fun provideTestDataStore(@ApplicationContext context: Context) =
         PreferenceDataStoreFactory.create(
-            produceFile = { context.preferencesDataStoreFile(DATASTORE_NAME_SETTINGS_TEST) }
+            produceFile = { context.preferencesDataStoreFile("settings_test") }
         )
 
     @TestPreferencesRepository
