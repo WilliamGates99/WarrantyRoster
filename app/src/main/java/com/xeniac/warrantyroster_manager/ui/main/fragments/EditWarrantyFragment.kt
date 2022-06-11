@@ -23,6 +23,7 @@ import com.google.firebase.ktx.Firebase
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentEditWarrantyBinding
 import com.xeniac.warrantyroster_manager.data.remote.models.*
+import com.xeniac.warrantyroster_manager.di.DefaultPreferencesRepository
 import com.xeniac.warrantyroster_manager.repositories.PreferencesRepository
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModel
 import com.xeniac.warrantyroster_manager.utils.CoilHelper.loadCategoryImage
@@ -62,6 +63,7 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
     private lateinit var viewModel: MainViewModel
 
     @Inject
+    @DefaultPreferencesRepository
     lateinit var preferencesRepository: PreferencesRepository
 
     @Inject

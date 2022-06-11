@@ -63,12 +63,13 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideMainRepository(
+    fun provideDefaultMainRepository(
         firebaseAuth: FirebaseAuth,
         @CategoriesCollection categoriesCollectionRef: CollectionReference,
         @WarrantiesCollection warrantiesCollectionRef: CollectionReference
     ) = MainRepository(firebaseAuth, categoriesCollectionRef, warrantiesCollectionRef)
 
+    @DefaultPreferencesRepository
     @Singleton
     @Provides
     fun providePreferencesRepository(settingsDataStore: DataStore<Preferences>) =
@@ -76,7 +77,7 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideLoginDataStore(@ApplicationContext context: Context): DataStore<Preferences> =
+    fun provideSettingsDataStore(@ApplicationContext context: Context): DataStore<Preferences> =
         PreferenceDataStoreFactory.create(
             corruptionHandler = ReplaceFileCorruptionHandler { emptyPreferences() },
             scope = CoroutineScope(Dispatchers.IO + SupervisorJob()),
@@ -131,3 +132,7 @@ annotation class CategoriesCollection
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
 annotation class WarrantiesCollection
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class DefaultPreferencesRepository

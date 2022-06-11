@@ -2,6 +2,7 @@ package com.xeniac.warrantyroster_manager.ui
 
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
+import com.xeniac.warrantyroster_manager.di.DefaultPreferencesRepository
 import com.xeniac.warrantyroster_manager.repositories.PreferencesRepository
 import com.xeniac.warrantyroster_manager.utils.SettingsHelper
 import dagger.hilt.EntryPoint
@@ -13,6 +14,7 @@ import dagger.hilt.components.SingletonComponent
 @AndroidEntryPoint
 open class BaseActivity : AppCompatActivity() {
 
+    @DefaultPreferencesRepository
     @EntryPoint
     @InstallIn(SingletonComponent::class)
     interface PreferencesRepositoryProviderEntryPoint {
