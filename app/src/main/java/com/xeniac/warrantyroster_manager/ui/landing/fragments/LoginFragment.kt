@@ -23,6 +23,9 @@ import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_ACC
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_CREDENTIALS
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_EMAIL
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_PASSWORD
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_EMAIL_INVALID
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_LOGIN_EMAIL
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_LOGIN_PASSWORD
@@ -33,7 +36,6 @@ import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseAuthCr
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkConnectionError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkFailureError
 import com.xeniac.warrantyroster_manager.utils.Status
-import com.xeniac.warrantyroster_manager.utils.UserHelper.isEmailValid
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -174,27 +176,8 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         val email = binding.tiEditEmail.text.toString().trim().lowercase()
         val password = binding.tiEditPassword.text.toString().trim()
 
-        if (email.isBlank()) {
-            binding.tiLayoutEmail.requestFocus()
-            binding.tiLayoutEmail.boxStrokeColor =
-                ContextCompat.getColor(requireContext(), R.color.red)
-        } else if (password.isBlank()) {
-            binding.tiLayoutPassword.requestFocus()
-            binding.tiLayoutPassword.boxStrokeColor =
-                ContextCompat.getColor(requireContext(), R.color.red)
-        } else {
-            if (!isEmailValid(email)) {
-                binding.tiLayoutEmail.requestFocus()
-                binding.tiLayoutEmail.error =
-                    requireContext().getString(R.string.login_error_email)
-            } else {
-                loginViaEmail(email, password)
-            }
-        }
+        viewModel.checkLoginInputs(email, password)
     }
-
-    private fun loginViaEmail(email: String, password: String) =
-        viewModel.loginViaEmail(email, password)
 
     private fun loginObserver() =
         viewModel.loginLiveData.observe(viewLifecycleOwner) { responseEvent ->
@@ -211,33 +194,54 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                     Status.ERROR -> {
                         hideLoadingAnimation()
                         response.message?.let {
-                            snackbar = when {
+                            when {
+                                it.contains(ERROR_INPUT_BLANK_EMAIL) -> {
+                                    binding.tiLayoutEmail.requestFocus()
+                                    binding.tiLayoutEmail.boxStrokeColor =
+                                        ContextCompat.getColor(requireContext(), R.color.red)
+                                }
+                                it.contains(ERROR_INPUT_BLANK_PASSWORD) -> {
+                                    binding.tiLayoutPassword.requestFocus()
+                                    binding.tiLayoutPassword.boxStrokeColor =
+                                        ContextCompat.getColor(requireContext(), R.color.red)
+                                }
+                                it.contains(ERROR_INPUT_EMAIL_INVALID) -> {
+                                    binding.tiLayoutEmail.requestFocus()
+                                    binding.tiLayoutEmail.error =
+                                        requireContext().getString(R.string.login_error_email)
+                                }
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
-                                    showNetworkConnectionError(
+                                    snackbar = showNetworkConnectionError(
                                         requireContext(), binding.root
                                     ) { getLoginInputs() }
                                 }
                                 it.contains(ERROR_FIREBASE_403) -> {
-                                    show403Error(requireContext(), binding.root)
+                                    snackbar = show403Error(requireContext(), binding.root)
                                 }
                                 it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
-                                    showFirebaseDeviceBlockedError(requireContext(), binding.root)
+                                    snackbar = showFirebaseDeviceBlockedError(
+                                        requireContext(),
+                                        binding.root
+                                    )
                                 }
                                 it.contains(ERROR_FIREBASE_AUTH_ACCOUNT_NOT_FOUND) -> {
-                                    showFirebaseAuthAccountNotFoundError(
+                                    snackbar = showFirebaseAuthAccountNotFoundError(
                                         binding.root,
                                         requireContext().getString(R.string.login_error_not_found),
                                         requireContext().getString(R.string.login_btn_register)
                                     ) { navigateToRegister() }
                                 }
                                 it.contains(ERROR_FIREBASE_AUTH_CREDENTIALS) -> {
-                                    showFirebaseAuthCredentialsError(
+                                    snackbar = showFirebaseAuthCredentialsError(
                                         binding.root,
                                         requireContext().getString(R.string.login_error_credentials)
                                     )
                                 }
                                 else -> {
-                                    showNetworkFailureError(requireContext(), binding.root)
+                                    snackbar = showNetworkFailureError(
+                                        requireContext(),
+                                        binding.root
+                                    )
                                 }
                             }
                         }
