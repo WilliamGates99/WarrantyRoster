@@ -49,7 +49,7 @@
     <string name="register_helper_password_strong">قوی</string>
     <string name="register_error_email">آدرس ایمیل وارد شده، معتبر نیست!</string>
     <string name="register_error_password_short">رمز‌عبور باید حداقل 6 کاراکتر باشد!</string>
-    <string name="register_error_password">رمز‌عبور و تکرار رمز‌عبور وارد شده با هم مطابقت ندارند!</string>
+    <string name="register_error_password_not_match">رمز‌عبور و تکرار رمز‌عبور وارد شده با هم مطابقت ندارند!</string>
     <string name="register_error_account_exists">حسابی با ایمیل وارد شده از قبل وجود دارد.</string>
 
     <!--Forgot Password Fragment-->

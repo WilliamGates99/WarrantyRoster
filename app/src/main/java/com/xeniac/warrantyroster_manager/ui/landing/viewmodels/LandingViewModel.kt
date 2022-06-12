@@ -10,11 +10,19 @@ import com.xeniac.warrantyroster_manager.BaseApplication
 import com.xeniac.warrantyroster_manager.di.DefaultPreferencesRepository
 import com.xeniac.warrantyroster_manager.repositories.PreferencesRepository
 import com.xeniac.warrantyroster_manager.repositories.UserRepository
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_EMAIL
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_EMAIL_INVALID
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_PASSWORD
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_PASSWORD_NOT_MATCH
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_PASSWORD_SHORT
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_RETYPE_PASSWORD
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_TIMER_IS_NOT_ZERO
 import com.xeniac.warrantyroster_manager.utils.Event
 import com.xeniac.warrantyroster_manager.utils.NetworkHelper.hasInternetConnection
 import com.xeniac.warrantyroster_manager.utils.Resource
+import com.xeniac.warrantyroster_manager.utils.UserHelper
+import com.xeniac.warrantyroster_manager.utils.UserHelper.isEmailValid
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -43,6 +51,48 @@ class LandingViewModel @Inject constructor(
     private var forgotPwEmail: String? = null
     var isFirstSentEmail = true
     var timerInMillis: Long = 0
+
+    fun checkRegisterInputs(email: String, password: String, retypePassword: String) {
+        if (email.isBlank()) {
+            _registerLiveData.postValue(Event(Resource.error(ERROR_INPUT_BLANK_EMAIL)))
+            return
+        }
+
+        if (password.isBlank()) {
+            _registerLiveData.postValue(Event(Resource.error(ERROR_INPUT_BLANK_PASSWORD)))
+            return
+        }
+
+        if (retypePassword.isBlank()) {
+            _registerLiveData.postValue(Event(Resource.error(ERROR_INPUT_BLANK_RETYPE_PASSWORD)))
+            return
+        }
+
+        if (!isEmailValid(email)) {
+            _registerLiveData.postValue(Event(Resource.error(ERROR_INPUT_EMAIL_INVALID)))
+            return
+        }
+
+        if (UserHelper.passwordStrength(password) == (-1).toByte()) {
+            _registerLiveData.postValue(Event(Resource.error(ERROR_INPUT_PASSWORD_SHORT)))
+            return
+        }
+
+        if (!UserHelper.isRetypePasswordValid(password, retypePassword)) {
+            _registerLiveData.postValue(Event(Resource.error(ERROR_INPUT_PASSWORD_NOT_MATCH)))
+            return
+        }
+
+        registerViaEmail(email, password)
+    }
+
+    fun checkLoginInputs(email: String, password: String) {
+
+    }
+
+    fun checkForgotPwInputs(email: String) {
+
+    }
 
     fun registerViaEmail(email: String, password: String) = viewModelScope.launch {
         safeRegisterViaEmail(email, password)

@@ -54,6 +54,14 @@ object Constants {
     const val WARRANTIES_CATEGORY_ID = "categoryId"
     const val WARRANTIES_UUID = "uuid"
 
+    // Input Errors
+    const val ERROR_INPUT_BLANK_EMAIL = "Email is blank"
+    const val ERROR_INPUT_BLANK_PASSWORD = "Password is blank"
+    const val ERROR_INPUT_BLANK_RETYPE_PASSWORD = "Retype Password is blank"
+    const val ERROR_INPUT_EMAIL_INVALID = "Invalid email"
+    const val ERROR_INPUT_PASSWORD_SHORT = "Password is too short"
+    const val ERROR_INPUT_PASSWORD_NOT_MATCH = "Password and Retype Password do not match"
+
     // Response Errors
     const val ERROR_NETWORK_CONNECTION = "Unable to connect to the internet"
     const val ERROR_FIREBASE_403 = "403"

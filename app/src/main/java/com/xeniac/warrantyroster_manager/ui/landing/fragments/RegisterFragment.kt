@@ -23,6 +23,12 @@ import com.xeniac.warrantyroster_manager.ui.main.MainActivity
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_EMAIL
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_EMAIL_INVALID
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_PASSWORD
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_PASSWORD_NOT_MATCH
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_PASSWORD_SHORT
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_RETYPE_PASSWORD
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_REGISTER_EMAIL
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_REGISTER_PASSWORD
@@ -34,8 +40,6 @@ import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseDevice
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkConnectionError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkFailureError
 import com.xeniac.warrantyroster_manager.utils.Status
-import com.xeniac.warrantyroster_manager.utils.UserHelper.isEmailValid
-import com.xeniac.warrantyroster_manager.utils.UserHelper.isRetypePasswordValid
 import com.xeniac.warrantyroster_manager.utils.UserHelper.passwordStrength
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -246,39 +250,8 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         val password = binding.tiEditPassword.text.toString().trim()
         val retypePassword = binding.tiEditRetypePassword.text.toString().trim()
 
-        if (email.isBlank()) {
-            binding.tiLayoutEmail.requestFocus()
-            binding.tiLayoutEmail.boxStrokeColor =
-                ContextCompat.getColor(requireContext(), R.color.red)
-        } else if (password.isBlank()) {
-            binding.tiLayoutPassword.requestFocus()
-            binding.tiLayoutPassword.boxStrokeColor =
-                ContextCompat.getColor(requireContext(), R.color.red)
-        } else if (retypePassword.isBlank()) {
-            binding.tiLayoutRetypePassword.requestFocus()
-            binding.tiLayoutRetypePassword.boxStrokeColor =
-                ContextCompat.getColor(requireContext(), R.color.red)
-        } else {
-            if (!isEmailValid(email)) {
-                binding.tiLayoutEmail.requestFocus()
-                binding.tiLayoutEmail.error =
-                    requireContext().getString(R.string.register_error_email)
-            } else if (passwordStrength(password) == (-1).toByte()) {
-                binding.tiLayoutPassword.requestFocus()
-                binding.tiLayoutPassword.error =
-                    requireContext().getString(R.string.register_error_password_short)
-            } else if (!isRetypePasswordValid(password, retypePassword)) {
-                binding.tiLayoutRetypePassword.requestFocus()
-                binding.tiLayoutRetypePassword.error =
-                    requireContext().getString(R.string.register_error_password)
-            } else {
-                registerViaEmail(email, password)
-            }
-        }
+        viewModel.checkRegisterInputs(email, password, retypePassword)
     }
-
-    private fun registerViaEmail(email: String, password: String) =
-        viewModel.registerViaEmail(email, password)
 
     private fun registerObserver() =
         viewModel.registerLiveData.observe(viewLifecycleOwner) { responseEvent ->
@@ -295,27 +268,63 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                     Status.ERROR -> {
                         hideLoadingAnimation()
                         response.message?.let {
-                            snackbar = when {
+                            when {
+                                it.contains(ERROR_INPUT_BLANK_EMAIL) -> {
+                                    binding.tiLayoutEmail.requestFocus()
+                                    binding.tiLayoutEmail.boxStrokeColor =
+                                        ContextCompat.getColor(requireContext(), R.color.red)
+                                }
+                                it.contains(ERROR_INPUT_BLANK_PASSWORD) -> {
+                                    binding.tiLayoutPassword.requestFocus()
+                                    binding.tiLayoutPassword.boxStrokeColor =
+                                        ContextCompat.getColor(requireContext(), R.color.red)
+                                }
+                                it.contains(ERROR_INPUT_BLANK_RETYPE_PASSWORD) -> {
+                                    binding.tiLayoutRetypePassword.requestFocus()
+                                    binding.tiLayoutRetypePassword.boxStrokeColor =
+                                        ContextCompat.getColor(requireContext(), R.color.red)
+                                }
+                                it.contains(ERROR_INPUT_EMAIL_INVALID) -> {
+                                    binding.tiLayoutEmail.requestFocus()
+                                    binding.tiLayoutEmail.error =
+                                        requireContext().getString(R.string.register_error_email)
+                                }
+                                it.contains(ERROR_INPUT_PASSWORD_SHORT) -> {
+                                    binding.tiLayoutPassword.requestFocus()
+                                    binding.tiLayoutPassword.error =
+                                        requireContext().getString(R.string.register_error_password_short)
+                                }
+                                it.contains(ERROR_INPUT_PASSWORD_NOT_MATCH) -> {
+                                    binding.tiLayoutRetypePassword.requestFocus()
+                                    binding.tiLayoutRetypePassword.error =
+                                        requireContext().getString(R.string.register_error_password_not_match)
+                                }
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
-                                    showNetworkConnectionError(
+                                    snackbar = showNetworkConnectionError(
                                         requireContext(), binding.root
                                     ) { getRegisterInputs() }
                                 }
                                 it.contains(ERROR_FIREBASE_403) -> {
-                                    show403Error(requireContext(), binding.root)
+                                    snackbar = show403Error(requireContext(), binding.root)
                                 }
                                 it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
-                                    showFirebaseDeviceBlockedError(requireContext(), binding.root)
+                                    snackbar = showFirebaseDeviceBlockedError(
+                                        requireContext(),
+                                        binding.root
+                                    )
                                 }
                                 it.contains(ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS) -> {
-                                    showFirebaseAuthAccountExists(
+                                    snackbar = showFirebaseAuthAccountExists(
                                         binding.root,
                                         requireContext().getString(R.string.register_error_account_exists),
                                         requireContext().getString(R.string.register_btn_login)
                                     ) { requireActivity().onBackPressed() }
                                 }
                                 else -> {
-                                    showNetworkFailureError(requireContext(), binding.root)
+                                    snackbar = showNetworkFailureError(
+                                        requireContext(),
+                                        binding.root
+                                    )
                                 }
                             }
                         }
