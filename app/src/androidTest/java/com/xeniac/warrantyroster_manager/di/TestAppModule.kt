@@ -13,14 +13,12 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import javax.inject.Qualifier
-import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object TestAppModule {
 
     @Provides
-    @Singleton
     @TestDataStore
     @ExperimentalCoroutinesApi
     fun provideTestDataStore(@ApplicationContext context: Context) =
@@ -29,7 +27,6 @@ object TestAppModule {
         )
 
     @Provides
-    @Singleton
     @TestPreferencesRepository
     fun provideTestPreferencesRepository(@TestDataStore testDataStore: DataStore<Preferences>) =
         PreferencesRepository(testDataStore)
