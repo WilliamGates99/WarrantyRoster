@@ -2,13 +2,11 @@ package com.xeniac.warrantyroster_manager.ui.landing.viewmodels
 
 import android.app.Application
 import android.os.CountDownTimer
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.xeniac.warrantyroster_manager.BaseApplication
-import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.di.DefaultPreferencesRepository
 import com.xeniac.warrantyroster_manager.repositories.PreferencesRepository
 import com.xeniac.warrantyroster_manager.repositories.UserRepository
@@ -105,6 +103,20 @@ class LandingViewModel @Inject constructor(
         }
 
         loginViaEmail(email, password)
+    }
+
+    fun checkForgotPwInputs(email: String) {
+        if (email.isBlank()) {
+            _forgotPwLiveData.postValue(Event(Resource.error(ERROR_INPUT_BLANK_EMAIL)))
+            return
+        }
+
+        if (!isEmailValid(email)) {
+            _forgotPwLiveData.postValue(Event(Resource.error(ERROR_INPUT_EMAIL_INVALID)))
+            return
+        }
+
+        sendResetPasswordEmail(email)
     }
 
     fun registerViaEmail(email: String, password: String) = viewModelScope.launch {
