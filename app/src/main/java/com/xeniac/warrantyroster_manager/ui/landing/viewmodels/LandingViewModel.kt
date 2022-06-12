@@ -1,4 +1,4 @@
-package com.xeniac.warrantyroster_manager.ui.landing
+package com.xeniac.warrantyroster_manager.ui.landing.viewmodels
 
 import android.app.Application
 import android.os.CountDownTimer
