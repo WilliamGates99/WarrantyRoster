@@ -1,37 +1,24 @@
 package com.xeniac.warrantyroster_manager.repositories
 
-import com.google.firebase.auth.EmailAuthProvider
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import javax.inject.Inject
+interface UserRepository {
 
-class UserRepository @Inject constructor(
-    private val firebaseAuth: FirebaseAuth
-) {
+    suspend fun registerViaEmail(email: String, password: String)
 
-    fun registerViaEmail(email: String, password: String) =
-        firebaseAuth.createUserWithEmailAndPassword(email, password)
+    suspend fun loginViaEmail(email: String, password: String)
 
-    fun loginViaEmail(email: String, password: String) =
-        firebaseAuth.signInWithEmailAndPassword(email, password)
+    suspend fun sendResetPasswordEmail(email: String)
 
-    fun sendResetPasswordEmail(email: String) =
-        firebaseAuth.sendPasswordResetEmail(email)
+    fun getCurrentUser(): Any
 
-    fun getCurrentUser() = firebaseAuth.currentUser!!
+    suspend fun sendVerificationEmail()
 
-    fun sendVerificationEmail() = getCurrentUser().sendEmailVerification()
+    suspend fun reloadCurrentUser()
 
-    fun reloadCurrentUser(user: FirebaseUser) = user.reload()
+    fun logoutUser()
 
-    fun logoutUser() = firebaseAuth.signOut()
+    suspend fun reAuthenticateUser(password: String)
 
-    fun reAuthenticateUser(password: String) = getCurrentUser().let {
-        val credential = EmailAuthProvider.getCredential(it.email.toString(), password)
-        it.reauthenticate(credential)
-    }
+    suspend fun updateUserEmail(newEmail: String)
 
-    fun updateUserEmail(newEmail: String) = getCurrentUser().updateEmail(newEmail)
-
-    fun updateUserPassword(newPassword: String) = getCurrentUser().updatePassword(newPassword)
+    suspend fun updateUserPassword(newPassword: String)
 }
