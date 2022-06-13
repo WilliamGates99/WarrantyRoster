@@ -89,17 +89,17 @@ class LandingViewModel @Inject constructor(
 
     fun checkLoginInputs(email: String, password: String) {
         if (email.isBlank()) {
-            _registerLiveData.postValue(Event(Resource.error(ERROR_INPUT_BLANK_EMAIL)))
+            _loginLiveData.postValue(Event(Resource.error(ERROR_INPUT_BLANK_EMAIL)))
             return
         }
 
         if (password.isBlank()) {
-            _registerLiveData.postValue(Event(Resource.error(ERROR_INPUT_BLANK_PASSWORD)))
+            _loginLiveData.postValue(Event(Resource.error(ERROR_INPUT_BLANK_PASSWORD)))
             return
         }
 
         if (!isEmailValid(email)) {
-            _registerLiveData.postValue(Event(Resource.error(ERROR_INPUT_EMAIL_INVALID)))
+            _loginLiveData.postValue(Event(Resource.error(ERROR_INPUT_EMAIL_INVALID)))
             return
         }
 

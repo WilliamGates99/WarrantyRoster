@@ -33,7 +33,7 @@ class PreferencesRepositoryTest {
     lateinit var testRepository: PreferencesRepository
 
     @Before
-    fun setup() {
+    fun setUp() {
         hiltRule.inject()
     }
 
