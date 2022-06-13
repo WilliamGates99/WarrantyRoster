@@ -21,8 +21,9 @@ import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_TIMER_IS_NOT_ZERO
 import com.xeniac.warrantyroster_manager.utils.Event
 import com.xeniac.warrantyroster_manager.utils.NetworkHelper.hasInternetConnection
 import com.xeniac.warrantyroster_manager.utils.Resource
-import com.xeniac.warrantyroster_manager.utils.UserHelper
 import com.xeniac.warrantyroster_manager.utils.UserHelper.isEmailValid
+import com.xeniac.warrantyroster_manager.utils.UserHelper.isRetypePasswordValid
+import com.xeniac.warrantyroster_manager.utils.UserHelper.passwordStrength
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -73,12 +74,12 @@ class LandingViewModel @Inject constructor(
             return
         }
 
-        if (UserHelper.passwordStrength(password) == (-1).toByte()) {
+        if (passwordStrength(password) == (-1).toByte()) {
             _registerLiveData.postValue(Event(Resource.error(ERROR_INPUT_PASSWORD_SHORT)))
             return
         }
 
-        if (!UserHelper.isRetypePasswordValid(password, retypePassword)) {
+        if (!isRetypePasswordValid(password, retypePassword)) {
             _registerLiveData.postValue(Event(Resource.error(ERROR_INPUT_PASSWORD_NOT_MATCH)))
             return
         }
