@@ -125,13 +125,4 @@ class PreferencesRepository @Inject constructor(
             Timber.e("setCurrentAppCountry Exception: $e")
         }
     }
-
-    suspend fun clearDataStore() {
-        try {
-            settingsDataStore.edit { it.clear() }
-            Timber.i("DataStore cleared.")
-        } catch (e: Exception) {
-            Timber.e("clearDataStore Exception: $e")
-        }
-    }
 }
