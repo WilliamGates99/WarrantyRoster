@@ -19,6 +19,7 @@ import com.google.firebase.ktx.Firebase
 import com.xeniac.warrantyroster_manager.BuildConfig
 import com.xeniac.warrantyroster_manager.repositories.MainRepository
 import com.xeniac.warrantyroster_manager.repositories.PreferencesRepository
+import com.xeniac.warrantyroster_manager.repositories.DefaultUserRepository
 import com.xeniac.warrantyroster_manager.repositories.UserRepository
 import com.xeniac.warrantyroster_manager.utils.Constants.COLLECTION_CATEGORIES
 import com.xeniac.warrantyroster_manager.utils.Constants.COLLECTION_WARRANTIES
@@ -59,7 +60,8 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideUserRepository(firebaseAuth: FirebaseAuth) = UserRepository(firebaseAuth)
+    fun provideUserRepository(firebaseAuth: FirebaseAuth) =
+        DefaultUserRepository(firebaseAuth) as UserRepository
 
     @Singleton
     @Provides

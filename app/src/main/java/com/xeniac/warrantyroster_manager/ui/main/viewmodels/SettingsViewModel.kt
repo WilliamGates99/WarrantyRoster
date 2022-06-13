@@ -24,7 +24,6 @@ import com.xeniac.warrantyroster_manager.utils.NetworkHelper.hasInternetConnecti
 import com.xeniac.warrantyroster_manager.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -145,14 +144,14 @@ class SettingsViewModel @Inject constructor(
     private suspend fun safeGetAccountDetails() {
         _accountDetailsLiveData.postValue(Event(Resource.loading()))
         try {
-            val currentUser = userRepository.getCurrentUser()
+            val currentUser = userRepository.getCurrentUser() as FirebaseUser
             var email = currentUser.email
             var isVerified = currentUser.isEmailVerified
             _accountDetailsLiveData.postValue(Event(Resource.success(currentUser)))
             Timber.i("Current user is $email and isVerified: $isVerified")
 
             if (hasInternetConnection(getApplication<BaseApplication>())) {
-                userRepository.reloadCurrentUser(currentUser).await()
+                userRepository.reloadCurrentUser()
                 if (email != currentUser.email || isVerified != currentUser.isEmailVerified) {
                     email = currentUser.email
                     isVerified = currentUser.isEmailVerified
@@ -170,7 +169,7 @@ class SettingsViewModel @Inject constructor(
         _sendVerificationEmailLiveData.postValue(Event(Resource.loading()))
         try {
             if (hasInternetConnection(getApplication<BaseApplication>())) {
-                userRepository.sendVerificationEmail().await()
+                userRepository.sendVerificationEmail()
                 _sendVerificationEmailLiveData.postValue(Event(Resource.success(null)))
                 Timber.i("Verification email sent.")
             } else {
@@ -202,7 +201,7 @@ class SettingsViewModel @Inject constructor(
         _reAuthenticateUserLiveData.postValue(Event(Resource.loading()))
         try {
             if (hasInternetConnection(getApplication<BaseApplication>())) {
-                userRepository.reAuthenticateUser(password).await()
+                userRepository.reAuthenticateUser(password)
                 _reAuthenticateUserLiveData.postValue(Event(Resource.success(null)))
                 Timber.i("User re-authenticated.")
             } else {
@@ -221,7 +220,7 @@ class SettingsViewModel @Inject constructor(
         _changeUserEmailLiveData.postValue(Event(Resource.loading()))
         try {
             if (hasInternetConnection(getApplication<BaseApplication>())) {
-                userRepository.updateUserEmail(newEmail).await()
+                userRepository.updateUserEmail(newEmail)
                 _changeUserEmailLiveData.postValue(Event(Resource.success(null)))
                 Timber.i("User email updated to ${newEmail}.")
             } else {
@@ -240,7 +239,7 @@ class SettingsViewModel @Inject constructor(
         _changeUserPasswordLiveData.postValue(Event(Resource.loading()))
         try {
             if (hasInternetConnection(getApplication<BaseApplication>())) {
-                userRepository.updateUserPassword(newPassword).await()
+                userRepository.updateUserPassword(newPassword)
                 _changeUserPasswordLiveData.postValue(Event(Resource.success(null)))
                 Timber.i("User password updated.")
             } else {

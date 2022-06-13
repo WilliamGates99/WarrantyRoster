@@ -26,7 +26,6 @@ import com.xeniac.warrantyroster_manager.utils.UserHelper.isRetypePasswordValid
 import com.xeniac.warrantyroster_manager.utils.UserHelper.passwordStrength
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -136,7 +135,7 @@ class LandingViewModel @Inject constructor(
         _registerLiveData.postValue(Event(Resource.loading()))
         try {
             if (hasInternetConnection(getApplication<BaseApplication>())) {
-                userRepository.registerViaEmail(email, password).await()
+                userRepository.registerViaEmail(email, password)
                 userRepository.sendVerificationEmail()
                 preferencesRepository.setIsUserLoggedIn(true)
                 _registerLiveData.postValue(Event(Resource.success(null)))
@@ -157,13 +156,10 @@ class LandingViewModel @Inject constructor(
         _loginLiveData.postValue(Event(Resource.loading()))
         try {
             if (hasInternetConnection(getApplication<BaseApplication>())) {
-                userRepository.loginViaEmail(email, password).await().apply {
-                    user?.let {
-                        preferencesRepository.setIsUserLoggedIn(true)
-                        _loginLiveData.postValue(Event(Resource.success(null)))
-                        Timber.i("$email logged in successfully.")
-                    }
-                }
+                userRepository.loginViaEmail(email, password)
+                preferencesRepository.setIsUserLoggedIn(true)
+                _loginLiveData.postValue(Event(Resource.success(null)))
+                Timber.i("$email logged in successfully.")
             } else {
                 Timber.e(ERROR_NETWORK_CONNECTION)
                 _loginLiveData.postValue(
@@ -184,12 +180,11 @@ class LandingViewModel @Inject constructor(
                     Timber.e(ERROR_TIMER_IS_NOT_ZERO)
                     _forgotPwLiveData.postValue(Event(Resource.error(ERROR_TIMER_IS_NOT_ZERO)))
                 } else {
-                    userRepository.sendResetPasswordEmail(email).await().apply {
-                        _forgotPwLiveData.postValue(Event(Resource.success(email)))
-                        forgotPwEmail = email
-                        startCountdown()
-                        Timber.i("Reset password email successfully sent to ${email}.")
-                    }
+                    userRepository.sendResetPasswordEmail(email)
+                    _forgotPwLiveData.postValue(Event(Resource.success(email)))
+                    forgotPwEmail = email
+                    startCountdown()
+                    Timber.i("Reset password email successfully sent to ${email}.")
                 }
             } else {
                 Timber.e(ERROR_NETWORK_CONNECTION)
