@@ -48,7 +48,7 @@ class LandingViewModel @Inject constructor(
     private val _timerLiveData: MutableLiveData<Event<Long>> = MutableLiveData()
     val timerLiveData: LiveData<Event<Long>> = _timerLiveData
 
-    private var forgotPwEmail: String? = null
+    var forgotPwEmail: String? = null
     var isFirstSentEmail = true
     var timerInMillis: Long = 0
 
@@ -105,7 +105,7 @@ class LandingViewModel @Inject constructor(
         loginViaEmail(email, password)
     }
 
-    fun checkForgotPwInputs(email: String) {
+    fun checkForgotPwInputs(email: String, activateCountDown: Boolean = true) {
         if (email.isBlank()) {
             _forgotPwLiveData.postValue(Event(Resource.error(ERROR_INPUT_BLANK_EMAIL)))
             return
@@ -116,7 +116,7 @@ class LandingViewModel @Inject constructor(
             return
         }
 
-        sendResetPasswordEmail(email)
+        sendResetPasswordEmail(email, activateCountDown)
     }
 
     fun registerViaEmail(email: String, password: String) = viewModelScope.launch {
@@ -127,9 +127,10 @@ class LandingViewModel @Inject constructor(
         safeLoginViaEmail(email, password)
     }
 
-    fun sendResetPasswordEmail(email: String) = viewModelScope.launch {
-        safeSendResetPasswordEmail(email)
-    }
+    fun sendResetPasswordEmail(email: String, activateCountDown: Boolean = true) =
+        viewModelScope.launch {
+            safeSendResetPasswordEmail(email, activateCountDown)
+        }
 
     private suspend fun safeRegisterViaEmail(email: String, password: String) {
         _registerLiveData.postValue(Event(Resource.loading()))
@@ -172,7 +173,7 @@ class LandingViewModel @Inject constructor(
         }
     }
 
-    private suspend fun safeSendResetPasswordEmail(email: String) {
+    private suspend fun safeSendResetPasswordEmail(email: String, activateCountDown: Boolean) {
         _forgotPwLiveData.postValue(Event(Resource.loading()))
         try {
             if (hasInternetConnection(getApplication<BaseApplication>())) {
@@ -183,7 +184,7 @@ class LandingViewModel @Inject constructor(
                     userRepository.sendResetPasswordEmail(email)
                     _forgotPwLiveData.postValue(Event(Resource.success(email)))
                     forgotPwEmail = email
-                    startCountdown()
+                    if (activateCountDown) startCountdown()
                     Timber.i("Reset password email successfully sent to ${email}.")
                 }
             } else {

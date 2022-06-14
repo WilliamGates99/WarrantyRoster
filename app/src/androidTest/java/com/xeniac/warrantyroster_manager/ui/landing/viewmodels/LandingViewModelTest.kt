@@ -12,6 +12,7 @@ import com.xeniac.warrantyroster_manager.utils.Status
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -35,15 +36,19 @@ class LandingViewModelTest {
     @TestPreferencesRepository
     lateinit var preferencesRepository: PreferencesRepository
 
+    private lateinit var fakeUserRepository: FakeUserRepository
+
     private lateinit var testViewModel: LandingViewModel
 
     @Before
     fun setUp() {
         hiltRule.inject()
 
+        fakeUserRepository = FakeUserRepository()
+
         testViewModel = LandingViewModel(
             ApplicationProvider.getApplicationContext(),
-            FakeUserRepository(),
+            fakeUserRepository,
             preferencesRepository
         )
     }
@@ -89,8 +94,40 @@ class LandingViewModelTest {
     fun checkRegisterInputsWithValidInputs_returnsSuccess() {
         testViewModel.checkRegisterInputs("email@test.com", "password", "password")
 
-        val responseEvent = testViewModel.registerLiveData.getOrAwaitValue()
+        var responseEvent = testViewModel.registerLiveData.getOrAwaitValue()
+        while (responseEvent.peekContent().status == Status.LOADING) {
+            responseEvent = testViewModel.registerLiveData.getOrAwaitValue()
+        }
+
         assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.SUCCESS)
+    }
+
+    @Test
+    fun registerWithNoInternet_returnsError() {
+        fakeUserRepository.setShouldReturnNetworkError(true)
+        testViewModel.registerViaEmail("email@test.com", "password")
+
+        var responseEvent = testViewModel.registerLiveData.getOrAwaitValue()
+        while (responseEvent.peekContent().status == Status.LOADING) {
+            responseEvent = testViewModel.registerLiveData.getOrAwaitValue()
+        }
+
+        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
+    }
+
+    @Test
+    fun registerWithExistingEmail_returnsError() {
+        val email = "email@test.com"
+        val password = "password"
+        testViewModel.registerViaEmail(email, password)
+        testViewModel.registerViaEmail(email, password)
+
+        var responseEvent = testViewModel.registerLiveData.getOrAwaitValue()
+        while (responseEvent.peekContent().status == Status.LOADING) {
+            responseEvent = testViewModel.registerLiveData.getOrAwaitValue()
+        }
+
+        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
     }
 
     @Test
@@ -110,8 +147,66 @@ class LandingViewModelTest {
     }
 
     @Test
+    fun checkLoginInputsWithValidInputs_returnsSuccess() {
+        val email = "email@test.com"
+        val password = "password"
+        testViewModel.registerViaEmail(email, password)
+        testViewModel.checkLoginInputs(email, password)
+
+        var responseEvent = testViewModel.loginLiveData.getOrAwaitValue()
+        while (responseEvent.peekContent().status == Status.LOADING) {
+            responseEvent = testViewModel.loginLiveData.getOrAwaitValue()
+        }
+
+        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.SUCCESS)
+    }
+
+    @Test
+    fun loginWithNoInternet_returnsError() {
+        val email = "email@test.com"
+        val password = "password"
+        testViewModel.registerViaEmail(email, password)
+
+        fakeUserRepository.setShouldReturnNetworkError(true)
+        testViewModel.loginViaEmail(email, password)
+
+        var responseEvent = testViewModel.loginLiveData.getOrAwaitValue()
+        while (responseEvent.peekContent().status == Status.LOADING) {
+            responseEvent = testViewModel.loginLiveData.getOrAwaitValue()
+        }
+
+        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
+    }
+
+    @Test
+    fun loginWithIncorrectCredentials_returnsError() {
+        val email = "email@test.com"
+        testViewModel.registerViaEmail(email, "password")
+        testViewModel.loginViaEmail(email, "wrong_password")
+
+        var responseEvent = testViewModel.loginLiveData.getOrAwaitValue()
+        while (responseEvent.peekContent().status == Status.LOADING) {
+            responseEvent = testViewModel.loginLiveData.getOrAwaitValue()
+        }
+
+        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
+    }
+
+    @Test
+    fun loginWithNonExistingEmail_returnsError() {
+        testViewModel.loginViaEmail("email@test.com", "password")
+
+        var responseEvent = testViewModel.loginLiveData.getOrAwaitValue()
+        while (responseEvent.peekContent().status == Status.LOADING) {
+            responseEvent = testViewModel.loginLiveData.getOrAwaitValue()
+        }
+
+        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
+    }
+
+    @Test
     fun checkForgotPwInputsWithBlankFields_returnsError() {
-        testViewModel.checkForgotPwInputs("")
+        testViewModel.checkForgotPwInputs("", false)
 
         val responseEvent = testViewModel.forgotPwLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
@@ -119,9 +214,67 @@ class LandingViewModelTest {
 
     @Test
     fun checkForgotPwInputsWithInvalidEmail_returnsError() {
-        testViewModel.checkForgotPwInputs("email")
+        testViewModel.checkForgotPwInputs("email", false)
 
         val responseEvent = testViewModel.forgotPwLiveData.getOrAwaitValue()
+        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
+    }
+
+    @Test
+    fun checkForgotPwInputsWithValidInputs_returnsSuccess() = runTest {
+        val email = "email@test.com"
+        testViewModel.registerViaEmail(email, "password")
+        testViewModel.checkForgotPwInputs(email, false)
+
+        var responseEvent = testViewModel.forgotPwLiveData.getOrAwaitValue()
+        while (responseEvent.peekContent().status == Status.LOADING) {
+            responseEvent = testViewModel.forgotPwLiveData.getOrAwaitValue()
+        }
+
+        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.SUCCESS)
+    }
+
+    @Test
+    fun sendResetPasswordEmailWithNoInternet_returnsError() {
+        val email = "email@test.com"
+        testViewModel.registerViaEmail(email, "password")
+
+        fakeUserRepository.setShouldReturnNetworkError(true)
+        testViewModel.sendResetPasswordEmail(email, false)
+
+        var responseEvent = testViewModel.forgotPwLiveData.getOrAwaitValue()
+        while (responseEvent.peekContent().status == Status.LOADING) {
+            responseEvent = testViewModel.forgotPwLiveData.getOrAwaitValue()
+        }
+
+        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
+    }
+
+    @Test
+    fun sendResetPasswordEmailWithNonExistingEmail_returnsError() {
+        testViewModel.sendResetPasswordEmail("email@test.com", false)
+
+        var responseEvent = testViewModel.forgotPwLiveData.getOrAwaitValue()
+        while (responseEvent.peekContent().status == Status.LOADING) {
+            responseEvent = testViewModel.forgotPwLiveData.getOrAwaitValue()
+        }
+
+        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
+    }
+
+    @Test
+    fun sendResetPasswordEmailWhileTimerIsNotZero_returnsError() {
+        val email = "email@test.com"
+        testViewModel.forgotPwEmail = email
+        testViewModel.timerInMillis = 1L
+        testViewModel.registerViaEmail(email, "password")
+        testViewModel.sendResetPasswordEmail(email, false)
+
+        var responseEvent = testViewModel.forgotPwLiveData.getOrAwaitValue()
+        while (responseEvent.peekContent().status == Status.LOADING) {
+            responseEvent = testViewModel.forgotPwLiveData.getOrAwaitValue()
+        }
+
         assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
     }
 }
