@@ -4,9 +4,8 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.core.app.ApplicationProvider
 import com.google.common.truth.Truth.assertThat
 import com.xeniac.warrantyroster_manager.MainCoroutineRule
-import com.xeniac.warrantyroster_manager.di.TestPreferencesRepository
 import com.xeniac.warrantyroster_manager.getOrAwaitValue
-import com.xeniac.warrantyroster_manager.repositories.PreferencesRepository
+import com.xeniac.warrantyroster_manager.repositories.FakePreferencesRepository
 import com.xeniac.warrantyroster_manager.repositories.FakeUserRepository
 import com.xeniac.warrantyroster_manager.utils.Status
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -17,7 +16,6 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
 @HiltAndroidTest
@@ -32,10 +30,6 @@ class LandingViewModelTest {
     @get:Rule
     var mainCoroutineRule = MainCoroutineRule()
 
-    @Inject
-    @TestPreferencesRepository
-    lateinit var preferencesRepository: PreferencesRepository
-
     private lateinit var fakeUserRepository: FakeUserRepository
 
     private lateinit var testViewModel: LandingViewModel
@@ -49,7 +43,7 @@ class LandingViewModelTest {
         testViewModel = LandingViewModel(
             ApplicationProvider.getApplicationContext(),
             fakeUserRepository,
-            preferencesRepository
+            FakePreferencesRepository()
         )
     }
 

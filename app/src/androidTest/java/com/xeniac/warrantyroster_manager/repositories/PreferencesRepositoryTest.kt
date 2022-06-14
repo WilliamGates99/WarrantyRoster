@@ -1,9 +1,11 @@
 package com.xeniac.warrantyroster_manager.repositories
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
 import com.google.common.truth.Truth.assertThat
 import com.xeniac.warrantyroster_manager.MainCoroutineRule
-import com.xeniac.warrantyroster_manager.di.TestPreferencesRepository
+import com.xeniac.warrantyroster_manager.di.TestDataStore
 import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_COUNTRY_UNITED_STATES
 import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_LANGUAGE_ENGLISH
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -29,12 +31,15 @@ class PreferencesRepositoryTest {
     var mainCoroutineRule = MainCoroutineRule()
 
     @Inject
-    @TestPreferencesRepository
-    lateinit var testRepository: PreferencesRepository
+    @TestDataStore
+    lateinit var testDataStore: DataStore<Preferences>
+
+    private lateinit var testRepository: PreferencesRepository
 
     @Before
     fun setUp() {
         hiltRule.inject()
+        testRepository = DefaultPreferencesRepository(testDataStore)
     }
 
     /**

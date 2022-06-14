@@ -7,7 +7,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.xeniac.warrantyroster_manager.BaseApplication
-import com.xeniac.warrantyroster_manager.di.DefaultPreferencesRepository
 import com.xeniac.warrantyroster_manager.repositories.PreferencesRepository
 import com.xeniac.warrantyroster_manager.repositories.UserRepository
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_EMAIL
@@ -33,7 +32,7 @@ import javax.inject.Inject
 class LandingViewModel @Inject constructor(
     application: Application,
     private val userRepository: UserRepository,
-    @DefaultPreferencesRepository private val preferencesRepository: PreferencesRepository
+    private val preferencesRepository: PreferencesRepository
 ) : AndroidViewModel(application) {
 
     private val _registerLiveData: MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()

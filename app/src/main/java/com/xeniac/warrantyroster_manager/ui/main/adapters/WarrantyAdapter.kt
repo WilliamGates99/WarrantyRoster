@@ -23,7 +23,6 @@ import com.xeniac.warrantyroster_manager.databinding.AdContainerListBinding
 import com.xeniac.warrantyroster_manager.databinding.ListItemWarrantyBinding
 import com.xeniac.warrantyroster_manager.data.remote.models.ListItemType
 import com.xeniac.warrantyroster_manager.data.remote.models.Warranty
-import com.xeniac.warrantyroster_manager.di.DefaultPreferencesRepository
 import com.xeniac.warrantyroster_manager.repositories.PreferencesRepository
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModel
 import com.xeniac.warrantyroster_manager.utils.CoilHelper.loadCategoryImage
@@ -58,7 +57,6 @@ class WarrantyAdapter(
     private var imageLoader: ImageLoader
     private var dateFormat: SimpleDateFormat
 
-    @DefaultPreferencesRepository
     @EntryPoint
     @InstallIn(SingletonComponent::class)
     interface PreferencesRepositoryProviderEntryPoint {

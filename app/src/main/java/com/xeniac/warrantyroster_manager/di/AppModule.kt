@@ -17,10 +17,8 @@ import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.xeniac.warrantyroster_manager.BuildConfig
-import com.xeniac.warrantyroster_manager.repositories.MainRepository
-import com.xeniac.warrantyroster_manager.repositories.PreferencesRepository
-import com.xeniac.warrantyroster_manager.repositories.DefaultUserRepository
-import com.xeniac.warrantyroster_manager.repositories.UserRepository
+import com.xeniac.warrantyroster_manager.repositories.*
+import com.xeniac.warrantyroster_manager.repositories.DefaultPreferencesRepository
 import com.xeniac.warrantyroster_manager.utils.Constants.COLLECTION_CATEGORIES
 import com.xeniac.warrantyroster_manager.utils.Constants.COLLECTION_WARRANTIES
 import com.xeniac.warrantyroster_manager.utils.Constants.DATASTORE_NAME_SETTINGS
@@ -73,9 +71,8 @@ object AppModule {
 
     @Singleton
     @Provides
-    @DefaultPreferencesRepository
     fun providePreferencesRepository(settingsDataStore: DataStore<Preferences>) =
-        PreferencesRepository(settingsDataStore)
+        DefaultPreferencesRepository(settingsDataStore) as PreferencesRepository
 
     @Singleton
     @Provides
@@ -134,7 +131,3 @@ annotation class CategoriesCollection
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
 annotation class WarrantiesCollection
-
-@Qualifier
-@Retention(AnnotationRetention.BINARY)
-annotation class DefaultPreferencesRepository
