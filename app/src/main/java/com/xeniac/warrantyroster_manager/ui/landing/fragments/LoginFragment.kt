@@ -3,8 +3,6 @@ package com.xeniac.warrantyroster_manager.ui.landing.fragments
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.text.InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
-import android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
 import android.view.View
 import android.view.View.*
 import android.view.inputmethod.EditorInfo
@@ -54,7 +52,6 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
         textInputsBackgroundColor()
         textInputsStrokeColor()
-        passwordInputsInputType()
         forgotPwOnClick()
         registerOnClick()
         loginOnClick()
@@ -130,18 +127,6 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         binding.tiEditPassword.addTextChangedListener {
             binding.tiLayoutPassword.boxStrokeColor =
                 ContextCompat.getColor(requireContext(), R.color.blue)
-        }
-    }
-
-    private fun passwordInputsInputType() {
-        binding.apply {
-            tiEditPassword.setOnFocusChangeListener { _, isFocused ->
-                if (isFocused) {
-                    tiEditPassword.inputType = TYPE_TEXT_VARIATION_PASSWORD
-                } else {
-                    tiEditPassword.inputType = TYPE_TEXT_FLAG_NO_SUGGESTIONS
-                }
-            }
         }
     }
 

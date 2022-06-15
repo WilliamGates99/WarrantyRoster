@@ -83,8 +83,9 @@
                     android:gravity="center_vertical"
                     android:hint="@string/change_email_hint_password"
                     android:imeOptions="actionNext"
-                    android:inputType="textNoSuggestions"
+                    android:inputType="textPassword"
                     android:maxLines="1"
+                    android:textAlignment="viewStart|gravity"
                     android:textColorHint="@color/grayDark"
                     android:textSize="@dimen/text_size_16sp" />
 

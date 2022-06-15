@@ -2,8 +2,6 @@ package com.xeniac.warrantyroster_manager.ui.main.fragments
 
 import android.content.Context
 import android.os.Bundle
-import android.text.InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
-import android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
 import android.view.View
 import android.view.View.*
 import android.view.inputmethod.EditorInfo
@@ -51,7 +49,6 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
 
         textInputsBackgroundColor()
         textInputsStrokeColor()
-        passwordInputsInputType()
         returnToMainActivity()
         changePasswordOnClick()
         changePasswordActionDone()
@@ -180,34 +177,6 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
             binding.tiLayoutCurrentPassword.isErrorEnabled = false
             binding.tiLayoutCurrentPassword.boxStrokeColor =
                 ContextCompat.getColor(requireContext(), R.color.blue)
-        }
-    }
-
-    private fun passwordInputsInputType() {
-        binding.apply {
-            tiEditCurrentPassword.setOnFocusChangeListener { _, isFocused ->
-                if (isFocused) {
-                    tiEditCurrentPassword.inputType = TYPE_TEXT_VARIATION_PASSWORD
-                } else {
-                    tiEditCurrentPassword.inputType = TYPE_TEXT_FLAG_NO_SUGGESTIONS
-                }
-            }
-
-            tiEditNewPassword.setOnFocusChangeListener { _, isFocused ->
-                if (isFocused) {
-                    tiEditNewPassword.inputType = TYPE_TEXT_VARIATION_PASSWORD
-                } else {
-                    tiEditNewPassword.inputType = TYPE_TEXT_FLAG_NO_SUGGESTIONS
-                }
-            }
-
-            tiEditRetypePassword.setOnFocusChangeListener { _, isFocused ->
-                if (isFocused) {
-                    tiEditRetypePassword.inputType = TYPE_TEXT_VARIATION_PASSWORD
-                } else {
-                    tiEditRetypePassword.inputType = TYPE_TEXT_FLAG_NO_SUGGESTIONS
-                }
-            }
         }
     }
 
