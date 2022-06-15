@@ -34,33 +34,33 @@ class SettingsViewModel @Inject constructor(
 ) : AndroidViewModel(application) {
 
     private val _currentAppTheme: MutableLiveData<Event<Int>> = MutableLiveData()
-    val currentAppTheme: MutableLiveData<Event<Int>> = _currentAppTheme
+    val currentAppTheme: LiveData<Event<Int>> = _currentAppTheme
 
     private val _currentAppLocale: MutableLiveData<Event<Array<String>>> = MutableLiveData()
-    val currentAppLocale: MutableLiveData<Event<Array<String>>> = _currentAppLocale
+    val currentAppLocale: LiveData<Event<Array<String>>> = _currentAppLocale
 
-    private val _accountDetailsLiveData:
-            MutableLiveData<Event<Resource<FirebaseUser>>> = MutableLiveData()
+    private val _accountDetailsLiveData: MutableLiveData<Event<Resource<FirebaseUser>>> =
+        MutableLiveData()
     val accountDetailsLiveData: LiveData<Event<Resource<FirebaseUser>>> = _accountDetailsLiveData
 
-    private val _sendVerificationEmailLiveData:
-            MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
-    val sendVerificationEmailLiveData:
-            LiveData<Event<Resource<Nothing>>> = _sendVerificationEmailLiveData
+    private val _sendVerificationEmailLiveData: MutableLiveData<Event<Resource<Nothing>>> =
+        MutableLiveData()
+    val sendVerificationEmailLiveData: LiveData<Event<Resource<Nothing>>> =
+        _sendVerificationEmailLiveData
 
     private val _logoutLiveData: MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
     val logoutLiveData: LiveData<Event<Resource<Nothing>>> = _logoutLiveData
 
-    private val _reAuthenticateUserLiveData:
-            MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
+    private val _reAuthenticateUserLiveData: MutableLiveData<Event<Resource<Nothing>>> =
+        MutableLiveData()
     val reAuthenticateUserLiveData: LiveData<Event<Resource<Nothing>>> = _reAuthenticateUserLiveData
 
-    private val _changeUserEmailLiveData:
-            MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
+    private val _changeUserEmailLiveData: MutableLiveData<Event<Resource<Nothing>>> =
+        MutableLiveData()
     val changeUserEmailLiveData: LiveData<Event<Resource<Nothing>>> = _changeUserEmailLiveData
 
-    private val _changeUserPasswordLiveData:
-            MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
+    private val _changeUserPasswordLiveData: MutableLiveData<Event<Resource<Nothing>>> =
+        MutableLiveData()
     val changeUserPasswordLiveData: LiveData<Event<Resource<Nothing>>> = _changeUserPasswordLiveData
 
     fun isUserLoggedIn() = preferencesRepository.getIsUserLoggedInSynchronously()
