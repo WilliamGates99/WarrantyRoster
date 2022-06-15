@@ -8,6 +8,10 @@ class FakeUserRepository : UserRepository {
 
     private var shouldReturnNetworkError = false
 
+    fun addUser(email: String, password: String) {
+        users.add(TestUser(email, password))
+    }
+
     fun setShouldReturnNetworkError(value: Boolean) {
         shouldReturnNetworkError = value
     }
@@ -48,26 +52,42 @@ class FakeUserRepository : UserRepository {
     override fun getCurrentUser(): TestUser = users[0]
 
     override suspend fun sendVerificationEmail() {
-        /* NO-OP */
+        if (shouldReturnNetworkError) {
+            throw Exception()
+        }
     }
 
     override suspend fun reloadCurrentUser() {
-        TODO("Not yet implemented")
+        /* NO-OP */
     }
 
     override fun logoutUser() {
-        TODO("Not yet implemented")
+        /* NO-OP */
     }
 
     override suspend fun reAuthenticateUser(password: String) {
-        TODO("Not yet implemented")
+        if (shouldReturnNetworkError) {
+            throw Exception()
+        } else {
+            if (users[0].password != password) {
+                throw Exception()
+            }
+        }
     }
 
     override suspend fun updateUserEmail(newEmail: String) {
-        TODO("Not yet implemented")
+        if (shouldReturnNetworkError) {
+            throw Exception()
+        } else {
+            users[0].email = newEmail
+        }
     }
 
     override suspend fun updateUserPassword(newPassword: String) {
-        TODO("Not yet implemented")
+        if (shouldReturnNetworkError) {
+            throw Exception()
+        } else {
+            users[0].password = newPassword
+        }
     }
 }
