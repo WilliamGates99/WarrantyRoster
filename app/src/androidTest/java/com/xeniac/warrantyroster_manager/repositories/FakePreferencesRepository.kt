@@ -1,52 +1,43 @@
 package com.xeniac.warrantyroster_manager.repositories
 
+import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_COUNTRY_UNITED_STATES
+import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_LANGUAGE_ENGLISH
+
 class FakePreferencesRepository : PreferencesRepository {
 
-    private var shouldReturnTrueValue = false
+    private var isUserLoggedIn = false
+    private var currentAppTheme = 0
+    private var currentAppLanguage = LOCALE_LANGUAGE_ENGLISH
+    private var currentAppCountry = LOCALE_COUNTRY_UNITED_STATES
 
-    fun setShouldReturnTrueValue(value: Boolean) {
-        shouldReturnTrueValue = value
-    }
+    override fun getIsUserLoggedInSynchronously(): Boolean = isUserLoggedIn
 
-    override fun getIsUserLoggedInSynchronously(): Boolean = shouldReturnTrueValue
+    override fun getCurrentAppLanguageSynchronously(): String = currentAppLanguage
 
-    override fun getCurrentAppLanguageSynchronously(): String {
-        TODO("Not yet implemented")
-    }
+    override fun getCurrentAppCountrySynchronously(): String = currentAppCountry
 
-    override fun getCurrentAppCountrySynchronously(): String {
-        TODO("Not yet implemented")
-    }
+    override suspend fun getCurrentAppTheme(): Int = currentAppTheme
 
-    override suspend fun getCurrentAppTheme(): Int {
-        TODO("Not yet implemented")
-    }
+    override suspend fun getCurrentAppLanguage(): String = currentAppLanguage
 
-    override suspend fun getCurrentAppLanguage(): String {
-        TODO("Not yet implemented")
-    }
+    override suspend fun getCurrentAppCountry(): String = currentAppCountry
 
-    override suspend fun getCurrentAppCountry(): String {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun getCategoryTitleMapKey(): String {
-        TODO("Not yet implemented")
-    }
+    override suspend fun getCategoryTitleMapKey(): String =
+        "${getCurrentAppLanguage()}-${getCurrentAppCountry()}"
 
     override suspend fun setIsUserLoggedIn(value: Boolean) {
-        shouldReturnTrueValue = value
+        isUserLoggedIn = value
     }
 
     override suspend fun setAppTheme(index: Int) {
-        TODO("Not yet implemented")
+        currentAppTheme = index
     }
 
     override suspend fun setCurrentAppLanguage(language: String) {
-        TODO("Not yet implemented")
+        currentAppLanguage = language
     }
 
     override suspend fun setCurrentAppCountry(country: String) {
-        TODO("Not yet implemented")
+        currentAppCountry = country
     }
 }
