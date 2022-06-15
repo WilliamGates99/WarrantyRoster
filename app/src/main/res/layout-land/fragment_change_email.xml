@@ -80,12 +80,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/localized_regular"
-                    android:gravity="center_vertical"
                     android:hint="@string/change_email_hint_password"
                     android:imeOptions="actionNext"
                     android:inputType="textPassword"
                     android:maxLines="1"
-                    android:textAlignment="viewStart|gravity"
+                    android:textAlignment="viewStart"
                     android:textColorHint="@color/grayDark"
                     android:textSize="@dimen/text_size_16sp" />
 
