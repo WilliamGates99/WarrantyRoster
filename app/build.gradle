@@ -12,20 +12,21 @@ plugins {
 }
 
 applovin {
-    apiKey "wPNW70TAHp3xrcTl2HOeZEpvt5kn19fKosui1hEugVWrFDKCh_411hghugSX5ln5ewRrMMRB8W1Ce_S3hcPh4c"
+    apiKey APPLOVIN_API_KEY
 }
 
 android {
-    compileSdkVersion 32
-    buildToolsVersion '33.0.0 rc4'
+    compileSdk 33
+    buildToolsVersion '33.0.0'
 
     defaultConfig {
         applicationId "com.xeniac.warrantyroster_manager"
         minSdkVersion 21
-        targetSdkVersion 32
+        targetSdk 33
         versionCode 12
         versionName "1.4.2"
 
+        buildConfigField("String", "APPLOVIN_API_KEY", APPLOVIN_API_KEY)
         buildConfigField("String", "APPLOVIN_INTERSTITIAL_UNIT_ID", APPLOVIN_INTERSTITIAL_UNIT_ID)
         buildConfigField("String", "APPLOVIN_SETTINGS_NATIVE_UNIT_ID", APPLOVIN_SETTINGS_NATIVE_UNIT_ID)
         buildConfigField("String", "APPLOVIN_WARRANTIES_NATIVE_UNIT_ID", APPLOVIN_WARRANTIES_NATIVE_UNIT_ID)
@@ -133,16 +134,16 @@ dependencies {
     implementation 'io.coil-kt:coil-svg:2.1.0'
 
     // AppLovin Libraries
-    implementation 'com.applovin:applovin-sdk:11.4.2'
+    implementation 'com.applovin:applovin-sdk:11.4.3'
     implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'
-    implementation 'com.applovin.mediation:adcolony-adapter:4.7.1.1'
+    implementation 'com.applovin.mediation:adcolony-adapter:4.8.0.0'
     implementation 'com.applovin.mediation:google-adapter:21.0.0.0'
 
     // Google AdMob Library
     implementation 'com.google.android.gms:play-services-ads:21.0.0'
 
     // AdColony Libraries
-    implementation 'com.adcolony:sdk:4.7.1'
+    implementation 'com.adcolony:sdk:4.8.0'
 
     // Tapsell Library
     implementation 'ir.tapsell.plus:tapsell-plus-sdk-android:2.1.7'
