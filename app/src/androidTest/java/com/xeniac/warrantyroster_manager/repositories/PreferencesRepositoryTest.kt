@@ -1,28 +1,32 @@
 package com.xeniac.warrantyroster_manager.repositories
 
+import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.preferencesDataStoreFile
+import androidx.test.core.app.ApplicationProvider
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import com.xeniac.warrantyroster_manager.MainCoroutineRule
-import com.xeniac.warrantyroster_manager.di.TestDataStore
+import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_COUNTRY_IRAN
 import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_COUNTRY_UNITED_STATES
 import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_LANGUAGE_ENGLISH
-import dagger.hilt.android.testing.HiltAndroidRule
-import dagger.hilt.android.testing.HiltAndroidTest
+import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_LANGUAGE_PERSIAN
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runTest
-import org.junit.Before
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.test.*
+import org.junit.After
 import org.junit.Rule
 import org.junit.Test
-import javax.inject.Inject
+import org.junit.runner.RunWith
 
 @ExperimentalCoroutinesApi
-@HiltAndroidTest
+@RunWith(AndroidJUnit4::class)
 class PreferencesRepositoryTest {
-
-    @get:Rule
-    var hiltRule = HiltAndroidRule(this)
 
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
@@ -30,16 +34,21 @@ class PreferencesRepositoryTest {
     @get:Rule
     var mainCoroutineRule = MainCoroutineRule()
 
-    @Inject
-    @TestDataStore
-    lateinit var testDataStore: DataStore<Preferences>
+    private val context: Context = ApplicationProvider.getApplicationContext()
 
-    private lateinit var testRepository: PreferencesRepository
+    private val testDispatcher: TestDispatcher = UnconfinedTestDispatcher()
+    private val testScope: TestScope = TestScope(testDispatcher + Job())
 
-    @Before
-    fun setUp() {
-        hiltRule.inject()
-        testRepository = DefaultPreferencesRepository(testDataStore)
+    private val testDataStore: DataStore<Preferences> = PreferenceDataStoreFactory.create(
+        scope = testScope,
+        produceFile = { context.preferencesDataStoreFile("settings_test") }
+    )
+
+    private val testRepository: PreferencesRepository = DefaultPreferencesRepository(testDataStore)
+
+    @After
+    fun tearDown() {
+        testScope.cancel()
     }
 
     /**
@@ -54,7 +63,9 @@ class PreferencesRepositoryTest {
      */
 
     @Test
-    fun fetchInitialSynchronousPreferences() {
+    fun fetchInitialSynchronousPreferences() = testScope.runTest {
+        testDataStore.edit { it.clear() }
+
         val initialIsUserLoggedIn = testRepository.getIsUserLoggedInSynchronously()
         val initialCurrentAppLanguage = testRepository.getCurrentAppLanguageSynchronously()
         val initialCurrentAppCountry = testRepository.getCurrentAppCountrySynchronously()
@@ -65,7 +76,9 @@ class PreferencesRepositoryTest {
     }
 
     @Test
-    fun fetchInitialPreferences() = runTest {
+    fun fetchInitialPreferences() = testScope.runTest {
+        testDataStore.edit { it.clear() }
+
         val initialCurrentAppTheme = testRepository.getCurrentAppTheme()
         val initialCurrentAppLanguage = testRepository.getCurrentAppLanguage()
         val initialCurrentAppCountry = testRepository.getCurrentAppCountry()
@@ -86,7 +99,9 @@ class PreferencesRepositoryTest {
      */
 
     @Test
-    fun writeIsUserLoggedIn() = runTest {
+    fun writeIsUserLoggedIn() = testScope.runTest {
+        testDataStore.edit { it.clear() }
+
         testRepository.setIsUserLoggedIn(true)
 
         val isUserLoggedIn = testRepository.getIsUserLoggedInSynchronously()
@@ -94,7 +109,9 @@ class PreferencesRepositoryTest {
     }
 
     @Test
-    fun writeAppTheme() = runTest {
+    fun writeAppTheme() = testScope.runTest {
+        testDataStore.edit { it.clear() }
+
         val testValue = 1
         testRepository.setAppTheme(testValue)
 
@@ -103,8 +120,10 @@ class PreferencesRepositoryTest {
     }
 
     @Test
-    fun writeCurrentAppLanguage() = runTest {
-        val testValue = "fa"
+    fun writeCurrentAppLanguage() = testScope.runTest {
+        testDataStore.edit { it.clear() }
+
+        val testValue = LOCALE_LANGUAGE_PERSIAN
         testRepository.setCurrentAppLanguage(testValue)
 
         val currentLanguage = testRepository.getCurrentAppLanguage()
@@ -112,8 +131,10 @@ class PreferencesRepositoryTest {
     }
 
     @Test
-    fun writeCurrentAppCountry() = runTest {
-        val testValue = "IR"
+    fun writeCurrentAppCountry() = testScope.runTest {
+        testDataStore.edit { it.clear() }
+
+        val testValue = LOCALE_COUNTRY_IRAN
         testRepository.setCurrentAppCountry(testValue)
 
         val currentCountry = testRepository.getCurrentAppCountry()
