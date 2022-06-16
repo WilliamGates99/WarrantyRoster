@@ -82,11 +82,7 @@ class LandingViewModelTest {
     fun checkRegisterInputsWithValidInputs_returnsSuccess() {
         testViewModel.checkRegisterInputs("email@test.com", "password", "password")
 
-        var responseEvent = testViewModel.registerLiveData.getOrAwaitValue()
-        while (responseEvent.peekContent().status == Status.LOADING) {
-            responseEvent = testViewModel.registerLiveData.getOrAwaitValue()
-        }
-
+        val responseEvent = testViewModel.registerLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.SUCCESS)
     }
 
@@ -95,11 +91,7 @@ class LandingViewModelTest {
         fakeUserRepository.setShouldReturnNetworkError(true)
         testViewModel.registerViaEmail("email@test.com", "password")
 
-        var responseEvent = testViewModel.registerLiveData.getOrAwaitValue()
-        while (responseEvent.peekContent().status == Status.LOADING) {
-            responseEvent = testViewModel.registerLiveData.getOrAwaitValue()
-        }
-
+        val responseEvent = testViewModel.registerLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
     }
 
@@ -110,11 +102,7 @@ class LandingViewModelTest {
         testViewModel.registerViaEmail(email, password)
         testViewModel.registerViaEmail(email, password)
 
-        var responseEvent = testViewModel.registerLiveData.getOrAwaitValue()
-        while (responseEvent.peekContent().status == Status.LOADING) {
-            responseEvent = testViewModel.registerLiveData.getOrAwaitValue()
-        }
-
+        val responseEvent = testViewModel.registerLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
     }
 
@@ -141,11 +129,7 @@ class LandingViewModelTest {
         testViewModel.registerViaEmail(email, password)
         testViewModel.checkLoginInputs(email, password)
 
-        var responseEvent = testViewModel.loginLiveData.getOrAwaitValue()
-        while (responseEvent.peekContent().status == Status.LOADING) {
-            responseEvent = testViewModel.loginLiveData.getOrAwaitValue()
-        }
-
+        val responseEvent = testViewModel.loginLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.SUCCESS)
     }
 
@@ -158,11 +142,7 @@ class LandingViewModelTest {
         fakeUserRepository.setShouldReturnNetworkError(true)
         testViewModel.loginViaEmail(email, password)
 
-        var responseEvent = testViewModel.loginLiveData.getOrAwaitValue()
-        while (responseEvent.peekContent().status == Status.LOADING) {
-            responseEvent = testViewModel.loginLiveData.getOrAwaitValue()
-        }
-
+        val responseEvent = testViewModel.loginLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
     }
 
@@ -172,11 +152,7 @@ class LandingViewModelTest {
         testViewModel.registerViaEmail(email, "password")
         testViewModel.loginViaEmail(email, "wrong_password")
 
-        var responseEvent = testViewModel.loginLiveData.getOrAwaitValue()
-        while (responseEvent.peekContent().status == Status.LOADING) {
-            responseEvent = testViewModel.loginLiveData.getOrAwaitValue()
-        }
-
+        val responseEvent = testViewModel.loginLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
     }
 
@@ -184,11 +160,7 @@ class LandingViewModelTest {
     fun loginWithNonExistingEmail_returnsError() {
         testViewModel.loginViaEmail("email@test.com", "password")
 
-        var responseEvent = testViewModel.loginLiveData.getOrAwaitValue()
-        while (responseEvent.peekContent().status == Status.LOADING) {
-            responseEvent = testViewModel.loginLiveData.getOrAwaitValue()
-        }
-
+        val responseEvent = testViewModel.loginLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
     }
 
@@ -214,11 +186,7 @@ class LandingViewModelTest {
         testViewModel.registerViaEmail(email, "password")
         testViewModel.checkForgotPwInputs(email, false)
 
-        var responseEvent = testViewModel.forgotPwLiveData.getOrAwaitValue()
-        while (responseEvent.peekContent().status == Status.LOADING) {
-            responseEvent = testViewModel.forgotPwLiveData.getOrAwaitValue()
-        }
-
+        val responseEvent = testViewModel.forgotPwLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.SUCCESS)
     }
 
@@ -230,11 +198,7 @@ class LandingViewModelTest {
         fakeUserRepository.setShouldReturnNetworkError(true)
         testViewModel.sendResetPasswordEmail(email, false)
 
-        var responseEvent = testViewModel.forgotPwLiveData.getOrAwaitValue()
-        while (responseEvent.peekContent().status == Status.LOADING) {
-            responseEvent = testViewModel.forgotPwLiveData.getOrAwaitValue()
-        }
-
+        val responseEvent = testViewModel.forgotPwLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
     }
 
@@ -242,11 +206,7 @@ class LandingViewModelTest {
     fun sendResetPasswordEmailWithNonExistingEmail_returnsError() {
         testViewModel.sendResetPasswordEmail("email@test.com", false)
 
-        var responseEvent = testViewModel.forgotPwLiveData.getOrAwaitValue()
-        while (responseEvent.peekContent().status == Status.LOADING) {
-            responseEvent = testViewModel.forgotPwLiveData.getOrAwaitValue()
-        }
-
+        val responseEvent = testViewModel.forgotPwLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
     }
 
@@ -258,11 +218,7 @@ class LandingViewModelTest {
         testViewModel.registerViaEmail(email, "password")
         testViewModel.sendResetPasswordEmail(email, false)
 
-        var responseEvent = testViewModel.forgotPwLiveData.getOrAwaitValue()
-        while (responseEvent.peekContent().status == Status.LOADING) {
-            responseEvent = testViewModel.forgotPwLiveData.getOrAwaitValue()
-        }
-
+        val responseEvent = testViewModel.forgotPwLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
     }
 }
