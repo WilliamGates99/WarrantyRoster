@@ -455,10 +455,10 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
         )
 
         val title = binding.tiEditTitle.text.toString().trim()
-        val isLifetime = binding.cbLifetime.isChecked
         val brand = binding.tiEditBrand.text?.toString()?.trim()
         val model = binding.tiEditModel.text?.toString()?.trim()
         val serialNumber = binding.tiEditSerial.text?.toString()?.trim()
+        val isLifetime = binding.cbLifetime.isChecked
         val description = binding.tiEditDescription.text?.toString()?.trim()
         val categoryId = selectedCategory?.id ?: "10"
 
