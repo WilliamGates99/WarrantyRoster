@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.ktx.Firebase
 import com.xeniac.warrantyroster_manager.BaseApplication
 import com.xeniac.warrantyroster_manager.data.remote.models.Category
@@ -38,7 +39,6 @@ import com.xeniac.warrantyroster_manager.utils.NetworkHelper.hasInternetConnecti
 import com.xeniac.warrantyroster_manager.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -304,7 +304,7 @@ class MainViewModel @Inject constructor(
         _addWarrantyLiveData.postValue(Event(Resource.loading()))
         try {
             if (hasInternetConnection(getApplication<BaseApplication>())) {
-                mainRepository.addWarrantyToFirestore(warrantyInput).await()
+                mainRepository.addWarrantyToFirestore(warrantyInput)
                 _addWarrantyLiveData.postValue(Event(Resource.success(null)))
                 Timber.i("Warranty successfully added.")
             } else {
@@ -321,7 +321,7 @@ class MainViewModel @Inject constructor(
         _deleteWarrantyLiveData.postValue(Event(Resource.loading()))
         try {
             if (hasInternetConnection(getApplication<BaseApplication>())) {
-                mainRepository.deleteWarrantyFromFirestore(warrantyId).await()
+                mainRepository.deleteWarrantyFromFirestore(warrantyId)
                 _deleteWarrantyLiveData.postValue(Event(Resource.success(null)))
                 Timber.i("$warrantyId successfully deleted.")
             } else {
@@ -340,7 +340,7 @@ class MainViewModel @Inject constructor(
         _updateWarrantyLiveData.postValue(Event(Resource.loading()))
         try {
             if (hasInternetConnection(getApplication<BaseApplication>())) {
-                mainRepository.updateWarrantyInFirestore(warrantyId, warrantyInput).await()
+                mainRepository.updateWarrantyInFirestore(warrantyId, warrantyInput)
                 _updateWarrantyLiveData.postValue(Event(Resource.success(null)))
                 Timber.i("Warranty successfully updated.")
             } else {
@@ -358,7 +358,7 @@ class MainViewModel @Inject constructor(
         try {
             if (hasInternetConnection(getApplication<BaseApplication>())) {
                 val warrantySnapshot = mainRepository
-                    .getUpdatedWarrantyFromFirestore(warrantyId).await()
+                    .getUpdatedWarrantyFromFirestore(warrantyId) as DocumentSnapshot
 
                 val updatedWarranty = Warranty(
                     warrantySnapshot.id,

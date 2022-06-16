@@ -67,7 +67,9 @@ object AppModule {
         firebaseAuth: FirebaseAuth,
         @CategoriesCollection categoriesCollectionRef: CollectionReference,
         @WarrantiesCollection warrantiesCollectionRef: CollectionReference
-    ) = MainRepository(firebaseAuth, categoriesCollectionRef, warrantiesCollectionRef)
+    ) = DefaultMainRepository(
+        firebaseAuth, categoriesCollectionRef, warrantiesCollectionRef
+    ) as MainRepository
 
     @Singleton
     @Provides

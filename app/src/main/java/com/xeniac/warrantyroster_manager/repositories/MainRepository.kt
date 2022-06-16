@@ -1,36 +1,19 @@
 package com.xeniac.warrantyroster_manager.repositories
 
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.Query
 import com.xeniac.warrantyroster_manager.data.remote.models.WarrantyInput
-import com.xeniac.warrantyroster_manager.di.CategoriesCollection
-import com.xeniac.warrantyroster_manager.di.WarrantiesCollection
-import com.xeniac.warrantyroster_manager.utils.Constants
-import javax.inject.Inject
 
-class MainRepository @Inject constructor(
-    private val firebaseAuth: FirebaseAuth,
-    @CategoriesCollection private val categoriesCollectionRef: CollectionReference,
-    @WarrantiesCollection private val warrantiesCollectionRef: CollectionReference
-) {
+interface MainRepository {
 
-    fun getCategoriesFromFirestore() = categoriesCollectionRef
-        .orderBy(Constants.CATEGORIES_TITLE, Query.Direction.ASCENDING)
+    fun getCategoriesFromFirestore(): Query
 
-    fun getWarrantiesFromFirestore() = warrantiesCollectionRef
-        .whereEqualTo(Constants.WARRANTIES_UUID, firebaseAuth.currentUser?.uid)
-        .orderBy(Constants.WARRANTIES_TITLE, Query.Direction.ASCENDING)
+    fun getWarrantiesFromFirestore(): Query
 
-    fun addWarrantyToFirestore(warrantyInput: WarrantyInput) =
-        warrantiesCollectionRef.add(warrantyInput)
+    suspend fun addWarrantyToFirestore(warrantyInput: WarrantyInput)
 
-    fun deleteWarrantyFromFirestore(warrantyId: String) =
-        warrantiesCollectionRef.document(warrantyId).delete()
+    suspend fun deleteWarrantyFromFirestore(warrantyId: String)
 
-    fun updateWarrantyInFirestore(warrantyId: String, warrantyInput: WarrantyInput) =
-        warrantiesCollectionRef.document(warrantyId).set(warrantyInput)
+    suspend fun updateWarrantyInFirestore(warrantyId: String, warrantyInput: WarrantyInput)
 
-    fun getUpdatedWarrantyFromFirestore(warrantyId: String) =
-        warrantiesCollectionRef.document(warrantyId).get()
+    suspend fun getUpdatedWarrantyFromFirestore(warrantyId: String): Any
 }
