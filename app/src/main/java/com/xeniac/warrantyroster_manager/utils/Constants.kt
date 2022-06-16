@@ -59,6 +59,7 @@ object Constants {
     const val ERROR_INPUT_BLANK_PASSWORD = "Password is blank"
     const val ERROR_INPUT_BLANK_RETYPE_PASSWORD = "Retype Password is blank"
     const val ERROR_INPUT_EMAIL_INVALID = "Invalid email"
+    const val ERROR_INPUT_EMAIL_SAME = "New Email is the same as current email"
     const val ERROR_INPUT_PASSWORD_SHORT = "Password is too short"
     const val ERROR_INPUT_PASSWORD_NOT_MATCH = "Password and Retype Password do not match"
 

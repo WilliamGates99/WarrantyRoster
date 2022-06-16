@@ -12,15 +12,18 @@ import com.xeniac.warrantyroster_manager.BaseApplication
 import com.xeniac.warrantyroster_manager.repositories.PreferencesRepository
 import com.xeniac.warrantyroster_manager.repositories.UserRepository
 import com.xeniac.warrantyroster_manager.ui.landing.LandingActivity
-import com.xeniac.warrantyroster_manager.utils.SettingsHelper
+import com.xeniac.warrantyroster_manager.utils.*
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_EMAIL
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_PASSWORD
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_EMAIL_INVALID
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_EMAIL_SAME
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_COUNTRY_IRAN
 import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_COUNTRY_UNITED_STATES
 import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_LANGUAGE_ENGLISH
 import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_LANGUAGE_PERSIAN
-import com.xeniac.warrantyroster_manager.utils.Event
 import com.xeniac.warrantyroster_manager.utils.NetworkHelper.hasInternetConnection
-import com.xeniac.warrantyroster_manager.utils.Resource
+import com.xeniac.warrantyroster_manager.utils.UserHelper.isEmailValid
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -115,6 +118,31 @@ class SettingsViewModel @Inject constructor(
 
     fun logoutUser() = viewModelScope.launch {
         safeLogoutUser()
+    }
+
+    fun checkChangeEmailInputs(password: String, newEmail: String){
+        if (password.isBlank()) {
+            _changeUserEmailLiveData.postValue(Event(Resource.error(ERROR_INPUT_BLANK_PASSWORD)))
+            return
+        }
+
+        if (newEmail.isBlank()) {
+            _changeUserEmailLiveData.postValue(Event(Resource.error(ERROR_INPUT_BLANK_EMAIL)))
+            return
+        }
+
+        if(!isEmailValid(newEmail)){
+            _changeUserEmailLiveData.postValue(Event(Resource.error(ERROR_INPUT_EMAIL_INVALID)))
+            return
+        }
+
+        val currentUser=userRepository.getCurrentUser() as FirebaseUser
+        if (newEmail == currentUser.email) {
+            _changeUserEmailLiveData.postValue(Event(Resource.error(ERROR_INPUT_EMAIL_SAME)))
+            return
+        }
+
+        reAuthenticateUser(password)
     }
 
     fun reAuthenticateUser(password: String) = viewModelScope.launch {
