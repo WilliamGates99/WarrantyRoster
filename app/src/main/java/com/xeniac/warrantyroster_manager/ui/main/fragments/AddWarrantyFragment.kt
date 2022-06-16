@@ -496,9 +496,7 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
                                     binding.tiLayoutDateExpiry.boxStrokeColor =
                                         ContextCompat.getColor(requireContext(), R.color.red)
                                 }
-                                it.contains(ERROR_INPUT_INVALID_STARTING_DATE) -> {
-                                    showDateError()
-                                }
+                                it.contains(ERROR_INPUT_INVALID_STARTING_DATE) -> showDateError()
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
                                     snackbar = showNetworkConnectionError(
                                         requireContext(), binding.root
