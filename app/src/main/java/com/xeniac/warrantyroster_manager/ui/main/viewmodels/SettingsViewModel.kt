@@ -126,7 +126,11 @@ class SettingsViewModel @Inject constructor(
         safeLogoutUser()
     }
 
-    fun checkChangeEmailInputs(password: String, newEmail: String) {
+    fun checkChangeEmailInputs(
+        password: String,
+        newEmail: String,
+        currentUserEmail: String = userRepository.getCurrentUserEmail()
+    ) {
         if (password.isBlank()) {
             _changeUserEmailLiveData.postValue(Event(Resource.error(ERROR_INPUT_BLANK_PASSWORD)))
             return
@@ -142,8 +146,7 @@ class SettingsViewModel @Inject constructor(
             return
         }
 
-        val currentUser = userRepository.getCurrentUser() as FirebaseUser
-        if (newEmail == currentUser.email) {
+        if (newEmail == currentUserEmail) {
             _changeUserEmailLiveData.postValue(Event(Resource.error(ERROR_INPUT_EMAIL_SAME)))
             return
         }

@@ -51,6 +51,8 @@ class FakeUserRepository : UserRepository {
 
     override fun getCurrentUser(): TestUser = users[0]
 
+    override fun getCurrentUserEmail(): String = getCurrentUser().email
+
     override suspend fun sendVerificationEmail() {
         if (shouldReturnNetworkError) {
             throw Exception()

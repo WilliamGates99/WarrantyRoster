@@ -10,6 +10,8 @@ interface UserRepository {
 
     fun getCurrentUser(): Any
 
+    fun getCurrentUserEmail(): String
+
     suspend fun sendVerificationEmail()
 
     suspend fun reloadCurrentUser()
