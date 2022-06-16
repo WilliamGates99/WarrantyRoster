@@ -32,7 +32,6 @@ import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_MODEL
 import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_SERIAL_NUMBER
 import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_STARTING_DATE
 import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_TITLE
-import com.xeniac.warrantyroster_manager.utils.DateHelper
 import com.xeniac.warrantyroster_manager.utils.DateHelper.isStartingDateValid
 import com.xeniac.warrantyroster_manager.utils.Event
 import com.xeniac.warrantyroster_manager.utils.NetworkHelper.hasInternetConnection
@@ -236,7 +235,52 @@ class MainViewModel @Inject constructor(
             categoryId,
             Firebase.auth.currentUser?.uid.toString()
         )
+
         addWarrantyToFirestore(warrantyInput)
+    }
+
+    fun checkEditWarrantyInputs(
+        warrantyId: String, title: String, brand: String?, model: String?, serialNumber: String?,
+        isLifetime: Boolean, startingDateInput: String?, expiryDateInput: String?,
+        description: String?, categoryId: String,
+        selectedStartingDateInMillis: Long, selectedExpiryDateInMillis: Long
+    ) {
+        if (title.isBlank()) {
+            _updateWarrantyLiveData.postValue(Event(Resource.error(ERROR_INPUT_BLANK_TITLE)))
+            return
+        }
+
+        if (startingDateInput.isNullOrBlank()) {
+            _updateWarrantyLiveData.postValue(Event(Resource.error(ERROR_INPUT_BLANK_STARTING_DATE)))
+            return
+        }
+
+        if (!isLifetime && expiryDateInput.isNullOrBlank()) {
+            _updateWarrantyLiveData.postValue(Event(Resource.error(ERROR_INPUT_BLANK_EXPIRY_DATE)))
+            return
+        }
+
+        if (!isLifetime &&
+            !isStartingDateValid(selectedStartingDateInMillis, selectedExpiryDateInMillis)
+        ) {
+            _updateWarrantyLiveData.postValue(Event(Resource.error(ERROR_INPUT_INVALID_STARTING_DATE)))
+            return
+        }
+
+        val warrantyInput = WarrantyInput(
+            title,
+            brand,
+            model,
+            serialNumber,
+            isLifetime,
+            startingDateInput,
+            expiryDateInput,
+            description,
+            categoryId,
+            Firebase.auth.currentUser?.uid.toString()
+        )
+
+        updateWarrantyInFirestore(warrantyId, warrantyInput)
     }
 
     fun addWarrantyToFirestore(warrantyInput: WarrantyInput) = viewModelScope.launch {
