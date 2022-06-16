@@ -18,6 +18,11 @@ import com.xeniac.warrantyroster_manager.ui.main.viewmodels.SettingsViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_CREDENTIALS
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_NEW_PASSWORD
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_PASSWORD
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_RETYPE_PASSWORD
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_PASSWORD_NOT_MATCH
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_PASSWORD_SHORT
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_CHANGE_PASSWORD_CURRENT
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_CHANGE_PASSWORD_NEW
@@ -28,7 +33,6 @@ import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseDevice
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkConnectionError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkFailureError
 import com.xeniac.warrantyroster_manager.utils.Status
-import com.xeniac.warrantyroster_manager.utils.UserHelper.isRetypePasswordValid
 import com.xeniac.warrantyroster_manager.utils.UserHelper.passwordStrength
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -210,36 +214,8 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
         newPassword = binding.tiEditNewPassword.text.toString().trim()
         val retypeNewPassword = binding.tiEditRetypePassword.text.toString().trim()
 
-        if (currentPassword.isBlank()) {
-            binding.tiLayoutCurrentPassword.requestFocus()
-            binding.tiLayoutCurrentPassword.boxStrokeColor =
-                ContextCompat.getColor(requireContext(), R.color.red)
-        } else if (newPassword.isBlank()) {
-            binding.tiLayoutNewPassword.requestFocus()
-            binding.tiLayoutNewPassword.boxStrokeColor =
-                ContextCompat.getColor(requireContext(), R.color.red)
-        } else if (retypeNewPassword.isBlank()) {
-            binding.tiLayoutRetypePassword.requestFocus()
-            binding.tiLayoutRetypePassword.boxStrokeColor =
-                ContextCompat.getColor(requireContext(), R.color.red)
-        } else {
-            if (passwordStrength(newPassword) == (-1).toByte()) {
-                binding.tiLayoutNewPassword.requestFocus()
-                binding.tiLayoutNewPassword.error =
-                    requireContext().getString(R.string.change_password_error_password_short)
-            } else if (!isRetypePasswordValid(newPassword, retypeNewPassword)) {
-                binding.tiLayoutRetypePassword.requestFocus()
-                binding.tiLayoutRetypePassword.error =
-                    requireContext().getString(R.string.change_password_error_match)
-            } else {
-                showLoadingAnimation()
-                reAuthenticateUser(currentPassword)
-            }
-        }
+        viewModel.checkChangePasswordInputs(currentPassword, newPassword, retypeNewPassword)
     }
-
-    private fun reAuthenticateUser(currentPassword: String) =
-        viewModel.reAuthenticateUser(currentPassword)
 
     private fun reAuthenticateUserObserver() =
         viewModel.reAuthenticateUserLiveData.observe(viewLifecycleOwner) { responseEvent ->
@@ -250,26 +226,57 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
                     Status.ERROR -> {
                         hideLoadingAnimation()
                         response.message?.let {
-                            snackbar = when {
+                            when {
+                                it.contains(ERROR_INPUT_BLANK_PASSWORD) -> {
+                                    binding.tiLayoutCurrentPassword.requestFocus()
+                                    binding.tiLayoutCurrentPassword.boxStrokeColor =
+                                        ContextCompat.getColor(requireContext(), R.color.red)
+                                }
+                                it.contains(ERROR_INPUT_BLANK_NEW_PASSWORD) -> {
+                                    binding.tiLayoutNewPassword.requestFocus()
+                                    binding.tiLayoutNewPassword.boxStrokeColor =
+                                        ContextCompat.getColor(requireContext(), R.color.red)
+                                }
+                                it.contains(ERROR_INPUT_BLANK_RETYPE_PASSWORD) -> {
+                                    binding.tiLayoutRetypePassword.requestFocus()
+                                    binding.tiLayoutRetypePassword.boxStrokeColor =
+                                        ContextCompat.getColor(requireContext(), R.color.red)
+                                }
+                                it.contains(ERROR_INPUT_PASSWORD_SHORT) -> {
+                                    binding.tiLayoutNewPassword.requestFocus()
+                                    binding.tiLayoutNewPassword.error =
+                                        requireContext().getString(R.string.change_password_error_password_short)
+                                }
+                                it.contains(ERROR_INPUT_PASSWORD_NOT_MATCH) -> {
+                                    binding.tiLayoutRetypePassword.requestFocus()
+                                    binding.tiLayoutRetypePassword.error =
+                                        requireContext().getString(R.string.change_password_error_match)
+                                }
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
-                                    showNetworkConnectionError(
+                                    snackbar = showNetworkConnectionError(
                                         requireContext(), binding.root
                                     ) { getChangeUserPasswordInputs() }
                                 }
                                 it.contains(ERROR_FIREBASE_403) -> {
-                                    show403Error(requireContext(), binding.root)
+                                    snackbar = show403Error(requireContext(), binding.root)
                                 }
                                 it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
-                                    showFirebaseDeviceBlockedError(requireContext(), binding.root)
+                                    snackbar = showFirebaseDeviceBlockedError(
+                                        requireContext(),
+                                        binding.root
+                                    )
                                 }
                                 it.contains(ERROR_FIREBASE_AUTH_CREDENTIALS) -> {
-                                    showFirebaseAuthCredentialsError(
+                                    snackbar = showFirebaseAuthCredentialsError(
                                         binding.root,
                                         requireContext().getString(R.string.change_password_error_credentials)
                                     )
                                 }
                                 else -> {
-                                    showNetworkFailureError(requireContext(), binding.root)
+                                    snackbar = showNetworkFailureError(
+                                        requireContext(),
+                                        binding.root
+                                    )
                                 }
                             }
                         }

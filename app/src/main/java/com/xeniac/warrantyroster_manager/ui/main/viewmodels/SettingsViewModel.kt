@@ -14,9 +14,13 @@ import com.xeniac.warrantyroster_manager.repositories.UserRepository
 import com.xeniac.warrantyroster_manager.ui.landing.LandingActivity
 import com.xeniac.warrantyroster_manager.utils.*
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_EMAIL
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_NEW_PASSWORD
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_PASSWORD
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_RETYPE_PASSWORD
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_EMAIL_INVALID
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_EMAIL_SAME
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_PASSWORD_NOT_MATCH
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_PASSWORD_SHORT
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_COUNTRY_IRAN
 import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_COUNTRY_UNITED_STATES
@@ -24,6 +28,8 @@ import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_LANGUAGE_ENGLISH
 import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_LANGUAGE_PERSIAN
 import com.xeniac.warrantyroster_manager.utils.NetworkHelper.hasInternetConnection
 import com.xeniac.warrantyroster_manager.utils.UserHelper.isEmailValid
+import com.xeniac.warrantyroster_manager.utils.UserHelper.isRetypePasswordValid
+import com.xeniac.warrantyroster_manager.utils.UserHelper.passwordStrength
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -120,7 +126,7 @@ class SettingsViewModel @Inject constructor(
         safeLogoutUser()
     }
 
-    fun checkChangeEmailInputs(password: String, newEmail: String){
+    fun checkChangeEmailInputs(password: String, newEmail: String) {
         if (password.isBlank()) {
             _changeUserEmailLiveData.postValue(Event(Resource.error(ERROR_INPUT_BLANK_PASSWORD)))
             return
@@ -131,18 +137,55 @@ class SettingsViewModel @Inject constructor(
             return
         }
 
-        if(!isEmailValid(newEmail)){
+        if (!isEmailValid(newEmail)) {
             _changeUserEmailLiveData.postValue(Event(Resource.error(ERROR_INPUT_EMAIL_INVALID)))
             return
         }
 
-        val currentUser=userRepository.getCurrentUser() as FirebaseUser
+        val currentUser = userRepository.getCurrentUser() as FirebaseUser
         if (newEmail == currentUser.email) {
             _changeUserEmailLiveData.postValue(Event(Resource.error(ERROR_INPUT_EMAIL_SAME)))
             return
         }
 
         reAuthenticateUser(password)
+    }
+
+    fun checkChangePasswordInputs(
+        currentPassword: String, newPassword: String, retypeNewPassword: String
+    ) {
+        if (currentPassword.isBlank()) {
+            _changeUserPasswordLiveData.postValue(Event(Resource.error(ERROR_INPUT_BLANK_PASSWORD)))
+            return
+        }
+
+        if (newPassword.isBlank()) {
+            _changeUserPasswordLiveData.postValue(
+                Event(Resource.error(ERROR_INPUT_BLANK_NEW_PASSWORD))
+            )
+            return
+        }
+
+        if (retypeNewPassword.isBlank()) {
+            _changeUserPasswordLiveData.postValue(
+                Event(Resource.error(ERROR_INPUT_BLANK_RETYPE_PASSWORD))
+            )
+            return
+        }
+
+        if (passwordStrength(newPassword) == (-1).toByte()) {
+            _changeUserPasswordLiveData.postValue(Event(Resource.error(ERROR_INPUT_PASSWORD_SHORT)))
+            return
+        }
+
+        if (!isRetypePasswordValid(newPassword, retypeNewPassword)) {
+            _changeUserPasswordLiveData.postValue(
+                Event(Resource.error(ERROR_INPUT_PASSWORD_NOT_MATCH))
+            )
+            return
+        }
+
+        reAuthenticateUser(currentPassword)
     }
 
     fun reAuthenticateUser(password: String) = viewModelScope.launch {

@@ -57,6 +57,7 @@ object Constants {
     // Account Input Errors
     const val ERROR_INPUT_BLANK_EMAIL = "Email is blank"
     const val ERROR_INPUT_BLANK_PASSWORD = "Password is blank"
+    const val ERROR_INPUT_BLANK_NEW_PASSWORD = "New Password is blank"
     const val ERROR_INPUT_BLANK_RETYPE_PASSWORD = "Retype Password is blank"
     const val ERROR_INPUT_EMAIL_INVALID = "Invalid email"
     const val ERROR_INPUT_EMAIL_SAME = "New Email is the same as current email"
