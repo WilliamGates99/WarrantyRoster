@@ -5,6 +5,8 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.xeniac.warrantyroster_manager.BaseApplication
 import com.xeniac.warrantyroster_manager.data.remote.models.Category
 import com.xeniac.warrantyroster_manager.data.remote.models.ListItemType
@@ -17,6 +19,10 @@ import com.xeniac.warrantyroster_manager.utils.Constants.CATEGORIES_TITLE
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_EMPTY_CATEGORY_LIST
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_EMPTY_WARRANTY_LIST
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_EXPIRY_DATE
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_STARTING_DATE
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_TITLE
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_INVALID_STARTING_DATE
 import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_BRAND
 import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_CATEGORY_ID
 import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_DESCRIPTION
@@ -26,6 +32,8 @@ import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_MODEL
 import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_SERIAL_NUMBER
 import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_STARTING_DATE
 import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_TITLE
+import com.xeniac.warrantyroster_manager.utils.DateHelper
+import com.xeniac.warrantyroster_manager.utils.DateHelper.isStartingDateValid
 import com.xeniac.warrantyroster_manager.utils.Event
 import com.xeniac.warrantyroster_manager.utils.NetworkHelper.hasInternetConnection
 import com.xeniac.warrantyroster_manager.utils.Resource
@@ -186,6 +194,49 @@ class MainViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun checkAddWarrantyInputs(
+        title: String, brand: String?, model: String?, serialNumber: String?,
+        isLifetime: Boolean, startingDateInput: String?, expiryDateInput: String?,
+        description: String?, categoryId: String,
+        selectedStartingDateInMillis: Long, selectedExpiryDateInMillis: Long
+    ) {
+        if (title.isBlank()) {
+            _addWarrantyLiveData.postValue(Event(Resource.error(ERROR_INPUT_BLANK_TITLE)))
+            return
+        }
+
+        if (startingDateInput.isNullOrBlank()) {
+            _addWarrantyLiveData.postValue(Event(Resource.error(ERROR_INPUT_BLANK_STARTING_DATE)))
+            return
+        }
+
+        if (!isLifetime && expiryDateInput.isNullOrBlank()) {
+            _addWarrantyLiveData.postValue(Event(Resource.error(ERROR_INPUT_BLANK_EXPIRY_DATE)))
+            return
+        }
+
+        if (!isLifetime &&
+            !isStartingDateValid(selectedStartingDateInMillis, selectedExpiryDateInMillis)
+        ) {
+            _addWarrantyLiveData.postValue(Event(Resource.error(ERROR_INPUT_INVALID_STARTING_DATE)))
+            return
+        }
+
+        val warrantyInput = WarrantyInput(
+            title,
+            brand,
+            model,
+            serialNumber,
+            isLifetime,
+            startingDateInput,
+            expiryDateInput,
+            description,
+            categoryId,
+            Firebase.auth.currentUser?.uid.toString()
+        )
+        addWarrantyToFirestore(warrantyInput)
     }
 
     fun addWarrantyToFirestore(warrantyInput: WarrantyInput) = viewModelScope.launch {

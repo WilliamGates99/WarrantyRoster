@@ -18,17 +18,18 @@ import androidx.navigation.fragment.findNavController
 import coil.ImageLoader
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentAddWarrantyBinding
 import com.xeniac.warrantyroster_manager.data.remote.models.Category
-import com.xeniac.warrantyroster_manager.data.remote.models.WarrantyInput
 import com.xeniac.warrantyroster_manager.repositories.PreferencesRepository
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModel
 import com.xeniac.warrantyroster_manager.utils.CoilHelper.loadCategoryImage
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_EXPIRY_DATE
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_STARTING_DATE
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_TITLE
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_INVALID_STARTING_DATE
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.Constants.FRAGMENT_TAG_ADD_CALENDAR_EXPIRY
 import com.xeniac.warrantyroster_manager.utils.Constants.FRAGMENT_TAG_ADD_CALENDAR_STARTING
@@ -41,7 +42,6 @@ import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_ADD_WARRA
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_ADD_WARRANTY_SERIAL
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_ADD_WARRANTY_STARTING_DATE_IN_MILLIS
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_ADD_WARRANTY_TITLE
-import com.xeniac.warrantyroster_manager.utils.DateHelper.isStartingDateValid
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.show403Error
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseDeviceBlockedError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkConnectionError
@@ -441,11 +441,10 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
             requireActivity().onBackPressed()
         }
 
-    private fun addWarrantyOnClick() = binding.toolbar.menu[0]
-        .setOnMenuItemClickListener {
-            getWarrantyInput()
-            false
-        }
+    private fun addWarrantyOnClick() = binding.toolbar.menu[0].setOnMenuItemClickListener {
+        getWarrantyInput()
+        false
+    }
 
     private fun getWarrantyInput() {
         val inputMethodManager = requireContext()
@@ -457,48 +456,17 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
 
         val title = binding.tiEditTitle.text.toString().trim()
         val isLifetime = binding.cbLifetime.isChecked
+        val brand = binding.tiEditBrand.text?.toString()?.trim()
+        val model = binding.tiEditModel.text?.toString()?.trim()
+        val serialNumber = binding.tiEditSerial.text?.toString()?.trim()
+        val description = binding.tiEditDescription.text?.toString()?.trim()
+        val categoryId = selectedCategory?.id ?: "10"
 
-        if (title.isBlank()) {
-            binding.tiLayoutTitle.requestFocus()
-            binding.tiLayoutTitle.boxStrokeColor =
-                ContextCompat.getColor(requireContext(), R.color.red)
-        } else if (startingDateInput.isNullOrBlank()) {
-            binding.tiLayoutDateStarting.requestFocus()
-            binding.tiLayoutDateStarting.boxStrokeColor =
-                ContextCompat.getColor(requireContext(), R.color.red)
-        } else if (!isLifetime && expiryDateInput.isNullOrBlank()) {
-            binding.tiLayoutDateExpiry.requestFocus()
-            binding.tiLayoutDateExpiry.boxStrokeColor =
-                ContextCompat.getColor(requireContext(), R.color.red)
-        } else if (!isLifetime &&
-            !isStartingDateValid(selectedStartingDateInMillis, selectedExpiryDateInMillis)
-        ) {
-            showDateError()
-        } else {
-            val brand = binding.tiEditBrand.text?.toString()?.trim()
-            val model = binding.tiEditModel.text?.toString()?.trim()
-            val serialNumber = binding.tiEditSerial.text?.toString()?.trim()
-            val description = binding.tiEditDescription.text?.toString()?.trim()
-            val categoryId = selectedCategory?.id ?: "10"
-
-            val warrantyInput = WarrantyInput(
-                title,
-                brand,
-                model,
-                serialNumber,
-                isLifetime,
-                startingDateInput!!,
-                expiryDateInput,
-                description,
-                categoryId,
-                Firebase.auth.currentUser?.uid.toString()
-            )
-            addWarrantyToFirestore(warrantyInput)
-        }
+        viewModel.checkAddWarrantyInputs(
+            title, brand, model, serialNumber, isLifetime, startingDateInput, expiryDateInput,
+            description, categoryId, selectedStartingDateInMillis, selectedExpiryDateInMillis
+        )
     }
-
-    private fun addWarrantyToFirestore(warrantyInput: WarrantyInput) =
-        viewModel.addWarrantyToFirestore(warrantyInput)
 
     private fun addWarrantyObserver() =
         viewModel.addWarrantyLiveData.observe(viewLifecycleOwner) { responseEvent ->
@@ -512,20 +480,44 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
                     Status.ERROR -> {
                         hideLoadingAnimation()
                         response.message?.let {
-                            snackbar = when {
+                            when {
+                                it.contains(ERROR_INPUT_BLANK_TITLE) -> {
+                                    binding.tiLayoutTitle.requestFocus()
+                                    binding.tiLayoutTitle.boxStrokeColor =
+                                        ContextCompat.getColor(requireContext(), R.color.red)
+                                }
+                                it.contains(ERROR_INPUT_BLANK_STARTING_DATE) -> {
+                                    binding.tiLayoutDateStarting.requestFocus()
+                                    binding.tiLayoutDateStarting.boxStrokeColor =
+                                        ContextCompat.getColor(requireContext(), R.color.red)
+                                }
+                                it.contains(ERROR_INPUT_BLANK_EXPIRY_DATE) -> {
+                                    binding.tiLayoutDateExpiry.requestFocus()
+                                    binding.tiLayoutDateExpiry.boxStrokeColor =
+                                        ContextCompat.getColor(requireContext(), R.color.red)
+                                }
+                                it.contains(ERROR_INPUT_INVALID_STARTING_DATE) -> {
+                                    showDateError()
+                                }
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
-                                    showNetworkConnectionError(
+                                    snackbar = showNetworkConnectionError(
                                         requireContext(), binding.root
                                     ) { getWarrantyInput() }
                                 }
                                 it.contains(ERROR_FIREBASE_403) -> {
-                                    show403Error(requireContext(), binding.root)
+                                    snackbar = show403Error(requireContext(), binding.root)
                                 }
                                 it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
-                                    showFirebaseDeviceBlockedError(requireContext(), binding.root)
+                                    snackbar = showFirebaseDeviceBlockedError(
+                                        requireContext(),
+                                        binding.root
+                                    )
                                 }
                                 else -> {
-                                    showNetworkFailureError(requireContext(), binding.root)
+                                    snackbar = showNetworkFailureError(
+                                        requireContext(),
+                                        binding.root
+                                    )
                                 }
                             }
                         }
