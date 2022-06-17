@@ -220,34 +220,34 @@ class MainViewModelTest {
         assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
     }
 
-//    @Test
-//    fun checkEditWarrantyInputsWithIsLifeTimeAndBlankExpiryDate_returnsSuccess() {
-//        val title = "title"
-//        val brand = ""
-//        val model = ""
-//        val serial = ""
-//        val isLifeTime = true
-//        val startingDate = "2020-05-10"
-//        val expiryDate = ""
-//        val description = ""
-//        val categoryId = "10"
-//        val uuid = "uuid"
-//        val dataInMillis = 0L
-//
-//        fakeMainRepository.addWarranty(
-//            WarrantyInput(
-//                title, brand, model, serial, isLifeTime,
-//                startingDate, expiryDate, description, categoryId, uuid
-//            )
-//        )
-//        testViewModel.checkEditWarrantyInputs(
-//            "1", title, brand, model, serial, isLifeTime,
-//            startingDate, expiryDate, description, categoryId, dataInMillis, dataInMillis
-//        )
-//
-//        val responseEvent = testViewModel.updateWarrantyLiveData.getOrAwaitValue()
-//        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.SUCCESS)
-//    }
+    @Test
+    fun checkEditWarrantyInputsWithIsLifeTimeAndBlankExpiryDate_returnsSuccess() {
+        val title = "title"
+        val brand = ""
+        val model = ""
+        val serial = ""
+        val isLifeTime = true
+        val startingDate = "2020-05-10"
+        val expiryDate = ""
+        val description = ""
+        val categoryId = "10"
+        val uuid = "uuid"
+        val dataInMillis = 0L
+
+        fakeMainRepository.addWarranty(
+            WarrantyInput(
+                title, brand, model, serial, isLifeTime,
+                startingDate, expiryDate, description, categoryId, uuid
+            )
+        )
+        testViewModel.checkEditWarrantyInputs(
+            "1", title, brand, model, serial, isLifeTime,
+            startingDate, expiryDate, description, categoryId, dataInMillis, dataInMillis
+        )
+
+        val responseEvent = testViewModel.updateWarrantyLiveData.getOrAwaitValue()
+        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.SUCCESS)
+    }
 
     @Test
     fun checkEditWarrantyInputsWithValidInputs_returnsSuccess() {
