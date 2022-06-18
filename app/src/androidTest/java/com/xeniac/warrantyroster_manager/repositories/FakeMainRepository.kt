@@ -1,7 +1,6 @@
 package com.xeniac.warrantyroster_manager.repositories
 
 import androidx.lifecycle.MutableLiveData
-import com.google.firebase.firestore.Query
 import com.xeniac.warrantyroster_manager.data.remote.models.Category
 import com.xeniac.warrantyroster_manager.data.remote.models.Warranty
 import com.xeniac.warrantyroster_manager.data.remote.models.WarrantyInput
@@ -35,22 +34,28 @@ class FakeMainRepository : MainRepository {
         observableWarranties.postValue(warranties)
     }
 
-    override fun getCategoriesFromFirestore(): Query {
-        TODO("Not yet implemented")
-//        if (shouldReturnNetworkError) {
-//            throw Exception()
-//        } else {
-//            return Firebase.firestore.collection("test")
-//        }
+    override fun getCategoriesFromFirestore(): MutableList<Category> {
+        if (shouldReturnNetworkError) {
+            throw Exception()
+        }
+
+        if (categories.size == 0) {
+            throw Exception()
+        }
+
+        return categories
     }
 
-    override fun getWarrantiesFromFirestore(): Query {
-        TODO("Not yet implemented")
-//        if (shouldReturnNetworkError) {
-//            throw Exception()
-//        } else {
-//            return Firebase.firestore.collection("test")
-//        }
+    override fun getWarrantiesFromFirestore(): MutableList<Warranty> {
+        if (shouldReturnNetworkError) {
+            throw Exception()
+        }
+
+        if (warranties.size == 0) {
+            throw Exception()
+        }
+
+        return warranties
     }
 
     override suspend fun addWarrantyToFirestore(warrantyInput: WarrantyInput) {
@@ -66,12 +71,8 @@ class FakeMainRepository : MainRepository {
         if (shouldReturnNetworkError) {
             throw Exception()
         } else {
-            for (warranty in warranties) {
-                if (warranty.id == warrantyId) {
-                    warranties.remove(warranty)
-                } else {
-                    throw Exception()
-                }
+            if (!warranties.remove(warranties.find { it.id == warrantyId })) {
+                throw Exception()
             }
             refreshLiveData()
         }
@@ -89,7 +90,11 @@ class FakeMainRepository : MainRepository {
         }
     }
 
-    override suspend fun getUpdatedWarrantyFromFirestore(warrantyId: String): Any {
-        TODO("Not yet implemented")
+    override suspend fun getUpdatedWarrantyFromFirestore(warrantyId: String): Warranty {
+        if (shouldReturnNetworkError) {
+            throw Exception()
+        } else {
+            return warranties.find { it.id == warrantyId } ?: throw Exception()
+        }
     }
 }

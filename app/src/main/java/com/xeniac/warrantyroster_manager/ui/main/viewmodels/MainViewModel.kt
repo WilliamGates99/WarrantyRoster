@@ -6,33 +6,18 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.ktx.Firebase
 import com.xeniac.warrantyroster_manager.BaseApplication
 import com.xeniac.warrantyroster_manager.data.remote.models.Category
-import com.xeniac.warrantyroster_manager.data.remote.models.ListItemType
 import com.xeniac.warrantyroster_manager.data.remote.models.Warranty
 import com.xeniac.warrantyroster_manager.data.remote.models.WarrantyInput
 import com.xeniac.warrantyroster_manager.repositories.MainRepository
 import com.xeniac.warrantyroster_manager.repositories.PreferencesRepository
-import com.xeniac.warrantyroster_manager.utils.Constants.CATEGORIES_ICON
-import com.xeniac.warrantyroster_manager.utils.Constants.CATEGORIES_TITLE
-import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_EMPTY_CATEGORY_LIST
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
-import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_EMPTY_WARRANTY_LIST
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_EXPIRY_DATE
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_STARTING_DATE
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_TITLE
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_INVALID_STARTING_DATE
-import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_BRAND
-import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_CATEGORY_ID
-import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_DESCRIPTION
-import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_EXPIRY_DATE
-import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_LIFETIME
-import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_MODEL
-import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_SERIAL_NUMBER
-import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_STARTING_DATE
-import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_TITLE
 import com.xeniac.warrantyroster_manager.utils.DateHelper.isStartingDateValid
 import com.xeniac.warrantyroster_manager.utils.Event
 import com.xeniac.warrantyroster_manager.utils.NetworkHelper.hasInternetConnection
@@ -118,80 +103,25 @@ class MainViewModel @Inject constructor(
 
     fun getCategoriesFromFirestore() = viewModelScope.launch {
         _categoriesLiveData.postValue(Event(Resource.loading()))
-        mainRepository.getCategoriesFromFirestore().addSnapshotListener { value, error ->
-            error?.let {
-                Timber.e("getCategoriesFromFirestore Error: ${it.message}")
-                _categoriesLiveData.postValue(Event(Resource.error(it.message.toString())))
-            }
-
-            value?.let {
-                if (it.documents.size == 0) {
-                    Timber.e("getCategoriesFromFirestore Error: $ERROR_EMPTY_CATEGORY_LIST")
-                    _categoriesLiveData.postValue(Event(Resource.error(ERROR_EMPTY_CATEGORY_LIST)))
-                } else {
-                    val categoriesList = mutableListOf<Category>()
-
-                    for (document in it.documents) {
-                        @Suppress("UNCHECKED_CAST")
-                        val category = Category(
-                            document.id,
-                            document.get(CATEGORIES_TITLE) as Map<String, String>,
-                            document.get(CATEGORIES_ICON).toString()
-                        )
-                        categoriesList.add(category)
-                    }
-                    _categoriesLiveData.postValue(Event(Resource.success(categoriesList)))
-                    Timber.i("Categories List successfully retrieved.")
-                }
-            }
+        try {
+            val categoriesList = mainRepository.getCategoriesFromFirestore()
+            _categoriesLiveData.postValue(Event(Resource.success(categoriesList)))
+            Timber.i("Categories List successfully retrieved.")
+        } catch (e: Exception) {
+            Timber.e("getCategoriesFromFirestore Error: ${e.message}")
+            _categoriesLiveData.postValue(Event(Resource.error(e.message.toString())))
         }
     }
 
     fun getWarrantiesListFromFirestore() = viewModelScope.launch {
         _warrantiesLiveData.postValue(Event(Resource.loading()))
-        mainRepository.getWarrantiesFromFirestore().addSnapshotListener { value, error ->
-            error?.let {
-                Timber.e("getWarrantiesListFromFirestore Error: ${it.message}")
-                _warrantiesLiveData.postValue(Event(Resource.error(it.message.toString())))
-            }
-
-            value?.let {
-                if (it.documents.size == 0) {
-                    Timber.e("getWarrantiesListFromFirestore Error: $ERROR_EMPTY_WARRANTY_LIST")
-                    _warrantiesLiveData.postValue(Event(Resource.error(ERROR_EMPTY_WARRANTY_LIST)))
-                } else {
-                    val warrantiesList = mutableListOf<Warranty>()
-                    var adIndex = 5
-
-                    for (document in it.documents) {
-                        val warranty = Warranty(
-                            document.id,
-                            document.get(WARRANTIES_TITLE).toString(),
-                            document.get(WARRANTIES_BRAND).toString(),
-                            document.get(WARRANTIES_MODEL).toString(),
-                            document.get(WARRANTIES_SERIAL_NUMBER).toString(),
-                            document.get(WARRANTIES_LIFETIME) as Boolean?,
-                            document.get(WARRANTIES_STARTING_DATE).toString(),
-                            document.get(WARRANTIES_EXPIRY_DATE).toString(),
-                            document.get(WARRANTIES_DESCRIPTION).toString(),
-                            document.get(WARRANTIES_CATEGORY_ID).toString()
-                        )
-                        warrantiesList.add(warranty)
-
-                        if (warrantiesList.size == adIndex) {
-                            adIndex += 6
-                            val nativeAd = Warranty(
-                                adIndex.toString(), null, null, null,
-                                null, null, null, null,
-                                null, null, ListItemType.AD
-                            )
-                            warrantiesList.add(nativeAd)
-                        }
-                    }
-                    _warrantiesLiveData.postValue(Event(Resource.success(warrantiesList)))
-                    Timber.i("Warranties List successfully retrieved.")
-                }
-            }
+        try {
+            val warrantiesList = mainRepository.getWarrantiesFromFirestore()
+            _warrantiesLiveData.postValue(Event(Resource.success(warrantiesList)))
+            Timber.i("Warranties List successfully retrieved.")
+        } catch (e: Exception) {
+            Timber.e("getWarrantiesListFromFirestore Error: ${e.message}")
+            _warrantiesLiveData.postValue(Event(Resource.error(e.message.toString())))
         }
     }
 
@@ -357,24 +287,9 @@ class MainViewModel @Inject constructor(
         _updatedWarrantyLiveData.postValue(Event(Resource.loading()))
         try {
             if (hasInternetConnection(getApplication<BaseApplication>())) {
-                val warrantySnapshot = mainRepository
-                    .getUpdatedWarrantyFromFirestore(warrantyId) as DocumentSnapshot
-
-                val updatedWarranty = Warranty(
-                    warrantySnapshot.id,
-                    warrantySnapshot.get(WARRANTIES_TITLE).toString(),
-                    warrantySnapshot.get(WARRANTIES_BRAND).toString(),
-                    warrantySnapshot.get(WARRANTIES_MODEL).toString(),
-                    warrantySnapshot.get(WARRANTIES_SERIAL_NUMBER).toString(),
-                    warrantySnapshot.get(WARRANTIES_LIFETIME) as Boolean?,
-                    warrantySnapshot.get(WARRANTIES_STARTING_DATE).toString(),
-                    warrantySnapshot.get(WARRANTIES_EXPIRY_DATE).toString(),
-                    warrantySnapshot.get(WARRANTIES_DESCRIPTION).toString(),
-                    warrantySnapshot.get(WARRANTIES_CATEGORY_ID).toString()
-                )
-
+                val updatedWarranty = mainRepository.getUpdatedWarrantyFromFirestore(warrantyId)
                 _updatedWarrantyLiveData.postValue(Event(Resource.success(updatedWarranty)))
-                Timber.i("DocumentSnapshot: $warrantySnapshot")
+                Timber.i("Updated warranty successfully retrieved.")
             } else {
                 Timber.e(ERROR_NETWORK_CONNECTION)
                 _updatedWarrantyLiveData.postValue(Event(Resource.error(ERROR_NETWORK_CONNECTION)))
