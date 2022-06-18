@@ -4,6 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.core.app.ApplicationProvider
 import com.google.common.truth.Truth.assertThat
 import com.xeniac.warrantyroster_manager.MainCoroutineRule
+import com.xeniac.warrantyroster_manager.data.remote.models.Category
 import com.xeniac.warrantyroster_manager.data.remote.models.WarrantyInput
 import com.xeniac.warrantyroster_manager.getOrAwaitValue
 import com.xeniac.warrantyroster_manager.repositories.FakeMainRepository
@@ -12,6 +13,7 @@ import com.xeniac.warrantyroster_manager.utils.Status
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -30,6 +32,7 @@ class MainViewModelTest {
     var mainCoroutineRule = MainCoroutineRule()
 
     private lateinit var fakeMainRepository: FakeMainRepository
+    private lateinit var fakePreferencesRepository: FakePreferencesRepository
 
     private lateinit var testViewModel: MainViewModel
 
@@ -38,46 +41,118 @@ class MainViewModelTest {
         hiltRule.inject()
 
         fakeMainRepository = FakeMainRepository()
+        fakePreferencesRepository = FakePreferencesRepository()
 
         testViewModel = MainViewModel(
             ApplicationProvider.getApplicationContext(),
             fakeMainRepository,
-            FakePreferencesRepository()
+            fakePreferencesRepository
         )
     }
 
-//    @Test
-//    fun getAllCategoryTitles() {
-//        val titles = testViewModel.getAllCategoryTitles()
-//    }
+    @Test
+    fun getAllCategoryTitles_returnsAllTitles() = runTest {
+        val mapKey = fakePreferencesRepository.getCategoryTitleMapKey()
 
-//    @Test
-//    fun getCategoryById(){
-//
-//    }
+        fakeMainRepository.addCategory("1", mapOf(Pair(mapKey, "title1")), "icon")
+        fakeMainRepository.addCategory("2", mapOf(Pair(mapKey, "title2")), "icon")
+        fakeMainRepository.addCategory("3", mapOf(Pair(mapKey, "title3")), "icon")
+        testViewModel.getCategoriesFromFirestore()
 
-//    @Test
-//    fun getCategoryByTitle(){
-//
-//    }
+        val result = testViewModel.getAllCategoryTitles()
+        assertThat(result.size).isEqualTo(3)
+    }
 
-//    @Test
-//    fun getCategoriesWithNoInternet_returnsError() {
-//        fakeMainRepository.setShouldReturnNetworkError(true)
-//        testViewModel.getCategoriesFromFirestore()
-//
-//        val responseEvent = testViewModel.categoriesLiveData.getOrAwaitValue()
-//        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
-//    }
+    @Test
+    fun getCategoryById_returnsTheRequestedCategory() = runTest {
+        val mapKey = fakePreferencesRepository.getCategoryTitleMapKey()
+        val category3 = Category("3", mapOf(Pair(mapKey, "title3")), "icon")
 
-//    @Test
-//    fun getWarrantiesWithNoInternet_returnsError() {
-//        fakeMainRepository.setShouldReturnNetworkError(true)
-//        testViewModel.getWarrantiesListFromFirestore()
-//
-//        val responseEvent = testViewModel.warrantiesLiveData.getOrAwaitValue()
-//        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
-//    }
+        fakeMainRepository.addCategory("1", mapOf(Pair(mapKey, "title1")), "icon")
+        fakeMainRepository.addCategory("2", mapOf(Pair(mapKey, "title2")), "icon")
+        fakeMainRepository.addCategory(category3.id, category3.title, category3.icon)
+        testViewModel.getCategoriesFromFirestore()
+
+        val result = testViewModel.getCategoryById("3")
+        assertThat(result).isEqualTo(category3)
+    }
+
+    @Test
+    fun getCategoryByTitle_returnsTheRequestedCategory() = runTest {
+        val mapKey = fakePreferencesRepository.getCategoryTitleMapKey()
+        val title3 = "title3"
+        val category3 = Category("3", mapOf(Pair(mapKey, title3)), "icon")
+
+        fakeMainRepository.addCategory("1", mapOf(Pair(mapKey, "title1")), "icon")
+        fakeMainRepository.addCategory("2", mapOf(Pair(mapKey, "title2")), "icon")
+        fakeMainRepository.addCategory(category3.id, category3.title, category3.icon)
+        testViewModel.getCategoriesFromFirestore()
+
+        val result = testViewModel.getCategoryByTitle(title3)
+        assertThat(result).isEqualTo(category3)
+    }
+
+    @Test
+    fun getCategoriesWithNoInternet_returnsError() {
+        fakeMainRepository.setShouldReturnNetworkError(true)
+        testViewModel.getCategoriesFromFirestore()
+
+        val responseEvent = testViewModel.categoriesLiveData.getOrAwaitValue()
+        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
+    }
+
+    @Test
+    fun getCategoriesWithEmptyList_returnsError() {
+        testViewModel.getCategoriesFromFirestore()
+
+        val responseEvent = testViewModel.categoriesLiveData.getOrAwaitValue()
+        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
+    }
+
+    @Test
+    fun getCategoriesWithValidList_returnsSuccess() = runTest {
+        val mapKey = fakePreferencesRepository.getCategoryTitleMapKey()
+        fakeMainRepository.addCategory("1", mapOf(Pair(mapKey, "title1")), "icon")
+        fakeMainRepository.addCategory("2", mapOf(Pair(mapKey, "title2")), "icon")
+        fakeMainRepository.addCategory("3", mapOf(Pair(mapKey, "title3")), "icon")
+        testViewModel.getCategoriesFromFirestore()
+
+        val responseEvent = testViewModel.categoriesLiveData.getOrAwaitValue()
+        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.SUCCESS)
+    }
+
+    @Test
+    fun getWarrantiesWithNoInternet_returnsError() {
+        fakeMainRepository.setShouldReturnNetworkError(true)
+        testViewModel.getWarrantiesListFromFirestore()
+
+        val responseEvent = testViewModel.warrantiesLiveData.getOrAwaitValue()
+        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
+    }
+
+    @Test
+    fun getWarrantiesWithEmptyList_returnsError() {
+        testViewModel.getWarrantiesListFromFirestore()
+
+        val responseEvent = testViewModel.warrantiesLiveData.getOrAwaitValue()
+        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
+    }
+
+    @Test
+    fun getWarrantiesWithValidList_returnsSuccess() {
+        val warrantyInput = WarrantyInput(
+            "title", "brand", "model", "serial", true,
+            "2020-05-10", "",
+            "description", "10", "uuid"
+        )
+        fakeMainRepository.addWarranty(warrantyInput, "1")
+        fakeMainRepository.addWarranty(warrantyInput, "2")
+        fakeMainRepository.addWarranty(warrantyInput, "3")
+        testViewModel.getWarrantiesListFromFirestore()
+
+        val responseEvent = testViewModel.warrantiesLiveData.getOrAwaitValue()
+        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.SUCCESS)
+    }
 
     @Test
     fun checkAddWarrantyInputsWithBlankTitle_returnsError() {
@@ -166,6 +241,49 @@ class MainViewModelTest {
 
         val responseEvent = testViewModel.addWarrantyLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
+    }
+
+    @Test
+    fun deleteWarrantyWithNoInternet_returnsError() {
+        fakeMainRepository.setShouldReturnNetworkError(true)
+        val warrantyInput = WarrantyInput(
+            "title", "brand", "model", "serial", true,
+            "2020-05-10", "",
+            "description", "10", "uuid"
+        )
+        fakeMainRepository.addWarranty(warrantyInput)
+        testViewModel.deleteWarrantyFromFirestore("1")
+
+        val responseEvent = testViewModel.deleteWarrantyLiveData.getOrAwaitValue()
+        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
+    }
+
+    @Test
+    fun deleteWarrantyWithNotExistingWarrantyId_returnsError() {
+        val warrantyInput = WarrantyInput(
+            "title", "brand", "model", "serial", true,
+            "2020-05-10", "",
+            "description", "10", "uuid"
+        )
+        fakeMainRepository.addWarranty(warrantyInput)
+        testViewModel.deleteWarrantyFromFirestore("2")
+
+        val responseEvent = testViewModel.deleteWarrantyLiveData.getOrAwaitValue()
+        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
+    }
+
+    @Test
+    fun deleteWarrantyWithExistingWarrantyId_returnsSuccess() {
+        val warrantyInput = WarrantyInput(
+            "title", "brand", "model", "serial", true,
+            "2020-05-10", "",
+            "description", "10", "uuid"
+        )
+        fakeMainRepository.addWarranty(warrantyInput)
+        testViewModel.deleteWarrantyFromFirestore("1")
+
+        val responseEvent = testViewModel.deleteWarrantyLiveData.getOrAwaitValue()
+        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.SUCCESS)
     }
 
     @Test
@@ -293,47 +411,33 @@ class MainViewModelTest {
     }
 
     @Test
-    fun deleteWarrantyWithNoInternet_returnsError() {
+    fun getUpdatedWarrantyWithNoInternet_returnsError() {
         fakeMainRepository.setShouldReturnNetworkError(true)
-        val warrantyInput = WarrantyInput(
-            "title", "brand", "model", "serial", true,
-            "2020-05-10", "",
-            "description", "10", "uuid"
-        )
-        fakeMainRepository.addWarranty(warrantyInput)
-        testViewModel.deleteWarrantyFromFirestore("1")
+        testViewModel.getUpdatedWarrantyFromFirestore("1")
 
-        val responseEvent = testViewModel.deleteWarrantyLiveData.getOrAwaitValue()
+        val responseEvent = testViewModel.updatedWarrantyLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
     }
 
     @Test
-    fun deleteWarrantyWithNotExistingWarrantyId_returnsError() {
-        fakeMainRepository.setShouldReturnNetworkError(true)
-        val warrantyInput = WarrantyInput(
-            "title", "brand", "model", "serial", true,
-            "2020-05-10", "",
-            "description", "10", "uuid"
-        )
-        fakeMainRepository.addWarranty(warrantyInput)
-        testViewModel.deleteWarrantyFromFirestore("2")
+    fun getUpdatedWarrantyWithIncorrectId_returnsError() {
+        testViewModel.getUpdatedWarrantyFromFirestore("1")
 
-        val responseEvent = testViewModel.deleteWarrantyLiveData.getOrAwaitValue()
+        val responseEvent = testViewModel.updatedWarrantyLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
     }
 
     @Test
-    fun deleteWarrantyWithExistingWarrantyId_returnsSuccess() {
-        fakeMainRepository.setShouldReturnNetworkError(true)
+    fun getUpdatedWarrantyWithValidId_returnsSuccess() {
         val warrantyInput = WarrantyInput(
             "title", "brand", "model", "serial", true,
             "2020-05-10", "",
             "description", "10", "uuid"
         )
-        fakeMainRepository.addWarranty(warrantyInput)
-        testViewModel.deleteWarrantyFromFirestore("1")
+        fakeMainRepository.addWarranty(warrantyInput, "1")
+        testViewModel.getUpdatedWarrantyFromFirestore("1")
 
-        val responseEvent = testViewModel.deleteWarrantyLiveData.getOrAwaitValue()
+        val responseEvent = testViewModel.updatedWarrantyLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.SUCCESS)
     }
 }
