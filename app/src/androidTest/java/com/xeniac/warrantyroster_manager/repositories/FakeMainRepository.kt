@@ -1,6 +1,5 @@
 package com.xeniac.warrantyroster_manager.repositories
 
-import androidx.lifecycle.MutableLiveData
 import com.xeniac.warrantyroster_manager.data.remote.models.Category
 import com.xeniac.warrantyroster_manager.data.remote.models.Warranty
 import com.xeniac.warrantyroster_manager.data.remote.models.WarrantyInput
@@ -10,28 +9,24 @@ class FakeMainRepository : MainRepository {
     private val categories = mutableListOf<Category>()
     private val warranties = mutableListOf<Warranty>()
 
-    private val observableCategories = MutableLiveData<List<Category>>(categories)
-    private val observableWarranties = MutableLiveData<List<Warranty>>(warranties)
-
     private var shouldReturnNetworkError = false
 
-    fun addWarranty(warrantyInput: WarrantyInput) {
+    fun addWarranty(warrantyInput: WarrantyInput, warrantyId: String = "1") {
         val warranty = warrantyInput.let {
             Warranty(
-                "1", it.title, it.brand, it.model, it.serialNumber, it.lifetime,
+                warrantyId, it.title, it.brand, it.model, it.serialNumber, it.lifetime,
                 it.startingDate, it.expiryDate, it.description, it.categoryId
             )
         }
         warranties.add(warranty)
     }
 
-    fun setShouldReturnNetworkError(value: Boolean) {
-        shouldReturnNetworkError = value
+    fun addCategory(id: String, title: Map<String, String>, icon: String) {
+        categories.add(Category(id, title, icon))
     }
 
-    private fun refreshLiveData() {
-        observableCategories.postValue(categories)
-        observableWarranties.postValue(warranties)
+    fun setShouldReturnNetworkError(value: Boolean) {
+        shouldReturnNetworkError = value
     }
 
     override fun getCategoriesFromFirestore(): MutableList<Category> {
@@ -63,7 +58,6 @@ class FakeMainRepository : MainRepository {
             throw Exception()
         } else {
             addWarranty(warrantyInput)
-            refreshLiveData()
         }
     }
 
@@ -74,7 +68,6 @@ class FakeMainRepository : MainRepository {
             if (!warranties.remove(warranties.find { it.id == warrantyId })) {
                 throw Exception()
             }
-            refreshLiveData()
         }
     }
 
@@ -84,9 +77,11 @@ class FakeMainRepository : MainRepository {
         if (shouldReturnNetworkError) {
             throw Exception()
         } else {
-            warranties.removeAt(0)
-            addWarranty(warrantyInput)
-            refreshLiveData()
+            if (warranties.remove(warranties.find { it.id == warrantyId })) {
+                addWarranty(warrantyInput)
+            } else {
+                throw Exception()
+            }
         }
     }
 
