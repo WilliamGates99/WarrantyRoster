@@ -420,7 +420,7 @@ class MainViewModelTest {
     }
 
     @Test
-    fun getUpdatedWarrantyWithIncorrectId_returnsError() {
+    fun getUpdatedWarrantyWithNonExistingId_returnsError() {
         testViewModel.getUpdatedWarrantyFromFirestore("1")
 
         val responseEvent = testViewModel.updatedWarrantyLiveData.getOrAwaitValue()
