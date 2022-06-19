@@ -1,12 +1,12 @@
 package com.xeniac.warrantyroster_manager.repositories
 
-import com.xeniac.warrantyroster_manager.data.remote.models.Category
+import com.google.firebase.firestore.Query
 import com.xeniac.warrantyroster_manager.data.remote.models.Warranty
 import com.xeniac.warrantyroster_manager.data.remote.models.WarrantyInput
 
 class FakeMainRepository : MainRepository {
 
-    private val categories = mutableListOf<Category>()
+    //    private val categories = mutableListOf<Category>()
     private val warranties = mutableListOf<Warranty>()
 
     private var shouldReturnNetworkError = false
@@ -21,15 +21,19 @@ class FakeMainRepository : MainRepository {
         warranties.add(warranty)
     }
 
+    /*
     fun addCategory(id: String, title: Map<String, String>, icon: String) {
         categories.add(Category(id, title, icon))
     }
+     */
 
     fun setShouldReturnNetworkError(value: Boolean) {
         shouldReturnNetworkError = value
     }
 
-    override fun getCategoriesFromFirestore(): MutableList<Category> {
+    override fun getCategoriesFromFirestore(): Query {
+        TODO("Not yet implemented")
+        /*
         if (shouldReturnNetworkError) {
             throw Exception()
         }
@@ -39,9 +43,12 @@ class FakeMainRepository : MainRepository {
         }
 
         return categories
+         */
     }
 
-    override fun getWarrantiesFromFirestore(): MutableList<Warranty> {
+    override fun getWarrantiesFromFirestore(): Query {
+        TODO("Not yet implemented")
+        /*
         if (shouldReturnNetworkError) {
             throw Exception()
         }
@@ -51,6 +58,7 @@ class FakeMainRepository : MainRepository {
         }
 
         return warranties
+        */
     }
 
     override suspend fun addWarrantyToFirestore(warrantyInput: WarrantyInput) {

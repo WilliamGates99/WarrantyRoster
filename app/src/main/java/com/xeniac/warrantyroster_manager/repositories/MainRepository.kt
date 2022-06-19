@@ -1,14 +1,14 @@
 package com.xeniac.warrantyroster_manager.repositories
 
-import com.xeniac.warrantyroster_manager.data.remote.models.Category
+import com.google.firebase.firestore.Query
 import com.xeniac.warrantyroster_manager.data.remote.models.Warranty
 import com.xeniac.warrantyroster_manager.data.remote.models.WarrantyInput
 
 interface MainRepository {
 
-    fun getCategoriesFromFirestore(): MutableList<Category>
+    fun getCategoriesFromFirestore(): Query
 
-    fun getWarrantiesFromFirestore(): MutableList<Warranty>
+    fun getWarrantiesFromFirestore(): Query
 
     suspend fun addWarrantyToFirestore(warrantyInput: WarrantyInput)
 

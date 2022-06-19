@@ -4,7 +4,6 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.core.app.ApplicationProvider
 import com.google.common.truth.Truth.assertThat
 import com.xeniac.warrantyroster_manager.MainCoroutineRule
-import com.xeniac.warrantyroster_manager.data.remote.models.Category
 import com.xeniac.warrantyroster_manager.data.remote.models.WarrantyInput
 import com.xeniac.warrantyroster_manager.getOrAwaitValue
 import com.xeniac.warrantyroster_manager.repositories.FakeMainRepository
@@ -13,7 +12,6 @@ import com.xeniac.warrantyroster_manager.utils.Status
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -50,6 +48,7 @@ class MainViewModelTest {
         )
     }
 
+    /*
     @Test
     fun getAllCategoryTitles_returnsAllTitles() = runTest {
         val mapKey = fakePreferencesRepository.getCategoryTitleMapKey()
@@ -153,6 +152,7 @@ class MainViewModelTest {
         val responseEvent = testViewModel.warrantiesLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.SUCCESS)
     }
+    */
 
     @Test
     fun checkAddWarrantyInputsWithBlankTitle_returnsError() {

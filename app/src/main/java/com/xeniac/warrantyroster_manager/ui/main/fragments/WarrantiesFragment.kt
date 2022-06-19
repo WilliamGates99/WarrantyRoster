@@ -38,6 +38,7 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
         _binding = FragmentWarrantiesBinding.bind(view)
         viewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
 
+        getCategoriesFromFirestore()
         setupRecyclerView()
         subscribeToObservers()
     }
