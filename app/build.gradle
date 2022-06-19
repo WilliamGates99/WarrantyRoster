@@ -16,7 +16,7 @@ applovin {
 }
 
 android {
-    compileSdk 33
+    compileSdk 32 // TODO CHANGE TO 33 BEFORE RELEASE
     buildToolsVersion '33.0.0'
 
     defaultConfig {
