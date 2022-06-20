@@ -13,7 +13,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 @ExperimentalCoroutinesApi
 inline fun <reified T : Fragment> launchFragmentInHiltContainer(
     fragmentArgs: Bundle? = null,
-    themeResId: Int = R.style.FragmentScenarioEmptyFragmentActivityTheme,
+    themeResId: Int = androidx.fragment.testing.R.style.FragmentScenarioEmptyFragmentActivityTheme,
     fragmentFactory: FragmentFactory? = null,
     crossinline action: T.() -> Unit = {}
 ) {
