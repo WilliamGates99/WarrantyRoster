@@ -41,9 +41,10 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
-    private lateinit var viewModel: LandingViewModel
 
-    private var snackbar: Snackbar? = null
+    lateinit var viewModel: LandingViewModel
+
+     var snackbar: Snackbar? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -131,15 +132,18 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     }
 
     private fun forgotPwOnClick() = binding.btnForgotPw.setOnClickListener {
-        findNavController().navigate(R.id.action_loginFragment_to_forgotPasswordFragment)
+        navigateToForgotPw()
     }
 
     private fun registerOnClick() = binding.btnRegister.setOnClickListener {
         navigateToRegister()
     }
 
-    private fun navigateToRegister() =
-        findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
+    private fun navigateToForgotPw() = findNavController()
+        .navigate(LoginFragmentDirections.actionLoginFragmentToForgotPasswordFragment())
+
+    private fun navigateToRegister() = findNavController()
+        .navigate(LoginFragmentDirections.actionLoginFragmentToRegisterFragment())
 
     private fun loginOnClick() = binding.btnLogin.setOnClickListener {
         getLoginInputs()
