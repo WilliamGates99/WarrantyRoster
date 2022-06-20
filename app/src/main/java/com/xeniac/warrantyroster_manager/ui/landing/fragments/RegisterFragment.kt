@@ -2,17 +2,17 @@ package com.xeniac.warrantyroster_manager.ui.landing.fragments
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.view.View.*
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentRegisterBinding
@@ -32,6 +32,7 @@ import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_REGISTER_
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_REGISTER_PASSWORD
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_REGISTER_RETYPE_PASSWORD
 import com.xeniac.warrantyroster_manager.utils.Constants.URL_PRIVACY_POLICY
+import com.xeniac.warrantyroster_manager.utils.LinkHelper.openLink
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.show403Error
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseAuthAccountExists
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseDeviceBlockedError
@@ -55,6 +56,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         _binding = FragmentRegisterBinding.bind(view)
         viewModel = ViewModelProvider(requireActivity())[LandingViewModel::class.java]
 
+        onBackPressed()
         textInputsBackgroundColor()
         textInputsStrokeColor()
         agreementOnclick()
@@ -68,6 +70,15 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         super.onDestroyView()
         snackbar?.dismiss()
         _binding = null
+    }
+
+    private fun onBackPressed() {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    findNavController().popBackStack()
+                }
+            })
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -191,19 +202,11 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     }
 
     private fun agreementOnclick() = binding.btnAgreement.setOnClickListener {
-        Intent(Intent.ACTION_VIEW, Uri.parse(URL_PRIVACY_POLICY)).apply {
-            resolveActivity(requireContext().packageManager)?.let {
-                startActivity(this)
-            } ?: Snackbar.make(
-                binding.root,
-                getString(R.string.error_intent_app_not_found),
-                LENGTH_LONG
-            ).show()
-        }
+        openLink(requireContext(), binding.root, URL_PRIVACY_POLICY)
     }
 
     private fun loginOnClick() = binding.btnLogin.setOnClickListener {
-        requireActivity().onBackPressed()
+        findNavController().popBackStack()
     }
 
     private fun registerOnClick() = binding.btnRegister.setOnClickListener {
@@ -295,7 +298,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                                         binding.root,
                                         requireContext().getString(R.string.register_error_account_exists),
                                         requireContext().getString(R.string.register_btn_login)
-                                    ) { requireActivity().onBackPressed() }
+                                    ) { findNavController().popBackStack() }
                                 }
                                 else -> {
                                     snackbar = showNetworkFailureError(

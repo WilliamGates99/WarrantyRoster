@@ -1,7 +1,6 @@
 package com.xeniac.warrantyroster_manager.ui.main.fragments
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.view.View.GONE
@@ -20,7 +19,6 @@ import com.applovin.mediation.nativeAds.MaxNativeAdLoader
 import com.applovin.mediation.nativeAds.MaxNativeAdView
 import com.applovin.mediation.nativeAds.MaxNativeAdViewBinder
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.BuildConfig
 import com.xeniac.warrantyroster_manager.R
@@ -34,6 +32,7 @@ import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_LANGUAGE_ENGLISH
 import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_LANGUAGE_PERSIAN
 import com.xeniac.warrantyroster_manager.utils.Constants.URL_DONATE
 import com.xeniac.warrantyroster_manager.utils.Constants.URL_PRIVACY_POLICY
+import com.xeniac.warrantyroster_manager.utils.LinkHelper.openLink
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.show403Error
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseDeviceBlockedError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkConnectionError
@@ -261,31 +260,13 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
         }.show()
     }
 
-    private fun donateOnClick() =
-        binding.clSettingsDonate.setOnClickListener {
-            Intent(Intent.ACTION_VIEW, Uri.parse(URL_DONATE)).apply {
-                this.resolveActivity(requireContext().packageManager)?.let {
-                    startActivity(this)
-                } ?: Snackbar.make(
-                    binding.root,
-                    requireContext().getString(R.string.error_intent_app_not_found),
-                    LENGTH_LONG
-                ).show()
-            }
-        }
+    private fun donateOnClick() = binding.clSettingsDonate.setOnClickListener {
+        openLink(requireContext(), binding.root, URL_DONATE)
+    }
 
-    private fun privacyPolicyOnClick() =
-        binding.clSettingsPrivacyPolicy.setOnClickListener {
-            Intent(Intent.ACTION_VIEW, Uri.parse(URL_PRIVACY_POLICY)).apply {
-                this.resolveActivity(requireContext().packageManager)?.let {
-                    startActivity(this)
-                } ?: Snackbar.make(
-                    binding.root,
-                    requireContext().getString(R.string.error_intent_app_not_found),
-                    LENGTH_LONG
-                ).show()
-            }
-        }
+    private fun privacyPolicyOnClick() = binding.clSettingsPrivacyPolicy.setOnClickListener {
+        openLink(requireContext(), binding.root, URL_PRIVACY_POLICY)
+    }
 
     private fun logoutOnClick() = binding.btnLogout.setOnClickListener {
         logout()
