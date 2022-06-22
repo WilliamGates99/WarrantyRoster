@@ -132,7 +132,7 @@ class RegisterFragmentTest {
             FakePreferencesRepository()
         )
 
-        launchFragmentInHiltContainer<LoginFragment>(fragmentFactory = fragmentFactory) {
+        launchFragmentInHiltContainer<RegisterFragment>(fragmentFactory = fragmentFactory) {
             navController.setGraph(R.navigation.nav_graph_landing)
             Navigation.setViewNavController(requireView(), navController)
             viewModel = testViewModel
