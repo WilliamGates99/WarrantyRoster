@@ -96,7 +96,6 @@ class LoginFragmentTest {
     @Test
     fun clickOnLoginBtnWithSuccessStatus_returnsSuccess() {
         val navController = TestNavHostController(ApplicationProvider.getApplicationContext())
-
         val fakeUserRepository = FakeUserRepository()
 
         val email = "email@test.com"
