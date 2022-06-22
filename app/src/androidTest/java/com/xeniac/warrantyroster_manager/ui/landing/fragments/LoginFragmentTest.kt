@@ -94,7 +94,7 @@ class LoginFragmentTest {
     }
 
     @Test
-    fun clickOnLoginBtnWithSuccessStatus_movesToMainActivity() {
+    fun clickOnLoginBtnWithSuccessStatus_returnsSuccess() {
         val navController = TestNavHostController(ApplicationProvider.getApplicationContext())
 
         val fakeUserRepository = FakeUserRepository()
