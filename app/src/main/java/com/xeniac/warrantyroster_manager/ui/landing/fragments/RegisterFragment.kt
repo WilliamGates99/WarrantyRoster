@@ -47,7 +47,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
 
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
-    private lateinit var viewModel: LandingViewModel
+    lateinit var viewModel: LandingViewModel
 
     private var snackbar: Snackbar? = null
 
