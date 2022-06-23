@@ -48,12 +48,12 @@ class LoginFragmentTest {
         hiltRule.inject()
         context = ApplicationProvider.getApplicationContext()
         navController = TestNavHostController(ApplicationProvider.getApplicationContext())
+        navController.setGraph(R.navigation.nav_graph_landing)
     }
 
     @Test
     fun clickOnEmailEditText_changesBoxBackgroundColor() {
         launchFragmentInHiltContainer<LoginFragment>(fragmentFactory = fragmentFactory) {
-            navController.setGraph(R.navigation.nav_graph_landing)
             Navigation.setViewNavController(requireView(), navController)
             testBinding = binding
         }
@@ -67,7 +67,6 @@ class LoginFragmentTest {
     @Test
     fun clickOnPasswordEditText_changesBoxBackgroundColor() {
         launchFragmentInHiltContainer<LoginFragment>(fragmentFactory = fragmentFactory) {
-            navController.setGraph(R.navigation.nav_graph_landing)
             Navigation.setViewNavController(requireView(), navController)
             testBinding = binding
         }
@@ -81,7 +80,6 @@ class LoginFragmentTest {
     @Test
     fun clickOnEmailEditText_changesBoxStrokeColor() {
         launchFragmentInHiltContainer<LoginFragment>(fragmentFactory = fragmentFactory) {
-            navController.setGraph(R.navigation.nav_graph_landing)
             Navigation.setViewNavController(requireView(), navController)
             testBinding = binding
         }
@@ -93,7 +91,6 @@ class LoginFragmentTest {
     @Test
     fun clickOnPasswordEditText_changesBoxStrokeColor() {
         launchFragmentInHiltContainer<LoginFragment>(fragmentFactory = fragmentFactory) {
-            navController.setGraph(R.navigation.nav_graph_landing)
             Navigation.setViewNavController(requireView(), navController)
             testBinding = binding
         }
@@ -111,7 +108,6 @@ class LoginFragmentTest {
         )
 
         launchFragmentInHiltContainer<LoginFragment>(fragmentFactory = fragmentFactory) {
-            navController.setGraph(R.navigation.nav_graph_landing)
             Navigation.setViewNavController(requireView(), navController)
             viewModel = testViewModel
             testBinding = binding
@@ -140,7 +136,6 @@ class LoginFragmentTest {
         )
 
         launchFragmentInHiltContainer<LoginFragment>(fragmentFactory = fragmentFactory) {
-            navController.setGraph(R.navigation.nav_graph_landing)
             Navigation.setViewNavController(requireView(), navController)
             viewModel = testViewModel
             testBinding = binding
@@ -157,7 +152,6 @@ class LoginFragmentTest {
     @Test
     fun clickOnForgotPwBtn_navigatesToForgotPwFragment() {
         launchFragmentInHiltContainer<LoginFragment>(fragmentFactory = fragmentFactory) {
-            navController.setGraph(R.navigation.nav_graph_landing)
             Navigation.setViewNavController(requireView(), navController)
             testBinding = binding
         }
@@ -169,7 +163,6 @@ class LoginFragmentTest {
     @Test
     fun clickOnRegisterBtn_navigatesToRegisterFragment() {
         launchFragmentInHiltContainer<LoginFragment>(fragmentFactory = fragmentFactory) {
-            navController.setGraph(R.navigation.nav_graph_landing)
             Navigation.setViewNavController(requireView(), navController)
             testBinding = binding
         }
@@ -187,7 +180,6 @@ class LoginFragmentTest {
         )
 
         launchFragmentInHiltContainer<LoginFragment>(fragmentFactory = fragmentFactory) {
-            navController.setGraph(R.navigation.nav_graph_landing)
             Navigation.setViewNavController(requireView(), navController)
             viewModel = testViewModel
             testBinding = binding
@@ -216,7 +208,6 @@ class LoginFragmentTest {
         )
 
         launchFragmentInHiltContainer<LoginFragment>(fragmentFactory = fragmentFactory) {
-            navController.setGraph(R.navigation.nav_graph_landing)
             Navigation.setViewNavController(requireView(), navController)
             viewModel = testViewModel
             testBinding = binding

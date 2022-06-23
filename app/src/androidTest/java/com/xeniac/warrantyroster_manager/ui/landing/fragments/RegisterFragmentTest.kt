@@ -56,14 +56,14 @@ class RegisterFragmentTest {
         hiltRule.inject()
         context = ApplicationProvider.getApplicationContext()
         navController = TestNavHostController(ApplicationProvider.getApplicationContext())
+        navController.setGraph(R.navigation.nav_graph_landing)
+        navController.navigate(LoginFragmentDirections.actionLoginFragmentToRegisterFragment())
     }
 
     @Test
     fun clickOnEmailEditText_changesBoxBackgroundColor() {
         launchFragmentInHiltContainer<RegisterFragment>(fragmentFactory = fragmentFactory) {
-            navController.setGraph(R.navigation.nav_graph_landing)
             Navigation.setViewNavController(requireView(), navController)
-            navController.navigate(LoginFragmentDirections.actionLoginFragmentToRegisterFragment())
             testBinding = binding
         }
 
@@ -78,9 +78,7 @@ class RegisterFragmentTest {
     @Test
     fun clickOnPasswordEditText_changesBoxBackgroundColor() {
         launchFragmentInHiltContainer<RegisterFragment>(fragmentFactory = fragmentFactory) {
-            navController.setGraph(R.navigation.nav_graph_landing)
             Navigation.setViewNavController(requireView(), navController)
-            navController.navigate(LoginFragmentDirections.actionLoginFragmentToRegisterFragment())
             testBinding = binding
         }
 
@@ -95,9 +93,7 @@ class RegisterFragmentTest {
     @Test
     fun clickOnRetypePasswordEditText_changesBoxBackgroundColor() {
         launchFragmentInHiltContainer<RegisterFragment>(fragmentFactory = fragmentFactory) {
-            navController.setGraph(R.navigation.nav_graph_landing)
             Navigation.setViewNavController(requireView(), navController)
-            navController.navigate(LoginFragmentDirections.actionLoginFragmentToRegisterFragment())
             testBinding = binding
         }
 
@@ -112,9 +108,7 @@ class RegisterFragmentTest {
     @Test
     fun clickOnEmailEditText_changesBoxStrokeColor() {
         launchFragmentInHiltContainer<RegisterFragment>(fragmentFactory = fragmentFactory) {
-            navController.setGraph(R.navigation.nav_graph_landing)
             Navigation.setViewNavController(requireView(), navController)
-            navController.navigate(LoginFragmentDirections.actionLoginFragmentToRegisterFragment())
             testBinding = binding
         }
 
@@ -125,9 +119,7 @@ class RegisterFragmentTest {
     @Test
     fun clickOnPasswordEditText_changesBoxStrokeColor() {
         launchFragmentInHiltContainer<RegisterFragment>(fragmentFactory = fragmentFactory) {
-            navController.setGraph(R.navigation.nav_graph_landing)
             Navigation.setViewNavController(requireView(), navController)
-            navController.navigate(LoginFragmentDirections.actionLoginFragmentToRegisterFragment())
             testBinding = binding
         }
 
@@ -138,9 +130,7 @@ class RegisterFragmentTest {
     @Test
     fun clickOnRetypePasswordEditText_changesBoxStrokeColor() {
         launchFragmentInHiltContainer<RegisterFragment>(fragmentFactory = fragmentFactory) {
-            navController.setGraph(R.navigation.nav_graph_landing)
             Navigation.setViewNavController(requireView(), navController)
-            navController.navigate(LoginFragmentDirections.actionLoginFragmentToRegisterFragment())
             testBinding = binding
         }
 
@@ -157,9 +147,7 @@ class RegisterFragmentTest {
         )
 
         launchFragmentInHiltContainer<RegisterFragment>(fragmentFactory = fragmentFactory) {
-            navController.setGraph(R.navigation.nav_graph_landing)
             Navigation.setViewNavController(requireView(), navController)
-            navController.navigate(LoginFragmentDirections.actionLoginFragmentToRegisterFragment())
             viewModel = testViewModel
             testBinding = binding
         }
@@ -182,9 +170,7 @@ class RegisterFragmentTest {
         )
 
         launchFragmentInHiltContainer<RegisterFragment>(fragmentFactory = fragmentFactory) {
-            navController.setGraph(R.navigation.nav_graph_landing)
             Navigation.setViewNavController(requireView(), navController)
-            navController.navigate(LoginFragmentDirections.actionLoginFragmentToRegisterFragment())
             viewModel = testViewModel
             testBinding = binding
         }
@@ -204,9 +190,7 @@ class RegisterFragmentTest {
     @Test
     fun pressBack_popsBackStack() {
         launchFragmentInHiltContainer<RegisterFragment>(fragmentFactory = fragmentFactory) {
-            navController.setGraph(R.navigation.nav_graph_landing)
             Navigation.setViewNavController(requireView(), navController)
-            navController.navigate(LoginFragmentDirections.actionLoginFragmentToRegisterFragment())
         }
 
         pressBack()
@@ -218,9 +202,7 @@ class RegisterFragmentTest {
         Intents.init()
 
         launchFragmentInHiltContainer<RegisterFragment>(fragmentFactory = fragmentFactory) {
-            navController.setGraph(R.navigation.nav_graph_landing)
             Navigation.setViewNavController(requireView(), navController)
-            navController.navigate(LoginFragmentDirections.actionLoginFragmentToRegisterFragment())
             testBinding = binding
         }
 
@@ -233,9 +215,7 @@ class RegisterFragmentTest {
     @Test
     fun clickOnLoginBtn_popsBackStack() {
         launchFragmentInHiltContainer<RegisterFragment>(fragmentFactory = fragmentFactory) {
-            navController.setGraph(R.navigation.nav_graph_landing)
             Navigation.setViewNavController(requireView(), navController)
-            navController.navigate(LoginFragmentDirections.actionLoginFragmentToRegisterFragment())
             testBinding = binding
         }
 
@@ -252,9 +232,7 @@ class RegisterFragmentTest {
         )
 
         launchFragmentInHiltContainer<RegisterFragment>(fragmentFactory = fragmentFactory) {
-            navController.setGraph(R.navigation.nav_graph_landing)
             Navigation.setViewNavController(requireView(), navController)
-            navController.navigate(LoginFragmentDirections.actionLoginFragmentToRegisterFragment())
             viewModel = testViewModel
             testBinding = binding
         }
@@ -277,9 +255,7 @@ class RegisterFragmentTest {
         )
 
         launchFragmentInHiltContainer<RegisterFragment>(fragmentFactory = fragmentFactory) {
-            navController.setGraph(R.navigation.nav_graph_landing)
             Navigation.setViewNavController(requireView(), navController)
-            navController.navigate(LoginFragmentDirections.actionLoginFragmentToRegisterFragment())
             viewModel = testViewModel
             testBinding = binding
         }

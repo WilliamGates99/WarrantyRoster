@@ -51,14 +51,14 @@ class ForgotPwFragmentTest {
         hiltRule.inject()
         context = ApplicationProvider.getApplicationContext()
         navController = TestNavHostController(ApplicationProvider.getApplicationContext())
+        navController.setGraph(R.navigation.nav_graph_landing)
+        navController.navigate(LoginFragmentDirections.actionLoginFragmentToForgotPasswordFragment())
     }
 
     @Test
     fun clickOnEmailEditText_changesBoxBackgroundColor() {
         launchFragmentInHiltContainer<ForgotPwFragment>(fragmentFactory = fragmentFactory) {
-            navController.setGraph(R.navigation.nav_graph_landing)
             Navigation.setViewNavController(requireView(), navController)
-            navController.navigate(LoginFragmentDirections.actionLoginFragmentToForgotPasswordFragment())
             testBinding = binding
         }
 
@@ -69,9 +69,7 @@ class ForgotPwFragmentTest {
     @Test
     fun clickOnEmailEditText_changesBoxStrokeColor() {
         launchFragmentInHiltContainer<ForgotPwFragment>(fragmentFactory = fragmentFactory) {
-            navController.setGraph(R.navigation.nav_graph_landing)
             Navigation.setViewNavController(requireView(), navController)
-            navController.navigate(LoginFragmentDirections.actionLoginFragmentToForgotPasswordFragment())
             testBinding = binding
         }
 
@@ -88,9 +86,7 @@ class ForgotPwFragmentTest {
         )
 
         launchFragmentInHiltContainer<ForgotPwFragment>(fragmentFactory = fragmentFactory) {
-            navController.setGraph(R.navigation.nav_graph_landing)
             Navigation.setViewNavController(requireView(), navController)
-            navController.navigate(LoginFragmentDirections.actionLoginFragmentToForgotPasswordFragment())
             viewModel = testViewModel
             testBinding = binding
         }
@@ -117,9 +113,7 @@ class ForgotPwFragmentTest {
         )
 
         launchFragmentInHiltContainer<ForgotPwFragment>(fragmentFactory = fragmentFactory) {
-            navController.setGraph(R.navigation.nav_graph_landing)
             Navigation.setViewNavController(requireView(), navController)
-            navController.navigate(LoginFragmentDirections.actionLoginFragmentToForgotPasswordFragment())
             viewModel = testViewModel
             testBinding = binding
         }
@@ -133,12 +127,8 @@ class ForgotPwFragmentTest {
 
     @Test
     fun pressBack_popsBackStack() {
-        val navController = TestNavHostController(ApplicationProvider.getApplicationContext())
-
         launchFragmentInHiltContainer<ForgotPwFragment>(fragmentFactory = fragmentFactory) {
-            navController.setGraph(R.navigation.nav_graph_landing)
             Navigation.setViewNavController(requireView(), navController)
-            navController.navigate(LoginFragmentDirections.actionLoginFragmentToForgotPasswordFragment())
         }
 
         pressBack()
@@ -147,12 +137,8 @@ class ForgotPwFragmentTest {
 
     @Test
     fun clickOnReturnBtn_popsBackStack() {
-        val navController = TestNavHostController(ApplicationProvider.getApplicationContext())
-
         launchFragmentInHiltContainer<ForgotPwFragment>(fragmentFactory = fragmentFactory) {
-            navController.setGraph(R.navigation.nav_graph_landing)
             Navigation.setViewNavController(requireView(), navController)
-            navController.navigate(LoginFragmentDirections.actionLoginFragmentToForgotPasswordFragment())
             testBinding = binding
         }
 
@@ -169,9 +155,7 @@ class ForgotPwFragmentTest {
         )
 
         launchFragmentInHiltContainer<ForgotPwFragment>(fragmentFactory = fragmentFactory) {
-            navController.setGraph(R.navigation.nav_graph_landing)
             Navigation.setViewNavController(requireView(), navController)
-            navController.navigate(LoginFragmentDirections.actionLoginFragmentToForgotPasswordFragment())
             viewModel = testViewModel
             testBinding = binding
         }
@@ -198,9 +182,7 @@ class ForgotPwFragmentTest {
         )
 
         launchFragmentInHiltContainer<ForgotPwFragment>(fragmentFactory = fragmentFactory) {
-            navController.setGraph(R.navigation.nav_graph_landing)
             Navigation.setViewNavController(requireView(), navController)
-            navController.navigate(LoginFragmentDirections.actionLoginFragmentToForgotPasswordFragment())
             viewModel = testViewModel
             testBinding = binding
         }
@@ -227,9 +209,7 @@ class ForgotPwFragmentTest {
         )
 
         launchFragmentInHiltContainer<ForgotPwFragment>(fragmentFactory = fragmentFactory) {
-            navController.setGraph(R.navigation.nav_graph_landing)
             Navigation.setViewNavController(requireView(), navController)
-            navController.navigate(LoginFragmentDirections.actionLoginFragmentToForgotPasswordFragment())
             viewModel = testViewModel
             testBinding = binding
         }
