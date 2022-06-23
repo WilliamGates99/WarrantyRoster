@@ -40,11 +40,11 @@ import dagger.hilt.android.AndroidEntryPoint
 class LoginFragment : Fragment(R.layout.fragment_login) {
 
     private var _binding: FragmentLoginBinding? = null
-    private val binding get() = _binding!!
+    val binding get() = _binding!!
 
     lateinit var viewModel: LandingViewModel
 
-     var snackbar: Snackbar? = null
+    var snackbar: Snackbar? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

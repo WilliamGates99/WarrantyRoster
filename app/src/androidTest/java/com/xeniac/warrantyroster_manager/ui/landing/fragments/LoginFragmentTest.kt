@@ -1,5 +1,6 @@
 package com.xeniac.warrantyroster_manager.ui.landing.fragments
 
+import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.navigation.Navigation
 import androidx.navigation.testing.TestNavHostController
@@ -10,6 +11,7 @@ import androidx.test.espresso.action.ViewActions.replaceText
 import androidx.test.espresso.matcher.ViewMatchers.*
 import com.google.common.truth.Truth.assertThat
 import com.xeniac.warrantyroster_manager.R
+import com.xeniac.warrantyroster_manager.databinding.FragmentLoginBinding
 import com.xeniac.warrantyroster_manager.getOrAwaitValue
 import com.xeniac.warrantyroster_manager.launchFragmentInHiltContainer
 import com.xeniac.warrantyroster_manager.repositories.FakePreferencesRepository
@@ -38,41 +40,95 @@ class LoginFragmentTest {
     @Inject
     lateinit var fragmentFactory: LandingFragmentFactory
 
+    private lateinit var context: Context
+    private lateinit var navController: TestNavHostController
+    private lateinit var testBinding: FragmentLoginBinding
+
     @Before
     fun setUp() {
         hiltRule.inject()
+        context = ApplicationProvider.getApplicationContext()
+        navController = TestNavHostController(ApplicationProvider.getApplicationContext())
+    }
+
+    @Test
+    fun clickOnEmailEditText_changesBoxBackgroundColor() {
+        launchFragmentInHiltContainer<LoginFragment>(fragmentFactory = fragmentFactory) {
+            navController.setGraph(R.navigation.nav_graph_landing)
+            Navigation.setViewNavController(requireView(), navController)
+            testBinding = binding
+        }
+
+        onView(withId(testBinding.tiEditEmail.id)).perform(click())
+
+        assertThat(testBinding.tiLayoutEmail.boxBackgroundColor).isEqualTo(context.getColor(R.color.background))
+        assertThat(testBinding.tiLayoutPassword.boxBackgroundColor).isEqualTo(context.getColor(R.color.grayLight))
+    }
+
+    @Test
+    fun clickOnPasswordEditText_changesBoxBackgroundColor() {
+        launchFragmentInHiltContainer<LoginFragment>(fragmentFactory = fragmentFactory) {
+            navController.setGraph(R.navigation.nav_graph_landing)
+            Navigation.setViewNavController(requireView(), navController)
+            testBinding = binding
+        }
+
+        onView(withId(testBinding.tiEditPassword.id)).perform(click())
+
+        assertThat(testBinding.tiLayoutPassword.boxBackgroundColor).isEqualTo(context.getColor(R.color.background))
+        assertThat(testBinding.tiLayoutEmail.boxBackgroundColor).isEqualTo(context.getColor(R.color.grayLight))
+    }
+
+    @Test
+    fun clickOnEmailEditText_changesBoxStrokeColor() {
+        launchFragmentInHiltContainer<LoginFragment>(fragmentFactory = fragmentFactory) {
+            navController.setGraph(R.navigation.nav_graph_landing)
+            Navigation.setViewNavController(requireView(), navController)
+            testBinding = binding
+        }
+
+        onView(withId(testBinding.tiEditEmail.id)).perform(click())
+        assertThat(testBinding.tiLayoutEmail.boxStrokeColor).isEqualTo(context.getColor(R.color.blue))
+    }
+
+    @Test
+    fun clickOnPasswordEditText_changesBoxStrokeColor() {
+        launchFragmentInHiltContainer<LoginFragment>(fragmentFactory = fragmentFactory) {
+            navController.setGraph(R.navigation.nav_graph_landing)
+            Navigation.setViewNavController(requireView(), navController)
+            testBinding = binding
+        }
+
+        onView(withId(testBinding.tiEditPassword.id)).perform(click())
+        assertThat(testBinding.tiLayoutPassword.boxStrokeColor).isEqualTo(context.getColor(R.color.blue))
     }
 
     @Test
     fun clickOnForgotPwBtn_navigatesToForgotPwFragment() {
-        val navController = TestNavHostController(ApplicationProvider.getApplicationContext())
-
         launchFragmentInHiltContainer<LoginFragment>(fragmentFactory = fragmentFactory) {
             navController.setGraph(R.navigation.nav_graph_landing)
             Navigation.setViewNavController(requireView(), navController)
+            testBinding = binding
         }
 
-        onView(withId(R.id.btn_forgot_pw)).perform(click())
+        onView(withId(testBinding.btnForgotPw.id)).perform(click())
         assertThat(navController.currentDestination?.id).isEqualTo(R.id.forgotPwFragment)
     }
 
     @Test
     fun clickOnRegisterBtn_navigatesToRegisterFragment() {
-        val navController = TestNavHostController(ApplicationProvider.getApplicationContext())
-
         launchFragmentInHiltContainer<LoginFragment>(fragmentFactory = fragmentFactory) {
             navController.setGraph(R.navigation.nav_graph_landing)
             Navigation.setViewNavController(requireView(), navController)
+            testBinding = binding
         }
 
-        onView(withId(R.id.btn_register)).perform(click())
+        onView(withId(testBinding.btnRegister.id)).perform(click())
         assertThat(navController.currentDestination?.id).isEqualTo(R.id.registerFragment)
     }
 
     @Test
     fun clickOnLoginBtnWithErrorStatus_returnsError() {
-        val navController = TestNavHostController(ApplicationProvider.getApplicationContext())
-
         val testViewModel = LandingViewModel(
             ApplicationProvider.getApplicationContext(),
             FakeUserRepository(),
@@ -83,11 +139,12 @@ class LoginFragmentTest {
             navController.setGraph(R.navigation.nav_graph_landing)
             Navigation.setViewNavController(requireView(), navController)
             viewModel = testViewModel
+            testBinding = binding
         }
 
-        onView(withId(R.id.ti_edit_email)).perform(replaceText("email"))
-        onView(withId(R.id.ti_edit_password)).perform(replaceText("password"))
-        onView(withId(R.id.btn_login)).perform(click())
+        onView(withId(testBinding.tiEditEmail.id)).perform(replaceText("email"))
+        onView(withId(testBinding.tiEditPassword.id)).perform(replaceText("password"))
+        onView(withId(testBinding.btnLogin.id)).perform(click())
 
         val responseEvent = testViewModel.loginLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
@@ -95,7 +152,6 @@ class LoginFragmentTest {
 
     @Test
     fun clickOnLoginBtnWithSuccessStatus_returnsSuccess() {
-        val navController = TestNavHostController(ApplicationProvider.getApplicationContext())
         val fakeUserRepository = FakeUserRepository()
 
         val email = "email@test.com"
@@ -112,11 +168,12 @@ class LoginFragmentTest {
             navController.setGraph(R.navigation.nav_graph_landing)
             Navigation.setViewNavController(requireView(), navController)
             viewModel = testViewModel
+            testBinding = binding
         }
 
-        onView(withId(R.id.ti_edit_email)).perform(replaceText(email))
-        onView(withId(R.id.ti_edit_password)).perform(replaceText(password))
-        onView(withId(R.id.btn_login)).perform(click())
+        onView(withId(testBinding.tiEditEmail.id)).perform(replaceText(email))
+        onView(withId(testBinding.tiEditPassword.id)).perform(replaceText(password))
+        onView(withId(testBinding.btnLogin.id)).perform(click())
 
         val responseEvent = testViewModel.loginLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.SUCCESS)
