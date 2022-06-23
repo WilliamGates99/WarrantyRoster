@@ -8,8 +8,7 @@ import androidx.navigation.testing.TestNavHostController
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.action.ViewActions.replaceText
+import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.Intents.intended
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasAction
@@ -142,6 +141,55 @@ class RegisterFragmentTest {
         onView(withId(testBinding.tiEditRetypePassword.id)).perform(click())
         assertThat(testBinding.tiLayoutRetypePassword.boxStrokeColor)
             .isEqualTo(context.getColor(R.color.blue))
+    }
+
+    @Test
+    fun pressImeActionOnRetypePasswordEditTextWithErrorStatus_returnsError() {
+        val testViewModel = LandingViewModel(
+            ApplicationProvider.getApplicationContext(),
+            FakeUserRepository(),
+            FakePreferencesRepository()
+        )
+
+        launchFragmentInHiltContainer<RegisterFragment>(fragmentFactory = fragmentFactory) {
+            navController.setGraph(R.navigation.nav_graph_landing)
+            Navigation.setViewNavController(requireView(), navController)
+            viewModel = testViewModel
+        }
+
+        onView(withId(R.id.ti_edit_email)).perform(replaceText("email"))
+        onView(withId(R.id.ti_edit_password)).perform(replaceText("password"))
+        onView(withId(R.id.ti_edit_retype_password)).perform(replaceText("retype_password"))
+        onView(withId(R.id.ti_edit_retype_password)).perform(pressImeActionButton())
+
+        val responseEvent = testViewModel.registerLiveData.getOrAwaitValue()
+        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
+    }
+
+    @Test
+    fun pressImeActionOnRetypePasswordEditTextWithSuccessStatus_returnsSuccess() {
+        val testViewModel = LandingViewModel(
+            ApplicationProvider.getApplicationContext(),
+            FakeUserRepository(),
+            FakePreferencesRepository()
+        )
+
+        launchFragmentInHiltContainer<RegisterFragment>(fragmentFactory = fragmentFactory) {
+            navController.setGraph(R.navigation.nav_graph_landing)
+            Navigation.setViewNavController(requireView(), navController)
+            viewModel = testViewModel
+        }
+
+        val email = "email@test.com"
+        val password = "password"
+
+        onView(withId(R.id.ti_edit_email)).perform(replaceText(email))
+        onView(withId(R.id.ti_edit_password)).perform(replaceText(password))
+        onView(withId(R.id.ti_edit_retype_password)).perform(replaceText(password))
+        onView(withId(R.id.ti_edit_retype_password)).perform(pressImeActionButton())
+
+        val responseEvent = testViewModel.registerLiveData.getOrAwaitValue()
+        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.SUCCESS)
     }
 
     @Test
