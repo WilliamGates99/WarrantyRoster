@@ -75,8 +75,8 @@ class LoginFragmentTest {
 
         onView(withId(testBinding.tiEditPassword.id)).perform(click())
 
-        assertThat(testBinding.tiLayoutPassword.boxBackgroundColor).isEqualTo(context.getColor(R.color.background))
         assertThat(testBinding.tiLayoutEmail.boxBackgroundColor).isEqualTo(context.getColor(R.color.grayLight))
+        assertThat(testBinding.tiLayoutPassword.boxBackgroundColor).isEqualTo(context.getColor(R.color.background))
     }
 
     @Test
