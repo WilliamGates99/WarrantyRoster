@@ -46,7 +46,8 @@ import dagger.hilt.android.AndroidEntryPoint
 class RegisterFragment : Fragment(R.layout.fragment_register) {
 
     private var _binding: FragmentRegisterBinding? = null
-    private val binding get() = _binding!!
+    val binding get() = _binding!!
+
     lateinit var viewModel: LandingViewModel
 
     private var snackbar: Snackbar? = null
