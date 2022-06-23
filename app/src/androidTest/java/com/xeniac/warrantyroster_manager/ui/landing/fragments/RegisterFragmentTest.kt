@@ -154,6 +154,7 @@ class RegisterFragmentTest {
             navController.setGraph(R.navigation.nav_graph_landing)
             Navigation.setViewNavController(requireView(), navController)
             viewModel = testViewModel
+            testBinding = binding
         }
 
         onView(withId(testBinding.tiEditEmail.id)).perform(replaceText("email"))
@@ -177,6 +178,7 @@ class RegisterFragmentTest {
             navController.setGraph(R.navigation.nav_graph_landing)
             Navigation.setViewNavController(requireView(), navController)
             viewModel = testViewModel
+            testBinding = binding
         }
 
         val email = "email@test.com"
@@ -211,6 +213,7 @@ class RegisterFragmentTest {
             navController.setGraph(R.navigation.nav_graph_landing)
             Navigation.setViewNavController(requireView(), navController)
             navController.navigate(LoginFragmentDirections.actionLoginFragmentToRegisterFragment())
+            testBinding = binding
         }
 
         onView(withId(testBinding.btnAgreement.id)).perform(click())
@@ -225,6 +228,7 @@ class RegisterFragmentTest {
             navController.setGraph(R.navigation.nav_graph_landing)
             Navigation.setViewNavController(requireView(), navController)
             navController.navigate(LoginFragmentDirections.actionLoginFragmentToRegisterFragment())
+            testBinding = binding
         }
 
         onView(withId(testBinding.btnLogin.id)).perform(click())
@@ -243,6 +247,7 @@ class RegisterFragmentTest {
             navController.setGraph(R.navigation.nav_graph_landing)
             Navigation.setViewNavController(requireView(), navController)
             viewModel = testViewModel
+            testBinding = binding
         }
 
         onView(withId(testBinding.tiEditEmail.id)).perform(replaceText("email"))
@@ -266,6 +271,7 @@ class RegisterFragmentTest {
             navController.setGraph(R.navigation.nav_graph_landing)
             Navigation.setViewNavController(requireView(), navController)
             viewModel = testViewModel
+            testBinding = binding
         }
 
         val email = "email@test.com"
