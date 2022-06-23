@@ -6,8 +6,7 @@ import androidx.navigation.Navigation
 import androidx.navigation.testing.TestNavHostController
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.action.ViewActions.replaceText
+import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.matcher.ViewMatchers.*
 import com.google.common.truth.Truth.assertThat
 import com.xeniac.warrantyroster_manager.R
@@ -101,6 +100,58 @@ class LoginFragmentTest {
 
         onView(withId(testBinding.tiEditPassword.id)).perform(click())
         assertThat(testBinding.tiLayoutPassword.boxStrokeColor).isEqualTo(context.getColor(R.color.blue))
+    }
+
+    @Test
+    fun pressImeActionOnPasswordEditTextWithErrorStatus_returnsError() {
+        val testViewModel = LandingViewModel(
+            ApplicationProvider.getApplicationContext(),
+            FakeUserRepository(),
+            FakePreferencesRepository()
+        )
+
+        launchFragmentInHiltContainer<LoginFragment>(fragmentFactory = fragmentFactory) {
+            navController.setGraph(R.navigation.nav_graph_landing)
+            Navigation.setViewNavController(requireView(), navController)
+            viewModel = testViewModel
+            testBinding = binding
+        }
+
+        onView(withId(testBinding.tiEditEmail.id)).perform(replaceText("email"))
+        onView(withId(testBinding.tiEditPassword.id)).perform(replaceText("password"))
+        onView(withId(testBinding.tiEditPassword.id)).perform(pressImeActionButton())
+
+        val responseEvent = testViewModel.loginLiveData.getOrAwaitValue()
+        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
+    }
+
+    @Test
+    fun pressImeActionOnPasswordEditTextWithSuccessStatus_returnsSuccess() {
+        val fakeUserRepository = FakeUserRepository()
+
+        val email = "email@test.com"
+        val password = "password"
+        fakeUserRepository.addUser(email, password)
+
+        val testViewModel = LandingViewModel(
+            ApplicationProvider.getApplicationContext(),
+            fakeUserRepository,
+            FakePreferencesRepository()
+        )
+
+        launchFragmentInHiltContainer<LoginFragment>(fragmentFactory = fragmentFactory) {
+            navController.setGraph(R.navigation.nav_graph_landing)
+            Navigation.setViewNavController(requireView(), navController)
+            viewModel = testViewModel
+            testBinding = binding
+        }
+
+        onView(withId(testBinding.tiEditEmail.id)).perform(replaceText(email))
+        onView(withId(testBinding.tiEditPassword.id)).perform(replaceText(password))
+        onView(withId(testBinding.tiEditPassword.id)).perform(pressImeActionButton())
+
+        val responseEvent = testViewModel.loginLiveData.getOrAwaitValue()
+        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.SUCCESS)
     }
 
     @Test
