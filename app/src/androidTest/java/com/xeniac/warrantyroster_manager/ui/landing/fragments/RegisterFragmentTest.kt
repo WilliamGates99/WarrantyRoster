@@ -139,8 +139,7 @@ class RegisterFragmentTest {
         }
 
         onView(withId(testBinding.tiEditRetypePassword.id)).perform(click())
-        assertThat(testBinding.tiLayoutRetypePassword.boxStrokeColor)
-            .isEqualTo(context.getColor(R.color.blue))
+        assertThat(testBinding.tiLayoutRetypePassword.boxStrokeColor).isEqualTo(context.getColor(R.color.blue))
     }
 
     @Test
@@ -157,10 +156,10 @@ class RegisterFragmentTest {
             viewModel = testViewModel
         }
 
-        onView(withId(R.id.ti_edit_email)).perform(replaceText("email"))
-        onView(withId(R.id.ti_edit_password)).perform(replaceText("password"))
-        onView(withId(R.id.ti_edit_retype_password)).perform(replaceText("retype_password"))
-        onView(withId(R.id.ti_edit_retype_password)).perform(pressImeActionButton())
+        onView(withId(testBinding.tiEditEmail.id)).perform(replaceText("email"))
+        onView(withId(testBinding.tiEditPassword.id)).perform(replaceText("password"))
+        onView(withId(testBinding.tiEditRetypePassword.id)).perform(replaceText("retype_password"))
+        onView(withId(testBinding.tiEditRetypePassword.id)).perform(pressImeActionButton())
 
         val responseEvent = testViewModel.registerLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
@@ -183,10 +182,10 @@ class RegisterFragmentTest {
         val email = "email@test.com"
         val password = "password"
 
-        onView(withId(R.id.ti_edit_email)).perform(replaceText(email))
-        onView(withId(R.id.ti_edit_password)).perform(replaceText(password))
-        onView(withId(R.id.ti_edit_retype_password)).perform(replaceText(password))
-        onView(withId(R.id.ti_edit_retype_password)).perform(pressImeActionButton())
+        onView(withId(testBinding.tiEditEmail.id)).perform(replaceText(email))
+        onView(withId(testBinding.tiEditPassword.id)).perform(replaceText(password))
+        onView(withId(testBinding.tiEditRetypePassword.id)).perform(replaceText(password))
+        onView(withId(testBinding.tiEditRetypePassword.id)).perform(pressImeActionButton())
 
         val responseEvent = testViewModel.registerLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.SUCCESS)
@@ -214,7 +213,7 @@ class RegisterFragmentTest {
             navController.navigate(LoginFragmentDirections.actionLoginFragmentToRegisterFragment())
         }
 
-        onView(withId(R.id.btn_agreement)).perform(click())
+        onView(withId(testBinding.btnAgreement.id)).perform(click())
         intended(allOf(hasAction(Intent.ACTION_VIEW), hasData(URL_PRIVACY_POLICY)))
 
         Intents.release()
@@ -228,7 +227,7 @@ class RegisterFragmentTest {
             navController.navigate(LoginFragmentDirections.actionLoginFragmentToRegisterFragment())
         }
 
-        onView(withId(R.id.btn_login)).perform(click())
+        onView(withId(testBinding.btnLogin.id)).perform(click())
         assertThat(navController.currentDestination?.id).isEqualTo(R.id.loginFragment)
     }
 
@@ -246,10 +245,10 @@ class RegisterFragmentTest {
             viewModel = testViewModel
         }
 
-        onView(withId(R.id.ti_edit_email)).perform(replaceText("email"))
-        onView(withId(R.id.ti_edit_password)).perform(replaceText("password"))
-        onView(withId(R.id.ti_edit_retype_password)).perform(replaceText("retype_password"))
-        onView(withId(R.id.btn_register)).perform(click())
+        onView(withId(testBinding.tiEditEmail.id)).perform(replaceText("email"))
+        onView(withId(testBinding.tiEditPassword.id)).perform(replaceText("password"))
+        onView(withId(testBinding.tiEditRetypePassword.id)).perform(replaceText("retype_password"))
+        onView(withId(testBinding.btnRegister.id)).perform(click())
 
         val responseEvent = testViewModel.registerLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
@@ -272,10 +271,10 @@ class RegisterFragmentTest {
         val email = "email@test.com"
         val password = "password"
 
-        onView(withId(R.id.ti_edit_email)).perform(replaceText(email))
-        onView(withId(R.id.ti_edit_password)).perform(replaceText(password))
-        onView(withId(R.id.ti_edit_retype_password)).perform(replaceText(password))
-        onView(withId(R.id.btn_register)).perform(click())
+        onView(withId(testBinding.tiEditEmail.id)).perform(replaceText(email))
+        onView(withId(testBinding.tiEditPassword.id)).perform(replaceText(password))
+        onView(withId(testBinding.tiEditRetypePassword.id)).perform(replaceText(password))
+        onView(withId(testBinding.btnRegister.id)).perform(click())
 
         val responseEvent = testViewModel.registerLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.SUCCESS)
