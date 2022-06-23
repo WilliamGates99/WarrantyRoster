@@ -7,6 +7,7 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -37,8 +38,9 @@ import dagger.hilt.android.AndroidEntryPoint
 class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
 
     private var _binding: FragmentForgotPwBinding? = null
-    private val binding get() = _binding!!
-    private lateinit var viewModel: LandingViewModel
+    val binding get() = _binding!!
+
+    lateinit var viewModel: LandingViewModel
 
     private var snackbar: Snackbar? = null
 
@@ -47,6 +49,7 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
         _binding = FragmentForgotPwBinding.bind(view)
         viewModel = ViewModelProvider(requireActivity())[LandingViewModel::class.java]
 
+        onBackPressed()
         textInputsBackgroundColor()
         textInputsStrokeColor()
         returnOnClick()
@@ -59,6 +62,15 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
         super.onDestroyView()
         snackbar?.dismiss()
         _binding = null
+    }
+
+    private fun onBackPressed() {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    findNavController().popBackStack()
+                }
+            })
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -100,7 +112,7 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
     }
 
     private fun returnOnClick() = binding.btnReturn.setOnClickListener {
-        requireActivity().onBackPressed()
+        findNavController().popBackStack()
     }
 
     private fun sendOnClick() = binding.btnSend.setOnClickListener {
