@@ -63,6 +63,7 @@ class RegisterFragmentTest {
         launchFragmentInHiltContainer<RegisterFragment>(fragmentFactory = fragmentFactory) {
             navController.setGraph(R.navigation.nav_graph_landing)
             Navigation.setViewNavController(requireView(), navController)
+            navController.navigate(LoginFragmentDirections.actionLoginFragmentToRegisterFragment())
             testBinding = binding
         }
 
@@ -79,6 +80,7 @@ class RegisterFragmentTest {
         launchFragmentInHiltContainer<RegisterFragment>(fragmentFactory = fragmentFactory) {
             navController.setGraph(R.navigation.nav_graph_landing)
             Navigation.setViewNavController(requireView(), navController)
+            navController.navigate(LoginFragmentDirections.actionLoginFragmentToRegisterFragment())
             testBinding = binding
         }
 
@@ -95,6 +97,7 @@ class RegisterFragmentTest {
         launchFragmentInHiltContainer<RegisterFragment>(fragmentFactory = fragmentFactory) {
             navController.setGraph(R.navigation.nav_graph_landing)
             Navigation.setViewNavController(requireView(), navController)
+            navController.navigate(LoginFragmentDirections.actionLoginFragmentToRegisterFragment())
             testBinding = binding
         }
 
@@ -111,6 +114,7 @@ class RegisterFragmentTest {
         launchFragmentInHiltContainer<RegisterFragment>(fragmentFactory = fragmentFactory) {
             navController.setGraph(R.navigation.nav_graph_landing)
             Navigation.setViewNavController(requireView(), navController)
+            navController.navigate(LoginFragmentDirections.actionLoginFragmentToRegisterFragment())
             testBinding = binding
         }
 
@@ -123,6 +127,7 @@ class RegisterFragmentTest {
         launchFragmentInHiltContainer<RegisterFragment>(fragmentFactory = fragmentFactory) {
             navController.setGraph(R.navigation.nav_graph_landing)
             Navigation.setViewNavController(requireView(), navController)
+            navController.navigate(LoginFragmentDirections.actionLoginFragmentToRegisterFragment())
             testBinding = binding
         }
 
@@ -135,6 +140,7 @@ class RegisterFragmentTest {
         launchFragmentInHiltContainer<RegisterFragment>(fragmentFactory = fragmentFactory) {
             navController.setGraph(R.navigation.nav_graph_landing)
             Navigation.setViewNavController(requireView(), navController)
+            navController.navigate(LoginFragmentDirections.actionLoginFragmentToRegisterFragment())
             testBinding = binding
         }
 
@@ -153,6 +159,7 @@ class RegisterFragmentTest {
         launchFragmentInHiltContainer<RegisterFragment>(fragmentFactory = fragmentFactory) {
             navController.setGraph(R.navigation.nav_graph_landing)
             Navigation.setViewNavController(requireView(), navController)
+            navController.navigate(LoginFragmentDirections.actionLoginFragmentToRegisterFragment())
             viewModel = testViewModel
             testBinding = binding
         }
@@ -177,6 +184,7 @@ class RegisterFragmentTest {
         launchFragmentInHiltContainer<RegisterFragment>(fragmentFactory = fragmentFactory) {
             navController.setGraph(R.navigation.nav_graph_landing)
             Navigation.setViewNavController(requireView(), navController)
+            navController.navigate(LoginFragmentDirections.actionLoginFragmentToRegisterFragment())
             viewModel = testViewModel
             testBinding = binding
         }
@@ -246,6 +254,7 @@ class RegisterFragmentTest {
         launchFragmentInHiltContainer<RegisterFragment>(fragmentFactory = fragmentFactory) {
             navController.setGraph(R.navigation.nav_graph_landing)
             Navigation.setViewNavController(requireView(), navController)
+            navController.navigate(LoginFragmentDirections.actionLoginFragmentToRegisterFragment())
             viewModel = testViewModel
             testBinding = binding
         }
@@ -270,6 +279,7 @@ class RegisterFragmentTest {
         launchFragmentInHiltContainer<RegisterFragment>(fragmentFactory = fragmentFactory) {
             navController.setGraph(R.navigation.nav_graph_landing)
             Navigation.setViewNavController(requireView(), navController)
+            navController.navigate(LoginFragmentDirections.actionLoginFragmentToRegisterFragment())
             viewModel = testViewModel
             testBinding = binding
         }
