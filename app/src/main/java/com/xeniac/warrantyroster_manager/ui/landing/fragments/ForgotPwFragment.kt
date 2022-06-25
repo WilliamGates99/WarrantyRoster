@@ -145,10 +145,7 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
                     Status.SUCCESS -> {
                         hideLoadingAnimation()
                         response.data?.let { email ->
-                            findNavController().navigate(
-                                ForgotPwFragmentDirections
-                                    .actionForgotPasswordFragmentToForgotPwSentFragment(email)
-                            )
+                            navigateToForgotPwSent(email)
                         }
                     }
                     Status.ERROR -> {
@@ -206,6 +203,10 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
                 }
             }
         }
+
+    private fun navigateToForgotPwSent(email: String) = findNavController().navigate(
+        ForgotPwFragmentDirections.actionForgotPasswordFragmentToForgotPwSentFragment(email)
+    )
 
     private fun showLoadingAnimation() {
         binding.tiEditEmail.isEnabled = false
