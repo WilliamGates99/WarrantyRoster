@@ -59,8 +59,8 @@
     <string name="forgot_pw_hint_email">آدرس ایمیل خود را وارد کنید</string>
     <string name="forgot_pw_btn_send">ارسال ایمیل</string>
     <string name="forgot_pw_btn_return">بازگشت به صفحه ورود</string>
-    <string name="forgot_pw_error_timer_is_not_zero_one">لطفاً قبل از درخواست مجدد، %d ثانیه منتظر بمانید…</string>
-    <string name="forgot_pw_error_timer_is_not_zero_other">لطفاً قبل از درخواست مجدد، %d ثانیه منتظر بمانید…</string>
+    <string name="forgot_pw_error_timer_is_not_zero_one">لطفاً قبل از درخواست مجدد، %d ثانیه منتظر بمانید.</string>
+    <string name="forgot_pw_error_timer_is_not_zero_other">لطفاً قبل از درخواست مجدد، %d ثانیه منتظر بمانید.</string>
     <string name="forgot_pw_error_email">آدرس ایمیل وارد شده، معتبر نیست!</string>
     <string name="forgot_pw_error_not_found">حسابی با ایمیل وارد شده وجود ندارد.</string>
 
