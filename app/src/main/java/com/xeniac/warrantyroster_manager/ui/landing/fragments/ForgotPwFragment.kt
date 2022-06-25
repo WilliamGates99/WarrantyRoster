@@ -145,9 +145,10 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
                     Status.SUCCESS -> {
                         hideLoadingAnimation()
                         response.data?.let { email ->
-                            val action = ForgotPwFragmentDirections
-                                .actionForgotPasswordFragmentToForgotPwSentFragment(email)
-                            findNavController().navigate(action)
+                            findNavController().navigate(
+                                ForgotPwFragmentDirections
+                                    .actionForgotPasswordFragmentToForgotPwSentFragment(email)
+                            )
                         }
                     }
                     Status.ERROR -> {
