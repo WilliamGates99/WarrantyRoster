@@ -47,7 +47,7 @@ class LoginFragmentTest {
     fun setUp() {
         hiltRule.inject()
         context = ApplicationProvider.getApplicationContext()
-        navController = TestNavHostController(ApplicationProvider.getApplicationContext())
+        navController = TestNavHostController(context)
         navController.setGraph(R.navigation.nav_graph_landing)
     }
 
