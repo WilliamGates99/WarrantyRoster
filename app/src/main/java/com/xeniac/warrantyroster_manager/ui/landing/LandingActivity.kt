@@ -15,13 +15,9 @@ import com.xeniac.warrantyroster_manager.ui.main.viewmodels.SettingsViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_LANGUAGE_ENGLISH
 import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_LANGUAGE_PERSIAN
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class LandingActivity : BaseActivity() {
-
-    @Inject
-    lateinit var fragmentFactory: LandingFragmentFactory
 
     private lateinit var binding: ActivityLandingBinding
     private val viewModel by viewModels<SettingsViewModel>()
@@ -53,7 +49,6 @@ class LandingActivity : BaseActivity() {
     }
 
     private fun landingInit() {
-        supportFragmentManager.fragmentFactory = fragmentFactory
         binding = ActivityLandingBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

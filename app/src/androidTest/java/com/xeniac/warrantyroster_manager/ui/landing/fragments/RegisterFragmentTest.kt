@@ -21,7 +21,6 @@ import com.xeniac.warrantyroster_manager.getOrAwaitValue
 import com.xeniac.warrantyroster_manager.launchFragmentInHiltContainer
 import com.xeniac.warrantyroster_manager.repositories.FakePreferencesRepository
 import com.xeniac.warrantyroster_manager.repositories.FakeUserRepository
-import com.xeniac.warrantyroster_manager.ui.landing.LandingFragmentFactory
 import com.xeniac.warrantyroster_manager.ui.landing.viewmodels.LandingViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.URL_PRIVACY_POLICY
 import com.xeniac.warrantyroster_manager.utils.Status
@@ -32,7 +31,6 @@ import org.hamcrest.CoreMatchers.allOf
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
 @HiltAndroidTest
@@ -44,29 +42,38 @@ class RegisterFragmentTest {
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    @Inject
-    lateinit var fragmentFactory: LandingFragmentFactory
-
     private lateinit var context: Context
+    private lateinit var fakeUserRepository: FakeUserRepository
+    private lateinit var testViewModel: LandingViewModel
+
     private lateinit var navController: TestNavHostController
     private lateinit var testBinding: FragmentRegisterBinding
 
     @Before
     fun setUp() {
         hiltRule.inject()
+
         context = ApplicationProvider.getApplicationContext()
+        fakeUserRepository = FakeUserRepository()
+        testViewModel = LandingViewModel(
+            ApplicationProvider.getApplicationContext(),
+            fakeUserRepository,
+            FakePreferencesRepository()
+        )
+
         navController = TestNavHostController(context)
         navController.setGraph(R.navigation.nav_graph_landing)
         navController.navigate(LoginFragmentDirections.actionLoginFragmentToRegisterFragment())
+
+        launchFragmentInHiltContainer<RegisterFragment> {
+            Navigation.setViewNavController(requireView(), navController)
+            viewModel = testViewModel
+            testBinding = binding
+        }
     }
 
     @Test
     fun clickOnEmailEditText_changesBoxBackgroundColor() {
-        launchFragmentInHiltContainer<RegisterFragment>(fragmentFactory = fragmentFactory) {
-            Navigation.setViewNavController(requireView(), navController)
-            testBinding = binding
-        }
-
         onView(withId(testBinding.tiEditEmail.id)).perform(click())
 
         assertThat(testBinding.tiLayoutEmail.boxBackgroundColor).isEqualTo(context.getColor(R.color.background))
@@ -77,11 +84,6 @@ class RegisterFragmentTest {
 
     @Test
     fun clickOnPasswordEditText_changesBoxBackgroundColor() {
-        launchFragmentInHiltContainer<RegisterFragment>(fragmentFactory = fragmentFactory) {
-            Navigation.setViewNavController(requireView(), navController)
-            testBinding = binding
-        }
-
         onView(withId(testBinding.tiEditPassword.id)).perform(click())
 
         assertThat(testBinding.tiLayoutEmail.boxBackgroundColor).isEqualTo(context.getColor(R.color.grayLight))
@@ -92,11 +94,6 @@ class RegisterFragmentTest {
 
     @Test
     fun clickOnRetypePasswordEditText_changesBoxBackgroundColor() {
-        launchFragmentInHiltContainer<RegisterFragment>(fragmentFactory = fragmentFactory) {
-            Navigation.setViewNavController(requireView(), navController)
-            testBinding = binding
-        }
-
         onView(withId(testBinding.tiEditRetypePassword.id)).perform(click())
 
         assertThat(testBinding.tiLayoutEmail.boxBackgroundColor).isEqualTo(context.getColor(R.color.grayLight))
@@ -107,51 +104,24 @@ class RegisterFragmentTest {
 
     @Test
     fun clickOnEmailEditText_changesBoxStrokeColor() {
-        launchFragmentInHiltContainer<RegisterFragment>(fragmentFactory = fragmentFactory) {
-            Navigation.setViewNavController(requireView(), navController)
-            testBinding = binding
-        }
-
         onView(withId(testBinding.tiEditEmail.id)).perform(click())
         assertThat(testBinding.tiLayoutEmail.boxStrokeColor).isEqualTo(context.getColor(R.color.blue))
     }
 
     @Test
     fun clickOnPasswordEditText_changesBoxStrokeColor() {
-        launchFragmentInHiltContainer<RegisterFragment>(fragmentFactory = fragmentFactory) {
-            Navigation.setViewNavController(requireView(), navController)
-            testBinding = binding
-        }
-
         onView(withId(testBinding.tiEditPassword.id)).perform(click())
         assertThat(testBinding.tiLayoutPassword.boxStrokeColor).isEqualTo(context.getColor(R.color.blue))
     }
 
     @Test
     fun clickOnRetypePasswordEditText_changesBoxStrokeColor() {
-        launchFragmentInHiltContainer<RegisterFragment>(fragmentFactory = fragmentFactory) {
-            Navigation.setViewNavController(requireView(), navController)
-            testBinding = binding
-        }
-
         onView(withId(testBinding.tiEditRetypePassword.id)).perform(click())
         assertThat(testBinding.tiLayoutRetypePassword.boxStrokeColor).isEqualTo(context.getColor(R.color.blue))
     }
 
     @Test
     fun pressImeActionOnRetypePasswordEditTextWithErrorStatus_returnsError() {
-        val testViewModel = LandingViewModel(
-            ApplicationProvider.getApplicationContext(),
-            FakeUserRepository(),
-            FakePreferencesRepository()
-        )
-
-        launchFragmentInHiltContainer<RegisterFragment>(fragmentFactory = fragmentFactory) {
-            Navigation.setViewNavController(requireView(), navController)
-            viewModel = testViewModel
-            testBinding = binding
-        }
-
         onView(withId(testBinding.tiEditEmail.id)).perform(replaceText("email"))
         onView(withId(testBinding.tiEditPassword.id)).perform(replaceText("password"))
         onView(withId(testBinding.tiEditRetypePassword.id)).perform(replaceText("retype_password"))
@@ -163,18 +133,6 @@ class RegisterFragmentTest {
 
     @Test
     fun pressImeActionOnRetypePasswordEditTextWithSuccessStatus_returnsSuccess() {
-        val testViewModel = LandingViewModel(
-            ApplicationProvider.getApplicationContext(),
-            FakeUserRepository(),
-            FakePreferencesRepository()
-        )
-
-        launchFragmentInHiltContainer<RegisterFragment>(fragmentFactory = fragmentFactory) {
-            Navigation.setViewNavController(requireView(), navController)
-            viewModel = testViewModel
-            testBinding = binding
-        }
-
         val email = "email@test.com"
         val password = "password"
 
@@ -189,10 +147,6 @@ class RegisterFragmentTest {
 
     @Test
     fun pressBack_popsBackStack() {
-        launchFragmentInHiltContainer<RegisterFragment>(fragmentFactory = fragmentFactory) {
-            Navigation.setViewNavController(requireView(), navController)
-        }
-
         pressBack()
         assertThat(navController.currentDestination?.id).isEqualTo(R.id.loginFragment)
     }
@@ -200,11 +154,6 @@ class RegisterFragmentTest {
     @Test
     fun clickOnAgreementBtn_opensLinkInBrowser() {
         Intents.init()
-
-        launchFragmentInHiltContainer<RegisterFragment>(fragmentFactory = fragmentFactory) {
-            Navigation.setViewNavController(requireView(), navController)
-            testBinding = binding
-        }
 
         onView(withId(testBinding.btnAgreement.id)).perform(click())
         intended(allOf(hasAction(Intent.ACTION_VIEW), hasData(URL_PRIVACY_POLICY)))
@@ -214,29 +163,12 @@ class RegisterFragmentTest {
 
     @Test
     fun clickOnLoginBtn_popsBackStack() {
-        launchFragmentInHiltContainer<RegisterFragment>(fragmentFactory = fragmentFactory) {
-            Navigation.setViewNavController(requireView(), navController)
-            testBinding = binding
-        }
-
         onView(withId(testBinding.btnLogin.id)).perform(click())
         assertThat(navController.currentDestination?.id).isEqualTo(R.id.loginFragment)
     }
 
     @Test
     fun clickOnRegisterBtnWithErrorStatus_returnsError() {
-        val testViewModel = LandingViewModel(
-            ApplicationProvider.getApplicationContext(),
-            FakeUserRepository(),
-            FakePreferencesRepository()
-        )
-
-        launchFragmentInHiltContainer<RegisterFragment>(fragmentFactory = fragmentFactory) {
-            Navigation.setViewNavController(requireView(), navController)
-            viewModel = testViewModel
-            testBinding = binding
-        }
-
         onView(withId(testBinding.tiEditEmail.id)).perform(replaceText("email"))
         onView(withId(testBinding.tiEditPassword.id)).perform(replaceText("password"))
         onView(withId(testBinding.tiEditRetypePassword.id)).perform(replaceText("retype_password"))
@@ -248,18 +180,6 @@ class RegisterFragmentTest {
 
     @Test
     fun clickOnRegisterBtnWithSuccessStatus_returnsSuccess() {
-        val testViewModel = LandingViewModel(
-            ApplicationProvider.getApplicationContext(),
-            FakeUserRepository(),
-            FakePreferencesRepository()
-        )
-
-        launchFragmentInHiltContainer<RegisterFragment>(fragmentFactory = fragmentFactory) {
-            Navigation.setViewNavController(requireView(), navController)
-            viewModel = testViewModel
-            testBinding = binding
-        }
-
         val email = "email@test.com"
         val password = "password"
 

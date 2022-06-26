@@ -18,19 +18,14 @@ import com.xeniac.warrantyroster_manager.getOrAwaitValue
 import com.xeniac.warrantyroster_manager.launchFragmentInHiltContainer
 import com.xeniac.warrantyroster_manager.repositories.FakePreferencesRepository
 import com.xeniac.warrantyroster_manager.repositories.FakeUserRepository
-import com.xeniac.warrantyroster_manager.ui.landing.LandingFragmentFactory
 import com.xeniac.warrantyroster_manager.ui.landing.viewmodels.LandingViewModel
 import com.xeniac.warrantyroster_manager.utils.Status
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.advanceTimeBy
-import kotlinx.coroutines.test.advanceUntilIdle
-import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
 @HiltAndroidTest
@@ -42,14 +37,12 @@ class ForgotPwSentFragmentTest {
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    @Inject
-    lateinit var fragmentFactory: LandingFragmentFactory
-
-    private val email = "email@test.com"
+    private lateinit var context: Context
     private lateinit var fakeUserRepository: FakeUserRepository
     private lateinit var testViewModel: LandingViewModel
 
-    private lateinit var context: Context
+    private val email = "email@test.com"
+
     private lateinit var navController: TestNavHostController
     private var testArgs: Bundle? = null
     private lateinit var testBinding: FragmentForgotPwSentBinding
@@ -58,19 +51,18 @@ class ForgotPwSentFragmentTest {
     fun setUp() {
         hiltRule.inject()
 
+        context = ApplicationProvider.getApplicationContext()
         fakeUserRepository = FakeUserRepository()
-        fakeUserRepository.addUser(email, "password")
-
         testViewModel = LandingViewModel(
             ApplicationProvider.getApplicationContext(),
             fakeUserRepository,
             FakePreferencesRepository()
         )
 
-        context = ApplicationProvider.getApplicationContext()
+        fakeUserRepository.addUser(email, "password")
+
         navController = TestNavHostController(context)
         navController.setGraph(R.navigation.nav_graph_landing)
-
         navController.navigate(LoginFragmentDirections.actionLoginFragmentToForgotPasswordFragment())
         navController.navigate(
             ForgotPwFragmentDirections.actionForgotPasswordFragmentToForgotPwSentFragment(email)
@@ -78,10 +70,7 @@ class ForgotPwSentFragmentTest {
 
         testArgs = navController.backStack.last().arguments
 
-        launchFragmentInHiltContainer<ForgotPwSentFragment>(
-            fragmentFactory = fragmentFactory,
-            fragmentArgs = testArgs
-        ) {
+        launchFragmentInHiltContainer<ForgotPwSentFragment>(fragmentArgs = testArgs) {
             Navigation.setViewNavController(requireView(), navController)
             viewModel = testViewModel
             testBinding = binding

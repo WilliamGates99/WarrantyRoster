@@ -16,7 +16,6 @@ import com.xeniac.warrantyroster_manager.getOrAwaitValue
 import com.xeniac.warrantyroster_manager.launchFragmentInHiltContainer
 import com.xeniac.warrantyroster_manager.repositories.FakePreferencesRepository
 import com.xeniac.warrantyroster_manager.repositories.FakeUserRepository
-import com.xeniac.warrantyroster_manager.ui.landing.LandingFragmentFactory
 import com.xeniac.warrantyroster_manager.ui.landing.viewmodels.LandingViewModel
 import com.xeniac.warrantyroster_manager.utils.Status
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -25,7 +24,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
 @HiltAndroidTest
@@ -37,58 +35,50 @@ class ForgotPwFragmentTest {
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    @Inject
-    lateinit var fragmentFactory: LandingFragmentFactory
-
     private lateinit var context: Context
+    private lateinit var fakeUserRepository: FakeUserRepository
+    private lateinit var testViewModel: LandingViewModel
+
     private lateinit var navController: TestNavHostController
     private lateinit var testBinding: FragmentForgotPwBinding
 
     @Before
     fun setUp() {
         hiltRule.inject()
+
         context = ApplicationProvider.getApplicationContext()
+        fakeUserRepository = FakeUserRepository()
+        testViewModel = LandingViewModel(
+            ApplicationProvider.getApplicationContext(),
+            fakeUserRepository,
+            FakePreferencesRepository()
+        )
+
         navController = TestNavHostController(context)
         navController.setGraph(R.navigation.nav_graph_landing)
         navController.navigate(LoginFragmentDirections.actionLoginFragmentToForgotPasswordFragment())
+
+        launchFragmentInHiltContainer<ForgotPwFragment> {
+            Navigation.setViewNavController(requireView(), navController)
+            viewModel = testViewModel
+            testBinding = binding
+        }
     }
 
     @Test
     fun clickOnEmailEditText_changesBoxBackgroundColor() {
-        launchFragmentInHiltContainer<ForgotPwFragment>(fragmentFactory = fragmentFactory) {
-            Navigation.setViewNavController(requireView(), navController)
-            testBinding = binding
-        }
-
         onView(withId(testBinding.tiEditEmail.id)).perform(click())
         assertThat(testBinding.tiLayoutEmail.boxBackgroundColor).isEqualTo(context.getColor(R.color.background))
     }
 
     @Test
     fun clickOnEmailEditText_changesBoxStrokeColor() {
-        launchFragmentInHiltContainer<ForgotPwFragment>(fragmentFactory = fragmentFactory) {
-            Navigation.setViewNavController(requireView(), navController)
-            testBinding = binding
-        }
-
         onView(withId(testBinding.tiEditEmail.id)).perform(click())
         assertThat(testBinding.tiLayoutEmail.boxStrokeColor).isEqualTo(context.getColor(R.color.blue))
     }
 
     @Test
     fun pressImeActionOnEmailEditTextWithErrorStatus_returnsError() {
-        val testViewModel = LandingViewModel(
-            ApplicationProvider.getApplicationContext(),
-            FakeUserRepository(),
-            FakePreferencesRepository()
-        )
-
-        launchFragmentInHiltContainer<ForgotPwFragment>(fragmentFactory = fragmentFactory) {
-            Navigation.setViewNavController(requireView(), navController)
-            viewModel = testViewModel
-            testBinding = binding
-        }
-
         onView(withId(testBinding.tiEditEmail.id)).perform(replaceText("email"))
         onView(withId(testBinding.tiEditEmail.id)).perform(pressImeActionButton())
 
@@ -98,23 +88,9 @@ class ForgotPwFragmentTest {
 
     @Test
     fun pressImeActionOnEmailEditTextWithSuccessStatus_returnsSuccess() {
-        val fakeUserRepository = FakeUserRepository()
-
         val email = "email@test.com"
         val password = "password"
         fakeUserRepository.addUser(email, password)
-
-        val testViewModel = LandingViewModel(
-            ApplicationProvider.getApplicationContext(),
-            fakeUserRepository,
-            FakePreferencesRepository()
-        )
-
-        launchFragmentInHiltContainer<ForgotPwFragment>(fragmentFactory = fragmentFactory) {
-            Navigation.setViewNavController(requireView(), navController)
-            viewModel = testViewModel
-            testBinding = binding
-        }
 
         onView(withId(testBinding.tiEditEmail.id)).perform(replaceText(email))
         onView(withId(testBinding.tiEditEmail.id)).perform(pressImeActionButton())
@@ -125,39 +101,18 @@ class ForgotPwFragmentTest {
 
     @Test
     fun pressBack_popsBackStack() {
-        launchFragmentInHiltContainer<ForgotPwFragment>(fragmentFactory = fragmentFactory) {
-            Navigation.setViewNavController(requireView(), navController)
-        }
-
         pressBack()
         assertThat(navController.currentDestination?.id).isEqualTo(R.id.loginFragment)
     }
 
     @Test
     fun clickOnReturnBtn_popsBackStack() {
-        launchFragmentInHiltContainer<ForgotPwFragment>(fragmentFactory = fragmentFactory) {
-            Navigation.setViewNavController(requireView(), navController)
-            testBinding = binding
-        }
-
         onView(withId(testBinding.btnReturn.id)).perform(click())
         assertThat(navController.currentDestination?.id).isEqualTo(R.id.loginFragment)
     }
 
     @Test
     fun clickOnSendBtnWithErrorStatus_returnsError() {
-        val testViewModel = LandingViewModel(
-            ApplicationProvider.getApplicationContext(),
-            FakeUserRepository(),
-            FakePreferencesRepository()
-        )
-
-        launchFragmentInHiltContainer<ForgotPwFragment>(fragmentFactory = fragmentFactory) {
-            Navigation.setViewNavController(requireView(), navController)
-            viewModel = testViewModel
-            testBinding = binding
-        }
-
         onView(withId(testBinding.tiEditEmail.id)).perform(replaceText("email"))
         onView(withId(testBinding.btnSend.id)).perform(click())
 
@@ -167,23 +122,9 @@ class ForgotPwFragmentTest {
 
     @Test
     fun clickOnSendBtnWithSuccessStatus_returnsSuccess() {
-        val fakeUserRepository = FakeUserRepository()
-
         val email = "email@test.com"
         val password = "password"
         fakeUserRepository.addUser(email, password)
-
-        val testViewModel = LandingViewModel(
-            ApplicationProvider.getApplicationContext(),
-            fakeUserRepository,
-            FakePreferencesRepository()
-        )
-
-        launchFragmentInHiltContainer<ForgotPwFragment>(fragmentFactory = fragmentFactory) {
-            Navigation.setViewNavController(requireView(), navController)
-            viewModel = testViewModel
-            testBinding = binding
-        }
 
         onView(withId(testBinding.tiEditEmail.id)).perform(replaceText(email))
         onView(withId(testBinding.btnSend.id)).perform(click())
@@ -194,23 +135,9 @@ class ForgotPwFragmentTest {
 
     @Test
     fun clickOnSendBtnWithSuccessStatus_navigatesToForgotPwSentFragment() {
-        val fakeUserRepository = FakeUserRepository()
-
         val email = "email@test.com"
         val password = "password"
         fakeUserRepository.addUser(email, password)
-
-        val testViewModel = LandingViewModel(
-            ApplicationProvider.getApplicationContext(),
-            fakeUserRepository,
-            FakePreferencesRepository()
-        )
-
-        launchFragmentInHiltContainer<ForgotPwFragment>(fragmentFactory = fragmentFactory) {
-            Navigation.setViewNavController(requireView(), navController)
-            viewModel = testViewModel
-            testBinding = binding
-        }
 
         onView(withId(testBinding.tiEditEmail.id)).perform(replaceText(email))
         onView(withId(testBinding.btnSend.id)).perform(click())
@@ -220,19 +147,11 @@ class ForgotPwFragmentTest {
 
     @Test
     fun pressImeActionOnEmailEditTextWithSuccessStatus_navigatesToForgotPwSentFragment() {
-        val fakeUserRepository = FakeUserRepository()
-
         val email = "email@test.com"
         val password = "password"
         fakeUserRepository.addUser(email, password)
 
-        val testViewModel = LandingViewModel(
-            ApplicationProvider.getApplicationContext(),
-            fakeUserRepository,
-            FakePreferencesRepository()
-        )
-
-        launchFragmentInHiltContainer<ForgotPwFragment>(fragmentFactory = fragmentFactory) {
+        launchFragmentInHiltContainer<ForgotPwFragment>() {
             Navigation.setViewNavController(requireView(), navController)
             viewModel = testViewModel
             testBinding = binding
