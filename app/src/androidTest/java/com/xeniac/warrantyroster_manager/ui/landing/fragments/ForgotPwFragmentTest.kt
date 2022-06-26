@@ -151,12 +151,6 @@ class ForgotPwFragmentTest {
         val password = "password"
         fakeUserRepository.addUser(email, password)
 
-        launchFragmentInHiltContainer<ForgotPwFragment>() {
-            Navigation.setViewNavController(requireView(), navController)
-            viewModel = testViewModel
-            testBinding = binding
-        }
-
         onView(withId(testBinding.tiEditEmail.id)).perform(replaceText(email))
         onView(withId(testBinding.tiEditEmail.id)).perform(pressImeActionButton())
 
