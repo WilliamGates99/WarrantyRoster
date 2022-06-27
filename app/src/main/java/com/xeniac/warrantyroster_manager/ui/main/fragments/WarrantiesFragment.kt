@@ -21,15 +21,16 @@ import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseDeviceBlockedError
 import com.xeniac.warrantyroster_manager.utils.Status
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
-class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListClickInterface {
+class WarrantiesFragment @Inject constructor(
+    private val warrantyAdapter: WarrantyAdapter
+) : Fragment(R.layout.fragment_warranties), WarrantyListClickInterface {
 
     private var _binding: FragmentWarrantiesBinding? = null
     private val binding get() = _binding!!
     private lateinit var viewModel: MainViewModel
-
-    private lateinit var warrantyAdapter: WarrantyAdapter
 
     private var snackbar: Snackbar? = null
 
@@ -50,7 +51,12 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
     }
 
     private fun setupRecyclerView() {
-        warrantyAdapter = WarrantyAdapter(requireActivity(), requireContext(), viewModel, this)
+        warrantyAdapter.apply {
+            setOnWarrantyItemClickListenter(this@WarrantiesFragment)
+            activity = requireActivity()
+            context = requireContext()
+            mainViewModel = viewModel
+        }
         binding.rv.adapter = warrantyAdapter
     }
 

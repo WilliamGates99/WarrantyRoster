@@ -23,16 +23,11 @@ import com.xeniac.warrantyroster_manager.databinding.AdContainerListBinding
 import com.xeniac.warrantyroster_manager.databinding.ListItemWarrantyBinding
 import com.xeniac.warrantyroster_manager.data.remote.models.ListItemType
 import com.xeniac.warrantyroster_manager.data.remote.models.Warranty
-import com.xeniac.warrantyroster_manager.domain.repository.PreferencesRepository
 import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModel
 import com.xeniac.warrantyroster_manager.utils.CoilHelper.loadCategoryImage
 import com.xeniac.warrantyroster_manager.utils.Constants.VIEW_TYPE_AD
 import com.xeniac.warrantyroster_manager.utils.Constants.VIEW_TYPE_WARRANTY
 import com.xeniac.warrantyroster_manager.utils.DateHelper.getDaysUntilExpiry
-import dagger.hilt.EntryPoint
-import dagger.hilt.InstallIn
-import dagger.hilt.android.EntryPointAccessors
-import dagger.hilt.components.SingletonComponent
 import ir.tapsell.plus.AdHolder
 import ir.tapsell.plus.AdRequestCallback
 import ir.tapsell.plus.AdShowListener
@@ -44,49 +39,19 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
 @Suppress("SpellCheckingInspection")
-class WarrantyAdapter(
-    private val activity: Activity,
-    private val context: Context,
-    private val viewModel: MainViewModel,
-    private val clickInterface: WarrantyListClickInterface
+class WarrantyAdapter @Inject constructor(
+    private val imageLoader: ImageLoader,
+    private val dateFormat: SimpleDateFormat
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var preferencesRepository: PreferencesRepository
-    private var imageLoader: ImageLoader
-    private var dateFormat: SimpleDateFormat
+    lateinit var activity: Activity
+    lateinit var context: Context
+    lateinit var mainViewModel: MainViewModel
 
-    @EntryPoint
-    @InstallIn(SingletonComponent::class)
-    interface PreferencesRepositoryProviderEntryPoint {
-        fun getPreferencesRepository(): PreferencesRepository
-    }
-
-    @EntryPoint
-    @InstallIn(SingletonComponent::class)
-    interface ImageLoaderProviderEntryPoint {
-        fun getImageLoader(): ImageLoader
-    }
-
-    @EntryPoint
-    @InstallIn(SingletonComponent::class)
-    interface DateFormatProviderEntryPoint {
-        fun getDateFormat(): SimpleDateFormat
-    }
-
-    init {
-        val preferencesRepositoryProviderEntryPoint = EntryPointAccessors
-            .fromApplication(context, PreferencesRepositoryProviderEntryPoint::class.java)
-        val imageLoaderProviderEntryPoint = EntryPointAccessors
-            .fromApplication(context, ImageLoaderProviderEntryPoint::class.java)
-        val dateFormatProviderEntryPoint = EntryPointAccessors
-            .fromApplication(context, DateFormatProviderEntryPoint::class.java)
-
-        preferencesRepository = preferencesRepositoryProviderEntryPoint.getPreferencesRepository()
-        imageLoader = imageLoaderProviderEntryPoint.getImageLoader()
-        dateFormat = dateFormatProviderEntryPoint.getDateFormat()
-    }
+    private lateinit var warrantyClickInterface: WarrantyListClickInterface
 
     private val diffCallback = object : DiffUtil.ItemCallback<Warranty>() {
         override fun areItemsTheSame(oldItem: Warranty, newItem: Warranty): Boolean {
@@ -190,16 +155,20 @@ class WarrantyAdapter(
             binding.executePendingBindings()
 
             val category = warranty.categoryId?.let {
-                viewModel.getCategoryById(it)
+                mainViewModel.getCategoryById(it)
             }
 
             category?.let {
-                binding.categoryTitle = it.title[preferencesRepository.getCategoryTitleMapKey()]
+                binding.categoryTitle = it.title[mainViewModel.getCategoryTitleMapKey()]
                 loadCategoryImage(context, it.icon, imageLoader, binding.ivIcon, binding.cpiIcon)
             }
 
-            binding.cvWarranty.setOnClickListener { clickInterface.onItemClick(warranty) }
+            binding.cvWarranty.setOnClickListener { warrantyClickInterface.onItemClick(warranty) }
         }
+    }
+
+    fun setOnWarrantyItemClickListenter(clickInterface: WarrantyListClickInterface) {
+        this.warrantyClickInterface = clickInterface
     }
 
     inner class AdViewHolder(val binding: AdContainerListBinding) :
