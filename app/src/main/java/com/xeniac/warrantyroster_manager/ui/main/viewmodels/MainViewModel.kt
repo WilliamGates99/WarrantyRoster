@@ -71,6 +71,8 @@ class MainViewModel @Inject constructor(
         MutableLiveData()
     val updatedWarrantyLiveData: LiveData<Event<Resource<Warranty>>> = _updatedWarrantyLiveData
 
+    suspend fun getCategoryTitleMapKey() = preferencesRepository.getCategoryTitleMapKey()
+
     fun getAllCategoryTitles(): List<String> {
         val titleList = mutableListOf<String>()
         viewModelScope.launch {
@@ -78,7 +80,7 @@ class MainViewModel @Inject constructor(
                 responseEvent.peekContent().let { response ->
                     response.data?.let { categoriesList ->
                         for (category in categoriesList) {
-                            titleList.add(category.title[preferencesRepository.getCategoryTitleMapKey()].toString())
+                            titleList.add(category.title[getCategoryTitleMapKey()].toString())
                         }
                     }
                 }
