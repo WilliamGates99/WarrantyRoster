@@ -1,4 +1,4 @@
-package com.xeniac.warrantyroster_manager.repositories
+package com.xeniac.warrantyroster_manager.data.repository
 
 import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
@@ -11,6 +11,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import com.xeniac.warrantyroster_manager.MainCoroutineRule
+import com.xeniac.warrantyroster_manager.domain.repository.PreferencesRepository
 import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_COUNTRY_IRAN
 import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_COUNTRY_UNITED_STATES
 import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_LANGUAGE_ENGLISH
@@ -44,7 +45,7 @@ class PreferencesRepositoryTest {
         produceFile = { context.preferencesDataStoreFile("settings_test") }
     )
 
-    private val testRepository: PreferencesRepository = DefaultPreferencesRepository(testDataStore)
+    private val testRepository: PreferencesRepository = PreferencesRepositoryImp(testDataStore)
 
     @After
     fun tearDown() {

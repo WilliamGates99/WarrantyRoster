@@ -1,6 +1,7 @@
-package com.xeniac.warrantyroster_manager.repositories
+package com.xeniac.warrantyroster_manager.data.repository
 
 import com.xeniac.warrantyroster_manager.data.TestUser
+import com.xeniac.warrantyroster_manager.domain.repository.UserRepository
 
 class FakeUserRepository : UserRepository {
 

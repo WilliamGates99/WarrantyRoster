@@ -1,5 +1,6 @@
-package com.xeniac.warrantyroster_manager.repositories
+package com.xeniac.warrantyroster_manager.data.repository
 
+import com.xeniac.warrantyroster_manager.domain.repository.PreferencesRepository
 import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_COUNTRY_UNITED_STATES
 import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_LANGUAGE_ENGLISH
 

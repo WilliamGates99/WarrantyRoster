@@ -1,4 +1,4 @@
-package com.xeniac.warrantyroster_manager.repositories
+package com.xeniac.warrantyroster_manager.domain.repository
 
 interface UserRepository {
 

@@ -1,7 +1,8 @@
-package com.xeniac.warrantyroster_manager.repositories
+package com.xeniac.warrantyroster_manager.data.repository
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.*
+import com.xeniac.warrantyroster_manager.domain.repository.PreferencesRepository
 import com.xeniac.warrantyroster_manager.utils.Constants.DATASTORE_COUNTRY_KEY
 import com.xeniac.warrantyroster_manager.utils.Constants.DATASTORE_IS_LOGGED_IN_KEY
 import com.xeniac.warrantyroster_manager.utils.Constants.DATASTORE_LANGUAGE_KEY
@@ -13,7 +14,7 @@ import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 import javax.inject.Inject
 
-class DefaultPreferencesRepository @Inject constructor(
+class PreferencesRepositoryImp @Inject constructor(
     private val settingsDataStore: DataStore<Preferences>
 ) : PreferencesRepository {
 

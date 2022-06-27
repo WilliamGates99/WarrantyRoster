@@ -1,4 +1,4 @@
-package com.xeniac.warrantyroster_manager.repositories
+package com.xeniac.warrantyroster_manager.data.repository
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
@@ -6,6 +6,7 @@ import com.xeniac.warrantyroster_manager.data.remote.models.Warranty
 import com.xeniac.warrantyroster_manager.data.remote.models.WarrantyInput
 import com.xeniac.warrantyroster_manager.di.CategoriesCollection
 import com.xeniac.warrantyroster_manager.di.WarrantiesCollection
+import com.xeniac.warrantyroster_manager.domain.repository.MainRepository
 import com.xeniac.warrantyroster_manager.utils.Constants.CATEGORIES_TITLE
 import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_BRAND
 import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_CATEGORY_ID
@@ -20,7 +21,7 @@ import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_UUID
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
-class DefaultMainRepository @Inject constructor(
+class MainRepositoryImp @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
     @CategoriesCollection private val categoriesCollectionRef: CollectionReference,
     @WarrantiesCollection private val warrantiesCollectionRef: CollectionReference

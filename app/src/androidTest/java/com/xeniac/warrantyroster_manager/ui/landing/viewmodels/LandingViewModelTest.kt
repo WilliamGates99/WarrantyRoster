@@ -5,8 +5,8 @@ import androidx.test.core.app.ApplicationProvider
 import com.google.common.truth.Truth.assertThat
 import com.xeniac.warrantyroster_manager.MainCoroutineRule
 import com.xeniac.warrantyroster_manager.getOrAwaitValue
-import com.xeniac.warrantyroster_manager.repositories.FakePreferencesRepository
-import com.xeniac.warrantyroster_manager.repositories.FakeUserRepository
+import com.xeniac.warrantyroster_manager.data.repository.FakePreferencesRepository
+import com.xeniac.warrantyroster_manager.data.repository.FakeUserRepository
 import com.xeniac.warrantyroster_manager.utils.Status
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest

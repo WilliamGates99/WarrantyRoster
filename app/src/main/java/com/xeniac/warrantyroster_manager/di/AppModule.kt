@@ -13,12 +13,9 @@ import coil.disk.DiskCache
 import coil.memory.MemoryCache
 import coil.util.DebugLogger
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.xeniac.warrantyroster_manager.BuildConfig
-import com.xeniac.warrantyroster_manager.repositories.*
-import com.xeniac.warrantyroster_manager.repositories.DefaultPreferencesRepository
 import com.xeniac.warrantyroster_manager.utils.Constants.COLLECTION_CATEGORIES
 import com.xeniac.warrantyroster_manager.utils.Constants.COLLECTION_WARRANTIES
 import com.xeniac.warrantyroster_manager.utils.Constants.DATASTORE_NAME_SETTINGS
@@ -55,26 +52,6 @@ object AppModule {
     @WarrantiesCollection
     fun provideFirestoreWarrantiesCollectionRef() =
         Firebase.firestore.collection(COLLECTION_WARRANTIES)
-
-    @Singleton
-    @Provides
-    fun provideUserRepository(firebaseAuth: FirebaseAuth) =
-        DefaultUserRepository(firebaseAuth) as UserRepository
-
-    @Singleton
-    @Provides
-    fun provideDefaultMainRepository(
-        firebaseAuth: FirebaseAuth,
-        @CategoriesCollection categoriesCollectionRef: CollectionReference,
-        @WarrantiesCollection warrantiesCollectionRef: CollectionReference
-    ) = DefaultMainRepository(
-        firebaseAuth, categoriesCollectionRef, warrantiesCollectionRef
-    ) as MainRepository
-
-    @Singleton
-    @Provides
-    fun providePreferencesRepository(settingsDataStore: DataStore<Preferences>) =
-        DefaultPreferencesRepository(settingsDataStore) as PreferencesRepository
 
     @Singleton
     @Provides
