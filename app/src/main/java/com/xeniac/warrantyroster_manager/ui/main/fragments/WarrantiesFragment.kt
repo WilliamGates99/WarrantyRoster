@@ -30,6 +30,7 @@ class WarrantiesFragment @Inject constructor(
 
     private var _binding: FragmentWarrantiesBinding? = null
     private val binding get() = _binding!!
+
     private lateinit var viewModel: MainViewModel
 
     private var snackbar: Snackbar? = null
