@@ -1,27 +1,21 @@
-package com.xeniac.warrantyroster_manager.ui.main.viewmodels
+package com.xeniac.warrantyroster_manager.ui.viewmodels
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.test.core.app.ApplicationProvider
 import com.google.common.truth.Truth.assertThat
 import com.xeniac.warrantyroster_manager.MainCoroutineRule
 import com.xeniac.warrantyroster_manager.data.remote.models.WarrantyInput
 import com.xeniac.warrantyroster_manager.getOrAwaitValue
 import com.xeniac.warrantyroster_manager.data.repository.FakeMainRepository
 import com.xeniac.warrantyroster_manager.data.repository.FakePreferencesRepository
+import com.xeniac.warrantyroster_manager.data.repository.FakeUserRepository
 import com.xeniac.warrantyroster_manager.utils.Status
-import dagger.hilt.android.testing.HiltAndroidRule
-import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
 @ExperimentalCoroutinesApi
-@HiltAndroidTest
 class MainViewModelTest {
-
-    @get:Rule
-    var hiltRule = HiltAndroidRule(this)
 
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
@@ -29,6 +23,7 @@ class MainViewModelTest {
     @get:Rule
     var mainCoroutineRule = MainCoroutineRule()
 
+    private lateinit var fakeUserRepository: FakeUserRepository
     private lateinit var fakeMainRepository: FakeMainRepository
     private lateinit var fakePreferencesRepository: FakePreferencesRepository
 
@@ -36,13 +31,14 @@ class MainViewModelTest {
 
     @Before
     fun setUp() {
-        hiltRule.inject()
-
+        fakeUserRepository = FakeUserRepository()
         fakeMainRepository = FakeMainRepository()
         fakePreferencesRepository = FakePreferencesRepository()
 
+        fakeUserRepository.addUser("email@test.com", "password")
+
         testViewModel = MainViewModel(
-            ApplicationProvider.getApplicationContext(),
+            fakeUserRepository,
             fakeMainRepository,
             fakePreferencesRepository
         )

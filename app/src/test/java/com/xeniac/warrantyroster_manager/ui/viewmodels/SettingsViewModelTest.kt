@@ -1,7 +1,6 @@
-package com.xeniac.warrantyroster_manager.ui.main.viewmodels
+package com.xeniac.warrantyroster_manager.ui.viewmodels
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.test.core.app.ApplicationProvider
 import com.google.common.truth.Truth.assertThat
 import com.xeniac.warrantyroster_manager.MainCoroutineRule
 import com.xeniac.warrantyroster_manager.getOrAwaitValue
@@ -10,19 +9,13 @@ import com.xeniac.warrantyroster_manager.data.repository.FakeUserRepository
 import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_COUNTRY_UNITED_STATES
 import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_LANGUAGE_ENGLISH
 import com.xeniac.warrantyroster_manager.utils.Status
-import dagger.hilt.android.testing.HiltAndroidRule
-import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
 @ExperimentalCoroutinesApi
-@HiltAndroidTest
 class SettingsViewModelTest {
-
-    @get:Rule
-    var hiltRule = HiltAndroidRule(this)
 
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
@@ -36,12 +29,9 @@ class SettingsViewModelTest {
 
     @Before
     fun setUp() {
-        hiltRule.inject()
-
         fakeUserRepository = FakeUserRepository()
 
         testViewModel = SettingsViewModel(
-            ApplicationProvider.getApplicationContext(),
             fakeUserRepository,
             FakePreferencesRepository()
         )
