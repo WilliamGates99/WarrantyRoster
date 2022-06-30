@@ -36,17 +36,19 @@ class ForgotPwFragmentTest {
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
     private lateinit var context: Context
-    private lateinit var fakeUserRepository: FakeUserRepository
-    private lateinit var testViewModel: LandingViewModel
-
     private lateinit var navController: TestNavHostController
     private lateinit var testBinding: FragmentForgotPwBinding
+
+    private lateinit var fakeUserRepository: FakeUserRepository
+    private lateinit var testViewModel: LandingViewModel
 
     @Before
     fun setUp() {
         hiltRule.inject()
 
         context = ApplicationProvider.getApplicationContext()
+        navController = TestNavHostController(context)
+
         fakeUserRepository = FakeUserRepository()
         testViewModel = LandingViewModel(
             ApplicationProvider.getApplicationContext(),
@@ -54,12 +56,11 @@ class ForgotPwFragmentTest {
             FakePreferencesRepository()
         )
 
-        navController = TestNavHostController(context)
-        navController.setGraph(R.navigation.nav_graph_landing)
-        navController.navigate(LoginFragmentDirections.actionLoginFragmentToForgotPasswordFragment())
-
         launchFragmentInHiltContainer<ForgotPwFragment> {
             Navigation.setViewNavController(requireView(), navController)
+            navController.setGraph(R.navigation.nav_graph_landing)
+            navController.navigate(LoginFragmentDirections.actionLoginFragmentToForgotPasswordFragment())
+
             viewModel = testViewModel
             testBinding = binding
         }

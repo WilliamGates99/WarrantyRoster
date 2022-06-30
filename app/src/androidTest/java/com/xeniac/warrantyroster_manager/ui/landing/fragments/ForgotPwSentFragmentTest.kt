@@ -38,40 +38,39 @@ class ForgotPwSentFragmentTest {
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
     private lateinit var context: Context
+    private lateinit var navController: TestNavHostController
+    private var testArgs: Bundle? = null
+    private lateinit var testBinding: FragmentForgotPwSentBinding
+
     private lateinit var fakeUserRepository: FakeUserRepository
     private lateinit var testViewModel: LandingViewModel
 
     private val email = "email@test.com"
-
-    private lateinit var navController: TestNavHostController
-    private var testArgs: Bundle? = null
-    private lateinit var testBinding: FragmentForgotPwSentBinding
 
     @Before
     fun setUp() {
         hiltRule.inject()
 
         context = ApplicationProvider.getApplicationContext()
+        navController = TestNavHostController(context)
+
         fakeUserRepository = FakeUserRepository()
+        fakeUserRepository.addUser(email, "password")
         testViewModel = LandingViewModel(
             ApplicationProvider.getApplicationContext(),
             fakeUserRepository,
             FakePreferencesRepository()
         )
 
-        fakeUserRepository.addUser(email, "password")
-
-        navController = TestNavHostController(context)
-        navController.setGraph(R.navigation.nav_graph_landing)
-        navController.navigate(LoginFragmentDirections.actionLoginFragmentToForgotPasswordFragment())
-        navController.navigate(
-            ForgotPwFragmentDirections.actionForgotPasswordFragmentToForgotPwSentFragment(email)
-        )
-
-        testArgs = navController.backStack.last().arguments
-
         launchFragmentInHiltContainer<ForgotPwSentFragment>(fragmentArgs = testArgs) {
             Navigation.setViewNavController(requireView(), navController)
+            navController.setGraph(R.navigation.nav_graph_landing)
+            navController.navigate(LoginFragmentDirections.actionLoginFragmentToForgotPasswordFragment())
+            navController.navigate(
+                ForgotPwFragmentDirections.actionForgotPasswordFragmentToForgotPwSentFragment(email)
+            )
+            testArgs = navController.backStack.last().arguments
+
             viewModel = testViewModel
             testBinding = binding
         }

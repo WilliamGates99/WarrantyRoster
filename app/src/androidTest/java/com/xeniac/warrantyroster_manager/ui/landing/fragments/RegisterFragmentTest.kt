@@ -43,17 +43,20 @@ class RegisterFragmentTest {
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
     private lateinit var context: Context
+    private lateinit var navController: TestNavHostController
+    private lateinit var testBinding: FragmentRegisterBinding
+
     private lateinit var fakeUserRepository: FakeUserRepository
     private lateinit var testViewModel: LandingViewModel
 
-    private lateinit var navController: TestNavHostController
-    private lateinit var testBinding: FragmentRegisterBinding
 
     @Before
     fun setUp() {
         hiltRule.inject()
 
         context = ApplicationProvider.getApplicationContext()
+        navController = TestNavHostController(context)
+
         fakeUserRepository = FakeUserRepository()
         testViewModel = LandingViewModel(
             ApplicationProvider.getApplicationContext(),
@@ -61,12 +64,11 @@ class RegisterFragmentTest {
             FakePreferencesRepository()
         )
 
-        navController = TestNavHostController(context)
-        navController.setGraph(R.navigation.nav_graph_landing)
-        navController.navigate(LoginFragmentDirections.actionLoginFragmentToRegisterFragment())
-
         launchFragmentInHiltContainer<RegisterFragment> {
             Navigation.setViewNavController(requireView(), navController)
+            navController.setGraph(R.navigation.nav_graph_landing)
+            navController.navigate(LoginFragmentDirections.actionLoginFragmentToRegisterFragment())
+
             viewModel = testViewModel
             testBinding = binding
         }
