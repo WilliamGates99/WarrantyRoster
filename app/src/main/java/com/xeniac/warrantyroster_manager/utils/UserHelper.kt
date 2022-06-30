@@ -1,11 +1,11 @@
 package com.xeniac.warrantyroster_manager.utils
 
-import android.util.Patterns
+import androidx.core.util.PatternsCompat
 
 object UserHelper {
 
     fun isEmailValid(email: String): Boolean =
-        Patterns.EMAIL_ADDRESS.matcher(email).matches()
+        PatternsCompat.EMAIL_ADDRESS.matcher(email).matches()
 
     fun isRetypePasswordValid(password: String, retypePassword: String): Boolean =
         password == retypePassword
