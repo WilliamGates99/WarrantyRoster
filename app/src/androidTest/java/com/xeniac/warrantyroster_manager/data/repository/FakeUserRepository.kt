@@ -9,8 +9,8 @@ class FakeUserRepository : UserRepository {
 
     private var shouldReturnNetworkError = false
 
-    fun addUser(email: String, password: String) {
-        users.add(TestUser(email, password))
+    fun addUser(email: String, password: String, uid: String = "1") {
+        users.add(TestUser(email, password, uid))
     }
 
     fun setShouldReturnNetworkError(value: Boolean) {
@@ -51,6 +51,8 @@ class FakeUserRepository : UserRepository {
     }
 
     override fun getCurrentUser(): TestUser = users[0]
+
+    override fun getCurrentUserUid(): String = getCurrentUser().uid
 
     override fun getCurrentUserEmail(): String = getCurrentUser().email
 

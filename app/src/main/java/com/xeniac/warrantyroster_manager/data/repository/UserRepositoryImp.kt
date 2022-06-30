@@ -25,6 +25,8 @@ class UserRepositoryImp @Inject constructor(
 
     override fun getCurrentUser(): FirebaseUser = firebaseAuth.currentUser!!
 
+    override fun getCurrentUserUid(): String = getCurrentUser().uid
+
     override fun getCurrentUserEmail(): String = getCurrentUser().email.toString()
 
     override suspend fun sendVerificationEmail() {
