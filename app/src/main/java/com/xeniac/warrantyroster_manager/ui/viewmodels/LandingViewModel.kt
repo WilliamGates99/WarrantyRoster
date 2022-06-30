@@ -1,12 +1,7 @@
-package com.xeniac.warrantyroster_manager.ui.landing.viewmodels
+package com.xeniac.warrantyroster_manager.ui.viewmodels
 
-import android.app.Application
 import android.os.CountDownTimer
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
-import com.xeniac.warrantyroster_manager.BaseApplication
+import androidx.lifecycle.*
 import com.xeniac.warrantyroster_manager.domain.repository.PreferencesRepository
 import com.xeniac.warrantyroster_manager.domain.repository.UserRepository
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_EMAIL
@@ -15,10 +10,8 @@ import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_PASSW
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_PASSWORD_NOT_MATCH
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_PASSWORD_SHORT
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_RETYPE_PASSWORD
-import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_TIMER_IS_NOT_ZERO
 import com.xeniac.warrantyroster_manager.utils.Event
-import com.xeniac.warrantyroster_manager.utils.NetworkHelper.hasInternetConnection
 import com.xeniac.warrantyroster_manager.utils.Resource
 import com.xeniac.warrantyroster_manager.utils.UserHelper.isEmailValid
 import com.xeniac.warrantyroster_manager.utils.UserHelper.isRetypePasswordValid
@@ -30,10 +23,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LandingViewModel @Inject constructor(
-    application: Application,
     private val userRepository: UserRepository,
     private val preferencesRepository: PreferencesRepository
-) : AndroidViewModel(application) {
+) : ViewModel() {
 
     private val _registerLiveData: MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
     val registerLiveData: LiveData<Event<Resource<Nothing>>> = _registerLiveData
@@ -134,18 +126,11 @@ class LandingViewModel @Inject constructor(
     private suspend fun safeRegisterViaEmail(email: String, password: String) {
         _registerLiveData.postValue(Event(Resource.loading()))
         try {
-            if (hasInternetConnection(getApplication<BaseApplication>())) {
-                userRepository.registerViaEmail(email, password)
-                userRepository.sendVerificationEmail()
-                preferencesRepository.setIsUserLoggedIn(true)
-                _registerLiveData.postValue(Event(Resource.success(null)))
-                Timber.i("$email registered successfully.")
-            } else {
-                Timber.e(ERROR_NETWORK_CONNECTION)
-                _registerLiveData.postValue(
-                    Event(Resource.error(ERROR_NETWORK_CONNECTION))
-                )
-            }
+            userRepository.registerViaEmail(email, password)
+            userRepository.sendVerificationEmail()
+            preferencesRepository.setIsUserLoggedIn(true)
+            _registerLiveData.postValue(Event(Resource.success(null)))
+            Timber.i("$email registered successfully.")
         } catch (e: Exception) {
             Timber.e("safeRegisterViaEmail Exception: ${e.message}")
             _registerLiveData.postValue(Event(Resource.error(e.message.toString())))
@@ -155,17 +140,10 @@ class LandingViewModel @Inject constructor(
     private suspend fun safeLoginViaEmail(email: String, password: String) {
         _loginLiveData.postValue(Event(Resource.loading()))
         try {
-            if (hasInternetConnection(getApplication<BaseApplication>())) {
-                userRepository.loginViaEmail(email, password)
-                preferencesRepository.setIsUserLoggedIn(true)
-                _loginLiveData.postValue(Event(Resource.success(null)))
-                Timber.i("$email logged in successfully.")
-            } else {
-                Timber.e(ERROR_NETWORK_CONNECTION)
-                _loginLiveData.postValue(
-                    Event(Resource.error(ERROR_NETWORK_CONNECTION))
-                )
-            }
+            userRepository.loginViaEmail(email, password)
+            preferencesRepository.setIsUserLoggedIn(true)
+            _loginLiveData.postValue(Event(Resource.success(null)))
+            Timber.i("$email logged in successfully.")
         } catch (e: Exception) {
             Timber.e("safeLoginViaEmail Exception: ${e.message}")
             _loginLiveData.postValue(Event(Resource.error(e.message.toString())))
@@ -175,20 +153,15 @@ class LandingViewModel @Inject constructor(
     private suspend fun safeSendResetPasswordEmail(email: String, activateCountDown: Boolean) {
         _forgotPwLiveData.postValue(Event(Resource.loading()))
         try {
-            if (hasInternetConnection(getApplication<BaseApplication>())) {
-                if (email == forgotPwEmail && timerInMillis != 0L) {
-                    Timber.e(ERROR_TIMER_IS_NOT_ZERO)
-                    _forgotPwLiveData.postValue(Event(Resource.error(ERROR_TIMER_IS_NOT_ZERO)))
-                } else {
-                    userRepository.sendResetPasswordEmail(email)
-                    _forgotPwLiveData.postValue(Event(Resource.success(email)))
-                    forgotPwEmail = email
-                    if (activateCountDown) startCountdown()
-                    Timber.i("Reset password email successfully sent to ${email}.")
-                }
+            if (email == forgotPwEmail && timerInMillis != 0L) {
+                Timber.e(ERROR_TIMER_IS_NOT_ZERO)
+                _forgotPwLiveData.postValue(Event(Resource.error(ERROR_TIMER_IS_NOT_ZERO)))
             } else {
-                Timber.e(ERROR_NETWORK_CONNECTION)
-                _forgotPwLiveData.postValue(Event(Resource.error(ERROR_NETWORK_CONNECTION)))
+                userRepository.sendResetPasswordEmail(email)
+                _forgotPwLiveData.postValue(Event(Resource.success(email)))
+                forgotPwEmail = email
+                if (activateCountDown) startCountdown()
+                Timber.i("Reset password email successfully sent to ${email}.")
             }
         } catch (e: Exception) {
             Timber.e("safeSendResetPasswordEmail Exception: ${e.message}")

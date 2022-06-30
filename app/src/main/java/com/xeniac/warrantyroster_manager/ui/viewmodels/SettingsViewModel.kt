@@ -1,14 +1,9 @@
-package com.xeniac.warrantyroster_manager.ui.main.viewmodels
+package com.xeniac.warrantyroster_manager.ui.viewmodels
 
 import android.app.Activity
-import android.app.Application
 import android.content.Intent
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.google.firebase.auth.FirebaseUser
-import com.xeniac.warrantyroster_manager.BaseApplication
 import com.xeniac.warrantyroster_manager.domain.repository.PreferencesRepository
 import com.xeniac.warrantyroster_manager.domain.repository.UserRepository
 import com.xeniac.warrantyroster_manager.ui.landing.LandingActivity
@@ -20,13 +15,11 @@ import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_EMAIL_INVAL
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_EMAIL_SAME
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_PASSWORD_NOT_MATCH
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_PASSWORD_SHORT
-import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_COUNTRY_IRAN
 import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_COUNTRY_UNITED_STATES
 import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_LANGUAGE_ENGLISH
 import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_LANGUAGE_PERSIAN
 import com.xeniac.warrantyroster_manager.utils.Event
-import com.xeniac.warrantyroster_manager.utils.NetworkHelper.hasInternetConnection
 import com.xeniac.warrantyroster_manager.utils.Resource
 import com.xeniac.warrantyroster_manager.utils.SettingsHelper
 import com.xeniac.warrantyroster_manager.utils.UserHelper.isEmailValid
@@ -39,10 +32,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
-    application: Application,
     private val userRepository: UserRepository,
     private val preferencesRepository: PreferencesRepository
-) : AndroidViewModel(application) {
+) : ViewModel() {
 
     private val _currentAppTheme: MutableLiveData<Event<Int>> = MutableLiveData()
     val currentAppTheme: LiveData<Event<Int>> = _currentAppTheme
@@ -102,7 +94,7 @@ class SettingsViewModel @Inject constructor(
 
         preferencesRepository.setCurrentAppLanguage(newLanguage)
         preferencesRepository.setCurrentAppCountry(newCountry)
-        SettingsHelper.setAppLocale(getApplication<BaseApplication>(), newLanguage, newCountry)
+        SettingsHelper.setAppLocale(activity, newLanguage, newCountry)
 
         activity.apply {
             startActivity(Intent(this, LandingActivity::class.java))
@@ -225,14 +217,12 @@ class SettingsViewModel @Inject constructor(
             _accountDetailsLiveData.postValue(Event(Resource.success(currentUser)))
             Timber.i("Current user is $email and isVerified: $isVerified")
 
-            if (hasInternetConnection(getApplication<BaseApplication>())) {
-                userRepository.reloadCurrentUser()
-                if (email != currentUser.email || isVerified != currentUser.isEmailVerified) {
-                    email = currentUser.email
-                    isVerified = currentUser.isEmailVerified
-                    _accountDetailsLiveData.postValue(Event(Resource.success(currentUser)))
-                    Timber.i("Updated user is $email and isVerified: $isVerified")
-                }
+            userRepository.reloadCurrentUser()
+            if (email != currentUser.email || isVerified != currentUser.isEmailVerified) {
+                email = currentUser.email
+                isVerified = currentUser.isEmailVerified
+                _accountDetailsLiveData.postValue(Event(Resource.success(currentUser)))
+                Timber.i("Updated user is $email and isVerified: $isVerified")
             }
         } catch (e: Exception) {
             Timber.e("safeGetAccountDetails Exception: ${e.message}")
@@ -243,16 +233,9 @@ class SettingsViewModel @Inject constructor(
     private suspend fun safeSendVerificationEmail() {
         _sendVerificationEmailLiveData.postValue(Event(Resource.loading()))
         try {
-            if (hasInternetConnection(getApplication<BaseApplication>())) {
-                userRepository.sendVerificationEmail()
-                _sendVerificationEmailLiveData.postValue(Event(Resource.success(null)))
-                Timber.i("Verification email sent.")
-            } else {
-                Timber.e(ERROR_NETWORK_CONNECTION)
-                _sendVerificationEmailLiveData.postValue(
-                    Event(Resource.error(ERROR_NETWORK_CONNECTION))
-                )
-            }
+            userRepository.sendVerificationEmail()
+            _sendVerificationEmailLiveData.postValue(Event(Resource.success(null)))
+            Timber.i("Verification email sent.")
         } catch (e: Exception) {
             Timber.e("safeSendVerificationEmail Exception: ${e.message}")
             _sendVerificationEmailLiveData.postValue(Event(Resource.error(e.message.toString())))
@@ -275,16 +258,9 @@ class SettingsViewModel @Inject constructor(
     private suspend fun safeReAuthenticateUser(password: String) {
         _reAuthenticateUserLiveData.postValue(Event(Resource.loading()))
         try {
-            if (hasInternetConnection(getApplication<BaseApplication>())) {
-                userRepository.reAuthenticateUser(password)
-                _reAuthenticateUserLiveData.postValue(Event(Resource.success(null)))
-                Timber.i("User re-authenticated.")
-            } else {
-                Timber.e(ERROR_NETWORK_CONNECTION)
-                _reAuthenticateUserLiveData.postValue(
-                    Event(Resource.error(ERROR_NETWORK_CONNECTION))
-                )
-            }
+            userRepository.reAuthenticateUser(password)
+            _reAuthenticateUserLiveData.postValue(Event(Resource.success(null)))
+            Timber.i("User re-authenticated.")
         } catch (e: Exception) {
             Timber.e("safeReAuthenticateUser Exception: ${e.message}")
             _reAuthenticateUserLiveData.postValue(Event(Resource.error(e.message.toString())))
@@ -294,16 +270,9 @@ class SettingsViewModel @Inject constructor(
     private suspend fun safeChangeUserEmail(newEmail: String) {
         _changeUserEmailLiveData.postValue(Event(Resource.loading()))
         try {
-            if (hasInternetConnection(getApplication<BaseApplication>())) {
-                userRepository.updateUserEmail(newEmail)
-                _changeUserEmailLiveData.postValue(Event(Resource.success(null)))
-                Timber.i("User email updated to ${newEmail}.")
-            } else {
-                Timber.e(ERROR_NETWORK_CONNECTION)
-                _changeUserEmailLiveData.postValue(
-                    Event(Resource.error(ERROR_NETWORK_CONNECTION))
-                )
-            }
+            userRepository.updateUserEmail(newEmail)
+            _changeUserEmailLiveData.postValue(Event(Resource.success(null)))
+            Timber.i("User email updated to ${newEmail}.")
         } catch (e: Exception) {
             Timber.e("safeChangeUserEmail Exception: ${e.message}")
             _changeUserEmailLiveData.postValue(Event(Resource.error(e.message.toString())))
@@ -313,16 +282,9 @@ class SettingsViewModel @Inject constructor(
     private suspend fun safeChangeUserPassword(newPassword: String) {
         _changeUserPasswordLiveData.postValue(Event(Resource.loading()))
         try {
-            if (hasInternetConnection(getApplication<BaseApplication>())) {
-                userRepository.updateUserPassword(newPassword)
-                _changeUserPasswordLiveData.postValue(Event(Resource.success(null)))
-                Timber.i("User password updated.")
-            } else {
-                Timber.e(ERROR_NETWORK_CONNECTION)
-                _changeUserPasswordLiveData.postValue(
-                    Event(Resource.error(ERROR_NETWORK_CONNECTION))
-                )
-            }
+            userRepository.updateUserPassword(newPassword)
+            _changeUserPasswordLiveData.postValue(Event(Resource.success(null)))
+            Timber.i("User password updated.")
         } catch (e: Exception) {
             Timber.e("safeChangeUserPassword Exception: ${e.message}")
             _changeUserPasswordLiveData.postValue(Event(Resource.error(e.message.toString())))

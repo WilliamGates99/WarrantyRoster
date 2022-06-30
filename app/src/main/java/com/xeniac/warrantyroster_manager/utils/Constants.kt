@@ -71,7 +71,8 @@ object Constants {
     const val ERROR_INPUT_INVALID_STARTING_DATE = "Invalid Starting Date"
 
     // Response Errors
-    const val ERROR_NETWORK_CONNECTION = "Unable to connect to the internet"
+    const val ERROR_NETWORK_CONNECTION =
+        "A network error (such as timeout, interrupted connection or unreachable host) has occurred"
     const val ERROR_FIREBASE_403 = "403"
     const val ERROR_FIREBASE_DEVICE_BLOCKED =
         "We have blocked all requests from this device due to unusual activity"

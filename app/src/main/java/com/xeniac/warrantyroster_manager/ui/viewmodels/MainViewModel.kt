@@ -1,24 +1,17 @@
-package com.xeniac.warrantyroster_manager.ui.main.viewmodels
+package com.xeniac.warrantyroster_manager.ui.viewmodels
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
-import com.xeniac.warrantyroster_manager.BaseApplication
+import androidx.lifecycle.*
 import com.xeniac.warrantyroster_manager.data.remote.models.Category
 import com.xeniac.warrantyroster_manager.data.remote.models.ListItemType
 import com.xeniac.warrantyroster_manager.data.remote.models.Warranty
 import com.xeniac.warrantyroster_manager.data.remote.models.WarrantyInput
 import com.xeniac.warrantyroster_manager.domain.repository.MainRepository
 import com.xeniac.warrantyroster_manager.domain.repository.PreferencesRepository
+import com.xeniac.warrantyroster_manager.domain.repository.UserRepository
 import com.xeniac.warrantyroster_manager.utils.Constants.CATEGORIES_ICON
 import com.xeniac.warrantyroster_manager.utils.Constants.CATEGORIES_TITLE
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_EMPTY_CATEGORY_LIST
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_EMPTY_WARRANTY_LIST
-import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_EXPIRY_DATE
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_STARTING_DATE
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_TITLE
@@ -34,7 +27,6 @@ import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_STARTING_DAT
 import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_TITLE
 import com.xeniac.warrantyroster_manager.utils.DateHelper.isStartingDateValid
 import com.xeniac.warrantyroster_manager.utils.Event
-import com.xeniac.warrantyroster_manager.utils.NetworkHelper.hasInternetConnection
 import com.xeniac.warrantyroster_manager.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -43,10 +35,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    application: Application,
+    private val userRepository: UserRepository,
     private val mainRepository: MainRepository,
     private val preferencesRepository: PreferencesRepository
-) : AndroidViewModel(application) {
+) : ViewModel() {
 
     private val _categoriesLiveData:
             MutableLiveData<Event<Resource<List<Category>>>> = MutableLiveData()
@@ -233,7 +225,7 @@ class MainViewModel @Inject constructor(
             expiryDateInput,
             description,
             categoryId,
-            Firebase.auth.currentUser?.uid.toString()
+            userRepository.getCurrentUserUid()
         )
 
         addWarrantyToFirestore(warrantyInput)
@@ -277,7 +269,7 @@ class MainViewModel @Inject constructor(
             expiryDateInput,
             description,
             categoryId,
-            Firebase.auth.currentUser?.uid.toString()
+            userRepository.getCurrentUserUid()
         )
 
         updateWarrantyInFirestore(warrantyId, warrantyInput)
@@ -303,14 +295,9 @@ class MainViewModel @Inject constructor(
     private suspend fun safeAddWarrantyToFirestore(warrantyInput: WarrantyInput) {
         _addWarrantyLiveData.postValue(Event(Resource.loading()))
         try {
-            if (hasInternetConnection(getApplication<BaseApplication>())) {
-                mainRepository.addWarrantyToFirestore(warrantyInput)
-                _addWarrantyLiveData.postValue(Event(Resource.success(null)))
-                Timber.i("Warranty successfully added.")
-            } else {
-                Timber.e(ERROR_NETWORK_CONNECTION)
-                _addWarrantyLiveData.postValue(Event(Resource.error(ERROR_NETWORK_CONNECTION)))
-            }
+            mainRepository.addWarrantyToFirestore(warrantyInput)
+            _addWarrantyLiveData.postValue(Event(Resource.success(null)))
+            Timber.i("Warranty successfully added.")
         } catch (e: Exception) {
             Timber.e("safeAddWarrantyToFirestore Exception: ${e.message}")
             _addWarrantyLiveData.postValue(Event(Resource.error(e.message.toString())))
@@ -320,14 +307,9 @@ class MainViewModel @Inject constructor(
     private suspend fun safeDeleteWarrantyFromFirestore(warrantyId: String) {
         _deleteWarrantyLiveData.postValue(Event(Resource.loading()))
         try {
-            if (hasInternetConnection(getApplication<BaseApplication>())) {
-                mainRepository.deleteWarrantyFromFirestore(warrantyId)
-                _deleteWarrantyLiveData.postValue(Event(Resource.success(null)))
-                Timber.i("$warrantyId successfully deleted.")
-            } else {
-                Timber.e(ERROR_NETWORK_CONNECTION)
-                _deleteWarrantyLiveData.postValue(Event(Resource.error(ERROR_NETWORK_CONNECTION)))
-            }
+            mainRepository.deleteWarrantyFromFirestore(warrantyId)
+            _deleteWarrantyLiveData.postValue(Event(Resource.success(null)))
+            Timber.i("$warrantyId successfully deleted.")
         } catch (e: Exception) {
             Timber.e("safeDeleteWarrantyFromFirestore Exception: ${e.message}")
             _deleteWarrantyLiveData.postValue(Event(Resource.error(e.message.toString())))
@@ -339,14 +321,9 @@ class MainViewModel @Inject constructor(
     ) {
         _updateWarrantyLiveData.postValue(Event(Resource.loading()))
         try {
-            if (hasInternetConnection(getApplication<BaseApplication>())) {
-                mainRepository.updateWarrantyInFirestore(warrantyId, warrantyInput)
-                _updateWarrantyLiveData.postValue(Event(Resource.success(null)))
-                Timber.i("Warranty successfully updated.")
-            } else {
-                Timber.e(ERROR_NETWORK_CONNECTION)
-                _updateWarrantyLiveData.postValue(Event(Resource.error(ERROR_NETWORK_CONNECTION)))
-            }
+            mainRepository.updateWarrantyInFirestore(warrantyId, warrantyInput)
+            _updateWarrantyLiveData.postValue(Event(Resource.success(null)))
+            Timber.i("Warranty successfully updated.")
         } catch (e: Exception) {
             Timber.e("safeUpdateWarrantyInFirestore Exception: ${e.message}")
             _updateWarrantyLiveData.postValue(Event(Resource.error(e.message.toString())))
@@ -356,14 +333,9 @@ class MainViewModel @Inject constructor(
     private suspend fun safeGetUpdatedWarrantyFromFirestore(warrantyId: String) {
         _updatedWarrantyLiveData.postValue(Event(Resource.loading()))
         try {
-            if (hasInternetConnection(getApplication<BaseApplication>())) {
-                val updatedWarranty = mainRepository.getUpdatedWarrantyFromFirestore(warrantyId)
-                _updatedWarrantyLiveData.postValue(Event(Resource.success(updatedWarranty)))
-                Timber.i("Updated warranty successfully retrieved.")
-            } else {
-                Timber.e(ERROR_NETWORK_CONNECTION)
-                _updatedWarrantyLiveData.postValue(Event(Resource.error(ERROR_NETWORK_CONNECTION)))
-            }
+            val updatedWarranty = mainRepository.getUpdatedWarrantyFromFirestore(warrantyId)
+            _updatedWarrantyLiveData.postValue(Event(Resource.success(updatedWarranty)))
+            Timber.i("Updated warranty successfully retrieved.")
         } catch (e: Exception) {
             Timber.e("safeGetUpdatedWarrantyFromFirestore Exception: ${e.message}")
             _updatedWarrantyLiveData.postValue(Event(Resource.error(e.message.toString())))
