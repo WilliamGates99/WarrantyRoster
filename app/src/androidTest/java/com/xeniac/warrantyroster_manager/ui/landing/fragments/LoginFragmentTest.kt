@@ -50,7 +50,6 @@ class LoginFragmentTest {
 
         fakeUserRepository = FakeUserRepository()
         testViewModel = LandingViewModel(
-            ApplicationProvider.getApplicationContext(),
             fakeUserRepository,
             FakePreferencesRepository()
         )

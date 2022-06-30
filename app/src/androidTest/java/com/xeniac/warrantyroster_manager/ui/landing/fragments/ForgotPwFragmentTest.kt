@@ -51,7 +51,6 @@ class ForgotPwFragmentTest {
 
         fakeUserRepository = FakeUserRepository()
         testViewModel = LandingViewModel(
-            ApplicationProvider.getApplicationContext(),
             fakeUserRepository,
             FakePreferencesRepository()
         )

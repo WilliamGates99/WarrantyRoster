@@ -46,9 +46,7 @@ class RegisterFragmentTest {
     private lateinit var navController: TestNavHostController
     private lateinit var testBinding: FragmentRegisterBinding
 
-    private lateinit var fakeUserRepository: FakeUserRepository
     private lateinit var testViewModel: LandingViewModel
-
 
     @Before
     fun setUp() {
@@ -57,10 +55,8 @@ class RegisterFragmentTest {
         context = ApplicationProvider.getApplicationContext()
         navController = TestNavHostController(context)
 
-        fakeUserRepository = FakeUserRepository()
         testViewModel = LandingViewModel(
-            ApplicationProvider.getApplicationContext(),
-            fakeUserRepository,
+            FakeUserRepository(),
             FakePreferencesRepository()
         )
 

@@ -57,7 +57,6 @@ class ForgotPwSentFragmentTest {
         fakeUserRepository = FakeUserRepository()
         fakeUserRepository.addUser(email, "password")
         testViewModel = LandingViewModel(
-            ApplicationProvider.getApplicationContext(),
             fakeUserRepository,
             FakePreferencesRepository()
         )
