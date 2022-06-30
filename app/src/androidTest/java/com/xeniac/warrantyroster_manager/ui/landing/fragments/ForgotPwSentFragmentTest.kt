@@ -61,14 +61,15 @@ class ForgotPwSentFragmentTest {
             FakePreferencesRepository()
         )
 
+        navController.setGraph(R.navigation.nav_graph_landing)
+        navController.navigate(LoginFragmentDirections.actionLoginFragmentToForgotPasswordFragment())
+        navController.navigate(
+            ForgotPwFragmentDirections.actionForgotPasswordFragmentToForgotPwSentFragment(email)
+        )
+        testArgs = navController.backStack.last().arguments
+
         launchFragmentInHiltContainer<ForgotPwSentFragment>(fragmentArgs = testArgs) {
             Navigation.setViewNavController(requireView(), navController)
-            navController.setGraph(R.navigation.nav_graph_landing)
-            navController.navigate(LoginFragmentDirections.actionLoginFragmentToForgotPasswordFragment())
-            navController.navigate(
-                ForgotPwFragmentDirections.actionForgotPasswordFragmentToForgotPwSentFragment(email)
-            )
-            testArgs = navController.backStack.last().arguments
 
             viewModel = testViewModel
             testBinding = binding
