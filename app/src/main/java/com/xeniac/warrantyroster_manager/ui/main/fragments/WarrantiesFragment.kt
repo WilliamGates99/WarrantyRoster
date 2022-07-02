@@ -188,11 +188,9 @@ class WarrantiesFragment @Inject constructor(
 //        searchWarrantiesList();
     }
 
-    override fun onItemClick(warranty: Warranty) {
-        val action = WarrantiesFragmentDirections
-            .actionWarrantiesFragmentToWarrantyDetailsFragment(warranty)
-        findNavController().navigate(action)
-    }
+    override fun onItemClick(warranty: Warranty) = findNavController().navigate(
+        WarrantiesFragmentDirections.actionWarrantiesFragmentToWarrantyDetailsFragment(warranty)
+    )
 
     /*
     private fun searchWarrantiesList() {

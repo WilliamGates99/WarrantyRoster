@@ -234,9 +234,11 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
     }
 
     private fun editWarrantyOnClick() = binding.fab.setOnClickListener {
-        val action = WarrantyDetailsFragmentDirections
-            .actionWarrantyDetailsFragmentToEditWarrantyFragment(warranty)
-        findNavController().navigate(action)
+        findNavController().navigate(
+            WarrantyDetailsFragmentDirections.actionWarrantyDetailsFragmentToEditWarrantyFragment(
+                warranty
+            )
+        )
     }
 
     private fun deleteWarrantyOnClick() =

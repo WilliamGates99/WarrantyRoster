@@ -214,13 +214,12 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
     }
 
     private fun changeEmailOnClick() = binding.clAccountChangeEmail.setOnClickListener {
-        findNavController().navigate(R.id.action_settingsFragment_to_changeEmailFragment)
+        findNavController().navigate(SettingsFragmentDirections.actionSettingsFragmentToChangeEmailFragment())
     }
 
-    private fun changePasswordOnClick() =
-        binding.clAccountChangePassword.setOnClickListener {
-            findNavController().navigate(R.id.action_settingsFragment_to_changePasswordFragment)
-        }
+    private fun changePasswordOnClick() = binding.clAccountChangePassword.setOnClickListener {
+        findNavController().navigate(SettingsFragmentDirections.actionSettingsFragmentToChangePasswordFragment())
+    }
 
     private fun languageOnClick() = binding.clSettingsLanguage.setOnClickListener {
         //TODO EDIT AFTER ADDING BRITISH ENGLISH

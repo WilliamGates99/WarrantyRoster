@@ -644,9 +644,7 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
                     Status.SUCCESS -> {
                         hideLoadingAnimation()
                         response.data?.let { updatedWarranty ->
-                            val action = EditWarrantyFragmentDirections
-                                .actionEditWarrantyFragmentToWarrantyDetailsFragment(updatedWarranty)
-                            findNavController().navigate(action)
+                            navigateToWarrantyDetails(updatedWarranty)
                         }
                     }
                     Status.ERROR -> {
@@ -655,7 +653,8 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
                             snackbar = when {
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
                                     showNetworkConnectionError(
-                                        requireContext(), binding.root
+                                        requireContext(),
+                                        binding.root
                                     ) { getUpdatedWarrantyFromFirestore() }
                                 }
                                 it.contains(ERROR_FIREBASE_403) -> {
@@ -673,6 +672,12 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
                 }
             }
         }
+
+    private fun navigateToWarrantyDetails(updatedWarranty: Warranty) = findNavController().navigate(
+        EditWarrantyFragmentDirections.actionEditWarrantyFragmentToWarrantyDetailsFragment(
+            updatedWarranty
+        )
+    )
 
     private fun showLoadingAnimation() {
         binding.toolbar.menu.getItem(0).isVisible = false
