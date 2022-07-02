@@ -6,10 +6,12 @@ import android.view.View
 import android.view.View.*
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
@@ -50,6 +52,7 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentChangeEmailBinding.bind(view)
 
+        onBackPressed()
         textInputsBackgroundColor()
         textInputsStrokeColor()
         returnToMainActivity()
@@ -62,6 +65,15 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
         super.onDestroyView()
         snackbar?.dismiss()
         _binding = null
+    }
+
+    private fun onBackPressed() {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    findNavController().popBackStack()
+                }
+            })
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -130,7 +142,7 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
     }
 
     private fun returnToMainActivity() = binding.toolbar.setNavigationOnClickListener {
-        requireActivity().onBackPressed()
+        findNavController().popBackStack()
     }
 
     private fun changeEmailOnClick() = binding.btnChangeEmail.setOnClickListener {
@@ -237,7 +249,7 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
                             setMessage(requireContext().getString(R.string.change_email_dialog_message))
                             setCancelable(false)
                             setPositiveButton(requireContext().getString(R.string.change_email_dialog_positive)) { _, _ -> }
-                            setOnDismissListener { requireActivity().onBackPressed() }
+                            setOnDismissListener { findNavController().popBackStack() }
                             show()
                         }
                     }

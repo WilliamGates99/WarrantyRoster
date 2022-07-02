@@ -8,6 +8,7 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.core.view.get
 import androidx.core.widget.addTextChangedListener
@@ -84,6 +85,7 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
         _binding = FragmentAddWarrantyBinding.bind(view)
         viewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
 
+        onBackPressed()
         textInputsBackgroundColor()
         textInputsStrokeColor()
         categoryDropDownSelection()
@@ -105,6 +107,15 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
     override fun onResume() {
         super.onResume()
         categoryDropDown()
+    }
+
+    private fun onBackPressed() {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    findNavController().popBackStack()
+                }
+            })
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -438,7 +449,7 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
 
     private fun returnToMainActivity() =
         binding.toolbar.setNavigationOnClickListener {
-            requireActivity().onBackPressed()
+            findNavController().popBackStack()
         }
 
     private fun addWarrantyOnClick() = binding.toolbar.menu[0].setOnMenuItemClickListener {
@@ -475,7 +486,9 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
                     Status.LOADING -> showLoadingAnimation()
                     Status.SUCCESS -> {
                         hideLoadingAnimation()
-                        findNavController().navigate(R.id.action_addWarrantyFragment_to_warrantiesFragment)
+                        findNavController().navigate(
+                            AddWarrantyFragmentDirections.actionAddWarrantyFragmentToWarrantiesFragment()
+                        )
                     }
                     Status.ERROR -> {
                         hideLoadingAnimation()
