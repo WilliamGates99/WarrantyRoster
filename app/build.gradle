@@ -22,7 +22,7 @@ android {
     defaultConfig {
         applicationId "com.xeniac.warrantyroster_manager"
         minSdkVersion 21
-        targetSdk 32 // TODO UPDATE TO 33 AFTER UPDATING GRADLE PLUGIN
+        targetSdk 33
         versionCode 13
         versionName "1.4.3"
 
@@ -134,7 +134,7 @@ dependencies {
     implementation 'io.coil-kt:coil-svg:2.1.0'
 
     // AppLovin Libraries
-    implementation 'com.applovin:applovin-sdk:11.4.3'
+    implementation 'com.applovin:applovin-sdk:11.4.4'
     implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'
     implementation 'com.applovin.mediation:adcolony-adapter:4.8.0.0'
     implementation 'com.applovin.mediation:google-adapter:21.0.0.0'
