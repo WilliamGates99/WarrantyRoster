@@ -1,7 +1,7 @@
 package com.xeniac.warrantyroster_manager.data.remote.models
 
 import android.os.Parcelable
-import com.xeniac.warrantyroster_manager.data.remote.models.ListItemType.*
+import com.xeniac.warrantyroster_manager.data.remote.models.ListItemType.WARRANTY
 import kotlinx.parcelize.Parcelize
 
 @Parcelize

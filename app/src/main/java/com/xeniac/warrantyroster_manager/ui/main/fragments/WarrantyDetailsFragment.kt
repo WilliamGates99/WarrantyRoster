@@ -17,13 +17,13 @@ import coil.ImageLoader
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
+import com.xeniac.warrantyroster_manager.data.remote.models.Warranty
 import com.xeniac.warrantyroster_manager.databinding.FragmentWarrantyDetailsBinding
 import com.xeniac.warrantyroster_manager.ui.main.MainActivity
-import com.xeniac.warrantyroster_manager.data.remote.models.Warranty
 import com.xeniac.warrantyroster_manager.ui.viewmodels.MainViewModel
 import com.xeniac.warrantyroster_manager.utils.CoilHelper.loadCategoryImage
-import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.DateHelper.getDaysUntilExpiry
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.show403Error

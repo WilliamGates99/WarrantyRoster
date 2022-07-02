@@ -2,7 +2,10 @@ package com.xeniac.warrantyroster_manager.ui.viewmodels
 
 import android.app.Activity
 import android.content.Intent
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseUser
 import com.xeniac.warrantyroster_manager.domain.repository.PreferencesRepository
 import com.xeniac.warrantyroster_manager.domain.repository.UserRepository

@@ -30,7 +30,7 @@ class MainActivity : BaseActivity(), MaxAdListener {
     @Inject
     lateinit var fragmentFactory: BaseMainFragmentFactory
 
-    private lateinit var binding: ActivityMainBinding
+    lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
 
     lateinit var appLovinAd: MaxInterstitialAd

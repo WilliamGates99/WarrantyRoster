@@ -3,7 +3,7 @@ package com.xeniac.warrantyroster_manager.ui.main.adapters
 import android.app.Activity
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View.*
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.AsyncListDiffer
@@ -19,10 +19,10 @@ import com.applovin.mediation.nativeAds.MaxNativeAdView
 import com.applovin.mediation.nativeAds.MaxNativeAdViewBinder
 import com.xeniac.warrantyroster_manager.BuildConfig
 import com.xeniac.warrantyroster_manager.R
-import com.xeniac.warrantyroster_manager.databinding.AdContainerListBinding
-import com.xeniac.warrantyroster_manager.databinding.ListItemWarrantyBinding
 import com.xeniac.warrantyroster_manager.data.remote.models.ListItemType
 import com.xeniac.warrantyroster_manager.data.remote.models.Warranty
+import com.xeniac.warrantyroster_manager.databinding.AdContainerListBinding
+import com.xeniac.warrantyroster_manager.databinding.ListItemWarrantyBinding
 import com.xeniac.warrantyroster_manager.ui.viewmodels.MainViewModel
 import com.xeniac.warrantyroster_manager.utils.CoilHelper.loadCategoryImage
 import com.xeniac.warrantyroster_manager.utils.Constants.VIEW_TYPE_AD

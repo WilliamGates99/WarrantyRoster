@@ -1,7 +1,8 @@
 package com.xeniac.warrantyroster_manager.data.repository
 
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.*
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.Query
 import com.xeniac.warrantyroster_manager.data.remote.models.Warranty
 import com.xeniac.warrantyroster_manager.data.remote.models.WarrantyInput
 import com.xeniac.warrantyroster_manager.di.CategoriesCollection

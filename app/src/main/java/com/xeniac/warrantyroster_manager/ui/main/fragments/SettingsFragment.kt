@@ -25,8 +25,8 @@ import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentSettingsBinding
 import com.xeniac.warrantyroster_manager.ui.landing.LandingActivity
 import com.xeniac.warrantyroster_manager.ui.viewmodels.SettingsViewModel
-import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_LANGUAGE_ENGLISH
 import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_LANGUAGE_PERSIAN
@@ -39,7 +39,10 @@ import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkConnect
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkFailureError
 import com.xeniac.warrantyroster_manager.utils.Status
 import dagger.hilt.android.AndroidEntryPoint
-import ir.tapsell.plus.*
+import ir.tapsell.plus.AdHolder
+import ir.tapsell.plus.AdRequestCallback
+import ir.tapsell.plus.AdShowListener
+import ir.tapsell.plus.TapsellPlus
 import ir.tapsell.plus.model.TapsellPlusAdModel
 import timber.log.Timber
 

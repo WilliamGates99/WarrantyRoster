@@ -14,8 +14,8 @@ import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentForgotPwSentBinding
 import com.xeniac.warrantyroster_manager.ui.viewmodels.LandingViewModel
-import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_TIMER_IS_NOT_ZERO
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.show403Error
@@ -25,7 +25,10 @@ import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkFailure
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showTimerIsNotZeroError
 import com.xeniac.warrantyroster_manager.utils.Status
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.text.DecimalFormat
 import javax.inject.Inject
 

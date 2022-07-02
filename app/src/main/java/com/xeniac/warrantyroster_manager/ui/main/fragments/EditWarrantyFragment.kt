@@ -20,13 +20,14 @@ import coil.ImageLoader
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
+import com.xeniac.warrantyroster_manager.data.remote.models.Category
+import com.xeniac.warrantyroster_manager.data.remote.models.Warranty
 import com.xeniac.warrantyroster_manager.databinding.FragmentEditWarrantyBinding
-import com.xeniac.warrantyroster_manager.data.remote.models.*
 import com.xeniac.warrantyroster_manager.domain.repository.PreferencesRepository
 import com.xeniac.warrantyroster_manager.ui.viewmodels.MainViewModel
 import com.xeniac.warrantyroster_manager.utils.CoilHelper.loadCategoryImage
-import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_EXPIRY_DATE
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_STARTING_DATE
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_TITLE

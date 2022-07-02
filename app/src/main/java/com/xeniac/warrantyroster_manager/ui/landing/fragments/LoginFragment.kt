@@ -4,7 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.view.View.*
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat
@@ -15,12 +16,12 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentLoginBinding
-import com.xeniac.warrantyroster_manager.ui.viewmodels.LandingViewModel
 import com.xeniac.warrantyroster_manager.ui.main.MainActivity
+import com.xeniac.warrantyroster_manager.ui.viewmodels.LandingViewModel
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_ACCOUNT_NOT_FOUND
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_CREDENTIALS
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
-import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_EMAIL
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_PASSWORD
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_EMAIL_INVALID
@@ -28,9 +29,9 @@ import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTIO
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_LOGIN_EMAIL
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_LOGIN_PASSWORD
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.show403Error
-import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseDeviceBlockedError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseAuthAccountNotFoundError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseAuthCredentialsError
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseDeviceBlockedError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkConnectionError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkFailureError
 import com.xeniac.warrantyroster_manager.utils.Status
