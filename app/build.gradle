@@ -16,13 +16,13 @@ applovin {
 }
 
 android {
-    compileSdk 33
+    compileSdk 32 // TODO UPDATE TO 33 AFTER UPDATING GRADLE PLUGIN
     buildToolsVersion '33.0.0'
 
     defaultConfig {
         applicationId "com.xeniac.warrantyroster_manager"
         minSdkVersion 21
-        targetSdk 33
+        targetSdk 32 // TODO UPDATE TO 33 AFTER UPDATING GRADLE PLUGIN
         versionCode 13
         versionName "1.4.3"
 
