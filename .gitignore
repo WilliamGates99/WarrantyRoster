@@ -11,6 +11,9 @@
 /.idea/modules.xml
 /.idea/navEditor.xml
 /.idea/workspace.xml
+/.idea/inspectionProfiles
+/.idea/modules
+/.idea/codeStyles
 .DS_Store
 /build
 /captures
