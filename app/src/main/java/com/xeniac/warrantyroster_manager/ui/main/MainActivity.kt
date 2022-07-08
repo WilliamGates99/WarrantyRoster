@@ -23,7 +23,6 @@ import ir.tapsell.plus.model.TapsellPlusAdModel
 import timber.log.Timber
 import javax.inject.Inject
 
-@Suppress("SpellCheckingInspection")
 @AndroidEntryPoint
 class MainActivity : BaseActivity(), MaxAdListener {
 

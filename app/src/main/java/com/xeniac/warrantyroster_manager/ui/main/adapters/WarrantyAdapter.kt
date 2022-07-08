@@ -41,7 +41,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
-@Suppress("SpellCheckingInspection")
 class WarrantyAdapter @Inject constructor(
     private val imageLoader: ImageLoader,
     private val dateFormat: SimpleDateFormat

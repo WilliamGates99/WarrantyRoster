@@ -56,7 +56,6 @@ class BaseApplication : Application() {
         AppLovinPrivacySettings.setHasUserConsent(true, this)
     }
 
-    @Suppress("SpellCheckingInspection")
     private fun initTapsell() {
         TapsellPlus.initialize(
             this, BuildConfig.TAPSELL_KEY, object : TapsellPlusInitListener {

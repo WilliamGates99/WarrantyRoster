@@ -46,7 +46,6 @@ import ir.tapsell.plus.TapsellPlus
 import ir.tapsell.plus.model.TapsellPlusAdModel
 import timber.log.Timber
 
-@Suppress("SpellCheckingInspection")
 @AndroidEntryPoint
 class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListener {
 

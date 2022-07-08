@@ -1,6 +1,5 @@
 package com.xeniac.warrantyroster_manager.utils
 
-@Suppress("SpellCheckingInspection")
 object Constants {
     // Web URLs
     const val URL_PRIVACY_POLICY = "https://xeniacdev.github.io/WarrantyRoster/privacy_policy"
