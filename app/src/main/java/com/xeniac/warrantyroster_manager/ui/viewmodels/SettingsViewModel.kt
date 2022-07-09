@@ -129,22 +129,22 @@ class SettingsViewModel @Inject constructor(
         currentUserEmail: String = userRepository.getCurrentUserEmail()
     ) {
         if (password.isBlank()) {
-            _changeUserEmailLiveData.postValue(Event(Resource.error(ERROR_INPUT_BLANK_PASSWORD)))
+            _reAuthenticateUserLiveData.postValue(Event(Resource.error(ERROR_INPUT_BLANK_PASSWORD)))
             return
         }
 
         if (newEmail.isBlank()) {
-            _changeUserEmailLiveData.postValue(Event(Resource.error(ERROR_INPUT_BLANK_EMAIL)))
+            _reAuthenticateUserLiveData.postValue(Event(Resource.error(ERROR_INPUT_BLANK_EMAIL)))
             return
         }
 
         if (!isEmailValid(newEmail)) {
-            _changeUserEmailLiveData.postValue(Event(Resource.error(ERROR_INPUT_EMAIL_INVALID)))
+            _reAuthenticateUserLiveData.postValue(Event(Resource.error(ERROR_INPUT_EMAIL_INVALID)))
             return
         }
 
         if (newEmail == currentUserEmail) {
-            _changeUserEmailLiveData.postValue(Event(Resource.error(ERROR_INPUT_EMAIL_SAME)))
+            _reAuthenticateUserLiveData.postValue(Event(Resource.error(ERROR_INPUT_EMAIL_SAME)))
             return
         }
 
@@ -155,31 +155,31 @@ class SettingsViewModel @Inject constructor(
         currentPassword: String, newPassword: String, retypeNewPassword: String
     ) {
         if (currentPassword.isBlank()) {
-            _changeUserPasswordLiveData.postValue(Event(Resource.error(ERROR_INPUT_BLANK_PASSWORD)))
+            _reAuthenticateUserLiveData.postValue(Event(Resource.error(ERROR_INPUT_BLANK_PASSWORD)))
             return
         }
 
         if (newPassword.isBlank()) {
-            _changeUserPasswordLiveData.postValue(
+            _reAuthenticateUserLiveData.postValue(
                 Event(Resource.error(ERROR_INPUT_BLANK_NEW_PASSWORD))
             )
             return
         }
 
         if (retypeNewPassword.isBlank()) {
-            _changeUserPasswordLiveData.postValue(
+            _reAuthenticateUserLiveData.postValue(
                 Event(Resource.error(ERROR_INPUT_BLANK_RETYPE_PASSWORD))
             )
             return
         }
 
         if (passwordStrength(newPassword) == (-1).toByte()) {
-            _changeUserPasswordLiveData.postValue(Event(Resource.error(ERROR_INPUT_PASSWORD_SHORT)))
+            _reAuthenticateUserLiveData.postValue(Event(Resource.error(ERROR_INPUT_PASSWORD_SHORT)))
             return
         }
 
         if (!isRetypePasswordValid(newPassword, retypeNewPassword)) {
-            _changeUserPasswordLiveData.postValue(
+            _reAuthenticateUserLiveData.postValue(
                 Event(Resource.error(ERROR_INPUT_PASSWORD_NOT_MATCH))
             )
             return
