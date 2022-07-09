@@ -57,6 +57,9 @@ class SettingsViewModel @Inject constructor(
     private val _logoutLiveData: MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
     val logoutLiveData: LiveData<Event<Resource<Nothing>>> = _logoutLiveData
 
+    private val _checkInputsLiveData: MutableLiveData<Event<Resource<String>>> = MutableLiveData()
+    val checkInputsLiveData: LiveData<Event<Resource<String>>> = _checkInputsLiveData
+
     private val _reAuthenticateUserLiveData: MutableLiveData<Event<Resource<Nothing>>> =
         MutableLiveData()
     val reAuthenticateUserLiveData: LiveData<Event<Resource<Nothing>>> = _reAuthenticateUserLiveData
@@ -129,63 +132,57 @@ class SettingsViewModel @Inject constructor(
         currentUserEmail: String = userRepository.getCurrentUserEmail()
     ) {
         if (password.isBlank()) {
-            _reAuthenticateUserLiveData.postValue(Event(Resource.error(ERROR_INPUT_BLANK_PASSWORD)))
+            _checkInputsLiveData.postValue(Event(Resource.error(ERROR_INPUT_BLANK_PASSWORD)))
             return
         }
 
         if (newEmail.isBlank()) {
-            _reAuthenticateUserLiveData.postValue(Event(Resource.error(ERROR_INPUT_BLANK_EMAIL)))
+            _checkInputsLiveData.postValue(Event(Resource.error(ERROR_INPUT_BLANK_EMAIL)))
             return
         }
 
         if (!isEmailValid(newEmail)) {
-            _reAuthenticateUserLiveData.postValue(Event(Resource.error(ERROR_INPUT_EMAIL_INVALID)))
+            _checkInputsLiveData.postValue(Event(Resource.error(ERROR_INPUT_EMAIL_INVALID)))
             return
         }
 
         if (newEmail == currentUserEmail) {
-            _reAuthenticateUserLiveData.postValue(Event(Resource.error(ERROR_INPUT_EMAIL_SAME)))
+            _checkInputsLiveData.postValue(Event(Resource.error(ERROR_INPUT_EMAIL_SAME)))
             return
         }
 
-        reAuthenticateUser(password)
+        _checkInputsLiveData.postValue(Event(Resource.success(password)))
     }
 
     fun checkChangePasswordInputs(
         currentPassword: String, newPassword: String, retypeNewPassword: String
     ) {
         if (currentPassword.isBlank()) {
-            _reAuthenticateUserLiveData.postValue(Event(Resource.error(ERROR_INPUT_BLANK_PASSWORD)))
+            _checkInputsLiveData.postValue(Event(Resource.error(ERROR_INPUT_BLANK_PASSWORD)))
             return
         }
 
         if (newPassword.isBlank()) {
-            _reAuthenticateUserLiveData.postValue(
-                Event(Resource.error(ERROR_INPUT_BLANK_NEW_PASSWORD))
-            )
+            _checkInputsLiveData.postValue(Event(Resource.error(ERROR_INPUT_BLANK_NEW_PASSWORD)))
             return
         }
 
         if (retypeNewPassword.isBlank()) {
-            _reAuthenticateUserLiveData.postValue(
-                Event(Resource.error(ERROR_INPUT_BLANK_RETYPE_PASSWORD))
-            )
+            _checkInputsLiveData.postValue(Event(Resource.error(ERROR_INPUT_BLANK_RETYPE_PASSWORD)))
             return
         }
 
         if (passwordStrength(newPassword) == (-1).toByte()) {
-            _reAuthenticateUserLiveData.postValue(Event(Resource.error(ERROR_INPUT_PASSWORD_SHORT)))
+            _checkInputsLiveData.postValue(Event(Resource.error(ERROR_INPUT_PASSWORD_SHORT)))
             return
         }
 
         if (!isRetypePasswordValid(newPassword, retypeNewPassword)) {
-            _reAuthenticateUserLiveData.postValue(
-                Event(Resource.error(ERROR_INPUT_PASSWORD_NOT_MATCH))
-            )
+            _checkInputsLiveData.postValue(Event(Resource.error(ERROR_INPUT_PASSWORD_NOT_MATCH)))
             return
         }
 
-        reAuthenticateUser(currentPassword)
+        _checkInputsLiveData.postValue(Event(Resource.success(currentPassword)))
     }
 
     fun reAuthenticateUser(password: String) = viewModelScope.launch {

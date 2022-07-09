@@ -170,18 +170,22 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
     }
 
     private fun subscribeToObservers() {
+        checkInputsObserver()
         reAuthenticateUserObserver()
         changeUserEmailObserver()
     }
 
-    private fun reAuthenticateUserObserver() =
-        viewModel.reAuthenticateUserLiveData.observe(viewLifecycleOwner) { responseEvent ->
+    private fun checkInputsObserver() =
+        viewModel.checkInputsLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response.status) {
-                    Status.LOADING -> showLoadingAnimation()
-                    Status.SUCCESS -> changeUserEmail()
+                    Status.LOADING -> {
+                        /* NO-OP */
+                    }
+                    Status.SUCCESS -> {
+                        reAuthenticateUser(response.data.toString())
+                    }
                     Status.ERROR -> {
-                        hideLoadingAnimation()
                         response.message?.let {
                             when {
                                 it.contains(ERROR_INPUT_BLANK_PASSWORD) -> {
@@ -204,6 +208,25 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
                                     binding.tiLayoutNewEmail.error =
                                         requireContext().getString(R.string.change_email_error_email_same)
                                 }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+    private fun reAuthenticateUser(password: String) = viewModel.reAuthenticateUser(password)
+
+    private fun reAuthenticateUserObserver() =
+        viewModel.reAuthenticateUserLiveData.observe(viewLifecycleOwner) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { response ->
+                when (response.status) {
+                    Status.LOADING -> showLoadingAnimation()
+                    Status.SUCCESS -> changeUserEmail()
+                    Status.ERROR -> {
+                        hideLoadingAnimation()
+                        response.message?.let {
+                            when {
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
                                     snackbar = showNetworkConnectionError(
                                         requireContext(), binding.root

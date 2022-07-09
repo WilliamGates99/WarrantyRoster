@@ -18,6 +18,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentChangePasswordBinding
 import com.xeniac.warrantyroster_manager.ui.viewmodels.SettingsViewModel
+import com.xeniac.warrantyroster_manager.utils.Constants
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_CREDENTIALS
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
@@ -214,6 +215,7 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
         }
 
     private fun subscribeToObservers() {
+        checkInputsObserver()
         reAuthenticateUserObserver()
         changeUserPasswordObserver()
     }
@@ -230,14 +232,17 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
         viewModel.checkChangePasswordInputs(currentPassword, newPassword, retypeNewPassword)
     }
 
-    private fun reAuthenticateUserObserver() =
-        viewModel.reAuthenticateUserLiveData.observe(viewLifecycleOwner) { responseEvent ->
+    private fun checkInputsObserver() =
+        viewModel.checkInputsLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response.status) {
-                    Status.LOADING -> showLoadingAnimation()
-                    Status.SUCCESS -> changeUserPassword()
+                    Status.LOADING -> {
+                        /* NO-OP */
+                    }
+                    Status.SUCCESS -> {
+                        reAuthenticateUser(response.data.toString())
+                    }
                     Status.ERROR -> {
-                        hideLoadingAnimation()
                         response.message?.let {
                             when {
                                 it.contains(ERROR_INPUT_BLANK_PASSWORD) -> {
@@ -265,6 +270,25 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
                                     binding.tiLayoutRetypePassword.error =
                                         requireContext().getString(R.string.change_password_error_match)
                                 }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+    private fun reAuthenticateUser(password: String) = viewModel.reAuthenticateUser(password)
+
+    private fun reAuthenticateUserObserver() =
+        viewModel.reAuthenticateUserLiveData.observe(viewLifecycleOwner) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { response ->
+                when (response.status) {
+                    Status.LOADING -> showLoadingAnimation()
+                    Status.SUCCESS -> changeUserPassword()
+                    Status.ERROR -> {
+                        hideLoadingAnimation()
+                        response.message?.let {
+                            when {
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
                                     snackbar = showNetworkConnectionError(
                                         requireContext(), binding.root

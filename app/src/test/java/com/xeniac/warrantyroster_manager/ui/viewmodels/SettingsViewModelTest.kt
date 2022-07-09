@@ -136,7 +136,7 @@ class SettingsViewModelTest {
         fakeUserRepository.addUser("email@test.com", "password")
         testViewModel.checkChangeEmailInputs("", "new_email@test.com")
 
-        val responseEvent = testViewModel.changeUserEmailLiveData.getOrAwaitValue()
+        val responseEvent = testViewModel.checkInputsLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
     }
 
@@ -146,7 +146,7 @@ class SettingsViewModelTest {
         fakeUserRepository.addUser("email@test.com", password)
         testViewModel.checkChangeEmailInputs(password, "email")
 
-        val responseEvent = testViewModel.changeUserEmailLiveData.getOrAwaitValue()
+        val responseEvent = testViewModel.checkInputsLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
     }
 
@@ -157,7 +157,7 @@ class SettingsViewModelTest {
         fakeUserRepository.addUser(email, password)
         testViewModel.checkChangeEmailInputs(password, email)
 
-        val responseEvent = testViewModel.changeUserEmailLiveData.getOrAwaitValue()
+        val responseEvent = testViewModel.checkInputsLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
     }
 
@@ -184,7 +184,7 @@ class SettingsViewModelTest {
         fakeUserRepository.addUser("email@test.com", "password")
         testViewModel.checkChangePasswordInputs("", "", "")
 
-        val responseEvent = testViewModel.changeUserPasswordLiveData.getOrAwaitValue()
+        val responseEvent = testViewModel.checkInputsLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
     }
 
@@ -195,7 +195,7 @@ class SettingsViewModelTest {
         fakeUserRepository.addUser("email@test.com", password)
         testViewModel.checkChangePasswordInputs(password, shortPassword, shortPassword)
 
-        val responseEvent = testViewModel.changeUserPasswordLiveData.getOrAwaitValue()
+        val responseEvent = testViewModel.checkInputsLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
     }
 
@@ -205,7 +205,7 @@ class SettingsViewModelTest {
         fakeUserRepository.addUser("email@test.com", password)
         testViewModel.checkChangePasswordInputs(password, "new_password", "1234")
 
-        val responseEvent = testViewModel.changeUserPasswordLiveData.getOrAwaitValue()
+        val responseEvent = testViewModel.checkInputsLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
     }
 
