@@ -111,7 +111,7 @@ class WarrantiesFragment @Inject constructor(
                 when (response.status) {
                     Status.LOADING -> showLoadingAnimation()
                     Status.SUCCESS -> {
-//                        hideLoadingAnimation()
+                        hideLoadingAnimation()
                         response.data?.let { warrantiesList ->
                             showWarrantiesList(warrantiesList)
                         }

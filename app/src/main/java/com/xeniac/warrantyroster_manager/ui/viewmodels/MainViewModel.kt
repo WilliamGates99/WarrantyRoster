@@ -114,6 +114,7 @@ class MainViewModel @Inject constructor(
             error?.let {
                 Timber.e("getCategoriesFromFirestore Error: ${it.message}")
                 _categoriesLiveData.postValue(Event(Resource.error(it.message.toString())))
+                return@addSnapshotListener
             }
 
             value?.let {
@@ -135,6 +136,7 @@ class MainViewModel @Inject constructor(
 
                     _categoriesLiveData.postValue(Event(Resource.success(categoriesList)))
                     Timber.i("Categories List successfully retrieved.")
+                    return@addSnapshotListener
                 }
             }
         }
@@ -146,6 +148,7 @@ class MainViewModel @Inject constructor(
             error?.let {
                 Timber.e("getWarrantiesListFromFirestore Error: ${it.message}")
                 _warrantiesLiveData.postValue(Event(Resource.error(it.message.toString())))
+                return@addSnapshotListener
             }
 
             value?.let {
@@ -186,6 +189,7 @@ class MainViewModel @Inject constructor(
                     _warrantiesLiveData.postValue(Event(Resource.success(warrantiesList)))
                     Timber.i("Warranties List successfully retrieved.")
                 }
+                return@addSnapshotListener
             }
         }
     }
