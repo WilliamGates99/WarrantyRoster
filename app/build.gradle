@@ -23,8 +23,8 @@ android {
         applicationId "com.xeniac.warrantyroster_manager"
         minSdkVersion 21
         targetSdk 33
-        versionCode 13
-        versionName "1.4.3"
+        versionCode 14
+        versionName "1.4.4"
 
         buildConfigField("String", "APPLOVIN_API_KEY", APPLOVIN_API_KEY)
         buildConfigField("String", "APPLOVIN_INTERSTITIAL_UNIT_ID", APPLOVIN_INTERSTITIAL_UNIT_ID)
