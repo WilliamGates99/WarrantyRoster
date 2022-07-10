@@ -24,14 +24,15 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class WarrantiesFragment @Inject constructor(
-    private val warrantyAdapter: WarrantyAdapter
-) : Fragment(R.layout.fragment_warranties), WarrantyListClickInterface {
+class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListClickInterface {
 
     private var _binding: FragmentWarrantiesBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var viewModel: MainViewModel
+
+    @Inject
+    lateinit var warrantyAdapter: WarrantyAdapter
 
     private var snackbar: Snackbar? = null
 

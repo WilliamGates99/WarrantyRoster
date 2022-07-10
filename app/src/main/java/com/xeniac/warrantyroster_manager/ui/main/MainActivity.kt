@@ -21,13 +21,9 @@ import ir.tapsell.plus.AdRequestCallback
 import ir.tapsell.plus.TapsellPlus
 import ir.tapsell.plus.model.TapsellPlusAdModel
 import timber.log.Timber
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity(), MaxAdListener {
-
-    @Inject
-    lateinit var fragmentFactory: BaseMainFragmentFactory
 
     lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
@@ -40,7 +36,6 @@ class MainActivity : BaseActivity(), MaxAdListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        supportFragmentManager.fragmentFactory = fragmentFactory
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         mainInit()
