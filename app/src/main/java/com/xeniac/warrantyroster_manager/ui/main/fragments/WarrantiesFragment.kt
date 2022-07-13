@@ -27,9 +27,9 @@ import javax.inject.Inject
 class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListClickInterface {
 
     private var _binding: FragmentWarrantiesBinding? = null
-    private val binding get() = _binding!!
+    val binding get() = _binding!!
 
-    private lateinit var viewModel: MainViewModel
+    lateinit var viewModel: MainViewModel
 
     @Inject
     lateinit var warrantyAdapter: WarrantyAdapter
