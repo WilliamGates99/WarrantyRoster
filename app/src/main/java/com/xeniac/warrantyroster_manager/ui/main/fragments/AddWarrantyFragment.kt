@@ -58,8 +58,9 @@ import javax.inject.Inject
 class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
 
     private var _binding: FragmentAddWarrantyBinding? = null
-    private val binding get() = _binding!!
-    private lateinit var viewModel: MainViewModel
+    val binding get() = _binding!!
+
+    lateinit var viewModel: MainViewModel
 
     @Inject
     lateinit var preferencesRepository: PreferencesRepository
@@ -73,7 +74,7 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
     private var selectedCategory: Category? = null
 
     private var selectedStartingDateInMillis = 0L
-    private var startingDateInput: String? = null
+    var startingDateInput: String? = null
 
     private var selectedExpiryDateInMillis = 0L
     private var expiryDateInput: String? = null
@@ -304,6 +305,7 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
     }
 
     private fun textInputsStrokeColor() {
+        // TODO ADD TITLE AFTER ADDING title.setError()
         binding.tiEditDateStarting.addTextChangedListener {
             hideDateError()
         }
@@ -447,10 +449,9 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
         requireContext(), categoryIcon, imageLoader, binding.ivIconCategory, binding.cpiIconCategory
     )
 
-    private fun returnToMainActivity() =
-        binding.toolbar.setNavigationOnClickListener {
-            findNavController().popBackStack()
-        }
+    private fun returnToMainActivity() = binding.toolbar.setNavigationOnClickListener {
+        findNavController().popBackStack()
+    }
 
     private fun addWarrantyOnClick() = binding.toolbar.menu[0].setOnMenuItemClickListener {
         getWarrantyInput()
