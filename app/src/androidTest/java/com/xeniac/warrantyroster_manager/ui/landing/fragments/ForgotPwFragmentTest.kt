@@ -56,8 +56,8 @@ class ForgotPwFragmentTest {
         )
 
         launchFragmentInHiltContainer<ForgotPwFragment> {
-            Navigation.setViewNavController(requireView(), navController)
             navController.setGraph(R.navigation.nav_graph_landing)
+            Navigation.setViewNavController(requireView(), navController)
             navController.navigate(LoginFragmentDirections.actionLoginFragmentToForgotPasswordFragment())
 
             viewModel = testViewModel
@@ -67,20 +67,26 @@ class ForgotPwFragmentTest {
 
     @Test
     fun clickOnEmailEditText_changesBoxBackgroundColor() {
-        onView(withId(testBinding.tiEditEmail.id)).perform(click())
-        assertThat(testBinding.tiLayoutEmail.boxBackgroundColor).isEqualTo(context.getColor(R.color.background))
+        testBinding.apply {
+            onView(withId(tiEditEmail.id)).perform(click())
+            assertThat(tiLayoutEmail.boxBackgroundColor).isEqualTo(context.getColor(R.color.background))
+        }
     }
 
     @Test
     fun clickOnEmailEditText_changesBoxStrokeColor() {
-        onView(withId(testBinding.tiEditEmail.id)).perform(click())
-        assertThat(testBinding.tiLayoutEmail.boxStrokeColor).isEqualTo(context.getColor(R.color.blue))
+        testBinding.apply {
+            onView(withId(tiEditEmail.id)).perform(click())
+            assertThat(tiLayoutEmail.boxStrokeColor).isEqualTo(context.getColor(R.color.blue))
+        }
     }
 
     @Test
     fun pressImeActionOnEmailEditTextWithErrorStatus_returnsError() {
-        onView(withId(testBinding.tiEditEmail.id)).perform(replaceText("email"))
-        onView(withId(testBinding.tiEditEmail.id)).perform(pressImeActionButton())
+        testBinding.apply {
+            onView(withId(tiEditEmail.id)).perform(replaceText("email"))
+            onView(withId(tiEditEmail.id)).perform(pressImeActionButton())
+        }
 
         val responseEvent = testViewModel.forgotPwLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
@@ -92,8 +98,10 @@ class ForgotPwFragmentTest {
         val password = "password"
         fakeUserRepository.addUser(email, password)
 
-        onView(withId(testBinding.tiEditEmail.id)).perform(replaceText(email))
-        onView(withId(testBinding.tiEditEmail.id)).perform(pressImeActionButton())
+        testBinding.apply {
+            onView(withId(tiEditEmail.id)).perform(replaceText(email))
+            onView(withId(tiEditEmail.id)).perform(pressImeActionButton())
+        }
 
         val responseEvent = testViewModel.forgotPwLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.SUCCESS)
@@ -113,8 +121,10 @@ class ForgotPwFragmentTest {
 
     @Test
     fun clickOnSendBtnWithErrorStatus_returnsError() {
-        onView(withId(testBinding.tiEditEmail.id)).perform(replaceText("email"))
-        onView(withId(testBinding.btnSend.id)).perform(click())
+        testBinding.apply {
+            onView(withId(tiEditEmail.id)).perform(replaceText("email"))
+            onView(withId(btnSend.id)).perform(click())
+        }
 
         val responseEvent = testViewModel.forgotPwLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
@@ -126,8 +136,10 @@ class ForgotPwFragmentTest {
         val password = "password"
         fakeUserRepository.addUser(email, password)
 
-        onView(withId(testBinding.tiEditEmail.id)).perform(replaceText(email))
-        onView(withId(testBinding.btnSend.id)).perform(click())
+        testBinding.apply {
+            onView(withId(tiEditEmail.id)).perform(replaceText(email))
+            onView(withId(btnSend.id)).perform(click())
+        }
 
         val responseEvent = testViewModel.forgotPwLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.SUCCESS)
@@ -139,8 +151,10 @@ class ForgotPwFragmentTest {
         val password = "password"
         fakeUserRepository.addUser(email, password)
 
-        onView(withId(testBinding.tiEditEmail.id)).perform(replaceText(email))
-        onView(withId(testBinding.btnSend.id)).perform(click())
+        testBinding.apply {
+            onView(withId(tiEditEmail.id)).perform(replaceText(email))
+            onView(withId(btnSend.id)).perform(click())
+        }
 
         assertThat(navController.currentDestination?.id).isEqualTo(R.id.forgotPwSentFragment)
     }
@@ -151,8 +165,10 @@ class ForgotPwFragmentTest {
         val password = "password"
         fakeUserRepository.addUser(email, password)
 
-        onView(withId(testBinding.tiEditEmail.id)).perform(replaceText(email))
-        onView(withId(testBinding.tiEditEmail.id)).perform(pressImeActionButton())
+        testBinding.apply {
+            onView(withId(tiEditEmail.id)).perform(replaceText(email))
+            onView(withId(tiEditEmail.id)).perform(pressImeActionButton())
+        }
 
         assertThat(navController.currentDestination?.id).isEqualTo(R.id.forgotPwSentFragment)
     }

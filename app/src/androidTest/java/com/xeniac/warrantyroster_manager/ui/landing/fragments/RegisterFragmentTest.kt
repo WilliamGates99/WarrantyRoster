@@ -61,8 +61,8 @@ class RegisterFragmentTest {
         )
 
         launchFragmentInHiltContainer<RegisterFragment> {
-            Navigation.setViewNavController(requireView(), navController)
             navController.setGraph(R.navigation.nav_graph_landing)
+            Navigation.setViewNavController(requireView(), navController)
             navController.navigate(LoginFragmentDirections.actionLoginFragmentToRegisterFragment())
 
             viewModel = testViewModel
@@ -72,58 +72,69 @@ class RegisterFragmentTest {
 
     @Test
     fun clickOnEmailEditText_changesBoxBackgroundColor() {
-        onView(withId(testBinding.tiEditEmail.id)).perform(click())
+        testBinding.apply {
+            onView(withId(tiEditEmail.id)).perform(click())
 
-        assertThat(testBinding.tiLayoutEmail.boxBackgroundColor).isEqualTo(context.getColor(R.color.background))
-        assertThat(testBinding.tiLayoutPassword.boxBackgroundColor).isEqualTo(context.getColor(R.color.grayLight))
-        assertThat(testBinding.tiLayoutRetypePassword.boxBackgroundColor)
-            .isEqualTo(context.getColor(R.color.grayLight))
+            assertThat(tiLayoutEmail.boxBackgroundColor).isEqualTo(context.getColor(R.color.background))
+            assertThat(tiLayoutPassword.boxBackgroundColor).isEqualTo(context.getColor(R.color.grayLight))
+            assertThat(tiLayoutRetypePassword.boxBackgroundColor).isEqualTo(context.getColor(R.color.grayLight))
+        }
     }
 
     @Test
     fun clickOnPasswordEditText_changesBoxBackgroundColor() {
-        onView(withId(testBinding.tiEditPassword.id)).perform(click())
+        testBinding.apply {
+            onView(withId(tiEditPassword.id)).perform(click())
 
-        assertThat(testBinding.tiLayoutEmail.boxBackgroundColor).isEqualTo(context.getColor(R.color.grayLight))
-        assertThat(testBinding.tiLayoutPassword.boxBackgroundColor).isEqualTo(context.getColor(R.color.background))
-        assertThat(testBinding.tiLayoutRetypePassword.boxBackgroundColor)
-            .isEqualTo(context.getColor(R.color.grayLight))
+            assertThat(tiLayoutEmail.boxBackgroundColor).isEqualTo(context.getColor(R.color.grayLight))
+            assertThat(tiLayoutPassword.boxBackgroundColor).isEqualTo(context.getColor(R.color.background))
+            assertThat(tiLayoutRetypePassword.boxBackgroundColor).isEqualTo(context.getColor(R.color.grayLight))
+        }
     }
 
     @Test
     fun clickOnRetypePasswordEditText_changesBoxBackgroundColor() {
-        onView(withId(testBinding.tiEditRetypePassword.id)).perform(click())
+        testBinding.apply {
+            onView(withId(tiEditRetypePassword.id)).perform(click())
 
-        assertThat(testBinding.tiLayoutEmail.boxBackgroundColor).isEqualTo(context.getColor(R.color.grayLight))
-        assertThat(testBinding.tiLayoutPassword.boxBackgroundColor).isEqualTo(context.getColor(R.color.grayLight))
-        assertThat(testBinding.tiLayoutRetypePassword.boxBackgroundColor)
-            .isEqualTo(context.getColor(R.color.background))
+            assertThat(tiLayoutEmail.boxBackgroundColor).isEqualTo(context.getColor(R.color.grayLight))
+            assertThat(tiLayoutPassword.boxBackgroundColor).isEqualTo(context.getColor(R.color.grayLight))
+            assertThat(tiLayoutRetypePassword.boxBackgroundColor).isEqualTo(context.getColor(R.color.background))
+        }
     }
 
     @Test
     fun clickOnEmailEditText_changesBoxStrokeColor() {
-        onView(withId(testBinding.tiEditEmail.id)).perform(click())
-        assertThat(testBinding.tiLayoutEmail.boxStrokeColor).isEqualTo(context.getColor(R.color.blue))
+        testBinding.apply {
+            onView(withId(tiEditEmail.id)).perform(click())
+            assertThat(tiLayoutEmail.boxStrokeColor).isEqualTo(context.getColor(R.color.blue))
+        }
     }
 
     @Test
     fun clickOnPasswordEditText_changesBoxStrokeColor() {
-        onView(withId(testBinding.tiEditPassword.id)).perform(click())
-        assertThat(testBinding.tiLayoutPassword.boxStrokeColor).isEqualTo(context.getColor(R.color.blue))
+        testBinding.apply {
+            onView(withId(tiEditPassword.id)).perform(click())
+            assertThat(tiLayoutPassword.boxStrokeColor).isEqualTo(context.getColor(R.color.blue))
+        }
     }
 
     @Test
     fun clickOnRetypePasswordEditText_changesBoxStrokeColor() {
-        onView(withId(testBinding.tiEditRetypePassword.id)).perform(click())
-        assertThat(testBinding.tiLayoutRetypePassword.boxStrokeColor).isEqualTo(context.getColor(R.color.blue))
+        testBinding.apply {
+            onView(withId(tiEditRetypePassword.id)).perform(click())
+            assertThat(tiLayoutRetypePassword.boxStrokeColor).isEqualTo(context.getColor(R.color.blue))
+        }
     }
 
     @Test
     fun pressImeActionOnRetypePasswordEditTextWithErrorStatus_returnsError() {
-        onView(withId(testBinding.tiEditEmail.id)).perform(replaceText("email"))
-        onView(withId(testBinding.tiEditPassword.id)).perform(replaceText("password"))
-        onView(withId(testBinding.tiEditRetypePassword.id)).perform(replaceText("retype_password"))
-        onView(withId(testBinding.tiEditRetypePassword.id)).perform(pressImeActionButton())
+        testBinding.apply {
+            onView(withId(tiEditEmail.id)).perform(replaceText("email"))
+            onView(withId(tiEditPassword.id)).perform(replaceText("password"))
+            onView(withId(tiEditRetypePassword.id)).perform(replaceText("retype_password"))
+            onView(withId(tiEditRetypePassword.id)).perform(pressImeActionButton())
+        }
 
         val responseEvent = testViewModel.registerLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
@@ -134,10 +145,12 @@ class RegisterFragmentTest {
         val email = "email@test.com"
         val password = "password"
 
-        onView(withId(testBinding.tiEditEmail.id)).perform(replaceText(email))
-        onView(withId(testBinding.tiEditPassword.id)).perform(replaceText(password))
-        onView(withId(testBinding.tiEditRetypePassword.id)).perform(replaceText(password))
-        onView(withId(testBinding.tiEditRetypePassword.id)).perform(pressImeActionButton())
+        testBinding.apply {
+            onView(withId(tiEditEmail.id)).perform(replaceText(email))
+            onView(withId(tiEditPassword.id)).perform(replaceText(password))
+            onView(withId(tiEditRetypePassword.id)).perform(replaceText(password))
+            onView(withId(tiEditRetypePassword.id)).perform(pressImeActionButton())
+        }
 
         val responseEvent = testViewModel.registerLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.SUCCESS)
@@ -167,10 +180,12 @@ class RegisterFragmentTest {
 
     @Test
     fun clickOnRegisterBtnWithErrorStatus_returnsError() {
-        onView(withId(testBinding.tiEditEmail.id)).perform(replaceText("email"))
-        onView(withId(testBinding.tiEditPassword.id)).perform(replaceText("password"))
-        onView(withId(testBinding.tiEditRetypePassword.id)).perform(replaceText("retype_password"))
-        onView(withId(testBinding.btnRegister.id)).perform(click())
+        testBinding.apply {
+            onView(withId(tiEditEmail.id)).perform(replaceText("email"))
+            onView(withId(tiEditPassword.id)).perform(replaceText("password"))
+            onView(withId(tiEditRetypePassword.id)).perform(replaceText("retype_password"))
+            onView(withId(btnRegister.id)).perform(click())
+        }
 
         val responseEvent = testViewModel.registerLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
@@ -181,10 +196,12 @@ class RegisterFragmentTest {
         val email = "email@test.com"
         val password = "password"
 
-        onView(withId(testBinding.tiEditEmail.id)).perform(replaceText(email))
-        onView(withId(testBinding.tiEditPassword.id)).perform(replaceText(password))
-        onView(withId(testBinding.tiEditRetypePassword.id)).perform(replaceText(password))
-        onView(withId(testBinding.btnRegister.id)).perform(click())
+        testBinding.apply {
+            onView(withId(tiEditEmail.id)).perform(replaceText(email))
+            onView(withId(tiEditPassword.id)).perform(replaceText(password))
+            onView(withId(tiEditRetypePassword.id)).perform(replaceText(password))
+            onView(withId(btnRegister.id)).perform(click())
+        }
 
         val responseEvent = testViewModel.registerLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.SUCCESS)

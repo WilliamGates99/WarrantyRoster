@@ -59,8 +59,8 @@ class AddWarrantyFragmentTest {
         )
 
         launchFragmentInHiltContainer<AddWarrantyFragment> {
-            Navigation.setViewNavController(requireView(), navController)
             navController.setGraph(R.navigation.nav_graph_main)
+            Navigation.setViewNavController(requireView(), navController)
             navController.navigate(NavGraphMainDirections.actionMainActivityToAddWarrantyFragment())
 
             viewModel = testViewModel
@@ -289,9 +289,8 @@ class AddWarrantyFragmentTest {
 
     @Test
     fun clickOnNavigateUpBtn_popsBackStack() {
-        onView(withContentDescription(androidx.appcompat.R.string.abc_action_bar_up_description)).perform(
-            click()
-        )
+        onView(withContentDescription(androidx.appcompat.R.string.abc_action_bar_up_description))
+            .perform(click())
         assertThat(navController.currentDestination?.id).isEqualTo(R.id.warrantiesFragment)
     }
 

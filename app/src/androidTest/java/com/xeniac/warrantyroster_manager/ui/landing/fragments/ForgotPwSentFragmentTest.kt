@@ -108,9 +108,11 @@ class ForgotPwSentFragmentTest {
 
     @Test
     fun timerWith0RemainingTime_showsGroupResend() {
-        onView(withId(testBinding.btnResend.id)).perform(click())
+        testBinding.apply {
+            onView(withId(btnResend.id)).perform(click())
 
-        assertThat(testBinding.groupTimer.isVisible).isFalse()
-        assertThat(testBinding.groupResend.isVisible).isTrue()
+            assertThat(groupTimer.isVisible).isFalse()
+            assertThat(groupResend.isVisible).isTrue()
+        }
     }
 }
