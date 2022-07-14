@@ -1,6 +1,7 @@
 package com.xeniac.warrantyroster_manager.ui.main.fragments
 
 import android.content.Context
+import androidx.appcompat.widget.AppCompatImageButton
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.navigation.Navigation
 import androidx.navigation.testing.TestNavHostController
@@ -9,8 +10,8 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withParent
 import com.google.common.truth.Truth.assertThat
 import com.xeniac.warrantyroster_manager.NavGraphMainDirections
 import com.xeniac.warrantyroster_manager.R
@@ -25,6 +26,8 @@ import com.xeniac.warrantyroster_manager.utils.Status
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import org.hamcrest.CoreMatchers.allOf
+import org.hamcrest.CoreMatchers.instanceOf
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -289,8 +292,13 @@ class AddWarrantyFragmentTest {
 
     @Test
     fun clickOnNavigateUpBtn_popsBackStack() {
-        onView(withContentDescription(androidx.appcompat.R.string.abc_action_bar_up_description))
-            .perform(click())
+        onView(
+            allOf(
+                instanceOf(AppCompatImageButton::class.java),
+                withParent(withId(testBinding.toolbar.id))
+            )
+        ).perform(click())
+
         assertThat(navController.currentDestination?.id).isEqualTo(R.id.warrantiesFragment)
     }
 
