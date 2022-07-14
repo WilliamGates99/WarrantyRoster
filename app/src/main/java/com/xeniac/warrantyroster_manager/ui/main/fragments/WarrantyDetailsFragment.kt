@@ -45,8 +45,9 @@ import javax.inject.Inject
 class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
 
     private var _binding: FragmentWarrantyDetailsBinding? = null
-    private val binding get() = _binding!!
-    private lateinit var viewModel: MainViewModel
+    val binding get() = _binding!!
+
+    lateinit var viewModel: MainViewModel
 
     @Inject
     lateinit var imageLoader: ImageLoader
