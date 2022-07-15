@@ -60,7 +60,9 @@ class MainActivity : BaseActivity(), MaxAdListener {
     }
 
     private fun bottomNavActions() {
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.fcv) as NavHostFragment
+        val navHostFragment = supportFragmentManager
+            .findFragmentById(binding.fcv.id) as NavHostFragment
+
         navController = navHostFragment.navController
         NavigationUI.setupWithNavController(binding.bnv, navController)
         binding.bnv.setOnItemReselectedListener { /* NO-OP */ }
