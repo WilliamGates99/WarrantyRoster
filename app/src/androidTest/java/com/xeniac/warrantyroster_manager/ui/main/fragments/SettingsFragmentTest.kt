@@ -69,7 +69,6 @@ class SettingsFragmentTest {
             Navigation.setViewNavController(requireView(), navController)
             navController.setCurrentDestination(R.id.settingsFragment)
 
-//            viewModel = testViewModel
             testViewModel = viewModel
             testBinding = binding
         }
