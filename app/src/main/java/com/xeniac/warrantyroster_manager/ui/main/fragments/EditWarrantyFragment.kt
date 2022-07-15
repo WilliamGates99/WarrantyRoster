@@ -61,8 +61,9 @@ import javax.inject.Inject
 class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
 
     private var _binding: FragmentEditWarrantyBinding? = null
-    private val binding get() = _binding!!
-    private lateinit var viewModel: MainViewModel
+    val binding get() = _binding!!
+
+    lateinit var viewModel: MainViewModel
 
     @Inject
     lateinit var preferencesRepository: PreferencesRepository
