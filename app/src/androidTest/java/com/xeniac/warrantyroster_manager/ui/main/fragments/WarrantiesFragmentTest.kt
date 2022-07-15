@@ -62,6 +62,7 @@ class WarrantiesFragmentTest {
         launchFragmentInHiltContainer<WarrantiesFragment> {
             navController.setGraph(R.navigation.nav_graph_main)
             Navigation.setViewNavController(requireView(), navController)
+            navController.setCurrentDestination(R.id.warrantiesFragment)
 
             viewModel = testViewModel
             testBinding = binding
