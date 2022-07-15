@@ -47,7 +47,6 @@ class EditWarrantyFragmentTest {
     private var testArgs: Bundle? = null
     private lateinit var testBinding: FragmentEditWarrantyBinding
 
-    private lateinit var fakeMainRepository: FakeMainRepository
     private lateinit var testViewModel: MainViewModel
 
     private val warranty = Warranty(
@@ -64,10 +63,9 @@ class EditWarrantyFragmentTest {
         context = ApplicationProvider.getApplicationContext()
         navController = TestNavHostController(context)
 
-        fakeMainRepository = FakeMainRepository()
         testViewModel = MainViewModel(
             FakeUserRepository(),
-            fakeMainRepository,
+            FakeMainRepository(),
             FakePreferencesRepository()
         )
 
