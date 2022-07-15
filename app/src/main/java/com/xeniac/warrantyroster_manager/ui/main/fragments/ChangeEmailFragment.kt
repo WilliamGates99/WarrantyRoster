@@ -42,8 +42,9 @@ import dagger.hilt.android.AndroidEntryPoint
 class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
 
     private var _binding: FragmentChangeEmailBinding? = null
-    private val binding get() = _binding!!
-    private val viewModel: SettingsViewModel by viewModels()
+    val binding get() = _binding!!
+
+    val viewModel: SettingsViewModel by viewModels()
 
     private lateinit var newEmail: String
 
