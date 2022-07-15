@@ -50,8 +50,9 @@ import timber.log.Timber
 class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListener {
 
     private var _binding: FragmentSettingsBinding? = null
-    private val binding get() = _binding!!
-    private val viewModel: SettingsViewModel by viewModels()
+    val binding get() = _binding!!
+
+    val viewModel: SettingsViewModel by viewModels()
 
     private lateinit var currentAppLanguage: String
     private lateinit var currentAppCountry: String
@@ -74,7 +75,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
         subscribeToObservers()
         getAccountDetails()
         getCurrentAppLocale()
-        getCurrentApptheme()
+        getCurrentAppTheme()
         verifyOnClick()
         changeEmailOnClick()
         changePasswordOnClick()
@@ -184,7 +185,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
         }
     }
 
-    private fun getCurrentApptheme() = viewModel.getCurrentAppTheme()
+    private fun getCurrentAppTheme() = viewModel.getCurrentAppTheme()
 
     private fun currentAppThemeObserver() =
         viewModel.currentAppTheme.observe(viewLifecycleOwner) { responseEvent ->
