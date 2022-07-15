@@ -8,8 +8,8 @@ import androidx.navigation.testing.TestNavHostController
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBack
-import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.replaceText
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withParent
 import com.google.common.truth.Truth.assertThat
@@ -314,8 +314,8 @@ class AddWarrantyFragmentTest {
     fun clickOnAddWarrantyMenuWithSuccessStatus_returnsSuccess() {
         testBinding.apply {
             cbLifetime.isChecked = true
-            onView(withId(tiEditTitle.id)).perform(ViewActions.replaceText("title"))
-            onView(withId(tiEditDateStarting.id)).perform(ViewActions.replaceText("title"))
+            onView(withId(tiEditTitle.id)).perform(replaceText("title"))
+            onView(withId(tiEditDateStarting.id)).perform(replaceText("title"))
         }
         onView(withId(R.id.action_menu_add)).perform(click())
 
@@ -327,8 +327,8 @@ class AddWarrantyFragmentTest {
     fun clickOnAddWarrantyMenuWithSuccessStatus_navigatesToWarrantiesFragment() {
         testBinding.apply {
             cbLifetime.isChecked = true
-            onView(withId(tiEditTitle.id)).perform(ViewActions.replaceText("title"))
-            onView(withId(tiEditDateStarting.id)).perform(ViewActions.replaceText("title"))
+            onView(withId(tiEditTitle.id)).perform(replaceText("title"))
+            onView(withId(tiEditDateStarting.id)).perform(replaceText("title"))
         }
         onView(withId(R.id.action_menu_add)).perform(click())
 
