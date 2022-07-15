@@ -18,7 +18,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentChangePasswordBinding
 import com.xeniac.warrantyroster_manager.ui.viewmodels.SettingsViewModel
-import com.xeniac.warrantyroster_manager.utils.Constants
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_CREDENTIALS
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
@@ -44,8 +43,9 @@ import dagger.hilt.android.AndroidEntryPoint
 class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
 
     private var _binding: FragmentChangePasswordBinding? = null
-    private val binding get() = _binding!!
-    private val viewModel: SettingsViewModel by viewModels()
+    val binding get() = _binding!!
+
+    val viewModel: SettingsViewModel by viewModels()
 
     private lateinit var newPassword: String
 
