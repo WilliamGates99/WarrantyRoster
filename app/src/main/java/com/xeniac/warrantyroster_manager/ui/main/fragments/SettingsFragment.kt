@@ -6,9 +6,11 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.widget.Toast
+import android.widget.Toast.LENGTH_LONG
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.airbnb.lottie.LottieDrawable
 import com.applovin.mediation.MaxAd
@@ -33,6 +35,7 @@ import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_LANGUAGE_PERSIAN
 import com.xeniac.warrantyroster_manager.utils.Constants.URL_DONATE
 import com.xeniac.warrantyroster_manager.utils.Constants.URL_PRIVACY_POLICY
 import com.xeniac.warrantyroster_manager.utils.LinkHelper.openLink
+import com.xeniac.warrantyroster_manager.utils.SettingsHelper
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.show403Error
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseDeviceBlockedError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkConnectionError
@@ -52,7 +55,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
     private var _binding: FragmentSettingsBinding? = null
     val binding get() = _binding!!
 
-    val viewModel: SettingsViewModel by viewModels()
+    lateinit var viewModel: SettingsViewModel
 
     private lateinit var currentAppLanguage: String
     private lateinit var currentAppCountry: String
@@ -71,6 +74,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentSettingsBinding.bind(view)
+        viewModel = ViewModelProvider(requireActivity())[SettingsViewModel::class.java]
 
         subscribeToObservers()
         getAccountDetails()
@@ -98,6 +102,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
         accountDetailsObserver()
         currentAppLocaleObserver()
         currentAppThemeObserver()
+        setAppLocaleObserver()
         sendVerificationEmailObserver()
         logoutObserver()
     }
@@ -274,7 +279,38 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
         logout()
     }
 
-    private fun setAppLocale(index: Int) = viewModel.setAppLocale(index, requireActivity())
+    private fun setAppLocale(index: Int) = viewModel.setAppLocale(index)
+
+    private fun setAppLocaleObserver() =
+        viewModel.setAppLocaleLiveData.observe(viewLifecycleOwner) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { response ->
+                when (response.status) {
+                    Status.SUCCESS -> {
+                        response.data?.let {
+                            val newAppLanguage = it[0]
+                            val newAppCountry = it[1]
+
+                            SettingsHelper.setAppLocale(
+                                requireActivity(),
+                                newAppLanguage,
+                                newAppCountry
+                            )
+
+                            requireActivity().apply {
+                                startActivity(Intent(this, LandingActivity::class.java))
+                                finish()
+                            }
+                        }
+                    }
+                    Status.ERROR -> {
+                        Toast.makeText(requireContext(), response.message, LENGTH_LONG).show()
+                    }
+                    Status.LOADING -> {
+                        /* NO-OP */
+                    }
+                }
+            }
+        }
 
     private fun setAppTheme(index: Int) = viewModel.setAppTheme(index)
 

@@ -1,7 +1,5 @@
 package com.xeniac.warrantyroster_manager.ui.viewmodels
 
-import android.app.Activity
-import android.content.Intent
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseUser
 import com.xeniac.warrantyroster_manager.domain.repository.PreferencesRepository
 import com.xeniac.warrantyroster_manager.domain.repository.UserRepository
-import com.xeniac.warrantyroster_manager.ui.landing.LandingActivity
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_EMAIL
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_NEW_PASSWORD
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_PASSWORD
@@ -25,6 +22,7 @@ import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_LANGUAGE_PERSIAN
 import com.xeniac.warrantyroster_manager.utils.Event
 import com.xeniac.warrantyroster_manager.utils.Resource
 import com.xeniac.warrantyroster_manager.utils.SettingsHelper
+import com.xeniac.warrantyroster_manager.utils.Status
 import com.xeniac.warrantyroster_manager.utils.UserHelper.isEmailValid
 import com.xeniac.warrantyroster_manager.utils.UserHelper.isRetypePasswordValid
 import com.xeniac.warrantyroster_manager.utils.UserHelper.passwordStrength
@@ -39,11 +37,15 @@ class SettingsViewModel @Inject constructor(
     private val preferencesRepository: PreferencesRepository
 ) : ViewModel() {
 
+    private val _currentAppLocale: MutableLiveData<Event<Array<String>>> = MutableLiveData()
+    val currentAppLocale: LiveData<Event<Array<String>>> = _currentAppLocale
+
     private val _currentAppTheme: MutableLiveData<Event<Int>> = MutableLiveData()
     val currentAppTheme: LiveData<Event<Int>> = _currentAppTheme
 
-    private val _currentAppLocale: MutableLiveData<Event<Array<String>>> = MutableLiveData()
-    val currentAppLocale: LiveData<Event<Array<String>>> = _currentAppLocale
+    private val _setAppLocaleLiveData: MutableLiveData<Event<Resource<Array<String>>>> =
+        MutableLiveData()
+    val setAppLocaleLiveData: LiveData<Event<Resource<Array<String>>>> = _setAppLocaleLiveData
 
     private val _accountDetailsLiveData: MutableLiveData<Event<Resource<FirebaseUser>>> =
         MutableLiveData()
@@ -82,30 +84,8 @@ class SettingsViewModel @Inject constructor(
         safeGetCurrentAppTheme()
     }
 
-    fun setAppLocale(index: Int, activity: Activity) = viewModelScope.launch {
-        var newLanguage = LOCALE_LANGUAGE_ENGLISH
-        var newCountry = LOCALE_COUNTRY_UNITED_STATES
-
-        //TODO CHANGE AFTER ADDING BRITISH ENGLISH
-        when (index) {
-            0 -> {
-                newLanguage = LOCALE_LANGUAGE_ENGLISH
-                newCountry = LOCALE_COUNTRY_UNITED_STATES
-            }
-            1 -> {
-                newLanguage = LOCALE_LANGUAGE_PERSIAN
-                newCountry = LOCALE_COUNTRY_IRAN
-            }
-        }
-
-        preferencesRepository.setCurrentAppLanguage(newLanguage)
-        preferencesRepository.setCurrentAppCountry(newCountry)
-        SettingsHelper.setAppLocale(activity, newLanguage, newCountry)
-
-        activity.apply {
-            startActivity(Intent(this, LandingActivity::class.java))
-            finish()
-        }
+    fun setAppLocale(index: Int) = viewModelScope.launch {
+        safeSetAppLocale(index)
     }
 
     fun setAppTheme(index: Int) = viewModelScope.launch {
@@ -206,6 +186,36 @@ class SettingsViewModel @Inject constructor(
 
     private suspend fun safeGetCurrentAppTheme() {
         _currentAppTheme.postValue(Event(preferencesRepository.getCurrentAppTheme()))
+    }
+
+    private suspend fun safeSetAppLocale(index: Int) {
+        _setAppLocaleLiveData.postValue(Event(Resource(Status.LOADING)))
+        try {
+            var newLanguage = LOCALE_LANGUAGE_ENGLISH
+            var newCountry = LOCALE_COUNTRY_UNITED_STATES
+
+            //TODO CHANGE AFTER ADDING BRITISH ENGLISH
+            when (index) {
+                0 -> {
+                    newLanguage = LOCALE_LANGUAGE_ENGLISH
+                    newCountry = LOCALE_COUNTRY_UNITED_STATES
+                }
+                1 -> {
+                    newLanguage = LOCALE_LANGUAGE_PERSIAN
+                    newCountry = LOCALE_COUNTRY_IRAN
+                }
+            }
+
+            preferencesRepository.setCurrentAppLanguage(newLanguage)
+            preferencesRepository.setCurrentAppCountry(newCountry)
+
+            val newLocale = arrayOf(newLanguage, newCountry)
+            _setAppLocaleLiveData.postValue(Event(Resource(Status.SUCCESS, newLocale)))
+            Timber.i("New app locale is: $newLanguage-$newCountry")
+        } catch (e: Exception) {
+            Timber.e("safeSetAppLocale Exception: ${e.message}")
+            _setAppLocaleLiveData.postValue(Event(Resource.error(e.message.toString())))
+        }
     }
 
     private suspend fun safeGetAccountDetails() {
