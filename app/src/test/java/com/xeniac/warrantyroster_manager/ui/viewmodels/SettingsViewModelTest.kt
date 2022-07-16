@@ -3,11 +3,13 @@ package com.xeniac.warrantyroster_manager.ui.viewmodels
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.common.truth.Truth.assertThat
 import com.xeniac.warrantyroster_manager.MainCoroutineRule
-import com.xeniac.warrantyroster_manager.getOrAwaitValue
 import com.xeniac.warrantyroster_manager.data.repository.FakePreferencesRepository
 import com.xeniac.warrantyroster_manager.data.repository.FakeUserRepository
+import com.xeniac.warrantyroster_manager.getOrAwaitValue
+import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_COUNTRY_IRAN
 import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_COUNTRY_UNITED_STATES
 import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_LANGUAGE_ENGLISH
+import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_LANGUAGE_PERSIAN
 import com.xeniac.warrantyroster_manager.utils.Status
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Before
@@ -56,6 +58,18 @@ class SettingsViewModelTest {
 
         val responseEvent = testViewModel.currentAppTheme.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()).isEqualTo(defaultThemeIndex)
+    }
+
+    @Test
+    fun setAppLocale_returnsNewAppLocale() {
+        testViewModel.setAppLocale(1)
+
+        val newLanguage = LOCALE_LANGUAGE_PERSIAN
+        val newCountry = LOCALE_COUNTRY_IRAN
+        val newLocale = arrayOf(newLanguage, newCountry)
+
+        val responseEvent = testViewModel.setAppLocaleLiveData.getOrAwaitValue()
+        assertThat(responseEvent.getContentIfNotHandled()?.data).isEqualTo(newLocale)
     }
 
     @Test
