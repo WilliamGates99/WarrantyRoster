@@ -71,7 +71,7 @@ class ChangeEmailFragmentTest {
         launchFragmentInHiltContainer<ChangeEmailFragment> {
             Navigation.setViewNavController(requireView(), navController)
 
-            testViewModel = viewModel
+            viewModel = testViewModel
             testBinding = binding
         }
     }

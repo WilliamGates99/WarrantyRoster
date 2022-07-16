@@ -11,7 +11,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
@@ -45,7 +45,7 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
     private var _binding: FragmentChangePasswordBinding? = null
     val binding get() = _binding!!
 
-    val viewModel: SettingsViewModel by viewModels()
+    lateinit var viewModel: SettingsViewModel
 
     private lateinit var newPassword: String
 
@@ -54,6 +54,7 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentChangePasswordBinding.bind(view)
+        viewModel = ViewModelProvider(requireActivity())[SettingsViewModel::class.java]
 
         onBackPressed()
         textInputsBackgroundColor()

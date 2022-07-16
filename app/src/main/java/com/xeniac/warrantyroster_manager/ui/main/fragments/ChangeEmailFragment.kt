@@ -11,7 +11,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
@@ -44,7 +44,7 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
     private var _binding: FragmentChangeEmailBinding? = null
     val binding get() = _binding!!
 
-    val viewModel: SettingsViewModel by viewModels()
+    lateinit var viewModel: SettingsViewModel
 
     private lateinit var newEmail: String
 
@@ -53,6 +53,7 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentChangeEmailBinding.bind(view)
+        viewModel = ViewModelProvider(requireActivity())[SettingsViewModel::class.java]
 
         onBackPressed()
         textInputsBackgroundColor()

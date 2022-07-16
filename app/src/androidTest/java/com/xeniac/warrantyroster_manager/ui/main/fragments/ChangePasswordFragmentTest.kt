@@ -71,7 +71,7 @@ class ChangePasswordFragmentTest {
         launchFragmentInHiltContainer<ChangePasswordFragment> {
             Navigation.setViewNavController(requireView(), navController)
 
-            testViewModel = viewModel
+            viewModel = testViewModel
             testBinding = binding
         }
     }
