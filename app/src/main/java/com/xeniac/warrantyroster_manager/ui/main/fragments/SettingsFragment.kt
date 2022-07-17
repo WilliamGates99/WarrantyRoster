@@ -129,40 +129,39 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
         }
 
     private fun setAccountDetails(email: String, isEmailVerified: Boolean) {
-        binding.tvAccountEmail.text = email
+        binding.apply {
+            userEmail = email
+            isVerificationBtnClickable = !isEmailVerified
 
-        if (isEmailVerified) {
-            binding.btnAccountVerification.isClickable = false
-            binding.btnAccountVerification.text =
-                requireContext().getString(R.string.settings_btn_account_verified)
-            binding.btnAccountVerification.setTextColor(
-                ContextCompat.getColor(requireContext(), R.color.green)
-            )
-            binding.btnAccountVerification.backgroundTintList =
-                ContextCompat.getColorStateList(requireContext(), R.color.green20)
-            binding.ivAccountEmail.setBackgroundColor(
-                ContextCompat.getColor(requireContext(), R.color.green10)
-            )
-            binding.lavAccountVerification.repeatCount = 0
-            binding.lavAccountVerification.speed = 0.60f
-            binding.lavAccountVerification.setAnimation(R.raw.anim_account_verified)
-        } else {
-            binding.btnAccountVerification.isClickable = true
-            binding.btnAccountVerification.text =
-                requireContext().getString(R.string.settings_btn_account_verify)
-            binding.btnAccountVerification.setTextColor(
-                ContextCompat.getColor(requireContext(), R.color.blue)
-            )
-            binding.btnAccountVerification.backgroundTintList =
-                ContextCompat.getColorStateList(requireContext(), R.color.blue20)
-            binding.ivAccountEmail.setBackgroundColor(
-                ContextCompat.getColor(requireContext(), R.color.red10)
-            )
-            binding.lavAccountVerification.repeatCount = LottieDrawable.INFINITE
-            binding.lavAccountVerification.speed = 1.00f
-            binding.lavAccountVerification.setAnimation(R.raw.anim_account_not_verified)
+            if (isEmailVerified) {
+                verificationBtnBackgroundTint = ContextCompat
+                    .getColorStateList(requireContext(), R.color.green20)
+                verificationBtnText = requireContext()
+                    .getString(R.string.settings_btn_account_verified)
+                verificationBtnTextColor =
+                    ContextCompat.getColor(requireContext(), R.color.green)
+                ivAccountEmail.setBackgroundColor(
+                    ContextCompat.getColor(requireContext(), R.color.green10)
+                )
+                lavAccountVerification.speed = 0.60f
+                lavAccountVerification.repeatCount = 0
+                lavAccountVerification.setAnimation(R.raw.anim_account_verified)
+            } else {
+                verificationBtnBackgroundTint = ContextCompat
+                    .getColorStateList(requireContext(), R.color.blue20)
+                verificationBtnText = requireContext()
+                    .getString(R.string.settings_btn_account_verify)
+                verificationBtnTextColor =
+                    ContextCompat.getColor(requireContext(), R.color.blue)
+                ivAccountEmail.setBackgroundColor(
+                    ContextCompat.getColor(requireContext(), R.color.red10)
+                )
+                lavAccountVerification.speed = 1.00f
+                lavAccountVerification.repeatCount = LottieDrawable.INFINITE
+                lavAccountVerification.setAnimation(R.raw.anim_account_not_verified)
+            }
+            lavAccountVerification.playAnimation()
         }
-        binding.lavAccountVerification.playAnimation()
     }
 
     private fun getCurrentAppLocale() = viewModel.getCurrentAppLocale()
@@ -177,15 +176,12 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
         }
 
     private fun setCurrentLanguageText() {
-        //TODO EDIT AFTER ADDING BRITISH ENGLISH
-        when (currentAppLanguage) {
-            LOCALE_LANGUAGE_ENGLISH -> {
-                binding.tvSettingsLanguageCurrent.text =
-                    requireContext().getString(R.string.settings_text_settings_language_english)
-            }
-            LOCALE_LANGUAGE_PERSIAN -> {
-                binding.tvSettingsLanguageCurrent.text =
-                    requireContext().getString(R.string.settings_text_settings_language_persian)
+        requireContext().apply {
+            //TODO EDIT AFTER ADDING BRITISH ENGLISH
+            binding.currentLanguage = when (currentAppLanguage) {
+                LOCALE_LANGUAGE_ENGLISH -> getString(R.string.settings_text_settings_language_english)
+                LOCALE_LANGUAGE_PERSIAN -> getString(R.string.settings_text_settings_language_persian)
+                else -> getString(R.string.settings_text_settings_language_english)
             }
         }
     }
@@ -201,18 +197,12 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
         }
 
     private fun setCurrentThemeText() {
-        when (currentAppTheme) {
-            0 -> {
-                binding.tvSettingsThemeCurrent.text =
-                    requireContext().getString(R.string.settings_text_settings_theme_default)
-            }
-            1 -> {
-                binding.tvSettingsThemeCurrent.text =
-                    requireContext().getString(R.string.settings_text_settings_theme_light)
-            }
-            2 -> {
-                binding.tvSettingsThemeCurrent.text =
-                    requireContext().getString(R.string.settings_text_settings_theme_dark)
+        requireContext().apply {
+            binding.currentTheme = when (currentAppTheme) {
+                0 -> getString(R.string.settings_text_settings_theme_default)
+                1 -> getString(R.string.settings_text_settings_theme_light)
+                2 -> getString(R.string.settings_text_settings_theme_dark)
+                else -> getString(R.string.settings_text_settings_theme_default)
             }
         }
     }
