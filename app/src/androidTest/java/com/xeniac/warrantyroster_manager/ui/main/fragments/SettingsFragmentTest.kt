@@ -76,14 +76,14 @@ class SettingsFragmentTest {
 
     @Test
     fun getCurrentAppLocale_setsCurrentLanguageTextToEnglish() {
-        assertThat(testBinding.tvSettingsLanguageCurrent.text).isEqualTo(
+        assertThat(testBinding.currentLanguage).isEqualTo(
             context.getString(R.string.settings_text_settings_language_english)
         )
     }
 
     @Test
     fun getCurrentAppTheme_setsCurrentThemeTextToSystemDefault() {
-        assertThat(testBinding.tvSettingsThemeCurrent.text).isEqualTo(
+        assertThat(testBinding.currentTheme).isEqualTo(
             context.getString(R.string.settings_text_settings_theme_default)
         )
     }
