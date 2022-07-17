@@ -16,7 +16,7 @@ applovin {
 }
 
 android {
-    compileSdk 32 // TODO UPDATE TO 33 AFTER UPDATING GRADLE PLUGIN
+    compileSdk 33
     buildToolsVersion '33.0.0'
 
     defaultConfig {
@@ -145,7 +145,7 @@ dependencies {
     implementation 'com.applovin.mediation:google-adapter:21.0.0.0'
 
     // Google AdMob Library
-    implementation 'com.google.android.gms:play-services-ads:21.0.0'
+    implementation 'com.google.android.gms:play-services-ads:21.1.0'
 
     // AdColony Libraries
     implementation 'com.adcolony:sdk:4.8.0'
