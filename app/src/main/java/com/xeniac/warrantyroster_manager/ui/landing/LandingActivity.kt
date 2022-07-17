@@ -2,6 +2,7 @@ package com.xeniac.warrantyroster_manager.ui.landing
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -14,6 +15,8 @@ import com.xeniac.warrantyroster_manager.ui.main.MainActivity
 import com.xeniac.warrantyroster_manager.ui.viewmodels.SettingsViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_LANGUAGE_ENGLISH
 import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_LANGUAGE_PERSIAN
+import com.xeniac.warrantyroster_manager.utils.SettingsHelper
+import com.xeniac.warrantyroster_manager.utils.Status
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -52,10 +55,15 @@ class LandingActivity : BaseActivity() {
         binding = ActivityLandingBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        subscribeToObservers()
         setTitle()
         getCurrentAppLocale()
-        currentAppLocaleObserver()
         languageOnClick()
+    }
+
+    private fun subscribeToObservers() {
+        currentAppLocaleObserver()
+        setAppLocaleObserver()
     }
 
     private fun setTitle() {
@@ -127,5 +135,34 @@ class LandingActivity : BaseActivity() {
         }.show()
     }
 
-    private fun setAppLocale(index: Int) = viewModel.setAppLocale(index, this)
+    private fun setAppLocale(index: Int) = viewModel.setAppLocale(index)
+
+    private fun setAppLocaleObserver() =
+        viewModel.setAppLocaleLiveData.observe(this) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { response ->
+                when (response.status) {
+                    Status.SUCCESS -> {
+                        response.data?.let {
+                            val newAppLanguage = it[0]
+                            val newAppCountry = it[1]
+
+                            SettingsHelper.setAppLocale(
+                                this,
+                                newAppLanguage,
+                                newAppCountry
+                            )
+
+                            startActivity(Intent(this, LandingActivity::class.java))
+                            finish()
+                        }
+                    }
+                    Status.ERROR -> {
+                        Toast.makeText(this, response.message, Toast.LENGTH_LONG).show()
+                    }
+                    Status.LOADING -> {
+                        /* NO-OP */
+                    }
+                }
+            }
+        }
 }
