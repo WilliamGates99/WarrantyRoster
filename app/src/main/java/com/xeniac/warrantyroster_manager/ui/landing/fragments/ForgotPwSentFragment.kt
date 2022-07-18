@@ -110,21 +110,25 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
                             snackbar = when {
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
                                     showNetworkConnectionError(
-                                        requireContext(), binding.root
+                                        requireContext(), requireView()
                                     ) { resendResetPasswordEmail() }
                                 }
                                 it.contains(ERROR_FIREBASE_403) -> {
-                                    show403Error(requireContext(), binding.root)
+                                    show403Error(requireContext(), requireView())
                                 }
                                 it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
-                                    showFirebaseDeviceBlockedError(requireContext(), binding.root)
+                                    showFirebaseDeviceBlockedError(requireContext(), requireView())
                                 }
                                 it.contains(ERROR_TIMER_IS_NOT_ZERO) -> {
                                     val seconds = viewModel.timerInMillis / 1000
-                                    showTimerIsNotZeroError(requireContext(), binding.root, seconds)
+                                    showTimerIsNotZeroError(
+                                        requireContext(),
+                                        requireView(),
+                                        seconds
+                                    )
                                 }
                                 else -> {
-                                    showNetworkFailureError(requireContext(), binding.root)
+                                    showNetworkFailureError(requireContext(), requireView())
                                 }
                             }
                         }
@@ -136,67 +140,69 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
     private fun timerObserver() =
         viewModel.timerLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { millisUntilFinished ->
-                when (millisUntilFinished) {
-                    0L -> {
-                        CoroutineScope(Dispatchers.Main).launch {
-                            delay(500)
-                            resetConstraintToDefault()
-                            binding.groupTimer.visibility = GONE
-                            binding.groupResend.visibility = VISIBLE
+                binding.apply {
+                    when (millisUntilFinished) {
+                        0L -> {
+                            CoroutineScope(Dispatchers.Main).launch {
+                                delay(500)
+                                resetConstraintToDefault()
+                                groupTimer.visibility = GONE
+                                groupResend.visibility = VISIBLE
+                            }
                         }
-                    }
-                    else -> {
-                        binding.tvResent.text = if (viewModel.isFirstSentEmail)
-                            requireContext().getString(R.string.forgot_pw_sent_text_first_time)
-                        else
-                            requireContext().getString(R.string.forgot_pw_sent_text_resent)
+                        else -> {
+                            tvResent.text = if (viewModel.isFirstSentEmail)
+                                requireContext().getString(R.string.forgot_pw_sent_text_first_time)
+                            else
+                                requireContext().getString(R.string.forgot_pw_sent_text_resent)
 
-                        updateConstraintToTimer()
-                        binding.groupResend.visibility = GONE
-                        binding.groupTimer.visibility = VISIBLE
+                            updateConstraintToTimer()
+                            groupResend.visibility = GONE
+                            groupTimer.visibility = VISIBLE
 
-                        val minutes = millisUntilFinished / 60000
-                        val seconds = (millisUntilFinished / 1000) % 60
+                            val minutes = millisUntilFinished / 60000
+                            val seconds = (millisUntilFinished / 1000) % 60
 
-                        val time =
-                            "(${decimalFormat.format(minutes)}:${decimalFormat.format(seconds)})"
-                        binding.tvTimer.text = time
+                            val time =
+                                "(${decimalFormat.format(minutes)}:${decimalFormat.format(seconds)})"
+                            tvTimer.text = time
+                        }
                     }
                 }
             }
         }
 
-    private fun showLoadingAnimation() {
-        binding.btnResend.visibility = GONE
-        binding.cpiResend.visibility = VISIBLE
+    private fun showLoadingAnimation() = binding.apply {
+        btnResend.visibility = GONE
+        cpiResend.visibility = VISIBLE
     }
 
-    private fun hideLoadingAnimation() {
-        binding.cpiResend.visibility = GONE
-        binding.btnResend.visibility = VISIBLE
+    private fun hideLoadingAnimation() = binding.apply {
+        cpiResend.visibility = GONE
+        btnResend.visibility = VISIBLE
     }
 
-    private fun updateConstraintToTimer() {
+    private fun updateConstraintToTimer() = binding.apply {
         val constraintSet = ConstraintSet()
-        constraintSet.clone(binding.cl)
+        constraintSet.clone(cl)
         constraintSet.connect(
-            binding.lavSent.id,
+            lavSent.id,
             ConstraintSet.BOTTOM,
-            binding.tvResent.id,
+            tvResent.id,
             ConstraintSet.TOP
         )
-        constraintSet.applyTo(binding.cl)
+        constraintSet.applyTo(cl)
     }
 
-    private fun resetConstraintToDefault() {
+    private fun resetConstraintToDefault() = binding.apply {
         val constraintSet = ConstraintSet()
-        constraintSet.clone(binding.cl)
+        constraintSet.clone(cl)
         constraintSet.connect(
-            binding.lavSent.id,
+            lavSent.id,
             ConstraintSet.BOTTOM,
-            binding.tvResend.id,
+            tvResend.id,
             ConstraintSet.TOP
         )
-        constraintSet.applyTo(binding.cl)
+        constraintSet.applyTo(cl)
     }
 }

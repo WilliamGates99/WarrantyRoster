@@ -258,11 +258,11 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
     }
 
     private fun donateOnClick() = binding.clSettingsDonate.setOnClickListener {
-        openLink(requireContext(), binding.root, URL_DONATE)
+        openLink(requireContext(), requireView(), URL_DONATE)
     }
 
     private fun privacyPolicyOnClick() = binding.clSettingsPrivacyPolicy.setOnClickListener {
-        openLink(requireContext(), binding.root, URL_PRIVACY_POLICY)
+        openLink(requireContext(), requireView(), URL_PRIVACY_POLICY)
     }
 
     private fun logoutOnClick() = binding.btnLogout.setOnClickListener {
@@ -325,17 +325,17 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
                             snackbar = when {
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
                                     showNetworkConnectionError(
-                                        requireContext(), binding.root
+                                        requireContext(), requireView()
                                     ) { sendVerificationEmail() }
                                 }
                                 it.contains(ERROR_FIREBASE_403) -> {
-                                    show403Error(requireContext(), binding.root)
+                                    show403Error(requireContext(), requireView())
                                 }
                                 it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
-                                    showFirebaseDeviceBlockedError(requireContext(), binding.root)
+                                    showFirebaseDeviceBlockedError(requireContext(), requireView())
                                 }
                                 else -> {
-                                    showNetworkFailureError(requireContext(), binding.root)
+                                    showNetworkFailureError(requireContext(), requireView())
                                 }
                             }
                         }
@@ -364,15 +364,15 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
             }
         }
 
-    private fun showLoadingAnimation() {
-        binding.btnAccountVerification.visibility = GONE
-        binding.cpiVerify.visibility = VISIBLE
+    private fun showLoadingAnimation() = binding.apply {
+        btnAccountVerification.visibility = GONE
+        cpiVerify.visibility = VISIBLE
 
     }
 
-    private fun hideLoadingAnimation() {
-        binding.cpiVerify.visibility = GONE
-        binding.btnAccountVerification.visibility = VISIBLE
+    private fun hideLoadingAnimation() = binding.apply {
+        cpiVerify.visibility = GONE
+        btnAccountVerification.visibility = VISIBLE
     }
 
     private fun requestAppLovinNativeAd() {
@@ -490,9 +490,9 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
         }
     }
 
-    private fun showNativeAdContainer() {
-        binding.flAdContainerNative.visibility = VISIBLE
-        binding.dividerSettingsFourth.visibility = VISIBLE
+    private fun showNativeAdContainer() = binding.apply {
+        flAdContainerNative.visibility = VISIBLE
+        dividerSettingsFourth.visibility = VISIBLE
     }
 
     private fun destroyAd() {

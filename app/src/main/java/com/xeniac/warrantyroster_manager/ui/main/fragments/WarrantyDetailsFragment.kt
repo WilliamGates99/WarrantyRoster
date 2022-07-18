@@ -286,17 +286,17 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
                             snackbar = when {
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
                                     showNetworkConnectionError(
-                                        requireContext(), binding.root
+                                        requireContext(), requireView()
                                     ) { deleteWarrantyFromFirestore() }
                                 }
                                 it.contains(ERROR_FIREBASE_403) -> {
-                                    show403Error(requireContext(), binding.root)
+                                    show403Error(requireContext(), requireView())
                                 }
                                 it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
-                                    showFirebaseDeviceBlockedError(requireContext(), binding.root)
+                                    showFirebaseDeviceBlockedError(requireContext(), requireView())
                                 }
                                 else -> {
-                                    showNetworkFailureError(requireContext(), binding.root)
+                                    showNetworkFailureError(requireContext(), requireView())
                                 }
                             }
                         }
@@ -305,16 +305,16 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
             }
         }
 
-    private fun showLoadingAnimation() {
-        binding.toolbar.menu.getItem(0).isVisible = false
-        binding.fab.isClickable = false
-        binding.cpiDelete.visibility = VISIBLE
+    private fun showLoadingAnimation() = binding.apply {
+        toolbar.menu.getItem(0).isVisible = false
+        fab.isClickable = false
+        cpiDelete.visibility = VISIBLE
     }
 
-    private fun hideLoadingAnimation() {
-        binding.cpiDelete.visibility = GONE
-        binding.toolbar.menu.getItem(0).isVisible = true
-        binding.fab.isClickable = true
+    private fun hideLoadingAnimation() = binding.apply {
+        cpiDelete.visibility = GONE
+        toolbar.menu.getItem(0).isVisible = true
+        fab.isClickable = true
     }
 
     private fun showInterstitialAd(responseId: String) = TapsellPlus.showInterstitialAd(

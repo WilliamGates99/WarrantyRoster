@@ -97,38 +97,36 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         super.onViewStateRestored(savedInstanceState)
     }
 
-    private fun textInputsBackgroundColor() {
-        binding.tiEditEmail.setOnFocusChangeListener { _, isFocused ->
+    private fun textInputsBackgroundColor() = binding.apply {
+        tiEditEmail.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                binding.tiLayoutEmail.boxBackgroundColor =
+                tiLayoutEmail.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.background)
             } else {
-                binding.tiLayoutEmail.boxBackgroundColor =
+                tiLayoutEmail.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.grayLight)
             }
         }
 
-        binding.tiEditPassword.setOnFocusChangeListener { _, isFocused ->
+        tiEditPassword.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                binding.tiLayoutPassword.boxBackgroundColor =
+                tiLayoutPassword.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.background)
             } else {
-                binding.tiLayoutPassword.boxBackgroundColor =
+                tiLayoutPassword.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.grayLight)
             }
         }
     }
 
-    private fun textInputsStrokeColor() {
-        binding.tiEditEmail.addTextChangedListener {
-            binding.tiLayoutEmail.isErrorEnabled = false
-            binding.tiLayoutEmail.boxStrokeColor =
-                ContextCompat.getColor(requireContext(), R.color.blue)
+    private fun textInputsStrokeColor() = binding.apply {
+        tiEditEmail.addTextChangedListener {
+            tiLayoutEmail.isErrorEnabled = false
+            tiLayoutEmail.boxStrokeColor = ContextCompat.getColor(requireContext(), R.color.blue)
         }
 
-        binding.tiEditPassword.addTextChangedListener {
-            binding.tiLayoutPassword.boxStrokeColor =
-                ContextCompat.getColor(requireContext(), R.color.blue)
+        tiEditPassword.addTextChangedListener {
+            tiLayoutPassword.boxStrokeColor = ContextCompat.getColor(requireContext(), R.color.blue)
         }
     }
 
@@ -161,7 +159,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     private fun getLoginInputs() {
         val inputMethodManager = requireContext()
             .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.hideSoftInputFromWindow(binding.root.applicationWindowToken, 0)
+        inputMethodManager.hideSoftInputFromWindow(requireView().applicationWindowToken, 0)
 
         val email = binding.tiEditEmail.text.toString().trim().lowercase()
         val password = binding.tiEditPassword.text.toString().trim()
@@ -202,35 +200,35 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                                 }
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
                                     snackbar = showNetworkConnectionError(
-                                        requireContext(), binding.root
+                                        requireContext(), requireView()
                                     ) { getLoginInputs() }
                                 }
                                 it.contains(ERROR_FIREBASE_403) -> {
-                                    snackbar = show403Error(requireContext(), binding.root)
+                                    snackbar = show403Error(requireContext(), requireView())
                                 }
                                 it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
                                     snackbar = showFirebaseDeviceBlockedError(
                                         requireContext(),
-                                        binding.root
+                                        requireView()
                                     )
                                 }
                                 it.contains(ERROR_FIREBASE_AUTH_ACCOUNT_NOT_FOUND) -> {
                                     snackbar = showFirebaseAuthAccountNotFoundError(
-                                        binding.root,
+                                        requireView(),
                                         requireContext().getString(R.string.login_error_not_found),
                                         requireContext().getString(R.string.login_btn_register)
                                     ) { navigateToRegister() }
                                 }
                                 it.contains(ERROR_FIREBASE_AUTH_CREDENTIALS) -> {
                                     snackbar = showFirebaseAuthCredentialsError(
-                                        binding.root,
+                                        requireView(),
                                         requireContext().getString(R.string.login_error_credentials)
                                     )
                                 }
                                 else -> {
                                     snackbar = showNetworkFailureError(
                                         requireContext(),
-                                        binding.root
+                                        requireView()
                                     )
                                 }
                             }
@@ -240,20 +238,19 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             }
         }
 
-    private fun showLoadingAnimation() {
-        binding.tiEditEmail.isEnabled = false
-        binding.tiEditPassword.isEnabled = false
-        binding.btnLogin.isClickable = false
-        binding.btnLogin.text = null
-        binding.cpiLogin.visibility = VISIBLE
+    private fun showLoadingAnimation() = binding.apply {
+        tiEditEmail.isEnabled = false
+        tiEditPassword.isEnabled = false
+        btnLogin.isClickable = false
+        btnLogin.text = null
+        cpiLogin.visibility = VISIBLE
     }
 
-    private fun hideLoadingAnimation() {
-        binding.cpiLogin.visibility = GONE
-        binding.tiEditEmail.isEnabled = true
-        binding.tiEditPassword.isEnabled = true
-        binding.btnLogin.isClickable = true
-        binding.btnLogin.text =
-            requireContext().getString(R.string.login_btn_login)
+    private fun hideLoadingAnimation() = binding.apply {
+        cpiLogin.visibility = GONE
+        tiEditEmail.isEnabled = true
+        tiEditPassword.isEnabled = true
+        btnLogin.isClickable = true
+        btnLogin.text = requireContext().getString(R.string.login_btn_login)
     }
 }

@@ -122,73 +122,73 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         super.onViewStateRestored(savedInstanceState)
     }
 
-    private fun textInputsBackgroundColor() {
-        binding.tiEditEmail.setOnFocusChangeListener { _, isFocused ->
+    private fun textInputsBackgroundColor() = binding.apply {
+        tiEditEmail.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                binding.tiLayoutEmail.boxBackgroundColor =
+                tiLayoutEmail.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.background)
             } else {
-                binding.tiLayoutEmail.boxBackgroundColor =
+                tiLayoutEmail.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.grayLight)
             }
         }
 
-        binding.tiEditPassword.setOnFocusChangeListener { _, isFocused ->
+        tiEditPassword.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                binding.tiLayoutPassword.boxBackgroundColor =
+                tiLayoutPassword.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.background)
             } else {
-                binding.tiLayoutPassword.boxBackgroundColor =
+                tiLayoutPassword.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.grayLight)
-                binding.tiLayoutPassword.isHelperTextEnabled = false
+                tiLayoutPassword.isHelperTextEnabled = false
             }
         }
 
-        binding.tiEditRetypePassword.setOnFocusChangeListener { _, isFocused ->
+        tiEditRetypePassword.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                binding.tiLayoutRetypePassword.boxBackgroundColor =
+                tiLayoutRetypePassword.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.background)
             } else {
-                binding.tiLayoutRetypePassword.boxBackgroundColor =
+                tiLayoutRetypePassword.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.grayLight)
             }
         }
     }
 
-    private fun textInputsStrokeColor() {
-        binding.tiEditEmail.addTextChangedListener {
-            binding.tiLayoutEmail.isErrorEnabled = false
-            binding.tiLayoutEmail.boxStrokeColor =
+    private fun textInputsStrokeColor() = binding.apply {
+        tiEditEmail.addTextChangedListener {
+            tiLayoutEmail.isErrorEnabled = false
+            tiLayoutEmail.boxStrokeColor =
                 ContextCompat.getColor(requireContext(), R.color.blue)
         }
 
-        binding.tiEditPassword.addTextChangedListener { inputPassword ->
-            if (binding.tiLayoutPassword.hasFocus()) {
+        tiEditPassword.addTextChangedListener { inputPassword ->
+            if (tiLayoutPassword.hasFocus()) {
                 when (passwordStrength(inputPassword.toString())) {
                     (-1).toByte() -> {
-                        binding.tiLayoutPassword.boxStrokeColor =
+                        tiLayoutPassword.boxStrokeColor =
                             ContextCompat.getColor(requireContext(), R.color.red)
-                        binding.tiLayoutPassword.helperText =
+                        tiLayoutPassword.helperText =
                             getString(R.string.register_helper_password_weak)
-                        binding.tiLayoutPassword.setHelperTextColor(
+                        tiLayoutPassword.setHelperTextColor(
                             ContextCompat.getColorStateList(requireContext(), R.color.red)
                         )
                     }
                     (0).toByte() -> {
-                        binding.tiLayoutPassword.boxStrokeColor =
+                        tiLayoutPassword.boxStrokeColor =
                             ContextCompat.getColor(requireContext(), R.color.orange)
-                        binding.tiLayoutPassword.helperText =
+                        tiLayoutPassword.helperText =
                             getString(R.string.register_helper_password_mediocre)
-                        binding.tiLayoutPassword.setHelperTextColor(
+                        tiLayoutPassword.setHelperTextColor(
                             ContextCompat.getColorStateList(requireContext(), R.color.orange)
                         )
                     }
                     (1).toByte() -> {
-                        binding.tiLayoutPassword.boxStrokeColor =
+                        tiLayoutPassword.boxStrokeColor =
                             ContextCompat.getColor(requireContext(), R.color.green)
-                        binding.tiLayoutPassword.helperText =
+                        tiLayoutPassword.helperText =
                             getString(R.string.register_helper_password_strong)
-                        binding.tiLayoutPassword.setHelperTextColor(
+                        tiLayoutPassword.setHelperTextColor(
                             ContextCompat.getColorStateList(requireContext(), R.color.green)
                         )
                     }
@@ -196,15 +196,15 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
             }
         }
 
-        binding.tiEditRetypePassword.addTextChangedListener {
-            binding.tiLayoutRetypePassword.isErrorEnabled = false
-            binding.tiLayoutRetypePassword.boxStrokeColor =
+        tiEditRetypePassword.addTextChangedListener {
+            tiLayoutRetypePassword.isErrorEnabled = false
+            tiLayoutRetypePassword.boxStrokeColor =
                 ContextCompat.getColor(requireContext(), R.color.blue)
         }
     }
 
     private fun agreementOnclick() = binding.btnAgreement.setOnClickListener {
-        openLink(requireContext(), binding.root, URL_PRIVACY_POLICY)
+        openLink(requireContext(), requireView(), URL_PRIVACY_POLICY)
     }
 
     private fun loginOnClick() = binding.btnLogin.setOnClickListener {
@@ -226,7 +226,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     private fun getRegisterInputs() {
         val inputMethodManager = requireContext()
             .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.hideSoftInputFromWindow(binding.root.applicationWindowToken, 0)
+        inputMethodManager.hideSoftInputFromWindow(requireView().applicationWindowToken, 0)
 
         val email = binding.tiEditEmail.text.toString().trim().lowercase()
         val password = binding.tiEditPassword.text.toString().trim()
@@ -283,21 +283,21 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                                 }
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
                                     snackbar = showNetworkConnectionError(
-                                        requireContext(), binding.root
+                                        requireContext(), requireView()
                                     ) { getRegisterInputs() }
                                 }
                                 it.contains(ERROR_FIREBASE_403) -> {
-                                    snackbar = show403Error(requireContext(), binding.root)
+                                    snackbar = show403Error(requireContext(), requireView())
                                 }
                                 it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
                                     snackbar = showFirebaseDeviceBlockedError(
                                         requireContext(),
-                                        binding.root
+                                        requireView()
                                     )
                                 }
                                 it.contains(ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS) -> {
                                     snackbar = showFirebaseAuthAccountExists(
-                                        binding.root,
+                                        requireView(),
                                         requireContext().getString(R.string.register_error_account_exists),
                                         requireContext().getString(R.string.register_btn_login)
                                     ) { findNavController().popBackStack() }
@@ -305,7 +305,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                                 else -> {
                                     snackbar = showNetworkFailureError(
                                         requireContext(),
-                                        binding.root
+                                        requireView()
                                     )
                                 }
                             }
@@ -315,22 +315,21 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
             }
         }
 
-    private fun showLoadingAnimation() {
-        binding.tiEditEmail.isEnabled = false
-        binding.tiEditPassword.isEnabled = false
-        binding.tiEditRetypePassword.isEnabled = false
-        binding.btnRegister.isClickable = false
-        binding.btnRegister.text = null
-        binding.cpiRegister.visibility = VISIBLE
+    private fun showLoadingAnimation() = binding.apply {
+        tiEditEmail.isEnabled = false
+        tiEditPassword.isEnabled = false
+        tiEditRetypePassword.isEnabled = false
+        btnRegister.isClickable = false
+        btnRegister.text = null
+        cpiRegister.visibility = VISIBLE
     }
 
-    private fun hideLoadingAnimation() {
-        binding.cpiRegister.visibility = GONE
-        binding.tiEditEmail.isEnabled = true
-        binding.tiEditPassword.isEnabled = true
-        binding.tiEditRetypePassword.isEnabled = true
-        binding.btnRegister.isClickable = true
-        binding.btnRegister.text =
-            requireContext().getString(R.string.register_btn_register)
+    private fun hideLoadingAnimation() = binding.apply {
+        cpiRegister.visibility = GONE
+        tiEditEmail.isEnabled = true
+        tiEditPassword.isEnabled = true
+        tiEditRetypePassword.isEnabled = true
+        btnRegister.isClickable = true
+        btnRegister.text = requireContext().getString(R.string.register_btn_register)
     }
 }

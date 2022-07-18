@@ -81,22 +81,20 @@ class MainActivity : BaseActivity(), MaxAdListener {
         }
     }
 
-    private fun fabOnClick() {
-        binding.fab.setOnClickListener {
-            navController.navigate(R.id.action_mainActivity_to_addWarrantyFragment)
-        }
+    private fun fabOnClick() = binding.fab.setOnClickListener {
+        navController.navigate(R.id.action_mainActivity_to_addWarrantyFragment)
     }
 
-    private fun showNavBar() {
-        binding.appbar.visibility = VISIBLE
-        binding.appbar.performShow()
-        binding.fab.show()
+    private fun showNavBar() = binding.apply {
+        appbar.visibility = VISIBLE
+        appbar.performShow()
+        fab.show()
     }
 
-    private fun hideNavBar() {
-        binding.fab.hide()
-        binding.appbar.performHide()
-        binding.appbar.visibility = GONE
+    private fun hideNavBar() = binding.apply {
+        fab.hide()
+        appbar.performHide()
+        appbar.visibility = GONE
     }
 
     fun requestAppLovinInterstitial() {

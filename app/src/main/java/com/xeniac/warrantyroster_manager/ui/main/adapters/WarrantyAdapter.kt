@@ -101,72 +101,67 @@ class WarrantyAdapter @Inject constructor(
         RecyclerView.ViewHolder(binding.root) {
 
         fun bindView(warranty: Warranty) = CoroutineScope(Dispatchers.Main).launch {
-            val isLifetime = warranty.isLifetime ?: false
-            if (isLifetime) {
-                val expiryDate = context.getString(R.string.warranties_list_is_lifetime)
-                binding.expiryDate = expiryDate
-                binding.statusColor = ContextCompat.getColor(context, R.color.green)
-                binding.statusTitle = context.getString(R.string.warranties_list_status_valid)
-            } else {
-                warranty.expiryDate?.let { date ->
-                    val expiryCalendar = Calendar.getInstance().apply {
-                        dateFormat.parse(date)?.let { time = it }
+            binding.apply {
+                val isLifetime = warranty.isLifetime ?: false
+                if (isLifetime) {
+                    expiryDate = context.getString(R.string.warranties_list_is_lifetime)
+                    statusColor = ContextCompat.getColor(context, R.color.green)
+                    statusTitle = context.getString(R.string.warranties_list_status_valid)
+                } else {
+                    warranty.expiryDate?.let { date ->
+                        val expiryCalendar = Calendar.getInstance().apply {
+                            dateFormat.parse(date)?.let { time = it }
 
-                        val dayWithSuffix = context.resources.getStringArray(
-                            R.array.warranties_list_day_with_suffix
-                        )[get(Calendar.DAY_OF_MONTH) - 1]
-                        val monthName = context.resources.getStringArray(
-                            R.array.warranties_list_month_name
-                        )[get(Calendar.MONTH)]
-                        val year = get(Calendar.YEAR)
+                            val dayWithSuffix = context.resources.getStringArray(
+                                R.array.warranties_list_day_with_suffix
+                            )[get(Calendar.DAY_OF_MONTH) - 1]
+                            val monthName = context.resources.getStringArray(
+                                R.array.warranties_list_month_name
+                            )[get(Calendar.MONTH)]
+                            val year = get(Calendar.YEAR)
 
-                        val expiryDate = context.getString(
-                            R.string.warranties_list_format_date,
-                            monthName, dayWithSuffix, year
-                        )
+                            expiryDate = context.getString(
+                                R.string.warranties_list_format_date,
+                                monthName, dayWithSuffix, year
+                            )
+                        }
 
-                        binding.expiryDate = expiryDate
-                    }
-
-                    val daysUntilExpiry = getDaysUntilExpiry(expiryCalendar)
-                    when {
-                        daysUntilExpiry < 0 -> {
-                            binding.statusColor = ContextCompat.getColor(context, R.color.red)
-                            binding.statusTitle =
+                        val daysUntilExpiry = getDaysUntilExpiry(expiryCalendar)
+                        statusTitle = when {
+                            daysUntilExpiry < 0 -> {
+                                statusColor = ContextCompat.getColor(context, R.color.red)
                                 context.getString(R.string.warranties_list_status_expired)
-                        }
-                        daysUntilExpiry <= 30 -> {
-                            binding.statusColor =
-                                ContextCompat.getColor(context, R.color.orange)
-                            binding.statusTitle =
+                            }
+                            daysUntilExpiry <= 30 -> {
+                                statusColor = ContextCompat.getColor(context, R.color.orange)
                                 context.getString(R.string.warranties_list_status_soon)
-                        }
-                        else -> {
-                            binding.statusColor = ContextCompat.getColor(context, R.color.green)
-                            binding.statusTitle =
+                            }
+                            else -> {
+                                statusColor = ContextCompat.getColor(context, R.color.green)
                                 context.getString(R.string.warranties_list_status_valid)
+                            }
                         }
                     }
                 }
+
+                title = warranty.title
+                executePendingBindings()
+
+                val category = warranty.categoryId?.let {
+                    mainViewModel.getCategoryById(it)
+                }
+
+                category?.let {
+                    categoryTitle = it.title[mainViewModel.getCategoryTitleMapKey()]
+                    loadCategoryImage(context, it.icon, imageLoader, ivIcon, cpiIcon)
+                }
+
+                cvWarranty.setOnClickListener { warrantyClickInterface.onItemClick(warranty) }
             }
-
-            binding.title = warranty.title
-            binding.executePendingBindings()
-
-            val category = warranty.categoryId?.let {
-                mainViewModel.getCategoryById(it)
-            }
-
-            category?.let {
-                binding.categoryTitle = it.title[mainViewModel.getCategoryTitleMapKey()]
-                loadCategoryImage(context, it.icon, imageLoader, binding.ivIcon, binding.cpiIcon)
-            }
-
-            binding.cvWarranty.setOnClickListener { warrantyClickInterface.onItemClick(warranty) }
         }
     }
 
-    fun setOnWarrantyItemClickListenter(clickInterface: WarrantyListClickInterface) {
+    fun setOnWarrantyItemClickListener(clickInterface: WarrantyListClickInterface) {
         this.warrantyClickInterface = clickInterface
     }
 

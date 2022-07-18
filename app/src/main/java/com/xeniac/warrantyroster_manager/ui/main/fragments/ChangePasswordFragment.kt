@@ -119,72 +119,72 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
         super.onViewStateRestored(savedInstanceState)
     }
 
-    private fun textInputsBackgroundColor() {
-        binding.tiEditCurrentPassword.setOnFocusChangeListener { _, isFocused ->
+    private fun textInputsBackgroundColor() = binding.apply {
+        tiEditCurrentPassword.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                binding.tiLayoutCurrentPassword.boxBackgroundColor =
+                tiLayoutCurrentPassword.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.background)
             } else {
-                binding.tiLayoutCurrentPassword.boxBackgroundColor =
+                tiLayoutCurrentPassword.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.grayLight)
             }
         }
 
-        binding.tiEditNewPassword.setOnFocusChangeListener { _, isFocused ->
+        tiEditNewPassword.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                binding.tiLayoutNewPassword.boxBackgroundColor =
+                tiLayoutNewPassword.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.background)
             } else {
-                binding.tiLayoutNewPassword.boxBackgroundColor =
+                tiLayoutNewPassword.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.grayLight)
             }
         }
 
-        binding.tiEditRetypePassword.setOnFocusChangeListener { _, isFocused ->
+        tiEditRetypePassword.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                binding.tiLayoutRetypePassword.boxBackgroundColor =
+                tiLayoutRetypePassword.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.background)
             } else {
-                binding.tiLayoutRetypePassword.boxBackgroundColor =
+                tiLayoutRetypePassword.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.grayLight)
             }
         }
     }
 
-    private fun textInputsStrokeColor() {
-        binding.tiEditCurrentPassword.addTextChangedListener {
-            binding.tiLayoutCurrentPassword.isErrorEnabled = false
-            binding.tiLayoutCurrentPassword.boxStrokeColor =
+    private fun textInputsStrokeColor() = binding.apply {
+        tiEditCurrentPassword.addTextChangedListener {
+            tiLayoutCurrentPassword.isErrorEnabled = false
+            tiLayoutCurrentPassword.boxStrokeColor =
                 ContextCompat.getColor(requireContext(), R.color.blue)
         }
 
-        binding.tiEditNewPassword.addTextChangedListener { inputPassword ->
-            if (binding.tiLayoutNewPassword.hasFocus()) {
+        tiEditNewPassword.addTextChangedListener { inputPassword ->
+            if (tiLayoutNewPassword.hasFocus()) {
                 when (passwordStrength(inputPassword.toString())) {
                     (-1).toByte() -> {
-                        binding.tiLayoutNewPassword.boxStrokeColor =
+                        tiLayoutNewPassword.boxStrokeColor =
                             ContextCompat.getColor(requireContext(), R.color.red)
-                        binding.tiLayoutNewPassword.helperText =
+                        tiLayoutNewPassword.helperText =
                             getString(R.string.change_password_helper_password_weak)
-                        binding.tiLayoutNewPassword.setHelperTextColor(
+                        tiLayoutNewPassword.setHelperTextColor(
                             ContextCompat.getColorStateList(requireContext(), R.color.red)
                         )
                     }
                     (0).toByte() -> {
-                        binding.tiLayoutNewPassword.boxStrokeColor =
+                        tiLayoutNewPassword.boxStrokeColor =
                             ContextCompat.getColor(requireContext(), R.color.orange)
-                        binding.tiLayoutNewPassword.helperText =
+                        tiLayoutNewPassword.helperText =
                             getString(R.string.change_password_helper_password_mediocre)
-                        binding.tiLayoutNewPassword.setHelperTextColor(
+                        tiLayoutNewPassword.setHelperTextColor(
                             ContextCompat.getColorStateList(requireContext(), R.color.orange)
                         )
                     }
                     (1).toByte() -> {
-                        binding.tiLayoutNewPassword.boxStrokeColor =
+                        tiLayoutNewPassword.boxStrokeColor =
                             ContextCompat.getColor(requireContext(), R.color.green)
-                        binding.tiLayoutNewPassword.helperText =
+                        tiLayoutNewPassword.helperText =
                             getString(R.string.change_password_helper_password_strong)
-                        binding.tiLayoutNewPassword.setHelperTextColor(
+                        tiLayoutNewPassword.setHelperTextColor(
                             ContextCompat.getColorStateList(requireContext(), R.color.green)
                         )
                     }
@@ -192,9 +192,9 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
             }
         }
 
-        binding.tiEditRetypePassword.addTextChangedListener {
-            binding.tiLayoutCurrentPassword.isErrorEnabled = false
-            binding.tiLayoutCurrentPassword.boxStrokeColor =
+        tiEditRetypePassword.addTextChangedListener {
+            tiLayoutCurrentPassword.isErrorEnabled = false
+            tiLayoutCurrentPassword.boxStrokeColor =
                 ContextCompat.getColor(requireContext(), R.color.blue)
         }
     }
@@ -224,7 +224,7 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
     private fun getChangeUserPasswordInputs() {
         val inputMethodManager = requireContext()
             .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.hideSoftInputFromWindow(binding.root.applicationWindowToken, 0)
+        inputMethodManager.hideSoftInputFromWindow(requireView().applicationWindowToken, 0)
 
         val currentPassword = binding.tiEditCurrentPassword.text.toString().trim()
         newPassword = binding.tiEditNewPassword.text.toString().trim()
@@ -292,28 +292,28 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
                             when {
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
                                     snackbar = showNetworkConnectionError(
-                                        requireContext(), binding.root
+                                        requireContext(), requireView()
                                     ) { getChangeUserPasswordInputs() }
                                 }
                                 it.contains(ERROR_FIREBASE_403) -> {
-                                    snackbar = show403Error(requireContext(), binding.root)
+                                    snackbar = show403Error(requireContext(), requireView())
                                 }
                                 it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
                                     snackbar = showFirebaseDeviceBlockedError(
                                         requireContext(),
-                                        binding.root
+                                        requireView()
                                     )
                                 }
                                 it.contains(ERROR_FIREBASE_AUTH_CREDENTIALS) -> {
                                     snackbar = showFirebaseAuthCredentialsError(
-                                        binding.root,
+                                        requireView(),
                                         requireContext().getString(R.string.change_password_error_credentials)
                                     )
                                 }
                                 else -> {
                                     snackbar = showNetworkFailureError(
                                         requireContext(),
-                                        binding.root
+                                        requireView()
                                     )
                                 }
                             }
@@ -346,17 +346,17 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
                             snackbar = when {
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
                                     showNetworkConnectionError(
-                                        requireContext(), binding.root
+                                        requireContext(), requireView()
                                     ) { getChangeUserPasswordInputs() }
                                 }
                                 it.contains(ERROR_FIREBASE_403) -> {
-                                    show403Error(requireContext(), binding.root)
+                                    show403Error(requireContext(), requireView())
                                 }
                                 it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
-                                    showFirebaseDeviceBlockedError(requireContext(), binding.root)
+                                    showFirebaseDeviceBlockedError(requireContext(), requireView())
                                 }
                                 else -> {
-                                    showNetworkFailureError(requireContext(), binding.root)
+                                    showNetworkFailureError(requireContext(), requireView())
                                 }
                             }
                         }
@@ -365,22 +365,21 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
             }
         }
 
-    private fun showLoadingAnimation() {
-        binding.tiEditCurrentPassword.isEnabled = false
-        binding.tiEditNewPassword.isEnabled = false
-        binding.tiEditRetypePassword.isEnabled = false
-        binding.btnChangePassword.isClickable = false
-        binding.btnChangePassword.text = null
-        binding.cpiChangePassword.visibility = VISIBLE
+    private fun showLoadingAnimation() = binding.apply {
+        tiEditCurrentPassword.isEnabled = false
+        tiEditNewPassword.isEnabled = false
+        tiEditRetypePassword.isEnabled = false
+        btnChangePassword.isClickable = false
+        btnChangePassword.text = null
+        cpiChangePassword.visibility = VISIBLE
     }
 
-    private fun hideLoadingAnimation() {
-        binding.cpiChangePassword.visibility = GONE
-        binding.tiEditCurrentPassword.isEnabled = true
-        binding.tiEditNewPassword.isEnabled = true
-        binding.tiEditRetypePassword.isEnabled = true
-        binding.btnChangePassword.isClickable = true
-        binding.btnChangePassword.text =
-            requireContext().getString(R.string.change_password_btn_change)
+    private fun hideLoadingAnimation() = binding.apply {
+        cpiChangePassword.visibility = GONE
+        tiEditCurrentPassword.isEnabled = true
+        tiEditNewPassword.isEnabled = true
+        tiEditRetypePassword.isEnabled = true
+        btnChangePassword.isClickable = true
+        btnChangePassword.text = requireContext().getString(R.string.change_password_btn_change)
     }
 }

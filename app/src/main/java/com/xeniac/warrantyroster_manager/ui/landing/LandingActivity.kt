@@ -67,24 +67,25 @@ class LandingActivity : BaseActivity() {
     }
 
     private fun setTitle() {
-        val navHostFragment = supportFragmentManager
-            .findFragmentById(binding.fcv.id) as NavHostFragment
+        binding.apply {
+            val navHostFragment = supportFragmentManager.findFragmentById(fcv.id) as NavHostFragment
 
-        val navController = navHostFragment.navController
+            val navController = navHostFragment.navController
 
-        navController.addOnDestinationChangedListener { _, destination, _ ->
-            when (destination.id) {
-                R.id.loginFragment -> {
-                    binding.tvTitle.text = getString(R.string.login_text_title)
-                }
-                R.id.registerFragment -> {
-                    binding.tvTitle.text = getString(R.string.register_text_title)
-                }
-                R.id.forgotPwFragment -> {
-                    binding.tvTitle.text = getString(R.string.forgot_pw_text_title)
-                }
-                R.id.forgotPwSentFragment -> {
-                    binding.tvTitle.text = getString(R.string.forgot_pw_sent_text_title)
+            navController.addOnDestinationChangedListener { _, destination, _ ->
+                when (destination.id) {
+                    R.id.loginFragment -> {
+                        tvTitle.text = getString(R.string.login_text_title)
+                    }
+                    R.id.registerFragment -> {
+                        tvTitle.text = getString(R.string.register_text_title)
+                    }
+                    R.id.forgotPwFragment -> {
+                        tvTitle.text = getString(R.string.forgot_pw_text_title)
+                    }
+                    R.id.forgotPwSentFragment -> {
+                        tvTitle.text = getString(R.string.forgot_pw_sent_text_title)
+                    }
                 }
             }
         }
@@ -102,14 +103,16 @@ class LandingActivity : BaseActivity() {
         }
 
     private fun setCurrentLanguageFlag() {
-        //TODO EDIT AFTER ADDING BRITISH ENGLISH
-        when (currentAppLanguage) {
-            LOCALE_LANGUAGE_ENGLISH -> binding.ivLanguageFlag.setImageDrawable(
-                AppCompatResources.getDrawable(this, R.drawable.ic_flag_usa)
-            )
-            LOCALE_LANGUAGE_PERSIAN -> binding.ivLanguageFlag.setImageDrawable(
-                AppCompatResources.getDrawable(this, R.drawable.ic_flag_iran)
-            )
+        binding.apply {
+            //TODO EDIT AFTER ADDING BRITISH ENGLISH
+            when (currentAppLanguage) {
+                LOCALE_LANGUAGE_ENGLISH -> ivLanguageFlag.setImageDrawable(
+                    AppCompatResources.getDrawable(this@LandingActivity, R.drawable.ic_flag_usa)
+                )
+                LOCALE_LANGUAGE_PERSIAN -> ivLanguageFlag.setImageDrawable(
+                    AppCompatResources.getDrawable(this@LandingActivity, R.drawable.ic_flag_iran)
+                )
+            }
         }
     }
 

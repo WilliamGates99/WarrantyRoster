@@ -54,7 +54,7 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
 
     private fun setupRecyclerView() {
         warrantyAdapter.apply {
-            setOnWarrantyItemClickListenter(this@WarrantiesFragment)
+            setOnWarrantyItemClickListener(this@WarrantiesFragment)
             activity = requireActivity()
             context = requireContext()
             mainViewModel = viewModel
@@ -90,7 +90,7 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
                                 }
                                 it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
                                     snackbar = showFirebaseDeviceBlockedError(
-                                        requireContext(), binding.root
+                                        requireContext(), requireView()
                                     )
                                 }
                                 else -> {
@@ -131,7 +131,7 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
                                 }
                                 it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
                                     snackbar = showFirebaseDeviceBlockedError(
-                                        requireContext(), binding.root
+                                        requireContext(), requireView()
                                     )
                                 }
                                 else -> {
@@ -147,10 +147,10 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
         }
     }
 
-    private fun showNetworkError() {
-        binding.groupEmptyList.visibility = GONE
-        binding.rv.visibility = GONE
-        binding.groupNetwork.visibility = VISIBLE
+    private fun showNetworkError() = binding.apply {
+        groupEmptyList.visibility = GONE
+        rv.visibility = GONE
+        groupNetwork.visibility = VISIBLE
         retryNetworkBtn()
     }
 
@@ -158,31 +158,31 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
         getWarrantiesListFromFirestore()
     }
 
-    private fun showLoadingAnimation() {
-        binding.svWarranties.visibility = GONE
-        binding.groupNetwork.visibility = GONE
-        binding.groupEmptyList.visibility = GONE
-        binding.rv.visibility = GONE
-        binding.cpi.visibility = VISIBLE
-        binding.cpi.show()
+    private fun showLoadingAnimation() = binding.apply {
+        svWarranties.visibility = GONE
+        groupNetwork.visibility = GONE
+        groupEmptyList.visibility = GONE
+        rv.visibility = GONE
+        cpi.visibility = VISIBLE
+        cpi.show()
     }
 
-    private fun hideLoadingAnimation() {
-        binding.cpi.hide()
-        binding.cpi.setVisibilityAfterHide(GONE)
+    private fun hideLoadingAnimation() = binding.apply {
+        cpi.hide()
+        cpi.setVisibilityAfterHide(GONE)
     }
 
-    private fun showWarrantiesEmptyList() {
-        binding.svWarranties.visibility = GONE
-        binding.groupNetwork.visibility = GONE
-        binding.rv.visibility = GONE
-        binding.groupEmptyList.visibility = VISIBLE
+    private fun showWarrantiesEmptyList() = binding.apply {
+        svWarranties.visibility = GONE
+        groupNetwork.visibility = GONE
+        rv.visibility = GONE
+        groupEmptyList.visibility = VISIBLE
     }
 
-    private fun showWarrantiesList(warrantiesList: MutableList<Warranty>) {
-        binding.groupNetwork.visibility = GONE
-        binding.groupEmptyList.visibility = GONE
-        binding.rv.visibility = VISIBLE
+    private fun showWarrantiesList(warrantiesList: MutableList<Warranty>) = binding.apply {
+        groupNetwork.visibility = GONE
+        groupEmptyList.visibility = GONE
+        rv.visibility = VISIBLE
         warrantyAdapter.warrantiesList = warrantiesList
 
         //TODO remove comment after adding search function
