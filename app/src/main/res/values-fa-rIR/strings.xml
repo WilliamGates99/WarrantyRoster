@@ -27,6 +27,8 @@
     <string name="login_btn_login">ورود</string>
     <string name="login_text_register_title">حساب کاربری ندارید؟</string>
     <string name="login_btn_register">ثبت‌نام کنید</string>
+    <string name="login_error_blank_email">آدرس ایمیل خود را وارد کنید!</string>
+    <string name="login_error_blank_password">رمز‌عبور خود را وارد کنید!</string>
     <string name="login_error_email">آدرس ایمیل وارد شده، معتبر نیست!</string>
     <string name="login_error_not_found">حسابی با ایمیل وارد شده وجود ندارد.</string>
     <string name="login_error_credentials">ایمیل و یا رمز‌عبور وارد شده نادرست است.</string>
@@ -47,6 +49,9 @@
     <string name="register_helper_password_weak">ضعیف</string>
     <string name="register_helper_password_mediocre">متوسط</string>
     <string name="register_helper_password_strong">قوی</string>
+    <string name="register_error_blank_email">آدرس ایمیل خود را وارد کنید!</string>
+    <string name="register_error_blank_password">رمز‌عبور را وارد کنید!</string>
+    <string name="register_error_blank_retype_password">رمز‌عبور را دوباره وارد کنید!</string>
     <string name="register_error_email">آدرس ایمیل وارد شده، معتبر نیست!</string>
     <string name="register_error_password_short">رمز‌عبور باید حداقل 6 کاراکتر باشد!</string>
     <string name="register_error_password_not_match">رمز‌عبور و تکرار رمز‌عبور وارد شده با هم مطابقت ندارند!</string>
@@ -59,6 +64,7 @@
     <string name="forgot_pw_hint_email">آدرس ایمیل خود را وارد کنید</string>
     <string name="forgot_pw_btn_send">ارسال ایمیل</string>
     <string name="forgot_pw_btn_return">بازگشت به صفحه ورود</string>
+    <string name="forgot_pw_error_blank_email">آدرس ایمیل خود را وارد کنید!</string>
     <string name="forgot_pw_error_timer_is_not_zero_one">لطفاً قبل از درخواست مجدد، %d ثانیه منتظر بمانید.</string>
     <string name="forgot_pw_error_timer_is_not_zero_other">لطفاً قبل از درخواست مجدد، %d ثانیه منتظر بمانید.</string>
     <string name="forgot_pw_error_email">آدرس ایمیل وارد شده، معتبر نیست!</string>
@@ -155,6 +161,7 @@
     <string name="add_warranty_hint_date">روز/ماه/سال</string>
     <string name="add_warranty_title_date_picker_starting">تاریخ شروع را انتخاب کنید</string>
     <string name="add_warranty_title_date_picker_expiry">تاریخ اتمام را انتخاب کنید</string>
+    <string name="add_warranty_error_blank_title">عنوان را وارد کنید!</string>
     <string name="add_warranty_error_date">تاریخ شروع نمی‌تواند بعد از تاریخ اتمام باشد!</string>
     <string name="add_warranty_checkbox_lifetime">گارانتی مادام‌العمر</string>
     <string name="add_warranty_format_date">%3$d/%1$s/%2$s</string> <!--yyyy/mm/dd-->
@@ -201,6 +208,7 @@
     <string name="edit_warranty_hint_date">روز/ماه/سال</string>
     <string name="edit_warranty_title_date_picker_starting">تاریخ شروع را انتخاب کنید</string>
     <string name="edit_warranty_title_date_picker_expiry">تاریخ اتمام را انتخاب کنید</string>
+    <string name="edit_warranty_error_blank_title">عنوان را وارد کنید!</string>
     <string name="edit_warranty_error_date">تاریخ شروع نمی‌تواند بعد از تاریخ اتمام باشد!</string>
     <string name="edit_warranty_checkbox_lifetime">گارانتی مادام‌العمر</string>
     <string name="edit_warranty_format_date">%3$d/%1$s/%2$s</string> <!--yyyy/mm/dd-->
@@ -238,6 +246,9 @@
     <string name="change_password_helper_password_weak">ضعیف</string>
     <string name="change_password_helper_password_mediocre">متوسط</string>
     <string name="change_password_helper_password_strong">قوی</string>
+    <string name="change_password_error_blank_current">رمز‌عبور فعلی خود را وارد کنید!</string>
+    <string name="change_password_error_blank_new">رمز‌عبور جدیدی را وارد کنید!</string>
+    <string name="change_password_error_blank_retype">رمز‌عبور جدید را مجددا وارد کنید!</string>
     <string name="change_password_error_password_short">رمز‌عبور باید حداقل 6 کاراکتر باشد!</string>
     <string name="change_password_error_match">رمز‌عبور جدید و تکرار رمز‌عبور جدید وارد شده با هم مطابقت ندارند!</string>
     <string name="change_password_error_credentials">رمز‌عبور فعلی وارد شده نادرست است.</string>
@@ -251,7 +262,9 @@
     <string name="change_email_title_new_email">آدرس ایمیل جدید</string>
     <string name="change_email_hint_new_email">آدرس ایمیل جدیدی را وارد کنید</string>
     <string name="change_email_btn_change">تغییر ایمیل</string>
-    <string name="change_email_error_new_email">آدرس ایمیل جدید وارد شده، معتبر نیست!</string>
+    <string name="change_email_error_blank_password">رمز‌عبور خود را وارد کنید!</string>
+    <string name="change_email_error_blank_new_email">Enter a new email address!</string>
+    <string name="change_email_error_new_email">آدرس ایمیل جدیدی را وارد کنید!</string>
     <string name="change_email_error_credentials">رمز‌عبور وارد شده نادرست است.</string>
     <string name="change_email_error_email_same">آدرس ایمیل جدید نمی‌تواند با ایمیل فعلیتان یکسان باشد!</string>
     <string name="change_email_error_email_exists">حسابی با ایمیل وارد شده از قبل وجود دارد.</string>

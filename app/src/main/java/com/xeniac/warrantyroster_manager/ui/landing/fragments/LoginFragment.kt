@@ -126,6 +126,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         }
 
         tiEditPassword.addTextChangedListener {
+            tiLayoutPassword.isErrorEnabled = false
             tiLayoutPassword.boxStrokeColor = ContextCompat.getColor(requireContext(), R.color.blue)
         }
     }
@@ -184,11 +185,15 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                         response.message?.let {
                             when {
                                 it.contains(ERROR_INPUT_BLANK_EMAIL) -> {
+                                    binding.tiLayoutEmail.error =
+                                        requireContext().getString(R.string.login_error_blank_email)
                                     binding.tiLayoutEmail.requestFocus()
                                     binding.tiLayoutEmail.boxStrokeColor =
                                         ContextCompat.getColor(requireContext(), R.color.red)
                                 }
                                 it.contains(ERROR_INPUT_BLANK_PASSWORD) -> {
+                                    binding.tiLayoutPassword.error =
+                                        requireContext().getString(R.string.login_error_blank_password)
                                     binding.tiLayoutPassword.requestFocus()
                                     binding.tiLayoutPassword.boxStrokeColor =
                                         ContextCompat.getColor(requireContext(), R.color.red)

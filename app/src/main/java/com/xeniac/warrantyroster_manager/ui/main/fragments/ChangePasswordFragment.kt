@@ -7,7 +7,6 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -56,7 +55,6 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
         _binding = FragmentChangePasswordBinding.bind(view)
         viewModel = ViewModelProvider(requireActivity())[SettingsViewModel::class.java]
 
-        onBackPressed()
         textInputsBackgroundColor()
         textInputsStrokeColor()
         returnToMainActivity()
@@ -69,15 +67,6 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
         super.onDestroyView()
         snackbar?.dismiss()
         _binding = null
-    }
-
-    private fun onBackPressed() {
-        requireActivity().onBackPressedDispatcher.addCallback(
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    findNavController().popBackStack()
-                }
-            })
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -159,6 +148,8 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
         }
 
         tiEditNewPassword.addTextChangedListener { inputPassword ->
+            tiLayoutNewPassword.isErrorEnabled = false
+
             if (tiLayoutNewPassword.hasFocus()) {
                 when (passwordStrength(inputPassword.toString())) {
                     (-1).toByte() -> {
@@ -247,16 +238,22 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
                         response.message?.let {
                             when {
                                 it.contains(ERROR_INPUT_BLANK_PASSWORD) -> {
+                                    binding.tiLayoutCurrentPassword.error =
+                                        requireContext().getString(R.string.change_password_error_blank_current)
                                     binding.tiLayoutCurrentPassword.requestFocus()
                                     binding.tiLayoutCurrentPassword.boxStrokeColor =
                                         ContextCompat.getColor(requireContext(), R.color.red)
                                 }
                                 it.contains(ERROR_INPUT_BLANK_NEW_PASSWORD) -> {
+                                    binding.tiLayoutNewPassword.error =
+                                        requireContext().getString(R.string.change_password_error_blank_new)
                                     binding.tiLayoutNewPassword.requestFocus()
                                     binding.tiLayoutNewPassword.boxStrokeColor =
                                         ContextCompat.getColor(requireContext(), R.color.red)
                                 }
                                 it.contains(ERROR_INPUT_BLANK_RETYPE_PASSWORD) -> {
+                                    binding.tiLayoutRetypePassword.error =
+                                        requireContext().getString(R.string.change_password_error_blank_retype)
                                     binding.tiLayoutRetypePassword.requestFocus()
                                     binding.tiLayoutRetypePassword.boxStrokeColor =
                                         ContextCompat.getColor(requireContext(), R.color.red)

@@ -7,7 +7,6 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -49,7 +48,6 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
         _binding = FragmentForgotPwBinding.bind(view)
         viewModel = ViewModelProvider(requireActivity())[LandingViewModel::class.java]
 
-        onBackPressed()
         textInputsBackgroundColor()
         textInputsStrokeColor()
         returnOnClick()
@@ -62,15 +60,6 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
         super.onDestroyView()
         snackbar?.dismiss()
         _binding = null
-    }
-
-    private fun onBackPressed() {
-        requireActivity().onBackPressedDispatcher.addCallback(
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    findNavController().popBackStack()
-                }
-            })
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -155,6 +144,8 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
                         response.message?.let {
                             when {
                                 it.contains(ERROR_INPUT_BLANK_EMAIL) -> {
+                                    binding.tiLayoutEmail.error =
+                                        requireContext().getString(R.string.forgot_pw_error_blank_email)
                                     binding.tiLayoutEmail.requestFocus()
                                     binding.tiLayoutEmail.boxStrokeColor =
                                         ContextCompat.getColor(requireContext(), R.color.red)

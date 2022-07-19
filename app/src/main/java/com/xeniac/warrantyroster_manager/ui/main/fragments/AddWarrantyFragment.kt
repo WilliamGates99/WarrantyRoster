@@ -8,7 +8,6 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
-import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.core.view.get
 import androidx.core.widget.addTextChangedListener
@@ -86,7 +85,6 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
         _binding = FragmentAddWarrantyBinding.bind(view)
         viewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
 
-        onBackPressed()
         textInputsBackgroundColor()
         textInputsStrokeColor()
         categoryDropDownSelection()
@@ -108,15 +106,6 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
     override fun onResume() {
         super.onResume()
         categoryDropDown()
-    }
-
-    private fun onBackPressed() {
-        requireActivity().onBackPressedDispatcher.addCallback(
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    findNavController().popBackStack()
-                }
-            })
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -305,7 +294,11 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
     }
 
     private fun textInputsStrokeColor() = binding.apply {
-        // TODO ADD TITLE AFTER ADDING title.setError()
+        tiEditTitle.addTextChangedListener {
+            tiLayoutTitle.isErrorEnabled = false
+            tiLayoutTitle.boxStrokeColor = ContextCompat.getColor(requireContext(), R.color.blue)
+        }
+
         tiEditDateStarting.addTextChangedListener {
             hideDateError()
         }
@@ -496,6 +489,8 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
                         response.message?.let {
                             when {
                                 it.contains(ERROR_INPUT_BLANK_TITLE) -> {
+                                    binding.tiLayoutTitle.error =
+                                        requireContext().getString(R.string.add_warranty_error_blank_title)
                                     binding.tiLayoutTitle.requestFocus()
                                     binding.tiLayoutTitle.boxStrokeColor =
                                         ContextCompat.getColor(requireContext(), R.color.red)

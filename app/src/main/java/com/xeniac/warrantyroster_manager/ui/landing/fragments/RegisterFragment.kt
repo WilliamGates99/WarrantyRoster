@@ -8,7 +8,6 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -58,7 +57,6 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         _binding = FragmentRegisterBinding.bind(view)
         viewModel = ViewModelProvider(requireActivity())[LandingViewModel::class.java]
 
-        onBackPressed()
         textInputsBackgroundColor()
         textInputsStrokeColor()
         agreementOnclick()
@@ -72,15 +70,6 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         super.onDestroyView()
         snackbar?.dismiss()
         _binding = null
-    }
-
-    private fun onBackPressed() {
-        requireActivity().onBackPressedDispatcher.addCallback(
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    findNavController().popBackStack()
-                }
-            })
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -163,6 +152,8 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         }
 
         tiEditPassword.addTextChangedListener { inputPassword ->
+            tiLayoutPassword.isErrorEnabled = false
+
             if (tiLayoutPassword.hasFocus()) {
                 when (passwordStrength(inputPassword.toString())) {
                     (-1).toByte() -> {
@@ -252,16 +243,22 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                         response.message?.let {
                             when {
                                 it.contains(ERROR_INPUT_BLANK_EMAIL) -> {
+                                    binding.tiLayoutEmail.error =
+                                        requireContext().getString(R.string.register_error_blank_email)
                                     binding.tiLayoutEmail.requestFocus()
                                     binding.tiLayoutEmail.boxStrokeColor =
                                         ContextCompat.getColor(requireContext(), R.color.red)
                                 }
                                 it.contains(ERROR_INPUT_BLANK_PASSWORD) -> {
+                                    binding.tiLayoutPassword.error =
+                                        requireContext().getString(R.string.register_error_blank_password)
                                     binding.tiLayoutPassword.requestFocus()
                                     binding.tiLayoutPassword.boxStrokeColor =
                                         ContextCompat.getColor(requireContext(), R.color.red)
                                 }
                                 it.contains(ERROR_INPUT_BLANK_RETYPE_PASSWORD) -> {
+                                    binding.tiLayoutRetypePassword.error =
+                                        requireContext().getString(R.string.register_error_blank_retype_password)
                                     binding.tiLayoutRetypePassword.requestFocus()
                                     binding.tiLayoutRetypePassword.boxStrokeColor =
                                         ContextCompat.getColor(requireContext(), R.color.red)
