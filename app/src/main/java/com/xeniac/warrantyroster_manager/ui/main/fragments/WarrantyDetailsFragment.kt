@@ -6,7 +6,6 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
@@ -67,7 +66,6 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
         _binding = FragmentWarrantyDetailsBinding.bind(view)
         viewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
 
-        onBackPressed()
         returnToMainActivity()
         handleExtendedFAB()
         getWarranty()
@@ -80,15 +78,6 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
         super.onDestroyView()
         snackbar?.dismiss()
         _binding = null
-    }
-
-    private fun onBackPressed() {
-        requireActivity().onBackPressedDispatcher.addCallback(
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    findNavController().popBackStack()
-                }
-            })
     }
 
     private fun returnToMainActivity() = binding.toolbar.setNavigationOnClickListener {
