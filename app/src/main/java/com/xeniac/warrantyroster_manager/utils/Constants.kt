@@ -11,6 +11,8 @@ object Constants {
     const val DATASTORE_THEME_KEY = "theme"
     const val DATASTORE_LANGUAGE_KEY = "language"
     const val DATASTORE_COUNTRY_KEY = "country"
+    const val DATASTORE_IN_APP_REVIEWS_CHOICE_KEY = "inAppReviewsChoice"
+    const val DATASTORE_PREVIOUS_REQUEST_TIME_IN_MILLIS_KEY = "previousRequestTimeInMillis"
 
     // App Language Constants
     const val LOCALE_LANGUAGE_ENGLISH = "en"

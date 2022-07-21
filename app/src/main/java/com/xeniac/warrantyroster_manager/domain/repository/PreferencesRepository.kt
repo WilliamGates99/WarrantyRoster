@@ -14,13 +14,21 @@ interface PreferencesRepository {
 
     suspend fun getCurrentAppCountry(): String
 
+    suspend fun getCurrentInAppReviewsChoice(): Int
+
+    suspend fun getPreviousRequestTimeInMillis(): Long
+
     suspend fun getCategoryTitleMapKey(): String
 
     suspend fun setIsUserLoggedIn(value: Boolean)
 
-    suspend fun setAppTheme(index: Int)
+    suspend fun setCurrentAppTheme(index: Int)
 
     suspend fun setCurrentAppLanguage(language: String)
 
     suspend fun setCurrentAppCountry(country: String)
+
+    suspend fun setCurrentInAppReviewsChoice(value: Int)
+
+    suspend fun setPreviousRequestTimeInMillis(timeInMillis: Long)
 }

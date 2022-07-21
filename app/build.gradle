@@ -138,6 +138,9 @@ dependencies {
     implementation 'io.coil-kt:coil:2.1.0'
     implementation 'io.coil-kt:coil-svg:2.1.0'
 
+    // Google Play In-App Reviews API
+    implementation 'com.google.android.play:review-ktx:2.0.0'
+
     // AppLovin Libraries
     implementation 'com.applovin:applovin-sdk:11.4.4'
     implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'

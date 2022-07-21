@@ -10,6 +10,8 @@ class FakePreferencesRepository : PreferencesRepository {
     private var currentAppTheme = 0
     private var currentAppLanguage = LOCALE_LANGUAGE_ENGLISH
     private var currentAppCountry = LOCALE_COUNTRY_UNITED_STATES
+    private var currentInAppReviewsChoice = 0
+    private var previousRequestTimeInMillis = 0L
 
     override fun getIsUserLoggedInSynchronously(): Boolean = isUserLoggedIn
 
@@ -23,6 +25,10 @@ class FakePreferencesRepository : PreferencesRepository {
 
     override suspend fun getCurrentAppCountry(): String = currentAppCountry
 
+    override suspend fun getCurrentInAppReviewsChoice(): Int = currentInAppReviewsChoice
+
+    override suspend fun getPreviousRequestTimeInMillis(): Long = previousRequestTimeInMillis
+
     override suspend fun getCategoryTitleMapKey(): String =
         "${getCurrentAppLanguage()}-${getCurrentAppCountry()}"
 
@@ -30,7 +36,7 @@ class FakePreferencesRepository : PreferencesRepository {
         isUserLoggedIn = value
     }
 
-    override suspend fun setAppTheme(index: Int) {
+    override suspend fun setCurrentAppTheme(index: Int) {
         currentAppTheme = index
     }
 
@@ -40,5 +46,13 @@ class FakePreferencesRepository : PreferencesRepository {
 
     override suspend fun setCurrentAppCountry(country: String) {
         currentAppCountry = country
+    }
+
+    override suspend fun setCurrentInAppReviewsChoice(value: Int) {
+        currentInAppReviewsChoice = value
+    }
+
+    override suspend fun setPreviousRequestTimeInMillis(timeInMillis: Long) {
+        previousRequestTimeInMillis = timeInMillis
     }
 }

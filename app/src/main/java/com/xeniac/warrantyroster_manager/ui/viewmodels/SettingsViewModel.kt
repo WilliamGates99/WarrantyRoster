@@ -29,6 +29,7 @@ import com.xeniac.warrantyroster_manager.utils.UserHelper.passwordStrength
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -37,11 +38,21 @@ class SettingsViewModel @Inject constructor(
     private val preferencesRepository: PreferencesRepository
 ) : ViewModel() {
 
+    // TODO ADD LIVEDATA TO THE NAME
     private val _currentAppLocale: MutableLiveData<Event<Array<String>>> = MutableLiveData()
     val currentAppLocale: LiveData<Event<Array<String>>> = _currentAppLocale
 
+    // TODO ADD LIVEDATA TO THE NAME
     private val _currentAppTheme: MutableLiveData<Event<Int>> = MutableLiveData()
     val currentAppTheme: LiveData<Event<Int>> = _currentAppTheme
+
+    private val _currentInAppReviewsChoiceLiveData: MutableLiveData<Event<Int>> = MutableLiveData()
+    val currentInAppReviewsChoiceLiveData: LiveData<Event<Int>> = _currentInAppReviewsChoiceLiveData
+
+    private val _previousRequestTimeInMillisLiveData: MutableLiveData<Event<Long>> =
+        MutableLiveData()
+    val previousRequestTimeInMillisLiveData: LiveData<Event<Long>> =
+        _previousRequestTimeInMillisLiveData
 
     private val _setAppLocaleLiveData: MutableLiveData<Event<Resource<Array<String>>>> =
         MutableLiveData()
@@ -84,14 +95,31 @@ class SettingsViewModel @Inject constructor(
         safeGetCurrentAppTheme()
     }
 
+    fun getCurrentInAppReviewsChoice() = viewModelScope.launch {
+        safeGetCurrentInAppReviewsChoice()
+    }
+
+    fun getPreviousRequestTimeInMillis() = viewModelScope.launch {
+        safeGetPreviousRequestTimeInMillis()
+    }
+
     fun setAppLocale(index: Int) = viewModelScope.launch {
         safeSetAppLocale(index)
     }
 
     fun setAppTheme(index: Int) = viewModelScope.launch {
-        preferencesRepository.setAppTheme(index)
+        preferencesRepository.setCurrentAppTheme(index)
         _currentAppTheme.postValue(Event(index))
         SettingsHelper.setAppTheme(index)
+    }
+
+    fun setInAppReviewsChoice(value: Int) = viewModelScope.launch {
+        preferencesRepository.setCurrentInAppReviewsChoice(value)
+        _currentInAppReviewsChoiceLiveData.postValue(Event(value))
+    }
+
+    fun setPreviousRequestTimeInMillis() = viewModelScope.launch {
+        preferencesRepository.setPreviousRequestTimeInMillis(Calendar.getInstance().timeInMillis)
     }
 
     fun getAccountDetails() = viewModelScope.launch {
@@ -186,6 +214,14 @@ class SettingsViewModel @Inject constructor(
 
     private suspend fun safeGetCurrentAppTheme() {
         _currentAppTheme.postValue(Event(preferencesRepository.getCurrentAppTheme()))
+    }
+
+    private suspend fun safeGetCurrentInAppReviewsChoice() {
+        _currentInAppReviewsChoiceLiveData.postValue(Event(preferencesRepository.getCurrentInAppReviewsChoice()))
+    }
+
+    private suspend fun safeGetPreviousRequestTimeInMillis() {
+        _previousRequestTimeInMillisLiveData.postValue(Event(preferencesRepository.getPreviousRequestTimeInMillis()))
     }
 
     private suspend fun safeSetAppLocale(index: Int) {

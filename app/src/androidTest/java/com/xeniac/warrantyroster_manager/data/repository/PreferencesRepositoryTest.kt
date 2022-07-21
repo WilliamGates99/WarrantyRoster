@@ -84,11 +84,15 @@ class PreferencesRepositoryTest {
         val initialCurrentAppLanguage = testRepository.getCurrentAppLanguage()
         val initialCurrentAppCountry = testRepository.getCurrentAppCountry()
         val initialCategoryTitleMapKey = testRepository.getCategoryTitleMapKey()
+        val initialCurrentInAppReviewsChoice = testRepository.getCurrentInAppReviewsChoice()
+        val initialPreviousRequestTimeInMillis = testRepository.getPreviousRequestTimeInMillis()
 
         assertThat(initialCurrentAppTheme).isEqualTo(0)
         assertThat(initialCurrentAppLanguage).isEqualTo(LOCALE_LANGUAGE_ENGLISH)
         assertThat(initialCurrentAppCountry).isEqualTo(LOCALE_COUNTRY_UNITED_STATES)
         assertThat(initialCategoryTitleMapKey).isEqualTo("$LOCALE_LANGUAGE_ENGLISH-$LOCALE_COUNTRY_UNITED_STATES")
+        assertThat(initialCurrentInAppReviewsChoice).isEqualTo(0)
+        assertThat(initialPreviousRequestTimeInMillis).isEqualTo(0L)
     }
 
     /**
@@ -114,7 +118,7 @@ class PreferencesRepositoryTest {
         testDataStore.edit { it.clear() }
 
         val testValue = 1
-        testRepository.setAppTheme(testValue)
+        testRepository.setCurrentAppTheme(testValue)
 
         val currentAppTheme = testRepository.getCurrentAppTheme()
         assertThat(currentAppTheme).isEqualTo(testValue)
@@ -140,5 +144,27 @@ class PreferencesRepositoryTest {
 
         val currentCountry = testRepository.getCurrentAppCountry()
         assertThat(currentCountry).isEqualTo(testValue)
+    }
+
+    @Test
+    fun writeInAppReviewsChoice() = testScope.runTest {
+        testDataStore.edit { it.clear() }
+
+        val testValue = 1
+        testRepository.setCurrentInAppReviewsChoice(testValue)
+
+        val currentInAppReviewsChoice = testRepository.getCurrentInAppReviewsChoice()
+        assertThat(currentInAppReviewsChoice).isEqualTo(testValue)
+    }
+
+    @Test
+    fun writePreviousRequestTimeInMillis() = testScope.runTest {
+        testDataStore.edit { it.clear() }
+
+        val testValue = 100L
+        testRepository.setPreviousRequestTimeInMillis(testValue)
+
+        val previousRequestTimeInMillis = testRepository.getPreviousRequestTimeInMillis()
+        assertThat(previousRequestTimeInMillis).isEqualTo(testValue)
     }
 }

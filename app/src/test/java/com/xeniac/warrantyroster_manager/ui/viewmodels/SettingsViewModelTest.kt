@@ -61,6 +61,25 @@ class SettingsViewModelTest {
     }
 
     @Test
+    fun getCurrentInAppReviewsChoice_returnsDefaultInAppReviewsChoice() {
+        val defaultInAppReviewsChoiceValue = 0
+        testViewModel.getCurrentInAppReviewsChoice()
+
+        val responseEvent = testViewModel.currentInAppReviewsChoiceLiveData.getOrAwaitValue()
+        assertThat(responseEvent.getContentIfNotHandled()).isEqualTo(defaultInAppReviewsChoiceValue)
+    }
+
+    @Test
+    fun getPreviousRequestTimeInMillis_returnsDefaultPreviousRequestTimeInMillis() {
+        val defaultPreviousRequestTimeInMillis = 0L
+        testViewModel.getPreviousRequestTimeInMillis()
+
+        val responseEvent = testViewModel.previousRequestTimeInMillisLiveData.getOrAwaitValue()
+        assertThat(responseEvent.getContentIfNotHandled())
+            .isEqualTo(defaultPreviousRequestTimeInMillis)
+    }
+
+    @Test
     fun setAppLocale_returnsNewAppLocale() {
         testViewModel.setAppLocale(1)
 
@@ -79,6 +98,15 @@ class SettingsViewModelTest {
 
         val responseEvent = testViewModel.currentAppTheme.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()).isEqualTo(newThemeIndex)
+    }
+
+    @Test
+    fun setInAppReviewsChoice_returnsNewCurrentInAppReviewsChoice() {
+        val newInAppReviewsChoiceValue = 1
+        testViewModel.setInAppReviewsChoice(newInAppReviewsChoiceValue)
+
+        val responseEvent = testViewModel.currentInAppReviewsChoiceLiveData.getOrAwaitValue()
+        assertThat(responseEvent.getContentIfNotHandled()).isEqualTo(newInAppReviewsChoiceValue)
     }
 
     @Test

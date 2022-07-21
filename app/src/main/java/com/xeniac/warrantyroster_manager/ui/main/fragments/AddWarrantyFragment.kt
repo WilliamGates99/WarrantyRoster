@@ -22,6 +22,7 @@ import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.data.remote.models.Category
 import com.xeniac.warrantyroster_manager.databinding.FragmentAddWarrantyBinding
 import com.xeniac.warrantyroster_manager.domain.repository.PreferencesRepository
+import com.xeniac.warrantyroster_manager.ui.main.MainActivity
 import com.xeniac.warrantyroster_manager.ui.viewmodels.MainViewModel
 import com.xeniac.warrantyroster_manager.utils.CoilHelper.loadCategoryImage
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
@@ -483,6 +484,7 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
                         findNavController().navigate(
                             AddWarrantyFragmentDirections.actionAddWarrantyFragmentToWarrantiesFragment()
                         )
+                        (requireActivity() as MainActivity).showInAppReviews()
                     }
                     Status.ERROR -> {
                         hideLoadingAnimation()

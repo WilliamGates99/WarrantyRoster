@@ -3,6 +3,7 @@ package com.xeniac.warrantyroster_manager.ui.main
 import android.os.Bundle
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
@@ -12,10 +13,17 @@ import com.applovin.mediation.MaxError
 import com.applovin.mediation.ads.MaxInterstitialAd
 import com.google.android.material.shape.CornerFamily.ROUNDED
 import com.google.android.material.shape.MaterialShapeDrawable
+import com.google.android.material.snackbar.Snackbar
+import com.google.android.play.core.review.ReviewInfo
+import com.google.android.play.core.review.ReviewManager
+import com.google.android.play.core.review.ReviewManagerFactory
 import com.xeniac.warrantyroster_manager.BuildConfig
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.ActivityMainBinding
 import com.xeniac.warrantyroster_manager.ui.BaseActivity
+import com.xeniac.warrantyroster_manager.ui.viewmodels.SettingsViewModel
+import com.xeniac.warrantyroster_manager.utils.DateHelper.getDaysFromFirstInstallTime
+import com.xeniac.warrantyroster_manager.utils.DateHelper.getDaysFromPreviousRequestTime
 import dagger.hilt.android.AndroidEntryPoint
 import ir.tapsell.plus.AdRequestCallback
 import ir.tapsell.plus.TapsellPlus
@@ -27,6 +35,11 @@ class MainActivity : BaseActivity(), MaxAdListener {
 
     lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
+
+    private lateinit var viewModel: SettingsViewModel
+
+    private lateinit var reviewManager: ReviewManager
+    private var reviewInfo: ReviewInfo? = null
 
     lateinit var appLovinAd: MaxInterstitialAd
     private var appLovinAdRequestCounter = 1
@@ -42,9 +55,14 @@ class MainActivity : BaseActivity(), MaxAdListener {
     }
 
     private fun mainInit() {
+        viewModel = ViewModelProvider(this)[SettingsViewModel::class.java]
+
         bottomAppBarStyle()
         bottomNavActions()
         fabOnClick()
+        subscribeToObservers()
+        getCurrentInAppReviewsChoice()
+        fabReviewOnClick() // TODO REMOVE AFTER TEST
         requestAppLovinInterstitial()
     }
 
@@ -95,6 +113,125 @@ class MainActivity : BaseActivity(), MaxAdListener {
         fab.hide()
         appbar.performHide()
         appbar.visibility = GONE
+    }
+
+    private fun subscribeToObservers() {
+        currentInAppReviewsChoiceObserver()
+        currentPreviousRequestTimeInMillisObserver()
+    }
+
+    private fun getCurrentInAppReviewsChoice() = viewModel.getCurrentInAppReviewsChoice()
+
+    private fun currentInAppReviewsChoiceObserver() =
+        viewModel.currentInAppReviewsChoiceLiveData.observe(this) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { currentInAppReviewsChoice ->
+                when (currentInAppReviewsChoice) {
+                    0 -> checkDaysFromFirstInstallTime()
+                    1 -> getPreviousRequestTimeInMillis()
+                    -1 -> {
+                        /* NO-OP */
+                    }
+                }
+            }
+        }
+
+    private fun checkDaysFromFirstInstallTime() {
+        val daysFromFirstInstallTime = getDaysFromFirstInstallTime(this)
+        Timber.i("It's been $daysFromFirstInstallTime days from first install time.")
+
+        if (daysFromFirstInstallTime >= 5) {
+            requestInAppReviews()
+        } else {
+            // TODO REMOVE ELSE BLOCK AFTER TEST
+            Snackbar.make(
+                binding.root,
+                "Can't show review dialog yet.",
+                Snackbar.LENGTH_INDEFINITE
+            ).show()
+        }
+    }
+
+    private fun getPreviousRequestTimeInMillis() = viewModel.getPreviousRequestTimeInMillis()
+
+    private fun currentPreviousRequestTimeInMillisObserver() =
+        viewModel.previousRequestTimeInMillisLiveData.observe(this) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { previousRequestTimeInMillis ->
+                checkDaysFromPreviousRequestTime(previousRequestTimeInMillis)
+            }
+        }
+
+    private fun checkDaysFromPreviousRequestTime(previousRequestTimeInMillis: Long) {
+        val daysFromPreviousRequestTime =
+            getDaysFromPreviousRequestTime(previousRequestTimeInMillis)
+        Timber.i("It's been $daysFromPreviousRequestTime days from the previous request time.")
+
+        if (daysFromPreviousRequestTime >= 3) {
+            requestInAppReviews()
+        } else {
+            // TODO REMOVE ELSE BLOCK AFTER TEST
+            Snackbar.make(
+                binding.root,
+                "Can't show review dialog yet.",
+                Snackbar.LENGTH_INDEFINITE
+            ).show()
+        }
+    }
+
+    private fun requestInAppReviews() {
+        reviewManager = ReviewManagerFactory.create(this)
+//        reviewManager = FakeReviewManager(this) // TODO REMOVE AFTER TEST
+        val request = reviewManager.requestReviewFlow()
+
+        request.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                // We got the ReviewInfo object
+                reviewInfo = task.result
+                Timber.i("InAppReviews request was successful.")
+            } else {
+                // There was some problem, log or handle the error code.
+                viewModel.setInAppReviewsChoice(1)
+                Timber.e("InAppReviews request was nos successful: ${task.exception}")
+            }
+
+            viewModel.setPreviousRequestTimeInMillis()
+        }
+    }
+
+    // TODO REMOVE AFTER TEST
+    private fun fabReviewOnClick() = binding.fabReview.setOnClickListener {
+        showInAppReviews()
+    }
+
+    fun showInAppReviews() {
+        reviewInfo?.let { reviewInfo ->
+            val flow = reviewManager.launchReviewFlow(this, reviewInfo)
+
+            flow.addOnCompleteListener {
+                /**
+                 * The flow has finished. The API does not indicate whether the user
+                 * reviewed or not, or even whether the review dialog was shown. Thus, no
+                 * matter the result, we continue our app flow.
+                 */
+
+                if (it.isSuccessful) {
+                    // TODO SET CHOICE VALUE TO -1
+                    viewModel.setInAppReviewsChoice(-1)
+                    Timber.i("flow isSuccessful")
+                } else if (it.isCanceled) {
+                    // TODO CHECK WHEN THIS HAPPENS
+//                    viewModel.setInAppReviewsChoice(1)
+                    Timber.i("flow isCanceled")
+                } else if (it.isComplete) {
+                    // TODO CHECK WHEN THIS HAPPENS
+//                    viewModel.setInAppReviewsChoice(1)
+                    Timber.i("flow isComplete")
+                } else {
+                    //TODO SET CHOICE VALUE TO 1
+//                    viewModel.setInAppReviewsChoice(1)
+                    Timber.i("else block")
+                }
+            }
+        }
     }
 
     fun requestAppLovinInterstitial() {
