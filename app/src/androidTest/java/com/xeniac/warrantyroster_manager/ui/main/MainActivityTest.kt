@@ -10,6 +10,7 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import com.google.android.play.core.review.testing.FakeReviewManager
 import com.google.common.truth.Truth.assertThat
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.ActivityMainBinding
@@ -81,5 +82,15 @@ class MainActivityTest {
 
 //        assertThat(navController.currentDestination?.id).isEqualTo(R.id.addWarrantyFragment)
         assertThat(navController.currentDestination?.id).isEqualTo(R.id.settingsFragment)
+    }
+
+    @Test
+    fun requestInAppReviews_returnsSuccess() {
+        val fakeReviewManager = FakeReviewManager(context)
+        val fakeRequest = fakeReviewManager.requestReviewFlow()
+
+        fakeRequest.addOnCompleteListener { task ->
+            assertThat(task.isSuccessful).isTrue()
+        }
     }
 }
