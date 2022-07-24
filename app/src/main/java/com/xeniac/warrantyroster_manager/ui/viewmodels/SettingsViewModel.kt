@@ -46,8 +46,8 @@ class SettingsViewModel @Inject constructor(
     private val _currentAppTheme: MutableLiveData<Event<Int>> = MutableLiveData()
     val currentAppTheme: LiveData<Event<Int>> = _currentAppTheme
 
-    private val _currentInAppReviewsChoiceLiveData: MutableLiveData<Event<Int>> = MutableLiveData()
-    val currentInAppReviewsChoiceLiveData: LiveData<Event<Int>> = _currentInAppReviewsChoiceLiveData
+    private val _isInAppReviewsShownLiveData: MutableLiveData<Event<Boolean>> = MutableLiveData()
+    val isInAppReviewsShownLiveData: LiveData<Event<Boolean>> = _isInAppReviewsShownLiveData
 
     private val _previousRequestTimeInMillisLiveData: MutableLiveData<Event<Long>> =
         MutableLiveData()
@@ -95,8 +95,8 @@ class SettingsViewModel @Inject constructor(
         safeGetCurrentAppTheme()
     }
 
-    fun getCurrentInAppReviewsChoice() = viewModelScope.launch {
-        safeGetCurrentInAppReviewsChoice()
+    fun getIsInAppReviewsShown() = viewModelScope.launch {
+        safeGetIsInAppReviewsShown()
     }
 
     fun getPreviousRequestTimeInMillis() = viewModelScope.launch {
@@ -113,9 +113,9 @@ class SettingsViewModel @Inject constructor(
         SettingsHelper.setAppTheme(index)
     }
 
-    fun setInAppReviewsChoice(value: Int) = viewModelScope.launch {
-        preferencesRepository.setCurrentInAppReviewsChoice(value)
-        _currentInAppReviewsChoiceLiveData.postValue(Event(value))
+    fun setIsInAppReviewsShown(value: Boolean) = viewModelScope.launch {
+        preferencesRepository.isInAppReviewsShown(value)
+        _isInAppReviewsShownLiveData.postValue(Event(value))
     }
 
     fun setPreviousRequestTimeInMillis() = viewModelScope.launch {
@@ -216,8 +216,8 @@ class SettingsViewModel @Inject constructor(
         _currentAppTheme.postValue(Event(preferencesRepository.getCurrentAppTheme()))
     }
 
-    private suspend fun safeGetCurrentInAppReviewsChoice() {
-        _currentInAppReviewsChoiceLiveData.postValue(Event(preferencesRepository.getCurrentInAppReviewsChoice()))
+    private suspend fun safeGetIsInAppReviewsShown() {
+        _isInAppReviewsShownLiveData.postValue(Event(preferencesRepository.isInAppReviewsShown()))
     }
 
     private suspend fun safeGetPreviousRequestTimeInMillis() {

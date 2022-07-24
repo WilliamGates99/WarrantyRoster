@@ -13,7 +13,6 @@ import com.applovin.mediation.MaxError
 import com.applovin.mediation.ads.MaxInterstitialAd
 import com.google.android.material.shape.CornerFamily.ROUNDED
 import com.google.android.material.shape.MaterialShapeDrawable
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.play.core.review.ReviewInfo
 import com.google.android.play.core.review.ReviewManager
 import com.google.android.play.core.review.ReviewManagerFactory
@@ -61,8 +60,7 @@ class MainActivity : BaseActivity(), MaxAdListener {
         bottomNavActions()
         fabOnClick()
         subscribeToObservers()
-        getCurrentInAppReviewsChoice()
-        fabReviewOnClick() // TODO REMOVE AFTER TEST
+        getIsInAppReviewsShown()
         requestAppLovinInterstitial()
     }
 
@@ -120,17 +118,14 @@ class MainActivity : BaseActivity(), MaxAdListener {
         currentPreviousRequestTimeInMillisObserver()
     }
 
-    private fun getCurrentInAppReviewsChoice() = viewModel.getCurrentInAppReviewsChoice()
+    private fun getIsInAppReviewsShown() = viewModel.getIsInAppReviewsShown()
 
     private fun currentInAppReviewsChoiceObserver() =
-        viewModel.currentInAppReviewsChoiceLiveData.observe(this) { responseEvent ->
-            responseEvent.getContentIfNotHandled()?.let { currentInAppReviewsChoice ->
-                when (currentInAppReviewsChoice) {
-                    0 -> checkDaysFromFirstInstallTime()
-                    1 -> getPreviousRequestTimeInMillis()
-                    -1 -> {
-                        /* NO-OP */
-                    }
+        viewModel.isInAppReviewsShownLiveData.observe(this) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { isInAppReviewsShown ->
+                when (isInAppReviewsShown) {
+                    false -> checkDaysFromFirstInstallTime()
+                    true -> getPreviousRequestTimeInMillis()
                 }
             }
         }
@@ -141,13 +136,6 @@ class MainActivity : BaseActivity(), MaxAdListener {
 
         if (daysFromFirstInstallTime >= 5) {
             requestInAppReviews()
-        } else {
-            // TODO REMOVE ELSE BLOCK AFTER TEST
-            Snackbar.make(
-                binding.root,
-                "Can't show review dialog yet.",
-                Snackbar.LENGTH_INDEFINITE
-            ).show()
         }
     }
 
@@ -167,19 +155,11 @@ class MainActivity : BaseActivity(), MaxAdListener {
 
         if (daysFromPreviousRequestTime >= 3) {
             requestInAppReviews()
-        } else {
-            // TODO REMOVE ELSE BLOCK AFTER TEST
-            Snackbar.make(
-                binding.root,
-                "Can't show review dialog yet.",
-                Snackbar.LENGTH_INDEFINITE
-            ).show()
         }
     }
 
     private fun requestInAppReviews() {
         reviewManager = ReviewManagerFactory.create(this)
-//        reviewManager = FakeReviewManager(this) // TODO REMOVE AFTER TEST
         val request = reviewManager.requestReviewFlow()
 
         request.addOnCompleteListener { task ->
@@ -189,17 +169,9 @@ class MainActivity : BaseActivity(), MaxAdListener {
                 Timber.i("InAppReviews request was successful.")
             } else {
                 // There was some problem, log or handle the error code.
-                viewModel.setInAppReviewsChoice(1)
-                Timber.e("InAppReviews request was nos successful: ${task.exception}")
+                Timber.e("InAppReviews request was not successful: ${task.exception}")
             }
-
-            viewModel.setPreviousRequestTimeInMillis()
         }
-    }
-
-    // TODO REMOVE AFTER TEST
-    private fun fabReviewOnClick() = binding.fabReview.setOnClickListener {
-        showInAppReviews()
     }
 
     fun showInAppReviews() {
@@ -214,21 +186,11 @@ class MainActivity : BaseActivity(), MaxAdListener {
                  */
 
                 if (it.isSuccessful) {
-                    // TODO SET CHOICE VALUE TO -1
-                    viewModel.setInAppReviewsChoice(-1)
-                    Timber.i("flow isSuccessful")
-                } else if (it.isCanceled) {
-                    // TODO CHECK WHEN THIS HAPPENS
-//                    viewModel.setInAppReviewsChoice(1)
-                    Timber.i("flow isCanceled")
-                } else if (it.isComplete) {
-                    // TODO CHECK WHEN THIS HAPPENS
-//                    viewModel.setInAppReviewsChoice(1)
-                    Timber.i("flow isComplete")
+                    viewModel.setIsInAppReviewsShown(true)
+                    viewModel.setPreviousRequestTimeInMillis()
+                    Timber.i("In-App Reviews Dialog was shown successfully.")
                 } else {
-                    //TODO SET CHOICE VALUE TO 1
-//                    viewModel.setInAppReviewsChoice(1)
-                    Timber.i("else block")
+                    Timber.i("Something went wrong with showing the In-App Reviews Dialog.")
                 }
             }
         }
