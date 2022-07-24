@@ -4,7 +4,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.*
 import com.xeniac.warrantyroster_manager.domain.repository.PreferencesRepository
 import com.xeniac.warrantyroster_manager.utils.Constants.DATASTORE_COUNTRY_KEY
-import com.xeniac.warrantyroster_manager.utils.Constants.DATASTORE_IN_APP_REVIEWS_CHOICE_KEY
+import com.xeniac.warrantyroster_manager.utils.Constants.DATASTORE_IS_IN_APP_REVIEWS_SHOWN_KEY
 import com.xeniac.warrantyroster_manager.utils.Constants.DATASTORE_IS_LOGGED_IN_KEY
 import com.xeniac.warrantyroster_manager.utils.Constants.DATASTORE_LANGUAGE_KEY
 import com.xeniac.warrantyroster_manager.utils.Constants.DATASTORE_PREVIOUS_REQUEST_TIME_IN_MILLIS_KEY
@@ -25,7 +25,7 @@ class PreferencesRepositoryImp @Inject constructor(
         val CURRENT_APP_THEME = intPreferencesKey(DATASTORE_THEME_KEY)
         val CURRENT_APP_LANGUAGE = stringPreferencesKey(DATASTORE_LANGUAGE_KEY)
         val CURRENT_APP_COUNTRY = stringPreferencesKey(DATASTORE_COUNTRY_KEY)
-        val CURRENT_IN_APP_REVIEWS_CHOICE = intPreferencesKey(DATASTORE_IN_APP_REVIEWS_CHOICE_KEY)
+        val IS_IN_APP_REVIEWS_SHOWN = booleanPreferencesKey(DATASTORE_IS_IN_APP_REVIEWS_SHOWN_KEY)
         val PREVIOUS_REQUEST_TIME_IN_MILLIS = longPreferencesKey(
             DATASTORE_PREVIOUS_REQUEST_TIME_IN_MILLIS_KEY
         )
@@ -83,11 +83,11 @@ class PreferencesRepositoryImp @Inject constructor(
         LOCALE_COUNTRY_UNITED_STATES
     }
 
-    override suspend fun getCurrentInAppReviewsChoice(): Int = try {
-        settingsDataStore.data.first()[PreferencesKeys.CURRENT_IN_APP_REVIEWS_CHOICE] ?: 0
+    override suspend fun isInAppReviewsShown(): Boolean = try {
+        settingsDataStore.data.first()[PreferencesKeys.IS_IN_APP_REVIEWS_SHOWN] ?: false
     } catch (e: Exception) {
-        Timber.e("getInAppReviewsChoice Exception: $e")
-        0
+        Timber.e("isInAppReviewsShown Exception: $e")
+        false
     }
 
     override suspend fun getPreviousRequestTimeInMillis(): Long = try {
@@ -147,14 +147,14 @@ class PreferencesRepositoryImp @Inject constructor(
         }
     }
 
-    override suspend fun setCurrentInAppReviewsChoice(value: Int) {
+    override suspend fun isInAppReviewsShown(value: Boolean) {
         try {
             settingsDataStore.edit { settingsPreferences ->
-                settingsPreferences[PreferencesKeys.CURRENT_IN_APP_REVIEWS_CHOICE] = value
-                Timber.i("InAppReviewsChoice edited to $value")
+                settingsPreferences[PreferencesKeys.IS_IN_APP_REVIEWS_SHOWN] = value
+                Timber.i("isInAppReviewsShown edited to $value")
             }
         } catch (e: Exception) {
-            Timber.e("setInAppReviewsChoice Exception: $e")
+            Timber.e("isInAppReviewsShown Exception: $e")
         }
     }
 

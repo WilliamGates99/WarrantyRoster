@@ -61,12 +61,12 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun getCurrentInAppReviewsChoice_returnsDefaultInAppReviewsChoice() {
-        val defaultInAppReviewsChoiceValue = 0
-        testViewModel.getCurrentInAppReviewsChoice()
+    fun getIsInAppReviewsShown_returnsDefaultIsInAppReviewsShown() {
+        val defaultIsInAppReviewsShown = false
+        testViewModel.getIsInAppReviewsShown()
 
-        val responseEvent = testViewModel.currentInAppReviewsChoiceLiveData.getOrAwaitValue()
-        assertThat(responseEvent.getContentIfNotHandled()).isEqualTo(defaultInAppReviewsChoiceValue)
+        val responseEvent = testViewModel.isInAppReviewsShownLiveData.getOrAwaitValue()
+        assertThat(responseEvent.getContentIfNotHandled()).isEqualTo(defaultIsInAppReviewsShown)
     }
 
     @Test
@@ -101,12 +101,12 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun setInAppReviewsChoice_returnsNewCurrentInAppReviewsChoice() {
-        val newInAppReviewsChoiceValue = 1
-        testViewModel.setInAppReviewsChoice(newInAppReviewsChoiceValue)
+    fun setIsInAppReviewsShown_returnsNewIsInAppReviewsShown() {
+        val newIsInAppReviewsShown = true
+        testViewModel.setIsInAppReviewsShown(true)
 
-        val responseEvent = testViewModel.currentInAppReviewsChoiceLiveData.getOrAwaitValue()
-        assertThat(responseEvent.getContentIfNotHandled()).isEqualTo(newInAppReviewsChoiceValue)
+        val responseEvent = testViewModel.isInAppReviewsShownLiveData.getOrAwaitValue()
+        assertThat(responseEvent.getContentIfNotHandled()).isEqualTo(newIsInAppReviewsShown)
     }
 
     @Test

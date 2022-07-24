@@ -19,7 +19,10 @@ import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_LANGUAGE_PERSIAN
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.test.*
+import kotlinx.coroutines.test.TestDispatcher
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Rule
 import org.junit.Test
@@ -84,14 +87,14 @@ class PreferencesRepositoryTest {
         val initialCurrentAppLanguage = testRepository.getCurrentAppLanguage()
         val initialCurrentAppCountry = testRepository.getCurrentAppCountry()
         val initialCategoryTitleMapKey = testRepository.getCategoryTitleMapKey()
-        val initialCurrentInAppReviewsChoice = testRepository.getCurrentInAppReviewsChoice()
+        val initialIsInAppReviewsShown = testRepository.isInAppReviewsShown()
         val initialPreviousRequestTimeInMillis = testRepository.getPreviousRequestTimeInMillis()
 
         assertThat(initialCurrentAppTheme).isEqualTo(0)
         assertThat(initialCurrentAppLanguage).isEqualTo(LOCALE_LANGUAGE_ENGLISH)
         assertThat(initialCurrentAppCountry).isEqualTo(LOCALE_COUNTRY_UNITED_STATES)
         assertThat(initialCategoryTitleMapKey).isEqualTo("$LOCALE_LANGUAGE_ENGLISH-$LOCALE_COUNTRY_UNITED_STATES")
-        assertThat(initialCurrentInAppReviewsChoice).isEqualTo(0)
+        assertThat(initialIsInAppReviewsShown).isFalse()
         assertThat(initialPreviousRequestTimeInMillis).isEqualTo(0L)
     }
 
@@ -147,14 +150,14 @@ class PreferencesRepositoryTest {
     }
 
     @Test
-    fun writeInAppReviewsChoice() = testScope.runTest {
+    fun writeIsInAppReviewsShown() = testScope.runTest {
         testDataStore.edit { it.clear() }
 
-        val testValue = 1
-        testRepository.setCurrentInAppReviewsChoice(testValue)
+        val testValue = true
+        testRepository.isInAppReviewsShown(testValue)
 
-        val currentInAppReviewsChoice = testRepository.getCurrentInAppReviewsChoice()
-        assertThat(currentInAppReviewsChoice).isEqualTo(testValue)
+        val isInAppReviewsShown = testRepository.isInAppReviewsShown()
+        assertThat(isInAppReviewsShown).isTrue()
     }
 
     @Test
