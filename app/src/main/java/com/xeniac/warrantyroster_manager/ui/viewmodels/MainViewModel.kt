@@ -14,6 +14,7 @@ import com.xeniac.warrantyroster_manager.domain.repository.UserRepository
 import com.xeniac.warrantyroster_manager.utils.Constants.CATEGORIES_ICON
 import com.xeniac.warrantyroster_manager.utils.Constants.CATEGORIES_TITLE
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_EMPTY_CATEGORY_LIST
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_EMPTY_SEARCH_RESULT_LIST
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_EMPTY_WARRANTY_LIST
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_EXPIRY_DATE
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_STARTING_DATE
@@ -50,6 +51,11 @@ class MainViewModel @Inject constructor(
     private val _warrantiesLiveData:
             MutableLiveData<Event<Resource<MutableList<Warranty>>>> = MutableLiveData()
     val warrantiesLiveData: LiveData<Event<Resource<MutableList<Warranty>>>> = _warrantiesLiveData
+
+    private val _searchWarrantiesLiveData:
+            MutableLiveData<Event<Resource<MutableList<Warranty>>>> = MutableLiveData()
+    val searchWarrantiesLiveData:
+            LiveData<Event<Resource<MutableList<Warranty>>>> = _searchWarrantiesLiveData
 
     private val _addWarrantyLiveData: MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
     val addWarrantyLiveData: LiveData<Event<Resource<Nothing>>> = _addWarrantyLiveData
@@ -190,6 +196,34 @@ class MainViewModel @Inject constructor(
                     Timber.i("Warranties List successfully retrieved.")
                 }
                 return@addSnapshotListener
+            }
+        }
+    }
+
+    fun searchWarrantiesByTitle(searchQuery: String) = viewModelScope.launch {
+        warrantiesLiveData.value?.let { responseEvent ->
+            responseEvent.peekContent().let { response ->
+                response.data?.let { warrantiesList ->
+                    val searchResultList = mutableListOf<Warranty>()
+
+                    for (warranty in warrantiesList) {
+                        warranty.title?.let {
+                            if (it.lowercase().contains(searchQuery)) {
+                                searchResultList.add(warranty)
+                            }
+                        }
+                    }
+
+                    if (searchResultList.size == 0) {
+                        Timber.e("searchWarrantiesByTitle Error: $ERROR_EMPTY_SEARCH_RESULT_LIST")
+                        _searchWarrantiesLiveData.postValue(
+                            Event(Resource.error(ERROR_EMPTY_SEARCH_RESULT_LIST))
+                        )
+                    } else {
+                        _searchWarrantiesLiveData.postValue(Event(Resource.success(searchResultList)))
+                        Timber.i("searchWarrantiesByTitle was successful.")
+                    }
+                }
             }
         }
     }
