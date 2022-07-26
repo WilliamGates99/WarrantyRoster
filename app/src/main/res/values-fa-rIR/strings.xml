@@ -227,6 +227,9 @@
     <string name="settings_text_settings_language_english_us">انگلیسی (آمریکایی)</string>
     <string name="settings_text_settings_language_english_gb">انگلیسی (بریتانیایی)</string>
     <string name="settings_text_settings_language_persian_ir">فارسی</string>
+    <string name="settings_dialog_item_language_english_us">انگلیسی (آمریکایی)</string>
+    <string name="settings_dialog_item_language_english_gb">انگلیسی (بریتانیایی)</string>
+    <string name="settings_dialog_item_language_persian_ir">فارسی</string>
     <string name="settings_text_settings_theme">تم</string>
     <string name="settings_text_settings_theme_default">پیش‌فرض سیستم</string>
     <string name="settings_text_settings_theme_light">روشن</string>

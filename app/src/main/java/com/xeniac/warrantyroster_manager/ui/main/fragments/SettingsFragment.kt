@@ -231,9 +231,9 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
         }
 
         val localeTextItems = arrayOf(
-            requireContext().getString(R.string.settings_text_settings_language_english_us),
-            requireContext().getString(R.string.settings_text_settings_language_english_gb),
-            requireContext().getString(R.string.settings_text_settings_language_persian_ir)
+            requireContext().getString(R.string.settings_dialog_item_language_english_us),
+            requireContext().getString(R.string.settings_dialog_item_language_english_gb),
+            requireContext().getString(R.string.settings_dialog_item_language_persian_ir)
         )
 
         MaterialAlertDialogBuilder(requireContext()).apply {
