@@ -77,7 +77,7 @@ class SettingsFragmentTest {
     @Test
     fun getCurrentAppLocale_setsCurrentLanguageTextToEnglish() {
         assertThat(testBinding.currentLanguage).isEqualTo(
-            context.getString(R.string.settings_text_settings_language_english)
+            context.getString(R.string.settings_text_settings_language_english_us)
         )
     }
 

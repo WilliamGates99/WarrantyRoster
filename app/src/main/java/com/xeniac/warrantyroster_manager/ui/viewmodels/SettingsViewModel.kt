@@ -15,6 +15,7 @@ import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_EMAIL_INVAL
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_EMAIL_SAME
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_PASSWORD_NOT_MATCH
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_PASSWORD_SHORT
+import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_COUNTRY_GREAT_BRITAIN
 import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_COUNTRY_IRAN
 import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_COUNTRY_UNITED_STATES
 import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_LANGUAGE_ENGLISH
@@ -230,13 +231,16 @@ class SettingsViewModel @Inject constructor(
             var newLanguage = LOCALE_LANGUAGE_ENGLISH
             var newCountry = LOCALE_COUNTRY_UNITED_STATES
 
-            //TODO CHANGE AFTER ADDING BRITISH ENGLISH
             when (index) {
                 0 -> {
                     newLanguage = LOCALE_LANGUAGE_ENGLISH
                     newCountry = LOCALE_COUNTRY_UNITED_STATES
                 }
                 1 -> {
+                    newLanguage = LOCALE_LANGUAGE_ENGLISH
+                    newCountry = LOCALE_COUNTRY_GREAT_BRITAIN
+                }
+                2 -> {
                     newLanguage = LOCALE_LANGUAGE_PERSIAN
                     newCountry = LOCALE_COUNTRY_IRAN
                 }

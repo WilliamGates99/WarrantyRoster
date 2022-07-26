@@ -13,8 +13,9 @@
 
     <!--Landing Activity-->
     <string name="landing_text_language">زبان</string>
-    <string name="landing_text_language_english">انگلیسی</string>
-    <string name="landing_text_language_persian">فارسی</string>
+    <string name="landing_text_language_english_us">انگلیسی (آمریکایی)</string>
+    <string name="landing_text_language_english_gb">انگلیسی (بریتانیایی)</string>
+    <string name="landing_text_language_persian_ir">فارسی</string>
 
     <!--Login Fragment-->
     <string name="login_text_title">ورود</string>
@@ -223,8 +224,9 @@
     <string name="settings_text_account_change_email">تغییر آدرس ایمیل</string>
     <string name="settings_text_account_change_password">تغییر رمز‌عبور</string>
     <string name="settings_text_settings_language">زبان</string>
-    <string name="settings_text_settings_language_english">انگلیسی</string>
-    <string name="settings_text_settings_language_persian">فارسی</string>
+    <string name="settings_text_settings_language_english_us">انگلیسی (آمریکایی)</string>
+    <string name="settings_text_settings_language_english_gb">انگلیسی (بریتانیایی)</string>
+    <string name="settings_text_settings_language_persian_ir">فارسی</string>
     <string name="settings_text_settings_theme">تم</string>
     <string name="settings_text_settings_theme_default">پیش‌فرض سیستم</string>
     <string name="settings_text_settings_theme_light">روشن</string>

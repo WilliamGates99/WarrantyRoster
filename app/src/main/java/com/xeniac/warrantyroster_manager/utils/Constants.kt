@@ -21,7 +21,12 @@ object Constants {
     // App Country Constants
     const val LOCALE_COUNTRY_UNITED_STATES = "US"
     const val LOCALE_COUNTRY_IRAN = "IR"
-    //const val LOCALE_COUNTRY_GREAT_BRITAIN = "GB" TODO UNCOMMENT AFTER ADDING BRITISH ENGLISH
+    const val LOCALE_COUNTRY_GREAT_BRITAIN = "GB"
+
+    // App Locale Constants
+    const val LOCALE_ENGLISH_UNITED_STATES = "en-US"
+    const val LOCALE_ENGLISH_GREAT_BRITAIN = "en-GB"
+    const val LOCALE_PERSIAN_IRAN = "fa-IR"
 
     // Warranty Adapter View Type Constants
     const val VIEW_TYPE_WARRANTY = 0

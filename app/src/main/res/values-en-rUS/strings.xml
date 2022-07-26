@@ -13,8 +13,9 @@
 
     <!--Landing Activity-->
     <string name="landing_text_language">Language</string>
-    <string name="landing_text_language_english">English</string>
-    <string name="landing_text_language_persian">Persian</string>
+    <string name="landing_text_language_english_us">English (United States)</string>
+    <string name="landing_text_language_english_gb">English (United Kingdom)</string>
+    <string name="landing_text_language_persian_ir">Persian</string>
 
     <!--Login Fragment-->
     <string name="login_text_title">Login</string>
@@ -223,8 +224,9 @@
     <string name="settings_text_account_change_email">Change Email Address</string>
     <string name="settings_text_account_change_password">Change Password</string>
     <string name="settings_text_settings_language">Language</string>
-    <string name="settings_text_settings_language_english">English</string>
-    <string name="settings_text_settings_language_persian">Persian</string>
+    <string name="settings_text_settings_language_english_us">English (United States)</string>
+    <string name="settings_text_settings_language_english_gb">English (United Kingdom)</string>
+    <string name="settings_text_settings_language_persian_ir">Persian</string>
     <string name="settings_text_settings_theme">Theme</string>
     <string name="settings_text_settings_theme_default">System Default</string>
     <string name="settings_text_settings_theme_light">Light</string>

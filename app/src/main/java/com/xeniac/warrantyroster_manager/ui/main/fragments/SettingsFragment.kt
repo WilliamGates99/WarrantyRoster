@@ -30,8 +30,9 @@ import com.xeniac.warrantyroster_manager.ui.viewmodels.SettingsViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
-import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_LANGUAGE_ENGLISH
-import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_LANGUAGE_PERSIAN
+import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_ENGLISH_GREAT_BRITAIN
+import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_ENGLISH_UNITED_STATES
+import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_PERSIAN_IRAN
 import com.xeniac.warrantyroster_manager.utils.Constants.URL_DONATE
 import com.xeniac.warrantyroster_manager.utils.Constants.URL_PRIVACY_POLICY
 import com.xeniac.warrantyroster_manager.utils.LinkHelper.openLink
@@ -59,6 +60,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
 
     private lateinit var currentAppLanguage: String
     private lateinit var currentAppCountry: String
+    private lateinit var currentAppLocale: String
     private var currentAppTheme = 0
 
     private lateinit var appLovinNativeAdContainer: ViewGroup
@@ -171,17 +173,18 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
             responseEvent.getContentIfNotHandled()?.let { currentLocale ->
                 currentAppLanguage = currentLocale[0]
                 currentAppCountry = currentLocale[1]
+                currentAppLocale = "$currentAppLanguage-$currentAppCountry"
                 setCurrentLanguageText()
             }
         }
 
     private fun setCurrentLanguageText() {
         requireContext().apply {
-            //TODO EDIT AFTER ADDING BRITISH ENGLISH
-            binding.currentLanguage = when (currentAppLanguage) {
-                LOCALE_LANGUAGE_ENGLISH -> getString(R.string.settings_text_settings_language_english)
-                LOCALE_LANGUAGE_PERSIAN -> getString(R.string.settings_text_settings_language_persian)
-                else -> getString(R.string.settings_text_settings_language_english)
+            binding.currentLanguage = when (currentAppLocale) {
+                LOCALE_ENGLISH_UNITED_STATES -> getString(R.string.settings_text_settings_language_english_us)
+                LOCALE_ENGLISH_GREAT_BRITAIN -> getString(R.string.settings_text_settings_language_english_gb)
+                LOCALE_PERSIAN_IRAN -> getString(R.string.settings_text_settings_language_persian_ir)
+                else -> getString(R.string.settings_text_settings_language_english_us)
             }
         }
     }
@@ -220,21 +223,22 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
     }
 
     private fun languageOnClick() = binding.clSettingsLanguage.setOnClickListener {
-        //TODO EDIT AFTER ADDING BRITISH ENGLISH
-        val currentAppLanguageIndex = when (currentAppLanguage) {
-            LOCALE_LANGUAGE_ENGLISH -> 0
-            LOCALE_LANGUAGE_PERSIAN -> 1
+        val currentAppLocaleIndex = when (currentAppLocale) {
+            LOCALE_ENGLISH_UNITED_STATES -> 0
+            LOCALE_ENGLISH_GREAT_BRITAIN -> 1
+            LOCALE_PERSIAN_IRAN -> 2
             else -> 0
         }
 
-        val languageItems = arrayOf(
-            requireContext().getString(R.string.settings_text_settings_language_english),
-            requireContext().getString(R.string.settings_text_settings_language_persian)
+        val localeTextItems = arrayOf(
+            requireContext().getString(R.string.settings_text_settings_language_english_us),
+            requireContext().getString(R.string.settings_text_settings_language_english_gb),
+            requireContext().getString(R.string.settings_text_settings_language_persian_ir)
         )
 
         MaterialAlertDialogBuilder(requireContext()).apply {
             setTitle(requireContext().getString(R.string.settings_text_settings_language))
-            setSingleChoiceItems(languageItems, currentAppLanguageIndex) { dialogInterface, index ->
+            setSingleChoiceItems(localeTextItems, currentAppLocaleIndex) { dialogInterface, index ->
                 setAppLocale(index)
                 dialogInterface.dismiss()
             }
