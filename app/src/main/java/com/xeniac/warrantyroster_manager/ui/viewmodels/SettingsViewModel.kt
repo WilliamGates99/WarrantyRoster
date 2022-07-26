@@ -39,34 +39,32 @@ class SettingsViewModel @Inject constructor(
     private val preferencesRepository: PreferencesRepository
 ) : ViewModel() {
 
-    // TODO ADD LIVEDATA TO THE NAME
-    private val _currentAppLocale: MutableLiveData<Event<Array<String>>> = MutableLiveData()
-    val currentAppLocale: LiveData<Event<Array<String>>> = _currentAppLocale
+    private val _currentAppLocaleLiveData: MutableLiveData<Event<Array<String>>> = MutableLiveData()
+    val currentAppLocaleLiveData: LiveData<Event<Array<String>>> = _currentAppLocaleLiveData
 
-    // TODO ADD LIVEDATA TO THE NAME
-    private val _currentAppTheme: MutableLiveData<Event<Int>> = MutableLiveData()
-    val currentAppTheme: LiveData<Event<Int>> = _currentAppTheme
+    private val _currentAppThemeLiveData: MutableLiveData<Event<Int>> = MutableLiveData()
+    val currentAppThemeLiveData: LiveData<Event<Int>> = _currentAppThemeLiveData
 
     private val _isInAppReviewsShownLiveData: MutableLiveData<Event<Boolean>> = MutableLiveData()
     val isInAppReviewsShownLiveData: LiveData<Event<Boolean>> = _isInAppReviewsShownLiveData
 
-    private val _previousRequestTimeInMillisLiveData: MutableLiveData<Event<Long>> =
-        MutableLiveData()
-    val previousRequestTimeInMillisLiveData: LiveData<Event<Long>> =
-        _previousRequestTimeInMillisLiveData
+    private val _previousRequestTimeInMillisLiveData:
+            MutableLiveData<Event<Long>> = MutableLiveData()
+    val previousRequestTimeInMillisLiveData:
+            LiveData<Event<Long>> = _previousRequestTimeInMillisLiveData
 
-    private val _setAppLocaleLiveData: MutableLiveData<Event<Resource<Array<String>>>> =
-        MutableLiveData()
+    private val _setAppLocaleLiveData:
+            MutableLiveData<Event<Resource<Array<String>>>> = MutableLiveData()
     val setAppLocaleLiveData: LiveData<Event<Resource<Array<String>>>> = _setAppLocaleLiveData
 
-    private val _accountDetailsLiveData: MutableLiveData<Event<Resource<FirebaseUser>>> =
-        MutableLiveData()
+    private val _accountDetailsLiveData:
+            MutableLiveData<Event<Resource<FirebaseUser>>> = MutableLiveData()
     val accountDetailsLiveData: LiveData<Event<Resource<FirebaseUser>>> = _accountDetailsLiveData
 
-    private val _sendVerificationEmailLiveData: MutableLiveData<Event<Resource<Nothing>>> =
-        MutableLiveData()
-    val sendVerificationEmailLiveData: LiveData<Event<Resource<Nothing>>> =
-        _sendVerificationEmailLiveData
+    private val _sendVerificationEmailLiveData:
+            MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
+    val sendVerificationEmailLiveData:
+            LiveData<Event<Resource<Nothing>>> = _sendVerificationEmailLiveData
 
     private val _logoutLiveData: MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
     val logoutLiveData: LiveData<Event<Resource<Nothing>>> = _logoutLiveData
@@ -74,16 +72,16 @@ class SettingsViewModel @Inject constructor(
     private val _checkInputsLiveData: MutableLiveData<Event<Resource<String>>> = MutableLiveData()
     val checkInputsLiveData: LiveData<Event<Resource<String>>> = _checkInputsLiveData
 
-    private val _reAuthenticateUserLiveData: MutableLiveData<Event<Resource<Nothing>>> =
-        MutableLiveData()
+    private val _reAuthenticateUserLiveData:
+            MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
     val reAuthenticateUserLiveData: LiveData<Event<Resource<Nothing>>> = _reAuthenticateUserLiveData
 
-    private val _changeUserEmailLiveData: MutableLiveData<Event<Resource<Nothing>>> =
-        MutableLiveData()
+    private val _changeUserEmailLiveData:
+            MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
     val changeUserEmailLiveData: LiveData<Event<Resource<Nothing>>> = _changeUserEmailLiveData
 
-    private val _changeUserPasswordLiveData: MutableLiveData<Event<Resource<Nothing>>> =
-        MutableLiveData()
+    private val _changeUserPasswordLiveData:
+            MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
     val changeUserPasswordLiveData: LiveData<Event<Resource<Nothing>>> = _changeUserPasswordLiveData
 
     fun isUserLoggedIn() = preferencesRepository.getIsUserLoggedInSynchronously()
@@ -110,7 +108,7 @@ class SettingsViewModel @Inject constructor(
 
     fun setAppTheme(index: Int) = viewModelScope.launch {
         preferencesRepository.setCurrentAppTheme(index)
-        _currentAppTheme.postValue(Event(index))
+        _currentAppThemeLiveData.postValue(Event(index))
         SettingsHelper.setAppTheme(index)
     }
 
@@ -210,11 +208,11 @@ class SettingsViewModel @Inject constructor(
         val currentLanguage = preferencesRepository.getCurrentAppLanguage()
         val currentCountry = preferencesRepository.getCurrentAppCountry()
         val currentLocale = arrayOf(currentLanguage, currentCountry)
-        _currentAppLocale.postValue(Event(currentLocale))
+        _currentAppLocaleLiveData.postValue(Event(currentLocale))
     }
 
     private suspend fun safeGetCurrentAppTheme() {
-        _currentAppTheme.postValue(Event(preferencesRepository.getCurrentAppTheme()))
+        _currentAppThemeLiveData.postValue(Event(preferencesRepository.getCurrentAppTheme()))
     }
 
     private suspend fun safeGetIsInAppReviewsShown() {

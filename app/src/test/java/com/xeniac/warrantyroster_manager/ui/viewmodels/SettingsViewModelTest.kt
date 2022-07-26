@@ -47,7 +47,7 @@ class SettingsViewModelTest {
 
         testViewModel.getCurrentAppLocale()
 
-        val responseEvent = testViewModel.currentAppLocale.getOrAwaitValue()
+        val responseEvent = testViewModel.currentAppLocaleLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()).isEqualTo(defaultLocale)
     }
 
@@ -56,7 +56,7 @@ class SettingsViewModelTest {
         val defaultThemeIndex = 0
         testViewModel.getCurrentAppTheme()
 
-        val responseEvent = testViewModel.currentAppTheme.getOrAwaitValue()
+        val responseEvent = testViewModel.currentAppThemeLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()).isEqualTo(defaultThemeIndex)
     }
 
@@ -96,7 +96,7 @@ class SettingsViewModelTest {
         val newThemeIndex = 1
         testViewModel.setAppTheme(newThemeIndex)
 
-        val responseEvent = testViewModel.currentAppTheme.getOrAwaitValue()
+        val responseEvent = testViewModel.currentAppThemeLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()).isEqualTo(newThemeIndex)
     }
 

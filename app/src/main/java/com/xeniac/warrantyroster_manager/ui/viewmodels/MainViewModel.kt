@@ -60,16 +60,16 @@ class MainViewModel @Inject constructor(
     private val _addWarrantyLiveData: MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
     val addWarrantyLiveData: LiveData<Event<Resource<Nothing>>> = _addWarrantyLiveData
 
-    private val _deleteWarrantyLiveData: MutableLiveData<Event<Resource<Nothing>>> =
-        MutableLiveData()
+    private val _deleteWarrantyLiveData:
+            MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
     val deleteWarrantyLiveData: LiveData<Event<Resource<Nothing>>> = _deleteWarrantyLiveData
 
-    private val _updateWarrantyLiveData: MutableLiveData<Event<Resource<Nothing>>> =
-        MutableLiveData()
+    private val _updateWarrantyLiveData:
+            MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
     val updateWarrantyLiveData: LiveData<Event<Resource<Nothing>>> = _updateWarrantyLiveData
 
-    private val _updatedWarrantyLiveData: MutableLiveData<Event<Resource<Warranty>>> =
-        MutableLiveData()
+    private val _updatedWarrantyLiveData:
+            MutableLiveData<Event<Resource<Warranty>>> = MutableLiveData()
     val updatedWarrantyLiveData: LiveData<Event<Resource<Warranty>>> = _updatedWarrantyLiveData
 
     suspend fun getCategoryTitleMapKey() = preferencesRepository.getCategoryTitleMapKey()

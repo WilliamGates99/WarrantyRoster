@@ -169,7 +169,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
     private fun getCurrentAppLocale() = viewModel.getCurrentAppLocale()
 
     private fun currentAppLocaleObserver() =
-        viewModel.currentAppLocale.observe(viewLifecycleOwner) { responseEvent ->
+        viewModel.currentAppLocaleLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { currentLocale ->
                 currentAppLanguage = currentLocale[0]
                 currentAppCountry = currentLocale[1]
@@ -192,7 +192,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
     private fun getCurrentAppTheme() = viewModel.getCurrentAppTheme()
 
     private fun currentAppThemeObserver() =
-        viewModel.currentAppTheme.observe(viewLifecycleOwner) { responseEvent ->
+        viewModel.currentAppThemeLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { currentThemeIndex ->
                 currentAppTheme = currentThemeIndex
                 setCurrentThemeText()

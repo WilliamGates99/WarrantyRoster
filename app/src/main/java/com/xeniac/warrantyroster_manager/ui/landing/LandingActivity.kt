@@ -96,7 +96,7 @@ class LandingActivity : BaseActivity() {
     private fun getCurrentAppLocale() = viewModel.getCurrentAppLocale()
 
     private fun currentAppLocaleObserver() =
-        viewModel.currentAppLocale.observe(this) { responseEvent ->
+        viewModel.currentAppLocaleLiveData.observe(this) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { currentLocale ->
                 currentAppLanguage = currentLocale[0]
                 currentAppCountry = currentLocale[1]
