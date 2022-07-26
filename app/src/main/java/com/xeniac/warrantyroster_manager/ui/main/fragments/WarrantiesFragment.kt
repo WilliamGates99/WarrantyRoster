@@ -1,12 +1,17 @@
 package com.xeniac.warrantyroster_manager.ui.main.fragments
 
 import android.os.Bundle
+import android.text.Spanned
+import android.text.SpannedString
+import android.text.TextUtils
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
-import androidx.core.text.parseAsHtml
+import androidx.core.text.HtmlCompat
+import androidx.core.text.HtmlCompat.FROM_HTML_MODE_LEGACY
+import androidx.core.text.HtmlCompat.TO_HTML_PARAGRAPH_LINES_CONSECUTIVE
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -242,23 +247,6 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
         lavEmptyWarrantiesList.playAnimation()
     }
 
-    private fun showEmptySearchResultListError() = binding.apply {
-        // TODO TRY THESE
-        tvEmptySearchResultList.text = requireContext().getString(
-            R.string.warranties_text_empty_search_result_list,
-            searchQuery
-        ).parseAsHtml()
-//        String.format(
-//            requireContext().getString(R.string.warranties_text_empty_search_result_list),
-//            searchQuery
-//        ).parseAsHtml()
-
-        groupNetwork.visibility = GONE
-        rv.visibility = GONE
-        groupEmptySearchResultList.visibility = VISIBLE
-        lavEmptySearchResultList.playAnimation()
-    }
-
     private fun showWarrantiesList(warrantiesList: MutableList<Warranty>) = binding.apply {
         groupNetwork.visibility = GONE
         groupEmptyWarrantiesList.visibility = GONE
@@ -270,6 +258,27 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
 
     override fun onItemClick(warranty: Warranty) = findNavController().navigate(
         WarrantiesFragmentDirections.actionWarrantiesFragmentToWarrantyDetailsFragment(warranty)
+    )
+
+    private fun showEmptySearchResultListError() = binding.apply {
+        if (groupEmptySearchResultList.visibility != VISIBLE) {
+            tvEmptySearchResultList.text = getEmptySearchResultErrorText()
+            groupNetwork.visibility = GONE
+            rv.visibility = GONE
+            groupEmptySearchResultList.visibility = VISIBLE
+            lavEmptySearchResultList.playAnimation()
+        }
+    }
+
+    private fun getEmptySearchResultErrorText(): Spanned = HtmlCompat.fromHtml(
+        String.format(
+            HtmlCompat.toHtml(
+                SpannedString(requireContext().getText(R.string.warranties_text_empty_search_result_list)),
+                TO_HTML_PARAGRAPH_LINES_CONSECUTIVE
+            ),
+            TextUtils.htmlEncode(searchQuery)
+        ),
+        FROM_HTML_MODE_LEGACY
     )
 
     private fun showLoadingAnimation() = binding.apply {

@@ -88,7 +88,7 @@
     <string name="warranties_text_title">فهرست گارانتی‌ها</string>
     <string name="warranties_menu_hint_search">جستجو بر اساس عنوان…</string>
     <string name="warranties_text_empty_warranties_list">در حال حاضر هیچ گارانتی در لیست شما وجود ندارد. با کلیک بر روی <font fgcolor="#1C53F4">دکمه افزودن</font> می‌توانید یک گارانتی اضافه کنید.</string>
-    <string name="warranties_text_empty_search_result_list"><![CDATA[هیچ گارانتی‌ای پیدا نکردیم که با جستجوی شما برای <font fgcolor="#1C53F4">%1$s</font> مطابقت داشته باشد.]]></string>
+    <string name="warranties_text_empty_search_result_list">هیچ گارانتی‌ای پیدا نکردیم که با جستجوی شما برای <font fgcolor="#1C53F4">%1$s</font> مطابقت داشته باشد.</string>
     <string name="warranties_list_status_valid">معتبر</string>
     <string name="warranties_list_status_soon">به‌زودی</string>
     <string name="warranties_list_status_expired">منقضی‌شده</string>
