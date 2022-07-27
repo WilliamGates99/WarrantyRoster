@@ -42,8 +42,8 @@
     <string name="register_hint_email">آدرس ایمیل خود را وارد کنید</string>
     <string name="register_title_password">رمز‌عبور</string>
     <string name="register_hint_password">رمز‌عبور را وارد کنید</string>
-    <string name="register_title_retype_password">تکرار رمز‌عبور</string>
-    <string name="register_hint_retype_password">رمز‌عبور را دوباره وارد کنید</string>
+    <string name="register_title_confirm_password">تکرار رمز‌عبور</string>
+    <string name="register_hint_confirm_password">رمز‌عبور را دوباره وارد کنید</string>
     <string name="register_btn_register">ثبت‌نام</string>
     <string name="register_text_login_title">در حال حاضر حساب کاربری دارید؟</string>
     <string name="register_btn_login">وارد شوید</string>
@@ -52,7 +52,7 @@
     <string name="register_helper_password_strong">قوی</string>
     <string name="register_error_blank_email">آدرس ایمیل خود را وارد کنید!</string>
     <string name="register_error_blank_password">رمز‌عبور را وارد کنید!</string>
-    <string name="register_error_blank_retype_password">رمز‌عبور را دوباره وارد کنید!</string>
+    <string name="register_error_blank_confirm_password">رمز‌عبور را دوباره وارد کنید!</string>
     <string name="register_error_email">آدرس ایمیل وارد شده، معتبر نیست!</string>
     <string name="register_error_password_short">رمز‌عبور باید حداقل 6 کاراکتر باشد!</string>
     <string name="register_error_password_not_match">رمز‌عبور و تکرار رمز‌عبور وارد شده با هم مطابقت ندارند!</string>
@@ -242,19 +242,19 @@
 
     <!--Change Password Fragment-->
     <string name="change_password_text_title">تغییر رمز‌عبور</string>
-    <string name="change_password_title_current">رمز‌عبور فعلی</string>
-    <string name="change_password_hint_current">رمز‌عبور فعلی خود را وارد کنید</string>
-    <string name="change_password_title_new">رمز‌عبور جدید</string>
-    <string name="change_password_hint_new">رمز‌عبور جدیدی را وارد کنید</string>
-    <string name="change_password_title_retype">تکرار رمز‌عبور جدید</string>
-    <string name="change_password_hint_retype">رمز‌عبور جدید را مجددا وارد کنید</string>
+    <string name="change_password_title_current_password">رمز‌عبور فعلی</string>
+    <string name="change_password_hint_current_password">رمز‌عبور فعلی خود را وارد کنید</string>
+    <string name="change_password_title_new_password">رمز‌عبور جدید</string>
+    <string name="change_password_hint_new_password">رمز‌عبور جدیدی را وارد کنید</string>
+    <string name="change_password_title_confirm_new_password">تکرار رمز‌عبور جدید</string>
+    <string name="change_password_hint_confirm_new_password">رمز‌عبور جدید را مجددا وارد کنید</string>
     <string name="change_password_btn_change">تغییر رمز‌عبور</string>
     <string name="change_password_helper_password_weak">ضعیف</string>
     <string name="change_password_helper_password_mediocre">متوسط</string>
     <string name="change_password_helper_password_strong">قوی</string>
     <string name="change_password_error_blank_current">رمز‌عبور فعلی خود را وارد کنید!</string>
     <string name="change_password_error_blank_new">رمز‌عبور جدیدی را وارد کنید!</string>
-    <string name="change_password_error_blank_retype">رمز‌عبور جدید را مجددا وارد کنید!</string>
+    <string name="change_password_error_blank_confirm">رمز‌عبور جدید را مجددا وارد کنید!</string>
     <string name="change_password_error_password_short">رمز‌عبور باید حداقل 6 کاراکتر باشد!</string>
     <string name="change_password_error_match">رمز‌عبور جدید و تکرار رمز‌عبور جدید وارد شده با هم مطابقت ندارند!</string>
     <string name="change_password_error_credentials">رمز‌عبور فعلی وارد شده نادرست است.</string>

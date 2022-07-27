@@ -28,9 +28,9 @@ import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_EMAIL_INVAL
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_PASSWORD_NOT_MATCH
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_PASSWORD_SHORT
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
+import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_REGISTER_CONFIRM_PASSWORD
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_REGISTER_EMAIL
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_REGISTER_PASSWORD
-import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_REGISTER_RETYPE_PASSWORD
 import com.xeniac.warrantyroster_manager.utils.Constants.URL_PRIVACY_POLICY
 import com.xeniac.warrantyroster_manager.utils.LinkHelper.openLink
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.show403Error
@@ -76,7 +76,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         _binding?.let {
             val email = binding.tiEditEmail.text.toString().trim().lowercase()
             val password = binding.tiEditPassword.text.toString().trim()
-            val retypePassword = binding.tiEditRetypePassword.text.toString().trim()
+            val confirmPassword = binding.tiEditConfirmPassword.text.toString().trim()
 
             if (email.isNotBlank()) {
                 outState.putString(SAVE_INSTANCE_REGISTER_EMAIL, email)
@@ -86,8 +86,8 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                 outState.putString(SAVE_INSTANCE_REGISTER_PASSWORD, password)
             }
 
-            if (retypePassword.isNotBlank()) {
-                outState.putString(SAVE_INSTANCE_REGISTER_RETYPE_PASSWORD, retypePassword)
+            if (confirmPassword.isNotBlank()) {
+                outState.putString(SAVE_INSTANCE_REGISTER_CONFIRM_PASSWORD, confirmPassword)
             }
         }
 
@@ -104,8 +104,8 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                 binding.tiEditPassword.setText(restoredPassword)
             }
 
-            it.getString(SAVE_INSTANCE_REGISTER_RETYPE_PASSWORD)?.let { restoredRetypePassword ->
-                binding.tiEditRetypePassword.setText(restoredRetypePassword)
+            it.getString(SAVE_INSTANCE_REGISTER_CONFIRM_PASSWORD)?.let { restoredRetypePassword ->
+                binding.tiEditConfirmPassword.setText(restoredRetypePassword)
             }
         }
         super.onViewStateRestored(savedInstanceState)
@@ -133,12 +133,12 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
             }
         }
 
-        tiEditRetypePassword.setOnFocusChangeListener { _, isFocused ->
+        tiEditConfirmPassword.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                tiLayoutRetypePassword.boxBackgroundColor =
+                tiLayoutConfirmPassword.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.background)
             } else {
-                tiLayoutRetypePassword.boxBackgroundColor =
+                tiLayoutConfirmPassword.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.grayLight)
             }
         }
@@ -187,9 +187,9 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
             }
         }
 
-        tiEditRetypePassword.addTextChangedListener {
-            tiLayoutRetypePassword.isErrorEnabled = false
-            tiLayoutRetypePassword.boxStrokeColor =
+        tiEditConfirmPassword.addTextChangedListener {
+            tiLayoutConfirmPassword.isErrorEnabled = false
+            tiLayoutConfirmPassword.boxStrokeColor =
                 ContextCompat.getColor(requireContext(), R.color.blue)
         }
     }
@@ -207,7 +207,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     }
 
     private fun registerActionDone() =
-        binding.tiEditRetypePassword.setOnEditorActionListener { _, actionId, _ ->
+        binding.tiEditConfirmPassword.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 getRegisterInputs()
             }
@@ -221,7 +221,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
 
         val email = binding.tiEditEmail.text.toString().trim().lowercase()
         val password = binding.tiEditPassword.text.toString().trim()
-        val retypePassword = binding.tiEditRetypePassword.text.toString().trim()
+        val retypePassword = binding.tiEditConfirmPassword.text.toString().trim()
 
         viewModel.checkRegisterInputs(email, password, retypePassword)
     }
@@ -257,10 +257,10 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                                         ContextCompat.getColor(requireContext(), R.color.red)
                                 }
                                 it.contains(ERROR_INPUT_BLANK_RETYPE_PASSWORD) -> {
-                                    binding.tiLayoutRetypePassword.error =
-                                        requireContext().getString(R.string.register_error_blank_retype_password)
-                                    binding.tiLayoutRetypePassword.requestFocus()
-                                    binding.tiLayoutRetypePassword.boxStrokeColor =
+                                    binding.tiLayoutConfirmPassword.error =
+                                        requireContext().getString(R.string.register_error_blank_confirm_password)
+                                    binding.tiLayoutConfirmPassword.requestFocus()
+                                    binding.tiLayoutConfirmPassword.boxStrokeColor =
                                         ContextCompat.getColor(requireContext(), R.color.red)
                                 }
                                 it.contains(ERROR_INPUT_EMAIL_INVALID) -> {
@@ -274,8 +274,8 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                                         requireContext().getString(R.string.register_error_password_short)
                                 }
                                 it.contains(ERROR_INPUT_PASSWORD_NOT_MATCH) -> {
-                                    binding.tiLayoutRetypePassword.requestFocus()
-                                    binding.tiLayoutRetypePassword.error =
+                                    binding.tiLayoutConfirmPassword.requestFocus()
+                                    binding.tiLayoutConfirmPassword.error =
                                         requireContext().getString(R.string.register_error_password_not_match)
                                 }
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
@@ -315,7 +315,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     private fun showLoadingAnimation() = binding.apply {
         tiEditEmail.isEnabled = false
         tiEditPassword.isEnabled = false
-        tiEditRetypePassword.isEnabled = false
+        tiEditConfirmPassword.isEnabled = false
         btnRegister.isClickable = false
         btnRegister.text = null
         cpiRegister.visibility = VISIBLE
@@ -325,7 +325,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         cpiRegister.visibility = GONE
         tiEditEmail.isEnabled = true
         tiEditPassword.isEnabled = true
-        tiEditRetypePassword.isEnabled = true
+        tiEditConfirmPassword.isEnabled = true
         btnRegister.isClickable = true
         btnRegister.text = requireContext().getString(R.string.register_btn_register)
     }

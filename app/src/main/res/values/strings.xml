@@ -41,8 +41,8 @@
     <string name="register_hint_email">Enter your email address</string>
     <string name="register_title_password">Password</string>
     <string name="register_hint_password">Enter your password</string>
-    <string name="register_title_retype_password">Retype Password</string>
-    <string name="register_hint_retype_password">Re-enter your password</string>
+    <string name="register_title_confirm_password">Confirm Password</string>
+    <string name="register_hint_confirm_password">Re-enter your password</string>
     <string name="register_btn_register">Register</string>
     <string name="register_text_login_title">Already have an account?</string>
     <string name="register_btn_login">Login</string>
@@ -51,10 +51,10 @@
     <string name="register_helper_password_strong">Strong</string>
     <string name="register_error_blank_email">Enter your email address!</string>
     <string name="register_error_blank_password">Enter your password!</string>
-    <string name="register_error_blank_retype_password">Re-enter your password!</string>
+    <string name="register_error_blank_confirm_password">Re-enter your password!</string>
     <string name="register_error_email">The entered email address is not valid!</string>
     <string name="register_error_password_short">Password should be at least 6 characters!</string>
-    <string name="register_error_password_not_match">Your password and retype password do not match!</string>
+    <string name="register_error_password_not_match">Your password and confirm password do not match!</string>
     <string name="register_error_account_exists">An account with the provided email already exists.</string>
 
     <!--Forgot Password Fragment-->
@@ -244,21 +244,21 @@
 
     <!--Change Password Fragment-->
     <string name="change_password_text_title">Change Password</string>
-    <string name="change_password_title_current">Current Password</string>
-    <string name="change_password_hint_current">Enter your current password</string>
-    <string name="change_password_title_new">New Password</string>
-    <string name="change_password_hint_new">Enter a new password</string>
-    <string name="change_password_title_retype">Retype New Password</string>
-    <string name="change_password_hint_retype">Re-enter the new password</string>
+    <string name="change_password_title_current_password">Current Password</string>
+    <string name="change_password_hint_current_password">Enter your current password</string>
+    <string name="change_password_title_new_password">New Password</string>
+    <string name="change_password_hint_new_password">Enter a new password</string>
+    <string name="change_password_title_confirm_new_password">Confirm New Password</string>
+    <string name="change_password_hint_confirm_new_password">Re-enter the new password</string>
     <string name="change_password_btn_change">Change Password</string>
     <string name="change_password_helper_password_weak">Weak</string>
     <string name="change_password_helper_password_mediocre">Mediocre</string>
     <string name="change_password_helper_password_strong">Strong</string>
     <string name="change_password_error_blank_current">Enter your current password!</string>
     <string name="change_password_error_blank_new">Enter a new password!</string>
-    <string name="change_password_error_blank_retype">Re-enter the new password!</string>
+    <string name="change_password_error_blank_confirm">Re-enter the new password!</string>
     <string name="change_password_error_password_short">Password should be at least 6 characters!</string>
-    <string name="change_password_error_match">New password and retype new password do not match!</string>
+    <string name="change_password_error_match">New password and confirm new password do not match!</string>
     <string name="change_password_error_credentials">The provided credentials are incorrect.</string>
     <string name="change_password_dialog_message">Your password has been successfully changed.</string>
     <string name="change_password_dialog_positive">Confirm</string>

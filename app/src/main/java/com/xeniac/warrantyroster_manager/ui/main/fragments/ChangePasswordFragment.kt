@@ -26,9 +26,9 @@ import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_RETYP
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_PASSWORD_NOT_MATCH
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_PASSWORD_SHORT
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
-import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_CHANGE_PASSWORD_CURRENT
-import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_CHANGE_PASSWORD_NEW
-import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_CHANGE_PASSWORD_RETYPE
+import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_CHANGE_PASSWORD_CONFIRM_NEW_PASSWORD
+import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_CHANGE_PASSWORD_CURRENT_PASSWORD
+import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_CHANGE_PASSWORD_NEW_PASSWORD
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.show403Error
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseAuthCredentialsError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseDeviceBlockedError
@@ -73,18 +73,21 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
         _binding?.let {
             val currentPassword = binding.tiEditCurrentPassword.text.toString().trim()
             val newPassword = binding.tiEditNewPassword.text.toString().trim()
-            val retypeNewPassword = binding.tiEditRetypePassword.text.toString().trim()
+            val retypeNewPassword = binding.tiEditConfirmNewPassword.text.toString().trim()
 
             if (currentPassword.isNotBlank()) {
-                outState.putString(SAVE_INSTANCE_CHANGE_PASSWORD_CURRENT, currentPassword)
+                outState.putString(SAVE_INSTANCE_CHANGE_PASSWORD_CURRENT_PASSWORD, currentPassword)
             }
 
             if (newPassword.isNotBlank()) {
-                outState.putString(SAVE_INSTANCE_CHANGE_PASSWORD_NEW, newPassword)
+                outState.putString(SAVE_INSTANCE_CHANGE_PASSWORD_NEW_PASSWORD, newPassword)
             }
 
             if (retypeNewPassword.isNotBlank()) {
-                outState.putString(SAVE_INSTANCE_CHANGE_PASSWORD_RETYPE, retypeNewPassword)
+                outState.putString(
+                    SAVE_INSTANCE_CHANGE_PASSWORD_CONFIRM_NEW_PASSWORD,
+                    retypeNewPassword
+                )
             }
         }
 
@@ -93,17 +96,19 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         savedInstanceState?.let {
-            it.getString(SAVE_INSTANCE_CHANGE_PASSWORD_CURRENT)?.let { restoredCurrentPassword ->
-                binding.tiEditCurrentPassword.setText(restoredCurrentPassword)
-            }
+            it.getString(SAVE_INSTANCE_CHANGE_PASSWORD_CURRENT_PASSWORD)
+                ?.let { restoredCurrentPassword ->
+                    binding.tiEditCurrentPassword.setText(restoredCurrentPassword)
+                }
 
-            it.getString(SAVE_INSTANCE_CHANGE_PASSWORD_NEW)?.let { restoredNewPassword ->
+            it.getString(SAVE_INSTANCE_CHANGE_PASSWORD_NEW_PASSWORD)?.let { restoredNewPassword ->
                 binding.tiEditNewPassword.setText(restoredNewPassword)
             }
 
-            it.getString(SAVE_INSTANCE_CHANGE_PASSWORD_RETYPE)?.let { restoredRetypePassword ->
-                binding.tiEditRetypePassword.setText(restoredRetypePassword)
-            }
+            it.getString(SAVE_INSTANCE_CHANGE_PASSWORD_CONFIRM_NEW_PASSWORD)
+                ?.let { restoredRetypePassword ->
+                    binding.tiEditConfirmNewPassword.setText(restoredRetypePassword)
+                }
         }
         super.onViewStateRestored(savedInstanceState)
     }
@@ -129,12 +134,12 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
             }
         }
 
-        tiEditRetypePassword.setOnFocusChangeListener { _, isFocused ->
+        tiEditConfirmNewPassword.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                tiLayoutRetypePassword.boxBackgroundColor =
+                tiLayoutConfirmNewPassword.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.background)
             } else {
-                tiLayoutRetypePassword.boxBackgroundColor =
+                tiLayoutConfirmNewPassword.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.grayLight)
             }
         }
@@ -183,7 +188,7 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
             }
         }
 
-        tiEditRetypePassword.addTextChangedListener {
+        tiEditConfirmNewPassword.addTextChangedListener {
             tiLayoutCurrentPassword.isErrorEnabled = false
             tiLayoutCurrentPassword.boxStrokeColor =
                 ContextCompat.getColor(requireContext(), R.color.blue)
@@ -199,7 +204,7 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
     }
 
     private fun changePasswordActionDone() =
-        binding.tiEditRetypePassword.setOnEditorActionListener { _, actionId, _ ->
+        binding.tiEditConfirmNewPassword.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 getChangeUserPasswordInputs()
             }
@@ -219,7 +224,7 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
 
         val currentPassword = binding.tiEditCurrentPassword.text.toString().trim()
         newPassword = binding.tiEditNewPassword.text.toString().trim()
-        val retypeNewPassword = binding.tiEditRetypePassword.text.toString().trim()
+        val retypeNewPassword = binding.tiEditConfirmNewPassword.text.toString().trim()
 
         viewModel.checkChangePasswordInputs(currentPassword, newPassword, retypeNewPassword)
     }
@@ -252,10 +257,10 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
                                         ContextCompat.getColor(requireContext(), R.color.red)
                                 }
                                 it.contains(ERROR_INPUT_BLANK_RETYPE_PASSWORD) -> {
-                                    binding.tiLayoutRetypePassword.error =
-                                        requireContext().getString(R.string.change_password_error_blank_retype)
-                                    binding.tiLayoutRetypePassword.requestFocus()
-                                    binding.tiLayoutRetypePassword.boxStrokeColor =
+                                    binding.tiLayoutConfirmNewPassword.error =
+                                        requireContext().getString(R.string.change_password_error_blank_confirm)
+                                    binding.tiLayoutConfirmNewPassword.requestFocus()
+                                    binding.tiLayoutConfirmNewPassword.boxStrokeColor =
                                         ContextCompat.getColor(requireContext(), R.color.red)
                                 }
                                 it.contains(ERROR_INPUT_PASSWORD_SHORT) -> {
@@ -264,8 +269,8 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
                                         requireContext().getString(R.string.change_password_error_password_short)
                                 }
                                 it.contains(ERROR_INPUT_PASSWORD_NOT_MATCH) -> {
-                                    binding.tiLayoutRetypePassword.requestFocus()
-                                    binding.tiLayoutRetypePassword.error =
+                                    binding.tiLayoutConfirmNewPassword.requestFocus()
+                                    binding.tiLayoutConfirmNewPassword.error =
                                         requireContext().getString(R.string.change_password_error_match)
                                 }
                             }
@@ -365,7 +370,7 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
     private fun showLoadingAnimation() = binding.apply {
         tiEditCurrentPassword.isEnabled = false
         tiEditNewPassword.isEnabled = false
-        tiEditRetypePassword.isEnabled = false
+        tiEditConfirmNewPassword.isEnabled = false
         btnChangePassword.isClickable = false
         btnChangePassword.text = null
         cpiChangePassword.visibility = VISIBLE
@@ -375,7 +380,7 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
         cpiChangePassword.visibility = GONE
         tiEditCurrentPassword.isEnabled = true
         tiEditNewPassword.isEnabled = true
-        tiEditRetypePassword.isEnabled = true
+        tiEditConfirmNewPassword.isEnabled = true
         btnChangePassword.isClickable = true
         btnChangePassword.text = requireContext().getString(R.string.change_password_btn_change)
     }
