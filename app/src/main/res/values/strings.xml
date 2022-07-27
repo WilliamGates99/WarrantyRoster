@@ -18,7 +18,7 @@
 
     <!--Login Fragment-->
     <string name="login_text_title">Login</string>
-    <string name="login_text_description">Let’s log you in.</string>
+    <string name="login_text_description">Let\'s log you in.</string>
     <string name="login_title_email">Email Address</string>
     <string name="login_hint_email">Enter your email address</string>
     <string name="login_title_password">Password</string>
@@ -29,7 +29,7 @@
     <string name="login_btn_register">Register</string>
     <string name="login_error_blank_email">Enter your email address!</string>
     <string name="login_error_blank_password">Enter your password!</string>
-    <string name="login_error_email">Email address is not valid!</string>
+    <string name="login_error_email">The entered email address is not valid!</string>
     <string name="login_error_not_found">The account with the provided email does not exist.</string>
     <string name="login_error_credentials">The provided credentials are incorrect.</string>
 
@@ -52,7 +52,7 @@
     <string name="register_error_blank_email">Enter your email address!</string>
     <string name="register_error_blank_password">Enter your password!</string>
     <string name="register_error_blank_retype_password">Re-enter your password!</string>
-    <string name="register_error_email">Email address is not valid!</string>
+    <string name="register_error_email">The entered email address is not valid!</string>
     <string name="register_error_password_short">Password should be at least 6 characters!</string>
     <string name="register_error_password_not_match">Your password and retype password do not match!</string>
     <string name="register_error_account_exists">An account with the provided email already exists.</string>
@@ -67,7 +67,7 @@
     <string name="forgot_pw_error_blank_email">Enter your email address!</string>
     <string name="forgot_pw_error_timer_is_not_zero_one">Please wait for %d second before requesting again.</string>
     <string name="forgot_pw_error_timer_is_not_zero_other">Please wait for %d seconds before requesting again.</string>
-    <string name="forgot_pw_error_email">Email address is not valid!</string>
+    <string name="forgot_pw_error_email">The entered email address is not valid!</string>
     <string name="forgot_pw_error_not_found">The account with the provided email does not exist.</string>
 
     <!--Forgot Password Sent Fragment-->
@@ -272,9 +272,9 @@
     <string name="change_email_btn_change">Change Email</string>
     <string name="change_email_error_blank_password">Enter your password!</string>
     <string name="change_email_error_blank_new_email">Enter a new email address!</string>
-    <string name="change_email_error_new_email">New email address is not valid!</string>
+    <string name="change_email_error_new_email">The entered new email address is not valid!</string>
     <string name="change_email_error_credentials">The provided credentials are incorrect.</string>
-    <string name="change_email_error_email_same">New email address cannot be the same as your current email!</string>
+    <string name="change_email_error_email_same">The new email address cannot be the same as your current email!</string>
     <string name="change_email_error_email_exists">An account with the provided email already exists.</string>
     <string name="change_email_dialog_message">Your email address has been successfully changed.</string>
     <string name="change_email_dialog_positive">Confirm</string>
