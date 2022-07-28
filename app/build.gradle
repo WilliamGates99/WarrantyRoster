@@ -16,15 +16,15 @@ applovin {
 }
 
 android {
-    compileSdk 32 // TODO UPGRADE TO 33 FOR RELEASE
+    compileSdk 33 // TODO UPGRADE TO 33 FOR RELEASE
     buildToolsVersion '33.0.0'
 
     defaultConfig {
         applicationId "com.xeniac.warrantyroster_manager"
         minSdkVersion 21
         targetSdk 33
-        versionCode 14
-        versionName "1.4.4"
+        versionCode 15
+        versionName "1.5.0"
 
         buildConfigField("String", "APPLOVIN_API_KEY", APPLOVIN_API_KEY)
         buildConfigField("String", "APPLOVIN_INTERSTITIAL_UNIT_ID", APPLOVIN_INTERSTITIAL_UNIT_ID)
@@ -91,8 +91,8 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui-ktx:2.5.0'
 
     // Dagger - Hilt
-    implementation 'com.google.dagger:hilt-android:2.42'
-    kapt 'com.google.dagger:hilt-compiler:2.42'
+    implementation 'com.google.dagger:hilt-android:2.43'
+    kapt 'com.google.dagger:hilt-compiler:2.43'
 
     // Activity KTX for Injecting ViewModels into Fragments
     implementation 'androidx.activity:activity-ktx:1.5.0'
@@ -112,7 +112,7 @@ dependencies {
     implementation 'androidx.datastore:datastore-preferences:1.0.0'
 
     // Firebase BoM and Analytics
-    implementation platform('com.google.firebase:firebase-bom:30.2.0')
+    implementation platform('com.google.firebase:firebase-bom:30.3.1')
     implementation 'com.google.firebase:firebase-analytics-ktx'
 
     // Firebase App Check
@@ -174,7 +174,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.3.0'
     androidTestImplementation 'androidx.test.espresso:espresso-intents:3.3.0'
-    androidTestImplementation 'com.google.dagger:hilt-android-testing:2.42'
-    kaptAndroidTest 'com.google.dagger:hilt-compiler:2.42'
+    androidTestImplementation 'com.google.dagger:hilt-android-testing:2.43'
+    kaptAndroidTest 'com.google.dagger:hilt-compiler:2.43'
     debugImplementation 'androidx.fragment:fragment-testing:1.5.0'
 }
