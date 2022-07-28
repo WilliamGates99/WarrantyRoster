@@ -2,11 +2,9 @@ package com.xeniac.warrantyroster_manager.ui.main.fragments
 
 import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.core.view.isVisible
 import androidx.navigation.Navigation
 import androidx.navigation.testing.TestNavHostController
 import androidx.test.core.app.ApplicationProvider
-import com.google.common.truth.Truth.assertThat
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.data.repository.FakeMainRepository
 import com.xeniac.warrantyroster_manager.data.repository.FakePreferencesRepository
@@ -19,7 +17,6 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Before
 import org.junit.Rule
-import org.junit.Test
 
 @ExperimentalCoroutinesApi
 @HiltAndroidTest
@@ -63,59 +60,59 @@ class WarrantiesFragmentTest {
         }
     }
 
-    @Test
-    fun emptyWarrantiesList_showsWarrantiesEmptyList() {
-        assertThat(testBinding.rv.isVisible).isFalse()
-        assertThat(testBinding.groupEmptyWarrantiesList.isVisible).isTrue()
-    }
-
     /*
-    @Test
-    fun warrantiesListWithItemInIt_showsWarrantiesList() {
-        val warrantyInput = WarrantyInput(
-            "title", "brand", "model", "serial", true,
-            "2020-05-10", "",
-            "description", "10", "uuid"
-        )
-        fakeMainRepository.addWarranty(warrantyInput)
-        testViewModel.getWarrantiesListFromFirestore()
+   @Test
+   fun emptyWarrantiesList_showsWarrantiesEmptyList() {
+       assertThat(testBinding.rv.isVisible).isFalse()
+       assertThat(testBinding.groupEmptyWarrantiesList.isVisible).isTrue()
+   }
 
-        assertThat(testBinding.groupEmptyWarrantiesList.isVisible).isFalse()
-        assertThat(testBinding.rv.isVisible).isTrue()
-    }
+   @Test
+   fun warrantiesListWithItemInIt_showsWarrantiesList() {
+       val warrantyInput = WarrantyInput(
+           "title", "brand", "model", "serial", true,
+           "2020-05-10", "",
+           "description", "10", "uuid"
+       )
+       fakeMainRepository.addWarranty(warrantyInput)
+       testViewModel.getWarrantiesListFromFirestore()
 
-    @Test
-    fun clickOnWarrantyItem_navigatesToWarrantyDetailsFragment() {
-        val warrantyInput = WarrantyInput(
-            "title", "brand", "model", "serial", true,
-            "2020-05-10", "",
-            "description", "10", "uuid"
-        )
-        fakeMainRepository.addWarranty(warrantyInput)
-        testViewModel.getWarrantiesListFromFirestore()
+       assertThat(testBinding.groupEmptyWarrantiesList.isVisible).isFalse()
+       assertThat(testBinding.rv.isVisible).isTrue()
+   }
 
-        onView(withId(testBinding.rv.id)).perform(
-            RecyclerViewActions.actionOnItemAtPosition<WarrantyAdapter.WarrantyViewHolder>(
-                0, click()
-            )
-        )
+   @Test
+   fun clickOnWarrantyItem_navigatesToWarrantyDetailsFragment() {
+       val warrantyInput = WarrantyInput(
+           "title", "brand", "model", "serial", true,
+           "2020-05-10", "",
+           "description", "10", "uuid"
+       )
+       fakeMainRepository.addWarranty(warrantyInput)
+       testViewModel.getWarrantiesListFromFirestore()
 
-        assertThat(navController.currentDestination?.id).isEqualTo(R.id.warrantyDetailsFragment)
-    }
+       onView(withId(testBinding.rv.id)).perform(
+           RecyclerViewActions.actionOnItemAtPosition<WarrantyAdapter.WarrantyViewHolder>(
+               0, click()
+           )
+       )
 
-    @Test
-    fun clickOnSearchView_setsToolbarTitleToNull() {
-        val warrantyInput = WarrantyInput(
-            "title", "brand", "model", "serial", true,
-            "2020-05-10", "",
-            "description", "10", "uuid"
-        )
-        fakeMainRepository.addWarranty(warrantyInput)
-        testViewModel.getWarrantiesListFromFirestore()
+       assertThat(navController.currentDestination?.id).isEqualTo(R.id.warrantyDetailsFragment)
+   }
 
-        onView(withId(testBinding.searchView.id)).perform(click())
+   @Test
+   fun clickOnSearchView_setsToolbarTitleToNull() {
+       val warrantyInput = WarrantyInput(
+           "title", "brand", "model", "serial", true,
+           "2020-05-10", "",
+           "description", "10", "uuid"
+       )
+       fakeMainRepository.addWarranty(warrantyInput)
+       testViewModel.getWarrantiesListFromFirestore()
 
-        assertThat(testBinding.toolbar.title).isNull()
-    }
-     */
+       onView(withId(testBinding.searchView.id)).perform(click())
+
+       assertThat(testBinding.toolbar.title).isNull()
+   }
+    */
 }
