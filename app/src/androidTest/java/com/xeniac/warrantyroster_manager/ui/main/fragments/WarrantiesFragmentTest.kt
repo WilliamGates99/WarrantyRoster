@@ -72,7 +72,7 @@ class WarrantiesFragmentTest {
     @Test
     fun emptyWarrantiesList_showsWarrantiesEmptyList() {
         assertThat(testBinding.rv.isVisible).isFalse()
-        assertThat(testBinding.groupEmptyList.isVisible).isTrue()
+        assertThat(testBinding.groupEmptyWarrantiesList.isVisible).isTrue()
     }
 
     @Test
@@ -85,7 +85,7 @@ class WarrantiesFragmentTest {
         fakeMainRepository.addWarranty(warrantyInput)
         testViewModel.getWarrantiesListFromFirestore()
 
-        assertThat(testBinding.groupEmptyList.isVisible).isFalse()
+        assertThat(testBinding.groupEmptyWarrantiesList.isVisible).isFalse()
         assertThat(testBinding.rv.isVisible).isTrue()
     }
 
