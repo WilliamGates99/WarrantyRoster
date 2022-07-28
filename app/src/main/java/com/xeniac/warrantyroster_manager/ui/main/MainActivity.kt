@@ -11,6 +11,7 @@ import com.applovin.mediation.MaxAd
 import com.applovin.mediation.MaxAdListener
 import com.applovin.mediation.MaxError
 import com.applovin.mediation.ads.MaxInterstitialAd
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.shape.CornerFamily.ROUNDED
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.play.core.review.ReviewInfo
@@ -38,7 +39,7 @@ class MainActivity : BaseActivity(), MaxAdListener {
     private lateinit var viewModel: SettingsViewModel
 
     private lateinit var reviewManager: ReviewManager
-    private var reviewInfo: ReviewInfo? = null
+    var reviewInfo: ReviewInfo? = null
 
     lateinit var appLovinAd: MaxInterstitialAd
     private var appLovinAdRequestCounter = 1
@@ -60,7 +61,7 @@ class MainActivity : BaseActivity(), MaxAdListener {
         bottomNavActions()
         fabOnClick()
         subscribeToObservers()
-        getIsInAppReviewsShown()
+        getRateAppDialogChoice()
         requestAppLovinInterstitial()
     }
 
@@ -114,18 +115,21 @@ class MainActivity : BaseActivity(), MaxAdListener {
     }
 
     private fun subscribeToObservers() {
-        currentInAppReviewsChoiceObserver()
-        currentPreviousRequestTimeInMillisObserver()
+        rateAppDialogChoiceObserver()
+        previousRequestTimeInMillisObserver()
     }
 
-    private fun getIsInAppReviewsShown() = viewModel.getIsInAppReviewsShown()
+    private fun getRateAppDialogChoice() = viewModel.getRateAppDialogChoice()
 
-    private fun currentInAppReviewsChoiceObserver() =
-        viewModel.isInAppReviewsShownLiveData.observe(this) { responseEvent ->
-            responseEvent.getContentIfNotHandled()?.let { isInAppReviewsShown ->
-                when (isInAppReviewsShown) {
-                    false -> checkDaysFromFirstInstallTime()
-                    true -> getPreviousRequestTimeInMillis()
+    private fun rateAppDialogChoiceObserver() =
+        viewModel.rateAppDialogChoiceLiveData.observe(this) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { rateAppDialogChoice ->
+                when (rateAppDialogChoice) {
+                    0 -> checkDaysFromFirstInstallTime()
+                    1 -> getPreviousRequestTimeInMillis()
+                    -1 -> {
+                        /* NO-OP */
+                    }
                 }
             }
         }
@@ -141,7 +145,7 @@ class MainActivity : BaseActivity(), MaxAdListener {
 
     private fun getPreviousRequestTimeInMillis() = viewModel.getPreviousRequestTimeInMillis()
 
-    private fun currentPreviousRequestTimeInMillisObserver() =
+    private fun previousRequestTimeInMillisObserver() =
         viewModel.previousRequestTimeInMillisLiveData.observe(this) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { previousRequestTimeInMillis ->
                 checkDaysFromPreviousRequestTime(previousRequestTimeInMillis)
@@ -174,7 +178,27 @@ class MainActivity : BaseActivity(), MaxAdListener {
         }
     }
 
-    fun showInAppReviews() {
+    fun showRateAppDialog() = reviewInfo?.let {
+        MaterialAlertDialogBuilder(this).apply {
+            setTitle(
+                getString(
+                    R.string.main_rate_app_dialog_title,
+                    getString(R.string.app_name)
+                )
+            )
+            setMessage(getString(R.string.main_rate_app_dialog_message))
+            setCancelable(false)
+            setPositiveButton(getString(R.string.main_rate_app_dialog_positive)) { _, _ -> showInAppReviews() }
+            setNegativeButton(getString(R.string.main_rate_app_dialog_negative)) { _, _ -> setRateAppDialogChoiceToNever() }
+            setNeutralButton(getString(R.string.main_rate_app_dialog_neutral)) { _, _ -> }
+            show()
+        }
+
+        viewModel.setPreviousRequestTimeInMillis()
+        viewModel.setRateAppDialogChoice(1)
+    }
+
+    private fun showInAppReviews() {
         reviewInfo?.let { reviewInfo ->
             val flow = reviewManager.launchReviewFlow(this, reviewInfo)
 
@@ -186,8 +210,8 @@ class MainActivity : BaseActivity(), MaxAdListener {
                  */
 
                 if (it.isSuccessful) {
-                    viewModel.setIsInAppReviewsShown(true)
                     viewModel.setPreviousRequestTimeInMillis()
+                    viewModel.setRateAppDialogChoice(1)
                     Timber.i("In-App Reviews Dialog was shown successfully.")
                 } else {
                     Timber.i("Something went wrong with showing the In-App Reviews Dialog.")
@@ -195,6 +219,8 @@ class MainActivity : BaseActivity(), MaxAdListener {
             }
         }
     }
+
+    private fun setRateAppDialogChoiceToNever() = viewModel.setRateAppDialogChoice(-1)
 
     fun requestAppLovinInterstitial() {
         appLovinAd = MaxInterstitialAd(BuildConfig.APPLOVIN_INTERSTITIAL_UNIT_ID, this).apply {

@@ -8,8 +8,10 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.intent.Intents
-import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.RootMatchers.isDialog
+import androidx.test.espresso.matcher.ViewMatchers.*
 import com.google.android.play.core.review.testing.FakeReviewManager
 import com.google.common.truth.Truth.assertThat
 import com.xeniac.warrantyroster_manager.R
@@ -92,5 +94,23 @@ class MainActivityTest {
         fakeRequest.addOnCompleteListener { task ->
             assertThat(task.isSuccessful).isTrue()
         }
+    }
+
+    @Test
+    fun callingShowRateAppDialogWithSuccessfulTask_showsRateAppDialog() {
+        val fakeReviewManager = FakeReviewManager(context)
+        val fakeRequest = fakeReviewManager.requestReviewFlow()
+
+        fakeRequest.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                activityScenario.onActivity {
+                    it.reviewInfo = task.result
+                    it.showRateAppDialog()
+                }
+            }
+        }
+
+        onView(withText(context.getString(R.string.main_rate_app_dialog_message)))
+            .inRoot(isDialog()).check(matches(isDisplayed()))
     }
 }
