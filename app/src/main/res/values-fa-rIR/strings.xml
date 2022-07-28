@@ -84,6 +84,11 @@
     <string name="main_menu_title_warranties">فهرست گارانتی‌ها</string>
     <string name="main_menu_title_settings">تنظیمات</string>
     <string name="main_text_content_description">افزودن گارانتی</string>
+    <string name="main_rate_app_dialog_title">امتیاز به %1$s؟</string>
+    <string name="main_rate_app_dialog_message">اگر از استفاده از این برنامه لذت می‌برید، در صورت امکان به آن امتیاز دهید. بیشتر از یک دقیقه طول نمی‌کشد. از حمایت شما متشکریم!</string>
+    <string name="main_rate_app_dialog_positive">الان امتیاز می‌دهم</string>
+    <string name="main_rate_app_dialog_negative">نه، ممنون</string>
+    <string name="main_rate_app_dialog_neutral">بعدا بهم یادآوری کن</string>
 
     <!--Warranties Fragment-->
     <string name="warranties_text_title">فهرست گارانتی‌ها</string>

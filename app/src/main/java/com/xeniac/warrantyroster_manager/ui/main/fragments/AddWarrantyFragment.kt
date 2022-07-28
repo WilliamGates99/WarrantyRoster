@@ -484,7 +484,7 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
                         findNavController().navigate(
                             AddWarrantyFragmentDirections.actionAddWarrantyFragmentToWarrantiesFragment()
                         )
-                        (requireActivity() as MainActivity).showInAppReviews()
+                        (requireActivity() as MainActivity).showRateAppDialog()
                     }
                     Status.ERROR -> {
                         hideLoadingAnimation()

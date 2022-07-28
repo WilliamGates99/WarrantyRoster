@@ -87,14 +87,14 @@ class PreferencesRepositoryTest {
         val initialCurrentAppLanguage = testRepository.getCurrentAppLanguage()
         val initialCurrentAppCountry = testRepository.getCurrentAppCountry()
         val initialCategoryTitleMapKey = testRepository.getCategoryTitleMapKey()
-        val initialIsInAppReviewsShown = testRepository.isInAppReviewsShown()
+        val initialRateAppDialogChoice = testRepository.getRateAppDialogChoice()
         val initialPreviousRequestTimeInMillis = testRepository.getPreviousRequestTimeInMillis()
 
         assertThat(initialCurrentAppTheme).isEqualTo(0)
         assertThat(initialCurrentAppLanguage).isEqualTo(LOCALE_LANGUAGE_ENGLISH)
         assertThat(initialCurrentAppCountry).isEqualTo(LOCALE_COUNTRY_UNITED_STATES)
         assertThat(initialCategoryTitleMapKey).isEqualTo("$LOCALE_LANGUAGE_ENGLISH-$LOCALE_COUNTRY_UNITED_STATES")
-        assertThat(initialIsInAppReviewsShown).isFalse()
+        assertThat(initialRateAppDialogChoice).isEqualTo(0)
         assertThat(initialPreviousRequestTimeInMillis).isEqualTo(0L)
     }
 
@@ -150,14 +150,14 @@ class PreferencesRepositoryTest {
     }
 
     @Test
-    fun writeIsInAppReviewsShown() = testScope.runTest {
+    fun writeRateAppDialogChoice() = testScope.runTest {
         testDataStore.edit { it.clear() }
 
-        val testValue = true
-        testRepository.isInAppReviewsShown(testValue)
+        val testValue = 1
+        testRepository.setRateAppDialogChoice(testValue)
 
-        val isInAppReviewsShown = testRepository.isInAppReviewsShown()
-        assertThat(isInAppReviewsShown).isTrue()
+        val isInAppReviewsShown = testRepository.getRateAppDialogChoice()
+        assertThat(isInAppReviewsShown).isEqualTo(testValue)
     }
 
     @Test

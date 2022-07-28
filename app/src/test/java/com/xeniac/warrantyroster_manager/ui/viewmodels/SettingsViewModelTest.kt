@@ -61,12 +61,12 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun getIsInAppReviewsShown_returnsDefaultIsInAppReviewsShown() {
-        val defaultIsInAppReviewsShown = false
-        testViewModel.getIsInAppReviewsShown()
+    fun getRateAppDialogChoice_returnsDefaultRateAppDialogChoice() {
+        val defaultRateAppDialogChoice = 0
+        testViewModel.getRateAppDialogChoice()
 
-        val responseEvent = testViewModel.isInAppReviewsShownLiveData.getOrAwaitValue()
-        assertThat(responseEvent.getContentIfNotHandled()).isEqualTo(defaultIsInAppReviewsShown)
+        val responseEvent = testViewModel.rateAppDialogChoiceLiveData.getOrAwaitValue()
+        assertThat(responseEvent.getContentIfNotHandled()).isEqualTo(defaultRateAppDialogChoice)
     }
 
     @Test
@@ -81,7 +81,7 @@ class SettingsViewModelTest {
 
     @Test
     fun setAppLocale_returnsNewAppLocale() {
-        testViewModel.setAppLocale(1)
+        testViewModel.setAppLocale(2)
 
         val newLanguage = LOCALE_LANGUAGE_PERSIAN
         val newCountry = LOCALE_COUNTRY_IRAN
@@ -101,12 +101,12 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun setIsInAppReviewsShown_returnsNewIsInAppReviewsShown() {
-        val newIsInAppReviewsShown = true
-        testViewModel.setIsInAppReviewsShown(true)
+    fun setRateAppDialogChoice_returnsNewRateAppDialogChoice() {
+        val newRateAppDialogChoice = 1
+        testViewModel.setRateAppDialogChoice(newRateAppDialogChoice)
 
-        val responseEvent = testViewModel.isInAppReviewsShownLiveData.getOrAwaitValue()
-        assertThat(responseEvent.getContentIfNotHandled()).isEqualTo(newIsInAppReviewsShown)
+        val responseEvent = testViewModel.rateAppDialogChoiceLiveData.getOrAwaitValue()
+        assertThat(responseEvent.getContentIfNotHandled()).isEqualTo(newRateAppDialogChoice)
     }
 
     @Test

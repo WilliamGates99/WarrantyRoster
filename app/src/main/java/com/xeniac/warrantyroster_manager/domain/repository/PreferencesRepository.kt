@@ -14,7 +14,7 @@ interface PreferencesRepository {
 
     suspend fun getCurrentAppCountry(): String
 
-    suspend fun isInAppReviewsShown(): Boolean
+    suspend fun getRateAppDialogChoice(): Int
 
     suspend fun getPreviousRequestTimeInMillis(): Long
 
@@ -28,7 +28,7 @@ interface PreferencesRepository {
 
     suspend fun setCurrentAppCountry(country: String)
 
-    suspend fun isInAppReviewsShown(value: Boolean)
+    suspend fun setRateAppDialogChoice(value: Int)
 
     suspend fun setPreviousRequestTimeInMillis(timeInMillis: Long)
 }

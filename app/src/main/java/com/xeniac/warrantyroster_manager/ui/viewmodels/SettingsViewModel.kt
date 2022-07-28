@@ -45,8 +45,8 @@ class SettingsViewModel @Inject constructor(
     private val _currentAppThemeLiveData: MutableLiveData<Event<Int>> = MutableLiveData()
     val currentAppThemeLiveData: LiveData<Event<Int>> = _currentAppThemeLiveData
 
-    private val _isInAppReviewsShownLiveData: MutableLiveData<Event<Boolean>> = MutableLiveData()
-    val isInAppReviewsShownLiveData: LiveData<Event<Boolean>> = _isInAppReviewsShownLiveData
+    private val _rateAppDialogChoiceLiveData: MutableLiveData<Event<Int>> = MutableLiveData()
+    val rateAppDialogChoiceLiveData: LiveData<Event<Int>> = _rateAppDialogChoiceLiveData
 
     private val _previousRequestTimeInMillisLiveData:
             MutableLiveData<Event<Long>> = MutableLiveData()
@@ -94,8 +94,8 @@ class SettingsViewModel @Inject constructor(
         safeGetCurrentAppTheme()
     }
 
-    fun getIsInAppReviewsShown() = viewModelScope.launch {
-        safeGetIsInAppReviewsShown()
+    fun getRateAppDialogChoice() = viewModelScope.launch {
+        safeGetRateAppDialogChoice()
     }
 
     fun getPreviousRequestTimeInMillis() = viewModelScope.launch {
@@ -112,9 +112,9 @@ class SettingsViewModel @Inject constructor(
         SettingsHelper.setAppTheme(index)
     }
 
-    fun setIsInAppReviewsShown(value: Boolean) = viewModelScope.launch {
-        preferencesRepository.isInAppReviewsShown(value)
-        _isInAppReviewsShownLiveData.postValue(Event(value))
+    fun setRateAppDialogChoice(value: Int) = viewModelScope.launch {
+        preferencesRepository.setRateAppDialogChoice(value)
+        _rateAppDialogChoiceLiveData.postValue(Event(value))
     }
 
     fun setPreviousRequestTimeInMillis() = viewModelScope.launch {
@@ -215,8 +215,8 @@ class SettingsViewModel @Inject constructor(
         _currentAppThemeLiveData.postValue(Event(preferencesRepository.getCurrentAppTheme()))
     }
 
-    private suspend fun safeGetIsInAppReviewsShown() {
-        _isInAppReviewsShownLiveData.postValue(Event(preferencesRepository.isInAppReviewsShown()))
+    private suspend fun safeGetRateAppDialogChoice() {
+        _rateAppDialogChoiceLiveData.postValue(Event(preferencesRepository.getRateAppDialogChoice()))
     }
 
     private suspend fun safeGetPreviousRequestTimeInMillis() {

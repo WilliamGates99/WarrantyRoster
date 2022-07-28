@@ -243,15 +243,20 @@
         <item name="materialAlertDialogTitleTextStyle">
             @style/Theme.WarrantyRoster.AlertDialog.Title
         </item>
-        <item name="materialAlertDialogBodyTextStyle">@style/Theme.WarrantyRoster.AlertDialog.Body
+        <item name="materialAlertDialogBodyTextStyle">
+            @style/Theme.WarrantyRoster.AlertDialog.Body
         </item>
-        <item name="android:checkedTextViewStyle">@style/Theme.WarrantyRoster.AlertDialog.Choice
+        <item name="android:checkedTextViewStyle">
+            @style/Theme.WarrantyRoster.AlertDialog.Choice
         </item>
         <item name="buttonBarPositiveButtonStyle">
             @style/Theme.WarrantyRoster.AlertDialog.PositiveButton
         </item>
         <item name="buttonBarNegativeButtonStyle">
             @style/Theme.WarrantyRoster.AlertDialog.NegativeButton
+        </item>
+        <item name="buttonBarNeutralButtonStyle">
+            @style/Theme.WarrantyRoster.AlertDialog.NeutralButton
         </item>
     </style>
 
@@ -312,8 +317,24 @@
         <item name="android:paddingEnd">@dimen/padding_8dp</item>
     </style>
 
+    <style name="Theme.WarrantyRoster.AlertDialog.NeutralButton" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="shapeAppearance">@style/Theme.WarrantyRoster.TextButton.Appearance</item>
+        <item name="android:textColor">@color/dialogButton</item>
+        <item name="android:textSize">@dimen/text_size_14sp</item>
+        <item name="android:fontFamily">@font/localized_bold</item>
+        <item name="textAllCaps">true</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:paddingTop">@dimen/padding_4dp</item>
+        <item name="android:paddingBottom">@dimen/padding_4dp</item>
+        <item name="android:paddingStart">@dimen/padding_8dp</item>
+        <item name="android:paddingEnd">@dimen/padding_8dp</item>
+    </style>
+
     <style name="Theme.WarrantyRoster.DatePicker" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
-        <item name="materialCalendarStyle">@style/Theme.WarrantyRoster.DatePicker.CalendarStyle
+        <item name="materialCalendarStyle">
+            @style/Theme.WarrantyRoster.DatePicker.CalendarStyle
         </item>
         <item name="materialCalendarHeaderTitle">@style/Theme.WarrantyRoster.DatePicker.Title</item>
         <item name="materialCalendarHeaderSelection">
