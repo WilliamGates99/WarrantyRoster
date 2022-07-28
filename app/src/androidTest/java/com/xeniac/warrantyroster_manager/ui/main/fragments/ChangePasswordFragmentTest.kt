@@ -83,7 +83,7 @@ class ChangePasswordFragmentTest {
 
             assertThat(tiLayoutCurrentPassword.boxBackgroundColor).isEqualTo(context.getColor(R.color.background))
             assertThat(tiLayoutNewPassword.boxBackgroundColor).isEqualTo(context.getColor(R.color.grayLight))
-            assertThat(tiLayoutRetypePassword.boxBackgroundColor).isEqualTo(context.getColor(R.color.grayLight))
+            assertThat(tiLayoutConfirmNewPassword.boxBackgroundColor).isEqualTo(context.getColor(R.color.grayLight))
         }
     }
 
@@ -94,18 +94,18 @@ class ChangePasswordFragmentTest {
 
             assertThat(tiLayoutCurrentPassword.boxBackgroundColor).isEqualTo(context.getColor(R.color.grayLight))
             assertThat(tiLayoutNewPassword.boxBackgroundColor).isEqualTo(context.getColor(R.color.background))
-            assertThat(tiLayoutRetypePassword.boxBackgroundColor).isEqualTo(context.getColor(R.color.grayLight))
+            assertThat(tiLayoutConfirmNewPassword.boxBackgroundColor).isEqualTo(context.getColor(R.color.grayLight))
         }
     }
 
     @Test
     fun clickOnRetypePasswordEditText_changesBoxBackgroundColor() {
         testBinding.apply {
-            onView(withId(tiEditRetypePassword.id)).perform(click())
+            onView(withId(tiEditConfirmNewPassword.id)).perform(click())
 
             assertThat(tiLayoutCurrentPassword.boxBackgroundColor).isEqualTo(context.getColor(R.color.grayLight))
             assertThat(tiLayoutNewPassword.boxBackgroundColor).isEqualTo(context.getColor(R.color.grayLight))
-            assertThat(tiLayoutRetypePassword.boxBackgroundColor).isEqualTo(context.getColor(R.color.background))
+            assertThat(tiLayoutConfirmNewPassword.boxBackgroundColor).isEqualTo(context.getColor(R.color.background))
         }
     }
 
@@ -128,8 +128,8 @@ class ChangePasswordFragmentTest {
     @Test
     fun clickOnRetypePasswordEditText_changesBoxStrokeColor() {
         testBinding.apply {
-            onView(withId(tiEditRetypePassword.id)).perform(click())
-            assertThat(tiLayoutRetypePassword.boxStrokeColor).isEqualTo(context.getColor(R.color.blue))
+            onView(withId(tiEditConfirmNewPassword.id)).perform(click())
+            assertThat(tiLayoutConfirmNewPassword.boxStrokeColor).isEqualTo(context.getColor(R.color.blue))
         }
     }
 
@@ -138,8 +138,8 @@ class ChangePasswordFragmentTest {
         testBinding.apply {
             onView(withId(tiEditCurrentPassword.id)).perform(replaceText(password))
             onView(withId(tiEditNewPassword.id)).perform(replaceText("new_password"))
-            onView(withId(tiEditRetypePassword.id)).perform(replaceText("not_password"))
-            onView(withId(tiEditRetypePassword.id)).perform(pressImeActionButton())
+            onView(withId(tiEditConfirmNewPassword.id)).perform(replaceText("not_password"))
+            onView(withId(tiEditConfirmNewPassword.id)).perform(pressImeActionButton())
         }
 
         val responseEvent = testViewModel.checkInputsLiveData.getOrAwaitValue()
@@ -152,8 +152,8 @@ class ChangePasswordFragmentTest {
         testBinding.apply {
             onView(withId(tiEditCurrentPassword.id)).perform(replaceText(password))
             onView(withId(tiEditNewPassword.id)).perform(replaceText(newPassword))
-            onView(withId(tiEditRetypePassword.id)).perform(replaceText(newPassword))
-            onView(withId(tiEditRetypePassword.id)).perform(pressImeActionButton())
+            onView(withId(tiEditConfirmNewPassword.id)).perform(replaceText(newPassword))
+            onView(withId(tiEditConfirmNewPassword.id)).perform(pressImeActionButton())
         }
 
         val responseEvent = testViewModel.checkInputsLiveData.getOrAwaitValue()
