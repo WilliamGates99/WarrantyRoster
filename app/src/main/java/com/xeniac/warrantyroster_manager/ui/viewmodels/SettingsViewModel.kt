@@ -84,7 +84,7 @@ class SettingsViewModel @Inject constructor(
             MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
     val changeUserPasswordLiveData: LiveData<Event<Resource<Nothing>>> = _changeUserPasswordLiveData
 
-    fun isUserLoggedIn() = preferencesRepository.getIsUserLoggedInSynchronously()
+    fun isUserLoggedIn() = preferencesRepository.isUserLoggedInSynchronously()
 
     fun getCurrentAppLocale() = viewModelScope.launch {
         safeGetCurrentAppLocale()
@@ -294,7 +294,7 @@ class SettingsViewModel @Inject constructor(
         _logoutLiveData.postValue(Event(Resource.loading()))
         try {
             userRepository.logoutUser()
-            preferencesRepository.setIsUserLoggedIn(false)
+            preferencesRepository.isUserLoggedIn(false)
             _logoutLiveData.postValue(Event(Resource.success(null)))
             Timber.i("User successfully logged out.")
         } catch (e: Exception) {

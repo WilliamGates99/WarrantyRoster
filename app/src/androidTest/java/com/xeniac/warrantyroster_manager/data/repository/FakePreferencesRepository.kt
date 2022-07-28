@@ -13,7 +13,7 @@ class FakePreferencesRepository : PreferencesRepository {
     private var rateAppDialogChoice = 0
     private var previousRequestTimeInMillis = 0L
 
-    override fun getIsUserLoggedInSynchronously(): Boolean = isUserLoggedIn
+    override fun isUserLoggedInSynchronously(): Boolean = isUserLoggedIn
 
     override fun getCurrentAppLanguageSynchronously(): String = currentAppLanguage
 
@@ -32,7 +32,7 @@ class FakePreferencesRepository : PreferencesRepository {
     override suspend fun getCategoryTitleMapKey(): String =
         "${getCurrentAppLanguage()}-${getCurrentAppCountry()}"
 
-    override suspend fun setIsUserLoggedIn(value: Boolean) {
+    override suspend fun isUserLoggedIn(value: Boolean) {
         isUserLoggedIn = value
     }
 

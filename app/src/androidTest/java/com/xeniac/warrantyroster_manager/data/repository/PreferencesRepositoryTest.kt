@@ -70,7 +70,7 @@ class PreferencesRepositoryTest {
     fun fetchInitialSynchronousPreferences() = testScope.runTest {
         testDataStore.edit { it.clear() }
 
-        val initialIsUserLoggedIn = testRepository.getIsUserLoggedInSynchronously()
+        val initialIsUserLoggedIn = testRepository.isUserLoggedInSynchronously()
         val initialCurrentAppLanguage = testRepository.getCurrentAppLanguageSynchronously()
         val initialCurrentAppCountry = testRepository.getCurrentAppCountrySynchronously()
 
@@ -110,9 +110,9 @@ class PreferencesRepositoryTest {
     fun writeIsUserLoggedIn() = testScope.runTest {
         testDataStore.edit { it.clear() }
 
-        testRepository.setIsUserLoggedIn(true)
+        testRepository.isUserLoggedIn(true)
 
-        val isUserLoggedIn = testRepository.getIsUserLoggedInSynchronously()
+        val isUserLoggedIn = testRepository.isUserLoggedInSynchronously()
         assertThat(isUserLoggedIn).isTrue()
     }
 

@@ -31,7 +31,7 @@ class PreferencesRepositoryImp @Inject constructor(
         )
     }
 
-    override fun getIsUserLoggedInSynchronously(): Boolean = runBlocking {
+    override fun isUserLoggedInSynchronously(): Boolean = runBlocking {
         try {
             settingsDataStore.data.first()[PreferencesKeys.IS_USER_LOGGED_IN] ?: false
         } catch (e: Exception) {
@@ -100,7 +100,7 @@ class PreferencesRepositoryImp @Inject constructor(
     override suspend fun getCategoryTitleMapKey(): String =
         "${getCurrentAppLanguage()}-${getCurrentAppCountry()}"
 
-    override suspend fun setIsUserLoggedIn(value: Boolean) {
+    override suspend fun isUserLoggedIn(value: Boolean) {
         try {
             settingsDataStore.edit { loginPreferences ->
                 when (value) {

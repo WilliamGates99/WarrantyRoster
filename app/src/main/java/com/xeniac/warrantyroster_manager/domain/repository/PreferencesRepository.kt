@@ -2,7 +2,7 @@ package com.xeniac.warrantyroster_manager.domain.repository
 
 interface PreferencesRepository {
 
-    fun getIsUserLoggedInSynchronously(): Boolean
+    fun isUserLoggedInSynchronously(): Boolean
 
     fun getCurrentAppLanguageSynchronously(): String
 
@@ -20,7 +20,7 @@ interface PreferencesRepository {
 
     suspend fun getCategoryTitleMapKey(): String
 
-    suspend fun setIsUserLoggedIn(value: Boolean)
+    suspend fun isUserLoggedIn(value: Boolean)
 
     suspend fun setCurrentAppTheme(index: Int)
 

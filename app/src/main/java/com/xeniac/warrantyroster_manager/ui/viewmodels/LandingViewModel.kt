@@ -131,7 +131,7 @@ class LandingViewModel @Inject constructor(
         try {
             userRepository.registerViaEmail(email, password)
             userRepository.sendVerificationEmail()
-            preferencesRepository.setIsUserLoggedIn(true)
+            preferencesRepository.isUserLoggedIn(true)
             _registerLiveData.postValue(Event(Resource.success(null)))
             Timber.i("$email registered successfully.")
         } catch (e: Exception) {
@@ -144,7 +144,7 @@ class LandingViewModel @Inject constructor(
         _loginLiveData.postValue(Event(Resource.loading()))
         try {
             userRepository.loginViaEmail(email, password)
-            preferencesRepository.setIsUserLoggedIn(true)
+            preferencesRepository.isUserLoggedIn(true)
             _loginLiveData.postValue(Event(Resource.success(null)))
             Timber.i("$email logged in successfully.")
         } catch (e: Exception) {
