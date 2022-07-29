@@ -10,17 +10,21 @@ import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.auth.FirebaseAuth
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentChangeEmailBinding
-import com.xeniac.warrantyroster_manager.ui.main.viewmodels.SettingsViewModel
+import com.xeniac.warrantyroster_manager.ui.viewmodels.SettingsViewModel
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_CREDENTIALS
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
-import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_EMAIL
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_PASSWORD
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_EMAIL_INVALID
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_EMAIL_SAME
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_CHANGE_EMAIL_NEW_EMAIL
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_CHANGE_EMAIL_PASSWORD
@@ -31,15 +35,15 @@ import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseDevice
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkConnectionError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkFailureError
 import com.xeniac.warrantyroster_manager.utils.Status
-import com.xeniac.warrantyroster_manager.utils.UserHelper.isEmailValid
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
 
     private var _binding: FragmentChangeEmailBinding? = null
-    private val binding get() = _binding!!
-    private val viewModel: SettingsViewModel by viewModels()
+    val binding get() = _binding!!
+
+    lateinit var viewModel: SettingsViewModel
 
     private lateinit var newEmail: String
 
@@ -48,6 +52,7 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentChangeEmailBinding.bind(view)
+        viewModel = ViewModelProvider(requireActivity())[SettingsViewModel::class.java]
 
         textInputsBackgroundColor()
         textInputsStrokeColor()
@@ -93,43 +98,42 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
         super.onViewStateRestored(savedInstanceState)
     }
 
-    private fun textInputsBackgroundColor() {
-        binding.tiEditPassword.setOnFocusChangeListener { _, isFocused ->
+    private fun textInputsBackgroundColor() = binding.apply {
+        tiEditPassword.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                binding.tiLayoutPassword.boxBackgroundColor =
+                tiLayoutPassword.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.background)
             } else {
-                binding.tiLayoutPassword.boxBackgroundColor =
+                tiLayoutPassword.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.grayLight)
             }
         }
 
-        binding.tiEditNewEmail.setOnFocusChangeListener { _, isFocused ->
+        tiEditNewEmail.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                binding.tiLayoutNewEmail.boxBackgroundColor =
+                tiLayoutNewEmail.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.background)
             } else {
-                binding.tiLayoutNewEmail.boxBackgroundColor =
+                tiLayoutNewEmail.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.grayLight)
             }
         }
     }
 
-    private fun textInputsStrokeColor() {
-        binding.tiEditPassword.addTextChangedListener {
-            binding.tiLayoutPassword.boxStrokeColor =
-                ContextCompat.getColor(requireContext(), R.color.blue)
+    private fun textInputsStrokeColor() = binding.apply {
+        tiEditPassword.addTextChangedListener {
+            tiLayoutPassword.isErrorEnabled = false
+            tiLayoutPassword.boxStrokeColor = ContextCompat.getColor(requireContext(), R.color.blue)
         }
 
-        binding.tiEditNewEmail.addTextChangedListener {
-            binding.tiLayoutNewEmail.isErrorEnabled = false
-            binding.tiLayoutNewEmail.boxStrokeColor =
-                ContextCompat.getColor(requireContext(), R.color.blue)
+        tiEditNewEmail.addTextChangedListener {
+            tiLayoutNewEmail.isErrorEnabled = false
+            tiLayoutNewEmail.boxStrokeColor = ContextCompat.getColor(requireContext(), R.color.blue)
         }
     }
 
     private fun returnToMainActivity() = binding.toolbar.setNavigationOnClickListener {
-        requireActivity().onBackPressed()
+        findNavController().popBackStack()
     }
 
     private fun changeEmailOnClick() = binding.btnChangeEmail.setOnClickListener {
@@ -147,39 +151,63 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
     private fun getChangeUserEmailInputs() {
         val inputMethodManager = requireContext()
             .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.hideSoftInputFromWindow(binding.root.applicationWindowToken, 0)
+        inputMethodManager.hideSoftInputFromWindow(requireView().applicationWindowToken, 0)
 
         val password = binding.tiEditPassword.text.toString().trim()
         newEmail = binding.tiEditNewEmail.text.toString().trim().lowercase()
 
-        if (password.isBlank()) {
-            binding.tiLayoutPassword.requestFocus()
-            binding.tiLayoutPassword.boxStrokeColor =
-                ContextCompat.getColor(requireContext(), R.color.red)
-        } else if (newEmail.isBlank()) {
-            binding.tiLayoutNewEmail.requestFocus()
-            binding.tiLayoutNewEmail.boxStrokeColor =
-                ContextCompat.getColor(requireContext(), R.color.red)
-        } else {
-            if (!isEmailValid(newEmail)) {
-                binding.tiLayoutNewEmail.requestFocus()
-                binding.tiLayoutNewEmail.error =
-                    requireContext().getString(R.string.change_email_error_new_email)
-            } else if (newEmail == FirebaseAuth.getInstance().currentUser?.email) {
-                binding.tiLayoutNewEmail.requestFocus()
-                binding.tiLayoutNewEmail.error =
-                    requireContext().getString(R.string.change_email_error_email_same)
-            } else {
-                showLoadingAnimation()
-                reAuthenticateUser(password)
-            }
-        }
+        viewModel.checkChangeEmailInputs(password, newEmail)
     }
 
     private fun subscribeToObservers() {
+        checkInputsObserver()
         reAuthenticateUserObserver()
         changeUserEmailObserver()
     }
+
+    private fun checkInputsObserver() =
+        viewModel.checkInputsLiveData.observe(viewLifecycleOwner) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { response ->
+                when (response.status) {
+                    Status.LOADING -> {
+                        /* NO-OP */
+                    }
+                    Status.SUCCESS -> {
+                        reAuthenticateUser(response.data.toString())
+                    }
+                    Status.ERROR -> {
+                        response.message?.let {
+                            when {
+                                it.contains(ERROR_INPUT_BLANK_PASSWORD) -> {
+                                    binding.tiLayoutPassword.error =
+                                        requireContext().getString(R.string.change_email_error_blank_password)
+                                    binding.tiLayoutPassword.requestFocus()
+                                    binding.tiLayoutPassword.boxStrokeColor =
+                                        ContextCompat.getColor(requireContext(), R.color.red)
+                                }
+                                it.contains(ERROR_INPUT_BLANK_EMAIL) -> {
+                                    binding.tiLayoutNewEmail.error =
+                                        requireContext().getString(R.string.change_email_error_blank_new_email)
+                                    binding.tiLayoutNewEmail.requestFocus()
+                                    binding.tiLayoutNewEmail.boxStrokeColor =
+                                        ContextCompat.getColor(requireContext(), R.color.red)
+                                }
+                                it.contains(ERROR_INPUT_EMAIL_INVALID) -> {
+                                    binding.tiLayoutNewEmail.requestFocus()
+                                    binding.tiLayoutNewEmail.error =
+                                        requireContext().getString(R.string.change_email_error_new_email)
+                                }
+                                it.contains(ERROR_INPUT_EMAIL_SAME) -> {
+                                    binding.tiLayoutNewEmail.requestFocus()
+                                    binding.tiLayoutNewEmail.error =
+                                        requireContext().getString(R.string.change_email_error_email_same)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
     private fun reAuthenticateUser(password: String) = viewModel.reAuthenticateUser(password)
 
@@ -192,27 +220,32 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
                     Status.ERROR -> {
                         hideLoadingAnimation()
                         response.message?.let {
-                            snackbar = when {
+                            when {
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
-                                    showNetworkConnectionError(
-                                        requireContext(), binding.root
+                                    snackbar = showNetworkConnectionError(
+                                        requireContext(), requireView()
                                     ) { getChangeUserEmailInputs() }
                                 }
                                 it.contains(ERROR_FIREBASE_403) -> {
-
-                                    show403Error(requireContext(), binding.root)
+                                    snackbar = show403Error(requireContext(), requireView())
                                 }
                                 it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
-                                    showFirebaseDeviceBlockedError(requireContext(), binding.root)
+                                    snackbar = showFirebaseDeviceBlockedError(
+                                        requireContext(),
+                                        requireView()
+                                    )
                                 }
                                 it.contains(ERROR_FIREBASE_AUTH_CREDENTIALS) -> {
-                                    showFirebaseAuthCredentialsError(
-                                        binding.root,
+                                    snackbar = showFirebaseAuthCredentialsError(
+                                        requireView(),
                                         requireContext().getString(R.string.change_email_error_credentials)
                                     )
                                 }
                                 else -> {
-                                    showNetworkFailureError(requireContext(), binding.root)
+                                    snackbar = showNetworkFailureError(
+                                        requireContext(),
+                                        requireView()
+                                    )
                                 }
                             }
                         }
@@ -234,7 +267,7 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
                             setMessage(requireContext().getString(R.string.change_email_dialog_message))
                             setCancelable(false)
                             setPositiveButton(requireContext().getString(R.string.change_email_dialog_positive)) { _, _ -> }
-                            setOnDismissListener { requireActivity().onBackPressed() }
+                            setOnDismissListener { findNavController().popBackStack() }
                             show()
                         }
                     }
@@ -244,24 +277,24 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
                             snackbar = when {
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
                                     showNetworkConnectionError(
-                                        requireContext(), binding.root
+                                        requireContext(), requireView()
                                     ) { getChangeUserEmailInputs() }
                                 }
                                 it.contains(ERROR_FIREBASE_403) -> {
-                                    show403Error(requireContext(), binding.root)
+                                    show403Error(requireContext(), requireView())
                                 }
                                 it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
-                                    showFirebaseDeviceBlockedError(requireContext(), binding.root)
+                                    showFirebaseDeviceBlockedError(requireContext(), requireView())
                                 }
                                 it.contains(ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS) -> {
                                     showFirebaseAuthAccountExists(
-                                        binding.root,
+                                        requireView(),
                                         requireContext().getString(R.string.change_email_error_email_exists),
                                         requireContext().getString(R.string.error_btn_confirm)
                                     ) { snackbar?.dismiss() }
                                 }
                                 else -> {
-                                    showNetworkFailureError(requireContext(), binding.root)
+                                    showNetworkFailureError(requireContext(), requireView())
                                 }
                             }
                         }
@@ -270,19 +303,19 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
             }
         }
 
-    private fun showLoadingAnimation() {
-        binding.tiEditPassword.isEnabled = false
-        binding.tiEditNewEmail.isEnabled = false
-        binding.btnChangeEmail.isClickable = false
-        binding.btnChangeEmail.text = null
-        binding.cpiChangeEmail.visibility = VISIBLE
+    private fun showLoadingAnimation() = binding.apply {
+        tiEditPassword.isEnabled = false
+        tiEditNewEmail.isEnabled = false
+        btnChangeEmail.isClickable = false
+        btnChangeEmail.text = null
+        cpiChangeEmail.visibility = VISIBLE
     }
 
-    private fun hideLoadingAnimation() {
-        binding.cpiChangeEmail.visibility = GONE
-        binding.tiEditPassword.isEnabled = true
-        binding.tiEditNewEmail.isEnabled = true
-        binding.btnChangeEmail.isClickable = true
-        binding.btnChangeEmail.text = requireContext().getString(R.string.change_email_btn_change)
+    private fun hideLoadingAnimation() = binding.apply {
+        cpiChangeEmail.visibility = GONE
+        tiEditPassword.isEnabled = true
+        tiEditNewEmail.isEnabled = true
+        btnChangeEmail.isClickable = true
+        btnChangeEmail.text = requireContext().getString(R.string.change_email_btn_change)
     }
 }

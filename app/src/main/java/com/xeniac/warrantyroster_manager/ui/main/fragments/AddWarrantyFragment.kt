@@ -18,17 +18,19 @@ import androidx.navigation.fragment.findNavController
 import coil.ImageLoader
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import com.xeniac.warrantyroster_manager.R
-import com.xeniac.warrantyroster_manager.databinding.FragmentAddWarrantyBinding
 import com.xeniac.warrantyroster_manager.data.remote.models.Category
-import com.xeniac.warrantyroster_manager.data.remote.models.WarrantyInput
-import com.xeniac.warrantyroster_manager.repositories.PreferencesRepository
-import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModel
+import com.xeniac.warrantyroster_manager.databinding.FragmentAddWarrantyBinding
+import com.xeniac.warrantyroster_manager.domain.repository.PreferencesRepository
+import com.xeniac.warrantyroster_manager.ui.main.MainActivity
+import com.xeniac.warrantyroster_manager.ui.viewmodels.MainViewModel
 import com.xeniac.warrantyroster_manager.utils.CoilHelper.loadCategoryImage
-import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_EXPIRY_DATE
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_STARTING_DATE
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_TITLE
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_INVALID_STARTING_DATE
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.Constants.FRAGMENT_TAG_ADD_CALENDAR_EXPIRY
 import com.xeniac.warrantyroster_manager.utils.Constants.FRAGMENT_TAG_ADD_CALENDAR_STARTING
@@ -41,7 +43,6 @@ import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_ADD_WARRA
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_ADD_WARRANTY_SERIAL
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_ADD_WARRANTY_STARTING_DATE_IN_MILLIS
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_ADD_WARRANTY_TITLE
-import com.xeniac.warrantyroster_manager.utils.DateHelper.isStartingDateValid
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.show403Error
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseDeviceBlockedError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkConnectionError
@@ -57,8 +58,9 @@ import javax.inject.Inject
 class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
 
     private var _binding: FragmentAddWarrantyBinding? = null
-    private val binding get() = _binding!!
-    private lateinit var viewModel: MainViewModel
+    val binding get() = _binding!!
+
+    lateinit var viewModel: MainViewModel
 
     @Inject
     lateinit var preferencesRepository: PreferencesRepository
@@ -72,7 +74,7 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
     private var selectedCategory: Category? = null
 
     private var selectedStartingDateInMillis = 0L
-    private var startingDateInput: String? = null
+    var startingDateInput: String? = null
 
     private var selectedExpiryDateInMillis = 0L
     private var expiryDateInput: String? = null
@@ -210,94 +212,99 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
         super.onViewStateRestored(savedInstanceState)
     }
 
-    private fun textInputsBackgroundColor() {
-        binding.tiEditTitle.setOnFocusChangeListener { _, isFocused ->
+    private fun textInputsBackgroundColor() = binding.apply {
+        tiEditTitle.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                binding.tiLayoutTitle.boxBackgroundColor =
+                tiLayoutTitle.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.background)
             } else {
-                binding.tiLayoutTitle.boxBackgroundColor =
+                tiLayoutTitle.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.grayLight)
             }
         }
 
-        binding.tiDdCategory.setOnFocusChangeListener { _, isFocused ->
+        tiDdCategory.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                binding.tiLayoutCategory.boxBackgroundColor =
+                tiLayoutCategory.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.background)
             } else {
-                binding.tiLayoutCategory.boxBackgroundColor =
+                tiLayoutCategory.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.grayLight)
             }
         }
 
-        binding.tiEditBrand.setOnFocusChangeListener { _, isFocused ->
+        tiEditBrand.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                binding.tiLayoutBrand.boxBackgroundColor =
+                tiLayoutBrand.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.background)
             } else {
-                binding.tiLayoutBrand.boxBackgroundColor =
+                tiLayoutBrand.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.grayLight)
             }
         }
 
-        binding.tiEditModel.setOnFocusChangeListener { _, isFocused ->
+        tiEditModel.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                binding.tiLayoutModel.boxBackgroundColor =
+                tiLayoutModel.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.background)
             } else {
-                binding.tiLayoutModel.boxBackgroundColor =
+                tiLayoutModel.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.grayLight)
             }
         }
 
-        binding.tiEditSerial.setOnFocusChangeListener { _, isFocused ->
+        tiEditSerial.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                binding.tiLayoutSerial.boxBackgroundColor =
+                tiLayoutSerial.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.background)
             } else {
-                binding.tiLayoutSerial.boxBackgroundColor =
+                tiLayoutSerial.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.grayLight)
             }
         }
 
-        binding.tiEditDateStarting.setOnFocusChangeListener { _, isFocused ->
+        tiEditDateStarting.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                binding.tiLayoutDateStarting.boxBackgroundColor =
+                tiLayoutDateStarting.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.background)
             } else {
-                binding.tiLayoutDateStarting.boxBackgroundColor =
+                tiLayoutDateStarting.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.grayLight)
             }
         }
 
-        binding.tiEditDateExpiry.setOnFocusChangeListener { _, isFocused ->
+        tiEditDateExpiry.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                binding.tiLayoutDateExpiry.boxBackgroundColor =
+                tiLayoutDateExpiry.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.background)
             } else {
-                binding.tiLayoutDateExpiry.boxBackgroundColor =
+                tiLayoutDateExpiry.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.grayLight)
             }
         }
 
-        binding.tiEditDescription.setOnFocusChangeListener { _, isFocused ->
+        tiEditDescription.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                binding.tiLayoutDescription.boxBackgroundColor =
+                tiLayoutDescription.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.background)
             } else {
-                binding.tiLayoutDescription.boxBackgroundColor =
+                tiLayoutDescription.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.grayLight)
             }
         }
     }
 
-    private fun textInputsStrokeColor() {
-        binding.tiEditDateStarting.addTextChangedListener {
+    private fun textInputsStrokeColor() = binding.apply {
+        tiEditTitle.addTextChangedListener {
+            tiLayoutTitle.isErrorEnabled = false
+            tiLayoutTitle.boxStrokeColor = ContextCompat.getColor(requireContext(), R.color.blue)
+        }
+
+        tiEditDateStarting.addTextChangedListener {
             hideDateError()
         }
 
-        binding.tiEditDateExpiry.addTextChangedListener {
+        tiEditDateExpiry.addTextChangedListener {
             hideDateError()
         }
     }
@@ -322,22 +329,22 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
             setExpiryDateActivation(isChecked)
         }
 
-    private fun startingDatePickerOnFocusListener() {
-        binding.tiEditDateStarting.inputType = InputType.TYPE_NULL
-        binding.tiEditDateStarting.keyListener = null
+    private fun startingDatePickerOnFocusListener() = binding.apply {
+        tiEditDateStarting.inputType = InputType.TYPE_NULL
+        tiEditDateStarting.keyListener = null
 
-        binding.tiEditDateStarting.setOnFocusChangeListener { _, isFocused ->
+        tiEditDateStarting.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
                 openStartingDatePicker()
             }
         }
     }
 
-    private fun expiryDatePickerOnFocusListener() {
-        binding.tiEditDateExpiry.inputType = InputType.TYPE_NULL
-        binding.tiEditDateExpiry.keyListener = null
+    private fun expiryDatePickerOnFocusListener() = binding.apply {
+        tiEditDateExpiry.inputType = InputType.TYPE_NULL
+        tiEditDateExpiry.keyListener = null
 
-        binding.tiEditDateExpiry.setOnFocusChangeListener { _, isFocused ->
+        tiEditDateExpiry.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
                 openExpiryDatePicker()
             }
@@ -436,69 +443,36 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
         requireContext(), categoryIcon, imageLoader, binding.ivIconCategory, binding.cpiIconCategory
     )
 
-    private fun returnToMainActivity() =
-        binding.toolbar.setNavigationOnClickListener {
-            requireActivity().onBackPressed()
-        }
+    private fun returnToMainActivity() = binding.toolbar.setNavigationOnClickListener {
+        findNavController().popBackStack()
+    }
 
-    private fun addWarrantyOnClick() = binding.toolbar.menu[0]
-        .setOnMenuItemClickListener {
-            getWarrantyInput()
-            false
-        }
+    private fun addWarrantyOnClick() = binding.toolbar.menu[0].setOnMenuItemClickListener {
+        getWarrantyInput()
+        false
+    }
 
     private fun getWarrantyInput() {
         val inputMethodManager = requireContext()
             .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(
-            binding.root.applicationWindowToken,
+            requireView().applicationWindowToken,
             0
         )
 
         val title = binding.tiEditTitle.text.toString().trim()
+        val brand = binding.tiEditBrand.text?.toString()?.trim()
+        val model = binding.tiEditModel.text?.toString()?.trim()
+        val serialNumber = binding.tiEditSerial.text?.toString()?.trim()
         val isLifetime = binding.cbLifetime.isChecked
+        val description = binding.tiEditDescription.text?.toString()?.trim()
+        val categoryId = selectedCategory?.id ?: "10"
 
-        if (title.isBlank()) {
-            binding.tiLayoutTitle.requestFocus()
-            binding.tiLayoutTitle.boxStrokeColor =
-                ContextCompat.getColor(requireContext(), R.color.red)
-        } else if (startingDateInput.isNullOrBlank()) {
-            binding.tiLayoutDateStarting.requestFocus()
-            binding.tiLayoutDateStarting.boxStrokeColor =
-                ContextCompat.getColor(requireContext(), R.color.red)
-        } else if (!isLifetime && expiryDateInput.isNullOrBlank()) {
-            binding.tiLayoutDateExpiry.requestFocus()
-            binding.tiLayoutDateExpiry.boxStrokeColor =
-                ContextCompat.getColor(requireContext(), R.color.red)
-        } else if (!isLifetime &&
-            !isStartingDateValid(selectedStartingDateInMillis, selectedExpiryDateInMillis)
-        ) {
-            showDateError()
-        } else {
-            val brand = binding.tiEditBrand.text?.toString()?.trim()
-            val model = binding.tiEditModel.text?.toString()?.trim()
-            val serialNumber = binding.tiEditSerial.text?.toString()?.trim()
-            val description = binding.tiEditDescription.text?.toString()?.trim()
-            val categoryId = selectedCategory?.id ?: "10"
-
-            val warrantyInput = WarrantyInput(
-                title,
-                brand,
-                model,
-                serialNumber,
-                isLifetime,
-                startingDateInput!!,
-                expiryDateInput,
-                description,
-                categoryId,
-                Firebase.auth.currentUser?.uid.toString()
-            )
-            addWarrantyToFirestore(warrantyInput)
-        }
+        viewModel.checkAddWarrantyInputs(
+            title, brand, model, serialNumber, isLifetime, startingDateInput, expiryDateInput,
+            description, categoryId, selectedStartingDateInMillis, selectedExpiryDateInMillis
+        )
     }
-
-    private fun addWarrantyToFirestore(warrantyInput: WarrantyInput) =
-        viewModel.addWarrantyToFirestore(warrantyInput)
 
     private fun addWarrantyObserver() =
         viewModel.addWarrantyLiveData.observe(viewLifecycleOwner) { responseEvent ->
@@ -507,25 +481,52 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
                     Status.LOADING -> showLoadingAnimation()
                     Status.SUCCESS -> {
                         hideLoadingAnimation()
-                        findNavController().navigate(R.id.action_addWarrantyFragment_to_warrantiesFragment)
+                        findNavController().navigate(
+                            AddWarrantyFragmentDirections.actionAddWarrantyFragmentToWarrantiesFragment()
+                        )
+                        (requireActivity() as MainActivity).showRateAppDialog()
                     }
                     Status.ERROR -> {
                         hideLoadingAnimation()
                         response.message?.let {
-                            snackbar = when {
+                            when {
+                                it.contains(ERROR_INPUT_BLANK_TITLE) -> {
+                                    binding.tiLayoutTitle.error =
+                                        requireContext().getString(R.string.add_warranty_error_blank_title)
+                                    binding.tiLayoutTitle.requestFocus()
+                                    binding.tiLayoutTitle.boxStrokeColor =
+                                        ContextCompat.getColor(requireContext(), R.color.red)
+                                }
+                                it.contains(ERROR_INPUT_BLANK_STARTING_DATE) -> {
+                                    binding.tiLayoutDateStarting.requestFocus()
+                                    binding.tiLayoutDateStarting.boxStrokeColor =
+                                        ContextCompat.getColor(requireContext(), R.color.red)
+                                }
+                                it.contains(ERROR_INPUT_BLANK_EXPIRY_DATE) -> {
+                                    binding.tiLayoutDateExpiry.requestFocus()
+                                    binding.tiLayoutDateExpiry.boxStrokeColor =
+                                        ContextCompat.getColor(requireContext(), R.color.red)
+                                }
+                                it.contains(ERROR_INPUT_INVALID_STARTING_DATE) -> showDateError()
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
-                                    showNetworkConnectionError(
-                                        requireContext(), binding.root
+                                    snackbar = showNetworkConnectionError(
+                                        requireContext(), requireView()
                                     ) { getWarrantyInput() }
                                 }
                                 it.contains(ERROR_FIREBASE_403) -> {
-                                    show403Error(requireContext(), binding.root)
+                                    snackbar = show403Error(requireContext(), requireView())
                                 }
                                 it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
-                                    showFirebaseDeviceBlockedError(requireContext(), binding.root)
+                                    snackbar = showFirebaseDeviceBlockedError(
+                                        requireContext(),
+                                        requireView()
+                                    )
                                 }
                                 else -> {
-                                    showNetworkFailureError(requireContext(), binding.root)
+                                    snackbar = showNetworkFailureError(
+                                        requireContext(),
+                                        requireView()
+                                    )
                                 }
                             }
                         }
@@ -534,43 +535,41 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
             }
         }
 
-    private fun showLoadingAnimation() {
-        binding.toolbar.menu[0].isVisible = false
-        binding.tiEditTitle.isEnabled = false
-        binding.tiDdCategory.isEnabled = false
-        binding.tiEditBrand.isEnabled = false
-        binding.tiEditModel.isEnabled = false
-        binding.tiEditSerial.isEnabled = false
-        binding.tiEditDateStarting.isEnabled = false
-        binding.tiEditDateExpiry.isEnabled = false
-        binding.tiEditDescription.isEnabled = false
-        binding.cpiAdd.visibility = VISIBLE
+    private fun showLoadingAnimation() = binding.apply {
+        toolbar.menu[0].isVisible = false
+        tiEditTitle.isEnabled = false
+        tiDdCategory.isEnabled = false
+        tiEditBrand.isEnabled = false
+        tiEditModel.isEnabled = false
+        tiEditSerial.isEnabled = false
+        tiEditDateStarting.isEnabled = false
+        tiEditDateExpiry.isEnabled = false
+        tiEditDescription.isEnabled = false
+        cpiAdd.visibility = VISIBLE
     }
 
-    private fun hideLoadingAnimation() {
-        binding.cpiAdd.visibility = GONE
-        binding.toolbar.menu[0].isVisible = true
-        binding.tiEditTitle.isEnabled = true
-        binding.tiDdCategory.isEnabled = true
-        binding.tiEditBrand.isEnabled = true
-        binding.tiEditModel.isEnabled = true
-        binding.tiEditSerial.isEnabled = true
-        binding.tiEditDateStarting.isEnabled = true
-        binding.tiEditDateExpiry.isEnabled = true
-        binding.tiEditDescription.isEnabled = true
+    private fun hideLoadingAnimation() = binding.apply {
+        cpiAdd.visibility = GONE
+        toolbar.menu[0].isVisible = true
+        tiEditTitle.isEnabled = true
+        tiDdCategory.isEnabled = true
+        tiEditBrand.isEnabled = true
+        tiEditModel.isEnabled = true
+        tiEditSerial.isEnabled = true
+        tiEditDateStarting.isEnabled = true
+        tiEditDateExpiry.isEnabled = true
+        tiEditDescription.isEnabled = true
     }
 
-    private fun showDateError() {
-        binding.tiLayoutDateStarting.requestFocus()
-        binding.tiLayoutDateStarting.boxStrokeColor =
-            ContextCompat.getColor(requireContext(), R.color.red)
-        binding.tvDateError.visibility = VISIBLE
+    private fun showDateError() = binding.apply {
+        tiLayoutDateStarting.requestFocus()
+        tiLayoutDateStarting.boxStrokeColor = ContextCompat.getColor(requireContext(), R.color.red)
+        tvDateError.visibility = VISIBLE
     }
 
-    private fun hideDateError() {
-        binding.tiLayoutDateStarting.boxStrokeColor =
-            ContextCompat.getColor(requireContext(), R.color.blue)
-        binding.tvDateError.visibility = GONE
+    private fun hideDateError() = binding.apply {
+        tiLayoutDateStarting.boxStrokeColor = ContextCompat.getColor(requireContext(), R.color.blue)
+        tvDateError.visibility = GONE
     }
 
     private fun setExpiryDateActivation(isLifeTime: Boolean) {

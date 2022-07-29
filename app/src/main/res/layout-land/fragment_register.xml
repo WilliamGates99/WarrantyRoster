@@ -104,7 +104,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_44dp"
             android:layout_marginTop="@dimen/margin_4dp"
-            app:layout_constraintBottom_toTopOf="@+id/tv_title_retype_password"
+            app:layout_constraintBottom_toTopOf="@+id/tv_title_confirm_password"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_title_password"
@@ -115,37 +115,37 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/localized_regular"
-                android:gravity="center_vertical"
                 android:hint="@string/register_hint_password"
                 android:imeOptions="actionNext"
-                android:inputType="textPassword|textVisiblePassword"
+                android:inputType="textPassword"
                 android:maxLines="1"
+                android:textAlignment="viewStart"
                 android:textColorHint="@color/grayDark"
                 android:textSize="@dimen/text_size_16sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_title_retype_password"
+            android:id="@+id/tv_title_confirm_password"
             android:layout_width="@dimen/width_0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_52dp"
             android:layout_marginTop="@dimen/margin_16dp"
             android:fontFamily="@font/localized_bold"
             android:gravity="start|center_vertical"
-            android:labelFor="@+id/ti_layout_retype_password"
+            android:labelFor="@+id/ti_layout_confirm_password"
             android:maxLines="1"
-            android:text="@string/register_title_retype_password"
+            android:text="@string/register_title_confirm_password"
             android:textAlignment="gravity"
             android:textColor="@color/black"
             android:textSize="@dimen/text_size_14sp"
-            app:layout_constraintBottom_toTopOf="@+id/ti_layout_retype_password"
+            app:layout_constraintBottom_toTopOf="@+id/ti_layout_confirm_password"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ti_layout_password" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/ti_layout_retype_password"
+            android:id="@+id/ti_layout_confirm_password"
             style="@style/Theme.WarrantyRoster.TextInputLayout"
             android:layout_width="@dimen/width_0dp"
             android:layout_height="wrap_content"
@@ -154,19 +154,19 @@
             app:layout_constraintBottom_toTopOf="@+id/btn_agreement"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_title_retype_password"
+            app:layout_constraintTop_toBottomOf="@+id/tv_title_confirm_password"
             app:passwordToggleEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/ti_edit_retype_password"
+                android:id="@+id/ti_edit_confirm_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/localized_regular"
-                android:gravity="center_vertical"
-                android:hint="@string/register_hint_retype_password"
+                android:hint="@string/register_hint_confirm_password"
                 android:imeOptions="actionDone"
-                android:inputType="textPassword|textVisiblePassword"
+                android:inputType="textPassword"
                 android:maxLines="1"
+                android:textAlignment="viewStart"
                 android:textColorHint="@color/grayDark"
                 android:textSize="@dimen/text_size_16sp" />
 
@@ -193,7 +193,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ti_layout_retype_password" />
+            app:layout_constraintTop_toBottomOf="@+id/ti_layout_confirm_password" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_register"

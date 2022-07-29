@@ -1,6 +1,5 @@
 package com.xeniac.warrantyroster_manager.utils
 
-@Suppress("SpellCheckingInspection")
 object Constants {
     // Web URLs
     const val URL_PRIVACY_POLICY = "https://xeniacdev.github.io/WarrantyRoster/privacy_policy"
@@ -12,6 +11,8 @@ object Constants {
     const val DATASTORE_THEME_KEY = "theme"
     const val DATASTORE_LANGUAGE_KEY = "language"
     const val DATASTORE_COUNTRY_KEY = "country"
+    const val DATASTORE_RATE_APP_DIALOG_CHOICE_KEY = "rateAppDialogChoice"
+    const val DATASTORE_PREVIOUS_REQUEST_TIME_IN_MILLIS_KEY = "previousRequestTimeInMillis"
 
     // App Language Constants
     const val LOCALE_LANGUAGE_ENGLISH = "en"
@@ -20,7 +21,12 @@ object Constants {
     // App Country Constants
     const val LOCALE_COUNTRY_UNITED_STATES = "US"
     const val LOCALE_COUNTRY_IRAN = "IR"
-    //const val LOCALE_COUNTRY_GREAT_BRITAIN = "GB" TODO UNCOMMENT AFTER ADDING BRITISH ENGLISH
+    const val LOCALE_COUNTRY_GREAT_BRITAIN = "GB"
+
+    // App Locale Constants
+    const val LOCALE_ENGLISH_UNITED_STATES = "en-US"
+    const val LOCALE_ENGLISH_GREAT_BRITAIN = "en-GB"
+    const val LOCALE_PERSIAN_IRAN = "fa-IR"
 
     // Warranty Adapter View Type Constants
     const val VIEW_TYPE_WARRANTY = 0
@@ -54,8 +60,25 @@ object Constants {
     const val WARRANTIES_CATEGORY_ID = "categoryId"
     const val WARRANTIES_UUID = "uuid"
 
+    // Account Input Errors
+    const val ERROR_INPUT_BLANK_EMAIL = "Email is blank"
+    const val ERROR_INPUT_BLANK_PASSWORD = "Password is blank"
+    const val ERROR_INPUT_BLANK_NEW_PASSWORD = "New Password is blank"
+    const val ERROR_INPUT_BLANK_RETYPE_PASSWORD = "Retype Password is blank"
+    const val ERROR_INPUT_EMAIL_INVALID = "Invalid email"
+    const val ERROR_INPUT_EMAIL_SAME = "New Email is the same as current email"
+    const val ERROR_INPUT_PASSWORD_SHORT = "Password is too short"
+    const val ERROR_INPUT_PASSWORD_NOT_MATCH = "Password and Retype Password do not match"
+
+    // Warranty Input Errors
+    const val ERROR_INPUT_BLANK_TITLE = "Title is Blank"
+    const val ERROR_INPUT_BLANK_STARTING_DATE = "Starting Date is Blank"
+    const val ERROR_INPUT_BLANK_EXPIRY_DATE = "Expiry Date is Blank"
+    const val ERROR_INPUT_INVALID_STARTING_DATE = "Invalid Starting Date"
+
     // Response Errors
-    const val ERROR_NETWORK_CONNECTION = "Unable to connect to the internet"
+    const val ERROR_NETWORK_CONNECTION =
+        "A network error (such as timeout, interrupted connection or unreachable host) has occurred"
     const val ERROR_FIREBASE_403 = "403"
     const val ERROR_FIREBASE_DEVICE_BLOCKED =
         "We have blocked all requests from this device due to unusual activity"
@@ -68,6 +91,7 @@ object Constants {
     const val ERROR_TIMER_IS_NOT_ZERO = "Timer is not zero"
     const val ERROR_EMPTY_CATEGORY_LIST = "Category list is empty"
     const val ERROR_EMPTY_WARRANTY_LIST = "Warranty list is empty"
+    const val ERROR_EMPTY_SEARCH_RESULT_LIST = "Search result list is empty"
 
     // Login Fragment SaveInstanceState Keys
     const val SAVE_INSTANCE_LOGIN_EMAIL = "save_instance_login_email"
@@ -76,7 +100,7 @@ object Constants {
     // Register Fragment SaveInstanceState Keys
     const val SAVE_INSTANCE_REGISTER_EMAIL = "save_instance_register_email"
     const val SAVE_INSTANCE_REGISTER_PASSWORD = "save_instance_register_password"
-    const val SAVE_INSTANCE_REGISTER_RETYPE_PASSWORD = "save_instance_register_retype_password"
+    const val SAVE_INSTANCE_REGISTER_CONFIRM_PASSWORD = "save_instance_register_confirm_password"
 
     // Forgot PW Fragment SaveInstanceState Keys
     const val SAVE_INSTANCE_FORGOT_PW_EMAIL = "save_instance_forgot_pw_email"
@@ -86,9 +110,12 @@ object Constants {
     const val SAVE_INSTANCE_CHANGE_EMAIL_NEW_EMAIL = "save_instance_change_email_new_email"
 
     // Change Password Fragment SaveInstanceState Keys
-    const val SAVE_INSTANCE_CHANGE_PASSWORD_CURRENT = "save_instance_change_password_current"
-    const val SAVE_INSTANCE_CHANGE_PASSWORD_NEW = "save_instance_change_password_new"
-    const val SAVE_INSTANCE_CHANGE_PASSWORD_RETYPE = "save_instance_change_password_retype"
+    const val SAVE_INSTANCE_CHANGE_PASSWORD_CURRENT_PASSWORD =
+        "save_instance_change_password_current_password"
+    const val SAVE_INSTANCE_CHANGE_PASSWORD_NEW_PASSWORD =
+        "save_instance_change_password_new_password"
+    const val SAVE_INSTANCE_CHANGE_PASSWORD_CONFIRM_NEW_PASSWORD =
+        "save_instance_change_password_confirm_password"
 
     // Add Warranty Fragment SaveInstanceState Keys
     const val SAVE_INSTANCE_ADD_WARRANTY_TITLE = "save_instance_add_warranty_title"

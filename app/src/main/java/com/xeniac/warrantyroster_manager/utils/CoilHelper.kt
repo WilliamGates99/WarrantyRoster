@@ -1,7 +1,8 @@
 package com.xeniac.warrantyroster_manager.utils
 
 import android.content.Context
-import android.view.View.*
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.widget.ImageView
 import android.widget.ProgressBar
 import androidx.core.content.ContextCompat

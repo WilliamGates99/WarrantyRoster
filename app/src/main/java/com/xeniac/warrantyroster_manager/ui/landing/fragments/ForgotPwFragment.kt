@@ -15,10 +15,12 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentForgotPwBinding
-import com.xeniac.warrantyroster_manager.ui.landing.LandingViewModel
+import com.xeniac.warrantyroster_manager.ui.viewmodels.LandingViewModel
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_ACCOUNT_NOT_FOUND
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
-import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_EMAIL
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_EMAIL_INVALID
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_TIMER_IS_NOT_ZERO
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_FORGOT_PW_EMAIL
@@ -29,15 +31,15 @@ import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkConnect
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkFailureError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showTimerIsNotZeroError
 import com.xeniac.warrantyroster_manager.utils.Status
-import com.xeniac.warrantyroster_manager.utils.UserHelper.isEmailValid
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
 
     private var _binding: FragmentForgotPwBinding? = null
-    private val binding get() = _binding!!
-    private lateinit var viewModel: LandingViewModel
+    val binding get() = _binding!!
+
+    lateinit var viewModel: LandingViewModel
 
     private var snackbar: Snackbar? = null
 
@@ -81,25 +83,27 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
         super.onViewStateRestored(savedInstanceState)
     }
 
-    private fun textInputsBackgroundColor() =
-        binding.tiEditEmail.setOnFocusChangeListener { _, isFocused ->
+    private fun textInputsBackgroundColor() = binding.apply {
+        tiEditEmail.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                binding.tiLayoutEmail.boxBackgroundColor =
+                tiLayoutEmail.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.background)
             } else {
-                binding.tiLayoutEmail.boxBackgroundColor =
+                tiLayoutEmail.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.grayLight)
             }
         }
+    }
 
-    private fun textInputsStrokeColor() = binding.tiEditEmail.addTextChangedListener {
-        binding.tiLayoutEmail.isErrorEnabled = false
-        binding.tiLayoutEmail.boxStrokeColor =
-            ContextCompat.getColor(requireContext(), R.color.blue)
+    private fun textInputsStrokeColor() = binding.apply {
+        tiEditEmail.addTextChangedListener {
+            tiLayoutEmail.isErrorEnabled = false
+            tiLayoutEmail.boxStrokeColor = ContextCompat.getColor(requireContext(), R.color.blue)
+        }
     }
 
     private fun returnOnClick() = binding.btnReturn.setOnClickListener {
-        requireActivity().onBackPressed()
+        findNavController().popBackStack()
     }
 
     private fun sendOnClick() = binding.btnSend.setOnClickListener {
@@ -117,26 +121,12 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
     private fun getResetPasswordInput() {
         val inputMethodManager = requireContext()
             .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.hideSoftInputFromWindow(binding.root.applicationWindowToken, 0)
+        inputMethodManager.hideSoftInputFromWindow(requireView().applicationWindowToken, 0)
 
         val email = binding.tiEditEmail.text.toString().trim().lowercase()
 
-        if (email.isBlank()) {
-            binding.tiLayoutEmail.requestFocus()
-            binding.tiLayoutEmail.boxStrokeColor =
-                ContextCompat.getColor(requireContext(), R.color.red)
-        } else {
-            if (!isEmailValid(email)) {
-                binding.tiLayoutEmail.requestFocus()
-                binding.tiLayoutEmail.error =
-                    requireContext().getString(R.string.forgot_pw_error_email)
-            } else {
-                sendResetPasswordEmail(email)
-            }
-        }
+        viewModel.checkForgotPwInputs(email)
     }
-
-    private fun sendResetPasswordEmail(email: String) = viewModel.sendResetPasswordEmail(email)
 
     private fun forgotPwObserver() =
         viewModel.forgotPwLiveData.observe(viewLifecycleOwner) { responseEvent ->
@@ -146,39 +136,59 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
                     Status.SUCCESS -> {
                         hideLoadingAnimation()
                         response.data?.let { email ->
-                            val action = ForgotPwFragmentDirections
-                                .actionForgotPasswordFragmentToForgotPwSentFragment(email)
-                            findNavController().navigate(action)
+                            navigateToForgotPwSent(email)
                         }
                     }
                     Status.ERROR -> {
                         hideLoadingAnimation()
                         response.message?.let {
-                            snackbar = when {
+                            when {
+                                it.contains(ERROR_INPUT_BLANK_EMAIL) -> {
+                                    binding.tiLayoutEmail.error =
+                                        requireContext().getString(R.string.forgot_pw_error_blank_email)
+                                    binding.tiLayoutEmail.requestFocus()
+                                    binding.tiLayoutEmail.boxStrokeColor =
+                                        ContextCompat.getColor(requireContext(), R.color.red)
+                                }
+                                it.contains(ERROR_INPUT_EMAIL_INVALID) -> {
+                                    binding.tiLayoutEmail.requestFocus()
+                                    binding.tiLayoutEmail.error =
+                                        requireContext().getString(R.string.forgot_pw_error_email)
+                                }
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
-                                    showNetworkConnectionError(
-                                        requireContext(), binding.root
+                                    snackbar = showNetworkConnectionError(
+                                        requireContext(), requireView()
                                     ) { getResetPasswordInput() }
                                 }
                                 it.contains(ERROR_FIREBASE_403) -> {
-                                    show403Error(requireContext(), binding.root)
+                                    snackbar = show403Error(requireContext(), requireView())
                                 }
                                 it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
-                                    showFirebaseDeviceBlockedError(requireContext(), binding.root)
+                                    snackbar = showFirebaseDeviceBlockedError(
+                                        requireContext(),
+                                        requireView()
+                                    )
                                 }
                                 it.contains(ERROR_FIREBASE_AUTH_ACCOUNT_NOT_FOUND) -> {
-                                    showFirebaseAuthAccountNotFoundError(
-                                        binding.root,
+                                    snackbar = showFirebaseAuthAccountNotFoundError(
+                                        requireView(),
                                         requireContext().getString(R.string.forgot_pw_error_not_found),
                                         requireContext().getString(R.string.error_btn_confirm)
                                     ) { snackbar?.dismiss() }
                                 }
                                 it.contains(ERROR_TIMER_IS_NOT_ZERO) -> {
                                     val seconds = viewModel.timerInMillis / 1000
-                                    showTimerIsNotZeroError(requireContext(), binding.root, seconds)
+                                    snackbar = showTimerIsNotZeroError(
+                                        requireContext(),
+                                        requireView(),
+                                        seconds
+                                    )
                                 }
                                 else -> {
-                                    showNetworkFailureError(requireContext(), binding.root)
+                                    snackbar = showNetworkFailureError(
+                                        requireContext(),
+                                        requireView()
+                                    )
                                 }
                             }
                         }
@@ -187,18 +197,21 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
             }
         }
 
-    private fun showLoadingAnimation() {
-        binding.tiEditEmail.isEnabled = false
-        binding.btnSend.isClickable = false
-        binding.btnSend.text = null
-        binding.cpiSend.visibility = VISIBLE
+    private fun navigateToForgotPwSent(email: String) = findNavController().navigate(
+        ForgotPwFragmentDirections.actionForgotPasswordFragmentToForgotPwSentFragment(email)
+    )
+
+    private fun showLoadingAnimation() = binding.apply {
+        tiEditEmail.isEnabled = false
+        btnSend.isClickable = false
+        btnSend.text = null
+        cpiSend.visibility = VISIBLE
     }
 
-    private fun hideLoadingAnimation() {
-        binding.cpiSend.visibility = GONE
-        binding.tiEditEmail.isEnabled = true
-        binding.btnSend.isClickable = true
-        binding.btnSend.text =
-            requireContext().getString(R.string.login_btn_login)
+    private fun hideLoadingAnimation() = binding.apply {
+        cpiSend.visibility = GONE
+        tiEditEmail.isEnabled = true
+        btnSend.isClickable = true
+        btnSend.text = requireContext().getString(R.string.login_btn_login)
     }
 }

@@ -3,7 +3,7 @@ package com.xeniac.warrantyroster_manager.ui.main.adapters
 import android.app.Activity
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View.*
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.AsyncListDiffer
@@ -19,20 +19,15 @@ import com.applovin.mediation.nativeAds.MaxNativeAdView
 import com.applovin.mediation.nativeAds.MaxNativeAdViewBinder
 import com.xeniac.warrantyroster_manager.BuildConfig
 import com.xeniac.warrantyroster_manager.R
-import com.xeniac.warrantyroster_manager.databinding.AdContainerListBinding
-import com.xeniac.warrantyroster_manager.databinding.ListItemWarrantyBinding
 import com.xeniac.warrantyroster_manager.data.remote.models.ListItemType
 import com.xeniac.warrantyroster_manager.data.remote.models.Warranty
-import com.xeniac.warrantyroster_manager.repositories.PreferencesRepository
-import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModel
+import com.xeniac.warrantyroster_manager.databinding.AdContainerListBinding
+import com.xeniac.warrantyroster_manager.databinding.ListItemWarrantyBinding
+import com.xeniac.warrantyroster_manager.ui.viewmodels.MainViewModel
 import com.xeniac.warrantyroster_manager.utils.CoilHelper.loadCategoryImage
 import com.xeniac.warrantyroster_manager.utils.Constants.VIEW_TYPE_AD
 import com.xeniac.warrantyroster_manager.utils.Constants.VIEW_TYPE_WARRANTY
 import com.xeniac.warrantyroster_manager.utils.DateHelper.getDaysUntilExpiry
-import dagger.hilt.EntryPoint
-import dagger.hilt.InstallIn
-import dagger.hilt.android.EntryPointAccessors
-import dagger.hilt.components.SingletonComponent
 import ir.tapsell.plus.AdHolder
 import ir.tapsell.plus.AdRequestCallback
 import ir.tapsell.plus.AdShowListener
@@ -44,49 +39,18 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
-@Suppress("SpellCheckingInspection")
-class WarrantyAdapter(
-    private val activity: Activity,
-    private val context: Context,
-    private val viewModel: MainViewModel,
-    private val clickInterface: WarrantyListClickInterface
+class WarrantyAdapter @Inject constructor(
+    private val imageLoader: ImageLoader,
+    private val dateFormat: SimpleDateFormat
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var preferencesRepository: PreferencesRepository
-    private var imageLoader: ImageLoader
-    private var dateFormat: SimpleDateFormat
+    lateinit var activity: Activity
+    lateinit var context: Context
+    lateinit var mainViewModel: MainViewModel
 
-    @EntryPoint
-    @InstallIn(SingletonComponent::class)
-    interface PreferencesRepositoryProviderEntryPoint {
-        fun getPreferencesRepository(): PreferencesRepository
-    }
-
-    @EntryPoint
-    @InstallIn(SingletonComponent::class)
-    interface ImageLoaderProviderEntryPoint {
-        fun getImageLoader(): ImageLoader
-    }
-
-    @EntryPoint
-    @InstallIn(SingletonComponent::class)
-    interface DateFormatProviderEntryPoint {
-        fun getDateFormat(): SimpleDateFormat
-    }
-
-    init {
-        val preferencesRepositoryProviderEntryPoint = EntryPointAccessors
-            .fromApplication(context, PreferencesRepositoryProviderEntryPoint::class.java)
-        val imageLoaderProviderEntryPoint = EntryPointAccessors
-            .fromApplication(context, ImageLoaderProviderEntryPoint::class.java)
-        val dateFormatProviderEntryPoint = EntryPointAccessors
-            .fromApplication(context, DateFormatProviderEntryPoint::class.java)
-
-        preferencesRepository = preferencesRepositoryProviderEntryPoint.getPreferencesRepository()
-        imageLoader = imageLoaderProviderEntryPoint.getImageLoader()
-        dateFormat = dateFormatProviderEntryPoint.getDateFormat()
-    }
+    private lateinit var warrantyClickInterface: WarrantyListClickInterface
 
     private val diffCallback = object : DiffUtil.ItemCallback<Warranty>() {
         override fun areItemsTheSame(oldItem: Warranty, newItem: Warranty): Boolean {
@@ -165,22 +129,18 @@ class WarrantyAdapter(
                     }
 
                     val daysUntilExpiry = getDaysUntilExpiry(expiryCalendar)
-                    when {
+                    binding.statusTitle = when {
                         daysUntilExpiry < 0 -> {
                             binding.statusColor = ContextCompat.getColor(context, R.color.red)
-                            binding.statusTitle =
-                                context.getString(R.string.warranties_list_status_expired)
+                            context.getString(R.string.warranties_list_status_expired)
                         }
                         daysUntilExpiry <= 30 -> {
-                            binding.statusColor =
-                                ContextCompat.getColor(context, R.color.orange)
-                            binding.statusTitle =
-                                context.getString(R.string.warranties_list_status_soon)
+                            binding.statusColor = ContextCompat.getColor(context, R.color.orange)
+                            context.getString(R.string.warranties_list_status_soon)
                         }
                         else -> {
                             binding.statusColor = ContextCompat.getColor(context, R.color.green)
-                            binding.statusTitle =
-                                context.getString(R.string.warranties_list_status_valid)
+                            context.getString(R.string.warranties_list_status_valid)
                         }
                     }
                 }
@@ -190,16 +150,20 @@ class WarrantyAdapter(
             binding.executePendingBindings()
 
             val category = warranty.categoryId?.let {
-                viewModel.getCategoryById(it)
+                mainViewModel.getCategoryById(it)
             }
 
             category?.let {
-                binding.categoryTitle = it.title[preferencesRepository.getCategoryTitleMapKey()]
+                binding.categoryTitle = it.title[mainViewModel.getCategoryTitleMapKey()]
                 loadCategoryImage(context, it.icon, imageLoader, binding.ivIcon, binding.cpiIcon)
             }
 
-            binding.cvWarranty.setOnClickListener { clickInterface.onItemClick(warranty) }
+            binding.cvWarranty.setOnClickListener { warrantyClickInterface.onItemClick(warranty) }
         }
+    }
+
+    fun setOnWarrantyItemClickListener(clickInterface: WarrantyListClickInterface) {
+        this.warrantyClickInterface = clickInterface
     }
 
     inner class AdViewHolder(val binding: AdContainerListBinding) :
@@ -241,6 +205,8 @@ class WarrantyAdapter(
             override fun onNativeAdLoaded(nativeAdView: MaxNativeAdView?, nativeAd: MaxAd?) {
                 super.onNativeAdLoaded(nativeAdView, nativeAd)
                 Timber.i("AppLovin onNativeAdLoaded")
+                appLovinAdRequestCounter = 1
+
                 appLovinNativeAd?.let {
                     // Clean up any pre-existing native ad to prevent memory leaks.
                     appLovinAdLoader.destroy(it)
@@ -285,6 +251,7 @@ class WarrantyAdapter(
                     override fun response(tapsellPlusAdModel: TapsellPlusAdModel?) {
                         super.response(tapsellPlusAdModel)
                         Timber.i("requestTapsellNativeAd onResponse")
+                        tapsellRequestCounter = 1
                         tapsellPlusAdModel?.let {
                             showNativeAd(adHolder, it.responseId)
                         }

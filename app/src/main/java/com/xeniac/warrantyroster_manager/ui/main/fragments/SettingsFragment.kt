@@ -1,15 +1,16 @@
 package com.xeniac.warrantyroster_manager.ui.main.fragments
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.widget.Toast
+import android.widget.Toast.LENGTH_LONG
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.airbnb.lottie.LottieDrawable
 import com.applovin.mediation.MaxAd
@@ -20,40 +21,46 @@ import com.applovin.mediation.nativeAds.MaxNativeAdLoader
 import com.applovin.mediation.nativeAds.MaxNativeAdView
 import com.applovin.mediation.nativeAds.MaxNativeAdViewBinder
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.BuildConfig
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentSettingsBinding
 import com.xeniac.warrantyroster_manager.ui.landing.LandingActivity
-import com.xeniac.warrantyroster_manager.ui.main.viewmodels.SettingsViewModel
-import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
+import com.xeniac.warrantyroster_manager.ui.viewmodels.SettingsViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
-import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_LANGUAGE_ENGLISH
-import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_LANGUAGE_PERSIAN
+import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_ENGLISH_GREAT_BRITAIN
+import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_ENGLISH_UNITED_STATES
+import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_PERSIAN_IRAN
 import com.xeniac.warrantyroster_manager.utils.Constants.URL_DONATE
 import com.xeniac.warrantyroster_manager.utils.Constants.URL_PRIVACY_POLICY
+import com.xeniac.warrantyroster_manager.utils.LinkHelper.openLink
+import com.xeniac.warrantyroster_manager.utils.SettingsHelper
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.show403Error
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseDeviceBlockedError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkConnectionError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkFailureError
 import com.xeniac.warrantyroster_manager.utils.Status
 import dagger.hilt.android.AndroidEntryPoint
-import ir.tapsell.plus.*
+import ir.tapsell.plus.AdHolder
+import ir.tapsell.plus.AdRequestCallback
+import ir.tapsell.plus.AdShowListener
+import ir.tapsell.plus.TapsellPlus
 import ir.tapsell.plus.model.TapsellPlusAdModel
 import timber.log.Timber
 
-@Suppress("SpellCheckingInspection")
 @AndroidEntryPoint
 class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListener {
 
     private var _binding: FragmentSettingsBinding? = null
-    private val binding get() = _binding!!
-    private val viewModel: SettingsViewModel by viewModels()
+    val binding get() = _binding!!
+
+    lateinit var viewModel: SettingsViewModel
 
     private lateinit var currentAppLanguage: String
     private lateinit var currentAppCountry: String
+    private lateinit var currentAppLocale: String
     private var currentAppTheme = 0
 
     private lateinit var appLovinNativeAdContainer: ViewGroup
@@ -69,11 +76,12 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentSettingsBinding.bind(view)
+        viewModel = ViewModelProvider(requireActivity())[SettingsViewModel::class.java]
 
         subscribeToObservers()
         getAccountDetails()
         getCurrentAppLocale()
-        getCurrentApptheme()
+        getCurrentAppTheme()
         verifyOnClick()
         changeEmailOnClick()
         changePasswordOnClick()
@@ -96,6 +104,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
         accountDetailsObserver()
         currentAppLocaleObserver()
         currentAppThemeObserver()
+        setAppLocaleObserver()
         sendVerificationEmailObserver()
         logoutObserver()
     }
@@ -122,71 +131,68 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
         }
 
     private fun setAccountDetails(email: String, isEmailVerified: Boolean) {
-        binding.tvAccountEmail.text = email
+        binding.apply {
+            userEmail = email
+            isVerificationBtnClickable = !isEmailVerified
 
-        if (isEmailVerified) {
-            binding.btnAccountVerification.isClickable = false
-            binding.btnAccountVerification.text =
-                requireContext().getString(R.string.settings_btn_account_verified)
-            binding.btnAccountVerification.setTextColor(
-                ContextCompat.getColor(requireContext(), R.color.green)
-            )
-            binding.btnAccountVerification.backgroundTintList =
-                ContextCompat.getColorStateList(requireContext(), R.color.green20)
-            binding.ivAccountEmail.setBackgroundColor(
-                ContextCompat.getColor(requireContext(), R.color.green10)
-            )
-            binding.lavAccountVerification.repeatCount = 0
-            binding.lavAccountVerification.speed = 0.60f
-            binding.lavAccountVerification.setAnimation(R.raw.anim_account_verified)
-        } else {
-            binding.btnAccountVerification.isClickable = true
-            binding.btnAccountVerification.text =
-                requireContext().getString(R.string.settings_btn_account_verify)
-            binding.btnAccountVerification.setTextColor(
-                ContextCompat.getColor(requireContext(), R.color.blue)
-            )
-            binding.btnAccountVerification.backgroundTintList =
-                ContextCompat.getColorStateList(requireContext(), R.color.blue20)
-            binding.ivAccountEmail.setBackgroundColor(
-                ContextCompat.getColor(requireContext(), R.color.red10)
-            )
-            binding.lavAccountVerification.repeatCount = LottieDrawable.INFINITE
-            binding.lavAccountVerification.speed = 1.00f
-            binding.lavAccountVerification.setAnimation(R.raw.anim_account_not_verified)
+            if (isEmailVerified) {
+                verificationBtnBackgroundTint = ContextCompat
+                    .getColorStateList(requireContext(), R.color.green20)
+                verificationBtnText = requireContext()
+                    .getString(R.string.settings_btn_account_verified)
+                verificationBtnTextColor =
+                    ContextCompat.getColor(requireContext(), R.color.green)
+                ivAccountEmail.setBackgroundColor(
+                    ContextCompat.getColor(requireContext(), R.color.green10)
+                )
+                lavAccountVerification.speed = 0.60f
+                lavAccountVerification.repeatCount = 0
+                lavAccountVerification.setAnimation(R.raw.anim_account_verified)
+            } else {
+                verificationBtnBackgroundTint = ContextCompat
+                    .getColorStateList(requireContext(), R.color.blue20)
+                verificationBtnText = requireContext()
+                    .getString(R.string.settings_btn_account_verify)
+                verificationBtnTextColor =
+                    ContextCompat.getColor(requireContext(), R.color.blue)
+                ivAccountEmail.setBackgroundColor(
+                    ContextCompat.getColor(requireContext(), R.color.red10)
+                )
+                lavAccountVerification.speed = 1.00f
+                lavAccountVerification.repeatCount = LottieDrawable.INFINITE
+                lavAccountVerification.setAnimation(R.raw.anim_account_not_verified)
+            }
+            lavAccountVerification.playAnimation()
         }
-        binding.lavAccountVerification.playAnimation()
     }
 
     private fun getCurrentAppLocale() = viewModel.getCurrentAppLocale()
 
     private fun currentAppLocaleObserver() =
-        viewModel.currentAppLocale.observe(viewLifecycleOwner) { responseEvent ->
+        viewModel.currentAppLocaleLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { currentLocale ->
                 currentAppLanguage = currentLocale[0]
                 currentAppCountry = currentLocale[1]
+                currentAppLocale = "$currentAppLanguage-$currentAppCountry"
                 setCurrentLanguageText()
             }
         }
 
     private fun setCurrentLanguageText() {
-        //TODO EDIT AFTER ADDING BRITISH ENGLISH
-        when (currentAppLanguage) {
-            LOCALE_LANGUAGE_ENGLISH -> {
-                binding.tvSettingsLanguageCurrent.text =
-                    requireContext().getString(R.string.settings_text_settings_language_english)
-            }
-            LOCALE_LANGUAGE_PERSIAN -> {
-                binding.tvSettingsLanguageCurrent.text =
-                    requireContext().getString(R.string.settings_text_settings_language_persian)
+        requireContext().apply {
+            binding.currentLanguage = when (currentAppLocale) {
+                LOCALE_ENGLISH_UNITED_STATES -> getString(R.string.settings_text_settings_language_english_us)
+                LOCALE_ENGLISH_GREAT_BRITAIN -> getString(R.string.settings_text_settings_language_english_gb)
+                LOCALE_PERSIAN_IRAN -> getString(R.string.settings_text_settings_language_persian_ir)
+                else -> getString(R.string.settings_text_settings_language_english_us)
             }
         }
     }
 
-    private fun getCurrentApptheme() = viewModel.getCurrentAppTheme()
+    private fun getCurrentAppTheme() = viewModel.getCurrentAppTheme()
 
     private fun currentAppThemeObserver() =
-        viewModel.currentAppTheme.observe(viewLifecycleOwner) { responseEvent ->
+        viewModel.currentAppThemeLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { currentThemeIndex ->
                 currentAppTheme = currentThemeIndex
                 setCurrentThemeText()
@@ -194,18 +200,12 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
         }
 
     private fun setCurrentThemeText() {
-        when (currentAppTheme) {
-            0 -> {
-                binding.tvSettingsThemeCurrent.text =
-                    requireContext().getString(R.string.settings_text_settings_theme_default)
-            }
-            1 -> {
-                binding.tvSettingsThemeCurrent.text =
-                    requireContext().getString(R.string.settings_text_settings_theme_light)
-            }
-            2 -> {
-                binding.tvSettingsThemeCurrent.text =
-                    requireContext().getString(R.string.settings_text_settings_theme_dark)
+        requireContext().apply {
+            binding.currentTheme = when (currentAppTheme) {
+                0 -> getString(R.string.settings_text_settings_theme_default)
+                1 -> getString(R.string.settings_text_settings_theme_light)
+                2 -> getString(R.string.settings_text_settings_theme_dark)
+                else -> getString(R.string.settings_text_settings_theme_default)
             }
         }
     }
@@ -215,30 +215,30 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
     }
 
     private fun changeEmailOnClick() = binding.clAccountChangeEmail.setOnClickListener {
-        findNavController().navigate(R.id.action_settingsFragment_to_changeEmailFragment)
+        findNavController().navigate(SettingsFragmentDirections.actionSettingsFragmentToChangeEmailFragment())
     }
 
-    private fun changePasswordOnClick() =
-        binding.clAccountChangePassword.setOnClickListener {
-            findNavController().navigate(R.id.action_settingsFragment_to_changePasswordFragment)
-        }
+    private fun changePasswordOnClick() = binding.clAccountChangePassword.setOnClickListener {
+        findNavController().navigate(SettingsFragmentDirections.actionSettingsFragmentToChangePasswordFragment())
+    }
 
     private fun languageOnClick() = binding.clSettingsLanguage.setOnClickListener {
-        //TODO EDIT AFTER ADDING BRITISH ENGLISH
-        val currentAppLanguageIndex = when (currentAppLanguage) {
-            LOCALE_LANGUAGE_ENGLISH -> 0
-            LOCALE_LANGUAGE_PERSIAN -> 1
+        val currentAppLocaleIndex = when (currentAppLocale) {
+            LOCALE_ENGLISH_UNITED_STATES -> 0
+            LOCALE_ENGLISH_GREAT_BRITAIN -> 1
+            LOCALE_PERSIAN_IRAN -> 2
             else -> 0
         }
 
-        val languageItems = arrayOf(
-            requireContext().getString(R.string.settings_text_settings_language_english),
-            requireContext().getString(R.string.settings_text_settings_language_persian)
+        val localeTextItems = arrayOf(
+            requireContext().getString(R.string.settings_dialog_item_language_english_us),
+            requireContext().getString(R.string.settings_dialog_item_language_english_gb),
+            requireContext().getString(R.string.settings_dialog_item_language_persian_ir)
         )
 
         MaterialAlertDialogBuilder(requireContext()).apply {
             setTitle(requireContext().getString(R.string.settings_text_settings_language))
-            setSingleChoiceItems(languageItems, currentAppLanguageIndex) { dialogInterface, index ->
+            setSingleChoiceItems(localeTextItems, currentAppLocaleIndex) { dialogInterface, index ->
                 setAppLocale(index)
                 dialogInterface.dismiss()
             }
@@ -261,37 +261,50 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
         }.show()
     }
 
-    private fun donateOnClick() =
-        binding.clSettingsDonate.setOnClickListener {
-            Intent(Intent.ACTION_VIEW, Uri.parse(URL_DONATE)).apply {
-                this.resolveActivity(requireContext().packageManager)?.let {
-                    startActivity(this)
-                } ?: Snackbar.make(
-                    binding.root,
-                    requireContext().getString(R.string.error_intent_app_not_found),
-                    LENGTH_LONG
-                ).show()
-            }
-        }
+    private fun donateOnClick() = binding.clSettingsDonate.setOnClickListener {
+        openLink(requireContext(), requireView(), URL_DONATE)
+    }
 
-    private fun privacyPolicyOnClick() =
-        binding.clSettingsPrivacyPolicy.setOnClickListener {
-            Intent(Intent.ACTION_VIEW, Uri.parse(URL_PRIVACY_POLICY)).apply {
-                this.resolveActivity(requireContext().packageManager)?.let {
-                    startActivity(this)
-                } ?: Snackbar.make(
-                    binding.root,
-                    requireContext().getString(R.string.error_intent_app_not_found),
-                    LENGTH_LONG
-                ).show()
-            }
-        }
+    private fun privacyPolicyOnClick() = binding.clSettingsPrivacyPolicy.setOnClickListener {
+        openLink(requireContext(), requireView(), URL_PRIVACY_POLICY)
+    }
 
     private fun logoutOnClick() = binding.btnLogout.setOnClickListener {
         logout()
     }
 
-    private fun setAppLocale(index: Int) = viewModel.setAppLocale(index, requireActivity())
+    private fun setAppLocale(index: Int) = viewModel.setAppLocale(index)
+
+    private fun setAppLocaleObserver() =
+        viewModel.setAppLocaleLiveData.observe(viewLifecycleOwner) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { response ->
+                when (response.status) {
+                    Status.SUCCESS -> {
+                        response.data?.let {
+                            val newAppLanguage = it[0]
+                            val newAppCountry = it[1]
+
+                            SettingsHelper.setAppLocale(
+                                requireActivity(),
+                                newAppLanguage,
+                                newAppCountry
+                            )
+
+                            requireActivity().apply {
+                                startActivity(Intent(this, LandingActivity::class.java))
+                                finish()
+                            }
+                        }
+                    }
+                    Status.ERROR -> {
+                        Toast.makeText(requireContext(), response.message, LENGTH_LONG).show()
+                    }
+                    Status.LOADING -> {
+                        /* NO-OP */
+                    }
+                }
+            }
+        }
 
     private fun setAppTheme(index: Int) = viewModel.setAppTheme(index)
 
@@ -316,17 +329,17 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
                             snackbar = when {
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
                                     showNetworkConnectionError(
-                                        requireContext(), binding.root
+                                        requireContext(), requireView()
                                     ) { sendVerificationEmail() }
                                 }
                                 it.contains(ERROR_FIREBASE_403) -> {
-                                    show403Error(requireContext(), binding.root)
+                                    show403Error(requireContext(), requireView())
                                 }
                                 it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
-                                    showFirebaseDeviceBlockedError(requireContext(), binding.root)
+                                    showFirebaseDeviceBlockedError(requireContext(), requireView())
                                 }
                                 else -> {
-                                    showNetworkFailureError(requireContext(), binding.root)
+                                    showNetworkFailureError(requireContext(), requireView())
                                 }
                             }
                         }
@@ -355,15 +368,15 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
             }
         }
 
-    private fun showLoadingAnimation() {
-        binding.btnAccountVerification.visibility = GONE
-        binding.cpiVerify.visibility = VISIBLE
+    private fun showLoadingAnimation() = binding.apply {
+        btnAccountVerification.visibility = GONE
+        cpiVerify.visibility = VISIBLE
 
     }
 
-    private fun hideLoadingAnimation() {
-        binding.cpiVerify.visibility = GONE
-        binding.btnAccountVerification.visibility = VISIBLE
+    private fun hideLoadingAnimation() = binding.apply {
+        cpiVerify.visibility = GONE
+        btnAccountVerification.visibility = VISIBLE
     }
 
     private fun requestAppLovinNativeAd() {
@@ -394,6 +407,8 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
         override fun onNativeAdLoaded(nativeAdView: MaxNativeAdView?, nativeAd: MaxAd?) {
             super.onNativeAdLoaded(nativeAdView, nativeAd)
             Timber.i("AppLovin onNativeAdLoaded")
+            appLovinAdRequestCounter = 1
+
             appLovinNativeAd?.let {
                 // Clean up any pre-existing native ad to prevent memory leaks.
                 appLovinAdLoader.destroy(it)
@@ -408,7 +423,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
         override fun onNativeAdLoadFailed(adUnitId: String?, error: MaxError?) {
             super.onNativeAdLoadFailed(adUnitId, error)
             Timber.e("AppLovin onNativeAdLoadFailed: ${error?.message}")
-            if (appLovinAdRequestCounter < 3) {
+            if (appLovinAdRequestCounter < 2) {
                 appLovinAdRequestCounter++
                 appLovinAdLoader.loadAd(createNativeAdView())
             } else {
@@ -442,7 +457,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
                     override fun response(tapsellPlusAdModel: TapsellPlusAdModel?) {
                         super.response(tapsellPlusAdModel)
                         Timber.i("requestTapsellNativeAd onResponse")
-                        tapsellRequestCounter = 0
+                        tapsellRequestCounter = 1
                         _binding?.let {
                             tapsellPlusAdModel?.let {
                                 tapsellResponseId = it.responseId
@@ -454,7 +469,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
                     override fun error(error: String?) {
                         super.error(error)
                         Timber.e("requestTapsellNativeAd onError: $error")
-                        if (tapsellRequestCounter < 3) {
+                        if (tapsellRequestCounter < 2) {
                             tapsellRequestCounter++
                             requestTapsellNativeAd(adHolder)
                         }
@@ -479,9 +494,9 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
         }
     }
 
-    private fun showNativeAdContainer() {
-        binding.flAdContainerNative.visibility = VISIBLE
-        binding.dividerSettingsFourth.visibility = VISIBLE
+    private fun showNativeAdContainer() = binding.apply {
+        flAdContainerNative.visibility = VISIBLE
+        dividerSettingsFourth.visibility = VISIBLE
     }
 
     private fun destroyAd() {

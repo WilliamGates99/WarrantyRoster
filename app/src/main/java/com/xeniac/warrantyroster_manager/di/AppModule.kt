@@ -9,16 +9,13 @@ import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.preferencesDataStoreFile
 import coil.ImageLoader
 import coil.decode.SvgDecoder
+import coil.disk.DiskCache
 import coil.memory.MemoryCache
 import coil.util.DebugLogger
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.xeniac.warrantyroster_manager.BuildConfig
-import com.xeniac.warrantyroster_manager.repositories.MainRepository
-import com.xeniac.warrantyroster_manager.repositories.PreferencesRepository
-import com.xeniac.warrantyroster_manager.repositories.UserRepository
 import com.xeniac.warrantyroster_manager.utils.Constants.COLLECTION_CATEGORIES
 import com.xeniac.warrantyroster_manager.utils.Constants.COLLECTION_WARRANTIES
 import com.xeniac.warrantyroster_manager.utils.Constants.DATASTORE_NAME_SETTINGS
@@ -27,7 +24,9 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import okhttp3.Dispatcher
 import okhttp3.OkHttpClient
 import java.text.DecimalFormat
@@ -44,38 +43,21 @@ object AppModule {
     @Provides
     fun provideFirebaseAuthInstance() = FirebaseAuth.getInstance()
 
-    @CategoriesCollection
     @Singleton
     @Provides
+    @CategoriesCollection
     fun provideFirestoreCategoriesCollectionRef() =
         Firebase.firestore.collection(COLLECTION_CATEGORIES)
 
-    @WarrantiesCollection
     @Singleton
     @Provides
+    @WarrantiesCollection
     fun provideFirestoreWarrantiesCollectionRef() =
         Firebase.firestore.collection(COLLECTION_WARRANTIES)
 
     @Singleton
     @Provides
-    fun provideUserRepository(firebaseAuth: FirebaseAuth) = UserRepository(firebaseAuth)
-
-    @Singleton
-    @Provides
-    fun provideMainRepository(
-        firebaseAuth: FirebaseAuth,
-        @CategoriesCollection categoriesCollectionRef: CollectionReference,
-        @WarrantiesCollection warrantiesCollectionRef: CollectionReference
-    ) = MainRepository(firebaseAuth, categoriesCollectionRef, warrantiesCollectionRef)
-
-    @Singleton
-    @Provides
-    fun providePreferencesRepository(settingsDataStore: DataStore<Preferences>) =
-        PreferencesRepository(settingsDataStore)
-
-    @Singleton
-    @Provides
-    fun provideLoginDataStore(@ApplicationContext context: Context): DataStore<Preferences> =
+    fun provideSettingsDataStore(@ApplicationContext context: Context): DataStore<Preferences> =
         PreferenceDataStoreFactory.create(
             corruptionHandler = ReplaceFileCorruptionHandler { emptyPreferences() },
             scope = CoroutineScope(Dispatchers.IO + SupervisorJob()),
@@ -95,6 +77,12 @@ object AppModule {
     fun provideCoilImageLoader(@ApplicationContext context: Context) =
         ImageLoader.Builder(context).apply {
             components { add(SvgDecoder.Factory()) }
+            diskCache {
+                DiskCache.Builder()
+                    // Set cache directory folder name
+                    .directory(context.cacheDir.resolve("image_cache"))
+                    .build()
+            }
             memoryCache {
                 MemoryCache.Builder(context)
                     // Set the max size to 25% of the app's available memory.

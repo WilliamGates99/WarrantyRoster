@@ -16,13 +16,13 @@ import coil.ImageLoader
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
+import com.xeniac.warrantyroster_manager.data.remote.models.Warranty
 import com.xeniac.warrantyroster_manager.databinding.FragmentWarrantyDetailsBinding
 import com.xeniac.warrantyroster_manager.ui.main.MainActivity
-import com.xeniac.warrantyroster_manager.data.remote.models.Warranty
-import com.xeniac.warrantyroster_manager.ui.main.viewmodels.MainViewModel
+import com.xeniac.warrantyroster_manager.ui.viewmodels.MainViewModel
 import com.xeniac.warrantyroster_manager.utils.CoilHelper.loadCategoryImage
-import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.DateHelper.getDaysUntilExpiry
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.show403Error
@@ -44,8 +44,9 @@ import javax.inject.Inject
 class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
 
     private var _binding: FragmentWarrantyDetailsBinding? = null
-    private val binding get() = _binding!!
-    private lateinit var viewModel: MainViewModel
+    val binding get() = _binding!!
+
+    lateinit var viewModel: MainViewModel
 
     @Inject
     lateinit var imageLoader: ImageLoader
@@ -79,10 +80,9 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
         _binding = null
     }
 
-    private fun returnToMainActivity() =
-        binding.toolbar.setNavigationOnClickListener {
-            requireActivity().onBackPressed()
-        }
+    private fun returnToMainActivity() = binding.toolbar.setNavigationOnClickListener {
+        findNavController().popBackStack()
+    }
 
     private fun handleExtendedFAB() = binding.nsv.setOnScrollChangeListener(
         NestedScrollView.OnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
@@ -100,133 +100,119 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
     }
 
     private fun setWarrantyDetails() {
-        binding.toolbar.title = warranty.title
+        binding.apply {
+            val warranty = this@WarrantyDetailsFragment.warranty
 
-        if (warranty.brand.isNullOrBlank()) {
-            binding.tvBrand.setTextColor(
-                ContextCompat.getColor(requireContext(), R.color.grayDark)
-            )
-            binding.tvBrand.text =
+            warrantyTitle = warranty.title
+
+            warrantyBrand = if (warranty.brand.isNullOrBlank()) {
+                tvBrand.setTextColor(ContextCompat.getColor(requireContext(), R.color.grayDark))
                 requireContext().getString(R.string.warranty_details_empty_device)
-        } else {
-            binding.tvBrand.text = warranty.brand
-        }
+            } else {
+                warranty.brand
+            }
 
-        if (warranty.model.isNullOrBlank()) {
-            binding.tvModel.setTextColor(
-                ContextCompat.getColor(requireContext(), R.color.grayDark)
-            )
-            binding.tvModel.text =
+            warrantyModel = if (warranty.model.isNullOrBlank()) {
+                tvModel.setTextColor(ContextCompat.getColor(requireContext(), R.color.grayDark))
                 requireContext().getString(R.string.warranty_details_empty_device)
-        } else {
-            binding.tvModel.text = warranty.model
-        }
+            } else {
+                warranty.model
+            }
 
-        if (warranty.serialNumber.isNullOrBlank()) {
-            binding.tvSerial.setTextColor(
-                ContextCompat.getColor(requireContext(), R.color.grayDark)
-            )
-            binding.tvSerial.text =
+            warrantySerial = if (warranty.serialNumber.isNullOrBlank()) {
+                tvSerial.setTextColor(ContextCompat.getColor(requireContext(), R.color.grayDark))
                 requireContext().getString(R.string.warranty_details_empty_device)
-        } else {
-            binding.tvSerial.text = warranty.serialNumber
-        }
+            } else {
+                warranty.serialNumber
+            }
 
-        if (warranty.description.isNullOrBlank()) {
-            binding.tvDescription.gravity = Gravity.CENTER
-            binding.tvDescription.setTextColor(
-                ContextCompat.getColor(requireContext(), R.color.grayDark)
-            )
-            binding.tvDescription.text =
+            warrantyDescription = if (warranty.description.isNullOrBlank()) {
+                tvDescription.gravity = Gravity.CENTER
+                tvDescription.setTextColor(
+                    ContextCompat.getColor(requireContext(), R.color.grayDark)
+                )
                 requireContext().getString(R.string.warranty_details_empty_description)
-        } else {
-            binding.tvDescription.text = warranty.description
-        }
+            } else {
+                warranty.description
+            }
 
-        val category = viewModel.getCategoryById(warranty.categoryId!!)
-        category?.let {
-            loadCategoryImage(
-                requireContext(), it.icon, imageLoader, binding.ivIcon, binding.cpiIcon
-            )
-        }
+            val category = viewModel.getCategoryById(warranty.categoryId!!)
+            category?.let {
+                loadCategoryImage(requireContext(), it.icon, imageLoader, ivIcon, cpiIcon)
+            }
 
-        Calendar.getInstance().apply {
-            dateFormat.parse(warranty.startingDate!!)?.let { time = it }
-
-            val day = decimalFormat.format(get(Calendar.DAY_OF_MONTH))
-            val month = decimalFormat.format((get(Calendar.MONTH)) + 1)
-            val year = get(Calendar.YEAR)
-
-            val startingDate = requireContext().getString(
-                R.string.warranty_details_format_date,
-                month, day, year
-            )
-
-            binding.tvDateStarting.text = startingDate
-        }
-
-        val isLifetime = warranty.isLifetime ?: false
-        if (isLifetime) {
-            val expiryDate = requireContext().getString(R.string.warranty_details_is_lifetime)
-            binding.tvDateExpiry.text = expiryDate
-            binding.tvStatus.text =
-                requireContext().getString(R.string.warranty_details_status_valid)
-            binding.tvStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.green))
-            binding.tvStatus.backgroundTintList =
-                ContextCompat.getColorStateList(requireContext(), R.color.green20)
-        } else {
-            val expiryCalendar = Calendar.getInstance().apply {
-                dateFormat.parse(warranty.expiryDate!!)?.let { time = it }
+            Calendar.getInstance().apply {
+                dateFormat.parse(warranty.startingDate!!)?.let { time = it }
 
                 val day = decimalFormat.format(get(Calendar.DAY_OF_MONTH))
                 val month = decimalFormat.format((get(Calendar.MONTH)) + 1)
                 val year = get(Calendar.YEAR)
 
-                val expiryDate = requireContext().getString(
+                warrantyStartingDate = requireContext().getString(
                     R.string.warranty_details_format_date,
                     month, day, year
                 )
-
-                binding.tvDateExpiry.text = expiryDate
             }
 
-            val daysUntilExpiry = getDaysUntilExpiry(expiryCalendar)
-            when {
-                daysUntilExpiry < 0 -> {
-                    binding.tvStatus.text =
+            val isLifetime = warranty.isLifetime ?: false
+            if (isLifetime) {
+                warrantyExpiryDate =
+                    requireContext().getString(R.string.warranty_details_is_lifetime)
+                warrantyStatus = requireContext().getString(R.string.warranty_details_status_valid)
+                tvStatus.setTextColor(ContextCompat.getColor(requireContext(), R.color.green))
+                tvStatus.backgroundTintList =
+                    ContextCompat.getColorStateList(requireContext(), R.color.green20)
+            } else {
+                val expiryCalendar = Calendar.getInstance().apply {
+                    dateFormat.parse(warranty.expiryDate!!)?.let { time = it }
+
+                    val day = decimalFormat.format(get(Calendar.DAY_OF_MONTH))
+                    val month = decimalFormat.format((get(Calendar.MONTH)) + 1)
+                    val year = get(Calendar.YEAR)
+
+                    warrantyExpiryDate = requireContext().getString(
+                        R.string.warranty_details_format_date,
+                        month, day, year
+                    )
+                }
+
+                val daysUntilExpiry = getDaysUntilExpiry(expiryCalendar)
+                warrantyStatus = when {
+                    daysUntilExpiry < 0 -> {
+                        tvStatus.setTextColor(
+                            ContextCompat.getColor(requireContext(), R.color.red)
+                        )
+                        tvStatus.backgroundTintList =
+                            ContextCompat.getColorStateList(requireContext(), R.color.red20)
                         requireContext().getString(R.string.warranty_details_status_expired)
-                    binding.tvStatus.setTextColor(
-                        ContextCompat.getColor(requireContext(), R.color.red)
-                    )
-                    binding.tvStatus.backgroundTintList =
-                        ContextCompat.getColorStateList(requireContext(), R.color.red20)
-                }
-                daysUntilExpiry <= 30 -> {
-                    binding.tvStatus.text =
+                    }
+                    daysUntilExpiry <= 30 -> {
+                        tvStatus.setTextColor(
+                            ContextCompat.getColor(requireContext(), R.color.orange)
+                        )
+                        tvStatus.backgroundTintList =
+                            ContextCompat.getColorStateList(requireContext(), R.color.orange20)
                         requireContext().getString(R.string.warranty_details_status_soon)
-                    binding.tvStatus.setTextColor(
-                        ContextCompat.getColor(requireContext(), R.color.orange)
-                    )
-                    binding.tvStatus.backgroundTintList =
-                        ContextCompat.getColorStateList(requireContext(), R.color.orange20)
-                }
-                else -> {
-                    binding.tvStatus.text =
+                    }
+                    else -> {
+                        tvStatus.setTextColor(
+                            ContextCompat.getColor(requireContext(), R.color.green)
+                        )
+                        tvStatus.backgroundTintList =
+                            ContextCompat.getColorStateList(requireContext(), R.color.green20)
                         requireContext().getString(R.string.warranty_details_status_valid)
-                    binding.tvStatus.setTextColor(
-                        ContextCompat.getColor(requireContext(), R.color.green)
-                    )
-                    binding.tvStatus.backgroundTintList =
-                        ContextCompat.getColorStateList(requireContext(), R.color.green20)
+                    }
                 }
             }
         }
     }
 
     private fun editWarrantyOnClick() = binding.fab.setOnClickListener {
-        val action = WarrantyDetailsFragmentDirections
-            .actionWarrantyDetailsFragmentToEditWarrantyFragment(warranty)
-        findNavController().navigate(action)
+        findNavController().navigate(
+            WarrantyDetailsFragmentDirections.actionWarrantyDetailsFragmentToEditWarrantyFragment(
+                warranty
+            )
+        )
     }
 
     private fun deleteWarrantyOnClick() =
@@ -245,7 +231,7 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
         )
         setCancelable(false)
         setPositiveButton(requireContext().getString(R.string.warranty_details_delete_dialog_positive)) { _, _ -> deleteWarrantyFromFirestore() }
-        setNegativeButton(requireContext().getText(R.string.warranty_details_delete_dialog_negative)) { _, _ -> }
+        setNegativeButton(requireContext().getString(R.string.warranty_details_delete_dialog_negative)) { _, _ -> }
         show()
     }
 
@@ -280,7 +266,7 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
                                 }
                             }
                         }
-                        requireActivity().onBackPressed()
+                        findNavController().popBackStack()
                         (requireActivity() as MainActivity).requestAppLovinInterstitial()
                     }
                     Status.ERROR -> {
@@ -289,17 +275,17 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
                             snackbar = when {
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
                                     showNetworkConnectionError(
-                                        requireContext(), binding.root
+                                        requireContext(), requireView()
                                     ) { deleteWarrantyFromFirestore() }
                                 }
                                 it.contains(ERROR_FIREBASE_403) -> {
-                                    show403Error(requireContext(), binding.root)
+                                    show403Error(requireContext(), requireView())
                                 }
                                 it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
-                                    showFirebaseDeviceBlockedError(requireContext(), binding.root)
+                                    showFirebaseDeviceBlockedError(requireContext(), requireView())
                                 }
                                 else -> {
-                                    showNetworkFailureError(requireContext(), binding.root)
+                                    showNetworkFailureError(requireContext(), requireView())
                                 }
                             }
                         }
@@ -308,16 +294,16 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
             }
         }
 
-    private fun showLoadingAnimation() {
-        binding.toolbar.menu.getItem(0).isVisible = false
-        binding.fab.isClickable = false
-        binding.cpiDelete.visibility = VISIBLE
+    private fun showLoadingAnimation() = binding.apply {
+        toolbar.menu.getItem(0).isVisible = false
+        fab.isClickable = false
+        cpiDelete.visibility = VISIBLE
     }
 
-    private fun hideLoadingAnimation() {
-        binding.cpiDelete.visibility = GONE
-        binding.toolbar.menu.getItem(0).isVisible = true
-        binding.fab.isClickable = true
+    private fun hideLoadingAnimation() = binding.apply {
+        cpiDelete.visibility = GONE
+        toolbar.menu.getItem(0).isVisible = true
+        fab.isClickable = true
     }
 
     private fun showInterstitialAd(responseId: String) = TapsellPlus.showInterstitialAd(

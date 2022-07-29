@@ -7,7 +7,7 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.appcheck.FirebaseAppCheck
 import com.google.firebase.appcheck.debug.DebugAppCheckProviderFactory
 import com.google.firebase.appcheck.playintegrity.PlayIntegrityAppCheckProviderFactory
-import com.xeniac.warrantyroster_manager.repositories.PreferencesRepository
+import com.xeniac.warrantyroster_manager.domain.repository.PreferencesRepository
 import com.xeniac.warrantyroster_manager.utils.SettingsHelper
 import dagger.hilt.android.HiltAndroidApp
 import ir.tapsell.plus.TapsellPlus
@@ -56,7 +56,6 @@ class BaseApplication : Application() {
         AppLovinPrivacySettings.setHasUserConsent(true, this)
     }
 
-    @Suppress("SpellCheckingInspection")
     private fun initTapsell() {
         TapsellPlus.initialize(
             this, BuildConfig.TAPSELL_KEY, object : TapsellPlusInitListener {

@@ -3,6 +3,7 @@ package com.xeniac.warrantyroster_manager.ui.main
 import android.os.Bundle
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
@@ -10,24 +11,35 @@ import com.applovin.mediation.MaxAd
 import com.applovin.mediation.MaxAdListener
 import com.applovin.mediation.MaxError
 import com.applovin.mediation.ads.MaxInterstitialAd
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.shape.CornerFamily.ROUNDED
 import com.google.android.material.shape.MaterialShapeDrawable
+import com.google.android.play.core.review.ReviewInfo
+import com.google.android.play.core.review.ReviewManager
+import com.google.android.play.core.review.ReviewManagerFactory
 import com.xeniac.warrantyroster_manager.BuildConfig
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.ActivityMainBinding
 import com.xeniac.warrantyroster_manager.ui.BaseActivity
+import com.xeniac.warrantyroster_manager.ui.viewmodels.SettingsViewModel
+import com.xeniac.warrantyroster_manager.utils.DateHelper.getDaysFromFirstInstallTime
+import com.xeniac.warrantyroster_manager.utils.DateHelper.getDaysFromPreviousRequestTime
 import dagger.hilt.android.AndroidEntryPoint
 import ir.tapsell.plus.AdRequestCallback
 import ir.tapsell.plus.TapsellPlus
 import ir.tapsell.plus.model.TapsellPlusAdModel
 import timber.log.Timber
 
-@Suppress("SpellCheckingInspection")
 @AndroidEntryPoint
 class MainActivity : BaseActivity(), MaxAdListener {
 
-    private lateinit var binding: ActivityMainBinding
+    lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
+
+    private lateinit var viewModel: SettingsViewModel
+
+    private lateinit var reviewManager: ReviewManager
+    var reviewInfo: ReviewInfo? = null
 
     lateinit var appLovinAd: MaxInterstitialAd
     private var appLovinAdRequestCounter = 1
@@ -43,9 +55,13 @@ class MainActivity : BaseActivity(), MaxAdListener {
     }
 
     private fun mainInit() {
+        viewModel = ViewModelProvider(this)[SettingsViewModel::class.java]
+
         bottomAppBarStyle()
         bottomNavActions()
         fabOnClick()
+        subscribeToObservers()
+        getRateAppDialogChoice()
         requestAppLovinInterstitial()
     }
 
@@ -61,7 +77,9 @@ class MainActivity : BaseActivity(), MaxAdListener {
     }
 
     private fun bottomNavActions() {
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.fcv) as NavHostFragment
+        val navHostFragment = supportFragmentManager
+            .findFragmentById(binding.fcv.id) as NavHostFragment
+
         navController = navHostFragment.navController
         NavigationUI.setupWithNavController(binding.bnv, navController)
         binding.bnv.setOnItemReselectedListener { /* NO-OP */ }
@@ -80,23 +98,129 @@ class MainActivity : BaseActivity(), MaxAdListener {
         }
     }
 
-    private fun fabOnClick() {
-        binding.fab.setOnClickListener {
-            navController.navigate(R.id.action_mainActivity_to_addWarrantyFragment)
+    private fun fabOnClick() = binding.fab.setOnClickListener {
+        navController.navigate(R.id.action_mainActivity_to_addWarrantyFragment)
+    }
+
+    private fun showNavBar() = binding.apply {
+        appbar.visibility = VISIBLE
+        appbar.performShow()
+        fab.show()
+    }
+
+    private fun hideNavBar() = binding.apply {
+        fab.hide()
+        appbar.performHide()
+        appbar.visibility = GONE
+    }
+
+    private fun subscribeToObservers() {
+        rateAppDialogChoiceObserver()
+        previousRequestTimeInMillisObserver()
+    }
+
+    private fun getRateAppDialogChoice() = viewModel.getRateAppDialogChoice()
+
+    private fun rateAppDialogChoiceObserver() =
+        viewModel.rateAppDialogChoiceLiveData.observe(this) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { rateAppDialogChoice ->
+                when (rateAppDialogChoice) {
+                    0 -> checkDaysFromFirstInstallTime()
+                    1 -> getPreviousRequestTimeInMillis()
+                    -1 -> {
+                        /* NO-OP */
+                    }
+                }
+            }
+        }
+
+    private fun checkDaysFromFirstInstallTime() {
+        val daysFromFirstInstallTime = getDaysFromFirstInstallTime(this)
+        Timber.i("It's been $daysFromFirstInstallTime days from first install time.")
+
+        if (daysFromFirstInstallTime >= 5) {
+            requestInAppReviews()
         }
     }
 
-    private fun showNavBar() {
-        binding.appbar.visibility = VISIBLE
-        binding.appbar.performShow()
-        binding.fab.show()
+    private fun getPreviousRequestTimeInMillis() = viewModel.getPreviousRequestTimeInMillis()
+
+    private fun previousRequestTimeInMillisObserver() =
+        viewModel.previousRequestTimeInMillisLiveData.observe(this) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { previousRequestTimeInMillis ->
+                checkDaysFromPreviousRequestTime(previousRequestTimeInMillis)
+            }
+        }
+
+    private fun checkDaysFromPreviousRequestTime(previousRequestTimeInMillis: Long) {
+        val daysFromPreviousRequestTime =
+            getDaysFromPreviousRequestTime(previousRequestTimeInMillis)
+        Timber.i("It's been $daysFromPreviousRequestTime days from the previous request time.")
+
+        if (daysFromPreviousRequestTime >= 3) {
+            requestInAppReviews()
+        }
     }
 
-    private fun hideNavBar() {
-        binding.fab.hide()
-        binding.appbar.performHide()
-        binding.appbar.visibility = GONE
+    private fun requestInAppReviews() {
+        reviewManager = ReviewManagerFactory.create(this)
+        val request = reviewManager.requestReviewFlow()
+
+        request.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                // We got the ReviewInfo object
+                reviewInfo = task.result
+                Timber.i("InAppReviews request was successful.")
+            } else {
+                // There was some problem, log or handle the error code.
+                Timber.e("InAppReviews request was not successful: ${task.exception}")
+            }
+        }
     }
+
+    fun showRateAppDialog() = reviewInfo?.let {
+        MaterialAlertDialogBuilder(this).apply {
+            setTitle(
+                getString(
+                    R.string.main_rate_app_dialog_title,
+                    getString(R.string.app_name)
+                )
+            )
+            setMessage(getString(R.string.main_rate_app_dialog_message))
+            setCancelable(false)
+            setPositiveButton(getString(R.string.main_rate_app_dialog_positive)) { _, _ -> showInAppReviews() }
+            setNegativeButton(getString(R.string.main_rate_app_dialog_negative)) { _, _ -> setRateAppDialogChoiceToNever() }
+            setNeutralButton(getString(R.string.main_rate_app_dialog_neutral)) { _, _ -> }
+            show()
+        }
+
+        viewModel.setPreviousRequestTimeInMillis()
+        viewModel.setRateAppDialogChoice(1)
+    }
+
+    private fun showInAppReviews() {
+        reviewInfo?.let { reviewInfo ->
+            val flow = reviewManager.launchReviewFlow(this, reviewInfo)
+
+            flow.addOnCompleteListener {
+                /**
+                 * The flow has finished. The API does not indicate whether the user
+                 * reviewed or not, or even whether the review dialog was shown. Thus, no
+                 * matter the result, we continue our app flow.
+                 */
+
+                if (it.isSuccessful) {
+                    viewModel.setPreviousRequestTimeInMillis()
+                    viewModel.setRateAppDialogChoice(1)
+                    Timber.i("In-App Reviews Dialog was shown successfully.")
+                } else {
+                    Timber.i("Something went wrong with showing the In-App Reviews Dialog.")
+                }
+            }
+        }
+    }
+
+    private fun setRateAppDialogChoiceToNever() = viewModel.setRateAppDialogChoice(-1)
 
     fun requestAppLovinInterstitial() {
         appLovinAd = MaxInterstitialAd(BuildConfig.APPLOVIN_INTERSTITIAL_UNIT_ID, this).apply {
@@ -107,7 +231,7 @@ class MainActivity : BaseActivity(), MaxAdListener {
 
     override fun onAdLoaded(ad: MaxAd?) {
         Timber.i("AppLovin onAdLoaded")
-        appLovinAdRequestCounter = 0
+        appLovinAdRequestCounter = 1
     }
 
     override fun onAdLoadFailed(adUnitId: String?, error: MaxError?) {
@@ -144,7 +268,7 @@ class MainActivity : BaseActivity(), MaxAdListener {
                 override fun response(tapsellPlusAdModel: TapsellPlusAdModel?) {
                     super.response(tapsellPlusAdModel)
                     Timber.i("requestTapsellInterstitial onResponse")
-                    tapsellRequestCounter = 0
+                    tapsellRequestCounter = 1
                     tapsellPlusAdModel?.let { tapsellResponseId = it.responseId }
                 }
 

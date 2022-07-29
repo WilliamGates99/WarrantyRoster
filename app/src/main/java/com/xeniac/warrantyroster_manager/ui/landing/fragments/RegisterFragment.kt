@@ -2,7 +2,6 @@ package com.xeniac.warrantyroster_manager.ui.landing.fragments
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.view.View.GONE
@@ -13,28 +12,33 @@ import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentRegisterBinding
-import com.xeniac.warrantyroster_manager.ui.landing.LandingViewModel
 import com.xeniac.warrantyroster_manager.ui.main.MainActivity
+import com.xeniac.warrantyroster_manager.ui.viewmodels.LandingViewModel
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
-import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_EMAIL
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_PASSWORD
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_RETYPE_PASSWORD
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_EMAIL_INVALID
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_PASSWORD_NOT_MATCH
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_PASSWORD_SHORT
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
+import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_REGISTER_CONFIRM_PASSWORD
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_REGISTER_EMAIL
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_REGISTER_PASSWORD
-import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_REGISTER_RETYPE_PASSWORD
 import com.xeniac.warrantyroster_manager.utils.Constants.URL_PRIVACY_POLICY
+import com.xeniac.warrantyroster_manager.utils.LinkHelper.openLink
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.show403Error
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseAuthAccountExists
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseDeviceBlockedError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkConnectionError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkFailureError
 import com.xeniac.warrantyroster_manager.utils.Status
-import com.xeniac.warrantyroster_manager.utils.UserHelper.isEmailValid
-import com.xeniac.warrantyroster_manager.utils.UserHelper.isRetypePasswordValid
 import com.xeniac.warrantyroster_manager.utils.UserHelper.passwordStrength
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -42,8 +46,9 @@ import dagger.hilt.android.AndroidEntryPoint
 class RegisterFragment : Fragment(R.layout.fragment_register) {
 
     private var _binding: FragmentRegisterBinding? = null
-    private val binding get() = _binding!!
-    private lateinit var viewModel: LandingViewModel
+    val binding get() = _binding!!
+
+    lateinit var viewModel: LandingViewModel
 
     private var snackbar: Snackbar? = null
 
@@ -71,7 +76,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         _binding?.let {
             val email = binding.tiEditEmail.text.toString().trim().lowercase()
             val password = binding.tiEditPassword.text.toString().trim()
-            val retypePassword = binding.tiEditRetypePassword.text.toString().trim()
+            val confirmPassword = binding.tiEditConfirmPassword.text.toString().trim()
 
             if (email.isNotBlank()) {
                 outState.putString(SAVE_INSTANCE_REGISTER_EMAIL, email)
@@ -81,8 +86,8 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                 outState.putString(SAVE_INSTANCE_REGISTER_PASSWORD, password)
             }
 
-            if (retypePassword.isNotBlank()) {
-                outState.putString(SAVE_INSTANCE_REGISTER_RETYPE_PASSWORD, retypePassword)
+            if (confirmPassword.isNotBlank()) {
+                outState.putString(SAVE_INSTANCE_REGISTER_CONFIRM_PASSWORD, confirmPassword)
             }
         }
 
@@ -99,80 +104,82 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                 binding.tiEditPassword.setText(restoredPassword)
             }
 
-            it.getString(SAVE_INSTANCE_REGISTER_RETYPE_PASSWORD)?.let { restoredRetypePassword ->
-                binding.tiEditRetypePassword.setText(restoredRetypePassword)
+            it.getString(SAVE_INSTANCE_REGISTER_CONFIRM_PASSWORD)?.let { restoredRetypePassword ->
+                binding.tiEditConfirmPassword.setText(restoredRetypePassword)
             }
         }
         super.onViewStateRestored(savedInstanceState)
     }
 
-    private fun textInputsBackgroundColor() {
-        binding.tiEditEmail.setOnFocusChangeListener { _, isFocused ->
+    private fun textInputsBackgroundColor() = binding.apply {
+        tiEditEmail.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                binding.tiLayoutEmail.boxBackgroundColor =
+                tiLayoutEmail.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.background)
             } else {
-                binding.tiLayoutEmail.boxBackgroundColor =
+                tiLayoutEmail.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.grayLight)
             }
         }
 
-        binding.tiEditPassword.setOnFocusChangeListener { _, isFocused ->
+        tiEditPassword.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                binding.tiLayoutPassword.boxBackgroundColor =
+                tiLayoutPassword.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.background)
             } else {
-                binding.tiLayoutPassword.boxBackgroundColor =
+                tiLayoutPassword.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.grayLight)
-                binding.tiLayoutPassword.isHelperTextEnabled = false
+                tiLayoutPassword.isHelperTextEnabled = false
             }
         }
 
-        binding.tiEditRetypePassword.setOnFocusChangeListener { _, isFocused ->
+        tiEditConfirmPassword.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                binding.tiLayoutRetypePassword.boxBackgroundColor =
+                tiLayoutConfirmPassword.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.background)
             } else {
-                binding.tiLayoutRetypePassword.boxBackgroundColor =
+                tiLayoutConfirmPassword.boxBackgroundColor =
                     ContextCompat.getColor(requireContext(), R.color.grayLight)
             }
         }
     }
 
-    private fun textInputsStrokeColor() {
-        binding.tiEditEmail.addTextChangedListener {
-            binding.tiLayoutEmail.isErrorEnabled = false
-            binding.tiLayoutEmail.boxStrokeColor =
+    private fun textInputsStrokeColor() = binding.apply {
+        tiEditEmail.addTextChangedListener {
+            tiLayoutEmail.isErrorEnabled = false
+            tiLayoutEmail.boxStrokeColor =
                 ContextCompat.getColor(requireContext(), R.color.blue)
         }
 
-        binding.tiEditPassword.addTextChangedListener { inputPassword ->
-            if (binding.tiLayoutPassword.hasFocus()) {
+        tiEditPassword.addTextChangedListener { inputPassword ->
+            tiLayoutPassword.isErrorEnabled = false
+
+            if (tiLayoutPassword.hasFocus()) {
                 when (passwordStrength(inputPassword.toString())) {
                     (-1).toByte() -> {
-                        binding.tiLayoutPassword.boxStrokeColor =
+                        tiLayoutPassword.boxStrokeColor =
                             ContextCompat.getColor(requireContext(), R.color.red)
-                        binding.tiLayoutPassword.helperText =
+                        tiLayoutPassword.helperText =
                             getString(R.string.register_helper_password_weak)
-                        binding.tiLayoutPassword.setHelperTextColor(
+                        tiLayoutPassword.setHelperTextColor(
                             ContextCompat.getColorStateList(requireContext(), R.color.red)
                         )
                     }
                     (0).toByte() -> {
-                        binding.tiLayoutPassword.boxStrokeColor =
+                        tiLayoutPassword.boxStrokeColor =
                             ContextCompat.getColor(requireContext(), R.color.orange)
-                        binding.tiLayoutPassword.helperText =
+                        tiLayoutPassword.helperText =
                             getString(R.string.register_helper_password_mediocre)
-                        binding.tiLayoutPassword.setHelperTextColor(
+                        tiLayoutPassword.setHelperTextColor(
                             ContextCompat.getColorStateList(requireContext(), R.color.orange)
                         )
                     }
                     (1).toByte() -> {
-                        binding.tiLayoutPassword.boxStrokeColor =
+                        tiLayoutPassword.boxStrokeColor =
                             ContextCompat.getColor(requireContext(), R.color.green)
-                        binding.tiLayoutPassword.helperText =
+                        tiLayoutPassword.helperText =
                             getString(R.string.register_helper_password_strong)
-                        binding.tiLayoutPassword.setHelperTextColor(
+                        tiLayoutPassword.setHelperTextColor(
                             ContextCompat.getColorStateList(requireContext(), R.color.green)
                         )
                     }
@@ -180,27 +187,19 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
             }
         }
 
-        binding.tiEditRetypePassword.addTextChangedListener {
-            binding.tiLayoutRetypePassword.isErrorEnabled = false
-            binding.tiLayoutRetypePassword.boxStrokeColor =
+        tiEditConfirmPassword.addTextChangedListener {
+            tiLayoutConfirmPassword.isErrorEnabled = false
+            tiLayoutConfirmPassword.boxStrokeColor =
                 ContextCompat.getColor(requireContext(), R.color.blue)
         }
     }
 
     private fun agreementOnclick() = binding.btnAgreement.setOnClickListener {
-        Intent(Intent.ACTION_VIEW, Uri.parse(URL_PRIVACY_POLICY)).apply {
-            resolveActivity(requireContext().packageManager)?.let {
-                startActivity(this)
-            } ?: Snackbar.make(
-                binding.root,
-                getString(R.string.error_intent_app_not_found),
-                LENGTH_LONG
-            ).show()
-        }
+        openLink(requireContext(), requireView(), URL_PRIVACY_POLICY)
     }
 
     private fun loginOnClick() = binding.btnLogin.setOnClickListener {
-        requireActivity().onBackPressed()
+        findNavController().popBackStack()
     }
 
     private fun registerOnClick() = binding.btnRegister.setOnClickListener {
@@ -208,7 +207,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     }
 
     private fun registerActionDone() =
-        binding.tiEditRetypePassword.setOnEditorActionListener { _, actionId, _ ->
+        binding.tiEditConfirmPassword.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 getRegisterInputs()
             }
@@ -218,45 +217,14 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     private fun getRegisterInputs() {
         val inputMethodManager = requireContext()
             .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.hideSoftInputFromWindow(binding.root.applicationWindowToken, 0)
+        inputMethodManager.hideSoftInputFromWindow(requireView().applicationWindowToken, 0)
 
         val email = binding.tiEditEmail.text.toString().trim().lowercase()
         val password = binding.tiEditPassword.text.toString().trim()
-        val retypePassword = binding.tiEditRetypePassword.text.toString().trim()
+        val retypePassword = binding.tiEditConfirmPassword.text.toString().trim()
 
-        if (email.isBlank()) {
-            binding.tiLayoutEmail.requestFocus()
-            binding.tiLayoutEmail.boxStrokeColor =
-                ContextCompat.getColor(requireContext(), R.color.red)
-        } else if (password.isBlank()) {
-            binding.tiLayoutPassword.requestFocus()
-            binding.tiLayoutPassword.boxStrokeColor =
-                ContextCompat.getColor(requireContext(), R.color.red)
-        } else if (retypePassword.isBlank()) {
-            binding.tiLayoutRetypePassword.requestFocus()
-            binding.tiLayoutRetypePassword.boxStrokeColor =
-                ContextCompat.getColor(requireContext(), R.color.red)
-        } else {
-            if (!isEmailValid(email)) {
-                binding.tiLayoutEmail.requestFocus()
-                binding.tiLayoutEmail.error =
-                    requireContext().getString(R.string.register_error_email)
-            } else if (passwordStrength(password) == (-1).toByte()) {
-                binding.tiLayoutPassword.requestFocus()
-                binding.tiLayoutPassword.error =
-                    requireContext().getString(R.string.register_error_password_short)
-            } else if (!isRetypePasswordValid(password, retypePassword)) {
-                binding.tiLayoutRetypePassword.requestFocus()
-                binding.tiLayoutRetypePassword.error =
-                    requireContext().getString(R.string.register_error_password)
-            } else {
-                registerViaEmail(email, password)
-            }
-        }
+        viewModel.checkRegisterInputs(email, password, retypePassword)
     }
-
-    private fun registerViaEmail(email: String, password: String) =
-        viewModel.registerViaEmail(email, password)
 
     private fun registerObserver() =
         viewModel.registerLiveData.observe(viewLifecycleOwner) { responseEvent ->
@@ -273,27 +241,69 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                     Status.ERROR -> {
                         hideLoadingAnimation()
                         response.message?.let {
-                            snackbar = when {
+                            when {
+                                it.contains(ERROR_INPUT_BLANK_EMAIL) -> {
+                                    binding.tiLayoutEmail.error =
+                                        requireContext().getString(R.string.register_error_blank_email)
+                                    binding.tiLayoutEmail.requestFocus()
+                                    binding.tiLayoutEmail.boxStrokeColor =
+                                        ContextCompat.getColor(requireContext(), R.color.red)
+                                }
+                                it.contains(ERROR_INPUT_BLANK_PASSWORD) -> {
+                                    binding.tiLayoutPassword.error =
+                                        requireContext().getString(R.string.register_error_blank_password)
+                                    binding.tiLayoutPassword.requestFocus()
+                                    binding.tiLayoutPassword.boxStrokeColor =
+                                        ContextCompat.getColor(requireContext(), R.color.red)
+                                }
+                                it.contains(ERROR_INPUT_BLANK_RETYPE_PASSWORD) -> {
+                                    binding.tiLayoutConfirmPassword.error =
+                                        requireContext().getString(R.string.register_error_blank_confirm_password)
+                                    binding.tiLayoutConfirmPassword.requestFocus()
+                                    binding.tiLayoutConfirmPassword.boxStrokeColor =
+                                        ContextCompat.getColor(requireContext(), R.color.red)
+                                }
+                                it.contains(ERROR_INPUT_EMAIL_INVALID) -> {
+                                    binding.tiLayoutEmail.requestFocus()
+                                    binding.tiLayoutEmail.error =
+                                        requireContext().getString(R.string.register_error_email)
+                                }
+                                it.contains(ERROR_INPUT_PASSWORD_SHORT) -> {
+                                    binding.tiLayoutPassword.requestFocus()
+                                    binding.tiLayoutPassword.error =
+                                        requireContext().getString(R.string.register_error_password_short)
+                                }
+                                it.contains(ERROR_INPUT_PASSWORD_NOT_MATCH) -> {
+                                    binding.tiLayoutConfirmPassword.requestFocus()
+                                    binding.tiLayoutConfirmPassword.error =
+                                        requireContext().getString(R.string.register_error_password_not_match)
+                                }
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
-                                    showNetworkConnectionError(
-                                        requireContext(), binding.root
+                                    snackbar = showNetworkConnectionError(
+                                        requireContext(), requireView()
                                     ) { getRegisterInputs() }
                                 }
                                 it.contains(ERROR_FIREBASE_403) -> {
-                                    show403Error(requireContext(), binding.root)
+                                    snackbar = show403Error(requireContext(), requireView())
                                 }
                                 it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
-                                    showFirebaseDeviceBlockedError(requireContext(), binding.root)
+                                    snackbar = showFirebaseDeviceBlockedError(
+                                        requireContext(),
+                                        requireView()
+                                    )
                                 }
                                 it.contains(ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS) -> {
-                                    showFirebaseAuthAccountExists(
-                                        binding.root,
+                                    snackbar = showFirebaseAuthAccountExists(
+                                        requireView(),
                                         requireContext().getString(R.string.register_error_account_exists),
                                         requireContext().getString(R.string.register_btn_login)
-                                    ) { requireActivity().onBackPressed() }
+                                    ) { findNavController().popBackStack() }
                                 }
                                 else -> {
-                                    showNetworkFailureError(requireContext(), binding.root)
+                                    snackbar = showNetworkFailureError(
+                                        requireContext(),
+                                        requireView()
+                                    )
                                 }
                             }
                         }
@@ -302,22 +312,21 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
             }
         }
 
-    private fun showLoadingAnimation() {
-        binding.tiEditEmail.isEnabled = false
-        binding.tiEditPassword.isEnabled = false
-        binding.tiEditRetypePassword.isEnabled = false
-        binding.btnRegister.isClickable = false
-        binding.btnRegister.text = null
-        binding.cpiRegister.visibility = VISIBLE
+    private fun showLoadingAnimation() = binding.apply {
+        tiEditEmail.isEnabled = false
+        tiEditPassword.isEnabled = false
+        tiEditConfirmPassword.isEnabled = false
+        btnRegister.isClickable = false
+        btnRegister.text = null
+        cpiRegister.visibility = VISIBLE
     }
 
-    private fun hideLoadingAnimation() {
-        binding.cpiRegister.visibility = GONE
-        binding.tiEditEmail.isEnabled = true
-        binding.tiEditPassword.isEnabled = true
-        binding.tiEditRetypePassword.isEnabled = true
-        binding.btnRegister.isClickable = true
-        binding.btnRegister.text =
-            requireContext().getString(R.string.register_btn_register)
+    private fun hideLoadingAnimation() = binding.apply {
+        cpiRegister.visibility = GONE
+        tiEditEmail.isEnabled = true
+        tiEditPassword.isEnabled = true
+        tiEditConfirmPassword.isEnabled = true
+        btnRegister.isClickable = true
+        btnRegister.text = requireContext().getString(R.string.register_btn_register)
     }
 }

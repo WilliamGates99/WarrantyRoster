@@ -2,15 +2,7 @@
 .gradle
 /gradle.properties
 /local.properties
-/.idea/shelf
-/.idea/caches
-/.idea/libraries
-/.idea/assetWizardSettings.xml
-/.idea/deploymentTargetDropDown.xml
-/.idea/gradle.xml
-/.idea/modules.xml
-/.idea/navEditor.xml
-/.idea/workspace.xml
+/.idea
 .DS_Store
 /build
 /captures
