@@ -198,24 +198,22 @@ class MainActivity : BaseActivity(), MaxAdListener {
         viewModel.setRateAppDialogChoice(1)
     }
 
-    private fun showInAppReviews() {
-        reviewInfo?.let { reviewInfo ->
-            val flow = reviewManager.launchReviewFlow(this, reviewInfo)
+    private fun showInAppReviews() = reviewInfo?.let { reviewInfo ->
+        val flow = reviewManager.launchReviewFlow(this, reviewInfo)
 
-            flow.addOnCompleteListener {
-                /**
-                 * The flow has finished. The API does not indicate whether the user
-                 * reviewed or not, or even whether the review dialog was shown. Thus, no
-                 * matter the result, we continue our app flow.
-                 */
+        flow.addOnCompleteListener {
+            /**
+             * The flow has finished. The API does not indicate whether the user
+             * reviewed or not, or even whether the review dialog was shown. Thus, no
+             * matter the result, we continue our app flow.
+             */
 
-                if (it.isSuccessful) {
-                    viewModel.setPreviousRequestTimeInMillis()
-                    viewModel.setRateAppDialogChoice(1)
-                    Timber.i("In-App Reviews Dialog was shown successfully.")
-                } else {
-                    Timber.i("Something went wrong with showing the In-App Reviews Dialog.")
-                }
+            if (it.isSuccessful) {
+                viewModel.setPreviousRequestTimeInMillis()
+                viewModel.setRateAppDialogChoice(1)
+                Timber.i("In-App Reviews Dialog was shown successfully.")
+            } else {
+                Timber.i("Something went wrong with showing the In-App Reviews Dialog.")
             }
         }
     }
