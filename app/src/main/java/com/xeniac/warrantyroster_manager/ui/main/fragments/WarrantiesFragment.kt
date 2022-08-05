@@ -66,6 +66,11 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
         _binding = null
     }
 
+    override fun onResume() {
+        super.onResume()
+        binding.searchView.onActionViewCollapsed()
+    }
+
     private fun setupRecyclerView() {
         warrantyAdapter.apply {
             setOnWarrantyItemClickListener(this@WarrantiesFragment)
@@ -100,8 +105,8 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
                         showWarrantiesList(it)
                     }
                 } else {
-                    searchQuery = newText.trim()
-                    viewModel.searchWarrantiesByTitle(searchQuery.lowercase())
+                    searchQuery = newText.trim().lowercase()
+                    viewModel.searchWarrantiesByTitle(searchQuery)
                 }
 
                 return false
