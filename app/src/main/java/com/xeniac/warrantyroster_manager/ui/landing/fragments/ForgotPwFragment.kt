@@ -32,6 +32,7 @@ import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkFailure
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showTimerIsNotZeroError
 import com.xeniac.warrantyroster_manager.utils.Status
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.*
 
 @AndroidEntryPoint
 class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
@@ -64,7 +65,7 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
 
     override fun onSaveInstanceState(outState: Bundle) {
         _binding?.let {
-            val email = binding.tiEditEmail.text.toString().trim().lowercase()
+            val email = binding.tiEditEmail.text.toString().trim().lowercase(Locale.US)
 
             if (email.isNotBlank()) {
                 outState.putString(SAVE_INSTANCE_FORGOT_PW_EMAIL, email)
@@ -123,7 +124,7 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
             .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(requireView().applicationWindowToken, 0)
 
-        val email = binding.tiEditEmail.text.toString().trim().lowercase()
+        val email = binding.tiEditEmail.text.toString().trim().lowercase(Locale.US)
 
         viewModel.checkForgotPwInputs(email)
     }
