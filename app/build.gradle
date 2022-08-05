@@ -16,7 +16,7 @@ applovin {
 }
 
 android {
-    compileSdk 33 // TODO UPGRADE TO 33 FOR RELEASE
+    compileSdk 32 // TODO UPGRADE TO 33 FOR RELEASE
     buildToolsVersion '33.0.0'
 
     defaultConfig {
@@ -170,10 +170,9 @@ dependencies {
     androidTestImplementation 'androidx.arch.core:core-testing:2.1.0'
     androidTestImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4'
     androidTestImplementation 'androidx.navigation:navigation-testing:2.5.1'
-    // TODO UPGRADE ESPRESSO TO 3.5.0 AND NOT 3.4.0
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.3.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.3.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.4.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.4.0'
     androidTestImplementation 'com.google.dagger:hilt-android-testing:2.43.2'
     kaptAndroidTest 'com.google.dagger:hilt-compiler:2.43.2'
     debugImplementation 'androidx.fragment:fragment-testing:1.5.1'
