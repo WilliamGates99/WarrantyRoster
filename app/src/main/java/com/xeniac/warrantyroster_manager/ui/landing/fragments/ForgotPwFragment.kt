@@ -177,7 +177,7 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
                                     ) { snackbar?.dismiss() }
                                 }
                                 it.contains(ERROR_TIMER_IS_NOT_ZERO) -> {
-                                    val seconds = viewModel.timerInMillis / 1000
+                                    val seconds = (viewModel.timerInMillis / 1000).toInt()
                                     snackbar = showTimerIsNotZeroError(
                                         requireContext(),
                                         requireView(),

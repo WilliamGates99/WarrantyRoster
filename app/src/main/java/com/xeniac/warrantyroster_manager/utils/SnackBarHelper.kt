@@ -76,28 +76,16 @@ object SnackBarHelper {
         show()
     }
 
-    fun showTimerIsNotZeroError(context: Context, view: View, seconds: Long): Snackbar =
-        if (seconds <= 1L) {
-            Snackbar.make(
-                view,
-                context.getString(
-                    R.string.forgot_pw_error_timer_is_not_zero_one,
-                    seconds
-                ),
-                LENGTH_LONG
-            ).apply {
-                show()
-            }
-        } else {
-            Snackbar.make(
-                view,
-                context.getString(
-                    R.string.forgot_pw_error_timer_is_not_zero_other,
-                    seconds
-                ),
-                LENGTH_LONG
-            ).apply {
-                show()
-            }
+    fun showTimerIsNotZeroError(context: Context, view: View, seconds: Int): Snackbar =
+        Snackbar.make(
+            view,
+            context.resources.getQuantityString(
+                R.plurals.forgot_pw_error_timer_is_not_zero,
+                seconds,
+                seconds
+            ),
+            LENGTH_LONG
+        ).apply {
+            show()
         }
 }

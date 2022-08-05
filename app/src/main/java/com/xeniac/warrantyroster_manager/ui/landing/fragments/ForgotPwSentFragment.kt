@@ -109,7 +109,7 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
                                     showFirebaseDeviceBlockedError(requireContext(), requireView())
                                 }
                                 it.contains(ERROR_TIMER_IS_NOT_ZERO) -> {
-                                    val seconds = viewModel.timerInMillis / 1000
+                                    val seconds = (viewModel.timerInMillis / 1000).toInt()
                                     showTimerIsNotZeroError(
                                         requireContext(),
                                         requireView(),

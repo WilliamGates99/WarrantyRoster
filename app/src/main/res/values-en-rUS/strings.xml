@@ -66,7 +66,11 @@
     <string name="forgot_pw_btn_send">Send Email</string>
     <string name="forgot_pw_btn_return">Return To Login</string>
     <string name="forgot_pw_error_blank_email">Enter your email address!</string>
+    <string name="forgot_pw_error_timer_is_not_zero_zero">Please wait for %d seconds before requesting again.</string>
     <string name="forgot_pw_error_timer_is_not_zero_one">Please wait for %d second before requesting again.</string>
+    <string name="forgot_pw_error_timer_is_not_zero_two">Please wait for %d seconds before requesting again.</string>
+    <string name="forgot_pw_error_timer_is_not_zero_few">Please wait for %d seconds before requesting again.</string>
+    <string name="forgot_pw_error_timer_is_not_zero_many">Please wait for %d seconds before requesting again.</string>
     <string name="forgot_pw_error_timer_is_not_zero_other">Please wait for %d seconds before requesting again.</string>
     <string name="forgot_pw_error_email">The entered email address is not valid!</string>
     <string name="forgot_pw_error_not_found">The account with the provided email does not exist.</string>
