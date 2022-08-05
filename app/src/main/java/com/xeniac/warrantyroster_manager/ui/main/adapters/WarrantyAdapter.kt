@@ -35,6 +35,7 @@ import ir.tapsell.plus.TapsellPlus
 import ir.tapsell.plus.model.TapsellPlusAdModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.text.SimpleDateFormat
@@ -149,9 +150,11 @@ class WarrantyAdapter @Inject constructor(
             binding.title = warranty.title
             binding.executePendingBindings()
 
+            delay(1)
             val category = warranty.categoryId?.let {
                 mainViewModel.getCategoryById(it)
             }
+
 
             category?.let {
                 binding.categoryTitle = it.title[mainViewModel.getCategoryTitleMapKey()]
