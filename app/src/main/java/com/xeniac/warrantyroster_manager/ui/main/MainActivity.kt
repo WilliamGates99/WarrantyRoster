@@ -173,6 +173,7 @@ class MainActivity : BaseActivity(), MaxAdListener {
                 Timber.i("InAppReviews request was successful.")
             } else {
                 // There was some problem, log or handle the error code.
+                reviewInfo = null
                 Timber.e("InAppReviews request was not successful: ${task.exception}")
             }
         }
