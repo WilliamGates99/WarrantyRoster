@@ -150,7 +150,7 @@ class WarrantyAdapter @Inject constructor(
             binding.title = warranty.title
             binding.executePendingBindings()
 
-            delay(1)
+            delay(1) // Delay fixed issue #22
             val category = warranty.categoryId?.let {
                 mainViewModel.getCategoryById(it)
             }
