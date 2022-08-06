@@ -21,6 +21,7 @@ import com.xeniac.warrantyroster_manager.databinding.FragmentSettingsBinding
 import com.xeniac.warrantyroster_manager.getOrAwaitValue
 import com.xeniac.warrantyroster_manager.launchFragmentInHiltContainer
 import com.xeniac.warrantyroster_manager.ui.viewmodels.SettingsViewModel
+import com.xeniac.warrantyroster_manager.utils.Constants.URL_CROWDIN
 import com.xeniac.warrantyroster_manager.utils.Constants.URL_DONATE
 import com.xeniac.warrantyroster_manager.utils.Constants.URL_PLAY_STORE
 import com.xeniac.warrantyroster_manager.utils.Constants.URL_PRIVACY_POLICY
@@ -143,6 +144,21 @@ class SettingsFragmentTest {
             CoreMatchers.allOf(
                 IntentMatchers.hasAction(Intent.ACTION_VIEW),
                 IntentMatchers.hasData(URL_DONATE)
+            )
+        )
+
+        Intents.release()
+    }
+
+    @Test
+    fun clickOnImproveTranslationsBtn_opensLinkInBrowser() {
+        Intents.init()
+
+        onView(withId(testBinding.clSettingsImproveTranslations.id)).perform(click())
+        Intents.intended(
+            CoreMatchers.allOf(
+                IntentMatchers.hasAction(Intent.ACTION_VIEW),
+                IntentMatchers.hasData(URL_CROWDIN)
             )
         )
 

@@ -4,6 +4,7 @@ object Constants {
     // Web URLs
     const val URL_PRIVACY_POLICY = "https://xeniacdev.github.io/WarrantyRoster/privacy_policy"
     const val URL_DONATE = "https://xeniacdev.github.io/WarrantyRoster/donate"
+    const val URL_CROWDIN = "https://google.com" // TODO ADD CROWDIN URL AFTER SETTING UP THE PROJECT
     const val URL_PLAY_STORE = "https://play.google.com/store/apps/details?id="
 
     // DataStore Constants

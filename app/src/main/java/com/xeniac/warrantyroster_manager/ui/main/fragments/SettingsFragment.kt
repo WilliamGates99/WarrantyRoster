@@ -33,6 +33,7 @@ import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTIO
 import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_ENGLISH_GREAT_BRITAIN
 import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_ENGLISH_UNITED_STATES
 import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_PERSIAN_IRAN
+import com.xeniac.warrantyroster_manager.utils.Constants.URL_CROWDIN
 import com.xeniac.warrantyroster_manager.utils.Constants.URL_DONATE
 import com.xeniac.warrantyroster_manager.utils.Constants.URL_PRIVACY_POLICY
 import com.xeniac.warrantyroster_manager.utils.LinkHelper.openLink
@@ -270,8 +271,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
 
     private fun improveTranslationsOnClick() =
         binding.clSettingsImproveTranslations.setOnClickListener {
-            // TODO CALL OPEN LINK FUNCTION
-            Toast.makeText(requireContext(), "improve clicked", Toast.LENGTH_SHORT).show()
+            openLink(requireContext(), requireView(), URL_CROWDIN)
         }
 
     private fun rateUsOnClick() = binding.clSettingsRateUs.setOnClickListener {
