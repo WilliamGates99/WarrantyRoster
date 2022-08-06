@@ -88,4 +88,10 @@ object SnackBarHelper {
         ).apply {
             show()
         }
+
+    fun showIntentAppNotFoundError(context: Context, view: View) = Snackbar.make(
+        view,
+        context.getString(R.string.error_intent_app_not_found),
+        LENGTH_LONG
+    ).show()
 }
