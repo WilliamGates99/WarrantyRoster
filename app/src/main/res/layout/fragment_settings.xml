@@ -175,7 +175,7 @@
                             app:layout_constraintVertical_bias="0.5" />
 
                         <View
-                            android:id="@+id/divider_account_first"
+                            android:id="@+id/divider_account_change_email"
                             android:layout_width="@dimen/width_0dp"
                             android:layout_height="@dimen/height_1dp"
                             android:layout_marginTop="@dimen/margin_12dp"
@@ -194,7 +194,7 @@
                             android:paddingVertical="@dimen/padding_12dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/divider_account_first">
+                            app:layout_constraintTop_toBottomOf="@+id/divider_account_change_email">
 
                             <com.google.android.material.imageview.ShapeableImageView
                                 android:id="@+id/iv_account_change_email"
@@ -241,7 +241,7 @@
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <View
-                            android:id="@+id/divider_account_second"
+                            android:id="@+id/divider_account_change_password"
                             android:layout_width="@dimen/width_0dp"
                             android:layout_height="@dimen/height_1dp"
                             android:background="@color/grayLight"
@@ -259,7 +259,7 @@
                             android:paddingVertical="@dimen/padding_12dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/divider_account_second">
+                            app:layout_constraintTop_toBottomOf="@+id/divider_account_change_password">
 
                             <com.google.android.material.imageview.ShapeableImageView
                                 android:id="@+id/iv_account_change_password"
@@ -410,7 +410,7 @@
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <View
-                            android:id="@+id/divider_settings_first"
+                            android:id="@+id/divider_settings_theme"
                             android:layout_width="@dimen/width_0dp"
                             android:layout_height="@dimen/height_1dp"
                             android:background="@color/grayLight"
@@ -428,7 +428,7 @@
                             android:paddingVertical="@dimen/padding_12dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/divider_settings_first">
+                            app:layout_constraintTop_toBottomOf="@+id/divider_settings_theme">
 
                             <com.google.android.material.imageview.ShapeableImageView
                                 android:id="@+id/iv_settings_theme"
@@ -483,7 +483,7 @@
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <View
-                            android:id="@+id/divider_settings_second"
+                            android:id="@+id/divider_settings_donate"
                             android:layout_width="@dimen/width_0dp"
                             android:layout_height="@dimen/height_1dp"
                             android:background="@color/grayLight"
@@ -501,7 +501,7 @@
                             android:paddingVertical="@dimen/padding_12dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/divider_settings_second">
+                            app:layout_constraintTop_toBottomOf="@+id/divider_settings_donate">
 
                             <com.google.android.material.imageview.ShapeableImageView
                                 android:id="@+id/iv_settings_donate"
@@ -548,14 +548,144 @@
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <View
-                            android:id="@+id/divider_settings_third"
+                            android:id="@+id/divider_settings_improve_translations"
+                            android:layout_width="@dimen/width_0dp"
+                            android:layout_height="@dimen/height_1dp"
+                            android:background="@color/grayLight"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/cl_settings_donate" />
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/cl_settings_improve_translations"
+                            android:layout_width="@dimen/width_0dp"
+                            android:layout_height="wrap_content"
+                            android:background="?attr/selectableItemBackground"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:paddingVertical="@dimen/padding_12dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/divider_settings_improve_translations">
+
+                            <com.google.android.material.imageview.ShapeableImageView
+                                android:id="@+id/iv_settings_improve_translations"
+                                android:layout_width="@dimen/width_26dp"
+                                android:layout_height="@dimen/height_26dp"
+                                android:layout_marginStart="@dimen/margin_12dp"
+                                android:background="@color/navyBlue10"
+                                android:src="@drawable/ic_settings_improve_translations"
+                                app:contentPadding="@dimen/padding_4dp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:shapeAppearance="@style/Theme.WarrantyRoster.ImageViewShapeAppearance.Settings" />
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/tv_settings_improve_translations"
+                                android:layout_width="@dimen/width_0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginHorizontal="@dimen/margin_12dp"
+                                android:ellipsize="end"
+                                android:fontFamily="@font/localized_semi_bold"
+                                android:gravity="center_vertical|start"
+                                android:maxLines="1"
+                                android:text="@string/settings_text_settings_improve_translations"
+                                android:textAlignment="gravity"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/text_size_16sp"
+                                app:layout_constraintBottom_toBottomOf="@+id/iv_settings_improve_translations"
+                                app:layout_constraintEnd_toStartOf="@+id/iv_settings_improve_translations_arrow"
+                                app:layout_constraintStart_toEndOf="@+id/iv_settings_improve_translations"
+                                app:layout_constraintTop_toTopOf="@+id/iv_settings_improve_translations"
+                                app:layout_constraintVertical_bias="0.5" />
+
+                            <com.google.android.material.imageview.ShapeableImageView
+                                android:id="@+id/iv_settings_improve_translations_arrow"
+                                android:layout_width="@dimen/width_18dp"
+                                android:layout_height="@dimen/height_18dp"
+                                android:layout_marginEnd="@dimen/margin_12dp"
+                                android:src="@drawable/ic_settings_arrow"
+                                app:layout_constraintBottom_toBottomOf="@+id/iv_settings_improve_translations"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="@+id/iv_settings_improve_translations"
+                                app:layout_constraintVertical_bias="0.5" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <View
+                            android:id="@+id/divider_settings_rate_us"
+                            android:layout_width="@dimen/width_0dp"
+                            android:layout_height="@dimen/height_1dp"
+                            android:background="@color/grayLight"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/cl_settings_improve_translations" />
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/cl_settings_rate_us"
+                            android:layout_width="@dimen/width_0dp"
+                            android:layout_height="wrap_content"
+                            android:background="?attr/selectableItemBackground"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:paddingVertical="@dimen/padding_12dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/divider_settings_rate_us">
+
+                            <com.google.android.material.imageview.ShapeableImageView
+                                android:id="@+id/iv_settings_rate_us"
+                                android:layout_width="@dimen/width_26dp"
+                                android:layout_height="@dimen/height_26dp"
+                                android:layout_marginStart="@dimen/margin_12dp"
+                                android:background="@color/navyBlue10"
+                                android:src="@drawable/ic_settings_rate_us"
+                                app:contentPadding="@dimen/padding_4dp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:shapeAppearance="@style/Theme.WarrantyRoster.ImageViewShapeAppearance.Settings" />
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/tv_settings_rate_us"
+                                android:layout_width="@dimen/width_0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginHorizontal="@dimen/margin_12dp"
+                                android:ellipsize="end"
+                                android:fontFamily="@font/localized_semi_bold"
+                                android:gravity="center_vertical|start"
+                                android:maxLines="1"
+                                android:text="@string/settings_text_settings_rate_us"
+                                android:textAlignment="gravity"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/text_size_16sp"
+                                app:layout_constraintBottom_toBottomOf="@+id/iv_settings_rate_us"
+                                app:layout_constraintEnd_toStartOf="@+id/iv_settings_rate_us_arrow"
+                                app:layout_constraintStart_toEndOf="@+id/iv_settings_rate_us"
+                                app:layout_constraintTop_toTopOf="@+id/iv_settings_rate_us"
+                                app:layout_constraintVertical_bias="0.5" />
+
+                            <com.google.android.material.imageview.ShapeableImageView
+                                android:id="@+id/iv_settings_rate_us_arrow"
+                                android:layout_width="@dimen/width_18dp"
+                                android:layout_height="@dimen/height_18dp"
+                                android:layout_marginEnd="@dimen/margin_12dp"
+                                android:src="@drawable/ic_settings_arrow"
+                                app:layout_constraintBottom_toBottomOf="@+id/iv_settings_rate_us"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="@+id/iv_settings_rate_us"
+                                app:layout_constraintVertical_bias="0.5" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <View
+                            android:id="@+id/divider_settings_privacy_policy"
                             android:layout_width="@dimen/width_0dp"
                             android:layout_height="@dimen/height_1dp"
                             android:background="@color/grayLight"
                             android:visibility="gone"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/cl_settings_donate" />
+                            app:layout_constraintTop_toBottomOf="@+id/cl_settings_rate_us" />
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:id="@+id/cl_settings_privacy_policy"
@@ -567,7 +697,7 @@
                             android:paddingVertical="@dimen/padding_12dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/divider_settings_third">
+                            app:layout_constraintTop_toBottomOf="@+id/divider_settings_privacy_policy">
 
                             <com.google.android.material.imageview.ShapeableImageView
                                 android:id="@+id/iv_settings_privacy_policy"
@@ -614,7 +744,7 @@
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                         <View
-                            android:id="@+id/divider_settings_fourth"
+                            android:id="@+id/divider_settings_ad_container"
                             android:layout_width="@dimen/width_0dp"
                             android:layout_height="@dimen/height_1dp"
                             android:background="@color/grayLight"
@@ -632,7 +762,7 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintHorizontal_bias="0.5"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/divider_settings_fourth" />
+                            app:layout_constraintTop_toBottomOf="@+id/divider_settings_ad_container" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 

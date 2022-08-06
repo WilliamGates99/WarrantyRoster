@@ -244,6 +244,8 @@
     <string name="settings_text_settings_theme_light">روشن</string>
     <string name="settings_text_settings_theme_dark">تیره</string>
     <string name="settings_text_settings_donate">حمایت</string>
+    <string name="settings_text_settings_improve_translations">بهبود ترجمه</string>
+    <string name="settings_text_settings_rate_us">امتیاز به برنامه</string>
     <string name="settings_text_settings_privacy_policy">حریم خصوصی</string>
     <string name="settings_btn_logout">خروج</string>
     <string name="settings_dialog_message">ایمیل تأیید با موفقیت به صندوق ایمیلتان ارسال شد.</string>
