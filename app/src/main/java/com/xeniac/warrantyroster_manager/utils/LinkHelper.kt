@@ -1,6 +1,5 @@
 package com.xeniac.warrantyroster_manager.utils
 
-import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -10,21 +9,22 @@ import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showIntentAppNotFo
 
 object LinkHelper {
 
-    fun openLink(context: Context, view: View, urlString: String) =
-        Intent(Intent.ACTION_VIEW, Uri.parse(urlString)).apply {
-            resolveActivity(context.packageManager)?.let {
-                context.startActivity(this)
-            } ?: showIntentAppNotFoundError(context, view)
-        }
+    fun openLink(context: Context, view: View, urlString: String) = Intent().apply {
+        action = Intent.ACTION_VIEW
+        data = Uri.parse(urlString)
 
-    fun openPlayStore(context: Context, view: View) = try {
-        context.startActivity(
-            Intent(Intent.ACTION_VIEW).apply {
-                data = Uri.parse(URL_PLAY_STORE + context.packageName)
-                setPackage("com.android.vending")
-            }
-        )
-    } catch (e: ActivityNotFoundException) {
-        openLink(context, view, URL_PLAY_STORE + context.packageName)
+        resolveActivity(context.packageManager)?.let {
+            context.startActivity(this)
+        } ?: showIntentAppNotFoundError(context, view)
+    }
+
+    fun openPlayStore(context: Context, view: View) = Intent().apply {
+        action = Intent.ACTION_VIEW
+        data = Uri.parse(URL_PLAY_STORE + context.packageName)
+        setPackage("com.android.vending")
+
+        resolveActivity(context.packageManager)?.let {
+            context.startActivity(this)
+        } ?: openLink(context, view, URL_PLAY_STORE + context.packageName)
     }
 }
