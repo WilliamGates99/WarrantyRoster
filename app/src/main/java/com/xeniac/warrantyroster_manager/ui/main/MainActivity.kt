@@ -125,6 +125,11 @@ class MainActivity : BaseActivity(), MaxAdListener {
         viewModel.rateAppDialogChoiceLiveData.observe(this) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { rateAppDialogChoice ->
                 when (rateAppDialogChoice) {
+                    /**
+                     * 0 -> Rate Now (Default)
+                     * 1 -> Remind me later
+                     * -1 -> No, Thanks (Never)
+                     */
                     0 -> checkDaysFromFirstInstallTime()
                     1 -> getPreviousRequestTimeInMillis()
                     -1 -> {
@@ -189,12 +194,19 @@ class MainActivity : BaseActivity(), MaxAdListener {
             )
             setMessage(getString(R.string.main_rate_app_dialog_message))
             setCancelable(false)
-            setPositiveButton(getString(R.string.main_rate_app_dialog_positive)) { _, _ -> showInAppReviews() }
+            setPositiveButton(getString(R.string.main_rate_app_dialog_positive)) { _, _ ->
+                showInAppReviews()
+                setRateAppDialogChoiceToNever()
+            }
             setNegativeButton(getString(R.string.main_rate_app_dialog_negative)) { _, _ -> setRateAppDialogChoiceToNever() }
-            setNeutralButton(getString(R.string.main_rate_app_dialog_neutral)) { _, _ -> }
+            setNeutralButton(getString(R.string.main_rate_app_dialog_neutral)) { _, _ -> setRateAppDialogChoiceToAskLater() }
             show()
         }
+    }
 
+    private fun setRateAppDialogChoiceToNever() = viewModel.setRateAppDialogChoice(-1)
+
+    private fun setRateAppDialogChoiceToAskLater() {
         viewModel.setPreviousRequestTimeInMillis()
         viewModel.setRateAppDialogChoice(1)
     }
@@ -210,16 +222,12 @@ class MainActivity : BaseActivity(), MaxAdListener {
              */
 
             if (it.isSuccessful) {
-                viewModel.setPreviousRequestTimeInMillis()
-                viewModel.setRateAppDialogChoice(1)
-                Timber.i("In-App Reviews Dialog was shown successfully.")
+                Timber.i("In-App Reviews Dialog was completed successfully.")
             } else {
                 Timber.i("Something went wrong with showing the In-App Reviews Dialog.")
             }
         }
     }
-
-    private fun setRateAppDialogChoiceToNever() = viewModel.setRateAppDialogChoice(-1)
 
     fun requestAppLovinInterstitial() {
         appLovinAd = MaxInterstitialAd(BuildConfig.APPLOVIN_INTERSTITIAL_UNIT_ID, this).apply {
