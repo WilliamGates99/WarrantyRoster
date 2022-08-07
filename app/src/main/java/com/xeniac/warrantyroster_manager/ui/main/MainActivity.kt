@@ -179,7 +179,7 @@ class MainActivity : BaseActivity(), MaxAdListener {
             } else {
                 // There was some problem, log or handle the error code.
                 reviewInfo = null
-                Timber.e("InAppReviews request was not successful: ${task.exception}")
+                Timber.e("InAppReviews request was not successful; Exception: ${task.exception}")
             }
         }
     }
@@ -219,7 +219,7 @@ class MainActivity : BaseActivity(), MaxAdListener {
             if (it.isSuccessful) {
                 Timber.i("In-App Reviews Dialog was completed successfully.")
             } else {
-                Timber.i("Something went wrong with showing the In-App Reviews Dialog.")
+                Timber.i("Something went wrong with showing the In-App Reviews Dialog; Exception: ${it.exception}")
             }
         }
     }
