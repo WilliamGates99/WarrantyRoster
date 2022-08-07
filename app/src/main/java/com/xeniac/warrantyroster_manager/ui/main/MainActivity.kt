@@ -186,12 +186,7 @@ class MainActivity : BaseActivity(), MaxAdListener {
 
     fun showRateAppDialog() = reviewInfo?.let {
         MaterialAlertDialogBuilder(this).apply {
-            setTitle(
-                getString(
-                    R.string.main_rate_app_dialog_title,
-                    getString(R.string.app_name)
-                )
-            )
+            setTitle(getString(R.string.main_rate_app_dialog_title, getString(R.string.app_name)))
             setMessage(getString(R.string.main_rate_app_dialog_message))
             setCancelable(false)
             setPositiveButton(getString(R.string.main_rate_app_dialog_positive)) { _, _ ->
