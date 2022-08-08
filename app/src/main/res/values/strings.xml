@@ -1,4 +1,6 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!--test-->
+    <string name="test_string" tools:ignore="MissingTranslation">this is just a temporary test text</string>
     <string name="app_name">Warranty Roster</string>
 
     <!--Errors-->
