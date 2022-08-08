@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<network-security-config xmlns:tools="http://schemas.android.com/tools">
+<network-security-config>
 
-    <!-- For AdColony and Smaato, this permits all cleartext traffic: -->
-    <base-config
-        cleartextTrafficPermitted="true"
-        tools:ignore="InsecureBaseConfiguration">
+    <!-- For AdColony and Smaato, cleartextTrafficPermitted should be set to TRUE,
+    But for security reasons we set it to FALSE -->
+    <base-config cleartextTrafficPermitted="false">
         <trust-anchors>
             <certificates src="system" />
         </trust-anchors>
