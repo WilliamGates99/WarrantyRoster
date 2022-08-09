@@ -158,7 +158,7 @@
     <string name="add_warranty_title_model">Device Model</string>
     <string name="add_warranty_hint_model">Enter the device model</string>
     <string name="add_warranty_title_serial">Serial Number</string>
-    <string name="add_warranty_hint_serial">Enter the serial number of the device</string>
+    <string name="add_warranty_hint_serial">Enter the device serial number</string>
     <string name="add_warranty_title_description">Description</string>
     <string name="add_warranty_hint_description">Enter description</string>
     <string name="add_warranty_title_date_starting">Starting Date</string>
@@ -225,7 +225,7 @@
     <string name="edit_warranty_title_model">Device Model</string>
     <string name="edit_warranty_hint_model">Enter the device model</string>
     <string name="edit_warranty_title_serial">Serial Number</string>
-    <string name="edit_warranty_hint_serial">Enter the serial number of the device</string>
+    <string name="edit_warranty_hint_serial">Enter the device serial number</string>
     <string name="edit_warranty_title_description">Description</string>
     <string name="edit_warranty_hint_description">Enter description</string>
     <string name="edit_warranty_title_date_starting">Starting Date</string>
