@@ -266,8 +266,8 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
     )
 
     private fun showEmptySearchResultListError() = binding.apply {
+        tvEmptySearchResultList.text = getEmptySearchResultErrorText()
         if (groupEmptySearchResultList.visibility != VISIBLE) {
-            tvEmptySearchResultList.text = getEmptySearchResultErrorText()
             groupNetwork.visibility = GONE
             rv.visibility = GONE
             groupEmptySearchResultList.visibility = VISIBLE
