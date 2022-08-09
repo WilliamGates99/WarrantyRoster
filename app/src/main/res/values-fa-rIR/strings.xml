@@ -81,7 +81,7 @@
     <string name="main_menu_title_warranties">فهرست گارانتی‌ها</string>
     <string name="main_menu_title_settings">تنظیمات</string>
     <string name="main_text_content_description">افزودن گارانتی</string>
-    <!--Placeholder for the App Name-->
+    <!--Placeholder is for the App Name-->
     <string name="main_rate_app_dialog_title">امتیاز به %s؟</string>
     <string name="main_rate_app_dialog_message">اگر از استفاده از این برنامه لذت می‌برید، در صورت امکان به آن امتیاز دهید. بیشتر از یک دقیقه طول نمی‌کشد. از حمایت شما متشکریم!</string>
     <string name="main_rate_app_dialog_positive">الان امتیاز می‌دهم</string>
@@ -206,11 +206,11 @@
     <string name="warranty_details_is_lifetime">مادام‌العمر</string>
     <string name="warranty_details_empty_description">هیچ توضیحی وارد نشده.</string>
     <string name="warranty_details_delete_dialog_title">گارانتی حذف شود؟</string>
-    <!--Placeholder for the Warranty Title-->
+    <!--Placeholder is for the Warranty Title-->
     <string name="warranty_details_delete_dialog_message">آیا مطمئنید که می‌خواهید %s را حذف کنید؟</string>
     <string name="warranty_details_delete_dialog_positive">حذف</string>
     <string name="warranty_details_delete_dialog_negative">لغو</string>
-    <!--Placeholder for the Warranty Title-->
+    <!--Placeholder is for the Warranty Title-->
     <string name="warranty_details_delete_success">%s با موفقیت حذف شد.</string>
     <!--
     Placeholders:
