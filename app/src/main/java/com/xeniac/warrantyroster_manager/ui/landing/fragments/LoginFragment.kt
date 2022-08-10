@@ -36,6 +36,7 @@ import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkConnect
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkFailureError
 import com.xeniac.warrantyroster_manager.utils.Status
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.*
 
 @AndroidEntryPoint
 class LoginFragment : Fragment(R.layout.fragment_login) {
@@ -69,7 +70,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
     override fun onSaveInstanceState(outState: Bundle) {
         _binding?.let {
-            val email = binding.tiEditEmail.text.toString().trim().lowercase()
+            val email = binding.tiEditEmail.text.toString().trim().lowercase(Locale.US)
             val password = binding.tiEditPassword.text.toString().trim()
 
             if (email.isNotBlank()) {
@@ -162,7 +163,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(requireView().applicationWindowToken, 0)
 
-        val email = binding.tiEditEmail.text.toString().trim().lowercase()
+        val email = binding.tiEditEmail.text.toString().trim().lowercase(Locale.US)
         val password = binding.tiEditPassword.text.toString().trim()
 
         viewModel.checkLoginInputs(email, password)

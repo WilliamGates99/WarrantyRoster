@@ -135,7 +135,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_4dp"
-            android:layout_marginTop="@dimen/margin_34dp"
+            android:layout_marginTop="@dimen/margin_35dp"
             android:layout_marginBottom="@dimen/margin_19dp"
             android:gravity="center"
             android:text="@string/forgot_pw_sent_btn_return"

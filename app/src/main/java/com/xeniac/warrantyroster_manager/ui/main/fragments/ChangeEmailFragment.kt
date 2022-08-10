@@ -36,6 +36,7 @@ import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkConnect
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkFailureError
 import com.xeniac.warrantyroster_manager.utils.Status
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.*
 
 @AndroidEntryPoint
 class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
@@ -71,7 +72,7 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
     override fun onSaveInstanceState(outState: Bundle) {
         _binding?.let {
             val password = binding.tiEditPassword.text.toString().trim()
-            val newEmail = binding.tiEditNewEmail.text.toString().trim().lowercase()
+            val newEmail = binding.tiEditNewEmail.text.toString().trim().lowercase(Locale.US)
 
             if (password.isNotBlank()) {
                 outState.putString(SAVE_INSTANCE_CHANGE_EMAIL_PASSWORD, password)
@@ -154,7 +155,7 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
         inputMethodManager.hideSoftInputFromWindow(requireView().applicationWindowToken, 0)
 
         val password = binding.tiEditPassword.text.toString().trim()
-        newEmail = binding.tiEditNewEmail.text.toString().trim().lowercase()
+        newEmail = binding.tiEditNewEmail.text.toString().trim().lowercase(Locale.US)
 
         viewModel.checkChangeEmailInputs(password, newEmail)
     }

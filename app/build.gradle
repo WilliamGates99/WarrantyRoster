@@ -16,15 +16,15 @@ applovin {
 }
 
 android {
-    compileSdk 33 // TODO UPGRADE TO 33 FOR RELEASE
+    compileSdk 32 // TODO UPGRADE TO 33 FOR RELEASE
     buildToolsVersion '33.0.0'
 
     defaultConfig {
         applicationId "com.xeniac.warrantyroster_manager"
         minSdkVersion 21
         targetSdk 33
-        versionCode 15
-        versionName "1.5.0"
+        versionCode 16 // TODO UPGRADE FOR RELEASE
+        versionName "1.5.1" // TODO UPGRADE FOR RELEASE
 
         buildConfigField("String", "APPLOVIN_API_KEY", APPLOVIN_API_KEY)
         buildConfigField("String", "APPLOVIN_INTERSTITIAL_UNIT_ID", APPLOVIN_INTERSTITIAL_UNIT_ID)
@@ -84,22 +84,22 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.8.0'
     implementation 'androidx.appcompat:appcompat:1.4.2'
     implementation 'com.google.android.material:material:1.6.1'
-    implementation 'androidx.core:core-splashscreen:1.0.0-rc01'
+    implementation 'androidx.core:core-splashscreen:1.0.0'
 
     // Navigation Component
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.5.0'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.5.0'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.5.1'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.5.1'
 
     // Dagger - Hilt
-    implementation 'com.google.dagger:hilt-android:2.43'
-    kapt 'com.google.dagger:hilt-compiler:2.43'
+    implementation 'com.google.dagger:hilt-android:2.43.2'
+    kapt 'com.google.dagger:hilt-compiler:2.43.2'
 
     // Activity KTX for Injecting ViewModels into Fragments
-    implementation 'androidx.activity:activity-ktx:1.5.0'
+    implementation 'androidx.activity:activity-ktx:1.5.1'
 
     // Architectural Components
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.0'
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
 
     // Coroutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4'
@@ -169,12 +169,48 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.arch.core:core-testing:2.1.0'
     androidTestImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4'
-    androidTestImplementation 'androidx.navigation:navigation-testing:2.5.0'
-    // TODO UPGRADE ESPRESSO TO 3.5.0 AND NOT 3.4.0
+    androidTestImplementation 'androidx.navigation:navigation-testing:2.5.1'
+    // Espresso 3.4.0 has runtime issues
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.3.0'
     androidTestImplementation 'androidx.test.espresso:espresso-intents:3.3.0'
-    androidTestImplementation 'com.google.dagger:hilt-android-testing:2.43'
-    kaptAndroidTest 'com.google.dagger:hilt-compiler:2.43'
-    debugImplementation 'androidx.fragment:fragment-testing:1.5.0'
+    androidTestImplementation 'com.google.dagger:hilt-android-testing:2.43.2'
+    kaptAndroidTest 'com.google.dagger:hilt-compiler:2.43.2'
+    debugImplementation 'androidx.fragment:fragment-testing:1.5.1'
+}
+
+task copyReleaseApk(type: Copy) {
+    def sourceDir = "${rootDir}/app/release/app-release.apk"
+    def destDir = "D:\\01 My Files\\Projects\\Xeniac\\Warranty Roster\\APK"
+    def versionName = "${android.defaultConfig.versionName}"
+
+    from sourceDir
+    into destDir
+
+    rename "app-release.apk", "Warranty Roster ${versionName}.apk"
+}
+
+task copyReleaseBundle(type: Copy) {
+    def sourceDir = "${rootDir}/app/release/app-release.aab"
+    def destDir = "D:\\01 My Files\\Projects\\Xeniac\\Warranty Roster\\APK"
+    def versionName = "${android.defaultConfig.versionName}"
+
+    from sourceDir
+    into destDir
+
+    rename "app-release.aab", "Warranty Roster ${versionName}.aab"
+}
+
+task copyObfuscationFolder(type: Copy) {
+    def sourceDir = "${rootDir}/app/obfuscation"
+    def destDir = "D:\\01 My Files\\Projects\\Xeniac\\Warranty Roster\\APK\\obfuscation"
+
+    delete "$destDir"
+
+    from sourceDir
+    into destDir
+}
+
+task copyReleaseFiles() {
+    dependsOn("copyReleaseApk", "copyReleaseBundle", "copyObfuscationFolder")
 }

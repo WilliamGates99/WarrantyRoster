@@ -33,9 +33,11 @@ import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTIO
 import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_ENGLISH_GREAT_BRITAIN
 import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_ENGLISH_UNITED_STATES
 import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_PERSIAN_IRAN
+import com.xeniac.warrantyroster_manager.utils.Constants.URL_CROWDIN
 import com.xeniac.warrantyroster_manager.utils.Constants.URL_DONATE
 import com.xeniac.warrantyroster_manager.utils.Constants.URL_PRIVACY_POLICY
 import com.xeniac.warrantyroster_manager.utils.LinkHelper.openLink
+import com.xeniac.warrantyroster_manager.utils.LinkHelper.openPlayStore
 import com.xeniac.warrantyroster_manager.utils.SettingsHelper
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.show403Error
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseDeviceBlockedError
@@ -88,6 +90,8 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
         languageOnClick()
         themeOnClick()
         donateOnClick()
+        improveTranslationsOnClick()
+        rateUsOnClick()
         privacyPolicyOnClick()
         logoutOnClick()
         requestAppLovinNativeAd()
@@ -263,6 +267,15 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
 
     private fun donateOnClick() = binding.clSettingsDonate.setOnClickListener {
         openLink(requireContext(), requireView(), URL_DONATE)
+    }
+
+    private fun improveTranslationsOnClick() =
+        binding.clSettingsImproveTranslations.setOnClickListener {
+            openLink(requireContext(), requireView(), URL_CROWDIN)
+        }
+
+    private fun rateUsOnClick() = binding.clSettingsRateUs.setOnClickListener {
+        openPlayStore(requireContext(), requireView())
     }
 
     private fun privacyPolicyOnClick() = binding.clSettingsPrivacyPolicy.setOnClickListener {
@@ -496,7 +509,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
 
     private fun showNativeAdContainer() = binding.apply {
         flAdContainerNative.visibility = VISIBLE
-        dividerSettingsFourth.visibility = VISIBLE
+        dividerSettingsAdContainer.visibility = VISIBLE
     }
 
     private fun destroyAd() {

@@ -41,6 +41,7 @@ import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkFailure
 import com.xeniac.warrantyroster_manager.utils.Status
 import com.xeniac.warrantyroster_manager.utils.UserHelper.passwordStrength
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.*
 
 @AndroidEntryPoint
 class RegisterFragment : Fragment(R.layout.fragment_register) {
@@ -74,7 +75,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
 
     override fun onSaveInstanceState(outState: Bundle) {
         _binding?.let {
-            val email = binding.tiEditEmail.text.toString().trim().lowercase()
+            val email = binding.tiEditEmail.text.toString().trim().lowercase(Locale.US)
             val password = binding.tiEditPassword.text.toString().trim()
             val confirmPassword = binding.tiEditConfirmPassword.text.toString().trim()
 
@@ -219,7 +220,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
             .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(requireView().applicationWindowToken, 0)
 
-        val email = binding.tiEditEmail.text.toString().trim().lowercase()
+        val email = binding.tiEditEmail.text.toString().trim().lowercase(Locale.US)
         val password = binding.tiEditPassword.text.toString().trim()
         val retypePassword = binding.tiEditConfirmPassword.text.toString().trim()
 
