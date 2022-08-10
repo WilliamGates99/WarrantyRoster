@@ -23,8 +23,8 @@ android {
         applicationId "com.xeniac.warrantyroster_manager"
         minSdkVersion 21
         targetSdk 33
-        versionCode 15
-        versionName "1.5.0"
+        versionCode 15 // TODO UPGRADE
+        versionName "1.5.0" // TODO UPGRADE
 
         buildConfigField("String", "APPLOVIN_API_KEY", APPLOVIN_API_KEY)
         buildConfigField("String", "APPLOVIN_INTERSTITIAL_UNIT_ID", APPLOVIN_INTERSTITIAL_UNIT_ID)
@@ -177,4 +177,46 @@ dependencies {
     androidTestImplementation 'com.google.dagger:hilt-android-testing:2.43.2'
     kaptAndroidTest 'com.google.dagger:hilt-compiler:2.43.2'
     debugImplementation 'androidx.fragment:fragment-testing:1.5.1'
+}
+
+task copyReleaseApk(type: Copy) {
+    def sourceDir = "${rootDir}/app/release/app-release.apk"
+    def destDir = "D:\\01 My Files\\Projects\\Xeniac\\Warranty Roster\\APK\\APK"
+    def versionName = "${android.defaultConfig.versionName}"
+
+    delete "$destDir\\Warranty Roster ${versionName}.apk"
+
+    from sourceDir
+    into destDir
+
+    rename "app-release.apk", "Warranty Roster ${versionName}.apk"
+}
+
+task copyReleaseBundle(type: Copy) {
+    def sourceDir = "${rootDir}/app/release/app-release.aab"
+    def destDir = "D:\\01 My Files\\Projects\\Xeniac\\Warranty Roster\\APK\\Bundle"
+    def versionName = "${android.defaultConfig.versionName}"
+
+    delete "$destDir\\Warranty Roster ${versionName}.aab"
+
+    from sourceDir
+    into destDir
+
+    rename "app-release.aab", "Warranty Roster ${versionName}.aab"
+}
+
+task copyObfuscationFolder(type: Copy) {
+    def sourceDir = "${rootDir}/app/obfuscation"
+    def destDir = "D:\\01 My Files\\Projects\\Xeniac\\Warranty Roster\\APK\\obfuscation"
+
+    delete "$destDir"
+
+    from sourceDir
+    into destDir
+}
+
+tasks.whenTaskAdded { task ->
+    if (task.name == "assembleRelease") {
+        task.finalizedBy "copyReleaseApk", "copyReleaseBundle", "copyObfuscationFolder"
+    }
 }
