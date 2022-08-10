@@ -181,10 +181,8 @@ dependencies {
 
 task copyReleaseApk(type: Copy) {
     def sourceDir = "${rootDir}/app/release/app-release.apk"
-    def destDir = "D:\\01 My Files\\Projects\\Xeniac\\Warranty Roster\\APK\\APK"
+    def destDir = "D:\\01 My Files\\Projects\\Xeniac\\Warranty Roster\\APK"
     def versionName = "${android.defaultConfig.versionName}"
-
-    delete "$destDir\\Warranty Roster ${versionName}.apk"
 
     from sourceDir
     into destDir
@@ -194,10 +192,8 @@ task copyReleaseApk(type: Copy) {
 
 task copyReleaseBundle(type: Copy) {
     def sourceDir = "${rootDir}/app/release/app-release.aab"
-    def destDir = "D:\\01 My Files\\Projects\\Xeniac\\Warranty Roster\\APK\\Bundle"
+    def destDir = "D:\\01 My Files\\Projects\\Xeniac\\Warranty Roster\\APK"
     def versionName = "${android.defaultConfig.versionName}"
-
-    delete "$destDir\\Warranty Roster ${versionName}.aab"
 
     from sourceDir
     into destDir
@@ -215,8 +211,6 @@ task copyObfuscationFolder(type: Copy) {
     into destDir
 }
 
-tasks.whenTaskAdded { task ->
-    if (task.name == "assembleRelease") {
-        task.finalizedBy "copyReleaseApk", "copyReleaseBundle", "copyObfuscationFolder"
-    }
+task copyReleaseFiles() {
+    dependsOn("copyReleaseApk", "copyReleaseBundle", "copyObfuscationFolder")
 }
