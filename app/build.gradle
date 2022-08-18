@@ -37,6 +37,7 @@ android {
         buildConfigField "String", "TAPSELL_WARRANTIES_NATIVE_ZONE_ID", "\"${properties.getProperty("TAPSELL_WARRANTIES_NATIVE_ZONE_ID")}\""
         buildConfigField "String", "TAPSELL_SETTINGS_NATIVE_ZONE_ID", "\"${properties.getProperty("TAPSELL_SETTINGS_NATIVE_ZONE_ID")}\""
         buildConfigField "String", "URL_APP_STORE", "\"${properties.getProperty("URL_PLAY_STORE")}\""
+        buildConfigField "String", "PACKAGE_NAME_APP_STORE", "\"${properties.getProperty("PACKAGE_NAME_PLAY_STORE")}\""
 
         testInstrumentationRunner "com.xeniac.warrantyroster_manager.HiltTestRunner"
     }
@@ -65,16 +66,19 @@ android {
         playStore {
             dimension "appStore"
             buildConfigField "String", "URL_APP_STORE", "\"${properties.getProperty("URL_PLAY_STORE")}\""
+            buildConfigField "String", "PACKAGE_NAME_APP_STORE", "\"${properties.getProperty("PACKAGE_NAME_PLAY_STORE")}\""
         }
 
         amazon {
             dimension "appStore"
             buildConfigField "String", "URL_APP_STORE", "\"${properties.getProperty("URL_AMAZON")}\""
+            buildConfigField "String", "PACKAGE_NAME_APP_STORE", "\"${properties.getProperty("PACKAGE_NAME_AMAZON")}\""
         }
 
         cafeBazaar {
             dimension "appStore"
             buildConfigField "String", "URL_APP_STORE", "\"${properties.getProperty("URL_CAFEBAZAAR")}\""
+            buildConfigField "String", "PACKAGE_NAME_APP_STORE", "\"${properties.getProperty("PACKAGE_NAME_CAFEBAZAAR")}\""
         }
     }
 

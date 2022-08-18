@@ -21,7 +21,7 @@ object LinkHelper {
     fun openPlayStore(context: Context, view: View) = Intent().apply {
         action = Intent.ACTION_VIEW
         data = Uri.parse(BuildConfig.URL_APP_STORE)
-        setPackage("com.android.vending")
+        setPackage(BuildConfig.PACKAGE_NAME_APP_STORE)
 
         resolveActivity(context.packageManager)?.let {
             context.startActivity(this)
