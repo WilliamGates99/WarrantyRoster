@@ -48,12 +48,6 @@ android {
             ext.alwaysUpdateBuildId = false
         }
 
-        beta {
-            initWith debug
-            applicationIdSuffix ".beta"
-            versionNameSuffix " - Beta"
-        }
-
         release {
             shrinkResources true
             minifyEnabled true
