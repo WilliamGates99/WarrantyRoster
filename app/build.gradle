@@ -26,8 +26,8 @@ android {
         applicationId "com.xeniac.warrantyroster_manager"
         minSdkVersion 21
         targetSdk 33
-        versionCode 16 // TODO UPGRADE FOR RELEASE
-        versionName "1.5.1" // TODO UPGRADE FOR RELEASE
+        versionCode 17 // TODO UPGRADE FOR RELEASE
+        versionName "1.5.2" // TODO UPGRADE FOR RELEASE
 
         buildConfigField "String", "APPLOVIN_INTERSTITIAL_UNIT_ID", "\"${properties.getProperty("APPLOVIN_INTERSTITIAL_UNIT_ID")}\""
         buildConfigField "String", "APPLOVIN_SETTINGS_NATIVE_UNIT_ID", "\"${properties.getProperty("APPLOVIN_SETTINGS_NATIVE_UNIT_ID")}\""
