@@ -163,6 +163,16 @@
     <string name="add_warranty_hint_description">توضیحات را وارد کنید</string>
     <string name="add_warranty_title_date_starting">تاریخ شروع</string>
     <string name="add_warranty_title_date_expiry">تاریخ اتمام</string>
+    <!--
+    dd: Day
+    mm: Month
+    yyyy: Year
+
+    Samples:
+    • en-US: mm/dd/yyyy
+    • en-GB: dd/mm/yyyy
+    • fa-IR: روز/ماه/سال
+    -->
     <string name="add_warranty_hint_date">روز/ماه/سال</string>
     <string name="add_warranty_title_date_picker_starting">تاریخ شروع را انتخاب کنید</string>
     <string name="add_warranty_title_date_picker_expiry">تاریخ اتمام را انتخاب کنید</string>
@@ -230,6 +240,16 @@
     <string name="edit_warranty_hint_description">توضیحات را وارد کنید</string>
     <string name="edit_warranty_title_date_starting">تاریخ شروع</string>
     <string name="edit_warranty_title_date_expiry">تاریخ اتمام</string>
+    <!--
+    dd: Day
+    mm: Month
+    yyyy: Year
+
+    Samples:
+    • en-US: mm/dd/yyyy
+    • en-GB: dd/mm/yyyy
+    • fa-IR: روز/ماه/سال
+    -->
     <string name="edit_warranty_hint_date">روز/ماه/سال</string>
     <string name="edit_warranty_title_date_picker_starting">تاریخ شروع را انتخاب کنید</string>
     <string name="edit_warranty_title_date_picker_expiry">تاریخ اتمام را انتخاب کنید</string>
