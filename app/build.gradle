@@ -144,14 +144,10 @@ dependencies {
     // AppLovin Libraries
     implementation 'com.applovin:applovin-sdk:11.4.4'
     implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'
-    implementation 'com.applovin.mediation:adcolony-adapter:4.8.0.0'
     implementation 'com.applovin.mediation:google-adapter:21.1.0.0'
 
     // Google AdMob Library
     implementation 'com.google.android.gms:play-services-ads:21.1.0'
-
-    // AdColony Libraries
-    implementation 'com.adcolony:sdk:4.8.0'
 
     // Tapsell Library
     implementation 'ir.tapsell.plus:tapsell-plus-sdk-android:2.1.7'
