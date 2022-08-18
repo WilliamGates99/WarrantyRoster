@@ -82,7 +82,7 @@ kapt {
 
 dependencies {
     implementation 'androidx.core:core-ktx:1.8.0'
-    implementation 'androidx.appcompat:appcompat:1.4.2'
+    implementation 'androidx.appcompat:appcompat:1.5.0'
     implementation 'com.google.android.material:material:1.6.1'
     implementation 'androidx.core:core-splashscreen:1.0.0'
 
@@ -112,7 +112,7 @@ dependencies {
     implementation 'androidx.datastore:datastore-preferences:1.0.0'
 
     // Firebase BoM and Analytics
-    implementation platform('com.google.firebase:firebase-bom:30.3.1')
+    implementation platform('com.google.firebase:firebase-bom:30.3.2')
     implementation 'com.google.firebase:firebase-analytics-ktx'
 
     // Firebase App Check
@@ -176,7 +176,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-intents:3.3.0'
     androidTestImplementation 'com.google.dagger:hilt-android-testing:2.43.2'
     kaptAndroidTest 'com.google.dagger:hilt-compiler:2.43.2'
-    debugImplementation 'androidx.fragment:fragment-testing:1.5.1'
+    debugImplementation 'androidx.fragment:fragment-testing:1.5.2'
 }
 
 task copyReleaseApk(type: Copy) {
