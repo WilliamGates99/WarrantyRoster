@@ -201,25 +201,30 @@ dependencies {
 }
 
 task copyReleaseApk(type: Copy) {
-    def sourceDir = "${rootDir}/app/release/app-release.apk"
+    def sourceDirAmazon = "${rootDir}/app/amazon/release/app-amazon-release.apk"
+    def sourceDirCafeBazaar = "${rootDir}/app/cafeBazaar/release/app-cafeBazaar-release.apk"
     def destDir = "D:\\01 My Files\\Projects\\Xeniac\\Warranty Roster\\APK"
     def versionName = "${android.defaultConfig.versionName}"
 
-    from sourceDir
+    from sourceDirAmazon
     into destDir
 
-    rename "app-release.apk", "Warranty Roster ${versionName}.apk"
+    from sourceDirCafeBazaar
+    into destDir
+
+    rename "app-amazon-release.apk", "Warranty Roster ${versionName} - Amazon.apk"
+    rename "app-cafeBazaar-release.apk", "Warranty Roster ${versionName} - CafeBazaar.apk"
 }
 
 task copyReleaseBundle(type: Copy) {
-    def sourceDir = "${rootDir}/app/release/app-release.aab"
+    def sourceDir = "${rootDir}/app/playStore/release/app-playStore-release.aab"
     def destDir = "D:\\01 My Files\\Projects\\Xeniac\\Warranty Roster\\APK"
     def versionName = "${android.defaultConfig.versionName}"
 
     from sourceDir
     into destDir
 
-    rename "app-release.aab", "Warranty Roster ${versionName}.aab"
+    rename "app-playStore-release.aab", "Warranty Roster ${versionName}.aab"
 }
 
 task copyObfuscationFolder(type: Copy) {
