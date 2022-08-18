@@ -11,8 +11,11 @@ plugins {
     id 'applovin-quality-service'
 }
 
+Properties properties = new Properties()
+properties.load(project.rootProject.file("local.properties").newDataInputStream())
+
 applovin {
-    apiKey APPLOVIN_API_KEY
+    apiKey "\"${properties.getProperty("APPLOVIN_API_KEY")}\""
 }
 
 android {
@@ -26,21 +29,16 @@ android {
         versionCode 16 // TODO UPGRADE FOR RELEASE
         versionName "1.5.1" // TODO UPGRADE FOR RELEASE
 
-        buildConfigField("String", "APPLOVIN_API_KEY", APPLOVIN_API_KEY)
-        buildConfigField("String", "APPLOVIN_INTERSTITIAL_UNIT_ID", APPLOVIN_INTERSTITIAL_UNIT_ID)
-        buildConfigField("String", "APPLOVIN_SETTINGS_NATIVE_UNIT_ID", APPLOVIN_SETTINGS_NATIVE_UNIT_ID)
-        buildConfigField("String", "APPLOVIN_WARRANTIES_NATIVE_UNIT_ID", APPLOVIN_WARRANTIES_NATIVE_UNIT_ID)
-        buildConfigField("String", "TAPSELL_KEY", TAPSELL_KEY)
-        buildConfigField("String", "TAPSELL_INTERSTITIAL_ZONE_ID", TAPSELL_INTERSTITIAL_ZONE_ID)
-        buildConfigField("String", "TAPSELL_WARRANTIES_NATIVE_ZONE_ID", TAPSELL_WARRANTIES_NATIVE_ZONE_ID)
-        buildConfigField("String", "TAPSELL_SETTINGS_NATIVE_ZONE_ID", TAPSELL_SETTINGS_NATIVE_ZONE_ID)
+        buildConfigField "String", "APPLOVIN_INTERSTITIAL_UNIT_ID", "\"${properties.getProperty("APPLOVIN_INTERSTITIAL_UNIT_ID")}\""
+        buildConfigField "String", "APPLOVIN_SETTINGS_NATIVE_UNIT_ID", "\"${properties.getProperty("APPLOVIN_SETTINGS_NATIVE_UNIT_ID")}\""
+        buildConfigField "String", "APPLOVIN_WARRANTIES_NATIVE_UNIT_ID", "\"${properties.getProperty("APPLOVIN_WARRANTIES_NATIVE_UNIT_ID")}\""
+        buildConfigField "String", "TAPSELL_KEY", "\"${properties.getProperty("TAPSELL_KEY")}\""
+        buildConfigField "String", "TAPSELL_INTERSTITIAL_ZONE_ID", "\"${properties.getProperty("TAPSELL_INTERSTITIAL_ZONE_ID")}\""
+        buildConfigField "String", "TAPSELL_WARRANTIES_NATIVE_ZONE_ID", "\"${properties.getProperty("TAPSELL_WARRANTIES_NATIVE_ZONE_ID")}\""
+        buildConfigField "String", "TAPSELL_SETTINGS_NATIVE_ZONE_ID", "\"${properties.getProperty("TAPSELL_SETTINGS_NATIVE_ZONE_ID")}\""
+        buildConfigField "String", "URL_APP_STORE", "\"${properties.getProperty("URL_PLAY_STORE")}\""
 
         testInstrumentationRunner "com.xeniac.warrantyroster_manager.HiltTestRunner"
-    }
-
-    buildFeatures {
-        viewBinding true
-        dataBinding true
     }
 
     buildTypes {
@@ -49,11 +47,40 @@ android {
             ext.alwaysUpdateBuildId = false
         }
 
+        beta {
+            initWith debug
+            applicationIdSuffix ".beta"
+            versionNameSuffix " - Beta"
+        }
+
         release {
             shrinkResources true
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+
+    flavorDimensions "appStore"
+    productFlavors {
+        playStore {
+            dimension "appStore"
+            buildConfigField "String", "URL_APP_STORE", "\"${properties.getProperty("URL_PLAY_STORE")}\""
+        }
+
+        amazon {
+            dimension "appStore"
+            buildConfigField "String", "URL_APP_STORE", "\"${properties.getProperty("URL_AMAZON")}\""
+        }
+
+        cafeBazaar {
+            dimension "appStore"
+            buildConfigField "String", "URL_APP_STORE", "\"${properties.getProperty("URL_CAFEBAZAAR")}\""
+        }
+    }
+
+    buildFeatures {
+        viewBinding true
+        dataBinding true
     }
 
     compileOptions {

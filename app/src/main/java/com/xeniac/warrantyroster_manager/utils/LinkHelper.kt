@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.view.View
-import com.xeniac.warrantyroster_manager.utils.Constants.URL_PLAY_STORE
+import com.xeniac.warrantyroster_manager.BuildConfig
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showIntentAppNotFoundError
 
 object LinkHelper {
@@ -20,11 +20,11 @@ object LinkHelper {
 
     fun openPlayStore(context: Context, view: View) = Intent().apply {
         action = Intent.ACTION_VIEW
-        data = Uri.parse(URL_PLAY_STORE + context.packageName)
+        data = Uri.parse(BuildConfig.URL_APP_STORE)
         setPackage("com.android.vending")
 
         resolveActivity(context.packageManager)?.let {
             context.startActivity(this)
-        } ?: openLink(context, view, URL_PLAY_STORE + context.packageName)
+        } ?: openLink(context, view, BuildConfig.URL_APP_STORE + context.packageName)
     }
 }

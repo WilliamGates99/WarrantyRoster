@@ -14,6 +14,7 @@ import androidx.test.espresso.intent.matcher.IntentMatchers
 import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.ViewMatchers.*
 import com.google.common.truth.Truth.assertThat
+import com.xeniac.warrantyroster_manager.BuildConfig
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.data.repository.FakePreferencesRepository
 import com.xeniac.warrantyroster_manager.data.repository.FakeUserRepository
@@ -23,7 +24,6 @@ import com.xeniac.warrantyroster_manager.launchFragmentInHiltContainer
 import com.xeniac.warrantyroster_manager.ui.viewmodels.SettingsViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.URL_CROWDIN
 import com.xeniac.warrantyroster_manager.utils.Constants.URL_DONATE
-import com.xeniac.warrantyroster_manager.utils.Constants.URL_PLAY_STORE
 import com.xeniac.warrantyroster_manager.utils.Constants.URL_PRIVACY_POLICY
 import com.xeniac.warrantyroster_manager.utils.Status
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -173,7 +173,7 @@ class SettingsFragmentTest {
         Intents.intended(
             CoreMatchers.allOf(
                 IntentMatchers.hasAction(Intent.ACTION_VIEW),
-                IntentMatchers.hasData(URL_PLAY_STORE)
+                IntentMatchers.hasData(BuildConfig.URL_APP_STORE)
             )
         )
 
