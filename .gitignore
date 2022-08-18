@@ -8,6 +8,9 @@
 .externalNativeBuild
 .cxx
 /app/release
+/app/playStore
+/app/amazon
+/app/cafeBazaar
 /app/obfuscation
 /app/src/main/dbschemas
 /app/google-services.json
