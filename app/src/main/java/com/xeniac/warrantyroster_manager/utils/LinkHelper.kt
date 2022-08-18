@@ -25,6 +25,6 @@ object LinkHelper {
 
         resolveActivity(context.packageManager)?.let {
             context.startActivity(this)
-        } ?: openLink(context, view, BuildConfig.URL_APP_STORE + context.packageName)
+        } ?: openLink(context, view, BuildConfig.URL_APP_STORE)
     }
 }
