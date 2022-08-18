@@ -231,8 +231,6 @@ task copyObfuscationFolder(type: Copy) {
     def sourceDir = "${rootDir}/app/obfuscation"
     def destDir = "D:\\01 My Files\\Projects\\Xeniac\\Warranty Roster\\APK\\obfuscation"
 
-    delete "$destDir"
-
     from sourceDir
     into destDir
 }
