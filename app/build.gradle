@@ -11,8 +11,11 @@ plugins {
     id 'applovin-quality-service'
 }
 
+Properties properties = new Properties()
+properties.load(project.rootProject.file("local.properties").newDataInputStream())
+
 applovin {
-    apiKey APPLOVIN_API_KEY
+    apiKey "\"${properties.getProperty("APPLOVIN_API_KEY")}\""
 }
 
 android {
@@ -23,24 +26,20 @@ android {
         applicationId "com.xeniac.warrantyroster_manager"
         minSdkVersion 21
         targetSdk 33
-        versionCode 16 // TODO UPGRADE FOR RELEASE
-        versionName "1.5.1" // TODO UPGRADE FOR RELEASE
+        versionCode 17 // TODO UPGRADE FOR RELEASE
+        versionName "1.5.2" // TODO UPGRADE FOR RELEASE
 
-        buildConfigField("String", "APPLOVIN_API_KEY", APPLOVIN_API_KEY)
-        buildConfigField("String", "APPLOVIN_INTERSTITIAL_UNIT_ID", APPLOVIN_INTERSTITIAL_UNIT_ID)
-        buildConfigField("String", "APPLOVIN_SETTINGS_NATIVE_UNIT_ID", APPLOVIN_SETTINGS_NATIVE_UNIT_ID)
-        buildConfigField("String", "APPLOVIN_WARRANTIES_NATIVE_UNIT_ID", APPLOVIN_WARRANTIES_NATIVE_UNIT_ID)
-        buildConfigField("String", "TAPSELL_KEY", TAPSELL_KEY)
-        buildConfigField("String", "TAPSELL_INTERSTITIAL_ZONE_ID", TAPSELL_INTERSTITIAL_ZONE_ID)
-        buildConfigField("String", "TAPSELL_WARRANTIES_NATIVE_ZONE_ID", TAPSELL_WARRANTIES_NATIVE_ZONE_ID)
-        buildConfigField("String", "TAPSELL_SETTINGS_NATIVE_ZONE_ID", TAPSELL_SETTINGS_NATIVE_ZONE_ID)
+        buildConfigField "String", "APPLOVIN_INTERSTITIAL_UNIT_ID", "\"${properties.getProperty("APPLOVIN_INTERSTITIAL_UNIT_ID")}\""
+        buildConfigField "String", "APPLOVIN_SETTINGS_NATIVE_UNIT_ID", "\"${properties.getProperty("APPLOVIN_SETTINGS_NATIVE_UNIT_ID")}\""
+        buildConfigField "String", "APPLOVIN_WARRANTIES_NATIVE_UNIT_ID", "\"${properties.getProperty("APPLOVIN_WARRANTIES_NATIVE_UNIT_ID")}\""
+        buildConfigField "String", "TAPSELL_KEY", "\"${properties.getProperty("TAPSELL_KEY")}\""
+        buildConfigField "String", "TAPSELL_INTERSTITIAL_ZONE_ID", "\"${properties.getProperty("TAPSELL_INTERSTITIAL_ZONE_ID")}\""
+        buildConfigField "String", "TAPSELL_WARRANTIES_NATIVE_ZONE_ID", "\"${properties.getProperty("TAPSELL_WARRANTIES_NATIVE_ZONE_ID")}\""
+        buildConfigField "String", "TAPSELL_SETTINGS_NATIVE_ZONE_ID", "\"${properties.getProperty("TAPSELL_SETTINGS_NATIVE_ZONE_ID")}\""
+        buildConfigField "String", "URL_APP_STORE", "\"${properties.getProperty("URL_PLAY_STORE")}\""
+        buildConfigField "String", "PACKAGE_NAME_APP_STORE", "\"${properties.getProperty("PACKAGE_NAME_PLAY_STORE")}\""
 
         testInstrumentationRunner "com.xeniac.warrantyroster_manager.HiltTestRunner"
-    }
-
-    buildFeatures {
-        viewBinding true
-        dataBinding true
     }
 
     buildTypes {
@@ -54,6 +53,32 @@ android {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+
+    flavorDimensions "appStore"
+    productFlavors {
+        playStore {
+            dimension "appStore"
+            buildConfigField "String", "URL_APP_STORE", "\"${properties.getProperty("URL_PLAY_STORE")}\""
+            buildConfigField "String", "PACKAGE_NAME_APP_STORE", "\"${properties.getProperty("PACKAGE_NAME_PLAY_STORE")}\""
+        }
+
+        amazon {
+            dimension "appStore"
+            buildConfigField "String", "URL_APP_STORE", "\"${properties.getProperty("URL_AMAZON")}\""
+            buildConfigField "String", "PACKAGE_NAME_APP_STORE", "\"${properties.getProperty("PACKAGE_NAME_AMAZON")}\""
+        }
+
+        cafeBazaar {
+            dimension "appStore"
+            buildConfigField "String", "URL_APP_STORE", "\"${properties.getProperty("URL_CAFEBAZAAR")}\""
+            buildConfigField "String", "PACKAGE_NAME_APP_STORE", "\"${properties.getProperty("PACKAGE_NAME_CAFEBAZAAR")}\""
+        }
+    }
+
+    buildFeatures {
+        viewBinding true
+        dataBinding true
     }
 
     compileOptions {
@@ -82,7 +107,7 @@ kapt {
 
 dependencies {
     implementation 'androidx.core:core-ktx:1.8.0'
-    implementation 'androidx.appcompat:appcompat:1.4.2'
+    implementation 'androidx.appcompat:appcompat:1.5.0'
     implementation 'com.google.android.material:material:1.6.1'
     implementation 'androidx.core:core-splashscreen:1.0.0'
 
@@ -112,7 +137,7 @@ dependencies {
     implementation 'androidx.datastore:datastore-preferences:1.0.0'
 
     // Firebase BoM and Analytics
-    implementation platform('com.google.firebase:firebase-bom:30.3.1')
+    implementation platform('com.google.firebase:firebase-bom:30.3.2')
     implementation 'com.google.firebase:firebase-analytics-ktx'
 
     // Firebase App Check
@@ -144,14 +169,10 @@ dependencies {
     // AppLovin Libraries
     implementation 'com.applovin:applovin-sdk:11.4.4'
     implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'
-    implementation 'com.applovin.mediation:adcolony-adapter:4.8.0.0'
     implementation 'com.applovin.mediation:google-adapter:21.1.0.0'
 
     // Google AdMob Library
     implementation 'com.google.android.gms:play-services-ads:21.1.0'
-
-    // AdColony Libraries
-    implementation 'com.adcolony:sdk:4.8.0'
 
     // Tapsell Library
     implementation 'ir.tapsell.plus:tapsell-plus-sdk-android:2.1.7'
@@ -176,36 +197,39 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-intents:3.3.0'
     androidTestImplementation 'com.google.dagger:hilt-android-testing:2.43.2'
     kaptAndroidTest 'com.google.dagger:hilt-compiler:2.43.2'
-    debugImplementation 'androidx.fragment:fragment-testing:1.5.1'
+    debugImplementation 'androidx.fragment:fragment-testing:1.5.2'
 }
 
 task copyReleaseApk(type: Copy) {
-    def sourceDir = "${rootDir}/app/release/app-release.apk"
+    def sourceDirAmazon = "${rootDir}/app/amazon/release/app-amazon-release.apk"
+    def sourceDirCafeBazaar = "${rootDir}/app/cafeBazaar/release/app-cafeBazaar-release.apk"
     def destDir = "D:\\01 My Files\\Projects\\Xeniac\\Warranty Roster\\APK"
     def versionName = "${android.defaultConfig.versionName}"
 
-    from sourceDir
+    from sourceDirAmazon
     into destDir
 
-    rename "app-release.apk", "Warranty Roster ${versionName}.apk"
+    from sourceDirCafeBazaar
+    into destDir
+
+    rename "app-amazon-release.apk", "Warranty Roster ${versionName} - Amazon.apk"
+    rename "app-cafeBazaar-release.apk", "Warranty Roster ${versionName} - CafeBazaar.apk"
 }
 
 task copyReleaseBundle(type: Copy) {
-    def sourceDir = "${rootDir}/app/release/app-release.aab"
+    def sourceDir = "${rootDir}/app/playStore/release/app-playStore-release.aab"
     def destDir = "D:\\01 My Files\\Projects\\Xeniac\\Warranty Roster\\APK"
     def versionName = "${android.defaultConfig.versionName}"
 
     from sourceDir
     into destDir
 
-    rename "app-release.aab", "Warranty Roster ${versionName}.aab"
+    rename "app-playStore-release.aab", "Warranty Roster ${versionName}.aab"
 }
 
 task copyObfuscationFolder(type: Copy) {
     def sourceDir = "${rootDir}/app/obfuscation"
     def destDir = "D:\\01 My Files\\Projects\\Xeniac\\Warranty Roster\\APK\\obfuscation"
-
-    delete "$destDir"
 
     from sourceDir
     into destDir

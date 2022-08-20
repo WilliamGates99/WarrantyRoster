@@ -5,7 +5,6 @@ object Constants {
     const val URL_PRIVACY_POLICY = "https://xeniacdev.github.io/WarrantyRoster/privacy_policy"
     const val URL_DONATE = "https://xeniacdev.github.io/WarrantyRoster/donate"
     const val URL_CROWDIN = "https://crowdin.com/project/warranty-roster"
-    const val URL_PLAY_STORE = "https://play.google.com/store/apps/details?id="
 
     // DataStore Constants
     const val DATASTORE_NAME_SETTINGS = "settings"

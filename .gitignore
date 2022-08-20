@@ -1,6 +1,5 @@
 *.iml
 .gradle
-/gradle.properties
 /local.properties
 /.idea
 .DS_Store
@@ -9,6 +8,9 @@
 .externalNativeBuild
 .cxx
 /app/release
+/app/playStore
+/app/amazon
+/app/cafeBazaar
 /app/obfuscation
 /app/src/main/dbschemas
 /app/google-services.json

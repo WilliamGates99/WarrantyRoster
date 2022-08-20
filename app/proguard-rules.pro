@@ -19,12 +19,13 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 
-##---------------Begin: proguard configuration for Obfuscation Mapping  ----------
+#---------------Begin: proguard configuration for Obfuscation Mapping---------------
 -printseeds obfuscation/seeds.txt
 -printmapping obfuscation/mapping.txt
-##---------------End: proguard configuration for Obfuscation Mapping  ----------
+#---------------End: proguard configuration for Obfuscation Mapping---------------
 
-##---------------Begin: proguard configuration for Gson  ----------
+
+#---------------Begin: proguard configuration for Gson---------------
 # Gson uses generic type information stored in a class file when working with fields. Proguard
 # removes such information by default, so configure it to keep all of it.
 -keepattributes Signature
@@ -45,10 +46,10 @@
 -keep class * implements com.google.gson.JsonSerializer
 -keep class * implements com.google.gson.JsonDeserializer
 
-##---------------End: proguard configuration for Gson  ----------
+#---------------End: proguard configuration for Gson---------------
 
 
-##---------------Begin: proguard configuration for Retrofit  ----------
+#---------------Begin: proguard configuration for Retrofit---------------
 # Retrofit does reflection on generic parameters. InnerClasses is required to use Signature and
 # EnclosingMethod is required to use InnerClasses.
 -keepattributes Signature, InnerClasses, EnclosingMethod
@@ -69,10 +70,10 @@
 
 # Top-level functions that can only be used by Kotlin.
 -dontwarn retrofit2.-KotlinExtensions
-##---------------End: proguard configuration for Retrofit  ----------
+#---------------End: proguard configuration for Retrofit---------------
 
 
-##---------------Begin: proguard configuration for okhttp3  ----------
+#---------------Begin: proguard configuration for okhttp3---------------
 # JSR 305 annotations are for embedding nullability information.
 -dontwarn javax.annotation.**
 
@@ -84,17 +85,17 @@
 
 # OkHttp platform used only on JVM and when Conscrypt dependency is available.
 -dontwarn okhttp3.internal.platform.ConscryptPlatform
-##---------------End: proguard configuration for okhttp3  ----------
+#---------------End: proguard configuration for okhttp3---------------
 
 
-##---------------Begin: proguard configuration for okio  ----------
+#---------------Begin: proguard configuration for okio---------------
 # Animal Sniffer compileOnly dependency to ensure APIs are compatible with older versions of Java.
 -dontwarn org.codehaus.mojo.animal_sniffer.*
-##---------------End: proguard configuration for okio  ----------
+#---------------End: proguard configuration for okio---------------
 
 
 
-##---------------Begin: proguard configuration for admob  ----------
+#---------------Begin: proguard configuration for admob---------------
 # If your project uses WebView with JS, uncomment the following
 # and specify the fully qualified class name to the JavaScript interface
 # class:
@@ -135,15 +136,15 @@
 -keepnames class * implements android.os.Parcelable {
    public static final ** CREATOR;
 }
-##---------------End: proguard configuration for admob  ----------
+#---------------End: proguard configuration for admob---------------
 
 
-##---------------Begin: proguard configuration for chartboost  ----------
+#---------------Begin: proguard configuration for chartboost---------------
 -keep class com.chartboost.** { *; }
-##---------------End: proguard configuration for chartboost  ----------
+#---------------End: proguard configuration for chartboost---------------
 
 
-##---------------Begin: proguard configuration for tapsell  ----------
+#---------------Begin: proguard configuration for tapsell---------------
 -keepclassmembers enum * { *; }
 -keep class **.R$* { *; }
 -keep interface ir.tapsell.sdk.NoProguard
@@ -170,16 +171,14 @@
 -keep interface ir.tapsell.plus.NoProguard
 -keep interface * extends ir.tapsell.plus.NoProguard { *; }
 -keep class * implements ir.tapsell.plus.NoProguard { *; }
+#---------------End: proguard configuration for tapsell---------------
 
-##---------------End: proguard configuration for tapsell  ----------
 
-##---------------Begin: proguard configuration for AppLovin  ----------
-
+#---------------Begin: proguard configuration for AppLovin---------------
 -dontwarn com.applovin.**
 -keep class com.applovin.** { *; }
 -keep class com.google.android.gms.ads.identifier.** { *; }
-
-##---------------End: proguard configuration for AppLovin  ----------
+#---------------End: proguard configuration for AppLovin---------------
 
 -keep public class com.bumptech.glide.**
 
@@ -195,3 +194,59 @@
 -keepnames public class com.google.android.gms.ads.identifier.AdvertisingIdClient
 -keepnames public class com.chartboost.sdk.Chartboost
 -keepnames public class com.applovin.sdk.AppLovinSdkSettings
+
+
+#---------------Begin: Suppress Warnings---------------
+# This is generated automatically by the Android Gradle plugin.
+-dontwarn com.adcolony.sdk.AdColony
+-dontwarn com.adcolony.sdk.AdColonyAdSize
+-dontwarn com.adcolony.sdk.AdColonyAdView
+-dontwarn com.adcolony.sdk.AdColonyAdViewListener
+-dontwarn com.adcolony.sdk.AdColonyAppOptions
+-dontwarn com.adcolony.sdk.AdColonyInterstitial
+-dontwarn com.adcolony.sdk.AdColonyInterstitialListener
+-dontwarn com.adcolony.sdk.AdColonyRewardListener
+-dontwarn com.android.vending.billing.IInAppBillingService$Stub
+-dontwarn com.android.vending.billing.IInAppBillingService
+-dontwarn com.chartboost.sdk.Chartboost
+-dontwarn com.chartboost.sdk.ChartboostDelegate
+-dontwarn com.chartboost.sdk.Libraries.CBLogging$Level
+-dontwarn com.chartboost.sdk.Privacy.model.DataUseConsent
+-dontwarn com.chartboost.sdk.Privacy.model.GDPR$GDPR_CONSENT
+-dontwarn com.chartboost.sdk.Privacy.model.GDPR
+-dontwarn com.chartboost.sdk.a
+-dontwarn com.facebook.FacebookSdk
+-dontwarn com.facebook.ads.AudienceNetworkAds$InitListener
+-dontwarn com.facebook.ads.AudienceNetworkAds$InitSettingsBuilder
+-dontwarn com.facebook.ads.AudienceNetworkAds
+-dontwarn com.facebook.ads.InterstitialAd
+-dontwarn com.facebook.ads.InterstitialAdListener
+-dontwarn com.facebook.ads.RewardedVideoAd
+-dontwarn com.facebook.ads.RewardedVideoAdListener
+-dontwarn com.squareup.picasso.Picasso
+-dontwarn com.squareup.picasso.RequestCreator
+-dontwarn com.squareup.picasso.Target
+-dontwarn com.unity3d.ads.IUnityAdsInitializationListener
+-dontwarn com.unity3d.ads.IUnityAdsListener
+-dontwarn com.unity3d.ads.UnityAds$PlacementState
+-dontwarn com.unity3d.ads.UnityAds
+-dontwarn com.unity3d.ads.metadata.MetaData
+-dontwarn com.unity3d.services.banners.BannerView$IListener
+-dontwarn com.unity3d.services.banners.BannerView
+-dontwarn com.unity3d.services.banners.UnityBannerSize
+-dontwarn com.vungle.warren.AdConfig
+-dontwarn com.vungle.warren.InitCallback
+-dontwarn com.vungle.warren.LoadAdCallback
+-dontwarn com.vungle.warren.PlayAdCallback
+-dontwarn com.vungle.warren.Vungle$Consent
+-dontwarn com.vungle.warren.Vungle
+-dontwarn org.bouncycastle.jsse.BCSSLParameters
+-dontwarn org.bouncycastle.jsse.BCSSLSocket
+-dontwarn org.bouncycastle.jsse.provider.BouncyCastleJsseProvider
+-dontwarn org.conscrypt.Conscrypt$Version
+-dontwarn org.conscrypt.Conscrypt
+-dontwarn org.conscrypt.ConscryptHostnameVerifier
+-dontwarn org.openjsse.javax.net.ssl.SSLParameters
+-dontwarn org.openjsse.javax.net.ssl.SSLSocket
+-dontwarn org.openjsse.net.ssl.OpenJSSE
+#---------------End: Suppress Warnings---------------
