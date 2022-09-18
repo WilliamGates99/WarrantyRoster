@@ -19,7 +19,7 @@ applovin {
 }
 
 android {
-    compileSdk 32 // TODO UPGRADE TO 33 FOR RELEASE
+    compileSdk 33
     buildToolsVersion '33.0.0'
 
     defaultConfig {
@@ -106,14 +106,14 @@ kapt {
 }
 
 dependencies {
-    implementation 'androidx.core:core-ktx:1.8.0'
-    implementation 'androidx.appcompat:appcompat:1.5.0'
+    implementation 'androidx.core:core-ktx:1.9.0'
+    implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'com.google.android.material:material:1.6.1'
     implementation 'androidx.core:core-splashscreen:1.0.0'
 
     // Navigation Component
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.5.1'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.5.1'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.5.2'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.5.2'
 
     // Dagger - Hilt
     implementation 'com.google.dagger:hilt-android:2.43.2'
@@ -137,7 +137,7 @@ dependencies {
     implementation 'androidx.datastore:datastore-preferences:1.0.0'
 
     // Firebase BoM and Analytics
-    implementation platform('com.google.firebase:firebase-bom:30.4.0')
+    implementation platform('com.google.firebase:firebase-bom:30.5.0')
     implementation 'com.google.firebase:firebase-analytics-ktx'
 
     // Firebase App Check
@@ -160,19 +160,19 @@ dependencies {
     implementation 'com.airbnb.android:lottie:5.2.0'
 
     // Coil Library
-    implementation 'io.coil-kt:coil:2.2.0'
-    implementation 'io.coil-kt:coil-svg:2.2.0'
+    implementation 'io.coil-kt:coil:2.2.1'
+    implementation 'io.coil-kt:coil-svg:2.2.1'
 
     // Google Play In-App Reviews API
     implementation 'com.google.android.play:review-ktx:2.0.0'
 
     // AppLovin Libraries
-    implementation 'com.applovin:applovin-sdk:11.4.5'
+    implementation 'com.applovin:applovin-sdk:11.4.6'
     implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'
-    implementation 'com.applovin.mediation:google-adapter:21.1.0.0'
+    implementation 'com.applovin.mediation:google-adapter:21.2.0.0'
 
     // Google AdMob Library
-    implementation 'com.google.android.gms:play-services-ads:21.1.0'
+    implementation 'com.google.android.gms:play-services-ads:21.2.0'
 
     // Tapsell Library
     implementation 'ir.tapsell.plus:tapsell-plus-sdk-android:2.1.7'
@@ -190,7 +190,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.arch.core:core-testing:2.1.0'
     androidTestImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4'
-    androidTestImplementation 'androidx.navigation:navigation-testing:2.5.1'
+    androidTestImplementation 'androidx.navigation:navigation-testing:2.5.2'
     // Espresso 3.4.0 has runtime issues
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.3.0'
