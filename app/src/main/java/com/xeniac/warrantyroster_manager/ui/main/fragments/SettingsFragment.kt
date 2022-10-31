@@ -241,7 +241,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
         )
 
         MaterialAlertDialogBuilder(requireContext()).apply {
-            setTitle(requireContext().getString(R.string.settings_text_settings_language))
+            setTitle(requireContext().getString(R.string.settings_dialog_title_language))
             setSingleChoiceItems(localeTextItems, currentAppLocaleIndex) { dialogInterface, index ->
                 setAppLocale(index)
                 dialogInterface.dismiss()
@@ -251,13 +251,13 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
 
     private fun themeOnClick() = binding.clSettingsTheme.setOnClickListener {
         val themeItems = arrayOf(
-            requireContext().getString(R.string.settings_text_settings_theme_default),
-            requireContext().getString(R.string.settings_text_settings_theme_light),
-            requireContext().getString(R.string.settings_text_settings_theme_dark)
+            requireContext().getString(R.string.settings_dialog_item_theme_default),
+            requireContext().getString(R.string.settings_dialog_item_theme_light),
+            requireContext().getString(R.string.settings_dialog_item_theme_dark)
         )
 
         MaterialAlertDialogBuilder(requireContext()).apply {
-            setTitle(requireContext().getString(R.string.settings_text_settings_theme))
+            setTitle(requireContext().getString(R.string.settings_dialog_title_theme))
             setSingleChoiceItems(themeItems, currentAppTheme) { dialogInterface, index ->
                 setAppTheme(index)
                 dialogInterface.dismiss()

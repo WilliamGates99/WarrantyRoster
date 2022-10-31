@@ -12,10 +12,10 @@
     <string name="error_btn_confirm">تایید</string>
 
 
-    <string name="landing_text_language">زبان</string>
-    <string name="landing_text_language_english_us">انگلیسی (آمریکایی)</string>
-    <string name="landing_text_language_english_gb">انگلیسی (بریتانیایی)</string>
-    <string name="landing_text_language_persian_ir">فارسی</string>
+    <string name="landing_dialog_title_language">زبان</string>
+    <string name="landing_dialog_item_language_english_us">انگلیسی (آمریکایی)</string>
+    <string name="landing_dialog_item_language_english_gb">انگلیسی (بریتانیایی)</string>
+    <string name="landing_dialog_item_language_persian_ir">فارسی</string>
 
 
     <string name="login_text_title">ورود</string>
@@ -305,9 +305,6 @@
     <string name="settings_text_settings_language_english_us">انگلیسی (آمریکایی)</string>
     <string name="settings_text_settings_language_english_gb">انگلیسی (بریتانیایی)</string>
     <string name="settings_text_settings_language_persian_ir">فارسی</string>
-    <string name="settings_dialog_item_language_english_us">انگلیسی (آمریکایی)</string>
-    <string name="settings_dialog_item_language_english_gb">انگلیسی (بریتانیایی)</string>
-    <string name="settings_dialog_item_language_persian_ir">فارسی</string>
     <string name="settings_text_settings_theme">تم</string>
     <string name="settings_text_settings_theme_default">پیش‌فرض سیستم</string>
     <string name="settings_text_settings_theme_light">روشن</string>
@@ -317,6 +314,14 @@
     <string name="settings_text_settings_rate_us">امتیاز به برنامه</string>
     <string name="settings_text_settings_privacy_policy">حریم خصوصی</string>
     <string name="settings_btn_logout">خروج</string>
+    <string name="settings_dialog_title_language">زبان</string>
+    <string name="settings_dialog_item_language_english_us">انگلیسی (آمریکایی)</string>
+    <string name="settings_dialog_item_language_english_gb">انگلیسی (بریتانیایی)</string>
+    <string name="settings_dialog_item_language_persian_ir">فارسی</string>
+    <string name="settings_dialog_title_theme">تم</string>
+    <string name="settings_dialog_item_theme_default">پیش‌فرض سیستم</string>
+    <string name="settings_dialog_item_theme_light">روشن</string>
+    <string name="settings_dialog_item_theme_dark">تیره</string>
     <string name="settings_dialog_message">ایمیل تأیید با موفقیت به صندوق ایمیلتان ارسال شد.</string>
     <string name="settings_dialog_positive">تایید</string>
 

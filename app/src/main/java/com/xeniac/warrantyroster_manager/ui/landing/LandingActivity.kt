@@ -130,13 +130,13 @@ class LandingActivity : BaseActivity() {
         }
 
         val localeTextItems = arrayOf(
-            getString(R.string.landing_text_language_english_us),
-            getString(R.string.landing_text_language_english_gb),
-            getString(R.string.landing_text_language_persian_ir)
+            getString(R.string.landing_dialog_item_language_english_us),
+            getString(R.string.landing_dialog_item_language_english_gb),
+            getString(R.string.landing_dialog_item_language_persian_ir)
         )
 
         MaterialAlertDialogBuilder(this).apply {
-            setTitle(getString(R.string.landing_text_language))
+            setTitle(getString(R.string.landing_dialog_title_language))
             setSingleChoiceItems(localeTextItems, currentAppLocaleIndex) { dialogInterface, index ->
                 setAppLocale(index)
                 dialogInterface.dismiss()

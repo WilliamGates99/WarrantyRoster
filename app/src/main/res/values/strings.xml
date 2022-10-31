@@ -11,10 +11,10 @@
     <string name="error_btn_confirm">Confirm</string>
 
 
-    <string name="landing_text_language">Language</string>
-    <string name="landing_text_language_english_us">English (United States)</string>
-    <string name="landing_text_language_english_gb">English (United Kingdom)</string>
-    <string name="landing_text_language_persian_ir">Persian</string>
+    <string name="landing_dialog_title_language">Language</string>
+    <string name="landing_dialog_item_language_english_us">English (United States)</string>
+    <string name="landing_dialog_item_language_english_gb">English (United Kingdom)</string>
+    <string name="landing_dialog_item_language_persian_ir">Persian</string>
 
 
     <string name="login_text_title">Login</string>
@@ -306,9 +306,6 @@
     <string name="settings_text_settings_language_english_us">English (US)</string>
     <string name="settings_text_settings_language_english_gb">English (UK)</string>
     <string name="settings_text_settings_language_persian_ir">Persian</string>
-    <string name="settings_dialog_item_language_english_us">English (United States)</string>
-    <string name="settings_dialog_item_language_english_gb">English (United Kingdom)</string>
-    <string name="settings_dialog_item_language_persian_ir">Persian</string>
     <string name="settings_text_settings_theme">Theme</string>
     <string name="settings_text_settings_theme_default">System Default</string>
     <string name="settings_text_settings_theme_light">Light</string>
@@ -318,6 +315,14 @@
     <string name="settings_text_settings_rate_us">Rate Us</string>
     <string name="settings_text_settings_privacy_policy">Privacy Policy</string>
     <string name="settings_btn_logout">Logout</string>
+    <string name="settings_dialog_title_language">Language</string>
+    <string name="settings_dialog_item_language_english_us">English (United States)</string>
+    <string name="settings_dialog_item_language_english_gb">English (United Kingdom)</string>
+    <string name="settings_dialog_item_language_persian_ir">Persian</string>
+    <string name="settings_dialog_title_theme">Theme</string>
+    <string name="settings_dialog_item_theme_default">System Default</string>
+    <string name="settings_dialog_item_theme_light">Light</string>
+    <string name="settings_dialog_item_theme_dark">Dark</string>
     <string name="settings_dialog_message">The verification email has been successfully sent to your inbox.</string>
     <string name="settings_dialog_positive">Confirm</string>
     <string name="settings_ad_indicator" translatable="false">Ad</string>
