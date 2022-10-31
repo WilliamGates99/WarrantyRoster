@@ -12,10 +12,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import com.xeniac.warrantyroster_manager.MainCoroutineRule
 import com.xeniac.warrantyroster_manager.domain.repository.PreferencesRepository
-import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_COUNTRY_IRAN
-import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_COUNTRY_UNITED_STATES
-import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_LANGUAGE_ENGLISH
-import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_LANGUAGE_PERSIAN
+import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_ENGLISH_UNITED_STATES
+import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_PERSIAN_IRAN
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
@@ -57,26 +55,23 @@ class PreferencesRepositoryTest {
 
     /**
      * Fetch Initial Preferences Test Cases:
+     * getCurrentAppThemeSynchronously -> 0
      * getIsUserLoggedInSynchronously -> false
-     * getCurrentAppLanguageSynchronously -> LOCALE_LANGUAGE_ENGLISH
-     * getCurrentAppCountrySynchronously -> LOCALE_COUNTRY_UNITED_STATES
      * getCurrentAppTheme -> 0
-     * getCurrentAppLanguage -> LOCALE_LANGUAGE_ENGLISH
-     * getCurrentAppCountry -> LOCALE_COUNTRY_UNITED_STATES
-     * getCategoryTitleMapKey -> "LOCALE_LANGUAGE_ENGLISH-LOCALE_COUNTRY_UNITED_STATES"
+     * getRateAppDialogChoice -> 0
+     * getPreviousRequestTimeInMillis -> 0L
+     * getCategoryTitleMapKey -> LOCALE_ENGLISH_UNITED_STATES
      */
 
     @Test
     fun fetchInitialSynchronousPreferences() = testScope.runTest {
         testDataStore.edit { it.clear() }
 
+        val initialCurrentAppTheme = testRepository.getCurrentAppThemeSynchronously()
         val initialIsUserLoggedIn = testRepository.isUserLoggedInSynchronously()
-        val initialCurrentAppLanguage = testRepository.getCurrentAppLanguageSynchronously()
-        val initialCurrentAppCountry = testRepository.getCurrentAppCountrySynchronously()
 
+        assertThat(initialCurrentAppTheme).isEqualTo(0)
         assertThat(initialIsUserLoggedIn).isFalse()
-        assertThat(initialCurrentAppLanguage).isEqualTo(LOCALE_LANGUAGE_ENGLISH)
-        assertThat(initialCurrentAppCountry).isEqualTo(LOCALE_COUNTRY_UNITED_STATES)
     }
 
     @Test
@@ -84,26 +79,23 @@ class PreferencesRepositoryTest {
         testDataStore.edit { it.clear() }
 
         val initialCurrentAppTheme = testRepository.getCurrentAppTheme()
-        val initialCurrentAppLanguage = testRepository.getCurrentAppLanguage()
-        val initialCurrentAppCountry = testRepository.getCurrentAppCountry()
-        val initialCategoryTitleMapKey = testRepository.getCategoryTitleMapKey()
         val initialRateAppDialogChoice = testRepository.getRateAppDialogChoice()
         val initialPreviousRequestTimeInMillis = testRepository.getPreviousRequestTimeInMillis()
+        val initialCategoryTitleMapKey = testRepository.getCategoryTitleMapKey()
 
         assertThat(initialCurrentAppTheme).isEqualTo(0)
-        assertThat(initialCurrentAppLanguage).isEqualTo(LOCALE_LANGUAGE_ENGLISH)
-        assertThat(initialCurrentAppCountry).isEqualTo(LOCALE_COUNTRY_UNITED_STATES)
-        assertThat(initialCategoryTitleMapKey).isEqualTo("$LOCALE_LANGUAGE_ENGLISH-$LOCALE_COUNTRY_UNITED_STATES")
         assertThat(initialRateAppDialogChoice).isEqualTo(0)
         assertThat(initialPreviousRequestTimeInMillis).isEqualTo(0L)
+        assertThat(initialCategoryTitleMapKey).isEqualTo(LOCALE_ENGLISH_UNITED_STATES)
     }
 
     /**
      * Write Preferences Test Cases:
      * setIsUserLoggedIn
      * setAppTheme
-     * setCurrentAppLanguage
-     * setCurrentAppCountry
+     * setRateAppDialogChoice
+     * setPreviousRequestTimeInMillis
+     * setCategoryTitleMapKey
      */
 
     @Test
@@ -128,28 +120,6 @@ class PreferencesRepositoryTest {
     }
 
     @Test
-    fun writeCurrentAppLanguage() = testScope.runTest {
-        testDataStore.edit { it.clear() }
-
-        val testValue = LOCALE_LANGUAGE_PERSIAN
-        testRepository.setCurrentAppLanguage(testValue)
-
-        val currentLanguage = testRepository.getCurrentAppLanguage()
-        assertThat(currentLanguage).isEqualTo(testValue)
-    }
-
-    @Test
-    fun writeCurrentAppCountry() = testScope.runTest {
-        testDataStore.edit { it.clear() }
-
-        val testValue = LOCALE_COUNTRY_IRAN
-        testRepository.setCurrentAppCountry(testValue)
-
-        val currentCountry = testRepository.getCurrentAppCountry()
-        assertThat(currentCountry).isEqualTo(testValue)
-    }
-
-    @Test
     fun writeRateAppDialogChoice() = testScope.runTest {
         testDataStore.edit { it.clear() }
 
@@ -169,5 +139,16 @@ class PreferencesRepositoryTest {
 
         val previousRequestTimeInMillis = testRepository.getPreviousRequestTimeInMillis()
         assertThat(previousRequestTimeInMillis).isEqualTo(testValue)
+    }
+
+    @Test
+    fun writeCategoryTitleMapKey() = testScope.runTest {
+        testDataStore.edit { it.clear() }
+
+        val testValue = LOCALE_PERSIAN_IRAN
+        testRepository.setCategoryTitleMapKey(testValue)
+
+        val categoryTitleMapKey = testRepository.getCategoryTitleMapKey()
+        assertThat(categoryTitleMapKey).isEqualTo(testValue)
     }
 }

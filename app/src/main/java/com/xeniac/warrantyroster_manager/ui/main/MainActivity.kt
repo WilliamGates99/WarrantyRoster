@@ -3,6 +3,7 @@ package com.xeniac.warrantyroster_manager.ui.main
 import android.os.Bundle
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -20,7 +21,6 @@ import com.google.android.play.core.review.ReviewManagerFactory
 import com.xeniac.warrantyroster_manager.BuildConfig
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.ActivityMainBinding
-import com.xeniac.warrantyroster_manager.ui.BaseActivity
 import com.xeniac.warrantyroster_manager.ui.viewmodels.SettingsViewModel
 import com.xeniac.warrantyroster_manager.utils.DateHelper.getDaysFromFirstInstallTime
 import com.xeniac.warrantyroster_manager.utils.DateHelper.getDaysFromPreviousRequestTime
@@ -31,7 +31,7 @@ import ir.tapsell.plus.model.TapsellPlusAdModel
 import timber.log.Timber
 
 @AndroidEntryPoint
-class MainActivity : BaseActivity(), MaxAdListener {
+class MainActivity : AppCompatActivity(), MaxAdListener {
 
     lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController

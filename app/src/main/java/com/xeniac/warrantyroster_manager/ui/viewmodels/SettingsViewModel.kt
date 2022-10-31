@@ -1,10 +1,16 @@
 package com.xeniac.warrantyroster_manager.ui.viewmodels
 
+import android.os.Build
+import android.util.LayoutDirection
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.LocaleListCompat
+import androidx.core.text.layoutDirection
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseUser
+import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.domain.repository.PreferencesRepository
 import com.xeniac.warrantyroster_manager.domain.repository.UserRepository
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_EMAIL
@@ -15,15 +21,16 @@ import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_EMAIL_INVAL
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_EMAIL_SAME
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_PASSWORD_NOT_MATCH
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_PASSWORD_SHORT
-import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_COUNTRY_GREAT_BRITAIN
-import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_COUNTRY_IRAN
-import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_COUNTRY_UNITED_STATES
-import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_LANGUAGE_ENGLISH
-import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_LANGUAGE_PERSIAN
+import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_ENGLISH_GREAT_BRITAIN
+import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_ENGLISH_UNITED_STATES
+import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_INDEX_ENGLISH_GREAT_BRITAIN
+import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_INDEX_ENGLISH_UNITED_STATES
+import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_INDEX_PERSIAN_IRAN
+import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_PERSIAN_IRAN
 import com.xeniac.warrantyroster_manager.utils.Event
 import com.xeniac.warrantyroster_manager.utils.Resource
 import com.xeniac.warrantyroster_manager.utils.SettingsHelper
-import com.xeniac.warrantyroster_manager.utils.Status
+import com.xeniac.warrantyroster_manager.utils.UiText
 import com.xeniac.warrantyroster_manager.utils.UserHelper.isEmailValid
 import com.xeniac.warrantyroster_manager.utils.UserHelper.isRetypePasswordValid
 import com.xeniac.warrantyroster_manager.utils.UserHelper.passwordStrength
@@ -39,8 +46,14 @@ class SettingsViewModel @Inject constructor(
     private val preferencesRepository: PreferencesRepository
 ) : ViewModel() {
 
-    private val _currentAppLocaleLiveData: MutableLiveData<Event<Array<String>>> = MutableLiveData()
-    val currentAppLocaleLiveData: LiveData<Event<Array<String>>> = _currentAppLocaleLiveData
+    private val _currentLanguageLiveData: MutableLiveData<Event<UiText>> = MutableLiveData()
+    val currentLanguageLiveData: LiveData<Event<UiText>> = _currentLanguageLiveData
+
+    private val _currentLocaleIndexLiveData: MutableLiveData<Event<Int>> = MutableLiveData()
+    val currentLocaleIndexLiveData: LiveData<Event<Int>> = _currentLocaleIndexLiveData
+
+    private val _changeCurrentLocaleLiveData: MutableLiveData<Event<Boolean>> = MutableLiveData()
+    val changeCurrentLocaleLiveData: LiveData<Event<Boolean>> = _changeCurrentLocaleLiveData
 
     private val _currentAppThemeLiveData: MutableLiveData<Event<Int>> = MutableLiveData()
     val currentAppThemeLiveData: LiveData<Event<Int>> = _currentAppThemeLiveData
@@ -84,10 +97,50 @@ class SettingsViewModel @Inject constructor(
             MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
     val changeUserPasswordLiveData: LiveData<Event<Resource<Nothing>>> = _changeUserPasswordLiveData
 
-    fun isUserLoggedIn() = preferencesRepository.isUserLoggedInSynchronously()
+//    fun isUserLoggedIn() = preferencesRepository.isUserLoggedInSynchronously()
 
-    fun getCurrentAppLocale() = viewModelScope.launch {
-        safeGetCurrentAppLocale()
+    fun getCurrentLanguage() = viewModelScope.launch {
+        safeGetCurrentLanguage()
+    }
+
+    private fun safeGetCurrentLanguage() {
+        val localeList = AppCompatDelegate.getApplicationLocales()
+
+        if (localeList.isEmpty) {
+            changeCurrentLocale(0)
+            Timber.i("Current language is System Default.")
+        } else {
+            val localeString = localeList[0].toString()
+            Timber.i("Current language is $localeString")
+
+            when (localeString) {
+                "en_US" -> {
+                    _currentLanguageLiveData.postValue(
+                        Event(UiText.StringResource(R.string.settings_text_settings_language_english_us))
+                    )
+                    _currentLocaleIndexLiveData.postValue(Event(LOCALE_INDEX_ENGLISH_UNITED_STATES))
+                    Timber.i("Current locale index is 0 (en_US).")
+                }
+                "en_GB" -> {
+                    _currentLanguageLiveData.postValue(
+                        Event(UiText.StringResource(R.string.settings_text_settings_language_english_gb))
+                    )
+                    _currentLocaleIndexLiveData.postValue(Event(LOCALE_INDEX_ENGLISH_GREAT_BRITAIN))
+                    Timber.i("Current locale index is 1 (en_GB).")
+                }
+                "fa_IR" -> {
+                    _currentLanguageLiveData.postValue(
+                        Event(UiText.StringResource(R.string.settings_text_settings_language_persian_ir))
+                    )
+                    _currentLocaleIndexLiveData.postValue(Event(LOCALE_INDEX_PERSIAN_IRAN))
+                    Timber.i("Current locale index is 2 (fa_IR).")
+                }
+                else -> {
+                    changeCurrentLocale(0)
+                    Timber.i("Current language is System Default.")
+                }
+            }
+        }
     }
 
     fun getCurrentAppTheme() = viewModelScope.launch {
@@ -102,11 +155,43 @@ class SettingsViewModel @Inject constructor(
         safeGetPreviousRequestTimeInMillis()
     }
 
-    fun setAppLocale(index: Int) = viewModelScope.launch {
-        safeSetAppLocale(index)
+    fun changeCurrentLocale(index: Int) = viewModelScope.launch {
+        safeChangeCurrentLocale(index)
     }
 
-    fun setAppTheme(index: Int) = viewModelScope.launch {
+    private suspend fun safeChangeCurrentLocale(index: Int) {
+        var isActivityRestartNeeded = false
+
+        when (index) {
+            0 -> {
+                preferencesRepository.setCategoryTitleMapKey(LOCALE_ENGLISH_UNITED_STATES)
+                isActivityRestartNeeded = isActivityRestartNeeded(LayoutDirection.LTR)
+                AppCompatDelegate.setApplicationLocales(
+                    LocaleListCompat.forLanguageTags(LOCALE_ENGLISH_UNITED_STATES)
+                )
+            }
+            1 -> {
+                preferencesRepository.setCategoryTitleMapKey(LOCALE_ENGLISH_GREAT_BRITAIN)
+                isActivityRestartNeeded = isActivityRestartNeeded(LayoutDirection.LTR)
+                AppCompatDelegate.setApplicationLocales(
+                    LocaleListCompat.forLanguageTags(LOCALE_ENGLISH_GREAT_BRITAIN)
+                )
+            }
+            2 -> {
+                preferencesRepository.setCategoryTitleMapKey(LOCALE_PERSIAN_IRAN)
+                isActivityRestartNeeded = isActivityRestartNeeded(LayoutDirection.RTL)
+                AppCompatDelegate.setApplicationLocales(
+                    LocaleListCompat.forLanguageTags(LOCALE_PERSIAN_IRAN)
+                )
+            }
+        }
+
+        _changeCurrentLocaleLiveData.postValue(Event(isActivityRestartNeeded))
+        Timber.i("isActivityRestartNeeded = $isActivityRestartNeeded}")
+        Timber.i("App locale index changed to $index")
+    }
+
+    fun changeCurrentTheme(index: Int) = viewModelScope.launch {
         preferencesRepository.setCurrentAppTheme(index)
         _currentAppThemeLiveData.postValue(Event(index))
         SettingsHelper.setAppTheme(index)
@@ -204,13 +289,6 @@ class SettingsViewModel @Inject constructor(
         safeChangeUserPassword(newPassword)
     }
 
-    private suspend fun safeGetCurrentAppLocale() {
-        val currentLanguage = preferencesRepository.getCurrentAppLanguage()
-        val currentCountry = preferencesRepository.getCurrentAppCountry()
-        val currentLocale = arrayOf(currentLanguage, currentCountry)
-        _currentAppLocaleLiveData.postValue(Event(currentLocale))
-    }
-
     private suspend fun safeGetCurrentAppTheme() {
         _currentAppThemeLiveData.postValue(Event(preferencesRepository.getCurrentAppTheme()))
     }
@@ -221,39 +299,6 @@ class SettingsViewModel @Inject constructor(
 
     private suspend fun safeGetPreviousRequestTimeInMillis() {
         _previousRequestTimeInMillisLiveData.postValue(Event(preferencesRepository.getPreviousRequestTimeInMillis()))
-    }
-
-    private suspend fun safeSetAppLocale(index: Int) {
-        _setAppLocaleLiveData.postValue(Event(Resource(Status.LOADING)))
-        try {
-            var newLanguage = LOCALE_LANGUAGE_ENGLISH
-            var newCountry = LOCALE_COUNTRY_UNITED_STATES
-
-            when (index) {
-                0 -> {
-                    newLanguage = LOCALE_LANGUAGE_ENGLISH
-                    newCountry = LOCALE_COUNTRY_UNITED_STATES
-                }
-                1 -> {
-                    newLanguage = LOCALE_LANGUAGE_ENGLISH
-                    newCountry = LOCALE_COUNTRY_GREAT_BRITAIN
-                }
-                2 -> {
-                    newLanguage = LOCALE_LANGUAGE_PERSIAN
-                    newCountry = LOCALE_COUNTRY_IRAN
-                }
-            }
-
-            preferencesRepository.setCurrentAppLanguage(newLanguage)
-            preferencesRepository.setCurrentAppCountry(newCountry)
-
-            val newLocale = arrayOf(newLanguage, newCountry)
-            _setAppLocaleLiveData.postValue(Event(Resource(Status.SUCCESS, newLocale)))
-            Timber.i("New app locale is: $newLanguage-$newCountry")
-        } catch (e: Exception) {
-            Timber.e("safeSetAppLocale Exception: ${e.message}")
-            _setAppLocaleLiveData.postValue(Event(Resource.error(e.message.toString())))
-        }
     }
 
     private suspend fun safeGetAccountDetails() {
@@ -337,5 +382,14 @@ class SettingsViewModel @Inject constructor(
             Timber.e("safeChangeUserPassword Exception: ${e.message}")
             _changeUserPasswordLiveData.postValue(Event(Resource.error(e.message.toString())))
         }
+    }
+
+    private fun isActivityRestartNeeded(newLayoutDirection: Int): Boolean {
+        val currentLocale = AppCompatDelegate.getApplicationLocales()[0]
+        val currentLayoutDirection = currentLocale?.layoutDirection
+
+        return if (Build.VERSION.SDK_INT >= 33) {
+            false
+        } else currentLayoutDirection != newLayoutDirection
     }
 }

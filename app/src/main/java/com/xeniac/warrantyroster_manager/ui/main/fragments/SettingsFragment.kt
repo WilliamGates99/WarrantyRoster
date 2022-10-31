@@ -6,8 +6,6 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import android.widget.Toast
-import android.widget.Toast.LENGTH_LONG
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -26,19 +24,16 @@ import com.xeniac.warrantyroster_manager.BuildConfig
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentSettingsBinding
 import com.xeniac.warrantyroster_manager.ui.landing.LandingActivity
+import com.xeniac.warrantyroster_manager.ui.main.MainActivity
 import com.xeniac.warrantyroster_manager.ui.viewmodels.SettingsViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
-import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_ENGLISH_GREAT_BRITAIN
-import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_ENGLISH_UNITED_STATES
-import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_PERSIAN_IRAN
 import com.xeniac.warrantyroster_manager.utils.Constants.URL_CROWDIN
 import com.xeniac.warrantyroster_manager.utils.Constants.URL_DONATE
 import com.xeniac.warrantyroster_manager.utils.Constants.URL_PRIVACY_POLICY
 import com.xeniac.warrantyroster_manager.utils.LinkHelper.openLink
 import com.xeniac.warrantyroster_manager.utils.LinkHelper.openPlayStore
-import com.xeniac.warrantyroster_manager.utils.SettingsHelper
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.show403Error
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseDeviceBlockedError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkConnectionError
@@ -60,9 +55,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
 
     lateinit var viewModel: SettingsViewModel
 
-    private lateinit var currentAppLanguage: String
-    private lateinit var currentAppCountry: String
-    private lateinit var currentAppLocale: String
+    private var currentLocaleIndex = 0
     private var currentAppTheme = 0
 
     private lateinit var appLovinNativeAdContainer: ViewGroup
@@ -82,7 +75,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
 
         subscribeToObservers()
         getAccountDetails()
-        getCurrentAppLocale()
+        getCurrentLanguage()
         getCurrentAppTheme()
         verifyOnClick()
         changeEmailOnClick()
@@ -106,9 +99,10 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
 
     private fun subscribeToObservers() {
         accountDetailsObserver()
-        currentAppLocaleObserver()
+        currentLanguageObserver()
+        currentLocaleIndexObserver()
         currentAppThemeObserver()
-        setAppLocaleObserver()
+        changeCurrentLocaleObserver()
         sendVerificationEmailObserver()
         logoutObserver()
     }
@@ -170,28 +164,21 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
         }
     }
 
-    private fun getCurrentAppLocale() = viewModel.getCurrentAppLocale()
+    private fun getCurrentLanguage() = viewModel.getCurrentLanguage()
 
-    private fun currentAppLocaleObserver() =
-        viewModel.currentAppLocaleLiveData.observe(viewLifecycleOwner) { responseEvent ->
-            responseEvent.getContentIfNotHandled()?.let { currentLocale ->
-                currentAppLanguage = currentLocale[0]
-                currentAppCountry = currentLocale[1]
-                currentAppLocale = "$currentAppLanguage-$currentAppCountry"
-                setCurrentLanguageText()
+    private fun currentLanguageObserver() =
+        viewModel.currentLanguageLiveData.observe(viewLifecycleOwner) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { currentLanguage ->
+                binding.currentLanguage = currentLanguage.asString(requireContext())
             }
         }
 
-    private fun setCurrentLanguageText() {
-        requireContext().apply {
-            binding.currentLanguage = when (currentAppLocale) {
-                LOCALE_ENGLISH_UNITED_STATES -> getString(R.string.settings_text_settings_language_english_us)
-                LOCALE_ENGLISH_GREAT_BRITAIN -> getString(R.string.settings_text_settings_language_english_gb)
-                LOCALE_PERSIAN_IRAN -> getString(R.string.settings_text_settings_language_persian_ir)
-                else -> getString(R.string.settings_text_settings_language_english_us)
+    private fun currentLocaleIndexObserver() =
+        viewModel.currentLocaleIndexLiveData.observe(viewLifecycleOwner) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { index ->
+                currentLocaleIndex = index
             }
         }
-    }
 
     private fun getCurrentAppTheme() = viewModel.getCurrentAppTheme()
 
@@ -227,13 +214,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
     }
 
     private fun languageOnClick() = binding.clSettingsLanguage.setOnClickListener {
-        val currentAppLocaleIndex = when (currentAppLocale) {
-            LOCALE_ENGLISH_UNITED_STATES -> 0
-            LOCALE_ENGLISH_GREAT_BRITAIN -> 1
-            LOCALE_PERSIAN_IRAN -> 2
-            else -> 0
-        }
-
         val localeTextItems = arrayOf(
             requireContext().getString(R.string.settings_dialog_item_language_english_us),
             requireContext().getString(R.string.settings_dialog_item_language_english_gb),
@@ -242,12 +222,28 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
 
         MaterialAlertDialogBuilder(requireContext()).apply {
             setTitle(requireContext().getString(R.string.settings_dialog_title_language))
-            setSingleChoiceItems(localeTextItems, currentAppLocaleIndex) { dialogInterface, index ->
-                setAppLocale(index)
+            setSingleChoiceItems(localeTextItems, currentLocaleIndex) { dialogInterface, index ->
+                changeCurrentLocale(index)
                 dialogInterface.dismiss()
             }
         }.show()
     }
+
+    private fun changeCurrentLocale(index: Int) = viewModel.changeCurrentLocale(index)
+
+    private fun changeCurrentLocaleObserver() =
+        viewModel.changeCurrentLocaleLiveData.observe(viewLifecycleOwner) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { isActivityRestartNeeded ->
+                if (isActivityRestartNeeded) {
+                    requireActivity().apply {
+                        startActivity(Intent(this, MainActivity::class.java))
+                        finish()
+                    }
+                } else {
+                    viewModel.getCurrentLanguage()
+                }
+            }
+        }
 
     private fun themeOnClick() = binding.clSettingsTheme.setOnClickListener {
         val themeItems = arrayOf(
@@ -259,11 +255,13 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
         MaterialAlertDialogBuilder(requireContext()).apply {
             setTitle(requireContext().getString(R.string.settings_dialog_title_theme))
             setSingleChoiceItems(themeItems, currentAppTheme) { dialogInterface, index ->
-                setAppTheme(index)
+                changeCurrentTheme(index)
                 dialogInterface.dismiss()
             }
         }.show()
     }
+
+    private fun changeCurrentTheme(index: Int) = viewModel.changeCurrentTheme(index)
 
     private fun donateOnClick() = binding.clSettingsDonate.setOnClickListener {
         openLink(requireContext(), requireView(), URL_DONATE)
@@ -285,41 +283,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
     private fun logoutOnClick() = binding.btnLogout.setOnClickListener {
         logout()
     }
-
-    private fun setAppLocale(index: Int) = viewModel.setAppLocale(index)
-
-    private fun setAppLocaleObserver() =
-        viewModel.setAppLocaleLiveData.observe(viewLifecycleOwner) { responseEvent ->
-            responseEvent.getContentIfNotHandled()?.let { response ->
-                when (response.status) {
-                    Status.SUCCESS -> {
-                        response.data?.let {
-                            val newAppLanguage = it[0]
-                            val newAppCountry = it[1]
-
-                            SettingsHelper.setAppLocale(
-                                requireActivity(),
-                                newAppLanguage,
-                                newAppCountry
-                            )
-
-                            requireActivity().apply {
-                                startActivity(Intent(this, LandingActivity::class.java))
-                                finish()
-                            }
-                        }
-                    }
-                    Status.ERROR -> {
-                        Toast.makeText(requireContext(), response.message, LENGTH_LONG).show()
-                    }
-                    Status.LOADING -> {
-                        /* NO-OP */
-                    }
-                }
-            }
-        }
-
-    private fun setAppTheme(index: Int) = viewModel.setAppTheme(index)
 
     private fun sendVerificationEmail() = viewModel.sendVerificationEmail()
 

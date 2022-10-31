@@ -10,11 +10,11 @@ object Constants {
     const val DATASTORE_NAME_SETTINGS = "settings"
     const val DATASTORE_IS_LOGGED_IN_KEY = "isUserLoggedIn"
     const val DATASTORE_THEME_KEY = "theme"
-    const val DATASTORE_LANGUAGE_KEY = "language"
-    const val DATASTORE_COUNTRY_KEY = "country"
     const val DATASTORE_RATE_APP_DIALOG_CHOICE_KEY = "rateAppDialogChoice"
     const val DATASTORE_PREVIOUS_REQUEST_TIME_IN_MILLIS_KEY = "previousRequestTimeInMillis"
+    const val DATASTORE_CATEGORY_TITLE_MAP_KEY_KEY = "categoryTitleMapKey"
 
+    // TODO CHECK FOR REMOVE
     // App Language Constants
     const val LOCALE_LANGUAGE_ENGLISH = "en"
     const val LOCALE_LANGUAGE_PERSIAN = "fa"
@@ -28,6 +28,9 @@ object Constants {
     const val LOCALE_ENGLISH_UNITED_STATES = "en-US"
     const val LOCALE_ENGLISH_GREAT_BRITAIN = "en-GB"
     const val LOCALE_PERSIAN_IRAN = "fa-IR"
+    const val LOCALE_INDEX_ENGLISH_UNITED_STATES = 0
+    const val LOCALE_INDEX_ENGLISH_GREAT_BRITAIN = 1
+    const val LOCALE_INDEX_PERSIAN_IRAN = 2
 
     // Warranty Adapter View Type Constants
     const val VIEW_TYPE_WARRANTY = 0
