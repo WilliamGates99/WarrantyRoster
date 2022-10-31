@@ -1,6 +1,6 @@
 plugins {
     id 'com.android.application'
-    id 'kotlin-android'
+    id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'kotlin-parcelize'
     id 'androidx.navigation.safeargs.kotlin'
@@ -19,6 +19,7 @@ applovin {
 }
 
 android {
+    namespace 'com.xeniac.warrantyroster_manager'
     compileSdk 33
     buildToolsVersion '33.0.0'
 
@@ -44,6 +45,8 @@ android {
 
     buildTypes {
         debug {
+            versionNameSuffix ' - debug'
+            applicationIdSuffix '.debug'
             ext.enableCrashlytics = false
             ext.alwaysUpdateBuildId = false
         }
@@ -108,19 +111,19 @@ kapt {
 dependencies {
     implementation 'androidx.core:core-ktx:1.9.0'
     implementation 'androidx.appcompat:appcompat:1.5.1'
-    implementation 'com.google.android.material:material:1.6.1'
+    implementation 'com.google.android.material:material:1.7.0'
     implementation 'androidx.core:core-splashscreen:1.0.0'
 
     // Navigation Component
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.5.2'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.5.2'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.5.3'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.5.3'
 
     // Dagger - Hilt
     implementation 'com.google.dagger:hilt-android:2.44'
     kapt 'com.google.dagger:hilt-compiler:2.44'
 
     // Activity KTX for Injecting ViewModels into Fragments
-    implementation 'androidx.activity:activity-ktx:1.6.0'
+    implementation 'androidx.activity:activity-ktx:1.6.1'
 
     // Architectural Components
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
@@ -137,7 +140,7 @@ dependencies {
     implementation 'androidx.datastore:datastore-preferences:1.0.0'
 
     // Firebase BoM and Analytics
-    implementation platform('com.google.firebase:firebase-bom:30.5.0')
+    implementation platform('com.google.firebase:firebase-bom:31.0.2')
     implementation 'com.google.firebase:firebase-analytics-ktx'
 
     // Firebase App Check
@@ -167,12 +170,12 @@ dependencies {
     implementation 'com.google.android.play:review-ktx:2.0.0'
 
     // AppLovin Libraries
-    implementation 'com.applovin:applovin-sdk:11.5.1'
+    implementation 'com.applovin:applovin-sdk:11.5.2'
     implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'
     implementation 'com.applovin.mediation:google-adapter:21.2.0.0'
 
     // Google AdMob Library
-    implementation 'com.google.android.gms:play-services-ads:21.2.0'
+    implementation 'com.google.android.gms:play-services-ads:21.3.0'
 
     // Tapsell Library
     implementation 'ir.tapsell.plus:tapsell-plus-sdk-android:2.1.7'
@@ -190,49 +193,53 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.arch.core:core-testing:2.1.0'
     androidTestImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4'
-    androidTestImplementation 'androidx.navigation:navigation-testing:2.5.2'
-    // Espresso 3.4.0 has runtime issues
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.3.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.3.0'
+    androidTestImplementation 'androidx.navigation:navigation-testing:2.5.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.4.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.4.0'
     androidTestImplementation 'com.google.dagger:hilt-android-testing:2.44'
     kaptAndroidTest 'com.google.dagger:hilt-compiler:2.44'
-    debugImplementation 'androidx.fragment:fragment-testing:1.5.3'
+    debugImplementation 'androidx.fragment:fragment-testing:1.5.4'
 }
 
+def releaseRootDir = "${rootDir}/app"
+def destinationDir = "D:\\01 My Files\\Projects\\Xeniac\\Warranty Roster\\APK"
+
+def versionName = "${android.defaultConfig.versionName}"
+def renamedFileName = "Warranty Roster $versionName"
+
 task copyReleaseApk(type: Copy) {
-    def sourceDirAmazon = "${rootDir}/app/amazon/release/app-amazon-release.apk"
-    def sourceDirCafeBazaar = "${rootDir}/app/cafeBazaar/release/app-cafeBazaar-release.apk"
-    def destDir = "D:\\01 My Files\\Projects\\Xeniac\\Warranty Roster\\APK"
-    def versionName = "${android.defaultConfig.versionName}"
+    def amazonApkFile = "app-amazon-release.apk"
+    def cafeBazaarApkFile = "app-cafeBazaar-release.apk"
+    def amazonApkSourceDir = "${releaseRootDir}/amazon/release/${amazonApkFile}"
+    def cafeBazaarApkSourceDir = "${releaseRootDir}/cafeBazaar/release/${cafeBazaarApkFile}"
 
-    from sourceDirAmazon
-    into destDir
+    from amazonApkSourceDir
+    into destinationDir
 
-    from sourceDirCafeBazaar
-    into destDir
+    from cafeBazaarApkSourceDir
+    into destinationDir
 
-    rename "app-amazon-release.apk", "Warranty Roster ${versionName} - Amazon.apk"
-    rename "app-cafeBazaar-release.apk", "Warranty Roster ${versionName} - CafeBazaar.apk"
+    rename "${amazonApkFile}", "${renamedFileName} - Amazon.apk"
+    rename "${cafeBazaarApkFile}", "${renamedFileName} - CafeBazaar.apk"
 }
 
 task copyReleaseBundle(type: Copy) {
-    def sourceDir = "${rootDir}/app/playStore/release/app-playStore-release.aab"
-    def destDir = "D:\\01 My Files\\Projects\\Xeniac\\Warranty Roster\\APK"
-    def versionName = "${android.defaultConfig.versionName}"
+    def bundleFile = "app-playStore-release.aab"
+    def bundleSourceDir = "${releaseRootDir}/playStore/release/${bundleFile}"
 
-    from sourceDir
-    into destDir
+    from bundleSourceDir
+    into destinationDir
 
-    rename "app-playStore-release.aab", "Warranty Roster ${versionName}.aab"
+    rename "${bundleFile}", "${renamedFileName}.aab"
 }
 
 task copyObfuscationFolder(type: Copy) {
-    def sourceDir = "${rootDir}/app/obfuscation"
-    def destDir = "D:\\01 My Files\\Projects\\Xeniac\\Warranty Roster\\APK\\obfuscation"
+    def obfuscationSourceDir = "${releaseRootDir}/obfuscation"
+    def obfuscationDestDir = "${destinationDir}\\obfuscation"
 
-    from sourceDir
-    into destDir
+    from obfuscationSourceDir
+    into obfuscationDestDir
 }
 
 task copyReleaseFiles() {
