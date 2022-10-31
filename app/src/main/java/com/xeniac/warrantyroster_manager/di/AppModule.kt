@@ -16,6 +16,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.xeniac.warrantyroster_manager.BuildConfig
+import com.xeniac.warrantyroster_manager.domain.repository.PreferencesRepository
 import com.xeniac.warrantyroster_manager.utils.Constants.COLLECTION_CATEGORIES
 import com.xeniac.warrantyroster_manager.utils.Constants.COLLECTION_WARRANTIES
 import com.xeniac.warrantyroster_manager.utils.Constants.DATASTORE_NAME_SETTINGS
@@ -41,6 +42,19 @@ object AppModule {
 
     @Singleton
     @Provides
+    fun provideSettingsDataStore(@ApplicationContext context: Context): DataStore<Preferences> =
+        PreferenceDataStoreFactory.create(
+            corruptionHandler = ReplaceFileCorruptionHandler { emptyPreferences() },
+            scope = CoroutineScope(Dispatchers.IO + SupervisorJob()),
+            produceFile = { context.preferencesDataStoreFile(DATASTORE_NAME_SETTINGS) }
+        )
+
+    @Provides
+    fun provideAppThemeIndex(preferencesRepository: PreferencesRepository): Int =
+        preferencesRepository.getCurrentAppThemeSynchronously()
+
+    @Singleton
+    @Provides
     fun provideFirebaseAuthInstance() = FirebaseAuth.getInstance()
 
     @Singleton
@@ -54,15 +68,6 @@ object AppModule {
     @WarrantiesCollection
     fun provideFirestoreWarrantiesCollectionRef() =
         Firebase.firestore.collection(COLLECTION_WARRANTIES)
-
-    @Singleton
-    @Provides
-    fun provideSettingsDataStore(@ApplicationContext context: Context): DataStore<Preferences> =
-        PreferenceDataStoreFactory.create(
-            corruptionHandler = ReplaceFileCorruptionHandler { emptyPreferences() },
-            scope = CoroutineScope(Dispatchers.IO + SupervisorJob()),
-            produceFile = { context.preferencesDataStoreFile(DATASTORE_NAME_SETTINGS) }
-        )
 
     @Singleton
     @Provides
