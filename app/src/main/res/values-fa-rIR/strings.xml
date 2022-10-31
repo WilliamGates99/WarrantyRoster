@@ -2,6 +2,7 @@
 <resources>
     <string name="app_name">وارانتی راستر</string>
 
+
     <string name="error_network_connection">اتصال به اینترنت امکان‌پذیر نیست.</string>
     <string name="error_network_failure">مشکلی برای شبکه رخ داده است. لطفا بعدا دوباره امتحان کنید.</string>
     <string name="error_firebase_403">این سرویس در منطقه شما در دسترس نیست. لطفاً از نرم‌افزار تغییر آدرس IP استفاده کنید.</string>
@@ -10,10 +11,12 @@
     <string name="error_btn_retry">تلاش مجدد</string>
     <string name="error_btn_confirm">تایید</string>
 
+
     <string name="landing_text_language">زبان</string>
     <string name="landing_text_language_english_us">انگلیسی (آمریکایی)</string>
     <string name="landing_text_language_english_gb">انگلیسی (بریتانیایی)</string>
     <string name="landing_text_language_persian_ir">فارسی</string>
+
 
     <string name="login_text_title">ورود</string>
     <string name="login_text_description">بیایید وارد برنامه شویم.</string>
@@ -30,6 +33,7 @@
     <string name="login_error_email">آدرس ایمیل وارد شده، معتبر نیست!</string>
     <string name="login_error_not_found">حسابی با ایمیل وارد شده وجود ندارد.</string>
     <string name="login_error_credentials">ایمیل و یا رمز‌عبور وارد شده نادرست است.</string>
+
 
     <string name="register_text_title">ثبت‌نام</string>
     <string name="register_text_description">اطلاعات خود را وارد کنید.</string>
@@ -54,6 +58,7 @@
     <string name="register_error_password_not_match">رمز‌عبور و تکرار رمز‌عبور وارد شده با هم مطابقت ندارند!</string>
     <string name="register_error_account_exists">حسابی با ایمیل وارد شده از قبل وجود دارد.</string>
 
+
     <string name="forgot_pw_text_title">بازیابی\nرمز‌عبور</string>
     <string name="forgot_pw_text_description">برای دریافت دستورالعمل‌های بازیابی رمز‌عبور، ایمیل تایید‌شده خود را وارد کنید.</string>
     <string name="forgot_pw_title_email">آدرس ایمیل</string>
@@ -70,6 +75,7 @@
     <string name="forgot_pw_error_email">آدرس ایمیل وارد شده، معتبر نیست!</string>
     <string name="forgot_pw_error_not_found">حسابی با ایمیل وارد شده وجود ندارد.</string>
 
+
     <string name="forgot_pw_sent_text_title">صندوق ایمیل\nخود را\nبررسی کنید</string>
     <string name="forgot_pw_sent_text_description">لطفا صندوق ایمیل خود را بررسی کنید و روی لینک دریافتی کلیک کنید تا رمز‌عبور خود را بازیابی کنید.</string>
     <string name="forgot_pw_sent_text_resend">لینکی را دریافت نکردید؟</string>
@@ -77,6 +83,7 @@
     <string name="forgot_pw_sent_text_first_time">ایمیل ارسال شد.</string>
     <string name="forgot_pw_sent_text_resent">ایمیل مجددا ارسال شد.</string>
     <string name="forgot_pw_sent_btn_return">بازگشت به صفحه ورود</string>
+
 
     <string name="main_menu_title_warranties">فهرست گارانتی‌ها</string>
     <string name="main_menu_title_settings">تنظیمات</string>
@@ -87,6 +94,7 @@
     <string name="main_rate_app_dialog_positive">الان امتیاز می‌دهم</string>
     <string name="main_rate_app_dialog_negative">نه، ممنون</string>
     <string name="main_rate_app_dialog_neutral">بعدا بهم یادآوری کن</string>
+
 
     <string name="warranties_text_title">فهرست گارانتی‌ها</string>
     <string name="warranties_menu_hint_search">جستجو بر اساس عنوان…</string>
@@ -156,6 +164,7 @@
         <item>دسامبر</item>
     </string-array>
 
+
     <string name="add_warranty_text_title">افزودن گارانتی</string>
     <string name="add_warranty_menu_title_add">افزودن گارانتی</string>
     <string name="add_warranty_title_title">عنوان</string>
@@ -183,6 +192,7 @@
     • fa-IR: روز/ماه/سال
     -->
     <string name="add_warranty_hint_date">روز/ماه/سال</string>
+    <string name="add_warranty_helper_optional">اختیاری</string>
     <string name="add_warranty_title_date_picker_starting">تاریخ شروع را انتخاب کنید</string>
     <string name="add_warranty_title_date_picker_expiry">تاریخ اتمام را انتخاب کنید</string>
     <string name="add_warranty_error_blank_title">عنوان را وارد کنید!</string>
@@ -200,6 +210,7 @@
     • fa-IR: 2022/12/25
     -->
     <string name="add_warranty_format_date">%3$d/%1$s/%2$s</string>
+
 
     <string name="warranty_details_fab_edit">ویرایش</string>
     <string name="warranty_details_menu_title_delete">حذف گارانتی</string>
@@ -235,6 +246,7 @@
     -->
     <string name="warranty_details_format_date">%3$d/%1$s/%2$s</string>
 
+
     <string name="edit_warranty_text_title">ویرایش گارانتی</string>
     <string name="edit_warranty_menu_title_edit">ویرایش گارانتی</string>
     <string name="edit_warranty_title_title">عنوان</string>
@@ -262,6 +274,7 @@
     • fa-IR: روز/ماه/سال
     -->
     <string name="edit_warranty_hint_date">روز/ماه/سال</string>
+    <string name="edit_warranty_helper_optional">اختیاری</string>
     <string name="edit_warranty_title_date_picker_starting">تاریخ شروع را انتخاب کنید</string>
     <string name="edit_warranty_title_date_picker_expiry">تاریخ اتمام را انتخاب کنید</string>
     <string name="edit_warranty_error_blank_title">عنوان را وارد کنید!</string>
@@ -279,6 +292,7 @@
     • fa-IR: 2022/12/25
     -->
     <string name="edit_warranty_format_date">%3$d/%1$s/%2$s</string>
+
 
     <string name="settings_text_title">تنظیمات</string>
     <string name="settings_title_account">حساب کاربری</string>
@@ -306,6 +320,7 @@
     <string name="settings_dialog_message">ایمیل تأیید با موفقیت به صندوق ایمیلتان ارسال شد.</string>
     <string name="settings_dialog_positive">تایید</string>
 
+
     <string name="change_password_text_title">تغییر رمز‌عبور</string>
     <string name="change_password_title_current_password">رمز‌عبور فعلی</string>
     <string name="change_password_hint_current_password">رمز‌عبور فعلی خود را وارد کنید</string>
@@ -325,6 +340,7 @@
     <string name="change_password_error_credentials">رمز‌عبور فعلی وارد شده نادرست است.</string>
     <string name="change_password_dialog_message">رمز‌عبور شما با موفقیت تغییر کرد.</string>
     <string name="change_password_dialog_positive">تایید</string>
+
 
     <string name="change_email_text_title">تغییر آدرس ایمیل</string>
     <string name="change_email_title_password">رمز‌عبور</string>

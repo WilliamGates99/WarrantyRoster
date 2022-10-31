@@ -290,6 +290,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/margin_16dp"
                         android:layout_marginTop="@dimen/margin_4dp"
+                        app:helperText="@string/add_warranty_helper_optional"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tv_title_brand">
@@ -334,6 +335,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginHorizontal="@dimen/margin_16dp"
                         android:layout_marginTop="@dimen/margin_4dp"
+                        app:helperText="@string/add_warranty_helper_optional"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tv_title_model">
@@ -379,6 +381,7 @@
                         android:layout_marginHorizontal="@dimen/margin_16dp"
                         android:layout_marginTop="@dimen/margin_4dp"
                         android:layout_marginBottom="@dimen/margin_16dp"
+                        app:helperText="@string/add_warranty_helper_optional"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -516,6 +519,7 @@
                         android:layout_marginHorizontal="@dimen/margin_16dp"
                         android:layout_marginTop="@dimen/margin_4dp"
                         android:layout_marginBottom="@dimen/margin_16dp"
+                        app:helperText="@string/add_warranty_helper_optional"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"

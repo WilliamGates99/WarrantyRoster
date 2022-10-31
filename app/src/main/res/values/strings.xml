@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Warranty Roster</string>
 
+
     <string name="error_network_connection">Unable to connect to the internet.</string>
     <string name="error_network_failure">You\'re having network issues. Please try again later.</string>
     <string name="error_firebase_403">This service is not available in your region. Please consider changing your IP address by using a VPN.</string>
@@ -9,10 +10,12 @@
     <string name="error_btn_retry">Retry</string>
     <string name="error_btn_confirm">Confirm</string>
 
+
     <string name="landing_text_language">Language</string>
     <string name="landing_text_language_english_us">English (United States)</string>
     <string name="landing_text_language_english_gb">English (United Kingdom)</string>
     <string name="landing_text_language_persian_ir">Persian</string>
+
 
     <string name="login_text_title">Login</string>
     <string name="login_text_description">Let\'s log you in.</string>
@@ -29,6 +32,7 @@
     <string name="login_error_email">The entered email address is not valid!</string>
     <string name="login_error_not_found">The account with the provided email does not exist.</string>
     <string name="login_error_credentials">The provided credentials are incorrect.</string>
+
 
     <string name="register_text_title">Register</string>
     <string name="register_text_description">Enter your information below.</string>
@@ -53,6 +57,7 @@
     <string name="register_error_password_not_match">Your password and confirm password do not match!</string>
     <string name="register_error_account_exists">An account with the provided email already exists.</string>
 
+
     <string name="forgot_pw_text_title">Reset\nPassword</string>
     <string name="forgot_pw_text_description">Enter your verified email to receive password reset instructions.</string>
     <string name="forgot_pw_title_email">Email Address</string>
@@ -69,6 +74,7 @@
     <string name="forgot_pw_error_email">The entered email address is not valid!</string>
     <string name="forgot_pw_error_not_found">The account with the provided email does not exist.</string>
 
+
     <string name="forgot_pw_sent_text_title">Check\nYour\nInbox</string>
     <string name="forgot_pw_sent_text_description">Please check your inbox and click on the received link to reset your password.</string>
     <string name="forgot_pw_sent_text_resend">Didn\'t receive the link?</string>
@@ -76,6 +82,7 @@
     <string name="forgot_pw_sent_text_first_time">The email has been sent.</string>
     <string name="forgot_pw_sent_text_resent">A new email has been sent.</string>
     <string name="forgot_pw_sent_btn_return">Return To Login</string>
+
 
     <string name="main_menu_title_warranties">Warranty List</string>
     <string name="main_menu_title_settings">Settings</string>
@@ -86,6 +93,7 @@
     <string name="main_rate_app_dialog_positive">Rate now</string>
     <string name="main_rate_app_dialog_negative">No, Thanks</string>
     <string name="main_rate_app_dialog_neutral">Remind me later</string>
+
 
     <string name="warranties_text_title">Warranty List</string>
     <string name="warranties_menu_hint_search">Search by title…</string>
@@ -156,6 +164,7 @@
         <item>December</item>
     </string-array>
 
+
     <string name="add_warranty_text_title">Add Warranty</string>
     <string name="add_warranty_menu_title_add">Add Warranty</string>
     <string name="add_warranty_title_title">Title</string>
@@ -183,6 +192,7 @@
     • fa-IR: روز/ماه/سال
     -->
     <string name="add_warranty_hint_date">mm/dd/yyyy</string>
+    <string name="add_warranty_helper_optional">Optional</string>
     <string name="add_warranty_title_date_picker_starting">Select Starting Date</string>
     <string name="add_warranty_title_date_picker_expiry">Select Expiry Date</string>
     <string name="add_warranty_error_blank_title">Enter the title!</string>
@@ -200,6 +210,7 @@
     • fa-IR: 2022/12/25
     -->
     <string name="add_warranty_format_date">%1$s/%2$s/%3$d</string>
+
 
     <string name="warranty_details_fab_edit">Edit</string>
     <string name="warranty_details_menu_title_delete">Delete Warranty</string>
@@ -236,6 +247,7 @@
     -->
     <string name="warranty_details_format_date">%1$s/%2$s/%3$d</string>
 
+
     <string name="edit_warranty_text_title">Edit Warranty</string>
     <string name="edit_warranty_menu_title_edit">Edit Warranty</string>
     <string name="edit_warranty_title_title">Title</string>
@@ -263,6 +275,7 @@
     • fa-IR: روز/ماه/سال
     -->
     <string name="edit_warranty_hint_date">mm/dd/yyyy</string>
+    <string name="edit_warranty_helper_optional">Optional</string>
     <string name="edit_warranty_title_date_picker_starting">Select Starting Date</string>
     <string name="edit_warranty_title_date_picker_expiry">Select Expiry Date</string>
     <string name="edit_warranty_error_blank_title">Enter the title!</string>
@@ -280,6 +293,7 @@
     • fa-IR: 2022/12/25
     -->
     <string name="edit_warranty_format_date">%1$s/%2$s/%3$d</string>
+
 
     <string name="settings_text_title">Settings</string>
     <string name="settings_title_account">Account</string>
@@ -308,6 +322,7 @@
     <string name="settings_dialog_positive">Confirm</string>
     <string name="settings_ad_indicator" translatable="false">Ad</string>
 
+
     <string name="change_password_text_title">Change Password</string>
     <string name="change_password_title_current_password">Current Password</string>
     <string name="change_password_hint_current_password">Enter your current password</string>
@@ -327,6 +342,7 @@
     <string name="change_password_error_credentials">The provided credentials are incorrect.</string>
     <string name="change_password_dialog_message">Your password has been successfully changed.</string>
     <string name="change_password_dialog_positive">Confirm</string>
+
 
     <string name="change_email_text_title">Change Email Address</string>
     <string name="change_email_title_password">Password</string>

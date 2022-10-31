@@ -60,7 +60,9 @@
         <item name="errorTextColor">@color/red</item>
         <item name="errorIconDrawable">@null</item>
         <item name="errorTextAppearance">@style/Theme.WarrantyRoster.TextInputLayout.Error</item>
-        <item name="helperTextTextAppearance">@style/Theme.WarrantyRoster.TextInputLayout.Helper
+        <item name="helperTextTextColor">@color/grayDark</item>
+        <item name="helperTextTextAppearance">
+            @style/Theme.WarrantyRoster.TextInputLayout.Helper
         </item>
     </style>
 
