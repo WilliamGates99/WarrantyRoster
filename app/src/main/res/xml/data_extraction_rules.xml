@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data-extraction-rules>
 
+    <!--
+    Backup rules for Android 12 (API level 31) or higher.
+    Sample data extraction rules file; uncomment and customize as necessary.
+    See https://developer.android.com/about/versions/12/backup-restore#xml-changes
+    for details.
+    -->
+
     <cloud-backup>
         <exclude domain="root" />
         <exclude domain="sharedpref" />
