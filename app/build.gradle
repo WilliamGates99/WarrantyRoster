@@ -163,7 +163,7 @@ dependencies {
     implementation 'com.airbnb.android:lottie:5.2.0'
 
     // Coil Library
-    implementation 'io.coil-kt:coil:2.2.1'
+    implementation 'io.coil-kt:coil:2.2.2'
     implementation 'io.coil-kt:coil-svg:2.2.2'
 
     // Google Play In-App Reviews API
@@ -172,7 +172,7 @@ dependencies {
     // AppLovin Libraries
     implementation 'com.applovin:applovin-sdk:11.5.3'
     implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'
-    implementation 'com.applovin.mediation:google-adapter:21.2.0.0'
+    implementation 'com.applovin.mediation:google-adapter:21.3.0.2'
 
     // Google AdMob Library
     implementation 'com.google.android.gms:play-services-ads:21.3.0'
