@@ -24,6 +24,11 @@ object Constants {
     const val LOCALE_COUNTRY_IRAN = "IR"
     const val LOCALE_COUNTRY_GREAT_BRITAIN = "GB"
 
+    // App Theme Constants
+    const val THEME_INDEX_DEFAULT = 0
+    const val THEME_INDEX_LIGHT = 1
+    const val THEME_INDEX_DARK = 2
+
     // App Locale Constants
     const val LOCALE_ENGLISH_UNITED_STATES = "en-US"
     const val LOCALE_ENGLISH_GREAT_BRITAIN = "en-GB"

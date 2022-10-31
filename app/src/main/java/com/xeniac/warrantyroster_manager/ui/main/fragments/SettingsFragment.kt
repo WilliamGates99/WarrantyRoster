@@ -29,6 +29,9 @@ import com.xeniac.warrantyroster_manager.ui.viewmodels.SettingsViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
+import com.xeniac.warrantyroster_manager.utils.Constants.THEME_INDEX_DARK
+import com.xeniac.warrantyroster_manager.utils.Constants.THEME_INDEX_DEFAULT
+import com.xeniac.warrantyroster_manager.utils.Constants.THEME_INDEX_LIGHT
 import com.xeniac.warrantyroster_manager.utils.Constants.URL_CROWDIN
 import com.xeniac.warrantyroster_manager.utils.Constants.URL_DONATE
 import com.xeniac.warrantyroster_manager.utils.Constants.URL_PRIVACY_POLICY
@@ -193,9 +196,9 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
     private fun setCurrentThemeText() {
         requireContext().apply {
             binding.currentTheme = when (currentAppTheme) {
-                0 -> getString(R.string.settings_text_settings_theme_default)
-                1 -> getString(R.string.settings_text_settings_theme_light)
-                2 -> getString(R.string.settings_text_settings_theme_dark)
+                THEME_INDEX_DEFAULT -> getString(R.string.settings_text_settings_theme_default)
+                THEME_INDEX_LIGHT -> getString(R.string.settings_text_settings_theme_light)
+                THEME_INDEX_DARK -> getString(R.string.settings_text_settings_theme_dark)
                 else -> getString(R.string.settings_text_settings_theme_default)
             }
         }
