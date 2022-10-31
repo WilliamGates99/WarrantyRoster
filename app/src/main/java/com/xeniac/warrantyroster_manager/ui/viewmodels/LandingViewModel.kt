@@ -74,7 +74,7 @@ class LandingViewModel @Inject constructor(
 
         if (localeList.isEmpty) {
             changeCurrentLocale(0)
-            Timber.i("Current language is System Default.")
+            Timber.i("Locale list is Empty.")
         } else {
             val localeString = localeList[0].toString()
             Timber.i("Current language is $localeString")
