@@ -15,7 +15,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentForgotPwBinding
-import com.xeniac.warrantyroster_manager.ui.viewmodels.LandingViewModel
+import com.xeniac.warrantyroster_manager.ui.viewmodels.ForgotPwViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_ACCOUNT_NOT_FOUND
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
@@ -40,14 +40,14 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
     private var _binding: FragmentForgotPwBinding? = null
     val binding get() = _binding!!
 
-    lateinit var viewModel: LandingViewModel
+    lateinit var viewModel: ForgotPwViewModel
 
     private var snackbar: Snackbar? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentForgotPwBinding.bind(view)
-        viewModel = ViewModelProvider(requireActivity())[LandingViewModel::class.java]
+        viewModel = ViewModelProvider(requireActivity())[ForgotPwViewModel::class.java]
 
         textInputsBackgroundColor()
         textInputsStrokeColor()
