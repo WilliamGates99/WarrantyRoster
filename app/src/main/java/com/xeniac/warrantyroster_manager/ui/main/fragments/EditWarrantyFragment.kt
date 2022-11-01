@@ -23,7 +23,7 @@ import com.xeniac.warrantyroster_manager.data.remote.models.Category
 import com.xeniac.warrantyroster_manager.data.remote.models.Warranty
 import com.xeniac.warrantyroster_manager.databinding.FragmentEditWarrantyBinding
 import com.xeniac.warrantyroster_manager.domain.repository.PreferencesRepository
-import com.xeniac.warrantyroster_manager.ui.viewmodels.MainViewModel
+import com.xeniac.warrantyroster_manager.ui.viewmodels.WarrantyViewModel
 import com.xeniac.warrantyroster_manager.utils.CoilHelper.loadCategoryImage
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
@@ -62,7 +62,7 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
     private var _binding: FragmentEditWarrantyBinding? = null
     val binding get() = _binding!!
 
-    lateinit var viewModel: MainViewModel
+    lateinit var viewModel: WarrantyViewModel
 
     @Inject
     lateinit var preferencesRepository: PreferencesRepository
@@ -92,7 +92,7 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentEditWarrantyBinding.bind(view)
-        viewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
+        viewModel = ViewModelProvider(requireActivity())[WarrantyViewModel::class.java]
 
         textInputsBackgroundColor()
         textInputsStrokeColor()

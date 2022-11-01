@@ -23,7 +23,7 @@ import com.xeniac.warrantyroster_manager.data.remote.models.ListItemType
 import com.xeniac.warrantyroster_manager.data.remote.models.Warranty
 import com.xeniac.warrantyroster_manager.databinding.AdContainerListBinding
 import com.xeniac.warrantyroster_manager.databinding.ListItemWarrantyBinding
-import com.xeniac.warrantyroster_manager.ui.viewmodels.MainViewModel
+import com.xeniac.warrantyroster_manager.ui.viewmodels.WarrantyViewModel
 import com.xeniac.warrantyroster_manager.utils.CoilHelper.loadCategoryImage
 import com.xeniac.warrantyroster_manager.utils.Constants.VIEW_TYPE_AD
 import com.xeniac.warrantyroster_manager.utils.Constants.VIEW_TYPE_WARRANTY
@@ -49,7 +49,7 @@ class WarrantyAdapter @Inject constructor(
 
     lateinit var activity: Activity
     lateinit var context: Context
-    lateinit var mainViewModel: MainViewModel
+    lateinit var warrantyViewModel: WarrantyViewModel
 
     private lateinit var warrantyClickInterface: WarrantyListClickInterface
 
@@ -152,12 +152,12 @@ class WarrantyAdapter @Inject constructor(
 
             delay(1) // Delay fixed issue #22
             val category = warranty.categoryId?.let {
-                mainViewModel.getCategoryById(it)
+                warrantyViewModel.getCategoryById(it)
             }
 
 
             category?.let {
-                binding.categoryTitle = it.title[mainViewModel.getCategoryTitleMapKey()]
+                binding.categoryTitle = it.title[warrantyViewModel.getCategoryTitleMapKey()]
                 loadCategoryImage(context, it.icon, imageLoader, binding.ivIcon, binding.cpiIcon)
             }
 

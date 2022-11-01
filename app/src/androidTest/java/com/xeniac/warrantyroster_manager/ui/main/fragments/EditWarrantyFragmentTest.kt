@@ -22,7 +22,7 @@ import com.xeniac.warrantyroster_manager.data.repository.FakeUserRepository
 import com.xeniac.warrantyroster_manager.databinding.FragmentEditWarrantyBinding
 import com.xeniac.warrantyroster_manager.getOrAwaitValue
 import com.xeniac.warrantyroster_manager.launchFragmentInHiltContainer
-import com.xeniac.warrantyroster_manager.ui.viewmodels.MainViewModel
+import com.xeniac.warrantyroster_manager.ui.viewmodels.WarrantyViewModel
 import com.xeniac.warrantyroster_manager.utils.Status
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -47,7 +47,7 @@ class EditWarrantyFragmentTest {
     private var testArgs: Bundle? = null
     private lateinit var testBinding: FragmentEditWarrantyBinding
 
-    private lateinit var testViewModel: MainViewModel
+    private lateinit var testViewModel: WarrantyViewModel
 
     private val warranty = Warranty(
         id = "1",
@@ -63,7 +63,7 @@ class EditWarrantyFragmentTest {
         context = ApplicationProvider.getApplicationContext()
         navController = TestNavHostController(context)
 
-        testViewModel = MainViewModel(
+        testViewModel = WarrantyViewModel(
             FakeUserRepository(),
             FakeMainRepository(),
             FakePreferencesRepository()

@@ -19,7 +19,7 @@ import com.xeniac.warrantyroster_manager.data.repository.FakeUserRepository
 import com.xeniac.warrantyroster_manager.databinding.FragmentWarrantiesBinding
 import com.xeniac.warrantyroster_manager.launchFragmentInHiltContainer
 import com.xeniac.warrantyroster_manager.ui.main.adapters.WarrantyAdapter
-import com.xeniac.warrantyroster_manager.ui.viewmodels.MainViewModel
+import com.xeniac.warrantyroster_manager.ui.viewmodels.WarrantyViewModel
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -42,7 +42,7 @@ class WarrantiesFragmentTest {
     private lateinit var testBinding: FragmentWarrantiesBinding
 
     private lateinit var fakeMainRepository: FakeMainRepository
-    private lateinit var testViewModel: MainViewModel
+    private lateinit var testViewModel: WarrantyViewModel
 
     @Before
     fun setUp() {
@@ -53,7 +53,7 @@ class WarrantiesFragmentTest {
 
         fakeMainRepository = FakeMainRepository()
 
-        testViewModel = MainViewModel(
+        testViewModel = WarrantyViewModel(
             FakeUserRepository(),
             fakeMainRepository,
             FakePreferencesRepository()

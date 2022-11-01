@@ -4,10 +4,10 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.common.truth.Truth.assertThat
 import com.xeniac.warrantyroster_manager.MainCoroutineRule
 import com.xeniac.warrantyroster_manager.data.remote.models.WarrantyInput
-import com.xeniac.warrantyroster_manager.getOrAwaitValue
 import com.xeniac.warrantyroster_manager.data.repository.FakeMainRepository
 import com.xeniac.warrantyroster_manager.data.repository.FakePreferencesRepository
 import com.xeniac.warrantyroster_manager.data.repository.FakeUserRepository
+import com.xeniac.warrantyroster_manager.getOrAwaitValue
 import com.xeniac.warrantyroster_manager.utils.Status
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Before
@@ -15,7 +15,7 @@ import org.junit.Rule
 import org.junit.Test
 
 @ExperimentalCoroutinesApi
-class MainViewModelTest {
+class WarrantyViewModelTest {
 
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
@@ -27,7 +27,7 @@ class MainViewModelTest {
     private lateinit var fakeMainRepository: FakeMainRepository
     private lateinit var fakePreferencesRepository: FakePreferencesRepository
 
-    private lateinit var testViewModel: MainViewModel
+    private lateinit var testViewModel: WarrantyViewModel
 
     @Before
     fun setUp() {
@@ -37,7 +37,7 @@ class MainViewModelTest {
 
         fakeUserRepository.addUser("email@test.com", "password")
 
-        testViewModel = MainViewModel(
+        testViewModel = WarrantyViewModel(
             fakeUserRepository,
             fakeMainRepository,
             fakePreferencesRepository

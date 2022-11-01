@@ -38,7 +38,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(
+class WarrantyViewModel @Inject constructor(
     private val userRepository: UserRepository,
     private val mainRepository: MainRepository,
     private val preferencesRepository: PreferencesRepository

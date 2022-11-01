@@ -21,7 +21,7 @@ import com.xeniac.warrantyroster_manager.data.remote.models.Warranty
 import com.xeniac.warrantyroster_manager.databinding.FragmentWarrantiesBinding
 import com.xeniac.warrantyroster_manager.ui.main.adapters.WarrantyAdapter
 import com.xeniac.warrantyroster_manager.ui.main.adapters.WarrantyListClickInterface
-import com.xeniac.warrantyroster_manager.ui.viewmodels.MainViewModel
+import com.xeniac.warrantyroster_manager.ui.viewmodels.WarrantyViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_EMPTY_CATEGORY_LIST
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_EMPTY_SEARCH_RESULT_LIST
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_EMPTY_WARRANTY_LIST
@@ -38,7 +38,7 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
     private var _binding: FragmentWarrantiesBinding? = null
     val binding get() = _binding!!
 
-    lateinit var viewModel: MainViewModel
+    lateinit var viewModel: WarrantyViewModel
 
     @Inject
     lateinit var warrantyAdapter: WarrantyAdapter
@@ -51,7 +51,7 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentWarrantiesBinding.bind(view)
-        viewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
+        viewModel = ViewModelProvider(requireActivity())[WarrantyViewModel::class.java]
 
         getCategoriesFromFirestore()
         setupRecyclerView()
@@ -76,7 +76,7 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
             setOnWarrantyItemClickListener(this@WarrantiesFragment)
             activity = requireActivity()
             context = requireContext()
-            mainViewModel = viewModel
+            warrantyViewModel = viewModel
         }
         binding.rv.adapter = warrantyAdapter
     }

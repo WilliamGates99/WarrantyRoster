@@ -19,7 +19,7 @@ import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.data.remote.models.Warranty
 import com.xeniac.warrantyroster_manager.databinding.FragmentWarrantyDetailsBinding
 import com.xeniac.warrantyroster_manager.ui.main.MainActivity
-import com.xeniac.warrantyroster_manager.ui.viewmodels.MainViewModel
+import com.xeniac.warrantyroster_manager.ui.viewmodels.WarrantyViewModel
 import com.xeniac.warrantyroster_manager.utils.CoilHelper.loadCategoryImage
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
@@ -46,7 +46,7 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
     private var _binding: FragmentWarrantyDetailsBinding? = null
     val binding get() = _binding!!
 
-    lateinit var viewModel: MainViewModel
+    lateinit var viewModel: WarrantyViewModel
 
     @Inject
     lateinit var imageLoader: ImageLoader
@@ -64,7 +64,7 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentWarrantyDetailsBinding.bind(view)
-        viewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
+        viewModel = ViewModelProvider(requireActivity())[WarrantyViewModel::class.java]
 
         returnToMainActivity()
         handleExtendedFAB()
