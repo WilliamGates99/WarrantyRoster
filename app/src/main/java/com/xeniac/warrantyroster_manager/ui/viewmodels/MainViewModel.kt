@@ -41,11 +41,19 @@ class MainViewModel @Inject constructor(
     }
 
     fun setRateAppDialogChoice(value: Int) = viewModelScope.launch {
+        safeSetRateAppDialogChoice(value)
+    }
+
+    private suspend fun safeSetRateAppDialogChoice(value: Int) {
         preferencesRepository.setRateAppDialogChoice(value)
         _rateAppDialogChoiceLiveData.postValue(Event(value))
     }
 
     fun setPreviousRequestTimeInMillis() = viewModelScope.launch {
+        safeSetPreviousRequestTimeInMillis()
+    }
+
+    private suspend fun safeSetPreviousRequestTimeInMillis() {
         preferencesRepository.setPreviousRequestTimeInMillis(Calendar.getInstance().timeInMillis)
     }
 }
