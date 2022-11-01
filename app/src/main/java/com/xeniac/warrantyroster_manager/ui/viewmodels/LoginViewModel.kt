@@ -6,7 +6,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.xeniac.warrantyroster_manager.domain.repository.PreferencesRepository
 import com.xeniac.warrantyroster_manager.domain.repository.UserRepository
-import com.xeniac.warrantyroster_manager.utils.Constants
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_EMAIL
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_PASSWORD
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_EMAIL_INVALID
 import com.xeniac.warrantyroster_manager.utils.Event
 import com.xeniac.warrantyroster_manager.utils.Resource
 import com.xeniac.warrantyroster_manager.utils.UserHelper
@@ -26,17 +28,17 @@ class LoginViewModel @Inject constructor(
 
     fun checkLoginInputs(email: String, password: String) {
         if (email.isBlank()) {
-            _loginLiveData.postValue(Event(Resource.error(Constants.ERROR_INPUT_BLANK_EMAIL)))
+            _loginLiveData.postValue(Event(Resource.error(ERROR_INPUT_BLANK_EMAIL)))
             return
         }
 
         if (password.isBlank()) {
-            _loginLiveData.postValue(Event(Resource.error(Constants.ERROR_INPUT_BLANK_PASSWORD)))
+            _loginLiveData.postValue(Event(Resource.error(ERROR_INPUT_BLANK_PASSWORD)))
             return
         }
 
         if (!UserHelper.isEmailValid(email)) {
-            _loginLiveData.postValue(Event(Resource.error(Constants.ERROR_INPUT_EMAIL_INVALID)))
+            _loginLiveData.postValue(Event(Resource.error(ERROR_INPUT_EMAIL_INVALID)))
             return
         }
 
