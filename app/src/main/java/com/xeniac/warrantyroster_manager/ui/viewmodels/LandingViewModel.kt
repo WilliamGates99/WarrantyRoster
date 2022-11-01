@@ -50,9 +50,6 @@ class LandingViewModel @Inject constructor(
     private val _registerLiveData: MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
     val registerLiveData: LiveData<Event<Resource<Nothing>>> = _registerLiveData
 
-    private val _loginLiveData: MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
-    val loginLiveData: LiveData<Event<Resource<Nothing>>> = _loginLiveData
-
     private val _forgotPwLiveData: MutableLiveData<Event<Resource<String>>> = MutableLiveData()
     val forgotPwLiveData: LiveData<Event<Resource<String>>> = _forgotPwLiveData
 
@@ -170,25 +167,6 @@ class LandingViewModel @Inject constructor(
         registerViaEmail(email, password)
     }
 
-    fun checkLoginInputs(email: String, password: String) {
-        if (email.isBlank()) {
-            _loginLiveData.postValue(Event(Resource.error(ERROR_INPUT_BLANK_EMAIL)))
-            return
-        }
-
-        if (password.isBlank()) {
-            _loginLiveData.postValue(Event(Resource.error(ERROR_INPUT_BLANK_PASSWORD)))
-            return
-        }
-
-        if (!isEmailValid(email)) {
-            _loginLiveData.postValue(Event(Resource.error(ERROR_INPUT_EMAIL_INVALID)))
-            return
-        }
-
-        loginViaEmail(email, password)
-    }
-
     fun checkForgotPwInputs(email: String, activateCountDown: Boolean = true) {
         if (email.isBlank()) {
             _forgotPwLiveData.postValue(Event(Resource.error(ERROR_INPUT_BLANK_EMAIL)))
@@ -207,10 +185,6 @@ class LandingViewModel @Inject constructor(
         safeRegisterViaEmail(email, password)
     }
 
-    fun loginViaEmail(email: String, password: String) = viewModelScope.launch {
-        safeLoginViaEmail(email, password)
-    }
-
     fun sendResetPasswordEmail(email: String, activateCountDown: Boolean = true) =
         viewModelScope.launch {
             safeSendResetPasswordEmail(email, activateCountDown)
@@ -227,19 +201,6 @@ class LandingViewModel @Inject constructor(
         } catch (e: Exception) {
             Timber.e("safeRegisterViaEmail Exception: ${e.message}")
             _registerLiveData.postValue(Event(Resource.error(e.message.toString())))
-        }
-    }
-
-    private suspend fun safeLoginViaEmail(email: String, password: String) {
-        _loginLiveData.postValue(Event(Resource.loading()))
-        try {
-            userRepository.loginViaEmail(email, password)
-            preferencesRepository.isUserLoggedIn(true)
-            _loginLiveData.postValue(Event(Resource.success(null)))
-            Timber.i("$email logged in successfully.")
-        } catch (e: Exception) {
-            Timber.e("safeLoginViaEmail Exception: ${e.message}")
-            _loginLiveData.postValue(Event(Resource.error(e.message.toString())))
         }
     }
 

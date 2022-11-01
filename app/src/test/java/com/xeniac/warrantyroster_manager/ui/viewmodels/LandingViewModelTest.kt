@@ -97,64 +97,6 @@ class LandingViewModelTest {
     }
 
     @Test
-    fun checkLoginInputsWithBlankFields_returnsError() {
-        testViewModel.checkLoginInputs("email", "")
-
-        val responseEvent = testViewModel.loginLiveData.getOrAwaitValue()
-        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
-    }
-
-    @Test
-    fun checkLoginInputsWithInvalidEmail_returnsError() {
-        testViewModel.checkLoginInputs("email", "password")
-
-        val responseEvent = testViewModel.loginLiveData.getOrAwaitValue()
-        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
-    }
-
-    @Test
-    fun checkLoginInputsWithValidInputs_returnsSuccess() {
-        val email = "email@test.com"
-        val password = "password"
-        testViewModel.registerViaEmail(email, password)
-        testViewModel.checkLoginInputs(email, password)
-
-        val responseEvent = testViewModel.loginLiveData.getOrAwaitValue()
-        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.SUCCESS)
-    }
-
-    @Test
-    fun loginWithNoInternet_returnsError() {
-        val email = "email@test.com"
-        val password = "password"
-        testViewModel.registerViaEmail(email, password)
-
-        fakeUserRepository.setShouldReturnNetworkError(true)
-        testViewModel.loginViaEmail(email, password)
-
-        val responseEvent = testViewModel.loginLiveData.getOrAwaitValue()
-        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
-    }
-
-    @Test
-    fun loginWithIncorrectCredentials_returnsError() {
-        val email = "email@test.com"
-        testViewModel.registerViaEmail(email, "password")
-        testViewModel.loginViaEmail(email, "wrong_password")
-
-        val responseEvent = testViewModel.loginLiveData.getOrAwaitValue()
-        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
-    }
-
-    @Test
-    fun loginWithNonExistingEmail_returnsError() {
-        testViewModel.loginViaEmail("email@test.com", "password")
-
-        val responseEvent = testViewModel.loginLiveData.getOrAwaitValue()
-        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
-    }
-
-    @Test
     fun checkForgotPwInputsWithBlankFields_returnsError() {
         testViewModel.checkForgotPwInputs("", false)
 
