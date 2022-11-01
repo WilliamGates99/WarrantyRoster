@@ -13,14 +13,6 @@ import com.google.firebase.auth.FirebaseUser
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.domain.repository.PreferencesRepository
 import com.xeniac.warrantyroster_manager.domain.repository.UserRepository
-import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_EMAIL
-import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_NEW_PASSWORD
-import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_PASSWORD
-import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_RETYPE_PASSWORD
-import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_EMAIL_INVALID
-import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_EMAIL_SAME
-import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_PASSWORD_NOT_MATCH
-import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_PASSWORD_SHORT
 import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_ENGLISH_GREAT_BRITAIN
 import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_ENGLISH_UNITED_STATES
 import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_INDEX_ENGLISH_GREAT_BRITAIN
@@ -31,13 +23,9 @@ import com.xeniac.warrantyroster_manager.utils.Event
 import com.xeniac.warrantyroster_manager.utils.Resource
 import com.xeniac.warrantyroster_manager.utils.SettingsHelper
 import com.xeniac.warrantyroster_manager.utils.UiText
-import com.xeniac.warrantyroster_manager.utils.UserHelper.isEmailValid
-import com.xeniac.warrantyroster_manager.utils.UserHelper.isRetypePasswordValid
-import com.xeniac.warrantyroster_manager.utils.UserHelper.passwordStrength
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -58,14 +46,6 @@ class SettingsViewModel @Inject constructor(
     private val _currentAppThemeLiveData: MutableLiveData<Event<Int>> = MutableLiveData()
     val currentAppThemeLiveData: LiveData<Event<Int>> = _currentAppThemeLiveData
 
-    private val _rateAppDialogChoiceLiveData: MutableLiveData<Event<Int>> = MutableLiveData()
-    val rateAppDialogChoiceLiveData: LiveData<Event<Int>> = _rateAppDialogChoiceLiveData
-
-    private val _previousRequestTimeInMillisLiveData:
-            MutableLiveData<Event<Long>> = MutableLiveData()
-    val previousRequestTimeInMillisLiveData:
-            LiveData<Event<Long>> = _previousRequestTimeInMillisLiveData
-
     private val _setAppLocaleLiveData:
             MutableLiveData<Event<Resource<Array<String>>>> = MutableLiveData()
     val setAppLocaleLiveData: LiveData<Event<Resource<Array<String>>>> = _setAppLocaleLiveData
@@ -81,23 +61,6 @@ class SettingsViewModel @Inject constructor(
 
     private val _logoutLiveData: MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
     val logoutLiveData: LiveData<Event<Resource<Nothing>>> = _logoutLiveData
-
-    private val _checkInputsLiveData: MutableLiveData<Event<Resource<String>>> = MutableLiveData()
-    val checkInputsLiveData: LiveData<Event<Resource<String>>> = _checkInputsLiveData
-
-    private val _reAuthenticateUserLiveData:
-            MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
-    val reAuthenticateUserLiveData: LiveData<Event<Resource<Nothing>>> = _reAuthenticateUserLiveData
-
-    private val _changeUserEmailLiveData:
-            MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
-    val changeUserEmailLiveData: LiveData<Event<Resource<Nothing>>> = _changeUserEmailLiveData
-
-    private val _changeUserPasswordLiveData:
-            MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
-    val changeUserPasswordLiveData: LiveData<Event<Resource<Nothing>>> = _changeUserPasswordLiveData
-
-//    fun isUserLoggedIn() = preferencesRepository.isUserLoggedInSynchronously()
 
     fun getCurrentLanguage() = viewModelScope.launch {
         safeGetCurrentLanguage()
@@ -147,12 +110,8 @@ class SettingsViewModel @Inject constructor(
         safeGetCurrentAppTheme()
     }
 
-    fun getRateAppDialogChoice() = viewModelScope.launch {
-        safeGetRateAppDialogChoice()
-    }
-
-    fun getPreviousRequestTimeInMillis() = viewModelScope.launch {
-        safeGetPreviousRequestTimeInMillis()
+    private suspend fun safeGetCurrentAppTheme() {
+        _currentAppThemeLiveData.postValue(Event(preferencesRepository.getCurrentAppTheme()))
     }
 
     fun changeCurrentLocale(index: Int) = viewModelScope.launch {
@@ -192,113 +151,17 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun changeCurrentTheme(index: Int) = viewModelScope.launch {
+        safeChangeCurrentTheme(index)
+    }
+
+    private suspend fun safeChangeCurrentTheme(index: Int) {
         preferencesRepository.setCurrentAppTheme(index)
         _currentAppThemeLiveData.postValue(Event(index))
         SettingsHelper.setAppTheme(index)
     }
 
-    fun setRateAppDialogChoice(value: Int) = viewModelScope.launch {
-        preferencesRepository.setRateAppDialogChoice(value)
-        _rateAppDialogChoiceLiveData.postValue(Event(value))
-    }
-
-    fun setPreviousRequestTimeInMillis() = viewModelScope.launch {
-        preferencesRepository.setPreviousRequestTimeInMillis(Calendar.getInstance().timeInMillis)
-    }
-
     fun getAccountDetails() = viewModelScope.launch {
         safeGetAccountDetails()
-    }
-
-    fun sendVerificationEmail() = viewModelScope.launch {
-        safeSendVerificationEmail()
-    }
-
-    fun logoutUser() = viewModelScope.launch {
-        safeLogoutUser()
-    }
-
-    fun checkChangeEmailInputs(
-        password: String,
-        newEmail: String,
-        currentUserEmail: String = userRepository.getCurrentUserEmail()
-    ) {
-        if (password.isBlank()) {
-            _checkInputsLiveData.postValue(Event(Resource.error(ERROR_INPUT_BLANK_PASSWORD)))
-            return
-        }
-
-        if (newEmail.isBlank()) {
-            _checkInputsLiveData.postValue(Event(Resource.error(ERROR_INPUT_BLANK_EMAIL)))
-            return
-        }
-
-        if (!isEmailValid(newEmail)) {
-            _checkInputsLiveData.postValue(Event(Resource.error(ERROR_INPUT_EMAIL_INVALID)))
-            return
-        }
-
-        if (newEmail == currentUserEmail) {
-            _checkInputsLiveData.postValue(Event(Resource.error(ERROR_INPUT_EMAIL_SAME)))
-            return
-        }
-
-        _checkInputsLiveData.postValue(Event(Resource.success(password)))
-    }
-
-    fun checkChangePasswordInputs(
-        currentPassword: String, newPassword: String, retypeNewPassword: String
-    ) {
-        if (currentPassword.isBlank()) {
-            _checkInputsLiveData.postValue(Event(Resource.error(ERROR_INPUT_BLANK_PASSWORD)))
-            return
-        }
-
-        if (newPassword.isBlank()) {
-            _checkInputsLiveData.postValue(Event(Resource.error(ERROR_INPUT_BLANK_NEW_PASSWORD)))
-            return
-        }
-
-        if (retypeNewPassword.isBlank()) {
-            _checkInputsLiveData.postValue(Event(Resource.error(ERROR_INPUT_BLANK_RETYPE_PASSWORD)))
-            return
-        }
-
-        if (passwordStrength(newPassword) == (-1).toByte()) {
-            _checkInputsLiveData.postValue(Event(Resource.error(ERROR_INPUT_PASSWORD_SHORT)))
-            return
-        }
-
-        if (!isRetypePasswordValid(newPassword, retypeNewPassword)) {
-            _checkInputsLiveData.postValue(Event(Resource.error(ERROR_INPUT_PASSWORD_NOT_MATCH)))
-            return
-        }
-
-        _checkInputsLiveData.postValue(Event(Resource.success(currentPassword)))
-    }
-
-    fun reAuthenticateUser(password: String) = viewModelScope.launch {
-        safeReAuthenticateUser(password)
-    }
-
-    fun changeUserEmail(newEmail: String) = viewModelScope.launch {
-        safeChangeUserEmail(newEmail)
-    }
-
-    fun changeUserPassword(newPassword: String) = viewModelScope.launch {
-        safeChangeUserPassword(newPassword)
-    }
-
-    private suspend fun safeGetCurrentAppTheme() {
-        _currentAppThemeLiveData.postValue(Event(preferencesRepository.getCurrentAppTheme()))
-    }
-
-    private suspend fun safeGetRateAppDialogChoice() {
-        _rateAppDialogChoiceLiveData.postValue(Event(preferencesRepository.getRateAppDialogChoice()))
-    }
-
-    private suspend fun safeGetPreviousRequestTimeInMillis() {
-        _previousRequestTimeInMillisLiveData.postValue(Event(preferencesRepository.getPreviousRequestTimeInMillis()))
     }
 
     private suspend fun safeGetAccountDetails() {
@@ -323,6 +186,10 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
+    fun sendVerificationEmail() = viewModelScope.launch {
+        safeSendVerificationEmail()
+    }
+
     private suspend fun safeSendVerificationEmail() {
         _sendVerificationEmailLiveData.postValue(Event(Resource.loading()))
         try {
@@ -335,6 +202,10 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
+    fun logoutUser() = viewModelScope.launch {
+        safeLogoutUser()
+    }
+
     private suspend fun safeLogoutUser() {
         _logoutLiveData.postValue(Event(Resource.loading()))
         try {
@@ -345,42 +216,6 @@ class SettingsViewModel @Inject constructor(
         } catch (e: Exception) {
             Timber.e("safeLogoutUser Exception: ${e.message}")
             _logoutLiveData.postValue(Event(Resource.error(e.message.toString())))
-        }
-    }
-
-    private suspend fun safeReAuthenticateUser(password: String) {
-        _reAuthenticateUserLiveData.postValue(Event(Resource.loading()))
-        try {
-            userRepository.reAuthenticateUser(password)
-            _reAuthenticateUserLiveData.postValue(Event(Resource.success(null)))
-            Timber.i("User re-authenticated.")
-        } catch (e: Exception) {
-            Timber.e("safeReAuthenticateUser Exception: ${e.message}")
-            _reAuthenticateUserLiveData.postValue(Event(Resource.error(e.message.toString())))
-        }
-    }
-
-    private suspend fun safeChangeUserEmail(newEmail: String) {
-        _changeUserEmailLiveData.postValue(Event(Resource.loading()))
-        try {
-            userRepository.updateUserEmail(newEmail)
-            _changeUserEmailLiveData.postValue(Event(Resource.success(null)))
-            Timber.i("User email updated to ${newEmail}.")
-        } catch (e: Exception) {
-            Timber.e("safeChangeUserEmail Exception: ${e.message}")
-            _changeUserEmailLiveData.postValue(Event(Resource.error(e.message.toString())))
-        }
-    }
-
-    private suspend fun safeChangeUserPassword(newPassword: String) {
-        _changeUserPasswordLiveData.postValue(Event(Resource.loading()))
-        try {
-            userRepository.updateUserPassword(newPassword)
-            _changeUserPasswordLiveData.postValue(Event(Resource.success(null)))
-            Timber.i("User password updated.")
-        } catch (e: Exception) {
-            Timber.e("safeChangeUserPassword Exception: ${e.message}")
-            _changeUserPasswordLiveData.postValue(Event(Resource.error(e.message.toString())))
         }
     }
 
