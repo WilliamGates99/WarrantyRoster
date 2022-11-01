@@ -272,6 +272,22 @@ class WarrantyViewModel @Inject constructor(
         addWarrantyToFirestore(warrantyInput)
     }
 
+    fun addWarrantyToFirestore(warrantyInput: WarrantyInput) = viewModelScope.launch {
+        safeAddWarrantyToFirestore(warrantyInput)
+    }
+
+    private suspend fun safeAddWarrantyToFirestore(warrantyInput: WarrantyInput) {
+        _addWarrantyLiveData.postValue(Event(Resource.loading()))
+        try {
+            mainRepository.addWarrantyToFirestore(warrantyInput)
+            _addWarrantyLiveData.postValue(Event(Resource.success(null)))
+            Timber.i("Warranty successfully added.")
+        } catch (e: Exception) {
+            Timber.e("safeAddWarrantyToFirestore Exception: ${e.message}")
+            _addWarrantyLiveData.postValue(Event(Resource.error(e.message.toString())))
+        }
+    }
+
     fun checkEditWarrantyInputs(
         warrantyId: String, title: String, brand: String?, model: String?, serialNumber: String?,
         isLifetime: Boolean, startingDateInput: String?, expiryDateInput: String?,
@@ -316,46 +332,10 @@ class WarrantyViewModel @Inject constructor(
         updateWarrantyInFirestore(warrantyId, warrantyInput)
     }
 
-    fun addWarrantyToFirestore(warrantyInput: WarrantyInput) = viewModelScope.launch {
-        safeAddWarrantyToFirestore(warrantyInput)
-    }
-
-    fun deleteWarrantyFromFirestore(warrantyId: String) = viewModelScope.launch {
-        safeDeleteWarrantyFromFirestore(warrantyId)
-    }
-
     fun updateWarrantyInFirestore(warrantyId: String, warrantyInput: WarrantyInput) =
         viewModelScope.launch {
             safeUpdateWarrantyInFirestore(warrantyId, warrantyInput)
         }
-
-    fun getUpdatedWarrantyFromFirestore(warrantyId: String) = viewModelScope.launch {
-        safeGetUpdatedWarrantyFromFirestore(warrantyId)
-    }
-
-    private suspend fun safeAddWarrantyToFirestore(warrantyInput: WarrantyInput) {
-        _addWarrantyLiveData.postValue(Event(Resource.loading()))
-        try {
-            mainRepository.addWarrantyToFirestore(warrantyInput)
-            _addWarrantyLiveData.postValue(Event(Resource.success(null)))
-            Timber.i("Warranty successfully added.")
-        } catch (e: Exception) {
-            Timber.e("safeAddWarrantyToFirestore Exception: ${e.message}")
-            _addWarrantyLiveData.postValue(Event(Resource.error(e.message.toString())))
-        }
-    }
-
-    private suspend fun safeDeleteWarrantyFromFirestore(warrantyId: String) {
-        _deleteWarrantyLiveData.postValue(Event(Resource.loading()))
-        try {
-            mainRepository.deleteWarrantyFromFirestore(warrantyId)
-            _deleteWarrantyLiveData.postValue(Event(Resource.success(null)))
-            Timber.i("$warrantyId successfully deleted.")
-        } catch (e: Exception) {
-            Timber.e("safeDeleteWarrantyFromFirestore Exception: ${e.message}")
-            _deleteWarrantyLiveData.postValue(Event(Resource.error(e.message.toString())))
-        }
-    }
 
     private suspend fun safeUpdateWarrantyInFirestore(
         warrantyId: String, warrantyInput: WarrantyInput
@@ -371,6 +351,10 @@ class WarrantyViewModel @Inject constructor(
         }
     }
 
+    fun getUpdatedWarrantyFromFirestore(warrantyId: String) = viewModelScope.launch {
+        safeGetUpdatedWarrantyFromFirestore(warrantyId)
+    }
+
     private suspend fun safeGetUpdatedWarrantyFromFirestore(warrantyId: String) {
         _updatedWarrantyLiveData.postValue(Event(Resource.loading()))
         try {
@@ -380,6 +364,22 @@ class WarrantyViewModel @Inject constructor(
         } catch (e: Exception) {
             Timber.e("safeGetUpdatedWarrantyFromFirestore Exception: ${e.message}")
             _updatedWarrantyLiveData.postValue(Event(Resource.error(e.message.toString())))
+        }
+    }
+
+    fun deleteWarrantyFromFirestore(warrantyId: String) = viewModelScope.launch {
+        safeDeleteWarrantyFromFirestore(warrantyId)
+    }
+
+    private suspend fun safeDeleteWarrantyFromFirestore(warrantyId: String) {
+        _deleteWarrantyLiveData.postValue(Event(Resource.loading()))
+        try {
+            mainRepository.deleteWarrantyFromFirestore(warrantyId)
+            _deleteWarrantyLiveData.postValue(Event(Resource.success(null)))
+            Timber.i("$warrantyId successfully deleted.")
+        } catch (e: Exception) {
+            Timber.e("safeDeleteWarrantyFromFirestore Exception: ${e.message}")
+            _deleteWarrantyLiveData.postValue(Event(Resource.error(e.message.toString())))
         }
     }
 }
