@@ -16,7 +16,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentChangePasswordBinding
-import com.xeniac.warrantyroster_manager.ui.viewmodels.SettingsViewModel
+import com.xeniac.warrantyroster_manager.ui.viewmodels.ChangePasswordViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_CREDENTIALS
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
@@ -44,7 +44,7 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
     private var _binding: FragmentChangePasswordBinding? = null
     val binding get() = _binding!!
 
-    lateinit var viewModel: SettingsViewModel
+    lateinit var viewModel: ChangePasswordViewModel
 
     private lateinit var newPassword: String
 
@@ -53,7 +53,7 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentChangePasswordBinding.bind(view)
-        viewModel = ViewModelProvider(requireActivity())[SettingsViewModel::class.java]
+        viewModel = ViewModelProvider(requireActivity())[ChangePasswordViewModel::class.java]
 
         textInputsBackgroundColor()
         textInputsStrokeColor()
