@@ -21,7 +21,7 @@ import com.google.android.play.core.review.ReviewManagerFactory
 import com.xeniac.warrantyroster_manager.BuildConfig
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.ActivityMainBinding
-import com.xeniac.warrantyroster_manager.ui.viewmodels.SettingsViewModel
+import com.xeniac.warrantyroster_manager.ui.viewmodels.MainViewModel
 import com.xeniac.warrantyroster_manager.utils.DateHelper.getDaysFromFirstInstallTime
 import com.xeniac.warrantyroster_manager.utils.DateHelper.getDaysFromPreviousRequestTime
 import dagger.hilt.android.AndroidEntryPoint
@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity(), MaxAdListener {
     lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
 
-    private lateinit var viewModel: SettingsViewModel
+    private lateinit var viewModel: MainViewModel
 
     private lateinit var reviewManager: ReviewManager
     var reviewInfo: ReviewInfo? = null
@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity(), MaxAdListener {
     }
 
     private fun mainInit() {
-        viewModel = ViewModelProvider(this)[SettingsViewModel::class.java]
+        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
 
         bottomAppBarStyle()
         bottomNavActions()
