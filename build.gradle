@@ -1,9 +1,9 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
-buildscript {
-    dependencies {
-        classpath 'com.applovin.quality:AppLovinQualityServiceGradlePlugin:4.3.7'
-    }
-}
+//buildscript {
+//    dependencies {
+//        classpath 'com.applovin.quality:AppLovinQualityServiceGradlePlugin:4.3.7'
+//    }
+//}
 
 plugins {
     id 'com.android.application' version '7.3.1' apply false // Android Gradle Plugin Version

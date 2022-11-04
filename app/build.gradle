@@ -8,15 +8,15 @@ plugins {
     id 'dagger.hilt.android.plugin'
     id 'com.google.firebase.crashlytics'
     id 'com.google.firebase.firebase-perf'
-    id 'applovin-quality-service'
+//    id 'applovin-quality-service'
 }
 
 Properties properties = new Properties()
 properties.load(project.rootProject.file("local.properties").newDataInputStream())
 
-applovin {
-    apiKey "\"${properties.getProperty("APPLOVIN_API_KEY")}\""
-}
+//applovin {
+//    apiKey "\"${properties.getProperty("APPLOVIN_API_KEY")}\""
+//}
 
 android {
     namespace 'com.xeniac.warrantyroster_manager'
@@ -107,6 +107,9 @@ android {
 }
 
 kapt {
+    /**
+     * Allow references to generated code
+     */
     correctErrorTypes = true
 }
 
