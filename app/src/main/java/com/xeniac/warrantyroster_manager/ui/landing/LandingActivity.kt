@@ -5,12 +5,10 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.fragment.NavHostFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.ActivityLandingBinding
-import com.xeniac.warrantyroster_manager.ui.main.MainActivity
 import com.xeniac.warrantyroster_manager.ui.viewmodels.LandingViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_INDEX_ENGLISH_GREAT_BRITAIN
 import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_INDEX_ENGLISH_UNITED_STATES
@@ -23,32 +21,10 @@ class LandingActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLandingBinding
     private val viewModel by viewModels<LandingViewModel>()
 
-    private var shouldShowSplashScreen = true
-
     private var currentLocaleIndex = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        splashScreen()
-    }
-
-    private fun splashScreen() {
-        val splashScreen = installSplashScreen()
-        splashScreen.setKeepOnScreenCondition { shouldShowSplashScreen }
-
-        if (viewModel.isUserLoggedIn()) {
-            shouldShowSplashScreen = false
-            Intent(this, MainActivity::class.java).apply {
-                startActivity(this)
-                finish()
-            }
-        } else {
-            shouldShowSplashScreen = false
-            landingInit()
-        }
-    }
-
-    private fun landingInit() {
         binding = ActivityLandingBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

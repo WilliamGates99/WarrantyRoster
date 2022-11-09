@@ -31,6 +31,12 @@ class MainViewModelTest {
     }
 
     @Test
+    fun isUserLoggedIn_returnsDefaultValue() {
+        val isUserLoggedIn = testViewModel.isUserLoggedIn()
+        assertThat(isUserLoggedIn).isFalse()
+    }
+
+    @Test
     fun getRateAppDialogChoice_returnsDefaultRateAppDialogChoice() {
         val defaultRateAppDialogChoice = 0
         testViewModel.getRateAppDialogChoice()

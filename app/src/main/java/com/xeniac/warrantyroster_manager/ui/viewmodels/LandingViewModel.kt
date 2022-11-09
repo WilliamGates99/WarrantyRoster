@@ -33,8 +33,6 @@ class LandingViewModel @Inject constructor(
     private val _changeCurrentLocaleLiveData: MutableLiveData<Event<Boolean>> = MutableLiveData()
     val changeCurrentLocaleLiveData: LiveData<Event<Boolean>> = _changeCurrentLocaleLiveData
 
-    fun isUserLoggedIn() = preferencesRepository.isUserLoggedInSynchronously()
-
     fun getCurrentLanguage() = viewModelScope.launch {
         safeGetCurrentLanguage()
     }

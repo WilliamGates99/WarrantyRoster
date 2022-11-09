@@ -1,10 +1,12 @@
 package com.xeniac.warrantyroster_manager.ui.main
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
@@ -21,6 +23,7 @@ import com.google.android.play.core.review.ReviewManagerFactory
 import com.xeniac.warrantyroster_manager.BuildConfig
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.ActivityMainBinding
+import com.xeniac.warrantyroster_manager.ui.landing.LandingActivity
 import com.xeniac.warrantyroster_manager.ui.viewmodels.MainViewModel
 import com.xeniac.warrantyroster_manager.utils.DateHelper.getDaysFromFirstInstallTime
 import com.xeniac.warrantyroster_manager.utils.DateHelper.getDaysFromPreviousRequestTime
@@ -33,10 +36,11 @@ import timber.log.Timber
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), MaxAdListener {
 
+    private val viewModel by viewModels<MainViewModel>()
+    private var shouldShowSplashScreen = true
+
     lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
-
-    private lateinit var viewModel: MainViewModel
 
     private lateinit var reviewManager: ReviewManager
     var reviewInfo: ReviewInfo? = null
@@ -49,13 +53,29 @@ class MainActivity : AppCompatActivity(), MaxAdListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        mainInit()
+        splashScreen()
+    }
+
+    private fun splashScreen() {
+        val splashScreen = installSplashScreen()
+        splashScreen.setKeepOnScreenCondition { shouldShowSplashScreen }
+
+        if (viewModel.isUserLoggedIn()) {
+            mainInit()
+            shouldShowSplashScreen = false
+        } else {
+            navigateToLandingActivity()
+        }
+    }
+
+    private fun navigateToLandingActivity() {
+        startActivity(Intent(this, LandingActivity::class.java))
+        finish()
     }
 
     private fun mainInit() {
-        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         bottomAppBarStyle()
         bottomNavActions()

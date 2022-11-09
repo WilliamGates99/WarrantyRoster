@@ -24,6 +24,8 @@ class MainViewModel @Inject constructor(
     val previousRequestTimeInMillisLiveData:
             LiveData<Event<Long>> = _previousRequestTimeInMillisLiveData
 
+    fun isUserLoggedIn() = preferencesRepository.isUserLoggedInSynchronously()
+
     fun getRateAppDialogChoice() = viewModelScope.launch {
         safeGetRateAppDialogChoice()
     }
