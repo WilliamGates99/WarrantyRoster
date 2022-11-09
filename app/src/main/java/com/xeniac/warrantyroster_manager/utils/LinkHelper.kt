@@ -1,5 +1,6 @@
 package com.xeniac.warrantyroster_manager.utils
 
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -9,22 +10,24 @@ import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showIntentAppNotFo
 
 object LinkHelper {
 
-    fun openLink(context: Context, view: View, urlString: String) = Intent().apply {
-        action = Intent.ACTION_VIEW
-        data = Uri.parse(urlString)
-
-        resolveActivity(context.packageManager)?.let {
+    fun openLink(context: Context, view: View, urlString: String) = try {
+        Intent().apply {
+            action = Intent.ACTION_VIEW
+            data = Uri.parse(urlString)
             context.startActivity(this)
-        } ?: showIntentAppNotFoundError(context, view)
+        }
+    } catch (e: ActivityNotFoundException) {
+        showIntentAppNotFoundError(context, view)
     }
 
-    fun openPlayStore(context: Context, view: View) = Intent().apply {
-        action = Intent.ACTION_VIEW
-        data = Uri.parse(BuildConfig.URL_APP_STORE)
-        setPackage(BuildConfig.PACKAGE_NAME_APP_STORE)
-
-        resolveActivity(context.packageManager)?.let {
+    fun openPlayStore(context: Context, view: View) = try {
+        Intent().apply {
+            action = Intent.ACTION_VIEW
+            data = Uri.parse(BuildConfig.URL_APP_STORE)
+            setPackage(BuildConfig.PACKAGE_NAME_APP_STORE)
             context.startActivity(this)
-        } ?: openLink(context, view, BuildConfig.URL_APP_STORE)
+        }
+    } catch (e: ActivityNotFoundException) {
+        openLink(context, view, BuildConfig.URL_APP_STORE)
     }
 }
