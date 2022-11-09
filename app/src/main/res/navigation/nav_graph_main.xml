@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/warrantiesFragment"
-        android:name="com.xeniac.warrantyroster_manager.ui.main.fragments.WarrantiesFragment"
+        android:name="com.xeniac.warrantyroster_manager.ui.fragments.WarrantiesFragment"
         android:label="WarrantiesFragment"
         tools:layout="@layout/fragment_warranties">
         <action
@@ -21,7 +21,7 @@
 
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.xeniac.warrantyroster_manager.ui.main.fragments.SettingsFragment"
+        android:name="com.xeniac.warrantyroster_manager.ui.fragments.SettingsFragment"
         android:label="SettingsFragment"
         tools:layout="@layout/fragment_settings">
         <action
@@ -42,7 +42,7 @@
 
     <fragment
         android:id="@+id/warrantyDetailsFragment"
-        android:name="com.xeniac.warrantyroster_manager.ui.main.fragments.WarrantyDetailsFragment"
+        android:name="com.xeniac.warrantyroster_manager.ui.fragments.WarrantyDetailsFragment"
         android:label="WarrantyDetailsFragment"
         tools:layout="@layout/fragment_warranty_details">
         <argument
@@ -60,7 +60,7 @@
 
     <fragment
         android:id="@+id/addWarrantyFragment"
-        android:name="com.xeniac.warrantyroster_manager.ui.main.fragments.AddWarrantyFragment"
+        android:name="com.xeniac.warrantyroster_manager.ui.fragments.AddWarrantyFragment"
         android:label="AddWarrantyFragment"
         tools:layout="@layout/fragment_add_warranty">
         <action
@@ -76,7 +76,7 @@
 
     <fragment
         android:id="@+id/editWarrantyFragment"
-        android:name="com.xeniac.warrantyroster_manager.ui.main.fragments.EditWarrantyFragment"
+        android:name="com.xeniac.warrantyroster_manager.ui.fragments.EditWarrantyFragment"
         android:label="EditWarrantyFragment"
         tools:layout="@layout/fragment_edit_warranty">
         <argument
@@ -95,13 +95,13 @@
 
     <fragment
         android:id="@+id/changeEmailFragment"
-        android:name="com.xeniac.warrantyroster_manager.ui.main.fragments.ChangeEmailFragment"
+        android:name="com.xeniac.warrantyroster_manager.ui.fragments.ChangeEmailFragment"
         android:label="ChangeEmailFragment"
         tools:layout="@layout/fragment_change_email" />
 
     <fragment
         android:id="@+id/changePasswordFragment"
-        android:name="com.xeniac.warrantyroster_manager.ui.main.fragments.ChangePasswordFragment"
+        android:name="com.xeniac.warrantyroster_manager.ui.fragments.ChangePasswordFragment"
         android:label="ChangePasswordFragment"
         tools:layout="@layout/fragment_change_password" />
 
