@@ -8,7 +8,7 @@ import com.xeniac.warrantyroster_manager.data.repository.FakeMainRepository
 import com.xeniac.warrantyroster_manager.data.repository.FakePreferencesRepository
 import com.xeniac.warrantyroster_manager.data.repository.FakeUserRepository
 import com.xeniac.warrantyroster_manager.getOrAwaitValue
-import com.xeniac.warrantyroster_manager.utils.Status
+import com.xeniac.warrantyroster_manager.utils.Resource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Before
 import org.junit.Rule
@@ -93,7 +93,7 @@ class WarrantyViewModelTest {
         testViewModel.getCategoriesFromFirestore()
 
         val responseEvent = testViewModel.categoriesLiveData.getOrAwaitValue()
-        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
+        assertThat(responseEvent.getContentIfNotHandle).isInstanceOf(Resource.Error::class.java)
     }
 
     @Test
@@ -101,7 +101,7 @@ class WarrantyViewModelTest {
         testViewModel.getCategoriesFromFirestore()
 
         val responseEvent = testViewModel.categoriesLiveData.getOrAwaitValue()
-        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
+        assertThat(responseEvent.getContentIfNotHandle).isInstanceOf(Resource.Error::class.java)
     }
 
     @Test
@@ -113,7 +113,7 @@ class WarrantyViewModelTest {
         testViewModel.getCategoriesFromFirestore()
 
         val responseEvent = testViewModel.categoriesLiveData.getOrAwaitValue()
-        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.SUCCESS)
+        assertThat(responseEvent.getContentIfNotHandle).isInstanceOf(Resource.Success::class.java)
     }
 
     @Test
@@ -122,7 +122,7 @@ class WarrantyViewModelTest {
         testViewModel.getWarrantiesListFromFirestore()
 
         val responseEvent = testViewModel.warrantiesLiveData.getOrAwaitValue()
-        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
+        assertThat(responseEvent.getContentIfNotHandle).isInstanceOf(Resource.Error::class.java)
     }
 
     @Test
@@ -130,7 +130,7 @@ class WarrantyViewModelTest {
         testViewModel.getWarrantiesListFromFirestore()
 
         val responseEvent = testViewModel.warrantiesLiveData.getOrAwaitValue()
-        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
+        assertThat(responseEvent.getContentIfNotHandle).isInstanceOf(Resource.Error::class.java)
     }
 
     @Test
@@ -146,7 +146,7 @@ class WarrantyViewModelTest {
         testViewModel.getWarrantiesListFromFirestore()
 
         val responseEvent = testViewModel.warrantiesLiveData.getOrAwaitValue()
-        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.SUCCESS)
+        assertThat(responseEvent.getContentIfNotHandle).isInstanceOf(Resource.Success::class.java)
     }
     */
 
@@ -160,7 +160,7 @@ class WarrantyViewModelTest {
         )
 
         val responseEvent = testViewModel.addWarrantyLiveData.getOrAwaitValue()
-        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
+        assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)
     }
 
     @Test
@@ -172,7 +172,7 @@ class WarrantyViewModelTest {
         )
 
         val responseEvent = testViewModel.addWarrantyLiveData.getOrAwaitValue()
-        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
+        assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)
     }
 
     @Test
@@ -184,7 +184,7 @@ class WarrantyViewModelTest {
         )
 
         val responseEvent = testViewModel.addWarrantyLiveData.getOrAwaitValue()
-        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
+        assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)
     }
 
     @Test
@@ -197,7 +197,7 @@ class WarrantyViewModelTest {
         )
 
         val responseEvent = testViewModel.addWarrantyLiveData.getOrAwaitValue()
-        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
+        assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)
     }
 
     @Test
@@ -209,7 +209,7 @@ class WarrantyViewModelTest {
         )
 
         val responseEvent = testViewModel.addWarrantyLiveData.getOrAwaitValue()
-        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.SUCCESS)
+        assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Success::class.java)
     }
 
     @Test
@@ -222,7 +222,7 @@ class WarrantyViewModelTest {
         )
 
         val responseEvent = testViewModel.addWarrantyLiveData.getOrAwaitValue()
-        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.SUCCESS)
+        assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Success::class.java)
     }
 
     @Test
@@ -236,7 +236,7 @@ class WarrantyViewModelTest {
         testViewModel.addWarrantyToFirestore(warrantyInput)
 
         val responseEvent = testViewModel.addWarrantyLiveData.getOrAwaitValue()
-        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
+        assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)
     }
 
     @Test
@@ -251,7 +251,7 @@ class WarrantyViewModelTest {
         testViewModel.deleteWarrantyFromFirestore("1")
 
         val responseEvent = testViewModel.deleteWarrantyLiveData.getOrAwaitValue()
-        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
+        assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)
     }
 
     @Test
@@ -265,7 +265,7 @@ class WarrantyViewModelTest {
         testViewModel.deleteWarrantyFromFirestore("2")
 
         val responseEvent = testViewModel.deleteWarrantyLiveData.getOrAwaitValue()
-        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
+        assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)
     }
 
     @Test
@@ -279,7 +279,7 @@ class WarrantyViewModelTest {
         testViewModel.deleteWarrantyFromFirestore("1")
 
         val responseEvent = testViewModel.deleteWarrantyLiveData.getOrAwaitValue()
-        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.SUCCESS)
+        assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Success::class.java)
     }
 
     @Test
@@ -292,7 +292,7 @@ class WarrantyViewModelTest {
         )
 
         val responseEvent = testViewModel.updateWarrantyLiveData.getOrAwaitValue()
-        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
+        assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)
     }
 
     @Test
@@ -305,7 +305,7 @@ class WarrantyViewModelTest {
         )
 
         val responseEvent = testViewModel.updateWarrantyLiveData.getOrAwaitValue()
-        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
+        assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)
     }
 
     @Test
@@ -318,7 +318,7 @@ class WarrantyViewModelTest {
         )
 
         val responseEvent = testViewModel.updateWarrantyLiveData.getOrAwaitValue()
-        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
+        assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)
     }
 
     @Test
@@ -331,7 +331,7 @@ class WarrantyViewModelTest {
         )
 
         val responseEvent = testViewModel.updateWarrantyLiveData.getOrAwaitValue()
-        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
+        assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)
     }
 
     @Test
@@ -360,7 +360,7 @@ class WarrantyViewModelTest {
         )
 
         val responseEvent = testViewModel.updateWarrantyLiveData.getOrAwaitValue()
-        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.SUCCESS)
+        assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Success::class.java)
     }
 
     @Test
@@ -389,7 +389,7 @@ class WarrantyViewModelTest {
         )
 
         val responseEvent = testViewModel.updateWarrantyLiveData.getOrAwaitValue()
-        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.SUCCESS)
+        assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Success::class.java)
     }
 
     @Test
@@ -403,7 +403,7 @@ class WarrantyViewModelTest {
         testViewModel.updateWarrantyInFirestore("1", warrantyInput)
 
         val responseEvent = testViewModel.updateWarrantyLiveData.getOrAwaitValue()
-        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
+        assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)
     }
 
     @Test
@@ -412,7 +412,7 @@ class WarrantyViewModelTest {
         testViewModel.getUpdatedWarrantyFromFirestore("1")
 
         val responseEvent = testViewModel.updatedWarrantyLiveData.getOrAwaitValue()
-        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
+        assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)
     }
 
     @Test
@@ -420,7 +420,7 @@ class WarrantyViewModelTest {
         testViewModel.getUpdatedWarrantyFromFirestore("1")
 
         val responseEvent = testViewModel.updatedWarrantyLiveData.getOrAwaitValue()
-        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
+        assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)
     }
 
     @Test
@@ -434,6 +434,6 @@ class WarrantyViewModelTest {
         testViewModel.getUpdatedWarrantyFromFirestore("1")
 
         val responseEvent = testViewModel.updatedWarrantyLiveData.getOrAwaitValue()
-        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.SUCCESS)
+        assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Success::class.java)
     }
 }

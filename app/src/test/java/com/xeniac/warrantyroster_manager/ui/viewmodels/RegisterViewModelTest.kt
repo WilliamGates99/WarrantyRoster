@@ -6,7 +6,7 @@ import com.xeniac.warrantyroster_manager.MainCoroutineRule
 import com.xeniac.warrantyroster_manager.data.repository.FakePreferencesRepository
 import com.xeniac.warrantyroster_manager.data.repository.FakeUserRepository
 import com.xeniac.warrantyroster_manager.getOrAwaitValue
-import com.xeniac.warrantyroster_manager.utils.Status
+import com.xeniac.warrantyroster_manager.utils.Resource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Before
 import org.junit.Rule
@@ -40,7 +40,7 @@ class RegisterViewModelTest {
         testViewModel.checkRegisterInputs("email", "password", "")
 
         val responseEvent = testViewModel.registerLiveData.getOrAwaitValue()
-        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
+        assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)
     }
 
     @Test
@@ -48,7 +48,7 @@ class RegisterViewModelTest {
         testViewModel.checkRegisterInputs("email", "password", "password")
 
         val responseEvent = testViewModel.registerLiveData.getOrAwaitValue()
-        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
+        assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)
     }
 
     @Test
@@ -56,7 +56,7 @@ class RegisterViewModelTest {
         testViewModel.checkRegisterInputs("email", "123", "123")
 
         val responseEvent = testViewModel.registerLiveData.getOrAwaitValue()
-        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
+        assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)
     }
 
     @Test
@@ -64,7 +64,7 @@ class RegisterViewModelTest {
         testViewModel.checkRegisterInputs("email", "password", "123")
 
         val responseEvent = testViewModel.registerLiveData.getOrAwaitValue()
-        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
+        assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)
     }
 
     @Test
@@ -72,7 +72,7 @@ class RegisterViewModelTest {
         testViewModel.checkRegisterInputs("email@test.com", "password", "password")
 
         val responseEvent = testViewModel.registerLiveData.getOrAwaitValue()
-        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.SUCCESS)
+        assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Success::class.java)
     }
 
     @Test
@@ -81,7 +81,7 @@ class RegisterViewModelTest {
         testViewModel.registerViaEmail("email@test.com", "password")
 
         val responseEvent = testViewModel.registerLiveData.getOrAwaitValue()
-        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
+        assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)
     }
 
     @Test
@@ -92,6 +92,6 @@ class RegisterViewModelTest {
         testViewModel.registerViaEmail(email, password)
 
         val responseEvent = testViewModel.registerLiveData.getOrAwaitValue()
-        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
+        assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)
     }
 }
