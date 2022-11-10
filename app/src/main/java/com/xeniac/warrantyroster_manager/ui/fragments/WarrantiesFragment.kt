@@ -21,7 +21,6 @@ import com.xeniac.warrantyroster_manager.data.remote.models.Warranty
 import com.xeniac.warrantyroster_manager.databinding.FragmentWarrantiesBinding
 import com.xeniac.warrantyroster_manager.ui.adapters.WarrantyAdapter
 import com.xeniac.warrantyroster_manager.ui.adapters.WarrantyListClickInterface
-import com.xeniac.warrantyroster_manager.ui.main.fragments.WarrantiesFragmentDirections
 import com.xeniac.warrantyroster_manager.ui.viewmodels.WarrantyViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_EMPTY_CATEGORY_LIST
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_EMPTY_SEARCH_RESULT_LIST

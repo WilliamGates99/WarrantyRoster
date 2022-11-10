@@ -15,7 +15,6 @@ import com.xeniac.warrantyroster_manager.data.repository.FakeUserRepository
 import com.xeniac.warrantyroster_manager.databinding.FragmentForgotPwBinding
 import com.xeniac.warrantyroster_manager.getOrAwaitValue
 import com.xeniac.warrantyroster_manager.launchFragmentInHiltContainer
-import com.xeniac.warrantyroster_manager.ui.landing.fragments.LoginFragmentDirections
 import com.xeniac.warrantyroster_manager.ui.viewmodels.ForgotPwViewModel
 import com.xeniac.warrantyroster_manager.utils.Status
 import dagger.hilt.android.testing.HiltAndroidRule

@@ -23,8 +23,6 @@ import com.xeniac.warrantyroster_manager.data.remote.models.Category
 import com.xeniac.warrantyroster_manager.data.remote.models.Warranty
 import com.xeniac.warrantyroster_manager.databinding.FragmentEditWarrantyBinding
 import com.xeniac.warrantyroster_manager.domain.repository.PreferencesRepository
-import com.xeniac.warrantyroster_manager.ui.main.fragments.EditWarrantyFragmentArgs
-import com.xeniac.warrantyroster_manager.ui.main.fragments.EditWarrantyFragmentDirections
 import com.xeniac.warrantyroster_manager.ui.viewmodels.WarrantyViewModel
 import com.xeniac.warrantyroster_manager.utils.CoilHelper.loadCategoryImage
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403

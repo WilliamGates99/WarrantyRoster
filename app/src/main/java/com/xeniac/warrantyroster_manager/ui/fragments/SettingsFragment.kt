@@ -25,7 +25,6 @@ import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentSettingsBinding
 import com.xeniac.warrantyroster_manager.ui.LandingActivity
 import com.xeniac.warrantyroster_manager.ui.MainActivity
-import com.xeniac.warrantyroster_manager.ui.main.fragments.SettingsFragmentDirections
 import com.xeniac.warrantyroster_manager.ui.viewmodels.SettingsViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED

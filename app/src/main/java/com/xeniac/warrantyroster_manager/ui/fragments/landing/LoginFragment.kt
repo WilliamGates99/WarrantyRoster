@@ -17,7 +17,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentLoginBinding
 import com.xeniac.warrantyroster_manager.ui.MainActivity
-import com.xeniac.warrantyroster_manager.ui.landing.fragments.LoginFragmentDirections
 import com.xeniac.warrantyroster_manager.ui.viewmodels.LoginViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_ACCOUNT_NOT_FOUND

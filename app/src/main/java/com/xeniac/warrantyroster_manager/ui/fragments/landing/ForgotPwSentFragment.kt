@@ -12,7 +12,6 @@ import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentForgotPwSentBinding
-import com.xeniac.warrantyroster_manager.ui.landing.fragments.ForgotPwSentFragmentArgs
 import com.xeniac.warrantyroster_manager.ui.viewmodels.ForgotPwViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
