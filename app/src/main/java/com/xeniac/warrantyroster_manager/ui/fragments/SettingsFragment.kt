@@ -38,11 +38,11 @@ import com.xeniac.warrantyroster_manager.utils.Constants.URL_DONATE
 import com.xeniac.warrantyroster_manager.utils.Constants.URL_PRIVACY_POLICY
 import com.xeniac.warrantyroster_manager.utils.LinkHelper.openLink
 import com.xeniac.warrantyroster_manager.utils.LinkHelper.openPlayStore
+import com.xeniac.warrantyroster_manager.utils.Resource
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.show403Error
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseDeviceBlockedError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkConnectionError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkFailureError
-import com.xeniac.warrantyroster_manager.utils.Status
 import dagger.hilt.android.AndroidEntryPoint
 import ir.tapsell.plus.AdHolder
 import ir.tapsell.plus.AdRequestCallback
@@ -116,16 +116,16 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
     private fun accountDetailsObserver() =
         viewModel.accountDetailsLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
-                when (response.status) {
-                    Status.SUCCESS -> {
+                when (response) {
+                    is Resource.Success -> {
                         response.data?.let { user ->
                             setAccountDetails(user.email.toString(), user.isEmailVerified)
                         }
                     }
-                    Status.ERROR -> {
+                    is Resource.Error -> {
                         /* NO-OP */
                     }
-                    Status.LOADING -> {
+                    is Resource.Loading -> {
                         /* NO-OP */
                     }
                 }
@@ -293,9 +293,9 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
     private fun sendVerificationEmailObserver() =
         viewModel.sendVerificationEmailLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
-                when (response.status) {
-                    Status.LOADING -> showLoadingAnimation()
-                    Status.SUCCESS -> {
+                when (response) {
+                    is Resource.Loading -> showLoadingAnimation()
+                    is Resource.Success -> {
                         hideLoadingAnimation()
                         MaterialAlertDialogBuilder(requireContext()).apply {
                             setMessage(requireContext().getString(R.string.settings_dialog_message))
@@ -303,19 +303,20 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
                             setPositiveButton(requireContext().getString(R.string.settings_dialog_positive)) { _, _ -> }
                         }.show()
                     }
-                    Status.ERROR -> {
+                    is Resource.Error -> {
                         hideLoadingAnimation()
                         response.message?.let {
+                            val message = it.asString(requireContext())
                             snackbar = when {
-                                it.contains(ERROR_NETWORK_CONNECTION) -> {
+                                message.contains(ERROR_NETWORK_CONNECTION) -> {
                                     showNetworkConnectionError(
                                         requireContext(), requireView()
                                     ) { sendVerificationEmail() }
                                 }
-                                it.contains(ERROR_FIREBASE_403) -> {
+                                message.contains(ERROR_FIREBASE_403) -> {
                                     show403Error(requireContext(), requireView())
                                 }
-                                it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
+                                message.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
                                     showFirebaseDeviceBlockedError(requireContext(), requireView())
                                 }
                                 else -> {
@@ -333,15 +334,15 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
     private fun logoutObserver() =
         viewModel.logoutLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
-                when (response.status) {
-                    Status.SUCCESS -> {
+                when (response) {
+                    is Resource.Success -> {
                         startActivity(Intent(requireContext(), LandingActivity::class.java))
                         requireActivity().finish()
                     }
-                    Status.ERROR -> {
+                    is Resource.Error -> {
                         /* NO-OP */
                     }
-                    Status.LOADING -> {
+                    is Resource.Loading -> {
                         /* NO-OP */
                     }
                 }

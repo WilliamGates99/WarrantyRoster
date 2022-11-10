@@ -27,11 +27,11 @@ import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.DateHelper.getDaysUntilExpiry
+import com.xeniac.warrantyroster_manager.utils.Resource
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.show403Error
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseDeviceBlockedError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkConnectionError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkFailureError
-import com.xeniac.warrantyroster_manager.utils.Status
 import dagger.hilt.android.AndroidEntryPoint
 import ir.tapsell.plus.AdShowListener
 import ir.tapsell.plus.TapsellPlus
@@ -242,9 +242,9 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
     private fun deleteWarrantyObserver() =
         viewModel.deleteWarrantyLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
-                when (response.status) {
-                    Status.LOADING -> showLoadingAnimation()
-                    Status.SUCCESS -> {
+                when (response) {
+                    is Resource.Loading -> showLoadingAnimation()
+                    is Resource.Success -> {
                         hideLoadingAnimation()
                         Toast.makeText(
                             requireContext(),
@@ -271,19 +271,20 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
                         findNavController().popBackStack()
                         (requireActivity() as MainActivity).requestAppLovinInterstitial()
                     }
-                    Status.ERROR -> {
+                    is Resource.Error -> {
                         hideLoadingAnimation()
                         response.message?.let {
+                            val message = it.asString(requireContext())
                             snackbar = when {
-                                it.contains(ERROR_NETWORK_CONNECTION) -> {
+                                message.contains(ERROR_NETWORK_CONNECTION) -> {
                                     showNetworkConnectionError(
                                         requireContext(), requireView()
                                     ) { deleteWarrantyFromFirestore() }
                                 }
-                                it.contains(ERROR_FIREBASE_403) -> {
+                                message.contains(ERROR_FIREBASE_403) -> {
                                     show403Error(requireContext(), requireView())
                                 }
-                                it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
+                                message.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
                                     showFirebaseDeviceBlockedError(requireContext(), requireView())
                                 }
                                 else -> {

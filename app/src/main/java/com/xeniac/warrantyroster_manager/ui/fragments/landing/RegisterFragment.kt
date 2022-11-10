@@ -33,12 +33,12 @@ import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_REGISTER_
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_REGISTER_PASSWORD
 import com.xeniac.warrantyroster_manager.utils.Constants.URL_PRIVACY_POLICY
 import com.xeniac.warrantyroster_manager.utils.LinkHelper.openLink
+import com.xeniac.warrantyroster_manager.utils.Resource
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.show403Error
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseAuthAccountExists
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseDeviceBlockedError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkConnectionError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkFailureError
-import com.xeniac.warrantyroster_manager.utils.Status
 import com.xeniac.warrantyroster_manager.utils.UserHelper.passwordStrength
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
@@ -230,70 +230,71 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     private fun registerObserver() =
         viewModel.registerLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
-                when (response.status) {
-                    Status.LOADING -> showLoadingAnimation()
-                    Status.SUCCESS -> {
+                when (response) {
+                    is Resource.Loading -> showLoadingAnimation()
+                    is Resource.Success -> {
                         hideLoadingAnimation()
                         Intent(requireContext(), MainActivity::class.java).apply {
                             startActivity(this)
                             requireActivity().finish()
                         }
                     }
-                    Status.ERROR -> {
+                    is Resource.Error -> {
                         hideLoadingAnimation()
                         response.message?.let {
+                            val message = it.asString(requireContext())
                             when {
-                                it.contains(ERROR_INPUT_BLANK_EMAIL) -> {
+                                message.contains(ERROR_INPUT_BLANK_EMAIL) -> {
                                     binding.tiLayoutEmail.error =
                                         requireContext().getString(R.string.register_error_blank_email)
                                     binding.tiLayoutEmail.requestFocus()
                                     binding.tiLayoutEmail.boxStrokeColor =
                                         ContextCompat.getColor(requireContext(), R.color.red)
                                 }
-                                it.contains(ERROR_INPUT_BLANK_PASSWORD) -> {
+                                message.contains(ERROR_INPUT_BLANK_PASSWORD) -> {
                                     binding.tiLayoutPassword.error =
                                         requireContext().getString(R.string.register_error_blank_password)
                                     binding.tiLayoutPassword.requestFocus()
                                     binding.tiLayoutPassword.boxStrokeColor =
                                         ContextCompat.getColor(requireContext(), R.color.red)
                                 }
-                                it.contains(ERROR_INPUT_BLANK_RETYPE_PASSWORD) -> {
+                                message.contains(ERROR_INPUT_BLANK_RETYPE_PASSWORD) -> {
                                     binding.tiLayoutConfirmPassword.error =
                                         requireContext().getString(R.string.register_error_blank_confirm_password)
                                     binding.tiLayoutConfirmPassword.requestFocus()
                                     binding.tiLayoutConfirmPassword.boxStrokeColor =
                                         ContextCompat.getColor(requireContext(), R.color.red)
                                 }
-                                it.contains(ERROR_INPUT_EMAIL_INVALID) -> {
+                                message.contains(ERROR_INPUT_EMAIL_INVALID) -> {
                                     binding.tiLayoutEmail.requestFocus()
                                     binding.tiLayoutEmail.error =
                                         requireContext().getString(R.string.register_error_email)
                                 }
-                                it.contains(ERROR_INPUT_PASSWORD_SHORT) -> {
+                                message.contains(ERROR_INPUT_PASSWORD_SHORT) -> {
                                     binding.tiLayoutPassword.requestFocus()
                                     binding.tiLayoutPassword.error =
                                         requireContext().getString(R.string.register_error_password_short)
                                 }
-                                it.contains(ERROR_INPUT_PASSWORD_NOT_MATCH) -> {
+                                message.contains(ERROR_INPUT_PASSWORD_NOT_MATCH) -> {
                                     binding.tiLayoutConfirmPassword.requestFocus()
                                     binding.tiLayoutConfirmPassword.error =
                                         requireContext().getString(R.string.register_error_password_not_match)
                                 }
-                                it.contains(ERROR_NETWORK_CONNECTION) -> {
+                                message.contains(ERROR_NETWORK_CONNECTION) -> {
                                     snackbar = showNetworkConnectionError(
                                         requireContext(), requireView()
                                     ) { getRegisterInputs() }
                                 }
-                                it.contains(ERROR_FIREBASE_403) -> {
+                                message.contains(ERROR_FIREBASE_403) -> {
                                     snackbar = show403Error(requireContext(), requireView())
                                 }
-                                it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
+                                message.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
                                     snackbar = showFirebaseDeviceBlockedError(
                                         requireContext(),
                                         requireView()
                                     )
                                 }
-                                it.contains(ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS) -> {
+                                message.contains(ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS) -> {
                                     snackbar = showFirebaseAuthAccountExists(
                                         requireView(),
                                         requireContext().getString(R.string.register_error_account_exists),

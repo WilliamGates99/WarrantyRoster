@@ -28,8 +28,8 @@ import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_EMPTY_SEARCH_RESU
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_EMPTY_WARRANTY_LIST
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
+import com.xeniac.warrantyroster_manager.utils.Resource
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseDeviceBlockedError
-import com.xeniac.warrantyroster_manager.utils.Status
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -128,21 +128,22 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
     private fun categoriesListObserver() {
         viewModel.categoriesLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.peekContent().let { response ->
-                when (response.status) {
-                    Status.LOADING -> showLoadingAnimation()
-                    Status.SUCCESS -> getWarrantiesListFromFirestore()
-                    Status.ERROR -> {
+                when (response) {
+                    is Resource.Loading -> showLoadingAnimation()
+                    is Resource.Success -> getWarrantiesListFromFirestore()
+                    is Resource.Error -> {
                         response.message?.let {
+                            val message = it.asString(requireContext())
                             when {
-                                it.contains(ERROR_EMPTY_CATEGORY_LIST) -> {
+                                message.contains(ERROR_EMPTY_CATEGORY_LIST) -> {
                                     getCategoriesFromFirestore()
                                 }
-                                it.contains(ERROR_FIREBASE_403) -> {
+                                message.contains(ERROR_FIREBASE_403) -> {
                                     binding.tvNetworkError.text =
                                         requireContext().getString(R.string.error_firebase_403)
                                     showNetworkError()
                                 }
-                                it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
+                                message.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
                                     snackbar = showFirebaseDeviceBlockedError(
                                         requireContext(), requireView()
                                     )
@@ -163,28 +164,29 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
     private fun warrantiesListObserver() {
         viewModel.warrantiesLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
-                when (response.status) {
-                    Status.LOADING -> showLoadingAnimation()
-                    Status.SUCCESS -> {
+                when (response) {
+                    is Resource.Loading -> showLoadingAnimation()
+                    is Resource.Success -> {
                         hideLoadingAnimation()
                         response.data?.let { warrantiesList ->
                             warrantiesListBeforeSearch = warrantiesList
                             showWarrantiesList(warrantiesList)
                         }
                     }
-                    Status.ERROR -> {
+                    is Resource.Error -> {
                         hideLoadingAnimation()
                         response.message?.let {
+                            val message = it.asString(requireContext())
                             when {
-                                it.contains(ERROR_EMPTY_WARRANTY_LIST) -> {
+                                message.contains(ERROR_EMPTY_WARRANTY_LIST) -> {
                                     showEmptyWarrantiesListError()
                                 }
-                                it.contains(ERROR_FIREBASE_403) -> {
+                                message.contains(ERROR_FIREBASE_403) -> {
                                     binding.tvNetworkError.text =
                                         requireContext().getString(R.string.error_firebase_403)
                                     showNetworkError()
                                 }
-                                it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
+                                message.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
                                     snackbar = showFirebaseDeviceBlockedError(
                                         requireContext(), requireView()
                                     )
@@ -205,19 +207,20 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
     private fun searchWarrantiesObserver() =
         viewModel.searchWarrantiesLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
-                when (response.status) {
-                    Status.LOADING -> {
+                when (response) {
+                    is Resource.Loading -> {
                         /* NO-OP */
                     }
-                    Status.SUCCESS -> {
+                    is Resource.Success -> {
                         response.data?.let { searchResult ->
                             showWarrantiesList(searchResult)
                         }
                     }
-                    Status.ERROR -> {
+                    is Resource.Error -> {
                         response.message?.let {
+                            val message = it.asString(requireContext())
                             when {
-                                it.contains(ERROR_EMPTY_SEARCH_RESULT_LIST) -> {
+                                message.contains(ERROR_EMPTY_SEARCH_RESULT_LIST) -> {
                                     showEmptySearchResultListError()
                                 }
                                 else -> {

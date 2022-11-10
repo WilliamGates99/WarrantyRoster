@@ -5,9 +5,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.xeniac.warrantyroster_manager.domain.repository.UserRepository
-import com.xeniac.warrantyroster_manager.utils.Constants
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_NEW_PASSWORD
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_PASSWORD
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_RETYPE_PASSWORD
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_PASSWORD_NOT_MATCH
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_PASSWORD_SHORT
 import com.xeniac.warrantyroster_manager.utils.Event
 import com.xeniac.warrantyroster_manager.utils.Resource
+import com.xeniac.warrantyroster_manager.utils.UiText
 import com.xeniac.warrantyroster_manager.utils.UserHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -34,31 +39,41 @@ class ChangePasswordViewModel @Inject constructor(
         currentPassword: String, newPassword: String, retypeNewPassword: String
     ) {
         if (currentPassword.isBlank()) {
-            _checkInputsLiveData.postValue(Event(Resource.error(Constants.ERROR_INPUT_BLANK_PASSWORD)))
+            _checkInputsLiveData.postValue(
+                Event(Resource.Error(UiText.DynamicString(ERROR_INPUT_BLANK_PASSWORD)))
+            )
             return
         }
 
         if (newPassword.isBlank()) {
-            _checkInputsLiveData.postValue(Event(Resource.error(Constants.ERROR_INPUT_BLANK_NEW_PASSWORD)))
+            _checkInputsLiveData.postValue(
+                Event(Resource.Error(UiText.DynamicString(ERROR_INPUT_BLANK_NEW_PASSWORD)))
+            )
             return
         }
 
         if (retypeNewPassword.isBlank()) {
-            _checkInputsLiveData.postValue(Event(Resource.error(Constants.ERROR_INPUT_BLANK_RETYPE_PASSWORD)))
+            _checkInputsLiveData.postValue(
+                Event(Resource.Error(UiText.DynamicString(ERROR_INPUT_BLANK_RETYPE_PASSWORD)))
+            )
             return
         }
 
         if (UserHelper.passwordStrength(newPassword) == (-1).toByte()) {
-            _checkInputsLiveData.postValue(Event(Resource.error(Constants.ERROR_INPUT_PASSWORD_SHORT)))
+            _checkInputsLiveData.postValue(
+                Event(Resource.Error(UiText.DynamicString(ERROR_INPUT_PASSWORD_SHORT)))
+            )
             return
         }
 
         if (!UserHelper.isRetypePasswordValid(newPassword, retypeNewPassword)) {
-            _checkInputsLiveData.postValue(Event(Resource.error(Constants.ERROR_INPUT_PASSWORD_NOT_MATCH)))
+            _checkInputsLiveData.postValue(
+                Event(Resource.Error(UiText.DynamicString(ERROR_INPUT_PASSWORD_NOT_MATCH)))
+            )
             return
         }
 
-        _checkInputsLiveData.postValue(Event(Resource.success(currentPassword)))
+        _checkInputsLiveData.postValue(Event(Resource.Success(currentPassword)))
     }
 
     fun reAuthenticateUser(password: String) = viewModelScope.launch {
@@ -66,14 +81,14 @@ class ChangePasswordViewModel @Inject constructor(
     }
 
     private suspend fun safeReAuthenticateUser(password: String) {
-        _reAuthenticateUserLiveData.postValue(Event(Resource.loading()))
+        _reAuthenticateUserLiveData.postValue(Event(Resource.Loading()))
         try {
             userRepository.reAuthenticateUser(password)
-            _reAuthenticateUserLiveData.postValue(Event(Resource.success(null)))
+            _reAuthenticateUserLiveData.postValue(Event(Resource.Success()))
             Timber.i("User re-authenticated.")
         } catch (e: Exception) {
             Timber.e("safeReAuthenticateUser Exception: ${e.message}")
-            _reAuthenticateUserLiveData.postValue(Event(Resource.error(e.message.toString())))
+            _reAuthenticateUserLiveData.postValue(Event(Resource.Error(UiText.DynamicString(e.message.toString()))))
         }
     }
 
@@ -82,14 +97,14 @@ class ChangePasswordViewModel @Inject constructor(
     }
 
     private suspend fun safeChangeUserPassword(newPassword: String) {
-        _changeUserPasswordLiveData.postValue(Event(Resource.loading()))
+        _changeUserPasswordLiveData.postValue(Event(Resource.Loading()))
         try {
             userRepository.updateUserPassword(newPassword)
-            _changeUserPasswordLiveData.postValue(Event(Resource.success(null)))
+            _changeUserPasswordLiveData.postValue(Event(Resource.Success()))
             Timber.i("User password updated.")
         } catch (e: Exception) {
             Timber.e("safeChangeUserPassword Exception: ${e.message}")
-            _changeUserPasswordLiveData.postValue(Event(Resource.error(e.message.toString())))
+            _changeUserPasswordLiveData.postValue(Event(Resource.Error(UiText.DynamicString(e.message.toString()))))
         }
     }
 }

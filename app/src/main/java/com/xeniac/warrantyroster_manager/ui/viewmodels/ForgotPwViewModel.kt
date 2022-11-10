@@ -11,6 +11,7 @@ import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_EMAIL_INVAL
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_TIMER_IS_NOT_ZERO
 import com.xeniac.warrantyroster_manager.utils.Event
 import com.xeniac.warrantyroster_manager.utils.Resource
+import com.xeniac.warrantyroster_manager.utils.UiText
 import com.xeniac.warrantyroster_manager.utils.UserHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -34,12 +35,16 @@ class ForgotPwViewModel @Inject constructor(
 
     fun checkForgotPwInputs(email: String, activateCountDown: Boolean = true) {
         if (email.isBlank()) {
-            _forgotPwLiveData.postValue(Event(Resource.error(ERROR_INPUT_BLANK_EMAIL)))
+            _forgotPwLiveData.postValue(
+                Event(Resource.Error(UiText.DynamicString(ERROR_INPUT_BLANK_EMAIL)))
+            )
             return
         }
 
         if (!UserHelper.isEmailValid(email)) {
-            _forgotPwLiveData.postValue(Event(Resource.error(ERROR_INPUT_EMAIL_INVALID)))
+            _forgotPwLiveData.postValue(
+                Event(Resource.Error(UiText.DynamicString(ERROR_INPUT_EMAIL_INVALID)))
+            )
             return
         }
 
@@ -52,21 +57,23 @@ class ForgotPwViewModel @Inject constructor(
         }
 
     private suspend fun safeSendResetPasswordEmail(email: String, activateCountDown: Boolean) {
-        _forgotPwLiveData.postValue(Event(Resource.loading()))
+        _forgotPwLiveData.postValue(Event(Resource.Loading()))
         try {
             if (email == forgotPwEmail && timerInMillis != 0L) {
                 Timber.e(ERROR_TIMER_IS_NOT_ZERO)
-                _forgotPwLiveData.postValue(Event(Resource.error(ERROR_TIMER_IS_NOT_ZERO)))
+                _forgotPwLiveData.postValue(
+                    Event(Resource.Error(UiText.DynamicString(ERROR_TIMER_IS_NOT_ZERO)))
+                )
             } else {
                 userRepository.sendResetPasswordEmail(email)
-                _forgotPwLiveData.postValue(Event(Resource.success(email)))
+                _forgotPwLiveData.postValue(Event(Resource.Success(email)))
                 forgotPwEmail = email
                 if (activateCountDown) startCountdown()
                 Timber.i("Reset password email successfully sent to ${email}.")
             }
         } catch (e: Exception) {
             Timber.e("safeSendResetPasswordEmail Exception: ${e.message}")
-            _forgotPwLiveData.postValue(Event(Resource.error(e.message.toString())))
+            _forgotPwLiveData.postValue(Event(Resource.Error(UiText.DynamicString(e.message.toString()))))
         }
     }
 

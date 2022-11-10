@@ -5,9 +5,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.xeniac.warrantyroster_manager.domain.repository.UserRepository
-import com.xeniac.warrantyroster_manager.utils.Constants
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_EMAIL
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_PASSWORD
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_EMAIL_INVALID
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_EMAIL_SAME
 import com.xeniac.warrantyroster_manager.utils.Event
 import com.xeniac.warrantyroster_manager.utils.Resource
+import com.xeniac.warrantyroster_manager.utils.UiText
 import com.xeniac.warrantyroster_manager.utils.UserHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -36,26 +40,34 @@ class ChangeEmailViewModel @Inject constructor(
         currentUserEmail: String = userRepository.getCurrentUserEmail()
     ) {
         if (password.isBlank()) {
-            _checkInputsLiveData.postValue(Event(Resource.error(Constants.ERROR_INPUT_BLANK_PASSWORD)))
+            _checkInputsLiveData.postValue(
+                Event(Resource.Error(UiText.DynamicString(ERROR_INPUT_BLANK_PASSWORD)))
+            )
             return
         }
 
         if (newEmail.isBlank()) {
-            _checkInputsLiveData.postValue(Event(Resource.error(Constants.ERROR_INPUT_BLANK_EMAIL)))
+            _checkInputsLiveData.postValue(
+                Event(Resource.Error(UiText.DynamicString(ERROR_INPUT_BLANK_EMAIL)))
+            )
             return
         }
 
         if (!UserHelper.isEmailValid(newEmail)) {
-            _checkInputsLiveData.postValue(Event(Resource.error(Constants.ERROR_INPUT_EMAIL_INVALID)))
+            _checkInputsLiveData.postValue(
+                Event(Resource.Error(UiText.DynamicString(ERROR_INPUT_EMAIL_INVALID)))
+            )
             return
         }
 
         if (newEmail == currentUserEmail) {
-            _checkInputsLiveData.postValue(Event(Resource.error(Constants.ERROR_INPUT_EMAIL_SAME)))
+            _checkInputsLiveData.postValue(
+                Event(Resource.Error(UiText.DynamicString(ERROR_INPUT_EMAIL_SAME)))
+            )
             return
         }
 
-        _checkInputsLiveData.postValue(Event(Resource.success(password)))
+        _checkInputsLiveData.postValue(Event(Resource.Success(password)))
     }
 
     fun reAuthenticateUser(password: String) = viewModelScope.launch {
@@ -63,14 +75,14 @@ class ChangeEmailViewModel @Inject constructor(
     }
 
     private suspend fun safeReAuthenticateUser(password: String) {
-        _reAuthenticateUserLiveData.postValue(Event(Resource.loading()))
+        _reAuthenticateUserLiveData.postValue(Event(Resource.Loading()))
         try {
             userRepository.reAuthenticateUser(password)
-            _reAuthenticateUserLiveData.postValue(Event(Resource.success(null)))
+            _reAuthenticateUserLiveData.postValue(Event(Resource.Success()))
             Timber.i("User re-authenticated.")
         } catch (e: Exception) {
             Timber.e("safeReAuthenticateUser Exception: ${e.message}")
-            _reAuthenticateUserLiveData.postValue(Event(Resource.error(e.message.toString())))
+            _reAuthenticateUserLiveData.postValue(Event(Resource.Error(UiText.DynamicString(e.message.toString()))))
         }
     }
 
@@ -79,14 +91,14 @@ class ChangeEmailViewModel @Inject constructor(
     }
 
     private suspend fun safeChangeUserEmail(newEmail: String) {
-        _changeUserEmailLiveData.postValue(Event(Resource.loading()))
+        _changeUserEmailLiveData.postValue(Event(Resource.Loading()))
         try {
             userRepository.updateUserEmail(newEmail)
-            _changeUserEmailLiveData.postValue(Event(Resource.success(null)))
+            _changeUserEmailLiveData.postValue(Event(Resource.Success()))
             Timber.i("User email updated to ${newEmail}.")
         } catch (e: Exception) {
             Timber.e("safeChangeUserEmail Exception: ${e.message}")
-            _changeUserEmailLiveData.postValue(Event(Resource.error(e.message.toString())))
+            _changeUserEmailLiveData.postValue(Event(Resource.Error(UiText.DynamicString(e.message.toString()))))
         }
     }
 }

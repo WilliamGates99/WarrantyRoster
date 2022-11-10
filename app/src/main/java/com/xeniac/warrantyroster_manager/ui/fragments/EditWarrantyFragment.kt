@@ -46,11 +46,11 @@ import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_EDIT_WARR
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_EDIT_WARRANTY_STARTING_DATE_IN_MILLIS
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_EDIT_WARRANTY_TITLE
 import com.xeniac.warrantyroster_manager.utils.DateHelper.getTimeZoneOffsetInMillis
+import com.xeniac.warrantyroster_manager.utils.Resource
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.show403Error
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseDeviceBlockedError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkConnectionError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkFailureError
-import com.xeniac.warrantyroster_manager.utils.Status
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.text.DecimalFormat
@@ -583,40 +583,41 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
     private fun updateWarrantyObserver() =
         viewModel.updateWarrantyLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
-                when (response.status) {
-                    Status.LOADING -> showLoadingAnimation()
-                    Status.SUCCESS -> getUpdatedWarrantyFromFirestore()
-                    Status.ERROR -> {
+                when (response) {
+                    is Resource.Loading -> showLoadingAnimation()
+                    is Resource.Success -> getUpdatedWarrantyFromFirestore()
+                    is Resource.Error -> {
                         hideLoadingAnimation()
                         response.message?.let {
+                            val message = it.asString(requireContext())
                             when {
-                                it.contains(ERROR_INPUT_BLANK_TITLE) -> {
+                                message.contains(ERROR_INPUT_BLANK_TITLE) -> {
                                     binding.tiLayoutTitle.error =
                                         requireContext().getString(R.string.edit_warranty_error_blank_title)
                                     binding.tiLayoutTitle.requestFocus()
                                     binding.tiLayoutTitle.boxStrokeColor =
                                         ContextCompat.getColor(requireContext(), R.color.red)
                                 }
-                                it.contains(ERROR_INPUT_BLANK_STARTING_DATE) -> {
+                                message.contains(ERROR_INPUT_BLANK_STARTING_DATE) -> {
                                     binding.tiLayoutDateStarting.requestFocus()
                                     binding.tiLayoutDateStarting.boxStrokeColor =
                                         ContextCompat.getColor(requireContext(), R.color.red)
                                 }
-                                it.contains(ERROR_INPUT_BLANK_EXPIRY_DATE) -> {
+                                message.contains(ERROR_INPUT_BLANK_EXPIRY_DATE) -> {
                                     binding.tiLayoutDateExpiry.requestFocus()
                                     binding.tiLayoutDateExpiry.boxStrokeColor =
                                         ContextCompat.getColor(requireContext(), R.color.red)
                                 }
-                                it.contains(ERROR_INPUT_INVALID_STARTING_DATE) -> showDateError()
-                                it.contains(ERROR_NETWORK_CONNECTION) -> {
+                                message.contains(ERROR_INPUT_INVALID_STARTING_DATE) -> showDateError()
+                                message.contains(ERROR_NETWORK_CONNECTION) -> {
                                     snackbar = showNetworkConnectionError(
                                         requireContext(), requireView()
                                     ) { getWarrantyInput() }
                                 }
-                                it.contains(ERROR_FIREBASE_403) -> {
+                                message.contains(ERROR_FIREBASE_403) -> {
                                     snackbar = show403Error(requireContext(), requireView())
                                 }
-                                it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
+                                message.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
                                     snackbar = showFirebaseDeviceBlockedError(
                                         requireContext(),
                                         requireView()
@@ -641,28 +642,29 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
     private fun getUpdatedWarrantyObserver() =
         viewModel.updatedWarrantyLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
-                when (response.status) {
-                    Status.LOADING -> showLoadingAnimation()
-                    Status.SUCCESS -> {
+                when (response) {
+                    is Resource.Loading -> showLoadingAnimation()
+                    is Resource.Success -> {
                         hideLoadingAnimation()
                         response.data?.let { updatedWarranty ->
                             navigateToWarrantyDetails(updatedWarranty)
                         }
                     }
-                    Status.ERROR -> {
+                    is Resource.Error -> {
                         hideLoadingAnimation()
                         response.message?.let {
+                            val message = it.asString(requireContext())
                             snackbar = when {
-                                it.contains(ERROR_NETWORK_CONNECTION) -> {
+                                message.contains(ERROR_NETWORK_CONNECTION) -> {
                                     showNetworkConnectionError(
                                         requireContext(),
                                         requireView()
                                     ) { getUpdatedWarrantyFromFirestore() }
                                 }
-                                it.contains(ERROR_FIREBASE_403) -> {
+                                message.contains(ERROR_FIREBASE_403) -> {
                                     show403Error(requireContext(), requireView())
                                 }
-                                it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
+                                message.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
                                     showFirebaseDeviceBlockedError(requireContext(), requireView())
                                 }
                                 else -> {

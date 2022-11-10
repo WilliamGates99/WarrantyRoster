@@ -11,6 +11,7 @@ import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_PASSW
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_EMAIL_INVALID
 import com.xeniac.warrantyroster_manager.utils.Event
 import com.xeniac.warrantyroster_manager.utils.Resource
+import com.xeniac.warrantyroster_manager.utils.UiText
 import com.xeniac.warrantyroster_manager.utils.UserHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -28,17 +29,23 @@ class LoginViewModel @Inject constructor(
 
     fun checkLoginInputs(email: String, password: String) {
         if (email.isBlank()) {
-            _loginLiveData.postValue(Event(Resource.error(ERROR_INPUT_BLANK_EMAIL)))
+            _loginLiveData.postValue(
+                Event(Resource.Error(UiText.DynamicString(ERROR_INPUT_BLANK_EMAIL)))
+            )
             return
         }
 
         if (password.isBlank()) {
-            _loginLiveData.postValue(Event(Resource.error(ERROR_INPUT_BLANK_PASSWORD)))
+            _loginLiveData.postValue(
+                Event(Resource.Error(UiText.DynamicString(ERROR_INPUT_BLANK_PASSWORD)))
+            )
             return
         }
 
         if (!UserHelper.isEmailValid(email)) {
-            _loginLiveData.postValue(Event(Resource.error(ERROR_INPUT_EMAIL_INVALID)))
+            _loginLiveData.postValue(
+                Event(Resource.Error(UiText.DynamicString(ERROR_INPUT_EMAIL_INVALID)))
+            )
             return
         }
 
@@ -50,15 +57,15 @@ class LoginViewModel @Inject constructor(
     }
 
     private suspend fun safeLoginViaEmail(email: String, password: String) {
-        _loginLiveData.postValue(Event(Resource.loading()))
+        _loginLiveData.postValue(Event(Resource.Loading()))
         try {
             userRepository.loginViaEmail(email, password)
             preferencesRepository.isUserLoggedIn(true)
-            _loginLiveData.postValue(Event(Resource.success(null)))
+            _loginLiveData.postValue(Event(Resource.Success()))
             Timber.i("$email logged in successfully.")
         } catch (e: Exception) {
             Timber.e("safeLoginViaEmail Exception: ${e.message}")
-            _loginLiveData.postValue(Event(Resource.error(e.message.toString())))
+            _loginLiveData.postValue(Event(Resource.Error(UiText.DynamicString(e.message.toString()))))
         }
     }
 }

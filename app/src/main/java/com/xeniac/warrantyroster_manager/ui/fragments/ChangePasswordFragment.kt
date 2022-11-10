@@ -29,12 +29,12 @@ import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTIO
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_CHANGE_PASSWORD_CONFIRM_NEW_PASSWORD
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_CHANGE_PASSWORD_CURRENT_PASSWORD
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_CHANGE_PASSWORD_NEW_PASSWORD
+import com.xeniac.warrantyroster_manager.utils.Resource
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.show403Error
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseAuthCredentialsError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseDeviceBlockedError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkConnectionError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkFailureError
-import com.xeniac.warrantyroster_manager.utils.Status
 import com.xeniac.warrantyroster_manager.utils.UserHelper.passwordStrength
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -232,43 +232,44 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
     private fun checkInputsObserver() =
         viewModel.checkInputsLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
-                when (response.status) {
-                    Status.LOADING -> {
+                when (response) {
+                    is Resource.Loading -> {
                         /* NO-OP */
                     }
-                    Status.SUCCESS -> {
+                    is Resource.Success -> {
                         reAuthenticateUser(response.data.toString())
                     }
-                    Status.ERROR -> {
+                    is Resource.Error -> {
                         response.message?.let {
+                            val message = it.asString(requireContext())
                             when {
-                                it.contains(ERROR_INPUT_BLANK_PASSWORD) -> {
+                                message.contains(ERROR_INPUT_BLANK_PASSWORD) -> {
                                     binding.tiLayoutCurrentPassword.error =
                                         requireContext().getString(R.string.change_password_error_blank_current)
                                     binding.tiLayoutCurrentPassword.requestFocus()
                                     binding.tiLayoutCurrentPassword.boxStrokeColor =
                                         ContextCompat.getColor(requireContext(), R.color.red)
                                 }
-                                it.contains(ERROR_INPUT_BLANK_NEW_PASSWORD) -> {
+                                message.contains(ERROR_INPUT_BLANK_NEW_PASSWORD) -> {
                                     binding.tiLayoutNewPassword.error =
                                         requireContext().getString(R.string.change_password_error_blank_new)
                                     binding.tiLayoutNewPassword.requestFocus()
                                     binding.tiLayoutNewPassword.boxStrokeColor =
                                         ContextCompat.getColor(requireContext(), R.color.red)
                                 }
-                                it.contains(ERROR_INPUT_BLANK_RETYPE_PASSWORD) -> {
+                                message.contains(ERROR_INPUT_BLANK_RETYPE_PASSWORD) -> {
                                     binding.tiLayoutConfirmNewPassword.error =
                                         requireContext().getString(R.string.change_password_error_blank_confirm)
                                     binding.tiLayoutConfirmNewPassword.requestFocus()
                                     binding.tiLayoutConfirmNewPassword.boxStrokeColor =
                                         ContextCompat.getColor(requireContext(), R.color.red)
                                 }
-                                it.contains(ERROR_INPUT_PASSWORD_SHORT) -> {
+                                message.contains(ERROR_INPUT_PASSWORD_SHORT) -> {
                                     binding.tiLayoutNewPassword.requestFocus()
                                     binding.tiLayoutNewPassword.error =
                                         requireContext().getString(R.string.change_password_error_password_short)
                                 }
-                                it.contains(ERROR_INPUT_PASSWORD_NOT_MATCH) -> {
+                                message.contains(ERROR_INPUT_PASSWORD_NOT_MATCH) -> {
                                     binding.tiLayoutConfirmNewPassword.requestFocus()
                                     binding.tiLayoutConfirmNewPassword.error =
                                         requireContext().getString(R.string.change_password_error_match)
@@ -285,28 +286,29 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
     private fun reAuthenticateUserObserver() =
         viewModel.reAuthenticateUserLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
-                when (response.status) {
-                    Status.LOADING -> showLoadingAnimation()
-                    Status.SUCCESS -> changeUserPassword()
-                    Status.ERROR -> {
+                when (response) {
+                    is Resource.Loading -> showLoadingAnimation()
+                    is Resource.Success -> changeUserPassword()
+                    is Resource.Error -> {
                         hideLoadingAnimation()
                         response.message?.let {
+                            val message = it.asString(requireContext())
                             when {
-                                it.contains(ERROR_NETWORK_CONNECTION) -> {
+                                message.contains(ERROR_NETWORK_CONNECTION) -> {
                                     snackbar = showNetworkConnectionError(
                                         requireContext(), requireView()
                                     ) { getChangeUserPasswordInputs() }
                                 }
-                                it.contains(ERROR_FIREBASE_403) -> {
+                                message.contains(ERROR_FIREBASE_403) -> {
                                     snackbar = show403Error(requireContext(), requireView())
                                 }
-                                it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
+                                message.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
                                     snackbar = showFirebaseDeviceBlockedError(
                                         requireContext(),
                                         requireView()
                                     )
                                 }
-                                it.contains(ERROR_FIREBASE_AUTH_CREDENTIALS) -> {
+                                message.contains(ERROR_FIREBASE_AUTH_CREDENTIALS) -> {
                                     snackbar = showFirebaseAuthCredentialsError(
                                         requireView(),
                                         requireContext().getString(R.string.change_password_error_credentials)
@@ -330,9 +332,9 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
     private fun changeUserPasswordObserver() =
         viewModel.changeUserPasswordLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
-                when (response.status) {
-                    Status.LOADING -> showLoadingAnimation()
-                    Status.SUCCESS -> {
+                when (response) {
+                    is Resource.Loading -> showLoadingAnimation()
+                    is Resource.Success -> {
                         hideLoadingAnimation()
                         MaterialAlertDialogBuilder(requireContext()).apply {
                             setMessage(requireContext().getString(R.string.change_password_dialog_message))
@@ -342,19 +344,20 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
                             show()
                         }
                     }
-                    Status.ERROR -> {
+                    is Resource.Error -> {
                         hideLoadingAnimation()
                         response.message?.let {
+                            val message = it.asString(requireContext())
                             snackbar = when {
-                                it.contains(ERROR_NETWORK_CONNECTION) -> {
+                                message.contains(ERROR_NETWORK_CONNECTION) -> {
                                     showNetworkConnectionError(
                                         requireContext(), requireView()
                                     ) { getChangeUserPasswordInputs() }
                                 }
-                                it.contains(ERROR_FIREBASE_403) -> {
+                                message.contains(ERROR_FIREBASE_403) -> {
                                     show403Error(requireContext(), requireView())
                                 }
-                                it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
+                                message.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
                                     showFirebaseDeviceBlockedError(requireContext(), requireView())
                                 }
                                 else -> {

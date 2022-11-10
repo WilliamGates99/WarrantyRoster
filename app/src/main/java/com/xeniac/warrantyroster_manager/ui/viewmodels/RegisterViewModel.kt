@@ -14,6 +14,7 @@ import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_PASSWORD_NO
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_PASSWORD_SHORT
 import com.xeniac.warrantyroster_manager.utils.Event
 import com.xeniac.warrantyroster_manager.utils.Resource
+import com.xeniac.warrantyroster_manager.utils.UiText
 import com.xeniac.warrantyroster_manager.utils.UserHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -31,32 +32,44 @@ class RegisterViewModel @Inject constructor(
 
     fun checkRegisterInputs(email: String, password: String, retypePassword: String) {
         if (email.isBlank()) {
-            _registerLiveData.postValue(Event(Resource.error(ERROR_INPUT_BLANK_EMAIL)))
+            _registerLiveData.postValue(
+                Event(Resource.Error(UiText.DynamicString(ERROR_INPUT_BLANK_EMAIL)))
+            )
             return
         }
 
         if (password.isBlank()) {
-            _registerLiveData.postValue(Event(Resource.error(ERROR_INPUT_BLANK_PASSWORD)))
+            _registerLiveData.postValue(
+                Event(Resource.Error(UiText.DynamicString(ERROR_INPUT_BLANK_PASSWORD)))
+            )
             return
         }
 
         if (retypePassword.isBlank()) {
-            _registerLiveData.postValue(Event(Resource.error(ERROR_INPUT_BLANK_RETYPE_PASSWORD)))
+            _registerLiveData.postValue(
+                Event(Resource.Error(UiText.DynamicString(ERROR_INPUT_BLANK_RETYPE_PASSWORD)))
+            )
             return
         }
 
         if (!UserHelper.isEmailValid(email)) {
-            _registerLiveData.postValue(Event(Resource.error(ERROR_INPUT_EMAIL_INVALID)))
+            _registerLiveData.postValue(
+                Event(Resource.Error(UiText.DynamicString(ERROR_INPUT_EMAIL_INVALID)))
+            )
             return
         }
 
         if (UserHelper.passwordStrength(password) == (-1).toByte()) {
-            _registerLiveData.postValue(Event(Resource.error(ERROR_INPUT_PASSWORD_SHORT)))
+            _registerLiveData.postValue(
+                Event(Resource.Error(UiText.DynamicString(ERROR_INPUT_PASSWORD_SHORT)))
+            )
             return
         }
 
         if (!UserHelper.isRetypePasswordValid(password, retypePassword)) {
-            _registerLiveData.postValue(Event(Resource.error(ERROR_INPUT_PASSWORD_NOT_MATCH)))
+            _registerLiveData.postValue(
+                Event(Resource.Error(UiText.DynamicString(ERROR_INPUT_PASSWORD_NOT_MATCH)))
+            )
             return
         }
 
@@ -68,16 +81,16 @@ class RegisterViewModel @Inject constructor(
     }
 
     private suspend fun safeRegisterViaEmail(email: String, password: String) {
-        _registerLiveData.postValue(Event(Resource.loading()))
+        _registerLiveData.postValue(Event(Resource.Loading()))
         try {
             userRepository.registerViaEmail(email, password)
             userRepository.sendVerificationEmail()
             preferencesRepository.isUserLoggedIn(true)
-            _registerLiveData.postValue(Event(Resource.success(null)))
+            _registerLiveData.postValue(Event(Resource.Success()))
             Timber.i("$email registered successfully.")
         } catch (e: Exception) {
             Timber.e("safeRegisterViaEmail Exception: ${e.message}")
-            _registerLiveData.postValue(Event(Resource.error(e.message.toString())))
+            _registerLiveData.postValue(Event(Resource.Error(UiText.DynamicString(e.message.toString()))))
         }
     }
 }

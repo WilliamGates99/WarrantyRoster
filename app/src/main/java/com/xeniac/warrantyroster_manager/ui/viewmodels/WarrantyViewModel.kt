@@ -32,6 +32,7 @@ import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_TITLE
 import com.xeniac.warrantyroster_manager.utils.DateHelper.isStartingDateValid
 import com.xeniac.warrantyroster_manager.utils.Event
 import com.xeniac.warrantyroster_manager.utils.Resource
+import com.xeniac.warrantyroster_manager.utils.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -115,18 +116,20 @@ class WarrantyViewModel @Inject constructor(
     }
 
     fun getCategoriesFromFirestore() = viewModelScope.launch {
-        _categoriesLiveData.postValue(Event(Resource.loading()))
+        _categoriesLiveData.postValue(Event(Resource.Loading()))
         mainRepository.getCategoriesFromFirestore().addSnapshotListener { value, error ->
             error?.let {
                 Timber.e("getCategoriesFromFirestore Error: ${it.message}")
-                _categoriesLiveData.postValue(Event(Resource.error(it.message.toString())))
+                _categoriesLiveData.postValue(Event(Resource.Error(UiText.DynamicString(it.message.toString()))))
                 return@addSnapshotListener
             }
 
             value?.let {
                 if (it.documents.size == 0) {
                     Timber.e("getCategoriesFromFirestore Error: $ERROR_EMPTY_CATEGORY_LIST")
-                    _categoriesLiveData.postValue(Event(Resource.error(ERROR_EMPTY_CATEGORY_LIST)))
+                    _categoriesLiveData.postValue(
+                        Event(Resource.Error(UiText.DynamicString(ERROR_EMPTY_CATEGORY_LIST)))
+                    )
                 } else {
                     val categoriesList = mutableListOf<Category>()
 
@@ -140,7 +143,7 @@ class WarrantyViewModel @Inject constructor(
                         categoriesList.add(category)
                     }
 
-                    _categoriesLiveData.postValue(Event(Resource.success(categoriesList)))
+                    _categoriesLiveData.postValue(Event(Resource.Success(categoriesList)))
                     Timber.i("Categories List successfully retrieved.")
                     return@addSnapshotListener
                 }
@@ -149,18 +152,20 @@ class WarrantyViewModel @Inject constructor(
     }
 
     fun getWarrantiesListFromFirestore() = viewModelScope.launch {
-        _warrantiesLiveData.postValue(Event(Resource.loading()))
+        _warrantiesLiveData.postValue(Event(Resource.Loading()))
         mainRepository.getWarrantiesFromFirestore().addSnapshotListener { value, error ->
             error?.let {
                 Timber.e("getWarrantiesListFromFirestore Error: ${it.message}")
-                _warrantiesLiveData.postValue(Event(Resource.error(it.message.toString())))
+                _warrantiesLiveData.postValue(Event(Resource.Error(UiText.DynamicString(it.message.toString()))))
                 return@addSnapshotListener
             }
 
             value?.let {
                 if (it.documents.size == 0) {
                     Timber.e("getWarrantiesListFromFirestore Error: $ERROR_EMPTY_WARRANTY_LIST")
-                    _warrantiesLiveData.postValue(Event(Resource.error(ERROR_EMPTY_WARRANTY_LIST)))
+                    _warrantiesLiveData.postValue(
+                        Event(Resource.Error(UiText.DynamicString(ERROR_EMPTY_WARRANTY_LIST)))
+                    )
                 } else {
                     val warrantiesList = mutableListOf<Warranty>()
                     var adIndex = 5
@@ -192,7 +197,7 @@ class WarrantyViewModel @Inject constructor(
                         }
                     }
 
-                    _warrantiesLiveData.postValue(Event(Resource.success(warrantiesList)))
+                    _warrantiesLiveData.postValue(Event(Resource.Success(warrantiesList)))
                     Timber.i("Warranties List successfully retrieved.")
                 }
                 return@addSnapshotListener
@@ -217,10 +222,10 @@ class WarrantyViewModel @Inject constructor(
                     if (searchResultList.size == 0) {
                         Timber.e("searchWarrantiesByTitle Error: $ERROR_EMPTY_SEARCH_RESULT_LIST")
                         _searchWarrantiesLiveData.postValue(
-                            Event(Resource.error(ERROR_EMPTY_SEARCH_RESULT_LIST))
+                            Event(Resource.Error(UiText.DynamicString(ERROR_EMPTY_SEARCH_RESULT_LIST)))
                         )
                     } else {
-                        _searchWarrantiesLiveData.postValue(Event(Resource.success(searchResultList)))
+                        _searchWarrantiesLiveData.postValue(Event(Resource.Success(searchResultList)))
                         Timber.i("searchWarrantiesByTitle was successful.")
                     }
                 }
@@ -235,24 +240,32 @@ class WarrantyViewModel @Inject constructor(
         selectedStartingDateInMillis: Long, selectedExpiryDateInMillis: Long
     ) {
         if (title.isBlank()) {
-            _addWarrantyLiveData.postValue(Event(Resource.error(ERROR_INPUT_BLANK_TITLE)))
+            _addWarrantyLiveData.postValue(
+                Event(Resource.Error(UiText.DynamicString(ERROR_INPUT_BLANK_TITLE)))
+            )
             return
         }
 
         if (startingDateInput.isNullOrBlank()) {
-            _addWarrantyLiveData.postValue(Event(Resource.error(ERROR_INPUT_BLANK_STARTING_DATE)))
+            _addWarrantyLiveData.postValue(
+                Event(Resource.Error(UiText.DynamicString(ERROR_INPUT_BLANK_STARTING_DATE)))
+            )
             return
         }
 
         if (!isLifetime && expiryDateInput.isNullOrBlank()) {
-            _addWarrantyLiveData.postValue(Event(Resource.error(ERROR_INPUT_BLANK_EXPIRY_DATE)))
+            _addWarrantyLiveData.postValue(
+                Event(Resource.Error(UiText.DynamicString(ERROR_INPUT_BLANK_EXPIRY_DATE)))
+            )
             return
         }
 
         if (!isLifetime &&
             !isStartingDateValid(selectedStartingDateInMillis, selectedExpiryDateInMillis)
         ) {
-            _addWarrantyLiveData.postValue(Event(Resource.error(ERROR_INPUT_INVALID_STARTING_DATE)))
+            _addWarrantyLiveData.postValue(
+                Event(Resource.Error(UiText.DynamicString(ERROR_INPUT_INVALID_STARTING_DATE)))
+            )
             return
         }
 
@@ -277,14 +290,14 @@ class WarrantyViewModel @Inject constructor(
     }
 
     private suspend fun safeAddWarrantyToFirestore(warrantyInput: WarrantyInput) {
-        _addWarrantyLiveData.postValue(Event(Resource.loading()))
+        _addWarrantyLiveData.postValue(Event(Resource.Loading()))
         try {
             mainRepository.addWarrantyToFirestore(warrantyInput)
-            _addWarrantyLiveData.postValue(Event(Resource.success(null)))
+            _addWarrantyLiveData.postValue(Event(Resource.Success()))
             Timber.i("Warranty successfully added.")
         } catch (e: Exception) {
             Timber.e("safeAddWarrantyToFirestore Exception: ${e.message}")
-            _addWarrantyLiveData.postValue(Event(Resource.error(e.message.toString())))
+            _addWarrantyLiveData.postValue(Event(Resource.Error(UiText.DynamicString(e.message.toString()))))
         }
     }
 
@@ -295,24 +308,32 @@ class WarrantyViewModel @Inject constructor(
         selectedStartingDateInMillis: Long, selectedExpiryDateInMillis: Long
     ) {
         if (title.isBlank()) {
-            _updateWarrantyLiveData.postValue(Event(Resource.error(ERROR_INPUT_BLANK_TITLE)))
+            _updateWarrantyLiveData.postValue(
+                Event(Resource.Error(UiText.DynamicString(ERROR_INPUT_BLANK_TITLE)))
+            )
             return
         }
 
         if (startingDateInput.isNullOrBlank()) {
-            _updateWarrantyLiveData.postValue(Event(Resource.error(ERROR_INPUT_BLANK_STARTING_DATE)))
+            _updateWarrantyLiveData.postValue(
+                Event(Resource.Error(UiText.DynamicString(ERROR_INPUT_BLANK_STARTING_DATE)))
+            )
             return
         }
 
         if (!isLifetime && expiryDateInput.isNullOrBlank()) {
-            _updateWarrantyLiveData.postValue(Event(Resource.error(ERROR_INPUT_BLANK_EXPIRY_DATE)))
+            _updateWarrantyLiveData.postValue(
+                Event(Resource.Error(UiText.DynamicString(ERROR_INPUT_BLANK_EXPIRY_DATE)))
+            )
             return
         }
 
         if (!isLifetime &&
             !isStartingDateValid(selectedStartingDateInMillis, selectedExpiryDateInMillis)
         ) {
-            _updateWarrantyLiveData.postValue(Event(Resource.error(ERROR_INPUT_INVALID_STARTING_DATE)))
+            _updateWarrantyLiveData.postValue(
+                Event(Resource.Error(UiText.DynamicString(ERROR_INPUT_INVALID_STARTING_DATE)))
+            )
             return
         }
 
@@ -340,14 +361,14 @@ class WarrantyViewModel @Inject constructor(
     private suspend fun safeUpdateWarrantyInFirestore(
         warrantyId: String, warrantyInput: WarrantyInput
     ) {
-        _updateWarrantyLiveData.postValue(Event(Resource.loading()))
+        _updateWarrantyLiveData.postValue(Event(Resource.Loading()))
         try {
             mainRepository.updateWarrantyInFirestore(warrantyId, warrantyInput)
-            _updateWarrantyLiveData.postValue(Event(Resource.success(null)))
+            _updateWarrantyLiveData.postValue(Event(Resource.Success()))
             Timber.i("Warranty successfully updated.")
         } catch (e: Exception) {
             Timber.e("safeUpdateWarrantyInFirestore Exception: ${e.message}")
-            _updateWarrantyLiveData.postValue(Event(Resource.error(e.message.toString())))
+            _updateWarrantyLiveData.postValue(Event(Resource.Error(UiText.DynamicString(e.message.toString()))))
         }
     }
 
@@ -356,14 +377,14 @@ class WarrantyViewModel @Inject constructor(
     }
 
     private suspend fun safeGetUpdatedWarrantyFromFirestore(warrantyId: String) {
-        _updatedWarrantyLiveData.postValue(Event(Resource.loading()))
+        _updatedWarrantyLiveData.postValue(Event(Resource.Loading()))
         try {
             val updatedWarranty = mainRepository.getUpdatedWarrantyFromFirestore(warrantyId)
-            _updatedWarrantyLiveData.postValue(Event(Resource.success(updatedWarranty)))
+            _updatedWarrantyLiveData.postValue(Event(Resource.Success(updatedWarranty)))
             Timber.i("Updated warranty successfully retrieved.")
         } catch (e: Exception) {
             Timber.e("safeGetUpdatedWarrantyFromFirestore Exception: ${e.message}")
-            _updatedWarrantyLiveData.postValue(Event(Resource.error(e.message.toString())))
+            _updatedWarrantyLiveData.postValue(Event(Resource.Error(UiText.DynamicString(e.message.toString()))))
         }
     }
 
@@ -372,14 +393,14 @@ class WarrantyViewModel @Inject constructor(
     }
 
     private suspend fun safeDeleteWarrantyFromFirestore(warrantyId: String) {
-        _deleteWarrantyLiveData.postValue(Event(Resource.loading()))
+        _deleteWarrantyLiveData.postValue(Event(Resource.Loading()))
         try {
             mainRepository.deleteWarrantyFromFirestore(warrantyId)
-            _deleteWarrantyLiveData.postValue(Event(Resource.success(null)))
+            _deleteWarrantyLiveData.postValue(Event(Resource.Success()))
             Timber.i("$warrantyId successfully deleted.")
         } catch (e: Exception) {
             Timber.e("safeDeleteWarrantyFromFirestore Exception: ${e.message}")
-            _deleteWarrantyLiveData.postValue(Event(Resource.error(e.message.toString())))
+            _deleteWarrantyLiveData.postValue(Event(Resource.Error(UiText.DynamicString(e.message.toString()))))
         }
     }
 }

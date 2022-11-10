@@ -165,24 +165,24 @@ class SettingsViewModel @Inject constructor(
     }
 
     private suspend fun safeGetAccountDetails() {
-        _accountDetailsLiveData.postValue(Event(Resource.loading()))
+        _accountDetailsLiveData.postValue(Event(Resource.Loading()))
         try {
             val currentUser = userRepository.getCurrentUser() as FirebaseUser
             var email = currentUser.email
             var isVerified = currentUser.isEmailVerified
-            _accountDetailsLiveData.postValue(Event(Resource.success(currentUser)))
+            _accountDetailsLiveData.postValue(Event(Resource.Success(currentUser)))
             Timber.i("Current user is $email and isVerified: $isVerified")
 
             userRepository.reloadCurrentUser()
             if (email != currentUser.email || isVerified != currentUser.isEmailVerified) {
                 email = currentUser.email
                 isVerified = currentUser.isEmailVerified
-                _accountDetailsLiveData.postValue(Event(Resource.success(currentUser)))
+                _accountDetailsLiveData.postValue(Event(Resource.Success(currentUser)))
                 Timber.i("Updated user is $email and isVerified: $isVerified")
             }
         } catch (e: Exception) {
             Timber.e("safeGetAccountDetails Exception: ${e.message}")
-            _accountDetailsLiveData.postValue(Event(Resource.error(e.message.toString())))
+            _accountDetailsLiveData.postValue(Event(Resource.Error(UiText.DynamicString(e.message.toString()))))
         }
     }
 
@@ -191,14 +191,14 @@ class SettingsViewModel @Inject constructor(
     }
 
     private suspend fun safeSendVerificationEmail() {
-        _sendVerificationEmailLiveData.postValue(Event(Resource.loading()))
+        _sendVerificationEmailLiveData.postValue(Event(Resource.Loading()))
         try {
             userRepository.sendVerificationEmail()
-            _sendVerificationEmailLiveData.postValue(Event(Resource.success(null)))
+            _sendVerificationEmailLiveData.postValue(Event(Resource.Success()))
             Timber.i("Verification email sent.")
         } catch (e: Exception) {
             Timber.e("safeSendVerificationEmail Exception: ${e.message}")
-            _sendVerificationEmailLiveData.postValue(Event(Resource.error(e.message.toString())))
+            _sendVerificationEmailLiveData.postValue(Event(Resource.Error(UiText.DynamicString(e.message.toString()))))
         }
     }
 
@@ -207,15 +207,15 @@ class SettingsViewModel @Inject constructor(
     }
 
     private suspend fun safeLogoutUser() {
-        _logoutLiveData.postValue(Event(Resource.loading()))
+        _logoutLiveData.postValue(Event(Resource.Loading()))
         try {
             userRepository.logoutUser()
             preferencesRepository.isUserLoggedIn(false)
-            _logoutLiveData.postValue(Event(Resource.success(null)))
+            _logoutLiveData.postValue(Event(Resource.Success()))
             Timber.i("User successfully logged out.")
         } catch (e: Exception) {
             Timber.e("safeLogoutUser Exception: ${e.message}")
-            _logoutLiveData.postValue(Event(Resource.error(e.message.toString())))
+            _logoutLiveData.postValue(Event(Resource.Error(UiText.DynamicString(e.message.toString()))))
         }
     }
 

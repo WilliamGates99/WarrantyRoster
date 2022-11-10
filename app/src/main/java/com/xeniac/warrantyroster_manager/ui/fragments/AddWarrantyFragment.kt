@@ -44,11 +44,11 @@ import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_ADD_WARRA
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_ADD_WARRANTY_SERIAL
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_ADD_WARRANTY_STARTING_DATE_IN_MILLIS
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_ADD_WARRANTY_TITLE
+import com.xeniac.warrantyroster_manager.utils.Resource
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.show403Error
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseDeviceBlockedError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkConnectionError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkFailureError
-import com.xeniac.warrantyroster_manager.utils.Status
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.text.DecimalFormat
@@ -478,46 +478,47 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
     private fun addWarrantyObserver() =
         viewModel.addWarrantyLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
-                when (response.status) {
-                    Status.LOADING -> showLoadingAnimation()
-                    Status.SUCCESS -> {
+                when (response) {
+                    is Resource.Loading -> showLoadingAnimation()
+                    is Resource.Success -> {
                         hideLoadingAnimation()
                         findNavController().navigate(
                             AddWarrantyFragmentDirections.actionAddWarrantyFragmentToWarrantiesFragment()
                         )
                         (requireActivity() as MainActivity).showRateAppDialog()
                     }
-                    Status.ERROR -> {
+                    is Resource.Error -> {
                         hideLoadingAnimation()
                         response.message?.let {
+                            val message = it.asString(requireContext())
                             when {
-                                it.contains(ERROR_INPUT_BLANK_TITLE) -> {
+                                message.contains(ERROR_INPUT_BLANK_TITLE) -> {
                                     binding.tiLayoutTitle.error =
                                         requireContext().getString(R.string.add_warranty_error_blank_title)
                                     binding.tiLayoutTitle.requestFocus()
                                     binding.tiLayoutTitle.boxStrokeColor =
                                         ContextCompat.getColor(requireContext(), R.color.red)
                                 }
-                                it.contains(ERROR_INPUT_BLANK_STARTING_DATE) -> {
+                                message.contains(ERROR_INPUT_BLANK_STARTING_DATE) -> {
                                     binding.tiLayoutDateStarting.requestFocus()
                                     binding.tiLayoutDateStarting.boxStrokeColor =
                                         ContextCompat.getColor(requireContext(), R.color.red)
                                 }
-                                it.contains(ERROR_INPUT_BLANK_EXPIRY_DATE) -> {
+                                message.contains(ERROR_INPUT_BLANK_EXPIRY_DATE) -> {
                                     binding.tiLayoutDateExpiry.requestFocus()
                                     binding.tiLayoutDateExpiry.boxStrokeColor =
                                         ContextCompat.getColor(requireContext(), R.color.red)
                                 }
-                                it.contains(ERROR_INPUT_INVALID_STARTING_DATE) -> showDateError()
-                                it.contains(ERROR_NETWORK_CONNECTION) -> {
+                                message.contains(ERROR_INPUT_INVALID_STARTING_DATE) -> showDateError()
+                                message.contains(ERROR_NETWORK_CONNECTION) -> {
                                     snackbar = showNetworkConnectionError(
                                         requireContext(), requireView()
                                     ) { getWarrantyInput() }
                                 }
-                                it.contains(ERROR_FIREBASE_403) -> {
+                                message.contains(ERROR_FIREBASE_403) -> {
                                     snackbar = show403Error(requireContext(), requireView())
                                 }
-                                it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
+                                message.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
                                     snackbar = showFirebaseDeviceBlockedError(
                                         requireContext(),
                                         requireView()
