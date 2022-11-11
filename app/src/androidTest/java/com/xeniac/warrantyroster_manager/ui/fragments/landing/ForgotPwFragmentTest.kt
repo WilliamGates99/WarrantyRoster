@@ -16,7 +16,7 @@ import com.xeniac.warrantyroster_manager.databinding.FragmentForgotPwBinding
 import com.xeniac.warrantyroster_manager.getOrAwaitValue
 import com.xeniac.warrantyroster_manager.launchFragmentInHiltContainer
 import com.xeniac.warrantyroster_manager.ui.viewmodels.ForgotPwViewModel
-import com.xeniac.warrantyroster_manager.utils.Status
+import com.xeniac.warrantyroster_manager.utils.Resource
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -85,7 +85,7 @@ class ForgotPwFragmentTest {
         }
 
         val responseEvent = testViewModel.forgotPwLiveData.getOrAwaitValue()
-        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
+        assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)
     }
 
     @Test
@@ -100,7 +100,7 @@ class ForgotPwFragmentTest {
         }
 
         val responseEvent = testViewModel.forgotPwLiveData.getOrAwaitValue()
-        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.SUCCESS)
+        assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Success::class.java)
     }
 
     @Test
@@ -123,7 +123,7 @@ class ForgotPwFragmentTest {
         }
 
         val responseEvent = testViewModel.forgotPwLiveData.getOrAwaitValue()
-        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
+        assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)
     }
 
     @Test
@@ -138,7 +138,7 @@ class ForgotPwFragmentTest {
         }
 
         val responseEvent = testViewModel.forgotPwLiveData.getOrAwaitValue()
-        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.SUCCESS)
+        assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Success::class.java)
     }
 
     @Test

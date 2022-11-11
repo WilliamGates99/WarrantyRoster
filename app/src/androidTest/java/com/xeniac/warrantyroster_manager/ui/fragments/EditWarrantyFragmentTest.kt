@@ -22,10 +22,8 @@ import com.xeniac.warrantyroster_manager.data.repository.FakeUserRepository
 import com.xeniac.warrantyroster_manager.databinding.FragmentEditWarrantyBinding
 import com.xeniac.warrantyroster_manager.getOrAwaitValue
 import com.xeniac.warrantyroster_manager.launchFragmentInHiltContainer
-import com.xeniac.warrantyroster_manager.ui.main.fragments.WarrantiesFragmentDirections
-import com.xeniac.warrantyroster_manager.ui.main.fragments.WarrantyDetailsFragmentDirections
 import com.xeniac.warrantyroster_manager.ui.viewmodels.WarrantyViewModel
-import com.xeniac.warrantyroster_manager.utils.Status
+import com.xeniac.warrantyroster_manager.utils.Resource
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -340,7 +338,7 @@ class EditWarrantyFragmentTest {
         onView(withId(R.id.action_menu_edit)).perform(click())
 
         val responseEvent = testViewModel.updateWarrantyLiveData.getOrAwaitValue()
-        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
+        assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)
     }
 
     @Test
@@ -349,7 +347,7 @@ class EditWarrantyFragmentTest {
         onView(withId(R.id.action_menu_edit)).perform(click())
 
         val responseEvent = testViewModel.updateWarrantyLiveData.getOrAwaitValue()
-        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.SUCCESS)
+        assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Success::class.java)
     }
 
     @Test

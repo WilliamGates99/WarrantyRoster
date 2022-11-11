@@ -25,7 +25,7 @@ import com.xeniac.warrantyroster_manager.ui.viewmodels.SettingsViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.URL_CROWDIN
 import com.xeniac.warrantyroster_manager.utils.Constants.URL_DONATE
 import com.xeniac.warrantyroster_manager.utils.Constants.URL_PRIVACY_POLICY
-import com.xeniac.warrantyroster_manager.utils.Status
+import com.xeniac.warrantyroster_manager.utils.Resource
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -96,7 +96,7 @@ class SettingsFragmentTest {
         onView(withId(testBinding.btnAccountVerification.id)).perform(click())
 
         val responseEvent = testViewModel.sendVerificationEmailLiveData.getOrAwaitValue()
-        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.ERROR)
+        assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)
     }
 
     @Test
@@ -104,7 +104,7 @@ class SettingsFragmentTest {
         onView(withId(testBinding.btnAccountVerification.id)).perform(click())
 
         val responseEvent = testViewModel.sendVerificationEmailLiveData.getOrAwaitValue()
-        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.SUCCESS)
+        assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Success::class.java)
     }
 
     @Test
@@ -200,6 +200,6 @@ class SettingsFragmentTest {
         onView(withId(testBinding.btnLogout.id)).perform(click())
 
         val responseEvent = testViewModel.logoutLiveData.getOrAwaitValue()
-        assertThat(responseEvent.getContentIfNotHandled()?.status).isEqualTo(Status.SUCCESS)
+        assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Success::class.java)
     }
 }
