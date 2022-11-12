@@ -61,7 +61,7 @@ class ChangePasswordViewModelTest {
     @Test
     fun checkChangePasswordInputsWithBlankFields_returnsError() {
         fakeUserRepository.addUser("email@test.com", "password")
-        testViewModel.checkChangePasswordInputs("", "", "")
+        testViewModel.validateChangePasswordInputs("", "", "")
 
         val responseEvent = testViewModel.checkInputsLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)
@@ -72,7 +72,7 @@ class ChangePasswordViewModelTest {
         val password = "password"
         val shortPassword = "1234"
         fakeUserRepository.addUser("email@test.com", password)
-        testViewModel.checkChangePasswordInputs(password, shortPassword, shortPassword)
+        testViewModel.validateChangePasswordInputs(password, shortPassword, shortPassword)
 
         val responseEvent = testViewModel.checkInputsLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)
@@ -82,7 +82,7 @@ class ChangePasswordViewModelTest {
     fun checkChangePasswordInputsWitInvalidRetypePassword_returnsError() {
         val password = "password"
         fakeUserRepository.addUser("email@test.com", password)
-        testViewModel.checkChangePasswordInputs(password, "new_password", "1234")
+        testViewModel.validateChangePasswordInputs(password, "new_password", "1234")
 
         val responseEvent = testViewModel.checkInputsLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)

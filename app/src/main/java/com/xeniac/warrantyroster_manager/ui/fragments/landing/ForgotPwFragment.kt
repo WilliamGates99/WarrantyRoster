@@ -108,25 +108,25 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
     }
 
     private fun sendOnClick() = binding.btnSend.setOnClickListener {
-        getResetPasswordInput()
+        validateResetPasswordInputs()
     }
 
     private fun sendActionDone() =
         binding.tiEditEmail.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                getResetPasswordInput()
+                validateResetPasswordInputs()
             }
             false
         }
 
-    private fun getResetPasswordInput() {
+    private fun validateResetPasswordInputs() {
         val inputMethodManager = requireContext()
             .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(requireView().applicationWindowToken, 0)
 
         val email = binding.tiEditEmail.text.toString().trim().lowercase(Locale.US)
 
-        viewModel.checkForgotPwInputs(email)
+        viewModel.validateForgotPwInputs(email)
     }
 
     private fun forgotPwObserver() =
@@ -160,7 +160,7 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
                                 message.contains(ERROR_NETWORK_CONNECTION) -> {
                                     snackbar = showNetworkConnectionError(
                                         requireContext(), requireView()
-                                    ) { getResetPasswordInput() }
+                                    ) { validateResetPasswordInputs() }
                                 }
                                 message.contains(ERROR_FIREBASE_403) -> {
                                     snackbar = show403Error(requireContext(), requireView())

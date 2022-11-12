@@ -33,7 +33,7 @@ class ForgotPwViewModelTest {
 
     @Test
     fun checkForgotPwInputsWithBlankFields_returnsError() {
-        testViewModel.checkForgotPwInputs("", false)
+        testViewModel.validateForgotPwInputs("", false)
 
         val responseEvent = testViewModel.forgotPwLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)
@@ -41,7 +41,7 @@ class ForgotPwViewModelTest {
 
     @Test
     fun checkForgotPwInputsWithInvalidEmail_returnsError() {
-        testViewModel.checkForgotPwInputs("email", false)
+        testViewModel.validateForgotPwInputs("email", false)
 
         val responseEvent = testViewModel.forgotPwLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)
@@ -51,7 +51,7 @@ class ForgotPwViewModelTest {
     fun checkForgotPwInputsWithValidInputs_returnsSuccess() = runTest {
         val email = "email@test.com"
         fakeUserRepository.addUser(email, "password")
-        testViewModel.checkForgotPwInputs(email, false)
+        testViewModel.validateForgotPwInputs(email, false)
 
         val responseEvent = testViewModel.forgotPwLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Success::class.java)

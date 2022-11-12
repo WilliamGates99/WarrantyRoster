@@ -37,7 +37,7 @@ class LoginViewModelTest {
 
     @Test
     fun checkLoginInputsWithBlankFields_returnsError() {
-        testViewModel.checkLoginInputs("email", "")
+        testViewModel.validateLoginInputs("email", "")
 
         val responseEvent = testViewModel.loginLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)
@@ -45,7 +45,7 @@ class LoginViewModelTest {
 
     @Test
     fun checkLoginInputsWithInvalidEmail_returnsError() {
-        testViewModel.checkLoginInputs("email", "password")
+        testViewModel.validateLoginInputs("email", "password")
 
         val responseEvent = testViewModel.loginLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)
@@ -56,7 +56,7 @@ class LoginViewModelTest {
         val email = "email@test.com"
         val password = "password"
         fakeUserRepository.addUser(email, password)
-        testViewModel.checkLoginInputs(email, password)
+        testViewModel.validateLoginInputs(email, password)
 
         val responseEvent = testViewModel.loginLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Success::class.java)

@@ -34,7 +34,7 @@ class ChangeEmailViewModel @Inject constructor(
             MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
     val changeUserEmailLiveData: LiveData<Event<Resource<Nothing>>> = _changeUserEmailLiveData
 
-    fun checkChangeEmailInputs(
+    fun validateChangeEmailInputs(
         password: String,
         newEmail: String,
         currentUserEmail: String = userRepository.getCurrentUserEmail()

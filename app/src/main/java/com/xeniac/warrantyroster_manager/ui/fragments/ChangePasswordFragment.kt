@@ -200,13 +200,13 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
     }
 
     private fun changePasswordOnClick() = binding.btnChangePassword.setOnClickListener {
-        getChangeUserPasswordInputs()
+        validateChangeUserPasswordInputs()
     }
 
     private fun changePasswordActionDone() =
         binding.tiEditConfirmNewPassword.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                getChangeUserPasswordInputs()
+                validateChangeUserPasswordInputs()
             }
             false
         }
@@ -217,7 +217,7 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
         changeUserPasswordObserver()
     }
 
-    private fun getChangeUserPasswordInputs() {
+    private fun validateChangeUserPasswordInputs() {
         val inputMethodManager = requireContext()
             .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(requireView().applicationWindowToken, 0)
@@ -226,7 +226,7 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
         newPassword = binding.tiEditNewPassword.text.toString().trim()
         val retypeNewPassword = binding.tiEditConfirmNewPassword.text.toString().trim()
 
-        viewModel.checkChangePasswordInputs(currentPassword, newPassword, retypeNewPassword)
+        viewModel.validateChangePasswordInputs(currentPassword, newPassword, retypeNewPassword)
     }
 
     private fun checkInputsObserver() =
@@ -297,7 +297,7 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
                                 message.contains(ERROR_NETWORK_CONNECTION) -> {
                                     snackbar = showNetworkConnectionError(
                                         requireContext(), requireView()
-                                    ) { getChangeUserPasswordInputs() }
+                                    ) { validateChangeUserPasswordInputs() }
                                 }
                                 message.contains(ERROR_FIREBASE_403) -> {
                                     snackbar = show403Error(requireContext(), requireView())
@@ -352,7 +352,7 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
                                 message.contains(ERROR_NETWORK_CONNECTION) -> {
                                     showNetworkConnectionError(
                                         requireContext(), requireView()
-                                    ) { getChangeUserPasswordInputs() }
+                                    ) { validateChangeUserPasswordInputs() }
                                 }
                                 message.contains(ERROR_FIREBASE_403) -> {
                                     show403Error(requireContext(), requireView())

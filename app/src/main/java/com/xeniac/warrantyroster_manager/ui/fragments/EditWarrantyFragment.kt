@@ -549,7 +549,7 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
     }
 
     private fun editWarrantyOnClick() = binding.toolbar.menu.getItem(0).setOnMenuItemClickListener {
-        getWarrantyInput()
+        validateWarrantyInputs()
         false
     }
 
@@ -558,7 +558,7 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
         getUpdatedWarrantyObserver()
     }
 
-    private fun getWarrantyInput() {
+    private fun validateWarrantyInputs() {
         val inputMethodManager = requireContext()
             .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(requireView().applicationWindowToken, 0)
@@ -571,7 +571,7 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
         val isLifetime = binding.cbLifetime.isChecked
         val categoryId = selectedCategory?.id ?: "10"
 
-        viewModel.checkEditWarrantyInputs(
+        viewModel.validateEditWarrantyInputs(
             warranty.id, title, brand, model, serialNumber,
             isLifetime, startingDateInput, expiryDateInput, description, categoryId,
             selectedStartingDateInMillis, selectedExpiryDateInMillis
@@ -610,7 +610,7 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
                                 message.contains(ERROR_NETWORK_CONNECTION) -> {
                                     snackbar = showNetworkConnectionError(
                                         requireContext(), requireView()
-                                    ) { getWarrantyInput() }
+                                    ) { validateWarrantyInputs() }
                                 }
                                 message.contains(ERROR_FIREBASE_403) -> {
                                     snackbar = show403Error(requireContext(), requireView())

@@ -35,7 +35,7 @@ class ChangePasswordViewModel @Inject constructor(
             MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
     val changeUserPasswordLiveData: LiveData<Event<Resource<Nothing>>> = _changeUserPasswordLiveData
 
-    fun checkChangePasswordInputs(
+    fun validateChangePasswordInputs(
         currentPassword: String, newPassword: String, retypeNewPassword: String
     ) {
         if (currentPassword.isBlank()) {

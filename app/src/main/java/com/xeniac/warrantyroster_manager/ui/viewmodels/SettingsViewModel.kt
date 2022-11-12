@@ -46,10 +46,6 @@ class SettingsViewModel @Inject constructor(
     private val _currentAppThemeLiveData: MutableLiveData<Event<Int>> = MutableLiveData()
     val currentAppThemeLiveData: LiveData<Event<Int>> = _currentAppThemeLiveData
 
-    private val _setAppLocaleLiveData:
-            MutableLiveData<Event<Resource<Array<String>>>> = MutableLiveData()
-    val setAppLocaleLiveData: LiveData<Event<Resource<Array<String>>>> = _setAppLocaleLiveData
-
     private val _accountDetailsLiveData:
             MutableLiveData<Event<Resource<FirebaseUser>>> = MutableLiveData()
     val accountDetailsLiveData: LiveData<Event<Resource<FirebaseUser>>> = _accountDetailsLiveData

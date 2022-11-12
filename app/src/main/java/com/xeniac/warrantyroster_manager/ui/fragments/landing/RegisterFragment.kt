@@ -204,18 +204,18 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     }
 
     private fun registerOnClick() = binding.btnRegister.setOnClickListener {
-        getRegisterInputs()
+        validateRegisterInputs()
     }
 
     private fun registerActionDone() =
         binding.tiEditConfirmPassword.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                getRegisterInputs()
+                validateRegisterInputs()
             }
             false
         }
 
-    private fun getRegisterInputs() {
+    private fun validateRegisterInputs() {
         val inputMethodManager = requireContext()
             .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(requireView().applicationWindowToken, 0)
@@ -224,7 +224,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         val password = binding.tiEditPassword.text.toString().trim()
         val retypePassword = binding.tiEditConfirmPassword.text.toString().trim()
 
-        viewModel.checkRegisterInputs(email, password, retypePassword)
+        viewModel.validateRegisterInputs(email, password, retypePassword)
     }
 
     private fun registerObserver() =
@@ -283,7 +283,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                                 message.contains(ERROR_NETWORK_CONNECTION) -> {
                                     snackbar = showNetworkConnectionError(
                                         requireContext(), requireView()
-                                    ) { getRegisterInputs() }
+                                    ) { validateRegisterInputs() }
                                 }
                                 message.contains(ERROR_FIREBASE_403) -> {
                                     snackbar = show403Error(requireContext(), requireView())

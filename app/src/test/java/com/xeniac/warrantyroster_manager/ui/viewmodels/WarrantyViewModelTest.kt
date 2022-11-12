@@ -153,7 +153,7 @@ class WarrantyViewModelTest {
     @Test
     fun checkAddWarrantyInputsWithBlankTitle_returnsError() {
         val blank = ""
-        testViewModel.checkAddWarrantyInputs(
+        testViewModel.validateAddWarrantyInputs(
             blank, blank, blank, blank, false,
             "2020-05-10", "2020-05-10",
             blank, "10", 0L, 0L
@@ -166,7 +166,7 @@ class WarrantyViewModelTest {
     @Test
     fun checkAddWarrantyInputsWithBlankStartingDate_returnsError() {
         val blank = ""
-        testViewModel.checkAddWarrantyInputs(
+        testViewModel.validateAddWarrantyInputs(
             "title", blank, blank, blank, false, blank, "2020-05-10",
             blank, "10", 0L, 0L
         )
@@ -178,7 +178,7 @@ class WarrantyViewModelTest {
     @Test
     fun checkAddWarrantyInputsWithBlankExpiryDate_returnsError() {
         val blank = ""
-        testViewModel.checkAddWarrantyInputs(
+        testViewModel.validateAddWarrantyInputs(
             "title", blank, blank, blank, false, "2020-05-10", blank,
             blank, "10", 0L, 0L
         )
@@ -190,7 +190,7 @@ class WarrantyViewModelTest {
     @Test
     fun checkAddWarrantyInputsWithInvalidStartingDate_returnsError() {
         val blank = ""
-        testViewModel.checkAddWarrantyInputs(
+        testViewModel.validateAddWarrantyInputs(
             "title", blank, blank, blank, false,
             "2022-05-10", "2020-05-10",
             blank, "10", 100L, 50L
@@ -203,7 +203,7 @@ class WarrantyViewModelTest {
     @Test
     fun checkAddWarrantyInputsWithIsLifeTimeAndBlankExpiryDate_returnsSuccess() {
         val blank = ""
-        testViewModel.checkAddWarrantyInputs(
+        testViewModel.validateAddWarrantyInputs(
             "title", blank, blank, blank, true, "2020-05-10", blank,
             blank, "10", 0L, 0L
         )
@@ -215,7 +215,7 @@ class WarrantyViewModelTest {
     @Test
     fun checkAddWarrantyInputsWithValidInputs_returnsSuccess() {
         val blank = ""
-        testViewModel.checkAddWarrantyInputs(
+        testViewModel.validateAddWarrantyInputs(
             "title", blank, blank, blank, false,
             "2020-05-10", "2022-05-10",
             blank, "10", 50L, 100L
@@ -285,7 +285,7 @@ class WarrantyViewModelTest {
     @Test
     fun checkEditWarrantyInputsWithBlankTitle_returnsError() {
         val blank = ""
-        testViewModel.checkEditWarrantyInputs(
+        testViewModel.validateEditWarrantyInputs(
             "1", blank, blank, blank, blank, false,
             "2020-05-10", "2020-05-10",
             blank, "10", 0L, 0L
@@ -298,7 +298,7 @@ class WarrantyViewModelTest {
     @Test
     fun checkEditWarrantyInputsWithBlankStartingDate_returnsError() {
         val blank = ""
-        testViewModel.checkEditWarrantyInputs(
+        testViewModel.validateEditWarrantyInputs(
             "1", "title", blank, blank, blank, false,
             blank, "2020-05-10", blank, "10",
             0L, 0L
@@ -311,7 +311,7 @@ class WarrantyViewModelTest {
     @Test
     fun checkEditWarrantyInputsWithBlankExpiryDate_returnsError() {
         val blank = ""
-        testViewModel.checkEditWarrantyInputs(
+        testViewModel.validateEditWarrantyInputs(
             "1", "title", blank, blank, blank, false,
             "2020-05-10", blank, blank, "10",
             0L, 0L
@@ -324,7 +324,7 @@ class WarrantyViewModelTest {
     @Test
     fun checkEditWarrantyInputsWithInvalidStartingDate_returnsError() {
         val blank = ""
-        testViewModel.checkEditWarrantyInputs(
+        testViewModel.validateEditWarrantyInputs(
             "1", "title", blank, blank, blank, false,
             "2022-05-10", "2020-05-10",
             blank, "10", 100L, 50L
@@ -354,7 +354,7 @@ class WarrantyViewModelTest {
                 startingDate, expiryDate, description, categoryId, uuid
             )
         )
-        testViewModel.checkEditWarrantyInputs(
+        testViewModel.validateEditWarrantyInputs(
             "1", title, brand, model, serial, isLifeTime,
             startingDate, expiryDate, description, categoryId, dataInMillis, dataInMillis
         )
@@ -382,7 +382,7 @@ class WarrantyViewModelTest {
                 startingDate, expiryDate, description, categoryId, uuid
             )
         )
-        testViewModel.checkEditWarrantyInputs(
+        testViewModel.validateEditWarrantyInputs(
             "1", title, brand, model, serial, isLifeTime,
             startingDate, expiryDate, description, categoryId,
             50L, 100L

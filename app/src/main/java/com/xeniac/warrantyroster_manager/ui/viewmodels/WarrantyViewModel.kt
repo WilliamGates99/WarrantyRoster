@@ -233,7 +233,7 @@ class WarrantyViewModel @Inject constructor(
         }
     }
 
-    fun checkAddWarrantyInputs(
+    fun validateAddWarrantyInputs(
         title: String, brand: String?, model: String?, serialNumber: String?,
         isLifetime: Boolean, startingDateInput: String?, expiryDateInput: String?,
         description: String?, categoryId: String,
@@ -301,7 +301,7 @@ class WarrantyViewModel @Inject constructor(
         }
     }
 
-    fun checkEditWarrantyInputs(
+    fun validateEditWarrantyInputs(
         warrantyId: String, title: String, brand: String?, model: String?, serialNumber: String?,
         isLifetime: Boolean, startingDateInput: String?, expiryDateInput: String?,
         description: String?, categoryId: String,

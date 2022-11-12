@@ -37,7 +37,7 @@ class RegisterViewModelTest {
 
     @Test
     fun checkRegisterInputsWithBlankFields_returnsError() {
-        testViewModel.checkRegisterInputs("email", "password", "")
+        testViewModel.validateRegisterInputs("email", "password", "")
 
         val responseEvent = testViewModel.registerLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)
@@ -45,7 +45,7 @@ class RegisterViewModelTest {
 
     @Test
     fun checkRegisterInputsWithInvalidEmail_returnsError() {
-        testViewModel.checkRegisterInputs("email", "password", "password")
+        testViewModel.validateRegisterInputs("email", "password", "password")
 
         val responseEvent = testViewModel.registerLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)
@@ -53,7 +53,7 @@ class RegisterViewModelTest {
 
     @Test
     fun checkRegisterInputsWithShortPassword_returnsError() {
-        testViewModel.checkRegisterInputs("email", "123", "123")
+        testViewModel.validateRegisterInputs("email", "123", "123")
 
         val responseEvent = testViewModel.registerLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)
@@ -61,7 +61,7 @@ class RegisterViewModelTest {
 
     @Test
     fun checkRegisterInputsWithInvalidRetypePassword_returnsError() {
-        testViewModel.checkRegisterInputs("email", "password", "123")
+        testViewModel.validateRegisterInputs("email", "password", "123")
 
         val responseEvent = testViewModel.registerLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)
@@ -69,7 +69,7 @@ class RegisterViewModelTest {
 
     @Test
     fun checkRegisterInputsWithValidInputs_returnsSuccess() {
-        testViewModel.checkRegisterInputs("email@test.com", "password", "password")
+        testViewModel.validateRegisterInputs("email@test.com", "password", "password")
 
         val responseEvent = testViewModel.registerLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Success::class.java)

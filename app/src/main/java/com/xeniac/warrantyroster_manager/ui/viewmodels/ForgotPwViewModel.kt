@@ -33,7 +33,7 @@ class ForgotPwViewModel @Inject constructor(
     var isFirstSentEmail = true
     var timerInMillis: Long = 0
 
-    fun checkForgotPwInputs(email: String, activateCountDown: Boolean = true) {
+    fun validateForgotPwInputs(email: String, activateCountDown: Boolean = true) {
         if (email.isBlank()) {
             _forgotPwLiveData.postValue(
                 Event(Resource.Error(UiText.DynamicString(ERROR_INPUT_BLANK_EMAIL)))

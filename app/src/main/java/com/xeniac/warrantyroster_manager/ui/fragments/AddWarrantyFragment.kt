@@ -448,11 +448,11 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
     }
 
     private fun addWarrantyOnClick() = binding.toolbar.menu[0].setOnMenuItemClickListener {
-        getWarrantyInput()
+        validateWarrantyInputs()
         false
     }
 
-    private fun getWarrantyInput() {
+    private fun validateWarrantyInputs() {
         val inputMethodManager = requireContext()
             .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(
@@ -468,7 +468,7 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
         val description = binding.tiEditDescription.text?.toString()?.trim()
         val categoryId = selectedCategory?.id ?: "10"
 
-        viewModel.checkAddWarrantyInputs(
+        viewModel.validateAddWarrantyInputs(
             title, brand, model, serialNumber, isLifetime, startingDateInput, expiryDateInput,
             description, categoryId, selectedStartingDateInMillis, selectedExpiryDateInMillis
         )
@@ -512,7 +512,7 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
                                 message.contains(ERROR_NETWORK_CONNECTION) -> {
                                     snackbar = showNetworkConnectionError(
                                         requireContext(), requireView()
-                                    ) { getWarrantyInput() }
+                                    ) { validateWarrantyInputs() }
                                 }
                                 message.contains(ERROR_FIREBASE_403) -> {
                                     snackbar = show403Error(requireContext(), requireView())

@@ -147,18 +147,18 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         .navigate(LoginFragmentDirections.actionLoginFragmentToRegisterFragment())
 
     private fun loginOnClick() = binding.btnLogin.setOnClickListener {
-        getLoginInputs()
+        validateLoginInputs()
     }
 
     private fun loginActionDone() =
         binding.tiEditPassword.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                getLoginInputs()
+                validateLoginInputs()
             }
             false
         }
 
-    private fun getLoginInputs() {
+    private fun validateLoginInputs() {
         val inputMethodManager = requireContext()
             .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(requireView().applicationWindowToken, 0)
@@ -166,7 +166,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         val email = binding.tiEditEmail.text.toString().trim().lowercase(Locale.US)
         val password = binding.tiEditPassword.text.toString().trim()
 
-        viewModel.checkLoginInputs(email, password)
+        viewModel.validateLoginInputs(email, password)
     }
 
     private fun loginObserver() =
@@ -208,7 +208,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                                 message.contains(ERROR_NETWORK_CONNECTION) -> {
                                     snackbar = showNetworkConnectionError(
                                         requireContext(), requireView()
-                                    ) { getLoginInputs() }
+                                    ) { validateLoginInputs() }
                                 }
                                 message.contains(ERROR_FIREBASE_403) -> {
                                     snackbar = show403Error(requireContext(), requireView())

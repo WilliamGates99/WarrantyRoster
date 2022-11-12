@@ -27,7 +27,7 @@ class LoginViewModel @Inject constructor(
     private val _loginLiveData: MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
     val loginLiveData: LiveData<Event<Resource<Nothing>>> = _loginLiveData
 
-    fun checkLoginInputs(email: String, password: String) {
+    fun validateLoginInputs(email: String, password: String) {
         if (email.isBlank()) {
             _loginLiveData.postValue(
                 Event(Resource.Error(UiText.DynamicString(ERROR_INPUT_BLANK_EMAIL)))

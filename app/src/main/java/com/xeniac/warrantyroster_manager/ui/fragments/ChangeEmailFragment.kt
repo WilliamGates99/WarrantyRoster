@@ -138,18 +138,18 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
     }
 
     private fun changeEmailOnClick() = binding.btnChangeEmail.setOnClickListener {
-        getChangeUserEmailInputs()
+        validateChangeUserEmailInputs()
     }
 
     private fun changeEmailActionDone() =
         binding.tiEditNewEmail.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                getChangeUserEmailInputs()
+                validateChangeUserEmailInputs()
             }
             false
         }
 
-    private fun getChangeUserEmailInputs() {
+    private fun validateChangeUserEmailInputs() {
         val inputMethodManager = requireContext()
             .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(requireView().applicationWindowToken, 0)
@@ -157,7 +157,7 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
         val password = binding.tiEditPassword.text.toString().trim()
         newEmail = binding.tiEditNewEmail.text.toString().trim().lowercase(Locale.US)
 
-        viewModel.checkChangeEmailInputs(password, newEmail)
+        viewModel.validateChangeEmailInputs(password, newEmail)
     }
 
     private fun subscribeToObservers() {
@@ -227,7 +227,7 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
                                 message.contains(ERROR_NETWORK_CONNECTION) -> {
                                     snackbar = showNetworkConnectionError(
                                         requireContext(), requireView()
-                                    ) { getChangeUserEmailInputs() }
+                                    ) { validateChangeUserEmailInputs() }
                                 }
                                 message.contains(ERROR_FIREBASE_403) -> {
                                     snackbar = show403Error(requireContext(), requireView())
@@ -282,7 +282,7 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
                                 message.contains(ERROR_NETWORK_CONNECTION) -> {
                                     showNetworkConnectionError(
                                         requireContext(), requireView()
-                                    ) { getChangeUserEmailInputs() }
+                                    ) { validateChangeUserEmailInputs() }
                                 }
                                 message.contains(ERROR_FIREBASE_403) -> {
                                     show403Error(requireContext(), requireView())

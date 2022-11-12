@@ -61,7 +61,7 @@ class ChangeEmailViewModelTest {
     @Test
     fun checkChangeEmailInputsWithBlankFields_returnsError() {
         fakeUserRepository.addUser("email@test.com", "password")
-        testViewModel.checkChangeEmailInputs("", "new_email@test.com")
+        testViewModel.validateChangeEmailInputs("", "new_email@test.com")
 
         val responseEvent = testViewModel.checkInputsLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)
@@ -71,7 +71,7 @@ class ChangeEmailViewModelTest {
     fun checkChangeEmailInputsWithInvalidEmail_returnsError() {
         val password = "password"
         fakeUserRepository.addUser("email@test.com", password)
-        testViewModel.checkChangeEmailInputs(password, "email")
+        testViewModel.validateChangeEmailInputs(password, "email")
 
         val responseEvent = testViewModel.checkInputsLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)
@@ -82,7 +82,7 @@ class ChangeEmailViewModelTest {
         val email = "email@test.com"
         val password = "password"
         fakeUserRepository.addUser(email, password)
-        testViewModel.checkChangeEmailInputs(password, email)
+        testViewModel.validateChangeEmailInputs(password, email)
 
         val responseEvent = testViewModel.checkInputsLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)

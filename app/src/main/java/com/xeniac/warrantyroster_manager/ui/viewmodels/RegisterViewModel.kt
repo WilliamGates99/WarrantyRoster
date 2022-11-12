@@ -30,7 +30,7 @@ class RegisterViewModel @Inject constructor(
     private val _registerLiveData: MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
     val registerLiveData: LiveData<Event<Resource<Nothing>>> = _registerLiveData
 
-    fun checkRegisterInputs(email: String, password: String, retypePassword: String) {
+    fun validateRegisterInputs(email: String, password: String, retypePassword: String) {
         if (email.isBlank()) {
             _registerLiveData.postValue(
                 Event(Resource.Error(UiText.DynamicString(ERROR_INPUT_BLANK_EMAIL)))
