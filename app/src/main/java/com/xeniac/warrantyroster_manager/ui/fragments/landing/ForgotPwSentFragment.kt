@@ -117,9 +117,7 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
                                     )
                                     showNormalSnackbarError(requireView(), message)
                                 }
-                                else -> {
-                                    showNetworkFailureError(requireContext(), requireView())
-                                }
+                                else -> showNetworkFailureError(requireContext(), requireView())
                             }
                         }
                     }
@@ -143,8 +141,7 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
                         else -> {
                             tvResent.text = if (viewModel.isFirstSentEmail)
                                 requireContext().getString(R.string.forgot_pw_sent_text_first_time)
-                            else
-                                requireContext().getString(R.string.forgot_pw_sent_text_resent)
+                            else requireContext().getString(R.string.forgot_pw_sent_text_resent)
 
                             updateConstraintToTimer()
                             groupResend.visibility = GONE

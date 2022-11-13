@@ -175,9 +175,7 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
                         hideLoadingAnimation()
                         response.message?.asString(requireContext())?.let {
                             when {
-                                it.contains(ERROR_EMPTY_WARRANTY_LIST) -> {
-                                    showEmptyWarrantiesListError()
-                                }
+                                it.contains(ERROR_EMPTY_WARRANTY_LIST) -> showEmptyWarrantiesListError()
                                 it.contains(ERROR_FIREBASE_403) -> {
                                     binding.tvNetworkError.text =
                                         requireContext().getString(R.string.error_firebase_403)
@@ -216,16 +214,10 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
                     is Resource.Error -> {
                         response.message?.asString(requireContext())?.let {
                             when {
-                                it.contains(ERROR_EMPTY_SEARCH_RESULT_LIST) -> {
-                                    showEmptySearchResultListError()
-                                }
-                                else -> {
-                                    Toast.makeText(
-                                        requireContext(),
-                                        "Something went wrong!",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
+                                it.contains(ERROR_EMPTY_SEARCH_RESULT_LIST) -> showEmptySearchResultListError()
+                                else -> Toast.makeText(
+                                    requireContext(), "Something went wrong!", Toast.LENGTH_SHORT
+                                ).show()
                             }
                         }
                     }

@@ -236,9 +236,7 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
                     is Resource.Loading -> {
                         /* NO-OP */
                     }
-                    is Resource.Success -> {
-                        reAuthenticateUser(response.data.toString())
-                    }
+                    is Resource.Success -> reAuthenticateUser(response.data.toString())
                     is Resource.Error -> {
                         response.message?.asString(requireContext())?.let {
                             when {
@@ -246,22 +244,16 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
                                     binding.tiLayoutCurrentPassword.error =
                                         requireContext().getString(R.string.change_password_error_blank_current)
                                     binding.tiLayoutCurrentPassword.requestFocus()
-                                    binding.tiLayoutCurrentPassword.boxStrokeColor =
-                                        ContextCompat.getColor(requireContext(), R.color.red)
                                 }
                                 it.contains(ERROR_INPUT_BLANK_NEW_PASSWORD) -> {
                                     binding.tiLayoutNewPassword.error =
                                         requireContext().getString(R.string.change_password_error_blank_new)
                                     binding.tiLayoutNewPassword.requestFocus()
-                                    binding.tiLayoutNewPassword.boxStrokeColor =
-                                        ContextCompat.getColor(requireContext(), R.color.red)
                                 }
                                 it.contains(ERROR_INPUT_BLANK_RETYPE_PASSWORD) -> {
                                     binding.tiLayoutConfirmNewPassword.error =
                                         requireContext().getString(R.string.change_password_error_blank_confirm)
                                     binding.tiLayoutConfirmNewPassword.requestFocus()
-                                    binding.tiLayoutConfirmNewPassword.boxStrokeColor =
-                                        ContextCompat.getColor(requireContext(), R.color.red)
                                 }
                                 it.contains(ERROR_INPUT_PASSWORD_SHORT) -> {
                                     binding.tiLayoutNewPassword.requestFocus()
@@ -272,6 +264,11 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
                                     binding.tiLayoutConfirmNewPassword.requestFocus()
                                     binding.tiLayoutConfirmNewPassword.error =
                                         requireContext().getString(R.string.change_password_error_match)
+                                }
+                                else -> {
+                                    snackbar = showNetworkFailureError(
+                                        requireContext(), requireView()
+                                    )
                                 }
                             }
                         }
@@ -314,8 +311,7 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
                                 }
                                 else -> {
                                     snackbar = showNetworkFailureError(
-                                        requireContext(),
-                                        requireView()
+                                        requireContext(), requireView()
                                     )
                                 }
                             }
@@ -357,9 +353,7 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
                                 it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
                                     showFirebaseDeviceBlockedError(requireContext(), requireView())
                                 }
-                                else -> {
-                                    showNetworkFailureError(requireContext(), requireView())
-                                }
+                                else -> showNetworkFailureError(requireContext(), requireView())
                             }
                         }
                     }

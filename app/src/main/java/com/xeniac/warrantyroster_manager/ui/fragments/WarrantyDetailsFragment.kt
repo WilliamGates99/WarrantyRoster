@@ -284,9 +284,7 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
                                 it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
                                     showFirebaseDeviceBlockedError(requireContext(), requireView())
                                 }
-                                else -> {
-                                    showNetworkFailureError(requireContext(), requireView())
-                                }
+                                else -> showNetworkFailureError(requireContext(), requireView())
                             }
                         }
                     }

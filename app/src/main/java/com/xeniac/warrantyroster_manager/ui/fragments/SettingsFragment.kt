@@ -317,9 +317,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
                                 it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
                                     showFirebaseDeviceBlockedError(requireContext(), requireView())
                                 }
-                                else -> {
-                                    showNetworkFailureError(requireContext(), requireView())
-                                }
+                                else -> showNetworkFailureError(requireContext(), requireView())
                             }
                         }
                     }
@@ -337,9 +335,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
                         startActivity(Intent(requireContext(), LandingActivity::class.java))
                         requireActivity().finish()
                     }
-                    is Resource.Error -> {
-                        /* NO-OP */
-                    }
+                    is Resource.Error -> logout()
                     is Resource.Loading -> {
                         /* NO-OP */
                     }

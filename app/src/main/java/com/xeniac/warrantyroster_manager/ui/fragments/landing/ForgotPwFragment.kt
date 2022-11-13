@@ -148,8 +148,6 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
                                     binding.tiLayoutEmail.error =
                                         requireContext().getString(R.string.forgot_pw_error_blank_email)
                                     binding.tiLayoutEmail.requestFocus()
-                                    binding.tiLayoutEmail.boxStrokeColor =
-                                        ContextCompat.getColor(requireContext(), R.color.red)
                                 }
                                 it.contains(ERROR_INPUT_EMAIL_INVALID) -> {
                                     binding.tiLayoutEmail.requestFocus()
@@ -166,8 +164,7 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
                                 }
                                 it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
                                     snackbar = showFirebaseDeviceBlockedError(
-                                        requireContext(),
-                                        requireView()
+                                        requireContext(), requireView()
                                     )
                                 }
                                 it.contains(ERROR_FIREBASE_AUTH_ACCOUNT_NOT_FOUND) -> {
@@ -188,8 +185,7 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
                                 }
                                 else -> {
                                     snackbar = showNetworkFailureError(
-                                        requireContext(),
-                                        requireView()
+                                        requireContext(), requireView()
                                     )
                                 }
                             }

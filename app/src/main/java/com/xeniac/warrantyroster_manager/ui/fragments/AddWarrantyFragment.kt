@@ -494,19 +494,11 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
                                     binding.tiLayoutTitle.error =
                                         requireContext().getString(R.string.add_warranty_error_blank_title)
                                     binding.tiLayoutTitle.requestFocus()
-                                    binding.tiLayoutTitle.boxStrokeColor =
-                                        ContextCompat.getColor(requireContext(), R.color.red)
                                 }
                                 it.contains(ERROR_INPUT_BLANK_STARTING_DATE) -> {
                                     binding.tiLayoutDateStarting.requestFocus()
-                                    binding.tiLayoutDateStarting.boxStrokeColor =
-                                        ContextCompat.getColor(requireContext(), R.color.red)
                                 }
-                                it.contains(ERROR_INPUT_BLANK_EXPIRY_DATE) -> {
-                                    binding.tiLayoutDateExpiry.requestFocus()
-                                    binding.tiLayoutDateExpiry.boxStrokeColor =
-                                        ContextCompat.getColor(requireContext(), R.color.red)
-                                }
+                                it.contains(ERROR_INPUT_BLANK_EXPIRY_DATE) -> binding.tiLayoutDateExpiry.requestFocus()
                                 it.contains(ERROR_INPUT_INVALID_STARTING_DATE) -> showDateError()
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
                                     snackbar = showNetworkConnectionError(
@@ -518,14 +510,12 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
                                 }
                                 it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
                                     snackbar = showFirebaseDeviceBlockedError(
-                                        requireContext(),
-                                        requireView()
+                                        requireContext(), requireView()
                                     )
                                 }
                                 else -> {
                                     snackbar = showNetworkFailureError(
-                                        requireContext(),
-                                        requireView()
+                                        requireContext(), requireView()
                                     )
                                 }
                             }

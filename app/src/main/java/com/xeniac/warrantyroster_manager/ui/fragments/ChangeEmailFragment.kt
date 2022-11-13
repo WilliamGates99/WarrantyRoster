@@ -173,9 +173,7 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
                     is Resource.Loading -> {
                         /* NO-OP */
                     }
-                    is Resource.Success -> {
-                        reAuthenticateUser(response.data.toString())
-                    }
+                    is Resource.Success -> reAuthenticateUser(response.data.toString())
                     is Resource.Error -> {
                         response.message?.asString(requireContext())?.let {
                             when {
@@ -183,15 +181,11 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
                                     binding.tiLayoutPassword.error =
                                         requireContext().getString(R.string.change_email_error_blank_password)
                                     binding.tiLayoutPassword.requestFocus()
-                                    binding.tiLayoutPassword.boxStrokeColor =
-                                        ContextCompat.getColor(requireContext(), R.color.red)
                                 }
                                 it.contains(ERROR_INPUT_BLANK_EMAIL) -> {
                                     binding.tiLayoutNewEmail.error =
                                         requireContext().getString(R.string.change_email_error_blank_new_email)
                                     binding.tiLayoutNewEmail.requestFocus()
-                                    binding.tiLayoutNewEmail.boxStrokeColor =
-                                        ContextCompat.getColor(requireContext(), R.color.red)
                                 }
                                 it.contains(ERROR_INPUT_EMAIL_INVALID) -> {
                                     binding.tiLayoutNewEmail.requestFocus()
@@ -202,6 +196,11 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
                                     binding.tiLayoutNewEmail.requestFocus()
                                     binding.tiLayoutNewEmail.error =
                                         requireContext().getString(R.string.change_email_error_email_same)
+                                }
+                                else -> {
+                                    snackbar = showNetworkFailureError(
+                                        requireContext(), requireView()
+                                    )
                                 }
                             }
                         }
@@ -232,8 +231,7 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
                                 }
                                 it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
                                     snackbar = showFirebaseDeviceBlockedError(
-                                        requireContext(),
-                                        requireView()
+                                        requireContext(), requireView()
                                     )
                                 }
                                 it.contains(ERROR_FIREBASE_AUTH_CREDENTIALS) -> {
@@ -244,8 +242,7 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
                                 }
                                 else -> {
                                     snackbar = showNetworkFailureError(
-                                        requireContext(),
-                                        requireView()
+                                        requireContext(), requireView()
                                     )
                                 }
                             }
@@ -294,9 +291,7 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
                                         requireContext().getString(R.string.error_btn_confirm)
                                     ) { snackbar?.dismiss() }
                                 }
-                                else -> {
-                                    showNetworkFailureError(requireContext(), requireView())
-                                }
+                                else -> showNetworkFailureError(requireContext(), requireView())
                             }
                         }
                     }

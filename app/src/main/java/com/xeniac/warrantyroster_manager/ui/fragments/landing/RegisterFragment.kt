@@ -247,22 +247,16 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                                     binding.tiLayoutEmail.error =
                                         requireContext().getString(R.string.register_error_blank_email)
                                     binding.tiLayoutEmail.requestFocus()
-                                    binding.tiLayoutEmail.boxStrokeColor =
-                                        ContextCompat.getColor(requireContext(), R.color.red)
                                 }
                                 it.contains(ERROR_INPUT_BLANK_PASSWORD) -> {
                                     binding.tiLayoutPassword.error =
                                         requireContext().getString(R.string.register_error_blank_password)
                                     binding.tiLayoutPassword.requestFocus()
-                                    binding.tiLayoutPassword.boxStrokeColor =
-                                        ContextCompat.getColor(requireContext(), R.color.red)
                                 }
                                 it.contains(ERROR_INPUT_BLANK_RETYPE_PASSWORD) -> {
                                     binding.tiLayoutConfirmPassword.error =
                                         requireContext().getString(R.string.register_error_blank_confirm_password)
                                     binding.tiLayoutConfirmPassword.requestFocus()
-                                    binding.tiLayoutConfirmPassword.boxStrokeColor =
-                                        ContextCompat.getColor(requireContext(), R.color.red)
                                 }
                                 it.contains(ERROR_INPUT_EMAIL_INVALID) -> {
                                     binding.tiLayoutEmail.requestFocus()
@@ -301,8 +295,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                                 }
                                 else -> {
                                     snackbar = showNetworkFailureError(
-                                        requireContext(),
-                                        requireView()
+                                        requireContext(), requireView()
                                     )
                                 }
                             }
