@@ -57,10 +57,10 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
 
         textInputsBackgroundColor()
         textInputsStrokeColor()
+        subscribeToObservers()
         returnToMainActivity()
         changeEmailOnClick()
         changeEmailActionDone()
-        subscribeToObservers()
     }
 
     override fun onDestroyView() {
@@ -133,6 +133,12 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
         }
     }
 
+    private fun subscribeToObservers() {
+        checkInputsObserver()
+        reAuthenticateUserObserver()
+        changeUserEmailObserver()
+    }
+
     private fun returnToMainActivity() = binding.toolbar.setNavigationOnClickListener {
         findNavController().popBackStack()
     }
@@ -158,12 +164,6 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
         newEmail = binding.tiEditNewEmail.text.toString().trim().lowercase(Locale.US)
 
         viewModel.validateChangeEmailInputs(password, newEmail)
-    }
-
-    private fun subscribeToObservers() {
-        checkInputsObserver()
-        reAuthenticateUserObserver()
-        changeUserEmailObserver()
     }
 
     private fun checkInputsObserver() =

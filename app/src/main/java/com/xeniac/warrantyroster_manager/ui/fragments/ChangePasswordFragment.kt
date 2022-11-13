@@ -57,10 +57,10 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
 
         textInputsBackgroundColor()
         textInputsStrokeColor()
+        subscribeToObservers()
         returnToMainActivity()
         changePasswordOnClick()
         changePasswordActionDone()
-        subscribeToObservers()
     }
 
     override fun onDestroyView() {
@@ -195,6 +195,12 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
         }
     }
 
+    private fun subscribeToObservers() {
+        checkInputsObserver()
+        reAuthenticateUserObserver()
+        changeUserPasswordObserver()
+    }
+
     private fun returnToMainActivity() = binding.toolbar.setNavigationOnClickListener {
         findNavController().popBackStack()
     }
@@ -210,12 +216,6 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
             }
             false
         }
-
-    private fun subscribeToObservers() {
-        checkInputsObserver()
-        reAuthenticateUserObserver()
-        changeUserPasswordObserver()
-    }
 
     private fun validateChangeUserPasswordInputs() {
         val inputMethodManager = requireContext()

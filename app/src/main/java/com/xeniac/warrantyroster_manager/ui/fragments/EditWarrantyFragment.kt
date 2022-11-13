@@ -96,6 +96,7 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
 
         textInputsBackgroundColor()
         textInputsStrokeColor()
+        subscribeToObservers()
         categoryDropDownSelection()
         categoryDropDownOnDismiss()
         lifetimeWarrantyCheckBoxListener()
@@ -104,7 +105,6 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
         returnToWarrantyDetailsFragment()
         getWarranty()
         editWarrantyOnClick()
-        subscribeToObservers()
     }
 
     override fun onDestroyView() {
@@ -319,6 +319,11 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
         }
     }
 
+    private fun subscribeToObservers() {
+        updateWarrantyObserver()
+        getUpdatedWarrantyObserver()
+    }
+
     private fun categoryDropDown() = binding.tiDdCategory.setAdapter(
         ArrayAdapter(requireContext(), R.layout.dropdown_category, viewModel.getAllCategoryTitles())
     )
@@ -339,6 +344,10 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
             setExpiryDateActivation(isChecked)
         }
 
+    private fun setExpiryDateActivation(isLifeTime: Boolean) {
+        binding.tiLayoutDateExpiry.isEnabled = !isLifeTime
+    }
+
     private fun startingDatePickerOnFocusListener() = binding.apply {
         tiEditDateStarting.inputType = InputType.TYPE_NULL
         tiEditDateStarting.keyListener = null
@@ -346,17 +355,6 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
         tiEditDateStarting.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
                 openStartingDatePicker()
-            }
-        }
-    }
-
-    private fun expiryDatePickerOnFocusListener() = binding.apply {
-        tiEditDateExpiry.inputType = InputType.TYPE_NULL
-        tiEditDateExpiry.keyListener = null
-
-        tiEditDateExpiry.setOnFocusChangeListener { _, isFocused ->
-            if (isFocused) {
-                openExpiryDatePicker()
             }
         }
     }
@@ -385,30 +383,6 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
         }
     }
 
-    private fun openExpiryDatePicker() {
-        val datePickerBuilder = MaterialDatePicker.Builder.datePicker().apply {
-            setTitleText(requireContext().getString(R.string.edit_warranty_title_date_picker_expiry))
-            setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
-        }
-
-        val expiryDP = if (selectedExpiryDateInMillis == 0L) {
-            datePickerBuilder.setSelection(MaterialDatePicker.todayInUtcMilliseconds()).build()
-        } else {
-            datePickerBuilder.setSelection(selectedExpiryDateInMillis).build()
-        }
-
-        expiryDP.show(parentFragmentManager, FRAGMENT_TAG_EDIT_CALENDAR_EXPIRY)
-
-        expiryDP.addOnPositiveButtonClickListener { selectionInMillis ->
-            selectedExpiryDateInMillis = selectionInMillis
-            setExpiryDate()
-        }
-
-        expiryDP.addOnDismissListener {
-            binding.tiEditDateExpiry.clearFocus()
-        }
-    }
-
     private fun setStartingDate() {
         Calendar.getInstance().apply {
             timeInMillis = if (offset < 0) {
@@ -430,6 +404,41 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
 
             binding.tiEditDateStarting.setText(startingDateText)
             binding.tiEditDateStarting.clearFocus()
+        }
+    }
+
+    private fun expiryDatePickerOnFocusListener() = binding.apply {
+        tiEditDateExpiry.inputType = InputType.TYPE_NULL
+        tiEditDateExpiry.keyListener = null
+
+        tiEditDateExpiry.setOnFocusChangeListener { _, isFocused ->
+            if (isFocused) {
+                openExpiryDatePicker()
+            }
+        }
+    }
+
+    private fun openExpiryDatePicker() {
+        val datePickerBuilder = MaterialDatePicker.Builder.datePicker().apply {
+            setTitleText(requireContext().getString(R.string.edit_warranty_title_date_picker_expiry))
+            setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
+        }
+
+        val expiryDP = if (selectedExpiryDateInMillis == 0L) {
+            datePickerBuilder.setSelection(MaterialDatePicker.todayInUtcMilliseconds()).build()
+        } else {
+            datePickerBuilder.setSelection(selectedExpiryDateInMillis).build()
+        }
+
+        expiryDP.show(parentFragmentManager, FRAGMENT_TAG_EDIT_CALENDAR_EXPIRY)
+
+        expiryDP.addOnPositiveButtonClickListener { selectionInMillis ->
+            selectedExpiryDateInMillis = selectionInMillis
+            setExpiryDate()
+        }
+
+        expiryDP.addOnDismissListener {
+            binding.tiEditDateExpiry.clearFocus()
         }
     }
 
@@ -485,10 +494,6 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
             }
         }
     }
-
-    private fun loadCategoryIcon(categoryIcon: String) = loadCategoryImage(
-        requireContext(), categoryIcon, imageLoader, binding.ivIconCategory, binding.cpiIconCategory
-    )
 
     private fun setStartingDateText(startingDate: String) {
         Calendar.getInstance().apply {
@@ -551,11 +556,6 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
     private fun editWarrantyOnClick() = binding.toolbar.menu.getItem(0).setOnMenuItemClickListener {
         validateWarrantyInputs()
         false
-    }
-
-    private fun subscribeToObservers() {
-        updateWarrantyObserver()
-        getUpdatedWarrantyObserver()
     }
 
     private fun validateWarrantyInputs() {
@@ -666,6 +666,10 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
         )
     )
 
+    private fun loadCategoryIcon(categoryIcon: String) = loadCategoryImage(
+        requireContext(), categoryIcon, imageLoader, binding.ivIconCategory, binding.cpiIconCategory
+    )
+
     private fun showLoadingAnimation() = binding.apply {
         toolbar.menu.getItem(0).isVisible = false
         tiEditTitle.isEnabled = false
@@ -701,9 +705,5 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
     private fun hideDateError() = binding.apply {
         tiLayoutDateStarting.boxStrokeColor = ContextCompat.getColor(requireContext(), R.color.blue)
         tvDateError.visibility = GONE
-    }
-
-    private fun setExpiryDateActivation(isLifeTime: Boolean) {
-        binding.tiLayoutDateExpiry.isEnabled = !isLifeTime
     }
 }

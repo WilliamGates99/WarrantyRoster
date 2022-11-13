@@ -52,9 +52,9 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
         viewModel = ViewModelProvider(requireActivity())[ForgotPwViewModel::class.java]
 
         getEmailFromArgs()
+        subscribeToObservers()
         returnOnClick()
         resendOnClick()
-        subscribeToObservers()
     }
 
     override fun onDestroyView() {
@@ -68,17 +68,17 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
         email = args.email
     }
 
+    private fun subscribeToObservers() {
+        forgotPwSentObserver()
+        timerObserver()
+    }
+
     private fun returnOnClick() = binding.btnReturn.setOnClickListener {
         findNavController().popBackStack()
     }
 
     private fun resendOnClick() = binding.btnResend.setOnClickListener {
         resendResetPasswordEmail()
-    }
-
-    private fun subscribeToObservers() {
-        forgotPwSentObserver()
-        timerObserver()
     }
 
     private fun resendResetPasswordEmail() = viewModel.sendResetPasswordEmail(email)

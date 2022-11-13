@@ -55,11 +55,11 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
         textInputsBackgroundColor()
         textInputsStrokeColor()
+        subscribeToObservers()
         forgotPwOnClick()
         registerOnClick()
         loginOnClick()
         loginActionDone()
-        loginObserver()
     }
 
     override fun onDestroyView() {
@@ -132,16 +132,20 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         }
     }
 
+    private fun subscribeToObservers() {
+        loginObserver()
+    }
+
     private fun forgotPwOnClick() = binding.btnForgotPw.setOnClickListener {
         navigateToForgotPw()
     }
 
+    private fun navigateToForgotPw() = findNavController()
+        .navigate(LoginFragmentDirections.actionLoginFragmentToForgotPasswordFragment())
+
     private fun registerOnClick() = binding.btnRegister.setOnClickListener {
         navigateToRegister()
     }
-
-    private fun navigateToForgotPw() = findNavController()
-        .navigate(LoginFragmentDirections.actionLoginFragmentToForgotPasswordFragment())
 
     private fun navigateToRegister() = findNavController()
         .navigate(LoginFragmentDirections.actionLoginFragmentToRegisterFragment())
@@ -176,9 +180,9 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                     is Resource.Loading -> showLoadingAnimation()
                     is Resource.Success -> {
                         hideLoadingAnimation()
-                        Intent(requireContext(), MainActivity::class.java).apply {
-                            startActivity(this)
-                            requireActivity().finish()
+                        requireActivity().apply {
+                            startActivity(Intent(this, MainActivity::class.java))
+                            finish()
                         }
                     }
                     is Resource.Error -> {

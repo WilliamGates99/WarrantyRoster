@@ -66,12 +66,12 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
         _binding = FragmentWarrantyDetailsBinding.bind(view)
         viewModel = ViewModelProvider(requireActivity())[WarrantyViewModel::class.java]
 
-        returnToMainActivity()
+        subscribeToObservers()
+        toolbarNavigationBackOnClick()
         handleExtendedFAB()
         getWarranty()
         editWarrantyOnClick()
         deleteWarrantyOnClick()
-        deleteWarrantyObserver()
     }
 
     override fun onDestroyView() {
@@ -80,8 +80,12 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
         _binding = null
     }
 
-    private fun returnToMainActivity() = binding.toolbar.setNavigationOnClickListener {
-        findNavController().popBackStack()
+    private fun subscribeToObservers() {
+        deleteWarrantyObserver()
+    }
+
+    private fun toolbarNavigationBackOnClick() = binding.toolbar.setNavigationOnClickListener {
+        returnToMainActivity()
     }
 
     private fun handleExtendedFAB() = binding.nsv.setOnScrollChangeListener(
@@ -248,26 +252,14 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
                             requireContext(),
                             String.format(
                                 requireContext().getString(
-                                    R.string.warranty_details_delete_success,
-                                    warranty.title
+                                    R.string.warranty_details_delete_success, warranty.title
                                 )
-                            ), Toast.LENGTH_LONG
-                        ).apply {
-                            show()
-                        }
+                            ),
+                            Toast.LENGTH_LONG
+                        ).show()
 
-                        when {
-                            (requireActivity() as MainActivity).appLovinAd.isReady -> {
-                                (requireActivity() as MainActivity).appLovinAd.showAd()
-                            }
-                            (requireActivity() as MainActivity).tapsellResponseId != null -> {
-                                (requireActivity() as MainActivity).tapsellResponseId?.let {
-                                    showInterstitialAd(it)
-                                }
-                            }
-                        }
-                        findNavController().popBackStack()
-                        (requireActivity() as MainActivity).requestAppLovinInterstitial()
+                        showInterstitialAd()
+                        returnToMainActivity()
                     }
                     is Resource.Error -> {
                         hideLoadingAnimation()
@@ -292,6 +284,8 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
             }
         }
 
+    private fun returnToMainActivity() = findNavController().popBackStack()
+
     private fun showLoadingAnimation() = binding.apply {
         toolbar.menu.getItem(0).isVisible = false
         fab.isClickable = false
@@ -304,7 +298,16 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
         fab.isClickable = true
     }
 
-    private fun showInterstitialAd(responseId: String) = TapsellPlus.showInterstitialAd(
+    private fun showInterstitialAd() = (requireActivity() as MainActivity).apply {
+        when {
+            appLovinAd.isReady -> appLovinAd.showAd()
+            tapsellResponseId != null -> showTapsellInterstitialAd(tapsellResponseId!!)
+        }
+
+        requestAppLovinInterstitial()
+    }
+
+    private fun showTapsellInterstitialAd(responseId: String) = TapsellPlus.showInterstitialAd(
         requireActivity(), responseId, object : AdShowListener() {
             override fun onOpened(tapsellPlusAdModel: TapsellPlusAdModel?) {
                 super.onOpened(tapsellPlusAdModel)

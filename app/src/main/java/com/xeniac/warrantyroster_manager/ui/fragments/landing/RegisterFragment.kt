@@ -60,11 +60,11 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
 
         textInputsBackgroundColor()
         textInputsStrokeColor()
+        subscribeToObservers()
         agreementOnclick()
         loginOnClick()
         registerOnClick()
         registerActionDone()
-        registerObserver()
     }
 
     override fun onDestroyView() {
@@ -195,6 +195,10 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         }
     }
 
+    private fun subscribeToObservers() {
+        registerObserver()
+    }
+
     private fun agreementOnclick() = binding.btnAgreement.setOnClickListener {
         openLink(requireContext(), requireView(), URL_PRIVACY_POLICY)
     }
@@ -234,9 +238,9 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                     is Resource.Loading -> showLoadingAnimation()
                     is Resource.Success -> {
                         hideLoadingAnimation()
-                        Intent(requireContext(), MainActivity::class.java).apply {
-                            startActivity(this)
-                            requireActivity().finish()
+                        requireActivity().apply {
+                            startActivity(Intent(this, MainActivity::class.java))
+                            finish()
                         }
                     }
                     is Resource.Error -> {

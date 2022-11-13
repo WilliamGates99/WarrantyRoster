@@ -206,6 +206,44 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
         sendVerificationEmail()
     }
 
+    private fun sendVerificationEmail() = viewModel.sendVerificationEmail()
+
+    private fun sendVerificationEmailObserver() =
+        viewModel.sendVerificationEmailLiveData.observe(viewLifecycleOwner) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { response ->
+                when (response) {
+                    is Resource.Loading -> showLoadingAnimation()
+                    is Resource.Success -> {
+                        hideLoadingAnimation()
+                        MaterialAlertDialogBuilder(requireContext()).apply {
+                            setMessage(requireContext().getString(R.string.settings_dialog_message))
+                            setCancelable(false)
+                            setPositiveButton(requireContext().getString(R.string.settings_dialog_positive)) { _, _ -> }
+                        }.show()
+                    }
+                    is Resource.Error -> {
+                        hideLoadingAnimation()
+                        response.message?.asString(requireContext())?.let {
+                            snackbar = when {
+                                it.contains(ERROR_NETWORK_CONNECTION) -> {
+                                    showNetworkConnectionError(
+                                        requireContext(), requireView()
+                                    ) { sendVerificationEmail() }
+                                }
+                                it.contains(ERROR_FIREBASE_403) -> {
+                                    show403Error(requireContext(), requireView())
+                                }
+                                it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
+                                    showFirebaseDeviceBlockedError(requireContext(), requireView())
+                                }
+                                else -> showNetworkFailureError(requireContext(), requireView())
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
     private fun changeEmailOnClick() = binding.clAccountChangeEmail.setOnClickListener {
         findNavController().navigate(SettingsFragmentDirections.actionSettingsFragmentToChangeEmailFragment())
     }
@@ -282,58 +320,22 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
     }
 
     private fun logoutOnClick() = binding.btnLogout.setOnClickListener {
-        logout()
+        logoutUser()
     }
 
-    private fun sendVerificationEmail() = viewModel.sendVerificationEmail()
-
-    private fun sendVerificationEmailObserver() =
-        viewModel.sendVerificationEmailLiveData.observe(viewLifecycleOwner) { responseEvent ->
-            responseEvent.getContentIfNotHandled()?.let { response ->
-                when (response) {
-                    is Resource.Loading -> showLoadingAnimation()
-                    is Resource.Success -> {
-                        hideLoadingAnimation()
-                        MaterialAlertDialogBuilder(requireContext()).apply {
-                            setMessage(requireContext().getString(R.string.settings_dialog_message))
-                            setCancelable(false)
-                            setPositiveButton(requireContext().getString(R.string.settings_dialog_positive)) { _, _ -> }
-                        }.show()
-                    }
-                    is Resource.Error -> {
-                        hideLoadingAnimation()
-                        response.message?.asString(requireContext())?.let {
-                            snackbar = when {
-                                it.contains(ERROR_NETWORK_CONNECTION) -> {
-                                    showNetworkConnectionError(
-                                        requireContext(), requireView()
-                                    ) { sendVerificationEmail() }
-                                }
-                                it.contains(ERROR_FIREBASE_403) -> {
-                                    show403Error(requireContext(), requireView())
-                                }
-                                it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
-                                    showFirebaseDeviceBlockedError(requireContext(), requireView())
-                                }
-                                else -> showNetworkFailureError(requireContext(), requireView())
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-    private fun logout() = viewModel.logoutUser()
+    private fun logoutUser() = viewModel.logoutUser()
 
     private fun logoutObserver() =
         viewModel.logoutLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
                     is Resource.Success -> {
-                        startActivity(Intent(requireContext(), LandingActivity::class.java))
-                        requireActivity().finish()
+                        requireActivity().apply {
+                            startActivity(Intent(this, LandingActivity::class.java))
+                            finish()
+                        }
                     }
-                    is Resource.Error -> logout()
+                    is Resource.Error -> logoutUser()
                     is Resource.Loading -> {
                         /* NO-OP */
                     }

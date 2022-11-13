@@ -53,11 +53,11 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
         _binding = FragmentWarrantiesBinding.bind(view)
         viewModel = ViewModelProvider(requireActivity())[WarrantyViewModel::class.java]
 
-        getCategoriesFromFirestore()
         setupRecyclerView()
-        setupSearchView()
-        retryNetworkBtn()
         subscribeToObservers()
+        retryNetworkBtn()
+        getCategoriesFromFirestore()
+        setupSearchView()
     }
 
     override fun onDestroyView() {
@@ -81,48 +81,17 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
         binding.rv.adapter = warrantyAdapter
     }
 
-    private fun setupSearchView() = binding.apply {
-        searchView.setOnQueryTextFocusChangeListener { _, hasFocus ->
-            if (hasFocus) {
-                toolbar.title = null
-            } else {
-                toolbar.title = requireContext().getString(R.string.warranties_text_title)
-            }
-        }
-
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                if (query.isNullOrBlank()) {
-                    searchView.onActionViewCollapsed()
-                }
-
-                return false
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                if (newText.isNullOrBlank()) {
-                    warrantiesListBeforeSearch?.let {
-                        showWarrantiesList(it)
-                    }
-                } else {
-                    searchQuery = newText.trim().lowercase()
-                    viewModel.searchWarrantiesByTitle(searchQuery)
-                }
-
-                return false
-            }
-        })
-    }
-
     private fun subscribeToObservers() {
         categoriesListObserver()
         warrantiesListObserver()
         searchWarrantiesObserver()
     }
 
-    private fun getCategoriesFromFirestore() = viewModel.getCategoriesFromFirestore()
+    private fun retryNetworkBtn() = binding.btnNetworkRetry.setOnClickListener {
+        getCategoriesFromFirestore()
+    }
 
-    private fun getWarrantiesListFromFirestore() = viewModel.getWarrantiesListFromFirestore()
+    private fun getCategoriesFromFirestore() = viewModel.getCategoriesFromFirestore()
 
     private fun categoriesListObserver() {
         viewModel.categoriesLiveData.observe(viewLifecycleOwner) { responseEvent ->
@@ -158,6 +127,8 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
             }
         }
     }
+
+    private fun getWarrantiesListFromFirestore() = viewModel.getWarrantiesListFromFirestore()
 
     private fun warrantiesListObserver() {
         viewModel.warrantiesLiveData.observe(viewLifecycleOwner) { responseEvent ->
@@ -199,6 +170,39 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
         }
     }
 
+    private fun setupSearchView() = binding.apply {
+        searchView.setOnQueryTextFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                toolbar.title = null
+            } else {
+                toolbar.title = requireContext().getString(R.string.warranties_text_title)
+            }
+        }
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if (query.isNullOrBlank()) {
+                    searchView.onActionViewCollapsed()
+                }
+
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                if (newText.isNullOrBlank()) {
+                    warrantiesListBeforeSearch?.let {
+                        showWarrantiesList(it)
+                    }
+                } else {
+                    searchQuery = newText.trim().lowercase()
+                    viewModel.searchWarrantiesByTitle(searchQuery)
+                }
+
+                return false
+            }
+        })
+    }
+
     private fun searchWarrantiesObserver() =
         viewModel.searchWarrantiesLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
@@ -230,10 +234,6 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
         groupEmptySearchResultList.visibility = GONE
         rv.visibility = GONE
         groupNetwork.visibility = VISIBLE
-    }
-
-    private fun retryNetworkBtn() = binding.btnNetworkRetry.setOnClickListener {
-        getWarrantiesListFromFirestore()
     }
 
     private fun showEmptyWarrantiesListError() = binding.apply {
