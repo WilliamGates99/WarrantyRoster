@@ -121,9 +121,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
                             setAccountDetails(user.email.toString(), user.isEmailVerified)
                         }
                     }
-                    is Resource.Error -> {
-                        /* NO-OP */
-                    }
+                    is Resource.Error -> getAccountDetails()
                     is Resource.Loading -> {
                         /* NO-OP */
                     }
