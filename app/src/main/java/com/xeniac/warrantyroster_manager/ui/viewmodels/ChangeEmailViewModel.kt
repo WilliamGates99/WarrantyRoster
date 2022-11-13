@@ -38,6 +38,14 @@ class ChangeEmailViewModel @Inject constructor(
         password: String,
         newEmail: String,
         currentUserEmail: String = userRepository.getCurrentUserEmail()
+    ) = viewModelScope.launch {
+        safeValidateChangeEmailInputs(password, newEmail, currentUserEmail)
+    }
+
+    private fun safeValidateChangeEmailInputs(
+        password: String,
+        newEmail: String,
+        currentUserEmail: String = userRepository.getCurrentUserEmail()
     ) {
         if (password.isBlank()) {
             _checkInputsLiveData.postValue(

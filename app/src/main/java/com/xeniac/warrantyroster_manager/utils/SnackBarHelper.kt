@@ -9,6 +9,22 @@ import com.xeniac.warrantyroster_manager.R
 
 object SnackBarHelper {
 
+    fun showNormalSnackbarError(view: View, message: String): Snackbar = Snackbar.make(
+        view, message, LENGTH_LONG
+    ).apply { show() }
+
+    fun showActionSnackbarError(
+        view: View,
+        message: String,
+        actionBtn: String,
+        action: () -> Unit
+    ): Snackbar = Snackbar.make(
+        view, message, LENGTH_INDEFINITE
+    ).apply {
+        setAction(actionBtn) { action() }
+        show()
+    }
+
     fun showNetworkConnectionError(
         context: Context,
         view: View,
@@ -42,56 +58,15 @@ object SnackBarHelper {
         show()
     }
 
-    fun showFirebaseAuthAccountExists(
-        view: View,
-        text: String,
-        actionText: String,
-        action: () -> Unit
-    ): Snackbar = Snackbar.make(view, text, LENGTH_INDEFINITE).apply {
-        setAction(actionText) { action() }
-        show()
-    }
-
-    fun showFirebaseAuthAccountNotFoundError(
-        view: View,
-        text: String,
-        actionText: String,
-        action: () -> Unit
-    ): Snackbar = Snackbar.make(view, text, LENGTH_INDEFINITE).apply {
-        setAction(actionText) { action() }
-        show()
-    }
-
-    fun showFirebaseAuthCredentialsError(view: View, text: String): Snackbar = Snackbar.make(
-        view, text, LENGTH_INDEFINITE
-    ).apply {
-        show()
-    }
-
     fun showNetworkFailureError(context: Context, view: View): Snackbar = Snackbar.make(
         view,
         context.getString(R.string.error_network_failure),
         LENGTH_LONG
-    ).apply {
-        show()
-    }
+    ).apply { show() }
 
-    fun showTimerIsNotZeroError(context: Context, view: View, seconds: Int): Snackbar =
-        Snackbar.make(
-            view,
-            context.resources.getQuantityString(
-                R.plurals.forgot_pw_error_timer_is_not_zero,
-                seconds,
-                seconds
-            ),
-            LENGTH_LONG
-        ).apply {
-            show()
-        }
-
-    fun showIntentAppNotFoundError(context: Context, view: View) = Snackbar.make(
+    fun showIntentAppNotFoundError(context: Context, view: View): Snackbar = Snackbar.make(
         view,
         context.getString(R.string.error_intent_app_not_found),
         LENGTH_LONG
-    ).show()
+    ).apply { show() }
 }

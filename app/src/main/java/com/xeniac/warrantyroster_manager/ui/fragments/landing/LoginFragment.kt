@@ -30,11 +30,11 @@ import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_LOGIN_EMA
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_LOGIN_PASSWORD
 import com.xeniac.warrantyroster_manager.utils.Resource
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.show403Error
-import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseAuthAccountNotFoundError
-import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseAuthCredentialsError
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showActionSnackbarError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseDeviceBlockedError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkConnectionError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkFailureError
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNormalSnackbarError
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
@@ -183,59 +183,56 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                     }
                     is Resource.Error -> {
                         hideLoadingAnimation()
-                        response.message?.let {
-                            val message = it.asString(requireContext())
+                        response.message?.asString(requireContext())?.let {
                             when {
-                                message.contains(ERROR_INPUT_BLANK_EMAIL) -> {
+                                it.contains(ERROR_INPUT_BLANK_EMAIL) -> {
                                     binding.tiLayoutEmail.error =
                                         requireContext().getString(R.string.login_error_blank_email)
                                     binding.tiLayoutEmail.requestFocus()
                                     binding.tiLayoutEmail.boxStrokeColor =
                                         ContextCompat.getColor(requireContext(), R.color.red)
                                 }
-                                message.contains(ERROR_INPUT_BLANK_PASSWORD) -> {
+                                it.contains(ERROR_INPUT_BLANK_PASSWORD) -> {
                                     binding.tiLayoutPassword.error =
                                         requireContext().getString(R.string.login_error_blank_password)
                                     binding.tiLayoutPassword.requestFocus()
                                     binding.tiLayoutPassword.boxStrokeColor =
                                         ContextCompat.getColor(requireContext(), R.color.red)
                                 }
-                                message.contains(ERROR_INPUT_EMAIL_INVALID) -> {
+                                it.contains(ERROR_INPUT_EMAIL_INVALID) -> {
                                     binding.tiLayoutEmail.requestFocus()
                                     binding.tiLayoutEmail.error =
                                         requireContext().getString(R.string.login_error_email)
                                 }
-                                message.contains(ERROR_NETWORK_CONNECTION) -> {
+                                it.contains(ERROR_NETWORK_CONNECTION) -> {
                                     snackbar = showNetworkConnectionError(
                                         requireContext(), requireView()
                                     ) { validateLoginInputs() }
                                 }
-                                message.contains(ERROR_FIREBASE_403) -> {
+                                it.contains(ERROR_FIREBASE_403) -> {
                                     snackbar = show403Error(requireContext(), requireView())
                                 }
-                                message.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
+                                it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
                                     snackbar = showFirebaseDeviceBlockedError(
-                                        requireContext(),
-                                        requireView()
+                                        requireContext(), requireView()
                                     )
                                 }
-                                message.contains(ERROR_FIREBASE_AUTH_ACCOUNT_NOT_FOUND) -> {
-                                    snackbar = showFirebaseAuthAccountNotFoundError(
+                                it.contains(ERROR_FIREBASE_AUTH_ACCOUNT_NOT_FOUND) -> {
+                                    snackbar = showActionSnackbarError(
                                         requireView(),
                                         requireContext().getString(R.string.login_error_not_found),
                                         requireContext().getString(R.string.login_btn_register)
                                     ) { navigateToRegister() }
                                 }
-                                message.contains(ERROR_FIREBASE_AUTH_CREDENTIALS) -> {
-                                    snackbar = showFirebaseAuthCredentialsError(
+                                it.contains(ERROR_FIREBASE_AUTH_CREDENTIALS) -> {
+                                    snackbar = showNormalSnackbarError(
                                         requireView(),
                                         requireContext().getString(R.string.login_error_credentials)
                                     )
                                 }
                                 else -> {
                                     snackbar = showNetworkFailureError(
-                                        requireContext(),
-                                        requireView()
+                                        requireContext(), requireView()
                                     )
                                 }
                             }

@@ -26,11 +26,11 @@ import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_TIMER_IS_NOT_ZERO
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_FORGOT_PW_EMAIL
 import com.xeniac.warrantyroster_manager.utils.Resource
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.show403Error
-import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseAuthAccountNotFoundError
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showActionSnackbarError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseDeviceBlockedError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkConnectionError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkFailureError
-import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showTimerIsNotZeroError
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNormalSnackbarError
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
@@ -142,49 +142,49 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
                     }
                     is Resource.Error -> {
                         hideLoadingAnimation()
-                        response.message?.let {
-                            val message = it.asString(requireContext())
+                        response.message?.asString(requireContext())?.let {
                             when {
-                                message.contains(ERROR_INPUT_BLANK_EMAIL) -> {
+                                it.contains(ERROR_INPUT_BLANK_EMAIL) -> {
                                     binding.tiLayoutEmail.error =
                                         requireContext().getString(R.string.forgot_pw_error_blank_email)
                                     binding.tiLayoutEmail.requestFocus()
                                     binding.tiLayoutEmail.boxStrokeColor =
                                         ContextCompat.getColor(requireContext(), R.color.red)
                                 }
-                                message.contains(ERROR_INPUT_EMAIL_INVALID) -> {
+                                it.contains(ERROR_INPUT_EMAIL_INVALID) -> {
                                     binding.tiLayoutEmail.requestFocus()
                                     binding.tiLayoutEmail.error =
                                         requireContext().getString(R.string.forgot_pw_error_email)
                                 }
-                                message.contains(ERROR_NETWORK_CONNECTION) -> {
+                                it.contains(ERROR_NETWORK_CONNECTION) -> {
                                     snackbar = showNetworkConnectionError(
                                         requireContext(), requireView()
                                     ) { validateResetPasswordInputs() }
                                 }
-                                message.contains(ERROR_FIREBASE_403) -> {
+                                it.contains(ERROR_FIREBASE_403) -> {
                                     snackbar = show403Error(requireContext(), requireView())
                                 }
-                                message.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
+                                it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
                                     snackbar = showFirebaseDeviceBlockedError(
                                         requireContext(),
                                         requireView()
                                     )
                                 }
-                                message.contains(ERROR_FIREBASE_AUTH_ACCOUNT_NOT_FOUND) -> {
-                                    snackbar = showFirebaseAuthAccountNotFoundError(
+                                it.contains(ERROR_FIREBASE_AUTH_ACCOUNT_NOT_FOUND) -> {
+                                    snackbar = showActionSnackbarError(
                                         requireView(),
                                         requireContext().getString(R.string.forgot_pw_error_not_found),
                                         requireContext().getString(R.string.error_btn_confirm)
                                     ) { snackbar?.dismiss() }
                                 }
-                                message.contains(ERROR_TIMER_IS_NOT_ZERO) -> {
+                                it.contains(ERROR_TIMER_IS_NOT_ZERO) -> {
                                     val seconds = (viewModel.timerInMillis / 1000).toInt()
-                                    snackbar = showTimerIsNotZeroError(
-                                        requireContext(),
-                                        requireView(),
+                                    val message = requireContext().resources.getQuantityString(
+                                        R.plurals.forgot_pw_error_timer_is_not_zero,
+                                        seconds,
                                         seconds
                                     )
+                                    snackbar = showNormalSnackbarError(requireView(), message)
                                 }
                                 else -> {
                                     snackbar = showNetworkFailureError(

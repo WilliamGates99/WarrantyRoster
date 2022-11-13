@@ -22,7 +22,7 @@ import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.show403Error
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseDeviceBlockedError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkConnectionError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkFailureError
-import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showTimerIsNotZeroError
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNormalSnackbarError
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -95,27 +95,27 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
                     }
                     is Resource.Error -> {
                         hideLoadingAnimation()
-                        response.message?.let {
-                            val message = it.asString(requireContext())
+                        response.message?.asString(requireContext())?.let {
                             snackbar = when {
-                                message.contains(ERROR_NETWORK_CONNECTION) -> {
+                                it.contains(ERROR_NETWORK_CONNECTION) -> {
                                     showNetworkConnectionError(
                                         requireContext(), requireView()
                                     ) { resendResetPasswordEmail() }
                                 }
-                                message.contains(ERROR_FIREBASE_403) -> {
+                                it.contains(ERROR_FIREBASE_403) -> {
                                     show403Error(requireContext(), requireView())
                                 }
-                                message.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
+                                it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
                                     showFirebaseDeviceBlockedError(requireContext(), requireView())
                                 }
-                                message.contains(ERROR_TIMER_IS_NOT_ZERO) -> {
+                                it.contains(ERROR_TIMER_IS_NOT_ZERO) -> {
                                     val seconds = (viewModel.timerInMillis / 1000).toInt()
-                                    showTimerIsNotZeroError(
-                                        requireContext(),
-                                        requireView(),
+                                    val message = requireContext().resources.getQuantityString(
+                                        R.plurals.forgot_pw_error_timer_is_not_zero,
+                                        seconds,
                                         seconds
                                     )
+                                    showNormalSnackbarError(requireView(), message)
                                 }
                                 else -> {
                                     showNetworkFailureError(requireContext(), requireView())

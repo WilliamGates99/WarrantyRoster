@@ -488,36 +488,35 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
                     }
                     is Resource.Error -> {
                         hideLoadingAnimation()
-                        response.message?.let {
-                            val message = it.asString(requireContext())
+                        response.message?.asString(requireContext())?.let {
                             when {
-                                message.contains(ERROR_INPUT_BLANK_TITLE) -> {
+                                it.contains(ERROR_INPUT_BLANK_TITLE) -> {
                                     binding.tiLayoutTitle.error =
                                         requireContext().getString(R.string.add_warranty_error_blank_title)
                                     binding.tiLayoutTitle.requestFocus()
                                     binding.tiLayoutTitle.boxStrokeColor =
                                         ContextCompat.getColor(requireContext(), R.color.red)
                                 }
-                                message.contains(ERROR_INPUT_BLANK_STARTING_DATE) -> {
+                                it.contains(ERROR_INPUT_BLANK_STARTING_DATE) -> {
                                     binding.tiLayoutDateStarting.requestFocus()
                                     binding.tiLayoutDateStarting.boxStrokeColor =
                                         ContextCompat.getColor(requireContext(), R.color.red)
                                 }
-                                message.contains(ERROR_INPUT_BLANK_EXPIRY_DATE) -> {
+                                it.contains(ERROR_INPUT_BLANK_EXPIRY_DATE) -> {
                                     binding.tiLayoutDateExpiry.requestFocus()
                                     binding.tiLayoutDateExpiry.boxStrokeColor =
                                         ContextCompat.getColor(requireContext(), R.color.red)
                                 }
-                                message.contains(ERROR_INPUT_INVALID_STARTING_DATE) -> showDateError()
-                                message.contains(ERROR_NETWORK_CONNECTION) -> {
+                                it.contains(ERROR_INPUT_INVALID_STARTING_DATE) -> showDateError()
+                                it.contains(ERROR_NETWORK_CONNECTION) -> {
                                     snackbar = showNetworkConnectionError(
                                         requireContext(), requireView()
                                     ) { validateWarrantyInputs() }
                                 }
-                                message.contains(ERROR_FIREBASE_403) -> {
+                                it.contains(ERROR_FIREBASE_403) -> {
                                     snackbar = show403Error(requireContext(), requireView())
                                 }
-                                message.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
+                                it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
                                     snackbar = showFirebaseDeviceBlockedError(
                                         requireContext(),
                                         requireView()

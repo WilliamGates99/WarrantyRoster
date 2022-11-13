@@ -37,6 +37,12 @@ class ChangePasswordViewModel @Inject constructor(
 
     fun validateChangePasswordInputs(
         currentPassword: String, newPassword: String, retypeNewPassword: String
+    ) = viewModelScope.launch {
+        safeValidateChangePasswordInputs(currentPassword, newPassword, retypeNewPassword)
+    }
+
+    private fun safeValidateChangePasswordInputs(
+        currentPassword: String, newPassword: String, retypeNewPassword: String
     ) {
         if (currentPassword.isBlank()) {
             _checkInputsLiveData.postValue(

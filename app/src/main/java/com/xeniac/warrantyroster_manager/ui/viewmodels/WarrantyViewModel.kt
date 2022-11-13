@@ -238,6 +238,18 @@ class WarrantyViewModel @Inject constructor(
         isLifetime: Boolean, startingDateInput: String?, expiryDateInput: String?,
         description: String?, categoryId: String,
         selectedStartingDateInMillis: Long, selectedExpiryDateInMillis: Long
+    ) = viewModelScope.launch {
+        safeValidateAddWarrantyInputs(
+            title, brand, model, serialNumber, isLifetime, startingDateInput, expiryDateInput,
+            description, categoryId, selectedStartingDateInMillis, selectedExpiryDateInMillis
+        )
+    }
+
+    private fun safeValidateAddWarrantyInputs(
+        title: String, brand: String?, model: String?, serialNumber: String?,
+        isLifetime: Boolean, startingDateInput: String?, expiryDateInput: String?,
+        description: String?, categoryId: String,
+        selectedStartingDateInMillis: Long, selectedExpiryDateInMillis: Long
     ) {
         if (title.isBlank()) {
             _addWarrantyLiveData.postValue(
@@ -302,6 +314,19 @@ class WarrantyViewModel @Inject constructor(
     }
 
     fun validateEditWarrantyInputs(
+        warrantyId: String, title: String, brand: String?, model: String?, serialNumber: String?,
+        isLifetime: Boolean, startingDateInput: String?, expiryDateInput: String?,
+        description: String?, categoryId: String,
+        selectedStartingDateInMillis: Long, selectedExpiryDateInMillis: Long
+    ) = viewModelScope.launch {
+        safeValidateEditWarrantyInputs(
+            warrantyId, title, brand, model, serialNumber, isLifetime,
+            startingDateInput, expiryDateInput, description, categoryId,
+            selectedStartingDateInMillis, selectedExpiryDateInMillis
+        )
+    }
+
+    private fun safeValidateEditWarrantyInputs(
         warrantyId: String, title: String, brand: String?, model: String?, serialNumber: String?,
         isLifetime: Boolean, startingDateInput: String?, expiryDateInput: String?,
         description: String?, categoryId: String,
