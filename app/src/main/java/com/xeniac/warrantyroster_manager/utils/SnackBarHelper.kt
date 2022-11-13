@@ -34,9 +34,7 @@ object SnackBarHelper {
         context.getString(R.string.error_network_connection),
         LENGTH_INDEFINITE
     ).apply {
-        setAction(context.getString(R.string.error_btn_retry)) {
-            action()
-        }
+        setAction(context.getString(R.string.error_btn_retry)) { action() }
         show()
     }
 
