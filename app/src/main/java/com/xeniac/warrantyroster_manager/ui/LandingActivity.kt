@@ -30,7 +30,7 @@ class LandingActivity : AppCompatActivity() {
 
         subscribeToObservers()
         getCurrentLanguage()
-        setTitle()
+        setTitleText()
         languageOnClick()
     }
 
@@ -65,9 +65,8 @@ class LandingActivity : AppCompatActivity() {
         }
     }
 
-    private fun setTitle() = binding.apply {
+    private fun setTitleText() = binding.apply {
         val navHostFragment = supportFragmentManager.findFragmentById(fcv.id) as NavHostFragment
-
         val navController = navHostFragment.navController
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
