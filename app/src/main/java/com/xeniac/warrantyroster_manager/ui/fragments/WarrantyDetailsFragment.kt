@@ -234,9 +234,8 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
         ),
         R.string.warranty_details_delete_dialog_positive,
         R.string.warranty_details_delete_dialog_negative,
-    ) {
-        deleteWarrantyFromFirestore()
-    }
+        positiveAction = { deleteWarrantyFromFirestore() }
+    )
 
     private fun deleteWarrantyFromFirestore() = viewModel.deleteWarrantyFromFirestore(warranty.id)
 

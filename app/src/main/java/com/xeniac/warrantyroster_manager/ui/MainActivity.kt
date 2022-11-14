@@ -206,7 +206,7 @@ class MainActivity : AppCompatActivity(), MaxAdListener {
     fun showRateAppDialog() = reviewInfo?.let {
         showThreeBtnAlertDialog(
             this,
-            R.string.main_rate_app_dialog_title,
+            getString(R.string.main_rate_app_dialog_title, getString(R.string.app_name)),
             R.string.main_rate_app_dialog_message,
             R.string.main_rate_app_dialog_positive,
             R.string.main_rate_app_dialog_negative,

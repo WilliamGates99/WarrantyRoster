@@ -38,7 +38,7 @@ object AlertDialogHelper {
 
     fun showThreeBtnAlertDialog(
         context: Context,
-        @StringRes title: Int,
+        title: String,
         @StringRes message: Int,
         @StringRes positiveBtn: Int,
         @StringRes negativeBtn: Int,
@@ -47,7 +47,7 @@ object AlertDialogHelper {
         negativeAction: (() -> Unit)? = null,
         neutralAction: (() -> Unit)? = null
     ) = MaterialAlertDialogBuilder(context).apply {
-        setTitle(context.getString(title))
+        setTitle(title)
         setMessage(context.getString(message))
         setPositiveButton(context.getString(positiveBtn)) { _, _ -> positiveAction?.let { it() } }
         setNegativeButton(context.getString(negativeBtn)) { _, _ -> negativeAction?.let { it() } }
