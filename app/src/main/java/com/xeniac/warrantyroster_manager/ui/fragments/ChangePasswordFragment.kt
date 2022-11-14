@@ -12,11 +12,11 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentChangePasswordBinding
 import com.xeniac.warrantyroster_manager.ui.viewmodels.ChangePasswordViewModel
+import com.xeniac.warrantyroster_manager.utils.AlertDialogHelper.showOneBtnAlertDialog
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_CREDENTIALS
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
@@ -58,7 +58,7 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
         textInputsBackgroundColor()
         textInputsStrokeColor()
         subscribeToObservers()
-        returnToMainActivity()
+        toolbarNavigationBackOnClick()
         changePasswordOnClick()
         changePasswordActionDone()
     }
@@ -201,7 +201,11 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
         changeUserPasswordObserver()
     }
 
-    private fun returnToMainActivity() = binding.toolbar.setNavigationOnClickListener {
+    private fun toolbarNavigationBackOnClick() = binding.toolbar.setNavigationOnClickListener {
+        navigateBack()
+    }
+
+    private fun navigateBack() {
         findNavController().popBackStack()
     }
 
@@ -330,13 +334,11 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
                     is Resource.Loading -> showLoadingAnimation()
                     is Resource.Success -> {
                         hideLoadingAnimation()
-                        MaterialAlertDialogBuilder(requireContext()).apply {
-                            setMessage(requireContext().getString(R.string.change_password_dialog_message))
-                            setCancelable(false)
-                            setPositiveButton(requireContext().getString(R.string.change_password_dialog_positive)) { _, _ -> }
-                            setOnDismissListener { findNavController().popBackStack() }
-                            show()
-                        }
+                        showOneBtnAlertDialog(
+                            requireContext(),
+                            R.string.change_password_dialog_message,
+                            R.string.change_password_dialog_positive,
+                        ) { navigateBack() }
                     }
                     is Resource.Error -> {
                         hideLoadingAnimation()

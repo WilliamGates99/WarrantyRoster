@@ -13,13 +13,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import coil.ImageLoader
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.data.remote.models.Warranty
 import com.xeniac.warrantyroster_manager.databinding.FragmentWarrantyDetailsBinding
 import com.xeniac.warrantyroster_manager.ui.MainActivity
 import com.xeniac.warrantyroster_manager.ui.viewmodels.WarrantyViewModel
+import com.xeniac.warrantyroster_manager.utils.AlertDialogHelper.showTwoBtnAlertDialog
 import com.xeniac.warrantyroster_manager.utils.CoilHelper.loadCategoryImage
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
@@ -225,18 +225,17 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
             false
         }
 
-    private fun showDeleteWarrantyDialog() = MaterialAlertDialogBuilder(requireContext()).apply {
-        setTitle(requireContext().getString(R.string.warranty_details_delete_dialog_title))
-        setMessage(
-            String.format(
-                requireContext().getString(R.string.warranty_details_delete_dialog_message),
-                warranty.title
-            )
-        )
-        setCancelable(false)
-        setPositiveButton(requireContext().getString(R.string.warranty_details_delete_dialog_positive)) { _, _ -> deleteWarrantyFromFirestore() }
-        setNegativeButton(requireContext().getString(R.string.warranty_details_delete_dialog_negative)) { _, _ -> }
-        show()
+    private fun showDeleteWarrantyDialog() = showTwoBtnAlertDialog(
+        requireContext(),
+        R.string.warranty_details_delete_dialog_title,
+        String.format(
+            requireContext().getString(R.string.warranty_details_delete_dialog_message),
+            warranty.title
+        ),
+        R.string.warranty_details_delete_dialog_positive,
+        R.string.warranty_details_delete_dialog_negative,
+    ) {
+        deleteWarrantyFromFirestore()
     }
 
     private fun deleteWarrantyFromFirestore() = viewModel.deleteWarrantyFromFirestore(warranty.id)

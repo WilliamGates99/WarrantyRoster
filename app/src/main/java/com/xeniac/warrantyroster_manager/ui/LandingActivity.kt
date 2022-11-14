@@ -6,10 +6,10 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.navigation.fragment.NavHostFragment
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.ActivityLandingBinding
 import com.xeniac.warrantyroster_manager.ui.viewmodels.LandingViewModel
+import com.xeniac.warrantyroster_manager.utils.AlertDialogHelper.showSingleChoiceItemsDialog
 import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_INDEX_ENGLISH_GREAT_BRITAIN
 import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_INDEX_ENGLISH_UNITED_STATES
 import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_INDEX_PERSIAN_IRAN
@@ -94,13 +94,14 @@ class LandingActivity : AppCompatActivity() {
             getString(R.string.landing_dialog_item_language_persian_ir)
         )
 
-        MaterialAlertDialogBuilder(this).apply {
-            setTitle(getString(R.string.landing_dialog_title_language))
-            setSingleChoiceItems(localeTextItems, currentLocaleIndex) { dialogInterface, index ->
-                changeCurrentLocale(index)
-                dialogInterface.dismiss()
-            }
-        }.show()
+        showSingleChoiceItemsDialog(
+            this,
+            R.string.landing_dialog_title_language,
+            localeTextItems,
+            currentLocaleIndex
+        ) { index ->
+            changeCurrentLocale(index)
+        }
     }
 
     private fun changeCurrentLocale(index: Int) = viewModel.changeCurrentLocale(index)

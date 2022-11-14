@@ -14,7 +14,6 @@ import com.applovin.mediation.MaxAd
 import com.applovin.mediation.MaxAdListener
 import com.applovin.mediation.MaxError
 import com.applovin.mediation.ads.MaxInterstitialAd
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.shape.CornerFamily.ROUNDED
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.play.core.review.ReviewInfo
@@ -24,6 +23,7 @@ import com.xeniac.warrantyroster_manager.BuildConfig
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.ActivityMainBinding
 import com.xeniac.warrantyroster_manager.ui.viewmodels.MainViewModel
+import com.xeniac.warrantyroster_manager.utils.AlertDialogHelper.showThreeBtnAlertDialog
 import com.xeniac.warrantyroster_manager.utils.DateHelper.getDaysFromFirstInstallTime
 import com.xeniac.warrantyroster_manager.utils.DateHelper.getDaysFromPreviousRequestTime
 import dagger.hilt.android.AndroidEntryPoint
@@ -204,18 +204,20 @@ class MainActivity : AppCompatActivity(), MaxAdListener {
     }
 
     fun showRateAppDialog() = reviewInfo?.let {
-        MaterialAlertDialogBuilder(this).apply {
-            setTitle(getString(R.string.main_rate_app_dialog_title, getString(R.string.app_name)))
-            setMessage(getString(R.string.main_rate_app_dialog_message))
-            setCancelable(false)
-            setPositiveButton(getString(R.string.main_rate_app_dialog_positive)) { _, _ ->
+        showThreeBtnAlertDialog(
+            this,
+            R.string.main_rate_app_dialog_title,
+            R.string.main_rate_app_dialog_message,
+            R.string.main_rate_app_dialog_positive,
+            R.string.main_rate_app_dialog_negative,
+            R.string.main_rate_app_dialog_neutral,
+            positiveAction = {
                 showInAppReviews()
                 setRateAppDialogChoiceToNever()
-            }
-            setNegativeButton(getString(R.string.main_rate_app_dialog_negative)) { _, _ -> setRateAppDialogChoiceToNever() }
-            setNeutralButton(getString(R.string.main_rate_app_dialog_neutral)) { _, _ -> setRateAppDialogChoiceToAskLater() }
-            show()
-        }
+            },
+            negativeAction = { setRateAppDialogChoiceToNever() },
+            neutralAction = { setRateAppDialogChoiceToAskLater() }
+        )
     }
 
     private fun setRateAppDialogChoiceToNever() = viewModel.setRateAppDialogChoice(-1)

@@ -18,7 +18,6 @@ import com.applovin.mediation.nativeAds.MaxNativeAdListener
 import com.applovin.mediation.nativeAds.MaxNativeAdLoader
 import com.applovin.mediation.nativeAds.MaxNativeAdView
 import com.applovin.mediation.nativeAds.MaxNativeAdViewBinder
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.BuildConfig
 import com.xeniac.warrantyroster_manager.R
@@ -26,6 +25,8 @@ import com.xeniac.warrantyroster_manager.databinding.FragmentSettingsBinding
 import com.xeniac.warrantyroster_manager.ui.LandingActivity
 import com.xeniac.warrantyroster_manager.ui.MainActivity
 import com.xeniac.warrantyroster_manager.ui.viewmodels.SettingsViewModel
+import com.xeniac.warrantyroster_manager.utils.AlertDialogHelper.showOneBtnAlertDialog
+import com.xeniac.warrantyroster_manager.utils.AlertDialogHelper.showSingleChoiceItemsDialog
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
@@ -215,11 +216,11 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
                     is Resource.Loading -> showLoadingAnimation()
                     is Resource.Success -> {
                         hideLoadingAnimation()
-                        MaterialAlertDialogBuilder(requireContext()).apply {
-                            setMessage(requireContext().getString(R.string.settings_dialog_message))
-                            setCancelable(false)
-                            setPositiveButton(requireContext().getString(R.string.settings_dialog_positive)) { _, _ -> }
-                        }.show()
+                        showOneBtnAlertDialog(
+                            requireContext(),
+                            R.string.settings_dialog_message,
+                            R.string.settings_dialog_positive
+                        )
                     }
                     is Resource.Error -> {
                         hideLoadingAnimation()
@@ -259,13 +260,14 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
             requireContext().getString(R.string.settings_dialog_item_language_persian_ir)
         )
 
-        MaterialAlertDialogBuilder(requireContext()).apply {
-            setTitle(requireContext().getString(R.string.settings_dialog_title_language))
-            setSingleChoiceItems(localeTextItems, currentLocaleIndex) { dialogInterface, index ->
-                changeCurrentLocale(index)
-                dialogInterface.dismiss()
-            }
-        }.show()
+        showSingleChoiceItemsDialog(
+            requireContext(),
+            R.string.settings_dialog_title_language,
+            localeTextItems,
+            currentLocaleIndex
+        ) { index ->
+            changeCurrentLocale(index)
+        }
     }
 
     private fun changeCurrentLocale(index: Int) = viewModel.changeCurrentLocale(index)
@@ -291,13 +293,14 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
             requireContext().getString(R.string.settings_dialog_item_theme_dark)
         )
 
-        MaterialAlertDialogBuilder(requireContext()).apply {
-            setTitle(requireContext().getString(R.string.settings_dialog_title_theme))
-            setSingleChoiceItems(themeItems, currentAppTheme) { dialogInterface, index ->
-                changeCurrentTheme(index)
-                dialogInterface.dismiss()
-            }
-        }.show()
+        showSingleChoiceItemsDialog(
+            requireContext(),
+            R.string.settings_dialog_title_theme,
+            themeItems,
+            currentAppTheme
+        ) { index ->
+            changeCurrentTheme(index)
+        }
     }
 
     private fun changeCurrentTheme(index: Int) = viewModel.changeCurrentTheme(index)
