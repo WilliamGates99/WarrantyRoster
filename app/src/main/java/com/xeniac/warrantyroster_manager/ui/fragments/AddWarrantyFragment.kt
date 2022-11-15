@@ -21,7 +21,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.data.remote.models.Category
 import com.xeniac.warrantyroster_manager.databinding.FragmentAddWarrantyBinding
-import com.xeniac.warrantyroster_manager.domain.repository.PreferencesRepository
 import com.xeniac.warrantyroster_manager.ui.MainActivity
 import com.xeniac.warrantyroster_manager.ui.viewmodels.WarrantyViewModel
 import com.xeniac.warrantyroster_manager.utils.CoilHelper.loadCategoryImage
@@ -61,9 +60,6 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
     val binding get() = _binding!!
 
     lateinit var viewModel: WarrantyViewModel
-
-    @Inject
-    lateinit var preferencesRepository: PreferencesRepository
 
     @Inject
     lateinit var imageLoader: ImageLoader
@@ -184,7 +180,7 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
                     selectedCategory = viewModel.getCategoryById(restoredCategoryId)
 
                     selectedCategory?.let { category ->
-                        binding.tiDdCategory.setText(category.title[preferencesRepository.getCategoryTitleMapKey()])
+                        binding.tiDdCategory.setText(category.title[viewModel.getCategoryTitleMapKey()])
                         loadCategoryIcon(category.icon)
                     }
                 }

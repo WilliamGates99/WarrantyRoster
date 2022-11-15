@@ -21,7 +21,6 @@ import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.data.remote.models.Warranty
 import com.xeniac.warrantyroster_manager.data.remote.models.WarrantyInput
 import com.xeniac.warrantyroster_manager.data.repository.FakeMainRepository
-import com.xeniac.warrantyroster_manager.data.repository.FakePreferencesRepository
 import com.xeniac.warrantyroster_manager.data.repository.FakeUserRepository
 import com.xeniac.warrantyroster_manager.databinding.FragmentWarrantyDetailsBinding
 import com.xeniac.warrantyroster_manager.getOrAwaitValue
@@ -70,11 +69,7 @@ class WarrantyDetailsFragmentTest {
         navController = TestNavHostController(context)
 
         fakeMainRepository = FakeMainRepository()
-        testViewModel = WarrantyViewModel(
-            FakeUserRepository(),
-            fakeMainRepository,
-            FakePreferencesRepository()
-        )
+        testViewModel = WarrantyViewModel(FakeUserRepository(), fakeMainRepository)
 
         navController.setGraph(R.navigation.nav_graph_main)
         navController.navigate(

@@ -5,7 +5,6 @@ import com.google.common.truth.Truth.assertThat
 import com.xeniac.warrantyroster_manager.MainCoroutineRule
 import com.xeniac.warrantyroster_manager.data.remote.models.WarrantyInput
 import com.xeniac.warrantyroster_manager.data.repository.FakeMainRepository
-import com.xeniac.warrantyroster_manager.data.repository.FakePreferencesRepository
 import com.xeniac.warrantyroster_manager.data.repository.FakeUserRepository
 import com.xeniac.warrantyroster_manager.getOrAwaitValue
 import com.xeniac.warrantyroster_manager.utils.Resource
@@ -25,7 +24,6 @@ class WarrantyViewModelTest {
 
     private lateinit var fakeUserRepository: FakeUserRepository
     private lateinit var fakeMainRepository: FakeMainRepository
-    private lateinit var fakePreferencesRepository: FakePreferencesRepository
 
     private lateinit var testViewModel: WarrantyViewModel
 
@@ -33,15 +31,10 @@ class WarrantyViewModelTest {
     fun setUp() {
         fakeUserRepository = FakeUserRepository()
         fakeMainRepository = FakeMainRepository()
-        fakePreferencesRepository = FakePreferencesRepository()
 
         fakeUserRepository.addUser("email@test.com", "password")
 
-        testViewModel = WarrantyViewModel(
-            fakeUserRepository,
-            fakeMainRepository,
-            fakePreferencesRepository
-        )
+        testViewModel = WarrantyViewModel(fakeUserRepository, fakeMainRepository)
     }
 
     /*

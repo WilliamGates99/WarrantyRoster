@@ -9,7 +9,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.xeniac.warrantyroster_manager.domain.repository.PreferencesRepository
 import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_ENGLISH_GREAT_BRITAIN
 import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_ENGLISH_UNITED_STATES
 import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_INDEX_ENGLISH_GREAT_BRITAIN
@@ -20,12 +19,9 @@ import com.xeniac.warrantyroster_manager.utils.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import javax.inject.Inject
 
 @HiltViewModel
-class LandingViewModel @Inject constructor(
-    private val preferencesRepository: PreferencesRepository
-) : ViewModel() {
+class LandingViewModel : ViewModel() {
 
     private val _currentLocaleIndexLiveData: MutableLiveData<Event<Int>> = MutableLiveData()
     val currentLocaleIndexLiveData: LiveData<Event<Int>> = _currentLocaleIndexLiveData
@@ -72,26 +68,23 @@ class LandingViewModel @Inject constructor(
         safeChangeCurrentLocale(index)
     }
 
-    private suspend fun safeChangeCurrentLocale(index: Int) {
+    private fun safeChangeCurrentLocale(index: Int) {
         var isActivityRestartNeeded = false
 
         when (index) {
             0 -> {
-                preferencesRepository.setCategoryTitleMapKey(LOCALE_ENGLISH_UNITED_STATES)
                 isActivityRestartNeeded = isActivityRestartNeeded(LayoutDirection.LTR)
                 AppCompatDelegate.setApplicationLocales(
                     LocaleListCompat.forLanguageTags(LOCALE_ENGLISH_UNITED_STATES)
                 )
             }
             1 -> {
-                preferencesRepository.setCategoryTitleMapKey(LOCALE_ENGLISH_GREAT_BRITAIN)
                 isActivityRestartNeeded = isActivityRestartNeeded(LayoutDirection.LTR)
                 AppCompatDelegate.setApplicationLocales(
                     LocaleListCompat.forLanguageTags(LOCALE_ENGLISH_GREAT_BRITAIN)
                 )
             }
             2 -> {
-                preferencesRepository.setCategoryTitleMapKey(LOCALE_PERSIAN_IRAN)
                 isActivityRestartNeeded = isActivityRestartNeeded(LayoutDirection.RTL)
                 AppCompatDelegate.setApplicationLocales(
                     LocaleListCompat.forLanguageTags(LOCALE_PERSIAN_IRAN)

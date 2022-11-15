@@ -3,12 +3,10 @@ package com.xeniac.warrantyroster_manager.data.repository
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.*
 import com.xeniac.warrantyroster_manager.domain.repository.PreferencesRepository
-import com.xeniac.warrantyroster_manager.utils.Constants.DATASTORE_CATEGORY_TITLE_MAP_KEY_KEY
 import com.xeniac.warrantyroster_manager.utils.Constants.DATASTORE_IS_LOGGED_IN_KEY
 import com.xeniac.warrantyroster_manager.utils.Constants.DATASTORE_PREVIOUS_REQUEST_TIME_IN_MILLIS_KEY
 import com.xeniac.warrantyroster_manager.utils.Constants.DATASTORE_RATE_APP_DIALOG_CHOICE_KEY
 import com.xeniac.warrantyroster_manager.utils.Constants.DATASTORE_THEME_KEY
-import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_ENGLISH_UNITED_STATES
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import timber.log.Timber
@@ -25,7 +23,6 @@ class PreferencesRepositoryImp @Inject constructor(
         val PREVIOUS_REQUEST_TIME_IN_MILLIS = longPreferencesKey(
             DATASTORE_PREVIOUS_REQUEST_TIME_IN_MILLIS_KEY
         )
-        val CATEGORY_TITLE_MAP_KEY = stringPreferencesKey(DATASTORE_CATEGORY_TITLE_MAP_KEY_KEY)
     }
 
     override fun getCurrentAppThemeSynchronously(): Int = runBlocking {
@@ -65,14 +62,6 @@ class PreferencesRepositoryImp @Inject constructor(
     } catch (e: Exception) {
         Timber.e("getPreviousRequestTimeInMillis Exception: $e")
         0L
-    }
-
-    override suspend fun getCategoryTitleMapKey(): String = try {
-        settingsDataStore.data
-            .first()[PreferencesKeys.CATEGORY_TITLE_MAP_KEY] ?: LOCALE_ENGLISH_UNITED_STATES
-    } catch (e: Exception) {
-        Timber.e("getCategoryTitleMapKey Exception: $e")
-        LOCALE_ENGLISH_UNITED_STATES
     }
 
     override suspend fun isUserLoggedIn(isLoggedIn: Boolean) {
@@ -116,17 +105,6 @@ class PreferencesRepositoryImp @Inject constructor(
             }
         } catch (e: Exception) {
             Timber.e("setPreviousRequestTimeInMillis Exception: $e")
-        }
-    }
-
-    override suspend fun setCategoryTitleMapKey(mapKey: String) {
-        try {
-            settingsDataStore.edit {
-                it[PreferencesKeys.CATEGORY_TITLE_MAP_KEY] = mapKey
-                Timber.i("CategoryTitleMapKey edited to $mapKey")
-            }
-        } catch (e: Exception) {
-            Timber.e("setCategoryTitleMapKey Exception: $e")
         }
     }
 }

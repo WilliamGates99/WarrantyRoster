@@ -1,5 +1,6 @@
 package com.xeniac.warrantyroster_manager.ui.viewmodels
 
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,7 +10,6 @@ import com.xeniac.warrantyroster_manager.data.remote.models.ListItemType
 import com.xeniac.warrantyroster_manager.data.remote.models.Warranty
 import com.xeniac.warrantyroster_manager.data.remote.models.WarrantyInput
 import com.xeniac.warrantyroster_manager.domain.repository.MainRepository
-import com.xeniac.warrantyroster_manager.domain.repository.PreferencesRepository
 import com.xeniac.warrantyroster_manager.domain.repository.UserRepository
 import com.xeniac.warrantyroster_manager.utils.Constants.CATEGORIES_ICON
 import com.xeniac.warrantyroster_manager.utils.Constants.CATEGORIES_TITLE
@@ -20,6 +20,9 @@ import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_EXPIR
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_STARTING_DATE
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_TITLE
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_INVALID_STARTING_DATE
+import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_ENGLISH_GREAT_BRITAIN
+import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_ENGLISH_UNITED_STATES
+import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_PERSIAN_IRAN
 import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_BRAND
 import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_CATEGORY_ID
 import com.xeniac.warrantyroster_manager.utils.Constants.WARRANTIES_DESCRIPTION
@@ -41,8 +44,7 @@ import javax.inject.Inject
 @HiltViewModel
 class WarrantyViewModel @Inject constructor(
     private val userRepository: UserRepository,
-    private val mainRepository: MainRepository,
-    private val preferencesRepository: PreferencesRepository
+    private val mainRepository: MainRepository
 ) : ViewModel() {
 
     private val _categoriesLiveData:
@@ -73,7 +75,26 @@ class WarrantyViewModel @Inject constructor(
             MutableLiveData<Event<Resource<Warranty>>> = MutableLiveData()
     val updatedWarrantyLiveData: LiveData<Event<Resource<Warranty>>> = _updatedWarrantyLiveData
 
-    suspend fun getCategoryTitleMapKey() = preferencesRepository.getCategoryTitleMapKey()
+    fun getCategoryTitleMapKey(): String = safeGetCategoryTitleMapKey()
+
+    private fun safeGetCategoryTitleMapKey(): String {
+        val localeList = AppCompatDelegate.getApplicationLocales()
+
+        return if (localeList.isEmpty) {
+            Timber.i("Locale list is Empty.")
+            LOCALE_ENGLISH_UNITED_STATES
+        } else {
+            val localeString = localeList[0].toString()
+            Timber.i("Current language is $localeString")
+
+            when (localeString) {
+                "en_US" -> LOCALE_ENGLISH_UNITED_STATES
+                "en_GB" -> LOCALE_ENGLISH_GREAT_BRITAIN
+                "fa_IR" -> LOCALE_PERSIAN_IRAN
+                else -> LOCALE_ENGLISH_UNITED_STATES
+            }
+        }
+    }
 
     fun getAllCategoryTitles(): List<String> {
         val titleList = mutableListOf<String>()

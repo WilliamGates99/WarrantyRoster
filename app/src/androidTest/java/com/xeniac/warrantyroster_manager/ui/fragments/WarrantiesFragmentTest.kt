@@ -14,7 +14,6 @@ import com.google.common.truth.Truth.assertThat
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.data.remote.models.WarrantyInput
 import com.xeniac.warrantyroster_manager.data.repository.FakeMainRepository
-import com.xeniac.warrantyroster_manager.data.repository.FakePreferencesRepository
 import com.xeniac.warrantyroster_manager.data.repository.FakeUserRepository
 import com.xeniac.warrantyroster_manager.databinding.FragmentWarrantiesBinding
 import com.xeniac.warrantyroster_manager.launchFragmentInHiltContainer
@@ -53,11 +52,7 @@ class WarrantiesFragmentTest {
 
         fakeMainRepository = FakeMainRepository()
 
-        testViewModel = WarrantyViewModel(
-            FakeUserRepository(),
-            fakeMainRepository,
-            FakePreferencesRepository()
-        )
+        testViewModel = WarrantyViewModel(FakeUserRepository(), fakeMainRepository)
 
         launchFragmentInHiltContainer<WarrantiesFragment> {
             navController.setGraph(R.navigation.nav_graph_main)

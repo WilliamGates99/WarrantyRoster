@@ -12,17 +12,6 @@ object Constants {
     const val DATASTORE_THEME_KEY = "theme"
     const val DATASTORE_RATE_APP_DIALOG_CHOICE_KEY = "rateAppDialogChoice"
     const val DATASTORE_PREVIOUS_REQUEST_TIME_IN_MILLIS_KEY = "previousRequestTimeInMillis"
-    const val DATASTORE_CATEGORY_TITLE_MAP_KEY_KEY = "categoryTitleMapKey"
-
-    // TODO CHECK FOR REMOVE
-    // App Language Constants
-    const val LOCALE_LANGUAGE_ENGLISH = "en"
-    const val LOCALE_LANGUAGE_PERSIAN = "fa"
-
-    // App Country Constants
-    const val LOCALE_COUNTRY_UNITED_STATES = "US"
-    const val LOCALE_COUNTRY_IRAN = "IR"
-    const val LOCALE_COUNTRY_GREAT_BRITAIN = "GB"
 
     // App Theme Constants
     const val THEME_INDEX_DEFAULT = 0

@@ -114,26 +114,23 @@ class SettingsViewModel @Inject constructor(
         safeChangeCurrentLocale(index)
     }
 
-    private suspend fun safeChangeCurrentLocale(index: Int) {
+    private fun safeChangeCurrentLocale(index: Int) {
         var isActivityRestartNeeded = false
 
         when (index) {
             0 -> {
-                preferencesRepository.setCategoryTitleMapKey(LOCALE_ENGLISH_UNITED_STATES)
                 isActivityRestartNeeded = isActivityRestartNeeded(LayoutDirection.LTR)
                 AppCompatDelegate.setApplicationLocales(
                     LocaleListCompat.forLanguageTags(LOCALE_ENGLISH_UNITED_STATES)
                 )
             }
             1 -> {
-                preferencesRepository.setCategoryTitleMapKey(LOCALE_ENGLISH_GREAT_BRITAIN)
                 isActivityRestartNeeded = isActivityRestartNeeded(LayoutDirection.LTR)
                 AppCompatDelegate.setApplicationLocales(
                     LocaleListCompat.forLanguageTags(LOCALE_ENGLISH_GREAT_BRITAIN)
                 )
             }
             2 -> {
-                preferencesRepository.setCategoryTitleMapKey(LOCALE_PERSIAN_IRAN)
                 isActivityRestartNeeded = isActivityRestartNeeded(LayoutDirection.RTL)
                 AppCompatDelegate.setApplicationLocales(
                     LocaleListCompat.forLanguageTags(LOCALE_PERSIAN_IRAN)

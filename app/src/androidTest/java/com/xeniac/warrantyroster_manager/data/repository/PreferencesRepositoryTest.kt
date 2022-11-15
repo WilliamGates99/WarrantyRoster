@@ -12,8 +12,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import com.xeniac.warrantyroster_manager.MainCoroutineRule
 import com.xeniac.warrantyroster_manager.domain.repository.PreferencesRepository
-import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_ENGLISH_UNITED_STATES
-import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_PERSIAN_IRAN
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
@@ -60,7 +58,6 @@ class PreferencesRepositoryTest {
      * getCurrentAppTheme -> 0
      * getRateAppDialogChoice -> 0
      * getPreviousRequestTimeInMillis -> 0L
-     * getCategoryTitleMapKey -> LOCALE_ENGLISH_UNITED_STATES
      */
 
     @Test
@@ -81,12 +78,10 @@ class PreferencesRepositoryTest {
         val initialCurrentAppTheme = testRepository.getCurrentAppTheme()
         val initialRateAppDialogChoice = testRepository.getRateAppDialogChoice()
         val initialPreviousRequestTimeInMillis = testRepository.getPreviousRequestTimeInMillis()
-        val initialCategoryTitleMapKey = testRepository.getCategoryTitleMapKey()
 
         assertThat(initialCurrentAppTheme).isEqualTo(0)
         assertThat(initialRateAppDialogChoice).isEqualTo(0)
         assertThat(initialPreviousRequestTimeInMillis).isEqualTo(0L)
-        assertThat(initialCategoryTitleMapKey).isEqualTo(LOCALE_ENGLISH_UNITED_STATES)
     }
 
     /**
@@ -95,7 +90,6 @@ class PreferencesRepositoryTest {
      * setAppTheme
      * setRateAppDialogChoice
      * setPreviousRequestTimeInMillis
-     * setCategoryTitleMapKey
      */
 
     @Test
@@ -139,16 +133,5 @@ class PreferencesRepositoryTest {
 
         val previousRequestTimeInMillis = testRepository.getPreviousRequestTimeInMillis()
         assertThat(previousRequestTimeInMillis).isEqualTo(testValue)
-    }
-
-    @Test
-    fun writeCategoryTitleMapKey() = testScope.runTest {
-        testDataStore.edit { it.clear() }
-
-        val testValue = LOCALE_PERSIAN_IRAN
-        testRepository.setCategoryTitleMapKey(testValue)
-
-        val categoryTitleMapKey = testRepository.getCategoryTitleMapKey()
-        assertThat(categoryTitleMapKey).isEqualTo(testValue)
     }
 }

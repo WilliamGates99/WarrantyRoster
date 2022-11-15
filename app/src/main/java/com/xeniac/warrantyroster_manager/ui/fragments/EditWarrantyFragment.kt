@@ -22,7 +22,6 @@ import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.data.remote.models.Category
 import com.xeniac.warrantyroster_manager.data.remote.models.Warranty
 import com.xeniac.warrantyroster_manager.databinding.FragmentEditWarrantyBinding
-import com.xeniac.warrantyroster_manager.domain.repository.PreferencesRepository
 import com.xeniac.warrantyroster_manager.ui.viewmodels.WarrantyViewModel
 import com.xeniac.warrantyroster_manager.utils.CoilHelper.loadCategoryImage
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
@@ -63,9 +62,6 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
     val binding get() = _binding!!
 
     lateinit var viewModel: WarrantyViewModel
-
-    @Inject
-    lateinit var preferencesRepository: PreferencesRepository
 
     @Inject
     lateinit var imageLoader: ImageLoader
@@ -193,7 +189,7 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
                     selectedCategory = viewModel.getCategoryById(restoredCategoryId)
 
                     selectedCategory?.let { category ->
-                        binding.tiDdCategory.setText(category.title[preferencesRepository.getCategoryTitleMapKey()])
+                        binding.tiDdCategory.setText(category.title[viewModel.getCategoryTitleMapKey()])
                         loadCategoryIcon(category.icon)
                     }
                 }
@@ -489,7 +485,7 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
 
             selectedCategory = viewModel.getCategoryById(warranty.categoryId!!)
             selectedCategory?.let {
-                tiDdCategory.setText(it.title[preferencesRepository.getCategoryTitleMapKey()])
+                tiDdCategory.setText(it.title[viewModel.getCategoryTitleMapKey()])
                 loadCategoryIcon(it.icon)
             }
         }

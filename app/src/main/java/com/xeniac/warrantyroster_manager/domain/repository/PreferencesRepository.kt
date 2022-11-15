@@ -12,8 +12,6 @@ interface PreferencesRepository {
 
     suspend fun getPreviousRequestTimeInMillis(): Long
 
-    suspend fun getCategoryTitleMapKey(): String
-
     suspend fun isUserLoggedIn(isLoggedIn: Boolean)
 
     suspend fun setCurrentAppTheme(index: Int)
@@ -21,6 +19,4 @@ interface PreferencesRepository {
     suspend fun setRateAppDialogChoice(value: Int)
 
     suspend fun setPreviousRequestTimeInMillis(timeInMillis: Long)
-
-    suspend fun setCategoryTitleMapKey(mapKey: String)
 }
