@@ -19,9 +19,10 @@ import com.xeniac.warrantyroster_manager.utils.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import javax.inject.Inject
 
 @HiltViewModel
-class LandingViewModel : ViewModel() {
+class LandingViewModel @Inject constructor() : ViewModel() {
 
     private val _currentLocaleIndexLiveData: MutableLiveData<Event<Int>> = MutableLiveData()
     val currentLocaleIndexLiveData: LiveData<Event<Int>> = _currentLocaleIndexLiveData
