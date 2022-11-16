@@ -30,7 +30,7 @@ android {
         versionCode 17 // TODO UPGRADE FOR RELEASE
         versionName "1.5.2" // TODO UPGRADE FOR RELEASE
 
-        resConfigs "en_US", "en_GB", "fa_IR"
+        resourceConfigurations = ["en-rUS", "en-rGB", "fa-rIR"]
 
         buildConfigField "String", "APPLOVIN_INTERSTITIAL_UNIT_ID", "\"${properties.getProperty("APPLOVIN_INTERSTITIAL_UNIT_ID")}\""
         buildConfigField "String", "APPLOVIN_SETTINGS_NATIVE_UNIT_ID", "\"${properties.getProperty("APPLOVIN_SETTINGS_NATIVE_UNIT_ID")}\""
