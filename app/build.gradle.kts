@@ -90,6 +90,7 @@ android {
     flavorDimensions.add("appStore")
     productFlavors {
         create("playStore") {
+            dimension = "appStore"
             buildConfigField(
                 "String",
                 "URL_APP_STORE",
@@ -103,6 +104,7 @@ android {
         }
 
         create("amazon") {
+            dimension = "appStore"
             buildConfigField(
                 "String",
                 "URL_APP_STORE",
@@ -116,6 +118,7 @@ android {
         }
 
         create("cafeBazaar") {
+            dimension = "appStore"
             buildConfigField(
                 "String",
                 "URL_APP_STORE",
