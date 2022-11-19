@@ -1,3 +1,5 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -8,76 +10,123 @@ plugins {
     id("dagger.hilt.android.plugin")
     id("com.google.firebase.crashlytics")
     id("com.google.firebase.firebase-perf")
-//    id ("applovin-quality-service")
+    id("applovin-quality-service")
 }
+//apply(plugin = "applovin-quality-service")
 
-Properties properties = new Properties()
-properties.load(project.rootProject.file("local.properties").newDataInputStream())
+val properties = gradleLocalProperties(rootDir)
 
-//applovin {
-//    apiKey "\"${properties.getProperty("APPLOVIN_API_KEY")}\""
-//}
+applovin {
+    apiKey = properties.getProperty("APPLOVIN_API_KEY")
+}
 
 android {
     namespace = "com.xeniac.warrantyroster_manager"
-    compileSdk(33)
+    compileSdk = 33
     buildToolsVersion = "33.0.0"
 
     defaultConfig {
         applicationId = "com.xeniac.warrantyroster_manager"
-        minSdkVersion(21)
-        targetSdk(33)
+        minSdk = 21
+        targetSdk = 33
         versionCode = 17 // TODO UPGRADE FOR RELEASE
         versionName = "1.5.2" // TODO UPGRADE FOR RELEASE
 
-        resourceConfigurations = ["en-rUS", "en-rGB", "fa-rIR"]
+        /**
+         * Keeps language resources for only the locales specified below.
+         */
+        resourceConfigurations += mutableSetOf("en-rUS", "en-rGB", "fa-rIR")
 
-        buildConfigField("String", "APPLOVIN_INTERSTITIAL_UNIT_ID", "\"${properties.getProperty("APPLOVIN_INTERSTITIAL_UNIT_ID")}\"")
-        buildConfigField("String", "APPLOVIN_SETTINGS_NATIVE_UNIT_ID", "\"${properties.getProperty("APPLOVIN_SETTINGS_NATIVE_UNIT_ID")}\"")
-        buildConfigField("String", "APPLOVIN_WARRANTIES_NATIVE_UNIT_ID", "\"${properties.getProperty("APPLOVIN_WARRANTIES_NATIVE_UNIT_ID")}\"")
-        buildConfigField("String", "TAPSELL_KEY", "\"${properties.getProperty("TAPSELL_KEY")}\"")
-        buildConfigField("String", "TAPSELL_INTERSTITIAL_ZONE_ID", "\"${properties.getProperty("TAPSELL_INTERSTITIAL_ZONE_ID")}\"")
-        buildConfigField("String", "TAPSELL_WARRANTIES_NATIVE_ZONE_ID", "\"${properties.getProperty("TAPSELL_WARRANTIES_NATIVE_ZONE_ID")}\"")
-        buildConfigField("String", "TAPSELL_SETTINGS_NATIVE_ZONE_ID", "\"${properties.getProperty("TAPSELL_SETTINGS_NATIVE_ZONE_ID")}\"")
-        buildConfigField("String", "URL_APP_STORE", "\"${properties.getProperty("URL_PLAY_STORE")}\"")
-        buildConfigField("String", "PACKAGE_NAME_APP_STORE", "\"${properties.getProperty("PACKAGE_NAME_PLAY_STORE")}\"")
+        buildConfigField(
+            "String",
+            "APPLOVIN_INTERSTITIAL_UNIT_ID",
+            properties.getProperty("APPLOVIN_INTERSTITIAL_UNIT_ID")
+        )
+        buildConfigField(
+            "String",
+            "APPLOVIN_SETTINGS_NATIVE_UNIT_ID",
+            properties.getProperty("APPLOVIN_SETTINGS_NATIVE_UNIT_ID")
+        )
+        buildConfigField(
+            "String",
+            "APPLOVIN_WARRANTIES_NATIVE_UNIT_ID",
+            properties.getProperty("APPLOVIN_WARRANTIES_NATIVE_UNIT_ID")
+        )
+        buildConfigField("String", "TAPSELL_KEY", properties.getProperty("TAPSELL_KEY"))
+        buildConfigField(
+            "String",
+            "TAPSELL_INTERSTITIAL_ZONE_ID",
+            properties.getProperty("TAPSELL_INTERSTITIAL_ZONE_ID")
+        )
+        buildConfigField(
+            "String",
+            "TAPSELL_WARRANTIES_NATIVE_ZONE_ID",
+            properties.getProperty("TAPSELL_WARRANTIES_NATIVE_ZONE_ID")
+        )
+        buildConfigField(
+            "String",
+            "TAPSELL_SETTINGS_NATIVE_ZONE_ID",
+            properties.getProperty("TAPSELL_SETTINGS_NATIVE_ZONE_ID")
+        )
 
         testInstrumentationRunner = "com.xeniac.warrantyroster_manager.HiltTestRunner"
     }
 
     buildTypes {
-        debug {
-            versionNameSuffix " - debug"
-            applicationIdSuffix ".debug"
-            ext.enableCrashlytics = false
-            ext.alwaysUpdateBuildId = false
+        getByName("debug") {
+            versionNameSuffix = " - debug"
+            applicationIdSuffix = ".debug"
         }
 
-        release {
-            shrinkResources = true
-            minifyEnabled = true
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+        getByName("release") {
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
 
-    flavorDimensions("appStore")
+    flavorDimensions.add("appStore")
     productFlavors {
-        playStore {
-            dimension = "appStore"
-            buildConfigField("String", "URL_APP_STORE", "\"${properties.getProperty("URL_PLAY_STORE")}\"")
-            buildConfigField("String", "PACKAGE_NAME_APP_STORE", "\"${properties.getProperty("PACKAGE_NAME_PLAY_STORE")}\"")
+        create("playStore") {
+            buildConfigField(
+                "String",
+                "URL_APP_STORE",
+                properties.getProperty("URL_PLAY_STORE")
+            )
+            buildConfigField(
+                "String",
+                "PACKAGE_NAME_APP_STORE",
+                properties.getProperty("PACKAGE_NAME_PLAY_STORE")
+            )
         }
 
-        amazon {
-            dimension = "appStore"
-            buildConfigField("String", "URL_APP_STORE", "\"${properties.getProperty("URL_AMAZON")}\"")
-            buildConfigField("String", "PACKAGE_NAME_APP_STORE", "\"${properties.getProperty("PACKAGE_NAME_AMAZON")}\"")
+        create("amazon") {
+            buildConfigField(
+                "String",
+                "URL_APP_STORE",
+                properties.getProperty("URL_AMAZON")
+            )
+            buildConfigField(
+                "String",
+                "PACKAGE_NAME_APP_STORE",
+                properties.getProperty("PACKAGE_NAME_AMAZON")
+            )
         }
 
-        cafeBazaar {
-            dimension = "appStore"
-            buildConfigField("String", "URL_APP_STORE", "\"${properties.getProperty("URL_CAFEBAZAAR")}\"")
-            buildConfigField("String", "PACKAGE_NAME_APP_STORE", "\"${properties.getProperty("PACKAGE_NAME_CAFEBAZAAR")}\"")
+        create("cafeBazaar") {
+            buildConfigField(
+                "String",
+                "URL_APP_STORE",
+                properties.getProperty("URL_CAFEBAZAAR")
+            )
+            buildConfigField(
+                "String",
+                "PACKAGE_NAME_APP_STORE",
+                properties.getProperty("PACKAGE_NAME_CAFEBAZAAR")
+            )
         }
     }
 
@@ -207,17 +256,17 @@ dependencies {
     debugImplementation("androidx.fragment:fragment-testing:1.5.4")
 }
 
-def releaseRootDir = "${rootDir}/app"
-def destinationDir = "D:\\01 My Files\\Projects\\Xeniac\\Warranty Roster\\APK"
+val releaseRootDir = "${rootDir}/app"
+val destinationDir = "D:\\01 My Files\\Projects\\Xeniac\\Warranty Roster\\APK"
 
-def versionName = "${android.defaultConfig.versionName}"
-def renamedFileName = "Warranty Roster $versionName"
+val versionName = "${android.defaultConfig.versionName}"
+val renamedFileName = "Warranty Roster $versionName"
 
-task copyReleaseApk(type: Copy) {
-    def amazonApkFile = "app-amazon-release.apk"
-    def cafeBazaarApkFile = "app-cafeBazaar-release.apk"
-    def amazonApkSourceDir = "${releaseRootDir}/amazon/release/${amazonApkFile}"
-    def cafeBazaarApkSourceDir = "${releaseRootDir}/cafeBazaar/release/${cafeBazaarApkFile}"
+tasks.register<Copy>("copyReleaseApk") {
+    val amazonApkFile = "app-amazon-release.apk"
+    val cafeBazaarApkFile = "app-cafeBazaar-release.apk"
+    val amazonApkSourceDir = "${releaseRootDir}/amazon/release/${amazonApkFile}"
+    val cafeBazaarApkSourceDir = "${releaseRootDir}/cafeBazaar/release/${cafeBazaarApkFile}"
 
     from(amazonApkSourceDir)
     into(destinationDir)
@@ -225,28 +274,28 @@ task copyReleaseApk(type: Copy) {
     from(cafeBazaarApkSourceDir)
     into(destinationDir)
 
-    rename("${amazonApkFile}", "${renamedFileName} - Amazon.apk")
-    rename("${cafeBazaarApkFile}", "${renamedFileName} - CafeBazaar.apk")
+    rename(amazonApkFile, "$renamedFileName - Amazon.apk")
+    rename(cafeBazaarApkFile, "$renamedFileName - CafeBazaar.apk")
 }
 
-task copyReleaseBundle(type: Copy) {
-    def bundleFile = "app-playStore-release.aab"
-    def bundleSourceDir = "${releaseRootDir}/playStore/release/${bundleFile}"
+tasks.register<Copy>("copyReleaseBundle") {
+    val bundleFile = "app-playStore-release.aab"
+    val bundleSourceDir = "${releaseRootDir}/playStore/release/${bundleFile}"
 
     from(bundleSourceDir)
     into(destinationDir)
 
-    rename("${bundleFile}", "${renamedFileName}.aab")
+    rename(bundleFile, "${renamedFileName}.aab")
 }
 
-task copyObfuscationFolder(type: Copy) {
-    def obfuscationSourceDir = "${releaseRootDir}/obfuscation"
-    def obfuscationDestDir = "${destinationDir}\\obfuscation"
+tasks.register<Copy>("copyObfuscationFolder") {
+    val obfuscationSourceDir = "${releaseRootDir}/obfuscation"
+    val obfuscationDestDir = "${destinationDir}\\obfuscation"
 
     from(obfuscationSourceDir)
     into(obfuscationDestDir)
 }
 
-task copyReleaseFiles() {
+tasks.register("copyReleaseFiles") {
     dependsOn("copyReleaseApk", "copyReleaseBundle", "copyObfuscationFolder")
 }
