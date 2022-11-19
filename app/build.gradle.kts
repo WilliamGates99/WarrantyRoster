@@ -255,13 +255,13 @@ dependencies {
     debugImplementation("androidx.fragment:fragment-testing:1.5.4")
 }
 
-val releaseRootDir = "${rootDir}/app"
-val destinationDir = "D:\\01 My Files\\Projects\\Xeniac\\Warranty Roster\\APK"
-
-val versionName = "${android.defaultConfig.versionName}"
-val renamedFileName = "Warranty Roster $versionName"
-
 tasks.register<Copy>("copyReleaseApk") {
+    val releaseRootDir = "${rootDir}/app"
+    val destinationDir = "D:\\01 My Files\\Projects\\Xeniac\\Warranty Roster\\APK"
+
+    val versionName = "${android.defaultConfig.versionName}"
+    val renamedFileName = "Warranty Roster $versionName"
+
     val amazonApkFile = "app-amazon-release.apk"
     val cafeBazaarApkFile = "app-cafeBazaar-release.apk"
     val amazonApkSourceDir = "${releaseRootDir}/amazon/release/${amazonApkFile}"
@@ -278,6 +278,12 @@ tasks.register<Copy>("copyReleaseApk") {
 }
 
 tasks.register<Copy>("copyReleaseBundle") {
+    val releaseRootDir = "${rootDir}/app"
+    val destinationDir = "D:\\01 My Files\\Projects\\Xeniac\\Warranty Roster\\APK"
+
+    val versionName = "${android.defaultConfig.versionName}"
+    val renamedFileName = "Warranty Roster $versionName"
+
     val bundleFile = "app-playStore-release.aab"
     val bundleSourceDir = "${releaseRootDir}/playStore/release/${bundleFile}"
 
@@ -288,6 +294,9 @@ tasks.register<Copy>("copyReleaseBundle") {
 }
 
 tasks.register<Copy>("copyObfuscationFolder") {
+    val releaseRootDir = "${rootDir}/app"
+    val destinationDir = "D:\\01 My Files\\Projects\\Xeniac\\Warranty Roster\\APK"
+
     val obfuscationSourceDir = "${releaseRootDir}/obfuscation"
     val obfuscationDestDir = "${destinationDir}\\obfuscation"
 
