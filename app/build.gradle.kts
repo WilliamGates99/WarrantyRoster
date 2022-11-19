@@ -10,15 +10,14 @@ plugins {
     id("dagger.hilt.android.plugin")
     id("com.google.firebase.crashlytics")
     id("com.google.firebase.firebase-perf")
-    id("applovin-quality-service")
+//    id("applovin-quality-service")
 }
-//apply(plugin = "applovin-quality-service")
 
 val properties = gradleLocalProperties(rootDir)
 
-applovin {
-    apiKey = properties.getProperty("APPLOVIN_API_KEY")
-}
+//applovin {
+//    apiKey = properties.getProperty("APPLOVIN_API_KEY")
+//}
 
 android {
     namespace = "com.xeniac.warrantyroster_manager"
