@@ -20,8 +20,8 @@ properties.load(project.rootProject.file("local.properties").newDataInputStream(
 
 android {
     namespace = "com.xeniac.warrantyroster_manager"
-    compileSdk 33
-    buildToolsVersion "33.0.0"
+    compileSdk(33)
+    buildToolsVersion = "33.0.0"
 
     defaultConfig {
         applicationId = "com.xeniac.warrantyroster_manager"
@@ -60,7 +60,7 @@ android {
         }
     }
 
-    flavorDimensions "appStore"
+    flavorDimensions("appStore")
     productFlavors {
         playStore {
             dimension = "appStore"
@@ -87,8 +87,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
 
     kotlinOptions {
