@@ -72,12 +72,8 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
-            popBackStack()
+            requireActivity().finishAffinity()
         }
-    }
-
-    private fun popBackStack() {
-        findNavController().popBackStack()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
