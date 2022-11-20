@@ -205,6 +205,31 @@
         <item name="cornerSize">@dimen/radius_4dp</item>
     </style>
 
+    <style name="Theme.WarrantyRoster.TextButton.OnBoarding" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="shapeAppearance">
+            @style/Theme.WarrantyRoster.TextButton.OnBoarding.Appearance
+        </item>
+        <item name="android:textColor">@color/whiteStatic</item>
+        <item name="android:textSize">@dimen/text_size_14sp</item>
+        <item name="android:fontFamily">@font/localized_bold</item>
+        <item name="textAllCaps">false</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:insetLeft">@dimen/content_inset_0dp</item>
+        <item name="android:insetTop">@dimen/content_inset_0dp</item>
+        <item name="android:insetRight">@dimen/content_inset_0dp</item>
+        <item name="android:insetBottom">@dimen/content_inset_0dp</item>
+        <item name="android:minWidth">@dimen/width_56dp</item>
+        <item name="android:minHeight">@dimen/height_48dp</item>
+        <item name="android:padding">@dimen/padding_5dp</item>
+    </style>
+
+    <style name="Theme.WarrantyRoster.TextButton.OnBoarding.Appearance" parent="ShapeAppearance.MaterialComponents">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">@dimen/radius_12dp</item>
+    </style>
+
     <style name="Theme.WarrantyRoster.BottomNavigationView.Text" parent="Widget.MaterialComponents.TextView">
         <item name="android:fontFamily">@font/localized_regular</item>
         <item name="android:textSize">@dimen/text_size_12sp</item>

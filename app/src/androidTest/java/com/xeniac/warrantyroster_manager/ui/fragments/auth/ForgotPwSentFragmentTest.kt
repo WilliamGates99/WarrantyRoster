@@ -1,4 +1,4 @@
-package com.xeniac.warrantyroster_manager.ui.fragments.landing
+package com.xeniac.warrantyroster_manager.ui.fragments.auth
 
 import android.content.Context
 import android.os.Bundle

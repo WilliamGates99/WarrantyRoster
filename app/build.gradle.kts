@@ -222,6 +222,9 @@ dependencies {
     implementation("io.coil-kt:coil:2.2.2")
     implementation("io.coil-kt:coil-svg:2.2.2")
 
+    // Dots Indicator Library
+    implementation("com.tbuonomo:dotsindicator:4.3")
+
     // Google Play In-App Reviews API
     implementation("com.google.android.play:review-ktx:2.0.1")
 

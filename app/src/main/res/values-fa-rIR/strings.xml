@@ -12,10 +12,24 @@
     <string name="error_btn_confirm">تایید</string>
 
 
-    <string name="landing_dialog_title_language">زبان</string>
-    <string name="landing_dialog_item_language_english_us">انگلیسی (آمریکایی)</string>
-    <string name="landing_dialog_item_language_english_gb">انگلیسی (بریتانیایی)</string>
-    <string name="landing_dialog_item_language_persian_ir">فارسی</string>
+    <string name="onboarding_dialog_title_language">زبان</string>
+    <string name="onboarding_dialog_item_language_english_us">انگلیسی (آمریکایی)</string>
+    <string name="onboarding_dialog_item_language_english_gb">انگلیسی (بریتانیایی)</string>
+    <string name="onboarding_dialog_item_language_persian_ir">فارسی</string>
+    <string name="onboarding_btn_skip">رد کردن</string>
+    <string name="onboarding_btn_back">قبلی</string>
+    <string name="onboarding_btn_next">بعدی</string>
+    <string name="onboarding_1st_title">دیگر تاریخ گارانتی محصولات‌تون را فراموش نخواهید کرد.</string>
+    <string name="onboarding_2nd_title">به راحتی تاریخ اتمام گارانتی رو پیگیری کنید.</string>
+    <string name="onboarding_3rd_title">با استفاده از گارانتی قبل از رسیدن به تاریخ انقضا، تو هزینه‌هاتون صرفه‌جویی کنید.</string>
+    <string name="onboarding_4th_title">تمامی داده‌ها به طور خودکار تو فضای ابری نگهداری و پشتیبان‌گیری می‌شوند.</string>
+    <string name="onboarding_4th_btn_start">شروع کنیم</string>
+
+
+    <string name="auth_dialog_title_language">زبان</string>
+    <string name="auth_dialog_item_language_english_us">انگلیسی (آمریکایی)</string>
+    <string name="auth_dialog_item_language_english_gb">انگلیسی (بریتانیایی)</string>
+    <string name="auth_dialog_item_language_persian_ir">فارسی</string>
 
 
     <string name="login_text_title">ورود</string>

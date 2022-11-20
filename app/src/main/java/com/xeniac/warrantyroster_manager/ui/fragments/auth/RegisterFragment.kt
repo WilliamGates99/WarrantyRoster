@@ -1,4 +1,4 @@
-package com.xeniac.warrantyroster_manager.ui.fragments.landing
+package com.xeniac.warrantyroster_manager.ui.fragments.auth
 
 import android.content.Context
 import android.content.Intent
@@ -8,6 +8,7 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -65,12 +66,23 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         loginOnClick()
         registerOnClick()
         registerActionDone()
+        requireActivity().onBackPressedDispatcher.addCallback(onBackPressedCallback)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         snackbar?.dismiss()
         _binding = null
+    }
+
+    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            popBackStack()
+        }
+    }
+
+    private fun popBackStack() {
+        findNavController().popBackStack()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -204,7 +216,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     }
 
     private fun loginOnClick() = binding.btnLogin.setOnClickListener {
-        findNavController().popBackStack()
+        popBackStack()
     }
 
     private fun registerOnClick() = binding.btnRegister.setOnClickListener {
@@ -295,7 +307,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                                         requireView(),
                                         requireContext().getString(R.string.register_error_account_exists),
                                         requireContext().getString(R.string.register_btn_login)
-                                    ) { findNavController().popBackStack() }
+                                    ) { popBackStack() }
                                 }
                                 else -> {
                                     snackbar = showNetworkFailureError(

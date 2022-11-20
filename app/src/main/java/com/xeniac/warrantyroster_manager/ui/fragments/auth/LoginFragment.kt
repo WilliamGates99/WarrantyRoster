@@ -1,4 +1,4 @@
-package com.xeniac.warrantyroster_manager.ui.fragments.landing
+package com.xeniac.warrantyroster_manager.ui.fragments.auth
 
 import android.content.Context
 import android.content.Intent
@@ -8,6 +8,7 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -60,12 +61,23 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         registerOnClick()
         loginOnClick()
         loginActionDone()
+        requireActivity().onBackPressedDispatcher.addCallback(onBackPressedCallback)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         snackbar?.dismiss()
         _binding = null
+    }
+
+    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            popBackStack()
+        }
+    }
+
+    private fun popBackStack() {
+        findNavController().popBackStack()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

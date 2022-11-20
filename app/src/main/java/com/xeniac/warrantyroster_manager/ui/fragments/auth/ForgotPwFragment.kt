@@ -1,4 +1,4 @@
-package com.xeniac.warrantyroster_manager.ui.fragments.landing
+package com.xeniac.warrantyroster_manager.ui.fragments.auth
 
 import android.content.Context
 import android.os.Bundle
@@ -7,6 +7,7 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -55,12 +56,23 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
         returnOnClick()
         sendOnClick()
         sendActionDone()
+        requireActivity().onBackPressedDispatcher.addCallback(onBackPressedCallback)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         snackbar?.dismiss()
         _binding = null
+    }
+
+    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            popBackStack()
+        }
+    }
+
+    private fun popBackStack() {
+        findNavController().popBackStack()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -108,7 +120,7 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
     }
 
     private fun returnOnClick() = binding.btnReturn.setOnClickListener {
-        findNavController().popBackStack()
+        popBackStack()
     }
 
     private fun sendOnClick() = binding.btnSend.setOnClickListener {
