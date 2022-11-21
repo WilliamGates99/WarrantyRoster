@@ -7,6 +7,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentOnboardingBinding
 import com.xeniac.warrantyroster_manager.ui.LandingActivity
@@ -51,7 +52,6 @@ class OnBoardingFragment : Fragment(R.layout.fragment_onboarding) {
         override fun handleOnBackPressed() {
             binding.viewpager.apply {
                 when (currentItem) {
-                    ONBOARDING_1ST_INDEX -> requireActivity().finishAffinity()
                     ONBOARDING_2ND_INDEX -> currentItem = ONBOARDING_1ST_INDEX
                     ONBOARDING_3RD_INDEX -> currentItem = ONBOARDING_2ND_INDEX
                     ONBOARDING_4TG_INDEX -> currentItem = ONBOARDING_3RD_INDEX
@@ -74,7 +74,22 @@ class OnBoardingFragment : Fragment(R.layout.fragment_onboarding) {
 
         binding.viewpager.adapter = onBoardingAdapter
         binding.indicator.attachTo(binding.viewpager)
+        viewPagerOnPageChange()
     }
+
+    private fun viewPagerOnPageChange() =
+        binding.viewpager.registerOnPageChangeCallback(object : OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                onBackPressedCallback.isEnabled = when (position) {
+                    ONBOARDING_1ST_INDEX -> false
+                    ONBOARDING_2ND_INDEX -> true
+                    ONBOARDING_3RD_INDEX -> true
+                    ONBOARDING_4TG_INDEX -> true
+                    else -> false
+                }
+            }
+        })
 
     private fun subscribeToObservers() {
         currentAppLocaleObserver()
