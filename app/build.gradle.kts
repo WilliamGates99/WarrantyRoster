@@ -237,7 +237,7 @@ dependencies {
     implementation("com.google.android.gms:play-services-ads:21.3.0")
 
     // Tapsell Library
-    implementation("ir.tapsell.plus:tapsell-plus-sdk-android:2.1.7")
+    implementation("ir.tapsell.plus:tapsell-plus-sdk-android:2.1.8")
 
     // Local Unit Test Libraries
     testImplementation("com.google.truth:truth:1.1.3")
