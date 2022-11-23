@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_marginVertical="@dimen/margin_16dp"
         android:layout_marginEnd="@dimen/margin_16dp"
-        android:background="@drawable/ripple_onboarding_language"
+        android:background="@drawable/ripple_landing_language"
         android:clickable="true"
         android:elevation="@dimen/elevation_8dp"
         android:focusable="true"
