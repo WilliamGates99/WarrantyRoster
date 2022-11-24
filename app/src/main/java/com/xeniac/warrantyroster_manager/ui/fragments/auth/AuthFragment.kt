@@ -6,7 +6,8 @@ import android.view.View
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.NavHostFragment
+import coil.load
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentAuthBinding
 import com.xeniac.warrantyroster_manager.ui.LandingActivity
@@ -32,7 +33,7 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
 
         subscribeToObservers()
         getCurrentLanguage()
-        setTitleText()
+        setHeader()
         languageOnClick()
     }
 
@@ -72,20 +73,28 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
         }
     }
 
-    private fun setTitleText() = binding.apply {
-        findNavController().addOnDestinationChangedListener { _, destination, _ ->
+    private fun setHeader() = binding.apply {
+        val navHostFragment = childFragmentManager
+            .findFragmentById(binding.fcv.id) as NavHostFragment
+
+        val navController = navHostFragment.navController
+        navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.loginFragment -> {
                     tvTitle.text = getString(R.string.login_text_title)
+                    ivHeader.load(R.drawable.ic_auth_login)
                 }
                 R.id.registerFragment -> {
                     tvTitle.text = getString(R.string.register_text_title)
+                    ivHeader.load(R.drawable.ic_auth_register)
                 }
                 R.id.forgotPwFragment -> {
                     tvTitle.text = getString(R.string.forgot_pw_text_title)
+                    ivHeader.load(R.drawable.ic_auth_forgot_pw)
                 }
                 R.id.forgotPwSentFragment -> {
                     tvTitle.text = getString(R.string.forgot_pw_sent_text_title)
+                    ivHeader.load(R.drawable.ic_auth_forgot_pw)
                 }
             }
         }
