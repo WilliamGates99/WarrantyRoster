@@ -90,7 +90,7 @@
     <string name="forgot_pw_error_not_found">حسابی با ایمیل وارد شده وجود ندارد.</string>
 
 
-    <string name="forgot_pw_sent_text_title">صندوق ایمیل\nخود را\nبررسی کنید</string>
+    <string name="forgot_pw_sent_text_title">بازیابی\nرمز‌عبور</string>
     <string name="forgot_pw_sent_text_description">لطفا صندوق ایمیل خود را بررسی کنید و روی لینک دریافتی کلیک کنید تا رمز‌عبور خود را بازیابی کنید.</string>
     <string name="forgot_pw_sent_text_resend">لینکی را دریافت نکردید؟</string>
     <string name="forgot_pw_sent_btn_resend">ارسال مجدد</string>
