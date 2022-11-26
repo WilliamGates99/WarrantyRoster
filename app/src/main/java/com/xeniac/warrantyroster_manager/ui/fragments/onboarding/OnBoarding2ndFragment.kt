@@ -14,7 +14,7 @@ class OnBoarding2ndFragment : Fragment(R.layout.fragment_onboarding_2nd) {
     private var _binding: FragmentOnboarding2ndBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var viewPager: ViewPager2
+    private var viewPager: ViewPager2? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -33,11 +33,11 @@ class OnBoarding2ndFragment : Fragment(R.layout.fragment_onboarding_2nd) {
 
     private fun backOnClick() = binding.btnBack.setOnClickListener {
         // ViewPager items start from 0
-        viewPager.currentItem = ONBOARDING_1ST_INDEX
+        viewPager?.currentItem = ONBOARDING_1ST_INDEX
     }
 
     private fun nextOnClick() = binding.btnNext.setOnClickListener {
         // ViewPager items start from 0
-        viewPager.currentItem = ONBOARDING_3RD_INDEX
+        viewPager?.currentItem = ONBOARDING_3RD_INDEX
     }
 }
