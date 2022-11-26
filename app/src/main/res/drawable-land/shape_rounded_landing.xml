@@ -4,8 +4,6 @@
 
     <solid android:color="@color/background" />
 
-    <corners
-        android:bottomLeftRadius="@dimen/radius_40dp"
-        android:topLeftRadius="@dimen/radius_40dp" />
+    <corners android:topLeftRadius="@dimen/radius_48dp" />
 
 </shape>

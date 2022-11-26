@@ -18,6 +18,7 @@
     <dimen name="width_86dp">86dp</dimen>
     <dimen name="width_114dp">114dp</dimen>
     <dimen name="width_125dp">125dp</dimen>
+    <dimen name="width_180dp">180dp</dimen>
     <dimen name="width_250dp">250dp</dimen>
 
     <!--Height-->
@@ -87,6 +88,7 @@
     <dimen name="radius_12dp">12dp</dimen>
     <dimen name="radius_20dp">20dp</dimen>
     <dimen name="radius_40dp">40dp</dimen>
+    <dimen name="radius_48dp">48dp</dimen>
     <dimen name="radius_64dp">64dp</dimen>
     <dimen name="radius_50percent">50%</dimen>
 
