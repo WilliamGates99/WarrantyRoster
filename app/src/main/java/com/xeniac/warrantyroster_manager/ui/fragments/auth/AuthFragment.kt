@@ -3,6 +3,8 @@ package com.xeniac.warrantyroster_manager.ui.fragments.auth
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -33,7 +35,7 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
 
         subscribeToObservers()
         getCurrentLanguage()
-        setHeader()
+        headerSetup()
         languageOnClick()
     }
 
@@ -73,30 +75,33 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
         }
     }
 
-    private fun setHeader() = binding.apply {
+    private fun headerSetup() = binding.apply {
         val navHostFragment = childFragmentManager
             .findFragmentById(binding.fcv.id) as NavHostFragment
-
         val navController = navHostFragment.navController
+
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.loginFragment -> {
-                    tvTitle.text = getString(R.string.login_text_title)
-                    ivHeader.load(R.drawable.ic_auth_login)
+                    setHeaderInfo(R.drawable.ic_auth_login, R.string.login_text_title)
                 }
                 R.id.registerFragment -> {
-                    tvTitle.text = getString(R.string.register_text_title)
-                    ivHeader.load(R.drawable.ic_auth_register)
+                    setHeaderInfo(R.drawable.ic_auth_register, R.string.register_text_title)
                 }
                 R.id.forgotPwFragment -> {
-                    tvTitle.text = getString(R.string.forgot_pw_text_title)
-                    ivHeader.load(R.drawable.ic_auth_forgot_pw)
+                    setHeaderInfo(R.drawable.ic_auth_forgot_pw, R.string.forgot_pw_text_title)
                 }
                 R.id.forgotPwSentFragment -> {
-                    tvTitle.text = getString(R.string.forgot_pw_sent_text_title)
-                    ivHeader.load(R.drawable.ic_auth_forgot_pw)
+                    setHeaderInfo(R.drawable.ic_auth_forgot_pw, R.string.forgot_pw_sent_text_title)
                 }
             }
+        }
+    }
+
+    private fun setHeaderInfo(@DrawableRes drawable: Int, @StringRes title: Int) {
+        binding.apply {
+            ivHeader.load(drawable)
+            tvTitle.text = getString(title)
         }
     }
 
