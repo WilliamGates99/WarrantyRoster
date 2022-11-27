@@ -72,11 +72,6 @@ android {
     }
 
     buildTypes {
-        getByName("debug") {
-            versionNameSuffix = " - debug"
-            applicationIdSuffix = ".debug"
-        }
-
         getByName("release") {
             isMinifyEnabled = true
             isShrinkResources = true
@@ -87,8 +82,15 @@ android {
         }
     }
 
+    flavorDimensions.add("build")
     flavorDimensions.add("appStore")
     productFlavors {
+        create("dev") {
+            dimension = "build"
+            versionNameSuffix = " - Developer Preview"
+            applicationIdSuffix = ".dev"
+        }
+
         create("playStore") {
             dimension = "appStore"
             buildConfigField(
