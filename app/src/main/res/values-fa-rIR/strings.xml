@@ -40,6 +40,7 @@
     <string name="login_hint_password">رمز‌عبور خود را وارد کنید</string>
     <string name="login_btn_forgot_pw">رمز‌عبور‌تان را فراموش کرده‌اید؟</string>
     <string name="login_btn_login">ورود</string>
+    <string name="login_text_other_methods">یا ورود با</string>
     <string name="login_text_register_title">حساب کاربری ندارید؟</string>
     <string name="login_btn_register">ثبت‌نام کنید</string>
     <string name="login_error_blank_email">آدرس ایمیل خود را وارد کنید!</string>
