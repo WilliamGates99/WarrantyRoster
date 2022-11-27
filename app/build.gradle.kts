@@ -73,6 +73,7 @@ android {
 
     buildTypes {
         getByName("release") {
+            resValue("color", "appIconBackground", "@color/appIconBackgroundRelease")
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(
@@ -89,6 +90,7 @@ android {
             dimension = "build"
             versionNameSuffix = " - Developer Preview"
             applicationIdSuffix = ".dev"
+            resValue("color", "appIconBackground", "@color/appIconBackgroundDev")
         }
 
         create("playStore") {

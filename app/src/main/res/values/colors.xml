@@ -18,7 +18,8 @@
     <color name="navyBlue20">#3300144F</color>
 
     <!--Static Colors-->
-    <color name="appIconBackground">#1C53F4</color>
+    <color name="appIconBackgroundRelease">#1C53F4</color>
+    <color name="appIconBackgroundDev">#FF9100</color>
     <color name="whiteStatic">#FFFFFF</color>
     <color name="navyBlueStatic">#00144F</color>
     <color name="skyBlueStatic">#DEF4FD</color>
