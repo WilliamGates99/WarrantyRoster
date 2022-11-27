@@ -142,6 +142,20 @@
         <item name="android:padding">@dimen/padding_16dp</item>
     </style>
 
+    <style name="Theme.WarrantyRoster.Button.Outlined" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="shapeAppearance">@style/Theme.WarrantyRoster.Button.Appearance</item>
+        <item name="strokeWidth">@dimen/width_1dp</item>
+        <item name="strokeColor">@color/grayLight</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">@dimen/text_size_16sp</item>
+        <item name="android:fontFamily">@font/localized_bold</item>
+        <item name="textAllCaps">false</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:padding">@dimen/padding_16dp</item>
+    </style>
+
     <style name="Theme.WarrantyRoster.Button.Settings" parent="Widget.MaterialComponents.Button.UnelevatedButton">
         <item name="shapeAppearance">@style/Theme.WarrantyRoster.Button.Appearance</item>
         <item name="backgroundTint">@color/red10</item>

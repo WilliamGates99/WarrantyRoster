@@ -46,6 +46,7 @@
     <dimen name="margin_8dp">8dp</dimen>
     <dimen name="margin_12dp">12dp</dimen>
     <dimen name="margin_16dp">16dp</dimen>
+    <dimen name="margin_18dp">18dp</dimen>
     <dimen name="margin_19dp">19dp</dimen>
     <dimen name="margin_20dp">20dp</dimen>
     <dimen name="margin_24dp">24dp</dimen>
@@ -63,6 +64,7 @@
     <dimen name="margin_79dp">79dp</dimen>
 
     <!--Padding-->
+    <dimen name="padding_0dp">0dp</dimen>
     <dimen name="padding_2dp">2dp</dimen>
     <dimen name="padding_4dp">4dp</dimen>
     <dimen name="padding_5dp">5dp</dimen>

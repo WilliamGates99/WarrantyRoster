@@ -39,6 +39,7 @@
     <string name="login_hint_password">Enter your password</string>
     <string name="login_btn_forgot_pw">Forgot Password?</string>
     <string name="login_btn_login">Login</string>
+    <string name="login_text_other_methods">Or continue with</string>
     <string name="login_text_register_title">Don’t have an account?</string>
     <string name="login_btn_register">Register</string>
     <string name="login_error_blank_email">Enter your email address!</string>
