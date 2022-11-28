@@ -22,7 +22,7 @@ val properties = gradleLocalProperties(rootDir)
 android {
     namespace = "com.xeniac.warrantyroster_manager"
     compileSdk = 33
-    buildToolsVersion = "33.0.0"
+    buildToolsVersion = "33.0.1"
 
     defaultConfig {
         applicationId = "com.xeniac.warrantyroster_manager"
@@ -87,8 +87,7 @@ android {
         }
     }
 
-    flavorDimensions.add("build")
-    flavorDimensions.add("market")
+    flavorDimensions += listOf("build", "market")
     productFlavors {
         create("dev") {
             dimension = "build"
