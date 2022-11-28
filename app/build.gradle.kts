@@ -88,7 +88,7 @@ android {
     }
 
     flavorDimensions.add("build")
-    flavorDimensions.add("appStore")
+    flavorDimensions.add("market")
     productFlavors {
         create("dev") {
             dimension = "build"
@@ -103,7 +103,7 @@ android {
         }
 
         create("playStore") {
-            dimension = "appStore"
+            dimension = "market"
             buildConfigField(
                 "String",
                 "URL_APP_STORE",
@@ -117,7 +117,7 @@ android {
         }
 
         create("amazon") {
-            dimension = "appStore"
+            dimension = "market"
             buildConfigField(
                 "String",
                 "URL_APP_STORE",
@@ -131,7 +131,7 @@ android {
         }
 
         create("cafeBazaar") {
-            dimension = "appStore"
+            dimension = "market"
             buildConfigField(
                 "String",
                 "URL_APP_STORE",
