@@ -175,9 +175,6 @@ class WarrantyAdapter @Inject constructor(
         private lateinit var appLovinNativeAdContainer: ViewGroup
         private lateinit var appLovinAdLoader: MaxNativeAdLoader
         private var appLovinNativeAd: MaxAd? = null
-        private var appLovinAdRequestCounter = 1
-
-        private var tapsellRequestCounter = 1
 
         fun bindView() {
             requestAppLovinNativeAd()
@@ -208,7 +205,6 @@ class WarrantyAdapter @Inject constructor(
             override fun onNativeAdLoaded(nativeAdView: MaxNativeAdView?, nativeAd: MaxAd?) {
                 super.onNativeAdLoaded(nativeAdView, nativeAd)
                 Timber.i("AppLovin onNativeAdLoaded")
-                appLovinAdRequestCounter = 1
 
                 appLovinNativeAd?.let {
                     // Clean up any pre-existing native ad to prevent memory leaks.
@@ -224,12 +220,7 @@ class WarrantyAdapter @Inject constructor(
             override fun onNativeAdLoadFailed(adUnitId: String?, error: MaxError?) {
                 super.onNativeAdLoadFailed(adUnitId, error)
                 Timber.e("AppLovin onNativeAdLoadFailed: ${error?.message}")
-                if (appLovinAdRequestCounter < 2) {
-                    appLovinAdRequestCounter++
-                    appLovinAdLoader.loadAd(createNativeAdView())
-                } else {
-                    initTapsellAdHolder()
-                }
+                initTapsellAdHolder()
             }
 
             override fun onNativeAdClicked(nativeAd: MaxAd?) {
@@ -254,7 +245,6 @@ class WarrantyAdapter @Inject constructor(
                     override fun response(tapsellPlusAdModel: TapsellPlusAdModel?) {
                         super.response(tapsellPlusAdModel)
                         Timber.i("requestTapsellNativeAd onResponse")
-                        tapsellRequestCounter = 1
                         tapsellPlusAdModel?.let {
                             showNativeAd(adHolder, it.responseId)
                         }
@@ -263,10 +253,6 @@ class WarrantyAdapter @Inject constructor(
                     override fun error(error: String?) {
                         super.error(error)
                         Timber.e("requestTapsellNativeAd onError: $error")
-                        if (tapsellRequestCounter < 2) {
-                            tapsellRequestCounter++
-                            requestTapsellNativeAd(adHolder)
-                        }
                     }
                 })
         }
