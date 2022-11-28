@@ -72,8 +72,12 @@ android {
     }
 
     buildTypes {
+        getByName("debug") {
+            versionNameSuffix = " - debug"
+            applicationIdSuffix = ".debug"
+        }
+
         getByName("release") {
-            resValue("color", "appIconBackground", "@color/appIconBackgroundRelease")
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(
@@ -91,6 +95,11 @@ android {
             versionNameSuffix = " - Developer Preview"
             applicationIdSuffix = ".dev"
             resValue("color", "appIconBackground", "@color/appIconBackgroundDev")
+        }
+
+        create("prod") {
+            dimension = "build"
+            resValue("color", "appIconBackground", "@color/appIconBackgroundProd")
         }
 
         create("playStore") {
