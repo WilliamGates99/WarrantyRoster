@@ -175,55 +175,25 @@ androidComponents {
          * Gradle ignores any variants that satisfy the conditions below.
          */
         if (variantBuilder.buildType == "debug") {
-            if (variantBuilder.productFlavors.containsAll(
-                    listOf("build" to "dev", "market" to "amazon")
-                )
-            ) {
-                variantBuilder.enable = false
-            }
-
-            if (variantBuilder.productFlavors.containsAll(
-                    listOf("build" to "dev", "market" to "cafeBazaar")
-                )
-            ) {
-                variantBuilder.enable = false
-            }
-
-            if (variantBuilder.productFlavors.containsAll(
-                    listOf("build" to "prod", "market" to "amazon")
-                )
-            ) {
-                variantBuilder.enable = false
-            }
-
-            if (variantBuilder.productFlavors.containsAll(
-                    listOf("build" to "prod", "market" to "cafeBazaar")
-                )
-            ) {
-                variantBuilder.enable = false
-            }
-
-            if (variantBuilder.productFlavors.containsAll(
-                    listOf("build" to "prod", "market" to "playStore")
-                )
-            ) {
-                variantBuilder.enable = false
+            variantBuilder.productFlavors.let {
+                variantBuilder.enable = when {
+                    it.containsAll(listOf("build" to "dev", "market" to "amazon")) -> false
+                    it.containsAll(listOf("build" to "dev", "market" to "cafeBazaar")) -> false
+                    it.containsAll(listOf("build" to "prod", "market" to "amazon")) -> false
+                    it.containsAll(listOf("build" to "prod", "market" to "cafeBazaar")) -> false
+                    it.containsAll(listOf("build" to "prod", "market" to "playStore")) -> false
+                    else -> true
+                }
             }
         }
 
         if (variantBuilder.buildType == "release") {
-            if (variantBuilder.productFlavors.containsAll(
-                    listOf("build" to "dev", "market" to "amazon")
-                )
-            ) {
-                variantBuilder.enable = false
-            }
-
-            if (variantBuilder.productFlavors.containsAll(
-                    listOf("build" to "dev", "market" to "cafeBazaar")
-                )
-            ) {
-                variantBuilder.enable = false
+            variantBuilder.productFlavors.let {
+                variantBuilder.enable = when {
+                    it.containsAll(listOf("build" to "dev", "market" to "amazon")) -> false
+                    it.containsAll(listOf("build" to "dev", "market" to "cafeBazaar")) -> false
+                    else -> true
+                }
             }
         }
     }
