@@ -169,6 +169,66 @@ android {
     }
 }
 
+androidComponents {
+    beforeVariants { variantBuilder ->
+        /**
+         * Gradle ignores any variants that satisfy the conditions below.
+         */
+        if (variantBuilder.buildType == "debug") {
+            if (variantBuilder.productFlavors.containsAll(
+                    listOf("build" to "dev", "market" to "amazon")
+                )
+            ) {
+                variantBuilder.enable = false
+            }
+
+            if (variantBuilder.productFlavors.containsAll(
+                    listOf("build" to "dev", "market" to "cafeBazaar")
+                )
+            ) {
+                variantBuilder.enable = false
+            }
+
+            if (variantBuilder.productFlavors.containsAll(
+                    listOf("build" to "prod", "market" to "amazon")
+                )
+            ) {
+                variantBuilder.enable = false
+            }
+
+            if (variantBuilder.productFlavors.containsAll(
+                    listOf("build" to "prod", "market" to "cafeBazaar")
+                )
+            ) {
+                variantBuilder.enable = false
+            }
+
+            if (variantBuilder.productFlavors.containsAll(
+                    listOf("build" to "prod", "market" to "playStore")
+                )
+            ) {
+                variantBuilder.enable = false
+            }
+        }
+
+        if (variantBuilder.buildType == "release") {
+            if (variantBuilder.productFlavors.containsAll(
+                    listOf("build" to "dev", "market" to "amazon")
+                )
+            ) {
+                variantBuilder.enable = false
+            }
+
+            if (variantBuilder.productFlavors.containsAll(
+                    listOf("build" to "dev", "market" to "cafeBazaar")
+                )
+            ) {
+                variantBuilder.enable = false
+            }
+        }
+    }
+}
+
 kapt {
     /**
      * Allow references to generated code
