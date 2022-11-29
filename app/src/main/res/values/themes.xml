@@ -154,6 +154,8 @@
         <item name="android:maxLines">1</item>
         <item name="android:ellipsize">end</item>
         <item name="android:padding">@dimen/padding_16dp</item>
+        <item name="android:insetTop">@dimen/content_inset_0dp</item>
+        <item name="android:insetBottom">@dimen/content_inset_0dp</item>
     </style>
 
     <style name="Theme.WarrantyRoster.Button.Settings" parent="Widget.MaterialComponents.Button.UnelevatedButton">
@@ -183,9 +185,7 @@
         <item name="android:letterSpacing">0</item>
         <item name="android:maxLines">1</item>
         <item name="android:ellipsize">end</item>
-        <item name="android:insetLeft">@dimen/content_inset_0dp</item>
         <item name="android:insetTop">@dimen/content_inset_0dp</item>
-        <item name="android:insetRight">@dimen/content_inset_0dp</item>
         <item name="android:insetBottom">@dimen/content_inset_0dp</item>
         <item name="android:minWidth">@dimen/min_width_0dp</item>
         <item name="android:minHeight">@dimen/min_height_0dp</item>
