@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:fillViewport="true"
     android:orientation="vertical"
-    android:overScrollMode="never"
+    android:overScrollMode="ifContentScrolls"
     android:scrollbars="none">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -295,8 +295,7 @@
             android:textAlignment="gravity"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tv_register_title"
-            app:layout_constraintVertical_bias="1" />
+            app:layout_constraintStart_toEndOf="@+id/tv_register_title" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
