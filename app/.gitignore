@@ -1,8 +1,8 @@
 /build
 /release
-/playStore
-/amazon
-/cafeBazaar
+/prodPlayStore
+/prodAmazon
+/prodCafeBazaar
 /obfuscation
 /src/main/dbschemas
 google-services.json
