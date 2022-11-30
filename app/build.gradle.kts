@@ -75,6 +75,10 @@ android {
         getByName("debug") {
             versionNameSuffix = " - debug"
             applicationIdSuffix = ".debug"
+            extra.apply {
+                set("enableCrashlytics", false)
+                set("alwaysUpdateBuildId", false)
+            }
         }
 
         getByName("release") {
@@ -312,8 +316,8 @@ tasks.register<Copy>("copyReleaseApk") {
 
     val amazonApkFile = "app-amazon-release.apk"
     val cafeBazaarApkFile = "app-cafeBazaar-release.apk"
-    val amazonApkSourceDir = "${releaseRootDir}/amazon/release/${amazonApkFile}"
-    val cafeBazaarApkSourceDir = "${releaseRootDir}/cafeBazaar/release/${cafeBazaarApkFile}"
+    val amazonApkSourceDir = "${releaseRootDir}/prodAmazon/release/${amazonApkFile}"
+    val cafeBazaarApkSourceDir = "${releaseRootDir}/prodCafeBazaar/release/${cafeBazaarApkFile}"
 
     from(amazonApkSourceDir)
     into(destinationDir)
@@ -332,8 +336,8 @@ tasks.register<Copy>("copyReleaseBundle") {
     val versionName = "${android.defaultConfig.versionName}"
     val renamedFileName = "Warranty Roster $versionName"
 
-    val bundleFile = "app-playStore-release.aab"
-    val bundleSourceDir = "${releaseRootDir}/playStore/release/${bundleFile}"
+    val bundleFile = "app-prod-playStore-release.aab"
+    val bundleSourceDir = "${releaseRootDir}/prodPlayStore/release/${bundleFile}"
 
     from(bundleSourceDir)
     into(destinationDir)
