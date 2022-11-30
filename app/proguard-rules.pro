@@ -210,6 +210,8 @@
 #🍅---------------Begin: Missing Rules---------------🍅
 # Please add these rules to your existing keep rules in order to suppress warnings.
 # This is generated automatically by the Android Gradle plugin.
+-dontwarn com.unity3d.ads.IUnityAdsLoadListener
+-dontwarn com.unity3d.ads.IUnityAdsShowListener
 -dontwarn com.adcolony.sdk.AdColony
 -dontwarn com.adcolony.sdk.AdColonyAdSize
 -dontwarn com.adcolony.sdk.AdColonyAdView
