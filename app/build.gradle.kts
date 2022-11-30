@@ -314,8 +314,8 @@ tasks.register<Copy>("copyReleaseApk") {
     val versionName = "${android.defaultConfig.versionName}"
     val renamedFileName = "Warranty Roster $versionName"
 
-    val amazonApkFile = "app-amazon-release.apk"
-    val cafeBazaarApkFile = "app-cafeBazaar-release.apk"
+    val amazonApkFile = "app-prod-amazon-release.apk"
+    val cafeBazaarApkFile = "app-prod-cafeBazaar-release.apk"
     val amazonApkSourceDir = "${releaseRootDir}/prodAmazon/release/${amazonApkFile}"
     val cafeBazaarApkSourceDir = "${releaseRootDir}/prodCafeBazaar/release/${cafeBazaarApkFile}"
 
