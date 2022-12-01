@@ -272,6 +272,17 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_weight="1" />
 
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/cpi_google"
+        style="@style/Theme.WarrantyRoster.LoadingProgressBar.OutlinedButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_google"
+        app:layout_constraintEnd_toEndOf="@+id/btn_google"
+        app:layout_constraintStart_toStartOf="@+id/btn_google"
+        app:layout_constraintTop_toTopOf="@+id/btn_google" />
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_twitter"
         style="@style/Theme.WarrantyRoster.Button.Outlined"
@@ -290,6 +301,17 @@
         app:layout_constraintTop_toBottomOf="@id/btn_google"
         app:layout_constraintVertical_weight="1" />
 
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/cpi_twitter"
+        style="@style/Theme.WarrantyRoster.LoadingProgressBar.OutlinedButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_twitter"
+        app:layout_constraintEnd_toEndOf="@+id/btn_twitter"
+        app:layout_constraintStart_toStartOf="@+id/btn_twitter"
+        app:layout_constraintTop_toTopOf="@+id/btn_twitter" />
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_facebook"
         style="@style/Theme.WarrantyRoster.Button.Outlined"
@@ -307,5 +329,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btn_twitter"
         app:layout_constraintVertical_weight="1" />
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/cpi_facebook"
+        style="@style/Theme.WarrantyRoster.LoadingProgressBar.OutlinedButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_facebook"
+        app:layout_constraintEnd_toEndOf="@+id/btn_facebook"
+        app:layout_constraintStart_toStartOf="@+id/btn_facebook"
+        app:layout_constraintTop_toTopOf="@+id/btn_facebook" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
