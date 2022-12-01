@@ -38,6 +38,11 @@ android {
 
         buildConfigField(
             "String",
+            "GOOGLE_AUTH_SERVER_CLIENT_ID",
+            properties.getProperty("GOOGLE_AUTH_SERVER_CLIENT_ID")
+        )
+        buildConfigField(
+            "String",
             "APPLOVIN_INTERSTITIAL_UNIT_ID",
             properties.getProperty("APPLOVIN_INTERSTITIAL_UNIT_ID")
         )
@@ -253,8 +258,11 @@ dependencies {
     implementation("com.google.firebase:firebase-crashlytics-ktx")
     implementation("com.google.firebase:firebase-perf-ktx")
 
-    // Firebase Auth, Firestore, Storage
+    // Firebase Auth
     implementation("com.google.firebase:firebase-auth-ktx")
+    implementation("com.google.android.gms:play-services-auth:20.4.0")
+
+    // Firebase Firestore, Storage
     implementation("com.google.firebase:firebase-firestore-ktx")
     implementation("com.google.firebase:firebase-storage-ktx")
 
