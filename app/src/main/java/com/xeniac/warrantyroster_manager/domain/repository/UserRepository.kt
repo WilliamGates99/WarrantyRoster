@@ -1,10 +1,14 @@
 package com.xeniac.warrantyroster_manager.domain.repository
 
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+
 interface UserRepository {
 
     suspend fun registerViaEmail(email: String, password: String)
 
     suspend fun loginViaEmail(email: String, password: String)
+
+    suspend fun authenticateGoogleAccountWithFirebase(account: GoogleSignInAccount)
 
     suspend fun sendResetPasswordEmail(email: String)
 
