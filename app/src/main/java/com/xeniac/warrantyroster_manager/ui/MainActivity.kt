@@ -45,10 +45,8 @@ class MainActivity : AppCompatActivity(), MaxAdListener {
     var reviewInfo: ReviewInfo? = null
 
     lateinit var appLovinAd: MaxInterstitialAd
-    private var appLovinAdRequestCounter = 1
 
     var tapsellResponseId: String? = null
-    private var tapsellRequestCounter = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -103,6 +101,7 @@ class MainActivity : AppCompatActivity(), MaxAdListener {
         NavigationUI.setupWithNavController(binding.bnv, navController)
         binding.bnv.setOnItemReselectedListener { /* NO-OP */ }
 
+        // TODO FIX NOT HIDING NAVBAR ISSUE
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.warrantiesFragment -> showNavBar()
@@ -254,17 +253,11 @@ class MainActivity : AppCompatActivity(), MaxAdListener {
 
     override fun onAdLoaded(ad: MaxAd?) {
         Timber.i("AppLovin onAdLoaded")
-        appLovinAdRequestCounter = 1
     }
 
     override fun onAdLoadFailed(adUnitId: String?, error: MaxError?) {
         Timber.e("AppLovin onAdLoadFailed: $error")
-        if (appLovinAdRequestCounter < 2) {
-            appLovinAdRequestCounter++
-            appLovinAd.loadAd()
-        } else {
-            requestTapsellInterstitial()
-        }
+        requestTapsellInterstitial()
     }
 
     override fun onAdDisplayFailed(ad: MaxAd?, error: MaxError?) {
@@ -291,17 +284,12 @@ class MainActivity : AppCompatActivity(), MaxAdListener {
                 override fun response(tapsellPlusAdModel: TapsellPlusAdModel?) {
                     super.response(tapsellPlusAdModel)
                     Timber.i("requestTapsellInterstitial onResponse")
-                    tapsellRequestCounter = 1
                     tapsellPlusAdModel?.let { tapsellResponseId = it.responseId }
                 }
 
                 override fun error(error: String?) {
                     super.error(error)
                     Timber.e("requestTapsellInterstitial onError: $error")
-                    if (tapsellRequestCounter < 2) {
-                        tapsellRequestCounter++
-                        requestTapsellInterstitial()
-                    }
                 }
             })
     }

@@ -1,4 +1,4 @@
-package com.xeniac.warrantyroster_manager.ui.fragments.landing
+package com.xeniac.warrantyroster_manager.ui.fragments.auth
 
 import android.content.Context
 import android.content.Intent
@@ -8,12 +8,18 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.snackbar.Snackbar
+import com.xeniac.warrantyroster_manager.BuildConfig
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentLoginBinding
 import com.xeniac.warrantyroster_manager.ui.MainActivity
@@ -36,6 +42,11 @@ import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkConnect
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkFailureError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNormalSnackbarError
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import timber.log.Timber
 import java.util.*
 
 @AndroidEntryPoint
@@ -60,12 +71,22 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         registerOnClick()
         loginOnClick()
         loginActionDone()
+        googleOnClick()
+        twitterOnClick()
+        facebookOnClick()
+        requireActivity().onBackPressedDispatcher.addCallback(onBackPressedCallback)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         snackbar?.dismiss()
         _binding = null
+    }
+
+    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            requireActivity().finishAffinity()
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -134,6 +155,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
     private fun subscribeToObservers() {
         loginObserver()
+        loginWithGoogleObserver()
     }
 
     private fun forgotPwOnClick() = binding.btnForgotPw.setOnClickListener {
@@ -177,16 +199,16 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         viewModel.loginLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
-                    is Resource.Loading -> showLoadingAnimation()
+                    is Resource.Loading -> showLoginLoadingAnimation()
                     is Resource.Success -> {
-                        hideLoadingAnimation()
+                        hideLoginLoadingAnimation()
                         requireActivity().apply {
                             startActivity(Intent(this, MainActivity::class.java))
                             finish()
                         }
                     }
                     is Resource.Error -> {
-                        hideLoadingAnimation()
+                        hideLoginLoadingAnimation()
                         response.message?.asString(requireContext())?.let {
                             when {
                                 it.contains(ERROR_INPUT_BLANK_EMAIL) -> {
@@ -242,19 +264,173 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             }
         }
 
-    private fun showLoadingAnimation() = binding.apply {
+    private fun googleOnClick() = binding.btnGoogle.setOnClickListener {
+        launchGoogleSignInClient()
+    }
+
+    private fun launchGoogleSignInClient() = CoroutineScope(Dispatchers.Main).launch {
+        try {
+            val options = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).apply {
+                requestIdToken(BuildConfig.GOOGLE_AUTH_SERVER_CLIENT_ID)
+                requestId()
+                requestEmail()
+            }.build()
+
+            val googleSignInClient = GoogleSignIn.getClient(requireContext(), options)
+            googleSignInClient.signOut().await()
+
+            googleResultLauncher.launch(googleSignInClient.signInIntent)
+        } catch (e: Exception) {
+            Timber.e("await exception: $e")
+        }
+    }
+
+    private val googleResultLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        try {
+            val account = GoogleSignIn.getSignedInAccountFromIntent(result.data).result
+            // Got an ID token from Google. Use it to authenticate with Firebase.
+            account?.let { viewModel.authenticateGoogleAccountWithFirebase(account) }
+        } catch (e: Exception) {
+            Timber.e("googleResultLauncher Exception: ${e.message}")
+        }
+    }
+
+    private fun loginWithGoogleObserver() =
+        viewModel.loginWithGoogleLiveData.observe(viewLifecycleOwner) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { response ->
+                when (response) {
+                    is Resource.Loading -> showGoogleLoadingAnimation()
+                    is Resource.Success -> {
+                        hideGoogleLoadingAnimation()
+                        requireActivity().apply {
+                            startActivity(Intent(this, MainActivity::class.java))
+                            finish()
+                        }
+                    }
+                    is Resource.Error -> {
+                        hideGoogleLoadingAnimation()
+                        response.message?.asString(requireContext())?.let {
+                            when {
+                                it.contains(ERROR_NETWORK_CONNECTION) -> {
+                                    snackbar = showNetworkConnectionError(
+                                        requireContext(), requireView()
+                                    ) { validateLoginInputs() }
+                                }
+                                it.contains(ERROR_FIREBASE_403) -> {
+                                    snackbar = show403Error(requireContext(), requireView())
+                                }
+                                it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
+                                    snackbar = showFirebaseDeviceBlockedError(
+                                        requireContext(), requireView()
+                                    )
+                                }
+                                else -> {
+                                    snackbar = showNetworkFailureError(
+                                        requireContext(), requireView()
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+    private fun twitterOnClick() = binding.btnTwitter.setOnClickListener {
+        Toast.makeText(requireContext(), "twitter", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun facebookOnClick() = binding.btnFacebook.setOnClickListener {
+        Toast.makeText(requireContext(), "facebook", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun showLoginLoadingAnimation() = binding.apply {
         tiEditEmail.isEnabled = false
         tiEditPassword.isEnabled = false
         btnLogin.isClickable = false
+        btnGoogle.isClickable = false
+        btnTwitter.isClickable = false
+        btnFacebook.isClickable = false
         btnLogin.text = null
         cpiLogin.visibility = VISIBLE
     }
 
-    private fun hideLoadingAnimation() = binding.apply {
+    private fun hideLoginLoadingAnimation() = binding.apply {
         cpiLogin.visibility = GONE
         tiEditEmail.isEnabled = true
         tiEditPassword.isEnabled = true
         btnLogin.isClickable = true
+        btnGoogle.isClickable = true
+        btnTwitter.isClickable = true
+        btnFacebook.isClickable = true
         btnLogin.text = requireContext().getString(R.string.login_btn_login)
+    }
+
+    private fun showGoogleLoadingAnimation() = binding.apply {
+        tiEditEmail.isEnabled = false
+        tiEditPassword.isEnabled = false
+        btnLogin.isClickable = false
+        btnGoogle.isClickable = false
+        btnTwitter.isClickable = false
+        btnFacebook.isClickable = false
+        btnGoogle.icon = null
+        cpiGoogle.visibility = VISIBLE
+    }
+
+    private fun hideGoogleLoadingAnimation() = binding.apply {
+        cpiGoogle.visibility = GONE
+        tiEditEmail.isEnabled = true
+        tiEditPassword.isEnabled = true
+        btnLogin.isClickable = true
+        btnGoogle.isClickable = true
+        btnTwitter.isClickable = true
+        btnFacebook.isClickable = true
+        btnGoogle.setIconResource(R.drawable.ic_auth_google)
+    }
+
+    private fun showTwitterLoadingAnimation() = binding.apply {
+        tiEditEmail.isEnabled = false
+        tiEditPassword.isEnabled = false
+        btnLogin.isClickable = false
+        btnGoogle.isClickable = false
+        btnTwitter.isClickable = false
+        btnFacebook.isClickable = false
+        btnTwitter.icon = null
+        cpiTwitter.visibility = VISIBLE
+    }
+
+    private fun hideTwitterLoadingAnimation() = binding.apply {
+        cpiTwitter.visibility = GONE
+        tiEditEmail.isEnabled = true
+        tiEditPassword.isEnabled = true
+        btnLogin.isClickable = true
+        btnGoogle.isClickable = true
+        btnTwitter.isClickable = true
+        btnFacebook.isClickable = true
+        btnTwitter.setIconResource(R.drawable.ic_auth_twitter)
+    }
+
+    private fun showFacebookLoadingAnimation() = binding.apply {
+        tiEditEmail.isEnabled = false
+        tiEditPassword.isEnabled = false
+        btnLogin.isClickable = false
+        btnGoogle.isClickable = false
+        btnTwitter.isClickable = false
+        btnFacebook.isClickable = false
+        btnFacebook.icon = null
+        cpiFacebook.visibility = VISIBLE
+    }
+
+    private fun hideFacebookLoadingAnimation() = binding.apply {
+        cpiFacebook.visibility = GONE
+        tiEditEmail.isEnabled = true
+        tiEditPassword.isEnabled = true
+        btnLogin.isClickable = true
+        btnGoogle.isClickable = true
+        btnTwitter.isClickable = true
+        btnFacebook.isClickable = true
+        btnFacebook.setIconResource(R.drawable.ic_auth_facebook)
     }
 }

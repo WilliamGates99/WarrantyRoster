@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.LandingActivity">
+    android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -12,60 +10,44 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/iv_header"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/height_0dp"
+            android:layout_width="@dimen/width_180dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_4dp"
+            android:layout_marginVertical="@dimen/margin_4dp"
             android:adjustViewBounds="true"
-            android:alpha="0.80"
-            android:rotationY="180"
+            android:alpha="0.90"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_landing_header"
             android:tintMode="multiply"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/fcv"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/guideline_header"
             app:tint="@color/blue" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_language"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_16dp"
-            android:layout_marginBottom="@dimen/margin_16dp"
+            android:layout_marginStart="@dimen/margin_12dp"
+            android:layout_marginTop="@dimen/margin_12dp"
             android:background="@drawable/ripple_landing_language"
             android:clickable="true"
+            android:elevation="@dimen/elevation_8dp"
             android:focusable="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/iv_language_flag"
                 android:layout_width="@dimen/width_20dp"
                 android:layout_height="@dimen/height_20dp"
-                android:layout_marginVertical="@dimen/margin_4dp"
-                android:layout_marginStart="@dimen/margin_8dp"
-                android:layout_marginEnd="@dimen/margin_4dp"
+                android:layout_margin="@dimen/margin_2dp"
                 android:adjustViewBounds="true"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_flag_usa"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/iv_language_arrow"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.5"
-                app:shapeAppearance="@style/Theme.WarrantyRoster.ImageViewShapeAppearance.Circle" />
-
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/iv_language_arrow"
-                android:layout_width="@dimen/width_14dp"
-                android:layout_height="@dimen/height_14dp"
-                android:layout_marginStart="@dimen/margin_4dp"
-                android:layout_marginEnd="@dimen/margin_8dp"
-                android:src="@drawable/ic_landing_arrow_up"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/iv_language_flag"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.5" />
+                app:shapeAppearance="@style/Theme.WarrantyRoster.ImageViewShapeAppearance.Circle" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -73,18 +55,18 @@
             android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/margin_12dp"
+            android:layout_marginHorizontal="@dimen/margin_4dp"
+            android:layout_marginTop="@dimen/margin_32dp"
             android:fontFamily="@font/localized_black"
-            android:gravity="start|center_vertical"
-            android:text="@string/login_text_title"
-            android:textAlignment="gravity"
+            android:textAlignment="center"
             android:textColor="@color/whiteStatic"
             android:textSize="@dimen/text_size_34sp"
             app:layout_constrainedWidth="true"
             app:layout_constraintBottom_toTopOf="@+id/iv_header"
             app:layout_constraintEnd_toStartOf="@+id/fcv"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/cl_language"
+            app:layout_constraintVertical_bias="0" />
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fcv"
@@ -96,23 +78,9 @@
             app:defaultNavHost="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/guideline"
+            app:layout_constraintStart_toEndOf="@+id/iv_header"
             app:layout_constraintTop_toTopOf="parent"
-            app:navGraph="@navigation/nav_graph_landing" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.3" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline_header"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.45" />
+            app:navGraph="@navigation/nav_graph_auth" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -1,8 +1,10 @@
 package com.xeniac.warrantyroster_manager.data.repository
 
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.GoogleAuthProvider
 import com.xeniac.warrantyroster_manager.domain.repository.UserRepository
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -17,6 +19,11 @@ class UserRepositoryImp @Inject constructor(
 
     override suspend fun loginViaEmail(email: String, password: String) {
         firebaseAuth.signInWithEmailAndPassword(email, password).await()
+    }
+
+    override suspend fun authenticateGoogleAccountWithFirebase(account: GoogleSignInAccount) {
+        val credentials = GoogleAuthProvider.getCredential(account.idToken, null)
+        firebaseAuth.signInWithCredential(credentials).await()
     }
 
     override suspend fun sendResetPasswordEmail(email: String) {

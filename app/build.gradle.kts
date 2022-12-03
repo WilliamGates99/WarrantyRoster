@@ -22,7 +22,7 @@ val properties = gradleLocalProperties(rootDir)
 android {
     namespace = "com.xeniac.warrantyroster_manager"
     compileSdk = 33
-    buildToolsVersion = "33.0.0"
+    buildToolsVersion = "33.0.1"
 
     defaultConfig {
         applicationId = "com.xeniac.warrantyroster_manager"
@@ -36,6 +36,11 @@ android {
          */
         resourceConfigurations += mutableSetOf("en-rUS", "en-rGB", "fa-rIR")
 
+        buildConfigField(
+            "String",
+            "GOOGLE_AUTH_SERVER_CLIENT_ID",
+            properties.getProperty("GOOGLE_AUTH_SERVER_CLIENT_ID")
+        )
         buildConfigField(
             "String",
             "APPLOVIN_INTERSTITIAL_UNIT_ID",
@@ -75,6 +80,10 @@ android {
         getByName("debug") {
             versionNameSuffix = " - debug"
             applicationIdSuffix = ".debug"
+            extra.apply {
+                set("enableCrashlytics", false)
+                set("alwaysUpdateBuildId", false)
+            }
         }
 
         getByName("release") {
@@ -87,10 +96,22 @@ android {
         }
     }
 
-    flavorDimensions.add("appStore")
+    flavorDimensions += listOf("build", "market")
     productFlavors {
+        create("dev") {
+            dimension = "build"
+            versionNameSuffix = " - Developer Preview"
+            applicationIdSuffix = ".dev"
+            resValue("color", "appIconBackground", "@color/appIconBackgroundDev")
+        }
+
+        create("prod") {
+            dimension = "build"
+            resValue("color", "appIconBackground", "@color/appIconBackgroundProd")
+        }
+
         create("playStore") {
-            dimension = "appStore"
+            dimension = "market"
             buildConfigField(
                 "String",
                 "URL_APP_STORE",
@@ -104,7 +125,7 @@ android {
         }
 
         create("amazon") {
-            dimension = "appStore"
+            dimension = "market"
             buildConfigField(
                 "String",
                 "URL_APP_STORE",
@@ -118,7 +139,7 @@ android {
         }
 
         create("cafeBazaar") {
-            dimension = "appStore"
+            dimension = "market"
             buildConfigField(
                 "String",
                 "URL_APP_STORE",
@@ -153,6 +174,36 @@ android {
              * These resources are instead packaged with each base and dynamic feature APK.
              */
             enableSplit = false
+        }
+    }
+}
+
+androidComponents {
+    beforeVariants { variantBuilder ->
+        /**
+         * Gradle ignores any variants that satisfy the conditions below.
+         */
+        if (variantBuilder.buildType == "debug") {
+            variantBuilder.productFlavors.let {
+                variantBuilder.enable = when {
+                    it.containsAll(listOf("build" to "dev", "market" to "amazon")) -> false
+                    it.containsAll(listOf("build" to "dev", "market" to "cafeBazaar")) -> false
+                    it.containsAll(listOf("build" to "prod", "market" to "amazon")) -> false
+                    it.containsAll(listOf("build" to "prod", "market" to "cafeBazaar")) -> false
+                    it.containsAll(listOf("build" to "prod", "market" to "playStore")) -> false
+                    else -> true
+                }
+            }
+        }
+
+        if (variantBuilder.buildType == "release") {
+            variantBuilder.productFlavors.let {
+                variantBuilder.enable = when {
+                    it.containsAll(listOf("build" to "dev", "market" to "amazon")) -> false
+                    it.containsAll(listOf("build" to "dev", "market" to "cafeBazaar")) -> false
+                    else -> true
+                }
+            }
         }
     }
 }
@@ -207,8 +258,11 @@ dependencies {
     implementation("com.google.firebase:firebase-crashlytics-ktx")
     implementation("com.google.firebase:firebase-perf-ktx")
 
-    // Firebase Auth, Firestore, Storage
+    // Firebase Auth
     implementation("com.google.firebase:firebase-auth-ktx")
+    implementation("com.google.android.gms:play-services-auth:20.4.0")
+
+    // Firebase Firestore, Storage
     implementation("com.google.firebase:firebase-firestore-ktx")
     implementation("com.google.firebase:firebase-storage-ktx")
 
@@ -222,6 +276,9 @@ dependencies {
     implementation("io.coil-kt:coil:2.2.2")
     implementation("io.coil-kt:coil-svg:2.2.2")
 
+    // Dots Indicator Library
+    implementation("com.tbuonomo:dotsindicator:4.3")
+
     // Google Play In-App Reviews API
     implementation("com.google.android.play:review-ktx:2.0.1")
 
@@ -234,7 +291,7 @@ dependencies {
     implementation("com.google.android.gms:play-services-ads:21.3.0")
 
     // Tapsell Library
-    implementation("ir.tapsell.plus:tapsell-plus-sdk-android:2.1.7")
+    implementation("ir.tapsell.plus:tapsell-plus-sdk-android:2.1.8")
 
     // Local Unit Test Libraries
     testImplementation("com.google.truth:truth:1.1.3")
@@ -265,10 +322,10 @@ tasks.register<Copy>("copyReleaseApk") {
     val versionName = "${android.defaultConfig.versionName}"
     val renamedFileName = "Warranty Roster $versionName"
 
-    val amazonApkFile = "app-amazon-release.apk"
-    val cafeBazaarApkFile = "app-cafeBazaar-release.apk"
-    val amazonApkSourceDir = "${releaseRootDir}/amazon/release/${amazonApkFile}"
-    val cafeBazaarApkSourceDir = "${releaseRootDir}/cafeBazaar/release/${cafeBazaarApkFile}"
+    val amazonApkFile = "app-prod-amazon-release.apk"
+    val cafeBazaarApkFile = "app-prod-cafeBazaar-release.apk"
+    val amazonApkSourceDir = "${releaseRootDir}/prodAmazon/release/${amazonApkFile}"
+    val cafeBazaarApkSourceDir = "${releaseRootDir}/prodCafeBazaar/release/${cafeBazaarApkFile}"
 
     from(amazonApkSourceDir)
     into(destinationDir)
@@ -287,8 +344,8 @@ tasks.register<Copy>("copyReleaseBundle") {
     val versionName = "${android.defaultConfig.versionName}"
     val renamedFileName = "Warranty Roster $versionName"
 
-    val bundleFile = "app-playStore-release.aab"
-    val bundleSourceDir = "${releaseRootDir}/playStore/release/${bundleFile}"
+    val bundleFile = "app-prod-playStore-release.aab"
+    val bundleSourceDir = "${releaseRootDir}/prodPlayStore/release/${bundleFile}"
 
     from(bundleSourceDir)
     into(destinationDir)
