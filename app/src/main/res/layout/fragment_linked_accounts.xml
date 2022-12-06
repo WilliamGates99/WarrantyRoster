@@ -4,9 +4,19 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
-            name="googleBackground"
-            type="Integer" />
+            name="isGoogleLoading"
+            type="Boolean" />
+
+        <variable
+            name="isTwitterLoading"
+            type="Boolean" />
+
+        <variable
+            name="isFacebookLoading"
+            type="Boolean" />
 
         <variable
             name="googleClickable"
@@ -18,7 +28,7 @@
 
         <variable
             name="googleStatusBackground"
-            type="Integer" />
+            type="android.graphics.drawable.Drawable" />
 
         <variable
             name="googleStatusTextColor"
@@ -27,10 +37,6 @@
         <variable
             name="googleStatusText"
             type="String" />
-
-        <variable
-            name="twitterBackground"
-            type="Integer" />
 
         <variable
             name="twitterClickable"
@@ -42,7 +48,7 @@
 
         <variable
             name="twitterStatusBackground"
-            type="Integer" />
+            type="android.graphics.drawable.Drawable" />
 
         <variable
             name="twitterStatusTextColor"
@@ -51,10 +57,6 @@
         <variable
             name="twitterStatusText"
             type="String" />
-
-        <variable
-            name="facebookBackground"
-            type="Integer" />
 
         <variable
             name="facebookClickable"
@@ -66,7 +68,7 @@
 
         <variable
             name="facebookStatusBackground"
-            type="Integer" />
+            type="android.graphics.drawable.Drawable" />
 
         <variable
             name="facebookStatusTextColor"
@@ -114,7 +116,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/margin_8dp"
                     android:layout_marginTop="@dimen/margin_8dp"
-                    android:background="@{googleBackground}"
+                    android:background="?attr/selectableItemBackground"
                     android:clickable="@{googleClickable}"
                     android:focusable="@{googleFocusable}"
                     app:cardBackgroundColor="@color/surface"
@@ -174,10 +176,22 @@
                             android:textAllCaps="true"
                             android:textColor="@{googleStatusTextColor}"
                             android:textSize="@dimen/text_size_10sp"
+                            android:visibility="@{isGoogleLoading ? View.GONE : View.VISIBLE, default=visible}"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             app:textAllCaps="true" />
+
+                        <com.google.android.material.progressindicator.CircularProgressIndicator
+                            android:id="@+id/cpi_google"
+                            style="@style/Theme.WarrantyRoster.LoadingProgressBar.LinkedAccounts"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/margin_24dp"
+                            android:visibility="@{isGoogleLoading ? View.VISIBLE : View.GONE, default=gone}"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -189,7 +203,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/margin_8dp"
                     android:layout_marginTop="@dimen/margin_8dp"
-                    android:background="@{twitterBackground}"
+                    android:background="?attr/selectableItemBackground"
                     android:clickable="@{twitterClickable}"
                     android:focusable="@{twitterFocusable}"
                     app:cardBackgroundColor="@color/surface"
@@ -249,10 +263,22 @@
                             android:textAllCaps="true"
                             android:textColor="@{twitterStatusTextColor}"
                             android:textSize="@dimen/text_size_10sp"
+                            android:visibility="@{isTwitterLoading ? View.GONE : View.VISIBLE, default=visible}"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             app:textAllCaps="true" />
+
+                        <com.google.android.material.progressindicator.CircularProgressIndicator
+                            android:id="@+id/cpi_twitter"
+                            style="@style/Theme.WarrantyRoster.LoadingProgressBar.LinkedAccounts"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/margin_24dp"
+                            android:visibility="@{isTwitterLoading ? View.VISIBLE : View.GONE, default=gone}"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -264,7 +290,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/margin_8dp"
                     android:layout_marginVertical="@dimen/margin_8dp"
-                    android:background="@{facebookBackground}"
+                    android:background="?attr/selectableItemBackground"
                     android:clickable="@{facebookClickable}"
                     android:focusable="@{facebookFocusable}"
                     app:cardBackgroundColor="@color/surface"
@@ -325,10 +351,22 @@
                             android:textAllCaps="true"
                             android:textColor="@{facebookStatusTextColor}"
                             android:textSize="@dimen/text_size_10sp"
+                            android:visibility="@{isFacebookLoading ? View.GONE : View.VISIBLE, default=visible}"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             app:textAllCaps="true" />
+
+                        <com.google.android.material.progressindicator.CircularProgressIndicator
+                            android:id="@+id/cpi_facebook"
+                            style="@style/Theme.WarrantyRoster.LoadingProgressBar.LinkedAccounts"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/margin_24dp"
+                            android:visibility="@{isFacebookLoading ? View.VISIBLE : View.GONE, default=gone}"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 

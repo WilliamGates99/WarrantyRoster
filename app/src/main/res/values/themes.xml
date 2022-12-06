@@ -136,6 +136,12 @@
         <item name="trackThickness">@dimen/width_2dp</item>
     </style>
 
+    <style name="Theme.WarrantyRoster.LoadingProgressBar.LinkedAccounts" parent="Widget.MaterialComponents.CircularProgressIndicator.Small">
+        <item name="android:indeterminate">true</item>
+        <item name="indicatorColor">@color/navyBlue</item>
+        <item name="trackCornerRadius">@dimen/radius_12dp</item>
+    </style>
+
     <style name="Theme.WarrantyRoster.Button" parent="Widget.MaterialComponents.Button.UnelevatedButton">
         <item name="shapeAppearance">@style/Theme.WarrantyRoster.Button.Appearance</item>
         <item name="android:textColor">@color/whiteStatic</item>
