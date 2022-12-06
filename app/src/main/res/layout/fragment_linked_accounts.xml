@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="googleBackground"
+            type="Integer" />
+
+        <variable
+            name="googleClickable"
+            type="Boolean" />
+
+        <variable
+            name="googleFocusable"
+            type="Boolean" />
+
+        <variable
+            name="googleStatusBackground"
+            type="Integer" />
+
+        <variable
+            name="googleStatusTextColor"
+            type="Integer" />
+
+        <variable
+            name="googleStatusText"
+            type="String" />
+
+        <variable
+            name="twitterBackground"
+            type="Integer" />
+
+        <variable
+            name="twitterClickable"
+            type="Boolean" />
+
+        <variable
+            name="twitterFocusable"
+            type="Boolean" />
+
+        <variable
+            name="twitterStatusBackground"
+            type="Integer" />
+
+        <variable
+            name="twitterStatusTextColor"
+            type="Integer" />
+
+        <variable
+            name="twitterStatusText"
+            type="String" />
+
+        <variable
+            name="facebookBackground"
+            type="Integer" />
+
+        <variable
+            name="facebookClickable"
+            type="Boolean" />
+
+        <variable
+            name="facebookFocusable"
+            type="Boolean" />
+
+        <variable
+            name="facebookStatusBackground"
+            type="Integer" />
+
+        <variable
+            name="facebookStatusTextColor"
+            type="Integer" />
+
+        <variable
+            name="facebookStatusText"
+            type="String" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            style="@style/Theme.WarrantyRoster.Toolbar"
+            android:layout_width="@dimen/width_0dp"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@drawable/ic_menu_back"
+            app:title="@string/linked_accounts_text_title" />
+
+        <ScrollView
+            android:layout_width="@dimen/width_0dp"
+            android:layout_height="@dimen/height_0dp"
+            android:orientation="vertical"
+            android:overScrollMode="ifContentScrolls"
+            android:scrollbars="none"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cv_google"
+                    android:layout_width="@dimen/width_0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/margin_8dp"
+                    android:layout_marginTop="@dimen/margin_8dp"
+                    android:background="@{googleBackground}"
+                    android:clickable="@{googleClickable}"
+                    android:focusable="@{googleFocusable}"
+                    app:cardBackgroundColor="@color/surface"
+                    app:cardCornerRadius="@dimen/radius_12dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:id="@+id/iv_icon_google"
+                            android:layout_width="@dimen/width_40dp"
+                            android:layout_height="@dimen/height_40dp"
+                            android:layout_marginVertical="@dimen/margin_16dp"
+                            android:layout_marginStart="@dimen/margin_16dp"
+                            android:src="@drawable/ic_auth_google"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/tv_title_google"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="@dimen/margin_16dp"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/localized_bold"
+                            android:gravity="center_vertical|start"
+                            android:maxLines="1"
+                            android:text="@string/linked_accounts_title_google"
+                            android:textAlignment="gravity"
+                            android:textColor="@color/navyBlue"
+                            android:textSize="@dimen/text_size_16sp"
+                            app:layout_constrainedWidth="true"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/tv_status_google"
+                            app:layout_constraintHorizontal_bias="0"
+                            app:layout_constraintStart_toEndOf="@+id/iv_icon_google"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/tv_status_google"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/margin_16dp"
+                            android:background="@{googleStatusBackground}"
+                            android:fontFamily="@font/localized_black"
+                            android:gravity="center"
+                            android:maxLines="1"
+                            android:paddingHorizontal="@dimen/padding_8dp"
+                            android:paddingVertical="@dimen/padding_4dp"
+                            android:text="@{googleStatusText}"
+                            android:textAlignment="gravity"
+                            android:textAllCaps="true"
+                            android:textColor="@{googleStatusTextColor}"
+                            android:textSize="@dimen/text_size_10sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:textAllCaps="true" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cv_twitter"
+                    android:layout_width="@dimen/width_0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/margin_8dp"
+                    android:layout_marginTop="@dimen/margin_8dp"
+                    android:background="@{twitterBackground}"
+                    android:clickable="@{twitterClickable}"
+                    android:focusable="@{twitterFocusable}"
+                    app:cardBackgroundColor="@color/surface"
+                    app:cardCornerRadius="@dimen/radius_12dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/cv_google">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:id="@+id/iv_icon_twitter"
+                            android:layout_width="@dimen/width_40dp"
+                            android:layout_height="@dimen/height_40dp"
+                            android:layout_marginVertical="@dimen/margin_16dp"
+                            android:layout_marginStart="@dimen/margin_16dp"
+                            android:src="@drawable/ic_auth_twitter"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/tv_title_twitter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="@dimen/margin_16dp"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/localized_bold"
+                            android:gravity="center_vertical|start"
+                            android:maxLines="1"
+                            android:text="@string/linked_accounts_title_twitter"
+                            android:textAlignment="gravity"
+                            android:textColor="@color/navyBlue"
+                            android:textSize="@dimen/text_size_16sp"
+                            app:layout_constrainedWidth="true"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/tv_status_twitter"
+                            app:layout_constraintHorizontal_bias="0"
+                            app:layout_constraintStart_toEndOf="@+id/iv_icon_twitter"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/tv_status_twitter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/margin_16dp"
+                            android:background="@{twitterStatusBackground}"
+                            android:fontFamily="@font/localized_black"
+                            android:gravity="center"
+                            android:maxLines="1"
+                            android:paddingHorizontal="@dimen/padding_8dp"
+                            android:paddingVertical="@dimen/padding_4dp"
+                            android:text="@{twitterStatusText}"
+                            android:textAlignment="gravity"
+                            android:textAllCaps="true"
+                            android:textColor="@{twitterStatusTextColor}"
+                            android:textSize="@dimen/text_size_10sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:textAllCaps="true" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cv_facebook"
+                    android:layout_width="@dimen/width_0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/margin_8dp"
+                    android:layout_marginVertical="@dimen/margin_8dp"
+                    android:background="@{facebookBackground}"
+                    android:clickable="@{facebookClickable}"
+                    android:focusable="@{facebookFocusable}"
+                    app:cardBackgroundColor="@color/surface"
+                    app:cardCornerRadius="@dimen/radius_12dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/cv_twitter">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:id="@+id/iv_icon_facebook"
+                            android:layout_width="@dimen/width_40dp"
+                            android:layout_height="@dimen/height_40dp"
+                            android:layout_marginVertical="@dimen/margin_16dp"
+                            android:layout_marginStart="@dimen/margin_16dp"
+                            android:src="@drawable/ic_auth_facebook"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/tv_title_facebook"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="@dimen/margin_16dp"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/localized_bold"
+                            android:gravity="center_vertical|start"
+                            android:maxLines="1"
+                            android:text="@string/linked_accounts_title_facebook"
+                            android:textAlignment="gravity"
+                            android:textColor="@color/navyBlue"
+                            android:textSize="@dimen/text_size_16sp"
+                            app:layout_constrainedWidth="true"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/tv_status_facebook"
+                            app:layout_constraintHorizontal_bias="0"
+                            app:layout_constraintStart_toEndOf="@+id/iv_icon_facebook"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/tv_status_facebook"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/margin_16dp"
+                            android:background="@{facebookStatusBackground}"
+                            android:fontFamily="@font/localized_black"
+                            android:gravity="center"
+                            android:maxLines="1"
+                            android:paddingHorizontal="@dimen/padding_8dp"
+                            android:paddingVertical="@dimen/padding_4dp"
+                            android:text="@{facebookStatusText}"
+                            android:textAlignment="gravity"
+                            android:textAllCaps="true"
+                            android:textColor="@{facebookStatusTextColor}"
+                            android:textSize="@dimen/text_size_10sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:textAllCaps="true" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </ScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

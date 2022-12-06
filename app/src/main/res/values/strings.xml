@@ -345,6 +345,14 @@
     <string name="settings_ad_indicator" translatable="false">Ad</string>
 
 
+    <string name="linked_accounts_text_title">Linked Accounts</string>
+    <string name="linked_accounts_title_google">Google</string>
+    <string name="linked_accounts_title_twitter">Twitter</string>
+    <string name="linked_accounts_title_facebook">Facebook</string>
+    <string name="linked_accounts_status_not_connected">Connect</string>
+    <string name="linked_accounts_status_connected">Connected</string>
+
+
     <string name="change_password_text_title">Change Password</string>
     <string name="change_password_title_current_password">Current Password</string>
     <string name="change_password_hint_current_password">Enter your current password</string>

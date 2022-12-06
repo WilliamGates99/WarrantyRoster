@@ -343,6 +343,9 @@
     <string name="settings_dialog_positive">تایید</string>
 
 
+    <string name="linked_accounts_text_title">حساب‌های متصل</string>
+
+
     <string name="change_password_text_title">تغییر رمز‌عبور</string>
     <string name="change_password_title_current_password">رمز‌عبور فعلی</string>
     <string name="change_password_hint_current_password">رمز‌عبور فعلی خود را وارد کنید</string>

@@ -343,6 +343,9 @@
     <string name="settings_dialog_positive">Confirm</string>
 
 
+    <string name="linked_accounts_text_title">Linked Accounts</string>
+
+
     <string name="change_password_text_title">Change Password</string>
     <string name="change_password_title_current_password">Current Password</string>
     <string name="change_password_hint_current_password">Enter your current password</string>
