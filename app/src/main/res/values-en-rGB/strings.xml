@@ -315,6 +315,7 @@
     <string name="settings_title_settings">Settings</string>
     <string name="settings_btn_account_verify">Verify Email</string>
     <string name="settings_btn_account_verified">Verified</string>
+    <string name="settings_text_account_linked_accounts">Linked Accounts</string>
     <string name="settings_text_account_change_email">Change Email Address</string>
     <string name="settings_text_account_change_password">Change Password</string>
     <string name="settings_text_settings_language">Language</string>

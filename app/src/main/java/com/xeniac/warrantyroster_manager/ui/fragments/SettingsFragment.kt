@@ -80,6 +80,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
         getCurrentLanguage()
         getCurrentAppTheme()
         verifyOnClick()
+        linkedAccountsOnClick()
         changeEmailOnClick()
         changePasswordOnClick()
         languageOnClick()
@@ -242,6 +243,10 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
                 }
             }
         }
+
+    private fun linkedAccountsOnClick() = binding.clAccountLinkedAccounts.setOnClickListener {
+        findNavController().navigate(SettingsFragmentDirections.actionSettingsFragmentToLinkedAccountsFragment())
+    }
 
     private fun changeEmailOnClick() = binding.clAccountChangeEmail.setOnClickListener {
         findNavController().navigate(SettingsFragmentDirections.actionSettingsFragmentToChangeEmailFragment())

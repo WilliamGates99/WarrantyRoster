@@ -315,6 +315,7 @@
     <string name="settings_title_settings">تنظیمات</string>
     <string name="settings_btn_account_verify">تایید ایمیل</string>
     <string name="settings_btn_account_verified">تایید شده</string>
+    <string name="settings_text_account_linked_accounts">حساب‌های متصل</string>
     <string name="settings_text_account_change_email">تغییر آدرس ایمیل</string>
     <string name="settings_text_account_change_password">تغییر رمز‌عبور</string>
     <string name="settings_text_settings_language">زبان</string>
