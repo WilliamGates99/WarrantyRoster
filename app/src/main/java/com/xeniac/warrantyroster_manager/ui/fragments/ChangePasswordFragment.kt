@@ -57,8 +57,8 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
 
         textInputsBackgroundColor()
         textInputsStrokeColor()
-        subscribeToObservers()
         toolbarNavigationBackOnClick()
+        subscribeToObservers()
         changePasswordOnClick()
         changePasswordActionDone()
     }
@@ -195,14 +195,14 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
         }
     }
 
+    private fun toolbarNavigationBackOnClick() = binding.toolbar.setNavigationOnClickListener {
+        navigateBack()
+    }
+
     private fun subscribeToObservers() {
         checkInputsObserver()
         reAuthenticateUserObserver()
         changeUserPasswordObserver()
-    }
-
-    private fun toolbarNavigationBackOnClick() = binding.toolbar.setNavigationOnClickListener {
-        navigateBack()
     }
 
     private fun navigateBack() {

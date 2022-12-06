@@ -57,8 +57,8 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
 
         textInputsBackgroundColor()
         textInputsStrokeColor()
-        subscribeToObservers()
         toolbarNavigationBackOnClick()
+        subscribeToObservers()
         changeEmailOnClick()
         changeEmailActionDone()
     }
@@ -133,14 +133,14 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
         }
     }
 
+    private fun toolbarNavigationBackOnClick() = binding.toolbar.setNavigationOnClickListener {
+        navigateBack()
+    }
+
     private fun subscribeToObservers() {
         checkInputsObserver()
         reAuthenticateUserObserver()
         changeUserEmailObserver()
-    }
-
-    private fun toolbarNavigationBackOnClick() = binding.toolbar.setNavigationOnClickListener {
-        navigateBack()
     }
 
     private fun navigateBack() {
