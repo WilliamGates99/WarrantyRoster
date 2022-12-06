@@ -199,14 +199,14 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
         navigateBack()
     }
 
+    private fun navigateBack() {
+        findNavController().popBackStack()
+    }
+
     private fun subscribeToObservers() {
         checkInputsObserver()
         reAuthenticateUserObserver()
         changeUserPasswordObserver()
-    }
-
-    private fun navigateBack() {
-        findNavController().popBackStack()
     }
 
     private fun changePasswordOnClick() = binding.btnChangePassword.setOnClickListener {

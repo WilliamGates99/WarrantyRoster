@@ -137,14 +137,14 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
         navigateBack()
     }
 
+    private fun navigateBack() {
+        findNavController().popBackStack()
+    }
+
     private fun subscribeToObservers() {
         checkInputsObserver()
         reAuthenticateUserObserver()
         changeUserEmailObserver()
-    }
-
-    private fun navigateBack() {
-        findNavController().popBackStack()
     }
 
     private fun changeEmailOnClick() = binding.btnChangeEmail.setOnClickListener {
