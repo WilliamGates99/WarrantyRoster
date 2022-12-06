@@ -109,6 +109,7 @@ class MainActivity : AppCompatActivity(), MaxAdListener {
                 R.id.warrantyDetailsFragment -> hideNavBar()
                 R.id.addWarrantyFragment -> hideNavBar()
                 R.id.editWarrantyFragment -> hideNavBar()
+                R.id.linkedAccountsFragment -> hideNavBar()
                 R.id.changeEmailFragment -> hideNavBar()
                 R.id.changePasswordFragment -> hideNavBar()
                 else -> showNavBar()
