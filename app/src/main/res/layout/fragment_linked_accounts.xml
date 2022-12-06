@@ -11,19 +11,7 @@
             type="Boolean" />
 
         <variable
-            name="isTwitterLoading"
-            type="Boolean" />
-
-        <variable
-            name="isFacebookLoading"
-            type="Boolean" />
-
-        <variable
             name="googleClickable"
-            type="Boolean" />
-
-        <variable
-            name="googleFocusable"
             type="Boolean" />
 
         <variable
@@ -39,11 +27,11 @@
             type="String" />
 
         <variable
-            name="twitterClickable"
+            name="isTwitterLoading"
             type="Boolean" />
 
         <variable
-            name="twitterFocusable"
+            name="twitterClickable"
             type="Boolean" />
 
         <variable
@@ -59,11 +47,11 @@
             type="String" />
 
         <variable
-            name="facebookClickable"
+            name="isFacebookLoading"
             type="Boolean" />
 
         <variable
-            name="facebookFocusable"
+            name="facebookClickable"
             type="Boolean" />
 
         <variable
@@ -118,7 +106,7 @@
                     android:layout_marginTop="@dimen/margin_8dp"
                     android:background="?attr/selectableItemBackground"
                     android:clickable="@{googleClickable}"
-                    android:focusable="@{googleFocusable}"
+                    android:focusable="true"
                     app:cardBackgroundColor="@color/surface"
                     app:cardCornerRadius="@dimen/radius_12dp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -205,7 +193,7 @@
                     android:layout_marginTop="@dimen/margin_8dp"
                     android:background="?attr/selectableItemBackground"
                     android:clickable="@{twitterClickable}"
-                    android:focusable="@{twitterFocusable}"
+                    android:focusable="true"
                     app:cardBackgroundColor="@color/surface"
                     app:cardCornerRadius="@dimen/radius_12dp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -292,7 +280,7 @@
                     android:layout_marginVertical="@dimen/margin_8dp"
                     android:background="?attr/selectableItemBackground"
                     android:clickable="@{facebookClickable}"
-                    android:focusable="@{facebookFocusable}"
+                    android:focusable="true"
                     app:cardBackgroundColor="@color/surface"
                     app:cardCornerRadius="@dimen/radius_12dp"
                     app:layout_constraintBottom_toBottomOf="parent"
