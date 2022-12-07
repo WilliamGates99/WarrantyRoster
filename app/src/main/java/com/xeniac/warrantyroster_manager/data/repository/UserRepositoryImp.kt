@@ -53,6 +53,16 @@ class UserRepositoryImp @Inject constructor(
         }
     }
 
+    override suspend fun getCurrentUserProviderIds(): List<String> {
+        val providerIds = mutableListOf<String>()
+
+        getCurrentUser().providerData.forEach { userInfo ->
+            providerIds.add(userInfo.providerId)
+        }
+
+        return providerIds
+    }
+
     override suspend fun updateUserEmail(newEmail: String) {
         getCurrentUser().updateEmail(newEmail).await()
     }

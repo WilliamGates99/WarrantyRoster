@@ -26,6 +26,8 @@ interface UserRepository {
 
     suspend fun reAuthenticateUser(password: String)
 
+    suspend fun getCurrentUserProviderIds(): List<String>
+
     suspend fun updateUserEmail(newEmail: String)
 
     suspend fun updateUserPassword(newPassword: String)
