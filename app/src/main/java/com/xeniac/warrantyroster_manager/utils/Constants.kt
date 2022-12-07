@@ -65,9 +65,9 @@ object Constants {
     const val WARRANTIES_UUID = "uuid"
 
     // Firebase Auth Provider Ids
-    const val FIREBASE_AUTH_PROVIDER_GOOGLE = "google.com"
-    const val FIREBASE_AUTH_PROVIDER_TWITTER = "twitter.com"
-    const val FIREBASE_AUTH_PROVIDER_FACEBOOK = "facebook.com"
+    const val FIREBASE_AUTH_PROVIDER_ID_GOOGLE = "google.com"
+    const val FIREBASE_AUTH_PROVIDER_ID_TWITTER = "twitter.com"
+    const val FIREBASE_AUTH_PROVIDER_ID_FACEBOOK = "facebook.com"
 
     // Account Input Errors
     const val ERROR_INPUT_BLANK_EMAIL = "Email is blank"
