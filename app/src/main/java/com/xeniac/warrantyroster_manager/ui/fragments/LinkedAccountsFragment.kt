@@ -129,7 +129,6 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
             val options = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).apply {
                 requestIdToken(BuildConfig.GOOGLE_AUTH_SERVER_CLIENT_ID)
                 requestId()
-                requestEmail()
             }.build()
 
             val googleSignInClient = GoogleSignIn.getClient(requireContext(), options)
