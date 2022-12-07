@@ -28,6 +28,12 @@ interface UserRepository {
 
     suspend fun getCurrentUserProviderIds(): List<String>
 
+    suspend fun linkGoogleAccount(account: GoogleSignInAccount)
+
+    suspend fun linkTwitterAccount()
+
+    suspend fun linkFacebookAccount()
+
     suspend fun updateUserEmail(newEmail: String)
 
     suspend fun updateUserPassword(newPassword: String)

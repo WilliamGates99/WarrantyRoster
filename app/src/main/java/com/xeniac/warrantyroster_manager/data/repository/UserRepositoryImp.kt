@@ -63,6 +63,19 @@ class UserRepositoryImp @Inject constructor(
         return providerIds
     }
 
+    override suspend fun linkGoogleAccount(account: GoogleSignInAccount) {
+        val credential = GoogleAuthProvider.getCredential(account.idToken, null)
+        getCurrentUser().linkWithCredential(credential).await()
+    }
+
+    override suspend fun linkTwitterAccount() {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun linkFacebookAccount() {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun updateUserEmail(newEmail: String) {
         getCurrentUser().updateEmail(newEmail).await()
     }
