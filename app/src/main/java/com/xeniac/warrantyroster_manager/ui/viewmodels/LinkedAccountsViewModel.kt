@@ -49,6 +49,7 @@ class LinkedAccountsViewModel @Inject constructor(
             Timber.i("Locale list is Empty.")
         } else {
             val currentLanguage = localeList[0]!!.language
+            _currentLanguageLiveData.postValue(Event(currentLanguage))
             Timber.i("Current app language is $currentLanguage")
         }
     }
