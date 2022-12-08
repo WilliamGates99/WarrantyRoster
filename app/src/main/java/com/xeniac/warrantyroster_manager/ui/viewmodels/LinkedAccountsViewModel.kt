@@ -1,10 +1,12 @@
 package com.xeniac.warrantyroster_manager.ui.viewmodels
 
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.firebase.auth.AuthCredential
 import com.xeniac.warrantyroster_manager.domain.repository.UserRepository
 import com.xeniac.warrantyroster_manager.utils.Event
 import com.xeniac.warrantyroster_manager.utils.Resource
@@ -20,6 +22,9 @@ class LinkedAccountsViewModel @Inject constructor(
     private val userRepository: UserRepository
 ) : ViewModel() {
 
+    private val _currentLanguageLiveData: MutableLiveData<Event<String>> = MutableLiveData()
+    val currentLanguageLiveData: LiveData<Event<String>> = _currentLanguageLiveData
+
     private val _linkedAccountsLiveData: MutableLiveData<Event<Resource<List<String>>>> =
         MutableLiveData()
     val linkedAccountsLiveData: LiveData<Event<Resource<List<String>>>> = _linkedAccountsLiveData
@@ -32,6 +37,21 @@ class LinkedAccountsViewModel @Inject constructor(
 
     private val _linkFacebookLiveData: MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
     val linkFacebookLiveData: LiveData<Event<Resource<Nothing>>> = _linkFacebookLiveData
+
+    fun getCurrentAppLanguage() = viewModelScope.launch {
+        safeGetCurrentAppLanguage()
+    }
+
+    private fun safeGetCurrentAppLanguage() {
+        val localeList = AppCompatDelegate.getApplicationLocales()
+
+        if (localeList.isEmpty) {
+            Timber.i("Locale list is Empty.")
+        } else {
+            val currentLanguage = localeList[0]!!.language
+            Timber.i("Current app language is $currentLanguage")
+        }
+    }
 
     fun getLinkedAccounts() = viewModelScope.launch {
         safeGetLinkedAccounts()
@@ -65,14 +85,14 @@ class LinkedAccountsViewModel @Inject constructor(
         }
     }
 
-    fun linkTwitterAccount() = viewModelScope.launch {
-        safeLinkTwitterAccount()
+    fun linkTwitterAccount(credential: AuthCredential) = viewModelScope.launch {
+        safeLinkTwitterAccount(credential)
     }
 
-    private suspend fun safeLinkTwitterAccount() {
+    private suspend fun safeLinkTwitterAccount(credential: AuthCredential) {
         _linkTwitterLiveData.postValue(Event(Resource.Loading()))
         try {
-            delay(3000)
+            userRepository.linkTwitterAccount(credential)
             _linkTwitterLiveData.postValue(Event(Resource.Success()))
             Timber.i("Twitter account linked successfully.")
         } catch (e: Exception) {

@@ -1,10 +1,7 @@
 package com.xeniac.warrantyroster_manager.data.repository
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.firebase.auth.EmailAuthProvider
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.*
 import com.xeniac.warrantyroster_manager.domain.repository.UserRepository
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -68,8 +65,8 @@ class UserRepositoryImp @Inject constructor(
         getCurrentUser().linkWithCredential(credential).await()
     }
 
-    override suspend fun linkTwitterAccount() {
-        TODO("Not yet implemented")
+    override suspend fun linkTwitterAccount(credential: AuthCredential) {
+        getCurrentUser().linkWithCredential(credential).await()
     }
 
     override suspend fun linkFacebookAccount() {

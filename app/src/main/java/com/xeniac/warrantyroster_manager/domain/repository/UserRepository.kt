@@ -1,6 +1,7 @@
 package com.xeniac.warrantyroster_manager.domain.repository
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.firebase.auth.AuthCredential
 
 interface UserRepository {
 
@@ -30,7 +31,7 @@ interface UserRepository {
 
     suspend fun linkGoogleAccount(account: GoogleSignInAccount)
 
-    suspend fun linkTwitterAccount()
+    suspend fun linkTwitterAccount(credential: AuthCredential)
 
     suspend fun linkFacebookAccount()
 

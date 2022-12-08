@@ -2,6 +2,7 @@ package com.xeniac.warrantyroster_manager.ui.fragments
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
@@ -12,6 +13,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_INDEFINITE
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.OAuthProvider
 import com.xeniac.warrantyroster_manager.BuildConfig
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentLinkedAccountsBinding
@@ -25,6 +28,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
+import javax.inject.Inject
 
 class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
 
@@ -32,6 +36,11 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
     private val binding get() = _binding!!
 
     lateinit var viewModel: LinkedAccountsViewModel
+
+    @Inject
+    lateinit var firebaseAuth: FirebaseAuth
+
+    private lateinit var currentAppLanguage: String
 
     private var snackbar: Snackbar? = null
 
@@ -42,6 +51,7 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
 
         toolbarNavigationBackOnClick()
         subscribeToObservers()
+        getCurrentAppLanguage()
         getLinkedAccounts()
         googleOnClick()
         twitterOnClick()
@@ -63,11 +73,39 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
     }
 
     private fun subscribeToObservers() {
+        currentAppLanguageObserver()
         linkedAccountsObserver()
         linkGoogleObserver()
         linkTwitterObserver()
         linkFacebookObserver()
     }
+
+    /* TODO MOVE THIS TO ON_VIEW_CREATED AND CREATE ITS OWN FUNCTION AND LIVEDATA IN VIEW_MODEL
+      // There's something already here! Finish the sign-in for your user.
+     firebaseAuth.pendingAuthResult?.let { pendingAuthResult ->
+         Timber.i("FirebaseAuth pending twitter auth result is not null.")
+         pendingAuthResult.addOnCompleteListener {
+             if (it.isSuccessful) {
+                 viewModel.linkTwitterAccount()
+             } else {
+                 hideTwitterLoadingAnimation()
+                 // TODO SHOW ERROR
+                 Timber.e("pendingResultTask is not null -> onFail:")
+                 Timber.e("Exception: ${it.exception?.message}")
+                 Timber.e("--------------------------------------------")
+             }
+         }
+     }
+      */
+
+    private fun getCurrentAppLanguage() = viewModel.getCurrentAppLanguage()
+
+    private fun currentAppLanguageObserver() =
+        viewModel.currentLanguageLiveData.observe(viewLifecycleOwner) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { language ->
+                currentAppLanguage = language
+            }
+        }
 
     private fun getLinkedAccounts() = viewModel.getLinkedAccounts()
 
@@ -129,6 +167,7 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
             val options = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).apply {
                 requestIdToken(BuildConfig.GOOGLE_AUTH_SERVER_CLIENT_ID)
                 requestId()
+                requestEmail()
             }.build()
 
             val googleSignInClient = GoogleSignIn.getClient(requireContext(), options)
@@ -179,6 +218,36 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
         linkTwitterAccount()
     }
 
+    private fun linkTwitterAccount() {
+        val oAuthProvider = OAuthProvider.newBuilder(FIREBASE_AUTH_PROVIDER_ID_TWITTER)
+        oAuthProvider.addCustomParameter("lang", currentAppLanguage)
+
+        firebaseAuth.startActivityForSignInWithProvider(requireActivity(), oAuthProvider.build())
+            .addOnCompleteListener {
+                if (it.isSuccessful) {
+                    val authCredential = it.result.credential
+                    authCredential?.let { credential ->
+                        viewModel.linkTwitterAccount(credential)
+                    }
+                } else {
+                    // TODO EDIT
+                    hideTwitterLoadingAnimation()
+                    it.exception?.message?.let { message ->
+                        Timber.e("else -> onFail:")
+                        Timber.e("Exception: $message")
+                        Timber.e("--------------------------------------------")
+                        if (message.contains("An account already exists with the same email address but different sign-in credentials. Sign in using a provider associated with this email address.")) {
+                            Toast.makeText(
+                                requireContext(),
+                                "An account already exists with the same email address but different sign-in credentials.",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    }
+                }
+            }
+    }
+
     private fun linkTwitterObserver() =
         viewModel.linkTwitterLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
@@ -186,15 +255,21 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
                     is Resource.Loading -> showTwitterLoadingAnimation()
                     is Resource.Success -> {
                         hideTwitterLoadingAnimation()
+                        showTwitterConnectedStatus()
                     }
                     is Resource.Error -> {
                         hideTwitterLoadingAnimation()
+                        showTwitterNotConnectedStatus()
+                        response.message?.asString(requireContext())?.let {
+                            snackbar = Snackbar.make(requireView(), it, LENGTH_INDEFINITE).apply {
+                                setAction(requireContext().getString(R.string.error_btn_retry)) { getLinkedAccounts() }
+                                show()
+                            }
+                        }
                     }
                 }
             }
         }
-
-    private fun linkTwitterAccount() = viewModel.linkTwitterAccount()
 
     private fun facebookOnClick() = binding.cvFacebook.setOnClickListener {
         linkFacebookAccount()
