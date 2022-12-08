@@ -18,7 +18,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.OAuthProvider
 import com.xeniac.warrantyroster_manager.BuildConfig
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentLoginBinding
@@ -32,6 +35,7 @@ import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_EMAIL
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_PASSWORD
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_EMAIL_INVALID
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
+import com.xeniac.warrantyroster_manager.utils.Constants.FIREBASE_AUTH_PROVIDER_ID_TWITTER
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_LOGIN_EMAIL
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_LOGIN_PASSWORD
 import com.xeniac.warrantyroster_manager.utils.Resource
@@ -48,6 +52,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 import java.util.*
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class LoginFragment : Fragment(R.layout.fragment_login) {
@@ -56,6 +61,11 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     val binding get() = _binding!!
 
     lateinit var viewModel: LoginViewModel
+
+    @Inject
+    lateinit var firebaseAuth: FirebaseAuth
+
+    private lateinit var currentAppLanguage: String
 
     var snackbar: Snackbar? = null
 
@@ -67,6 +77,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         textInputsBackgroundColor()
         textInputsStrokeColor()
         subscribeToObservers()
+        getCurrentAppLanguage()
         forgotPwOnClick()
         registerOnClick()
         loginOnClick()
@@ -154,9 +165,20 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     }
 
     private fun subscribeToObservers() {
+        currentAppLanguageObserver()
         loginObserver()
-        loginWithGoogleObserver()
+        loginWithGoogleAccountObserver()
+        loginWithTwitterAccountObserver()
     }
+
+    private fun getCurrentAppLanguage() = viewModel.getCurrentAppLanguage()
+
+    private fun currentAppLanguageObserver() =
+        viewModel.currentLanguageLiveData.observe(viewLifecycleOwner) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { language ->
+                currentAppLanguage = language
+            }
+        }
 
     private fun forgotPwOnClick() = binding.btnForgotPw.setOnClickListener {
         navigateToForgotPw()
@@ -291,14 +313,14 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         try {
             val account = GoogleSignIn.getSignedInAccountFromIntent(result.data).result
             // Got an ID token from Google. Use it to authenticate with Firebase.
-            account?.let { viewModel.authenticateGoogleAccountWithFirebase(account) }
+            account?.let { viewModel.loginWithGoogleAccount(account) }
         } catch (e: Exception) {
             Timber.e("googleResultLauncher Exception: ${e.message}")
         }
     }
 
-    private fun loginWithGoogleObserver() =
-        viewModel.loginWithGoogleLiveData.observe(viewLifecycleOwner) { responseEvent ->
+    private fun loginWithGoogleAccountObserver() =
+        viewModel.loginWithGoogleAccountLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
                     is Resource.Loading -> showGoogleLoadingAnimation()
@@ -339,8 +361,63 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         }
 
     private fun twitterOnClick() = binding.btnTwitter.setOnClickListener {
-        Toast.makeText(requireContext(), "twitter", Toast.LENGTH_SHORT).show()
+        showTwitterLoadingAnimation()
+        val oAuthProvider = OAuthProvider.newBuilder(FIREBASE_AUTH_PROVIDER_ID_TWITTER)
+        oAuthProvider.addCustomParameter("lang", currentAppLanguage)
+
+        firebaseAuth.startActivityForSignInWithProvider(requireActivity(), oAuthProvider.build())
+            .addOnCompleteListener {
+                if (it.isSuccessful) {
+                    val authCredential = it.result.credential
+                    authCredential?.let { credential ->
+                        viewModel.loginWithTwitterAccount(credential)
+                    }
+                } else {
+                    // TODO EDIT
+                    hideTwitterLoadingAnimation()
+                    it.exception?.message?.let { message ->
+                        Timber.e("else -> onFail:")
+                        Timber.e("Exception: $message")
+                        Timber.e("--------------------------------------------")
+                        if (message.contains("An account already exists with the same email address but different sign-in credentials. Sign in using a provider associated with this email address.")) {
+                            Toast.makeText(
+                                requireContext(),
+                                "An account already exists with the same email address but different sign-in credentials.",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    }
+                }
+            }
     }
+
+    private fun loginWithTwitterAccountObserver() =
+        viewModel.loginWithTwitterAccountLiveData.observe(viewLifecycleOwner) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { response ->
+                when (response) {
+                    is Resource.Loading -> showTwitterLoadingAnimation()
+                    is Resource.Success -> {
+                        hideTwitterLoadingAnimation()
+                        requireActivity().apply {
+                            startActivity(Intent(this, MainActivity::class.java))
+                            finish()
+                        }
+                    }
+                    is Resource.Error -> {
+                        hideTwitterLoadingAnimation()
+                        response.message?.asString(requireContext())?.let {
+                            snackbar = Snackbar.make(
+                                requireView(), it,
+                                BaseTransientBottomBar.LENGTH_INDEFINITE
+                            ).apply {
+                                setAction(requireContext().getString(R.string.error_btn_confirm)) { dismiss() }
+                                show()
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
     private fun facebookOnClick() = binding.btnFacebook.setOnClickListener {
         Toast.makeText(requireContext(), "facebook", Toast.LENGTH_SHORT).show()

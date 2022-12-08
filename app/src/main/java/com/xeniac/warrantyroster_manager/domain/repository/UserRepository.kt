@@ -9,7 +9,9 @@ interface UserRepository {
 
     suspend fun loginViaEmail(email: String, password: String)
 
-    suspend fun authenticateGoogleAccountWithFirebase(account: GoogleSignInAccount)
+    suspend fun loginWithGoogleAccount(account: GoogleSignInAccount)
+
+    suspend fun loginWithTwitterAccount(credential: AuthCredential)
 
     suspend fun sendResetPasswordEmail(email: String)
 

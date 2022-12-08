@@ -1,10 +1,12 @@
 package com.xeniac.warrantyroster_manager.ui.viewmodels
 
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.firebase.auth.AuthCredential
 import com.xeniac.warrantyroster_manager.domain.repository.PreferencesRepository
 import com.xeniac.warrantyroster_manager.domain.repository.UserRepository
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_EMAIL
@@ -25,12 +27,36 @@ class LoginViewModel @Inject constructor(
     private val preferencesRepository: PreferencesRepository
 ) : ViewModel() {
 
+    private val _currentLanguageLiveData: MutableLiveData<Event<String>> = MutableLiveData()
+    val currentLanguageLiveData: LiveData<Event<String>> = _currentLanguageLiveData
+
     private val _loginLiveData: MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
     val loginLiveData: LiveData<Event<Resource<Nothing>>> = _loginLiveData
 
-    private val _loginWithGoogleLiveData:
+    private val _loginWithGoogleAccountLiveData:
             MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
-    val loginWithGoogleLiveData: LiveData<Event<Resource<Nothing>>> = _loginWithGoogleLiveData
+    val loginWithGoogleAccountLiveData:
+            LiveData<Event<Resource<Nothing>>> = _loginWithGoogleAccountLiveData
+
+    private val _loginWithTwitterAccountLiveData:
+            MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
+    val loginWithTwitterAccountLiveData:
+            LiveData<Event<Resource<Nothing>>> = _loginWithTwitterAccountLiveData
+
+    fun getCurrentAppLanguage() = viewModelScope.launch {
+        safeGetCurrentAppLanguage()
+    }
+
+    private fun safeGetCurrentAppLanguage() {
+        val localeList = AppCompatDelegate.getApplicationLocales()
+
+        if (localeList.isEmpty) {
+            Timber.i("Locale list is Empty.")
+        } else {
+            val currentLanguage = localeList[0]!!.language
+            Timber.i("Current app language is $currentLanguage")
+        }
+    }
 
     fun validateLoginInputs(email: String, password: String) = viewModelScope.launch {
         safeValidateLoginInputs(email, password)
@@ -78,21 +104,38 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    fun authenticateGoogleAccountWithFirebase(account: GoogleSignInAccount) =
+    fun loginWithGoogleAccount(account: GoogleSignInAccount) =
         viewModelScope.launch {
-            safeAuthenticateGoogleAccountWithFirebase(account)
+            safeLoginWithGoogleAccount(account)
         }
 
-    private suspend fun safeAuthenticateGoogleAccountWithFirebase(account: GoogleSignInAccount) {
-        _loginWithGoogleLiveData.postValue(Event(Resource.Loading()))
+    private suspend fun safeLoginWithGoogleAccount(account: GoogleSignInAccount) {
+        _loginWithGoogleAccountLiveData.postValue(Event(Resource.Loading()))
         try {
-            userRepository.authenticateGoogleAccountWithFirebase(account)
+            userRepository.loginWithGoogleAccount(account)
             preferencesRepository.isUserLoggedIn(true)
-            _loginWithGoogleLiveData.postValue(Event(Resource.Success()))
+            _loginWithGoogleAccountLiveData.postValue(Event(Resource.Success()))
             Timber.i("${account.email} logged in successfully with Google account.")
         } catch (e: Exception) {
             Timber.e("safeAuthenticateGoogleAccountWithFirebase Exception: ${e.message}")
-            _loginWithGoogleLiveData.postValue(Event(Resource.Error(UiText.DynamicString(e.message.toString()))))
+            _loginWithGoogleAccountLiveData.postValue(Event(Resource.Error(UiText.DynamicString(e.message.toString()))))
+        }
+    }
+
+    fun loginWithTwitterAccount(credential: AuthCredential) = viewModelScope.launch {
+        safeLoginWithTwitterAccount(credential)
+    }
+
+    private suspend fun safeLoginWithTwitterAccount(credential: AuthCredential) {
+        _loginWithTwitterAccountLiveData.postValue(Event(Resource.Loading()))
+        try {
+            userRepository.loginWithTwitterAccount(credential)
+            preferencesRepository.isUserLoggedIn(true)
+            _loginWithTwitterAccountLiveData.postValue(Event(Resource.Success()))
+            Timber.i("Successfully logged in with Twitter account.")
+        } catch (e: Exception) {
+            Timber.e("safeLoginWithTwitterAccount Exception: ${e.message}")
+            _loginWithTwitterAccountLiveData.postValue(Event(Resource.Error(UiText.DynamicString(e.message.toString()))))
         }
     }
 }

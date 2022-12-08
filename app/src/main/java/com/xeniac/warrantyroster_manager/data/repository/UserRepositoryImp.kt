@@ -18,9 +18,13 @@ class UserRepositoryImp @Inject constructor(
         firebaseAuth.signInWithEmailAndPassword(email, password).await()
     }
 
-    override suspend fun authenticateGoogleAccountWithFirebase(account: GoogleSignInAccount) {
+    override suspend fun loginWithGoogleAccount(account: GoogleSignInAccount) {
         val credentials = GoogleAuthProvider.getCredential(account.idToken, null)
         firebaseAuth.signInWithCredential(credentials).await()
+    }
+
+    override suspend fun loginWithTwitterAccount(credential: AuthCredential) {
+        firebaseAuth.signInWithCredential(credential).await()
     }
 
     override suspend fun sendResetPasswordEmail(email: String) {
