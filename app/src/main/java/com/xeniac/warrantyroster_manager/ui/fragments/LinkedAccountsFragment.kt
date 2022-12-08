@@ -23,6 +23,7 @@ import com.xeniac.warrantyroster_manager.utils.Constants.FIREBASE_AUTH_PROVIDER_
 import com.xeniac.warrantyroster_manager.utils.Constants.FIREBASE_AUTH_PROVIDER_ID_GOOGLE
 import com.xeniac.warrantyroster_manager.utils.Constants.FIREBASE_AUTH_PROVIDER_ID_TWITTER
 import com.xeniac.warrantyroster_manager.utils.Resource
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -30,6 +31,7 @@ import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
 
     private var _binding: FragmentLinkedAccountsBinding? = null
@@ -80,7 +82,9 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
         linkFacebookObserver()
     }
 
-    /* TODO MOVE THIS TO ON_VIEW_CREATED AND CREATE ITS OWN FUNCTION AND LIVEDATA IN VIEW_MODEL
+    /*
+    TODO MOVE THIS TO ON_VIEW_CREATED AND CREATE ITS OWN FUNCTION AND LIVEDATA IN VIEW_MODEL
+    TODO ALSO ADD TO LOGIN_FRAGMENT
       // There's something already here! Finish the sign-in for your user.
      firebaseAuth.pendingAuthResult?.let { pendingAuthResult ->
          Timber.i("FirebaseAuth pending twitter auth result is not null.")
