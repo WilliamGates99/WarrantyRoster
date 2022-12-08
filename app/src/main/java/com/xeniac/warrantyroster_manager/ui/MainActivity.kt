@@ -61,6 +61,7 @@ class MainActivity : AppCompatActivity(), MaxAdListener {
             mainInit()
             shouldShowSplashScreen = false
         } else {
+            shouldShowSplashScreen = false
             navigateToLandingActivity()
         }
     }
