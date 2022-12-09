@@ -66,9 +66,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_24dp"
                 android:layout_marginTop="@dimen/margin_4dp"
-                android:layout_marginEnd="@dimen/margin_12dp"
-                app:layout_constraintBottom_toTopOf="@+id/btn_login"
-                app:layout_constraintEnd_toStartOf="@+id/ti_layout_password"
+                android:layout_marginEnd="@dimen/margin_18dp"
+                app:layout_constraintBottom_toTopOf="@+id/tv_title_password"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_title_email">
 
@@ -92,6 +92,7 @@
                 android:layout_width="@dimen/width_0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/margin_8dp"
+                android:layout_marginTop="@dimen/margin_16dp"
                 android:fontFamily="@font/localized_bold"
                 android:gravity="start|center_vertical"
                 android:labelFor="@+id/ti_layout_password"
@@ -100,22 +101,23 @@
                 android:textAlignment="gravity"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_14sp"
-                app:layout_constraintBaseline_toBaselineOf="@+id/tv_title_email"
-                app:layout_constraintBottom_toTopOf="@+id/ti_layout_password"
+                app:layout_constraintBottom_toTopOf="@id/ti_layout_password"
                 app:layout_constraintEnd_toEndOf="@id/ti_layout_password"
-                app:layout_constraintStart_toStartOf="@id/ti_layout_password" />
+                app:layout_constraintStart_toStartOf="@id/ti_layout_password"
+                app:layout_constraintTop_toBottomOf="@+id/ti_layout_email" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/ti_layout_password"
                 style="@style/Theme.WarrantyRoster.TextInputLayout"
                 android:layout_width="@dimen/width_0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_12dp"
+                android:layout_marginStart="@dimen/margin_24dp"
                 android:layout_marginTop="@dimen/margin_4dp"
                 android:layout_marginEnd="@dimen/margin_18dp"
+                app:layout_constraintBottom_toTopOf="@id/btn_login"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/ti_layout_email"
-                app:layout_constraintTop_toBottomOf="@+id/tv_title_email"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_title_password"
                 app:passwordToggleEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -147,7 +149,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/btn_register"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ti_layout_email" />
+                app:layout_constraintTop_toBottomOf="@+id/ti_layout_password" />
 
             <com.google.android.material.progressindicator.CircularProgressIndicator
                 android:id="@+id/cpi_login"
@@ -160,25 +162,6 @@
                 app:layout_constraintStart_toStartOf="@+id/btn_login"
                 app:layout_constraintTop_toTopOf="@+id/btn_login" />
 
-            <!-- MARGIN_HORIZONTAL: 13 + 5 = 18DP -->
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_forgot_pw"
-                style="@style/Theme.WarrantyRoster.TextButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/margin_13dp"
-                android:fontFamily="@font/localized_light"
-                android:gravity="center"
-                android:text="@string/login_btn_forgot_pw"
-                android:textAlignment="gravity"
-                android:textColor="@color/red"
-                android:textSize="@dimen/text_size_12sp"
-                app:layout_constrainedWidth="true"
-                app:layout_constraintBaseline_toBaselineOf="@+id/btn_register"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1"
-                app:layout_constraintStart_toEndOf="@+id/btn_register" />
-
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tv_register_title"
                 android:layout_width="wrap_content"
@@ -190,8 +173,7 @@
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_14sp"
-                app:layout_constraintBaseline_toBaselineOf="@+id/btn_register"
-                app:layout_constraintEnd_toStartOf="@+id/btn_register"
+                app:layout_constraintBaseline_toBaselineOf="@id/btn_register"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <!-- MARGIN_BOTTOM: 7 + 5 = 12DP -->
@@ -207,6 +189,27 @@
                 android:textAlignment="gravity"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/tv_register_title" />
+
+            <!-- MARGIN_END: 13 + 5 = 18DP -->
+            <!-- MARGIN_START: 3 + 5 = 8DP -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_forgot_pw"
+                style="@style/Theme.WarrantyRoster.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_3dp"
+                android:layout_marginEnd="@dimen/margin_13dp"
+                android:fontFamily="@font/localized_light"
+                android:gravity="center"
+                android:text="@string/login_btn_forgot_pw"
+                android:textAlignment="gravity"
+                android:textColor="@color/red"
+                android:textSize="@dimen/text_size_12sp"
+                app:layout_constrainedWidth="true"
+                app:layout_constraintBaseline_toBaselineOf="@+id/btn_register"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1"
+                app:layout_constraintStart_toEndOf="@+id/btn_register" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
