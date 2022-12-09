@@ -19,7 +19,7 @@
             android:scaleType="centerCrop"
             android:tintMode="multiply"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/fcv"
+            app:layout_constraintEnd_toStartOf="@id/cv"
             app:layout_constraintStart_toStartOf="parent"
             app:tint="@color/blue" />
 
@@ -63,24 +63,28 @@
             android:textSize="@dimen/text_size_34sp"
             app:layout_constrainedWidth="true"
             app:layout_constraintBottom_toTopOf="@+id/iv_header"
-            app:layout_constraintEnd_toStartOf="@+id/fcv"
+            app:layout_constraintEnd_toStartOf="@+id/cv"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cl_language"
             app:layout_constraintVertical_bias="0" />
 
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/fcv"
-            android:name="androidx.navigation.fragment.NavHostFragment"
-            android:layout_width="@dimen/width_0dp"
-            android:layout_height="@dimen/height_0dp"
-            android:background="@drawable/shape_rounded_landing"
-            android:elevation="@dimen/elevation_4dp"
-            app:defaultNavHost="true"
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cv"
+            style="@style/Theme.WarrantyRoster.AuthCardView"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/iv_header"
-            app:layout_constraintTop_toTopOf="parent"
-            app:navGraph="@navigation/nav_graph_auth" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/fcv"
+                android:name="androidx.navigation.fragment.NavHostFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:defaultNavHost="true"
+                app:navGraph="@navigation/nav_graph_auth" />
+
+        </com.google.android.material.card.MaterialCardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

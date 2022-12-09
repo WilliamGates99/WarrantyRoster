@@ -89,6 +89,7 @@
     <dimen name="elevation_13dp">13dp</dimen>
 
     <!--Radius-->
+    <dimen name="radius_0dp">0dp</dimen>
     <dimen name="radius_4dp">4dp</dimen>
     <dimen name="radius_8dp">8dp</dimen>
     <dimen name="radius_12dp">12dp</dimen>
