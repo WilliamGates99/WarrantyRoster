@@ -68,9 +68,11 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.5" />
 
+        <!-- CONTENT_PADDING: -19DP -> TO FIX CORNER_OVERLAP ISSUE -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cv"
             style="@style/Theme.WarrantyRoster.AuthCardView"
+            app:contentPadding="@dimen/padding_negative19dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

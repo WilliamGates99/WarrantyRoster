@@ -51,7 +51,6 @@
         <item name="shapeAppearance">@style/Theme.WarrantyRoster.AuthCardView.Appearance</item>
         <item name="android:layout_width">@dimen/width_0dp</item>
         <item name="android:layout_height">@dimen/height_0dp</item>
-        <item name="cardPreventCornerOverlap">false</item>
         <item name="cardElevation">@dimen/elevation_4dp</item>
         <item name="cardBackgroundColor">@color/background</item>
     </style>

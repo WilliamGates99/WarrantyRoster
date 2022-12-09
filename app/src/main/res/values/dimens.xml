@@ -68,6 +68,8 @@
     <dimen name="margin_79dp">79dp</dimen>
 
     <!--Padding-->
+    <dimen name="padding_negative19dp">-19dp</dimen>
+    <dimen name="padding_negative14dp">-14dp</dimen>
     <dimen name="padding_0dp">0dp</dimen>
     <dimen name="padding_2dp">2dp</dimen>
     <dimen name="padding_4dp">4dp</dimen>
