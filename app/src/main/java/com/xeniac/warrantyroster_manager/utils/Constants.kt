@@ -19,6 +19,7 @@ object Constants {
     const val THEME_INDEX_DARK = 2
 
     // App Locale Constants
+    const val LOCALE_ENGLISH = "en"
     const val LOCALE_ENGLISH_UNITED_STATES = "en-US"
     const val LOCALE_ENGLISH_GREAT_BRITAIN = "en-GB"
     const val LOCALE_PERSIAN_IRAN = "fa-IR"

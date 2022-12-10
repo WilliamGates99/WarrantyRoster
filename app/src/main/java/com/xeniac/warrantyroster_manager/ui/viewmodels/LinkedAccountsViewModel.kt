@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.AuthCredential
 import com.xeniac.warrantyroster_manager.domain.repository.UserRepository
+import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_ENGLISH
 import com.xeniac.warrantyroster_manager.utils.Event
 import com.xeniac.warrantyroster_manager.utils.Resource
 import com.xeniac.warrantyroster_manager.utils.UiText
@@ -46,7 +47,8 @@ class LinkedAccountsViewModel @Inject constructor(
         val localeList = AppCompatDelegate.getApplicationLocales()
 
         if (localeList.isEmpty) {
-            Timber.i("Locale list is Empty.")
+            _currentLanguageLiveData.postValue(Event(LOCALE_ENGLISH))
+            Timber.i("Locale list is Empty. -> Current app language is $LOCALE_ENGLISH")
         } else {
             val currentLanguage = localeList[0]!!.language
             _currentLanguageLiveData.postValue(Event(currentLanguage))
