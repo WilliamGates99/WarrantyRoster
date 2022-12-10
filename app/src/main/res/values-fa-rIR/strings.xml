@@ -347,8 +347,8 @@
     <string name="linked_accounts_title_google">گوگل</string>
     <string name="linked_accounts_title_twitter">توییتر</string>
     <string name="linked_accounts_title_facebook">فیسبوک</string>
-    <string name="linked_accounts_status_not_connected">متصل کردن</string>
-    <string name="linked_accounts_status_connected">متصل</string>
+    <string name="linked_accounts_status_connect">متصل کردن</string>
+    <string name="linked_accounts_status_disconnect">قطع اتصال</string>
 
 
     <string name="change_password_text_title">تغییر رمز‌عبور</string>

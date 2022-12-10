@@ -7,6 +7,10 @@
         <import type="android.view.View" />
 
         <variable
+            name="isGoogleConnected"
+            type="Boolean" />
+
+        <variable
             name="isGoogleLoading"
             type="Boolean" />
 
@@ -15,16 +19,8 @@
             type="Boolean" />
 
         <variable
-            name="googleStatusBackground"
-            type="android.graphics.drawable.Drawable" />
-
-        <variable
-            name="googleStatusTextColor"
-            type="Integer" />
-
-        <variable
-            name="googleStatusText"
-            type="String" />
+            name="isTwitterConnected"
+            type="Boolean" />
 
         <variable
             name="isTwitterLoading"
@@ -35,16 +31,8 @@
             type="Boolean" />
 
         <variable
-            name="twitterStatusBackground"
-            type="android.graphics.drawable.Drawable" />
-
-        <variable
-            name="twitterStatusTextColor"
-            type="Integer" />
-
-        <variable
-            name="twitterStatusText"
-            type="String" />
+            name="isFacebookConnected"
+            type="Boolean" />
 
         <variable
             name="isFacebookLoading"
@@ -53,18 +41,6 @@
         <variable
             name="facebookClickable"
             type="Boolean" />
-
-        <variable
-            name="facebookStatusBackground"
-            type="android.graphics.drawable.Drawable" />
-
-        <variable
-            name="facebookStatusTextColor"
-            type="Integer" />
-
-        <variable
-            name="facebookStatusText"
-            type="String" />
 
     </data>
 
@@ -117,6 +93,17 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
+                        <FrameLayout
+                            android:id="@+id/fl_status_google"
+                            android:layout_width="@dimen/width_4dp"
+                            android:layout_height="@dimen/height_4dp"
+                            android:layout_marginStart="@dimen/margin_8dp"
+                            android:layout_marginTop="@dimen/margin_8dp"
+                            android:background="@drawable/shape_circle"
+                            android:backgroundTint="@{isGoogleConnected ? @color/green : @color/red}"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
                         <com.google.android.material.imageview.ShapeableImageView
                             android:id="@+id/iv_icon_google"
                             android:layout_width="@dimen/width_40dp"
@@ -153,16 +140,16 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="@dimen/margin_16dp"
-                            android:background="@{googleStatusBackground}"
+                            android:background="@{isGoogleConnected ? @drawable/shape_rounded_linked_accounts_status_disconnect : @drawable/shape_rounded_linked_accounts_status_connect}"
                             android:fontFamily="@font/localized_black"
                             android:gravity="center"
                             android:maxLines="1"
                             android:paddingHorizontal="@dimen/padding_8dp"
                             android:paddingVertical="@dimen/padding_4dp"
-                            android:text="@{googleStatusText}"
+                            android:text="@{isGoogleConnected ? @string/linked_accounts_status_disconnect : @string/linked_accounts_status_connect}"
                             android:textAlignment="gravity"
                             android:textAllCaps="true"
-                            android:textColor="@{googleStatusTextColor}"
+                            android:textColor="@{isGoogleConnected ? @color/red : @color/grayDark}"
                             android:textSize="@dimen/text_size_10sp"
                             android:visibility="@{isGoogleLoading ? View.GONE : View.VISIBLE, default=gone}"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -204,6 +191,17 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
+                        <FrameLayout
+                            android:id="@+id/fl_status_twitter"
+                            android:layout_width="@dimen/width_4dp"
+                            android:layout_height="@dimen/height_4dp"
+                            android:layout_marginStart="@dimen/margin_8dp"
+                            android:layout_marginTop="@dimen/margin_8dp"
+                            android:background="@drawable/shape_circle"
+                            android:backgroundTint="@{isTwitterConnected ? @color/green : @color/red}"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
                         <com.google.android.material.imageview.ShapeableImageView
                             android:id="@+id/iv_icon_twitter"
                             android:layout_width="@dimen/width_40dp"
@@ -240,16 +238,16 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="@dimen/margin_16dp"
-                            android:background="@{twitterStatusBackground}"
+                            android:background="@{isTwitterConnected ? @drawable/shape_rounded_linked_accounts_status_disconnect : @drawable/shape_rounded_linked_accounts_status_connect}"
                             android:fontFamily="@font/localized_black"
                             android:gravity="center"
                             android:maxLines="1"
                             android:paddingHorizontal="@dimen/padding_8dp"
                             android:paddingVertical="@dimen/padding_4dp"
-                            android:text="@{twitterStatusText}"
+                            android:text="@{isTwitterConnected ? @string/linked_accounts_status_disconnect : @string/linked_accounts_status_connect}"
                             android:textAlignment="gravity"
                             android:textAllCaps="true"
-                            android:textColor="@{twitterStatusTextColor}"
+                            android:textColor="@{isTwitterConnected ? @color/red : @color/grayDark}"
                             android:textSize="@dimen/text_size_10sp"
                             android:visibility="@{isTwitterLoading ? View.GONE : View.VISIBLE, default=gone}"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -292,6 +290,17 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
+                        <FrameLayout
+                            android:id="@+id/fl_status_facebook"
+                            android:layout_width="@dimen/width_4dp"
+                            android:layout_height="@dimen/height_4dp"
+                            android:layout_marginStart="@dimen/margin_8dp"
+                            android:layout_marginTop="@dimen/margin_8dp"
+                            android:background="@drawable/shape_circle"
+                            android:backgroundTint="@{isFacebookConnected ? @color/green : @color/red}"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
                         <com.google.android.material.imageview.ShapeableImageView
                             android:id="@+id/iv_icon_facebook"
                             android:layout_width="@dimen/width_40dp"
@@ -328,16 +337,16 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="@dimen/margin_16dp"
-                            android:background="@{facebookStatusBackground}"
+                            android:background="@{isFacebookConnected ? @drawable/shape_rounded_linked_accounts_status_disconnect : @drawable/shape_rounded_linked_accounts_status_connect}"
                             android:fontFamily="@font/localized_black"
                             android:gravity="center"
                             android:maxLines="1"
                             android:paddingHorizontal="@dimen/padding_8dp"
                             android:paddingVertical="@dimen/padding_4dp"
-                            android:text="@{facebookStatusText}"
+                            android:text="@{isFacebookConnected ? @string/linked_accounts_status_disconnect : @string/linked_accounts_status_connect}"
                             android:textAlignment="gravity"
                             android:textAllCaps="true"
-                            android:textColor="@{facebookStatusTextColor}"
+                            android:textColor="@{isFacebookConnected ? @color/red : @color/grayDark}"
                             android:textSize="@dimen/text_size_10sp"
                             android:visibility="@{isFacebookLoading ? View.GONE : View.VISIBLE, default=gone}"
                             app:layout_constraintBottom_toBottomOf="parent"
