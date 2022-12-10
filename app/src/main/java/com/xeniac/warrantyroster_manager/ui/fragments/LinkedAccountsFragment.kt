@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.content.res.AppCompatResources
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -117,13 +115,13 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
         viewModel.linkedAccountsLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
-                    is Resource.Loading -> showLoadingAnimation()
+                    is Resource.Loading -> showAllLoadingAnimations()
                     is Resource.Success -> {
-                        hideLoadingAnimation()
+                        hideAllLoadingAnimations()
                         response.data?.let { showLinkedAccountsStatus(it) }
                     }
                     is Resource.Error -> {
-                        hideLoadingAnimation()
+                        hideAllLoadingAnimations()
 
                         binding.apply {
                             googleClickable = false
@@ -142,32 +140,35 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
             }
         }
 
-    private fun showLinkedAccountsStatus(linkedAccounts: List<String>) {
-        if (linkedAccounts.contains(FIREBASE_AUTH_PROVIDER_ID_GOOGLE)) {
-            showGoogleConnectedStatus()
-        } else {
-            showGoogleNotConnectedStatus()
-        }
+    private fun showLinkedAccountsStatus(linkedAccounts: List<String>) = binding.apply {
+        isGoogleConnected = linkedAccounts.contains(FIREBASE_AUTH_PROVIDER_ID_GOOGLE)
 
-        if (linkedAccounts.contains(FIREBASE_AUTH_PROVIDER_ID_TWITTER)) {
-            showTwitterConnectedStatus()
-        } else {
-            showTwitterNotConnectedStatus()
-        }
+        isTwitterConnected = linkedAccounts.contains(FIREBASE_AUTH_PROVIDER_ID_TWITTER)
 
-        if (linkedAccounts.contains(FIREBASE_AUTH_PROVIDER_ID_FACEBOOK)) {
-            showFacebookConnectedStatus()
-        } else {
-            showFacebookNotConnectedStatus()
+        isFacebookConnected = linkedAccounts.contains(FIREBASE_AUTH_PROVIDER_ID_FACEBOOK)
+    }
+
+    private fun googleOnClick() = binding.apply {
+        cvGoogle.setOnClickListener {
+            if (isGoogleConnected) unlinkGoogleAccount() else launchGoogleSignInClient()
         }
     }
 
-    private fun googleOnClick() = binding.cvGoogle.setOnClickListener {
-        launchGoogleSignInClient()
+    private fun unlinkGoogleAccount() {
+        val auth = FirebaseAuth.getInstance()
+        auth.currentUser!!.unlink(FIREBASE_AUTH_PROVIDER_ID_GOOGLE).addOnCompleteListener {
+            if (it.isSuccessful) {
+                Timber.i("google removed from user: ${it.result.user}")
+                getLinkedAccounts()
+            } else {
+                Timber.e("Unlink Google Exception: ${it.exception?.message}")
+            }
+        }
     }
 
     private fun launchGoogleSignInClient() = CoroutineScope(Dispatchers.Main).launch {
         try {
+            showGoogleLoadingAnimation()
             val options = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).apply {
                 requestIdToken(BuildConfig.GOOGLE_AUTH_SERVER_CLIENT_ID)
                 requestId()
@@ -179,6 +180,8 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
 
             googleResultLauncher.launch(googleSignInClient.signInIntent)
         } catch (e: Exception) {
+            hideGoogleLoadingAnimation()
+            // TODO EDIT
             Timber.e("await exception: $e")
         }
     }
@@ -191,6 +194,7 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
             // Got an ID token from Google. Use it to authenticate with Firebase.
             account?.let { viewModel.linkGoogleAccount(account) }
         } catch (e: Exception) {
+            hideGoogleLoadingAnimation()
             Timber.e("googleResultLauncher Exception: ${e.message}")
         }
     }
@@ -202,11 +206,11 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
                     is Resource.Loading -> showGoogleLoadingAnimation()
                     is Resource.Success -> {
                         hideGoogleLoadingAnimation()
-                        showGoogleConnectedStatus()
+                        binding.isGoogleConnected = true
                     }
                     is Resource.Error -> {
                         hideGoogleLoadingAnimation()
-                        showGoogleNotConnectedStatus()
+                        binding.isGoogleConnected = false
                         response.message?.asString(requireContext())?.let {
                             snackbar = Snackbar.make(requireView(), it, LENGTH_INDEFINITE).apply {
                                 setAction(requireContext().getString(R.string.error_btn_retry)) { getLinkedAccounts() }
@@ -218,14 +222,31 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
             }
         }
 
-    private fun twitterOnClick() = binding.cvTwitter.setOnClickListener {
-        linkTwitterAccount()
+    private fun twitterOnClick() = binding.apply {
+        cvTwitter.setOnClickListener {
+            if (isTwitterConnected) unlinkTwitterAccount() else linkTwitterAccount()
+        }
+    }
+
+    private fun unlinkTwitterAccount() {
+        val auth = FirebaseAuth.getInstance()
+        auth.currentUser!!.unlink(FIREBASE_AUTH_PROVIDER_ID_TWITTER).addOnCompleteListener {
+            if (it.isSuccessful) {
+                Timber.i("Twitter removed from user: ${it.result.user}")
+                getLinkedAccounts()
+            } else {
+                Timber.e("Unlink Twitter Exception: ${it.exception?.message}")
+            }
+        }
     }
 
     private fun linkTwitterAccount() {
+        showTwitterLoadingAnimation()
+
         val oAuthProvider = OAuthProvider.newBuilder(FIREBASE_AUTH_PROVIDER_ID_TWITTER)
         oAuthProvider.addCustomParameter("lang", currentAppLanguage)
 
+        // TODO safeLinkTwitterAccount Exception: User has already been linked to the given provider.
         firebaseAuth.startActivityForSignInWithProvider(requireActivity(), oAuthProvider.build())
             .addOnCompleteListener {
                 if (it.isSuccessful) {
@@ -259,11 +280,11 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
                     is Resource.Loading -> showTwitterLoadingAnimation()
                     is Resource.Success -> {
                         hideTwitterLoadingAnimation()
-                        showTwitterConnectedStatus()
+                        binding.isTwitterConnected = true
                     }
                     is Resource.Error -> {
                         hideTwitterLoadingAnimation()
-                        showTwitterNotConnectedStatus()
+                        binding.isTwitterConnected = false
                         response.message?.asString(requireContext())?.let {
                             snackbar = Snackbar.make(requireView(), it, LENGTH_INDEFINITE).apply {
                                 setAction(requireContext().getString(R.string.error_btn_retry)) { getLinkedAccounts() }
@@ -275,8 +296,22 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
             }
         }
 
-    private fun facebookOnClick() = binding.cvFacebook.setOnClickListener {
-        linkFacebookAccount()
+    private fun facebookOnClick() = binding.apply {
+        cvFacebook.setOnClickListener {
+            if (isGoogleConnected) unlinkFacebookAccount() else linkFacebookAccount()
+        }
+    }
+
+    private fun unlinkFacebookAccount() {
+        val auth = FirebaseAuth.getInstance()
+        auth.currentUser!!.unlink(FIREBASE_AUTH_PROVIDER_ID_FACEBOOK).addOnCompleteListener {
+            if (it.isSuccessful) {
+                Timber.i("Facebook removed from user: ${it.result.user}")
+                getLinkedAccounts()
+            } else {
+                Timber.e("Unlink Facebook Exception: ${it.exception?.message}")
+            }
+        }
     }
 
     private fun linkFacebookAccount() = viewModel.linkFacebookAccount()
@@ -288,79 +323,23 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
                     is Resource.Loading -> showFacebookLoadingAnimation()
                     is Resource.Success -> {
                         hideFacebookLoadingAnimation()
+                        binding.isFacebookConnected = true
                     }
                     is Resource.Error -> {
                         hideFacebookLoadingAnimation()
+                        binding.isFacebookConnected = false
                     }
                 }
             }
         }
 
-    private fun showGoogleConnectedStatus() = binding.apply {
-        googleClickable = false
-        googleStatusBackground = AppCompatResources.getDrawable(
-            requireContext(), R.drawable.shape_rounded_linked_accounts_status_connected
-        )
-        googleStatusTextColor = ContextCompat.getColor(requireContext(), R.color.green)
-        googleStatusText = requireContext().getString(R.string.linked_accounts_status_connected)
-    }
-
-    private fun showGoogleNotConnectedStatus() = binding.apply {
-        googleClickable = true
-        googleStatusBackground = AppCompatResources.getDrawable(
-            requireContext(), R.drawable.shape_rounded_linked_accounts_status_not_connected
-        )
-        googleStatusTextColor = ContextCompat.getColor(requireContext(), R.color.grayDark)
-        googleStatusText = requireContext().getString(R.string.linked_accounts_status_not_connected)
-    }
-
-    private fun showTwitterConnectedStatus() = binding.apply {
-        twitterClickable = false
-        twitterStatusBackground = AppCompatResources.getDrawable(
-            requireContext(), R.drawable.shape_rounded_linked_accounts_status_connected
-        )
-        twitterStatusTextColor = ContextCompat.getColor(requireContext(), R.color.green)
-        twitterStatusText = requireContext().getString(R.string.linked_accounts_status_connected)
-    }
-
-    private fun showTwitterNotConnectedStatus() = binding.apply {
-        twitterClickable = true
-        twitterStatusBackground = AppCompatResources.getDrawable(
-            requireContext(), R.drawable.shape_rounded_linked_accounts_status_not_connected
-        )
-        twitterStatusTextColor = ContextCompat.getColor(requireContext(), R.color.grayDark)
-        twitterStatusText = requireContext().getString(
-            R.string.linked_accounts_status_not_connected
-        )
-    }
-
-    private fun showFacebookConnectedStatus() = binding.apply {
-        facebookClickable = false
-        facebookStatusBackground = AppCompatResources.getDrawable(
-            requireContext(), R.drawable.shape_rounded_linked_accounts_status_connected
-        )
-        facebookStatusTextColor = ContextCompat.getColor(requireContext(), R.color.green)
-        facebookStatusText = requireContext().getString(R.string.linked_accounts_status_connected)
-    }
-
-    private fun showFacebookNotConnectedStatus() = binding.apply {
-        facebookClickable = true
-        facebookStatusBackground = AppCompatResources.getDrawable(
-            requireContext(), R.drawable.shape_rounded_linked_accounts_status_not_connected
-        )
-        facebookStatusTextColor = ContextCompat.getColor(requireContext(), R.color.grayDark)
-        facebookStatusText = requireContext().getString(
-            R.string.linked_accounts_status_not_connected
-        )
-    }
-
-    private fun showLoadingAnimation() {
+    private fun showAllLoadingAnimations() {
         showGoogleLoadingAnimation()
         showTwitterLoadingAnimation()
         showFacebookLoadingAnimation()
     }
 
-    private fun hideLoadingAnimation() {
+    private fun hideAllLoadingAnimations() {
         hideGoogleLoadingAnimation()
         hideTwitterLoadingAnimation()
         hideFacebookLoadingAnimation()
