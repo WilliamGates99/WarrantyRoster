@@ -40,6 +40,7 @@ import com.xeniac.warrantyroster_manager.utils.LinkHelper.openLink
 import com.xeniac.warrantyroster_manager.utils.LinkHelper.openPlayStore
 import com.xeniac.warrantyroster_manager.utils.Resource
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.show403Error
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showActionSnackbarError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseDeviceBlockedError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkConnectionError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkFailureError
@@ -76,7 +77,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
         viewModel = ViewModelProvider(requireActivity())[SettingsViewModel::class.java]
 
         subscribeToObservers()
-        getAccountDetails()
+        getReloadedAccountDetails()
         getCurrentLanguage()
         getCurrentAppTheme()
         verifyOnClick()
@@ -101,7 +102,8 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
     }
 
     private fun subscribeToObservers() {
-        accountDetailsObserver()
+        reloadedAccountDetailsObserver()
+        cachedAccountDetailsObserver()
         currentLanguageObserver()
         currentLocaleIndexObserver()
         currentAppThemeObserver()
@@ -110,10 +112,10 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
         logoutObserver()
     }
 
-    private fun getAccountDetails() = viewModel.getAccountDetails()
+    private fun getReloadedAccountDetails() = viewModel.getReloadedAccountDetails()
 
-    private fun accountDetailsObserver() =
-        viewModel.accountDetailsLiveData.observe(viewLifecycleOwner) { responseEvent ->
+    private fun reloadedAccountDetailsObserver() =
+        viewModel.reloadedAccountDetailsLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
                     is Resource.Success -> {
@@ -121,7 +123,36 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
                             setAccountDetails(user.email.toString(), user.isEmailVerified)
                         }
                     }
-                    is Resource.Error -> getAccountDetails()
+                    is Resource.Error -> {
+                        getCachedAccountDetails()
+                    }
+                    is Resource.Loading -> {
+                        /* NO-OP */
+                    }
+                }
+            }
+        }
+
+    private fun getCachedAccountDetails() = viewModel.getCachedAccountDetails()
+
+    private fun cachedAccountDetailsObserver() =
+        viewModel.cachedAccountDetailsLiveData.observe(viewLifecycleOwner) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { response ->
+                when (response) {
+                    is Resource.Success -> {
+                        response.data?.let { user ->
+                            setAccountDetails(user.email.toString(), user.isEmailVerified)
+                        }
+                    }
+                    is Resource.Error -> {
+                        response.message?.asString(requireContext())?.let {
+                            snackbar = showActionSnackbarError(
+                                view = requireView(),
+                                message = it,
+                                actionBtn = requireContext().getString(R.string.error_btn_confirm)
+                            ) { snackbar?.dismiss() }
+                        }
+                    }
                     is Resource.Loading -> {
                         /* NO-OP */
                     }

@@ -2,6 +2,7 @@ package com.xeniac.warrantyroster_manager.domain.repository
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.AuthCredential
+import com.google.firebase.auth.FirebaseUser
 
 interface UserRepository {
 
@@ -15,7 +16,7 @@ interface UserRepository {
 
     suspend fun sendResetPasswordEmail(email: String)
 
-    fun getCurrentUser(): Any
+    fun getCurrentUser(): FirebaseUser
 
     fun getCurrentUserUid(): String
 
