@@ -1,7 +1,9 @@
 package com.xeniac.warrantyroster_manager.ui.fragments
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
@@ -44,6 +46,17 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
 
     private var snackbar: Snackbar? = null
 
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View? {
+        _binding?.let {
+            it.isGoogleConnected = false
+            it.isTwitterConnected = false
+            it.isFacebookConnected = false
+        }
+        return super.onCreateView(inflater, container, savedInstanceState)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentLinkedAccountsBinding.bind(view)
@@ -76,8 +89,11 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
         currentAppLanguageObserver()
         linkedAccountsObserver()
         linkGoogleObserver()
+        unlinkGoogleObserver()
         linkTwitterObserver()
+        unlinkTwitterObserver()
         linkFacebookObserver()
+        unlinkFacebookObserver()
     }
 
     /*
@@ -150,21 +166,34 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
 
     private fun googleOnClick() = binding.apply {
         cvGoogle.setOnClickListener {
-            if (isGoogleConnected) unlinkGoogleAccount() else launchGoogleSignInClient()
+            if (isGoogleConnected!!) unlinkGoogleAccount() else launchGoogleSignInClient()
         }
     }
 
-    private fun unlinkGoogleAccount() {
-        val auth = FirebaseAuth.getInstance()
-        auth.currentUser!!.unlink(FIREBASE_AUTH_PROVIDER_ID_GOOGLE).addOnCompleteListener {
-            if (it.isSuccessful) {
-                Timber.i("google removed from user: ${it.result.user}")
-                getLinkedAccounts()
-            } else {
-                Timber.e("Unlink Google Exception: ${it.exception?.message}")
+    private fun unlinkGoogleAccount() = viewModel.unlinkGoogleAccount()
+
+    private fun unlinkGoogleObserver() =
+        viewModel.unlinkGoogleLiveData.observe(viewLifecycleOwner) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { response ->
+                when (response) {
+                    is Resource.Loading -> showGoogleLoadingAnimation()
+                    is Resource.Success -> {
+                        hideGoogleLoadingAnimation()
+                        binding.isGoogleConnected = false
+                    }
+                    is Resource.Error -> {
+                        hideGoogleLoadingAnimation()
+                        binding.isGoogleConnected = true
+                        response.message?.asString(requireContext())?.let {
+                            snackbar = Snackbar.make(requireView(), it, LENGTH_INDEFINITE).apply {
+                                setAction(requireContext().getString(R.string.error_btn_retry)) { unlinkGoogleAccount() }
+                                show()
+                            }
+                        }
+                    }
+                }
             }
         }
-    }
 
     private fun launchGoogleSignInClient() = CoroutineScope(Dispatchers.Main).launch {
         try {
@@ -224,21 +253,34 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
 
     private fun twitterOnClick() = binding.apply {
         cvTwitter.setOnClickListener {
-            if (isTwitterConnected) unlinkTwitterAccount() else linkTwitterAccount()
+            if (isTwitterConnected!!) unlinkTwitterAccount() else linkTwitterAccount()
         }
     }
 
-    private fun unlinkTwitterAccount() {
-        val auth = FirebaseAuth.getInstance()
-        auth.currentUser!!.unlink(FIREBASE_AUTH_PROVIDER_ID_TWITTER).addOnCompleteListener {
-            if (it.isSuccessful) {
-                Timber.i("Twitter removed from user: ${it.result.user}")
-                getLinkedAccounts()
-            } else {
-                Timber.e("Unlink Twitter Exception: ${it.exception?.message}")
+    private fun unlinkTwitterAccount() = viewModel.unlinkTwitterAccount()
+
+    private fun unlinkTwitterObserver() =
+        viewModel.unlinkTwitterLiveData.observe(viewLifecycleOwner) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { response ->
+                when (response) {
+                    is Resource.Loading -> showTwitterLoadingAnimation()
+                    is Resource.Success -> {
+                        hideTwitterLoadingAnimation()
+                        binding.isTwitterConnected = false
+                    }
+                    is Resource.Error -> {
+                        hideTwitterLoadingAnimation()
+                        binding.isTwitterConnected = true
+                        response.message?.asString(requireContext())?.let {
+                            snackbar = Snackbar.make(requireView(), it, LENGTH_INDEFINITE).apply {
+                                setAction(requireContext().getString(R.string.error_btn_retry)) { unlinkTwitterAccount() }
+                                show()
+                            }
+                        }
+                    }
+                }
             }
         }
-    }
 
     private fun linkTwitterAccount() {
         showTwitterLoadingAnimation()
@@ -247,30 +289,31 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
         oAuthProvider.addCustomParameter("lang", currentAppLanguage)
 
         // TODO safeLinkTwitterAccount Exception: User has already been linked to the given provider.
-        firebaseAuth.startActivityForSignInWithProvider(requireActivity(), oAuthProvider.build())
-            .addOnCompleteListener {
-                if (it.isSuccessful) {
-                    val authCredential = it.result.credential
-                    authCredential?.let { credential ->
-                        viewModel.linkTwitterAccount(credential)
-                    }
-                } else {
-                    // TODO EDIT
-                    hideTwitterLoadingAnimation()
-                    it.exception?.message?.let { message ->
-                        Timber.e("else -> onFail:")
-                        Timber.e("Exception: $message")
-                        Timber.e("--------------------------------------------")
-                        if (message.contains("An account already exists with the same email address but different sign-in credentials. Sign in using a provider associated with this email address.")) {
-                            Toast.makeText(
-                                requireContext(),
-                                "An account already exists with the same email address but different sign-in credentials.",
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }
+        firebaseAuth.currentUser!!.startActivityForLinkWithProvider(
+            requireActivity(), oAuthProvider.build()
+        ).addOnCompleteListener {
+            if (it.isSuccessful) {
+                val authCredential = it.result.credential
+                authCredential?.let { credential ->
+                    viewModel.linkTwitterAccount(credential)
+                }
+            } else {
+                // TODO EDIT
+                hideTwitterLoadingAnimation()
+                it.exception?.message?.let { message ->
+                    Timber.e("else -> onFail:")
+                    Timber.e("Exception: $message")
+                    Timber.e("--------------------------------------------")
+                    if (message.contains("An account already exists with the same email address but different sign-in credentials. Sign in using a provider associated with this email address.")) {
+                        Toast.makeText(
+                            requireContext(),
+                            "An account already exists with the same email address but different sign-in credentials.",
+                            Toast.LENGTH_LONG
+                        ).show()
                     }
                 }
             }
+        }
     }
 
     private fun linkTwitterObserver() =
@@ -298,21 +341,34 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
 
     private fun facebookOnClick() = binding.apply {
         cvFacebook.setOnClickListener {
-            if (isGoogleConnected) unlinkFacebookAccount() else linkFacebookAccount()
+            if (isFacebookConnected!!) unlinkFacebookAccount() else linkFacebookAccount()
         }
     }
 
-    private fun unlinkFacebookAccount() {
-        val auth = FirebaseAuth.getInstance()
-        auth.currentUser!!.unlink(FIREBASE_AUTH_PROVIDER_ID_FACEBOOK).addOnCompleteListener {
-            if (it.isSuccessful) {
-                Timber.i("Facebook removed from user: ${it.result.user}")
-                getLinkedAccounts()
-            } else {
-                Timber.e("Unlink Facebook Exception: ${it.exception?.message}")
+    private fun unlinkFacebookAccount() = viewModel.unlinkFacebookAccount()
+
+    private fun unlinkFacebookObserver() =
+        viewModel.unlinkFacebookLiveData.observe(viewLifecycleOwner) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { response ->
+                when (response) {
+                    is Resource.Loading -> showFacebookLoadingAnimation()
+                    is Resource.Success -> {
+                        hideFacebookLoadingAnimation()
+                        binding.isFacebookConnected = false
+                    }
+                    is Resource.Error -> {
+                        hideFacebookLoadingAnimation()
+                        binding.isFacebookConnected = true
+                        response.message?.asString(requireContext())?.let {
+                            snackbar = Snackbar.make(requireView(), it, LENGTH_INDEFINITE).apply {
+                                setAction(requireContext().getString(R.string.error_btn_retry)) { unlinkFacebookAccount() }
+                                show()
+                            }
+                        }
+                    }
+                }
             }
         }
-    }
 
     private fun linkFacebookAccount() = viewModel.linkFacebookAccount()
 

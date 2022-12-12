@@ -34,9 +34,15 @@ interface UserRepository {
 
     suspend fun linkGoogleAccount(account: GoogleSignInAccount)
 
+    suspend fun unlinkGoogleAccount()
+
     suspend fun linkTwitterAccount(credential: AuthCredential)
 
+    suspend fun unlinkTwitterAccount()
+
     suspend fun linkFacebookAccount()
+
+    suspend fun unlinkFacebookAccount()
 
     suspend fun updateUserEmail(newEmail: String)
 

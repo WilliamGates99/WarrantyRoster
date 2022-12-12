@@ -33,11 +33,22 @@ class LinkedAccountsViewModel @Inject constructor(
     private val _linkGoogleLiveData: MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
     val linkGoogleLiveData: LiveData<Event<Resource<Nothing>>> = _linkGoogleLiveData
 
+    private val _unlinkGoogleLiveData: MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
+    val unlinkGoogleLiveData: LiveData<Event<Resource<Nothing>>> = _unlinkGoogleLiveData
+
     private val _linkTwitterLiveData: MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
     val linkTwitterLiveData: LiveData<Event<Resource<Nothing>>> = _linkTwitterLiveData
 
+    private val _unlinkTwitterLiveData:
+            MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
+    val unlinkTwitterLiveData: LiveData<Event<Resource<Nothing>>> = _unlinkTwitterLiveData
+
     private val _linkFacebookLiveData: MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
     val linkFacebookLiveData: LiveData<Event<Resource<Nothing>>> = _linkFacebookLiveData
+
+    private val _unlinkFacebookLiveData:
+            MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
+    val unlinkFacebookLiveData: LiveData<Event<Resource<Nothing>>> = _unlinkFacebookLiveData
 
     fun getCurrentAppLanguage() = viewModelScope.launch {
         safeGetCurrentAppLanguage()
@@ -88,6 +99,22 @@ class LinkedAccountsViewModel @Inject constructor(
         }
     }
 
+    fun unlinkGoogleAccount() = viewModelScope.launch {
+        safeUnlinkGoogleAccount()
+    }
+
+    private suspend fun safeUnlinkGoogleAccount() {
+        _unlinkGoogleLiveData.postValue(Event(Resource.Loading()))
+        try {
+            userRepository.unlinkGoogleAccount()
+            _unlinkGoogleLiveData.postValue(Event(Resource.Success()))
+            Timber.i("Google account unlinked successfully.")
+        } catch (e: Exception) {
+            Timber.e("safeUnlinkGoogleAccount Exception: ${e.message}")
+            _unlinkGoogleLiveData.postValue(Event(Resource.Error(UiText.DynamicString(e.message.toString()))))
+        }
+    }
+
     fun linkTwitterAccount(credential: AuthCredential) = viewModelScope.launch {
         safeLinkTwitterAccount(credential)
     }
@@ -104,6 +131,22 @@ class LinkedAccountsViewModel @Inject constructor(
         }
     }
 
+    fun unlinkTwitterAccount() = viewModelScope.launch {
+        safeUnlinkTwitterAccount()
+    }
+
+    private suspend fun safeUnlinkTwitterAccount() {
+        _unlinkTwitterLiveData.postValue(Event(Resource.Loading()))
+        try {
+            userRepository.unlinkGoogleAccount()
+            _unlinkTwitterLiveData.postValue(Event(Resource.Success()))
+            Timber.i("Twitter account unlinked successfully.")
+        } catch (e: Exception) {
+            Timber.e("safeUnlinkTwitterAccount Exception: ${e.message}")
+            _unlinkTwitterLiveData.postValue(Event(Resource.Error(UiText.DynamicString(e.message.toString()))))
+        }
+    }
+
     fun linkFacebookAccount() = viewModelScope.launch {
         safeLinkFacebookAccount()
     }
@@ -117,6 +160,22 @@ class LinkedAccountsViewModel @Inject constructor(
         } catch (e: Exception) {
             Timber.e("safeLinkFacebookAccount Exception: ${e.message}")
             _linkFacebookLiveData.postValue(Event(Resource.Error(UiText.DynamicString(e.message.toString()))))
+        }
+    }
+
+    fun unlinkFacebookAccount() = viewModelScope.launch {
+        safeUnlinkFacebookAccount()
+    }
+
+    private suspend fun safeUnlinkFacebookAccount() {
+        _unlinkFacebookLiveData.postValue(Event(Resource.Loading()))
+        try {
+            userRepository.unlinkGoogleAccount()
+            _unlinkFacebookLiveData.postValue(Event(Resource.Success()))
+            Timber.i("Facebook account unlinked successfully.")
+        } catch (e: Exception) {
+            Timber.e("safeUnlinkFacebookAccount Exception: ${e.message}")
+            _unlinkFacebookLiveData.postValue(Event(Resource.Error(UiText.DynamicString(e.message.toString()))))
         }
     }
 }
