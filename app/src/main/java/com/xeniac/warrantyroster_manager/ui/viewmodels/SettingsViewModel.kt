@@ -169,7 +169,7 @@ class SettingsViewModel @Inject constructor(
             userRepository.reloadCurrentUser()
             val user = userRepository.getCurrentUser()
             _reloadedAccountDetailsLiveData.postValue(Event(Resource.Success(user)))
-            Timber.i("User email is ${user.email} and isVerified: ${user.isEmailVerified}")
+            Timber.i("Reloaded user email is ${user.email} and isVerified: ${user.isEmailVerified}")
         } catch (e: Exception) {
             Timber.e("safeGetReloadedAccountDetails Exception: ${e.message}")
             _reloadedAccountDetailsLiveData.postValue(Event(Resource.Error(UiText.DynamicString(e.message.toString()))))
@@ -185,7 +185,7 @@ class SettingsViewModel @Inject constructor(
         try {
             val user = userRepository.getCurrentUser()
             _cachedAccountDetailsLiveData.postValue(Event(Resource.Success(user)))
-            Timber.i("User email is ${user.email} and isVerified: ${user.isEmailVerified}")
+            Timber.i("Cached user email is ${user.email} and isVerified: ${user.isEmailVerified}")
         } catch (e: Exception) {
             Timber.e("safeGetCachedAccountDetails Exception: ${e.message}")
             _cachedAccountDetailsLiveData.postValue(Event(Resource.Error(UiText.DynamicString(e.message.toString()))))
