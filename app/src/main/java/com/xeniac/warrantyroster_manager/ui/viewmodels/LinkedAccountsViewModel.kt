@@ -138,7 +138,7 @@ class LinkedAccountsViewModel @Inject constructor(
     private suspend fun safeUnlinkTwitterAccount() {
         _unlinkTwitterLiveData.postValue(Event(Resource.Loading()))
         try {
-            userRepository.unlinkGoogleAccount()
+            userRepository.unlinkTwitterAccount()
             _unlinkTwitterLiveData.postValue(Event(Resource.Success()))
             Timber.i("Twitter account unlinked successfully.")
         } catch (e: Exception) {
@@ -170,7 +170,7 @@ class LinkedAccountsViewModel @Inject constructor(
     private suspend fun safeUnlinkFacebookAccount() {
         _unlinkFacebookLiveData.postValue(Event(Resource.Loading()))
         try {
-            userRepository.unlinkGoogleAccount()
+            userRepository.unlinkFacebookAccount()
             _unlinkFacebookLiveData.postValue(Event(Resource.Success()))
             Timber.i("Facebook account unlinked successfully.")
         } catch (e: Exception) {
