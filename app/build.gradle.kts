@@ -312,7 +312,7 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-intents:3.5.0")
     androidTestImplementation("com.google.dagger:hilt-android-testing:2.44.2")
     kaptAndroidTest("com.google.dagger:hilt-compiler:2.44.2")
-    debugImplementation("androidx.fragment:fragment-testing:1.5.4")
+    debugImplementation("androidx.fragment:fragment-testing:1.5.5")
 }
 
 tasks.register<Copy>("copyReleaseApk") {
