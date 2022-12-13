@@ -303,6 +303,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
             googleResultLauncher.launch(googleSignInClient.signInIntent)
         } catch (e: Exception) {
+            // TODO EDIT
             Timber.e("await exception: $e")
         }
     }
@@ -361,7 +362,12 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         }
 
     private fun twitterOnClick() = binding.btnTwitter.setOnClickListener {
+        loginWithTwitterAccount()
+    }
+
+    private fun loginWithTwitterAccount() {
         showTwitterLoadingAnimation()
+
         val oAuthProvider = OAuthProvider.newBuilder(FIREBASE_AUTH_PROVIDER_ID_TWITTER)
         oAuthProvider.addCustomParameter("lang", currentAppLanguage)
 
