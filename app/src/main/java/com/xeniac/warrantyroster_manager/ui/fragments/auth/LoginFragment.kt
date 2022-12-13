@@ -84,7 +84,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         loginActionDone()
         googleOnClick()
         twitterOnClick()
-        facebookOnClick()
+//        facebookOnClick()
         requireActivity().onBackPressedDispatcher.addCallback(onBackPressedCallback)
     }
 
@@ -425,9 +425,64 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             }
         }
 
+    /* TODO UNCOMMENT WHEN ITS DEPENDENCY GOT FIXED
     private fun facebookOnClick() = binding.btnFacebook.setOnClickListener {
-        Toast.makeText(requireContext(), "facebook", Toast.LENGTH_SHORT).show()
+        loginWithFacebookAccount()
     }
+
+    private fun loginWithFacebookAccount() {
+        showFacebookLoadingAnimation()
+
+        val callbackManager = CallbackManager.Factory.create()
+        val loginManager = LoginManager.getInstance()
+        loginManager.logInWithReadPermissions(requireActivity(), listOf("email", "public_profile"))
+
+        loginManager.registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
+            override fun onSuccess(result: LoginResult) {
+                Timber.i("onSuccess")
+                handleFacebookAccessToken(result.accessToken)
+            }
+
+            override fun onCancel() {
+                Timber.i("onCancel")
+                hideFacebookLoadingAnimation()
+            }
+
+            override fun onError(error: FacebookException) {
+                Timber.e("onError: ${error.message}")
+                hideFacebookLoadingAnimation()
+            }
+        })
+    }
+
+    private fun handleFacebookAccessToken(accessToken: AccessToken) {
+        val credential = FacebookAuthProvider.getCredential(accessToken.token)
+
+        firebaseAuth.signInWithCredential(credential)
+            .addOnCompleteListener {
+                hideFacebookLoadingAnimation()
+
+                if (it.isSuccessful) {
+                    Timber.i("signInWithCredential succeeded.")
+                    val user = it.result.user
+                    user?.let { u ->
+                        val uid = u.uid
+                        val email = u.email
+                        val displayName = u.displayName
+
+                        Timber.i("user id: $uid\nuser email: $email\nuser displayName: $displayName")
+                    }
+
+                    requireActivity().apply {
+                        startActivity(Intent(this, MainActivity::class.java))
+                        finish()
+                    }
+                } else {
+                    Timber.e("signInWithCredential failed. message: ${it.exception?.message}")
+                }
+            }
+    }
+    */
 
     private fun showLoginLoadingAnimation() = binding.apply {
         tiEditEmail.isEnabled = false

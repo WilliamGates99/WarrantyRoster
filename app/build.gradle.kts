@@ -36,6 +36,21 @@ android {
          */
         resourceConfigurations += mutableSetOf("en-rUS", "en-rGB", "fa-rIR")
 
+        resValue(
+            "string",
+            "fb_login_protocol_scheme",
+            properties.getProperty("FACEBOOK_AUTH_LOGIN_PROTOCOL_SCHEME")
+        )
+        resValue(
+            "string",
+            "facebook_app_id",
+            properties.getProperty("FACEBOOK_AUTH_APP_ID")
+        )
+        resValue(
+            "string",
+            "facebook_client_token",
+            properties.getProperty("FACEBOOK_AUTH_CLIENT_TOKEN")
+        )
         buildConfigField(
             "String",
             "GOOGLE_AUTH_SERVER_CLIENT_ID",
@@ -261,6 +276,7 @@ dependencies {
     // Firebase Auth
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.android.gms:play-services-auth:20.4.0")
+//    implementation("com.facebook.android:facebook-login:15.1.0")
 
     // Firebase Firestore, Storage
     implementation("com.google.firebase:firebase-firestore-ktx")
@@ -283,7 +299,7 @@ dependencies {
     implementation("com.google.android.play:review-ktx:2.0.1")
 
     // AppLovin Libraries
-    implementation("com.applovin:applovin-sdk:11.5.5")
+    implementation("com.applovin:applovin-sdk:11.6.0")
     implementation("com.google.android.gms:play-services-ads-identifier:18.0.1")
     implementation("com.applovin.mediation:google-adapter:21.3.0.2")
 
