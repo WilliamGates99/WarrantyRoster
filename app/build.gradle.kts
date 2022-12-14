@@ -276,7 +276,7 @@ dependencies {
     // Firebase Auth
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.android.gms:play-services-auth:20.4.0")
-//    implementation("com.facebook.android:facebook-login:15.1.0")
+    implementation("com.facebook.android:facebook-login:15.1.0")
 
     // Firebase Firestore, Storage
     implementation("com.google.firebase:firebase-firestore-ktx")

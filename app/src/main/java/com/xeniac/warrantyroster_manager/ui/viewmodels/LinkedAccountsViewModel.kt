@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.facebook.AccessToken
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.AuthCredential
 import com.xeniac.warrantyroster_manager.domain.repository.UserRepository
@@ -13,7 +14,6 @@ import com.xeniac.warrantyroster_manager.utils.Event
 import com.xeniac.warrantyroster_manager.utils.Resource
 import com.xeniac.warrantyroster_manager.utils.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -147,14 +147,14 @@ class LinkedAccountsViewModel @Inject constructor(
         }
     }
 
-    fun linkFacebookAccount() = viewModelScope.launch {
-        safeLinkFacebookAccount()
+    fun linkFacebookAccount(accessToken: AccessToken) = viewModelScope.launch {
+        safeLinkFacebookAccount(accessToken)
     }
 
-    private suspend fun safeLinkFacebookAccount() {
+    private suspend fun safeLinkFacebookAccount(accessToken: AccessToken) {
         _linkFacebookLiveData.postValue(Event(Resource.Loading()))
         try {
-            delay(3000)
+            userRepository.linkFacebookAccount(accessToken)
             _linkFacebookLiveData.postValue(Event(Resource.Success()))
             Timber.i("Facebook account linked successfully.")
         } catch (e: Exception) {

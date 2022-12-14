@@ -1,5 +1,6 @@
 package com.xeniac.warrantyroster_manager.data.repository
 
+import com.facebook.AccessToken
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.*
 import com.xeniac.warrantyroster_manager.domain.repository.UserRepository
@@ -84,8 +85,9 @@ class UserRepositoryImp @Inject constructor(
         getCurrentUser().unlink(FIREBASE_AUTH_PROVIDER_ID_TWITTER).await()
     }
 
-    override suspend fun linkFacebookAccount() {
-        TODO("Not yet implemented")
+    override suspend fun linkFacebookAccount(accessToken: AccessToken) {
+        val credential = FacebookAuthProvider.getCredential(accessToken.token)
+        getCurrentUser().linkWithCredential(credential).await()
     }
 
     override suspend fun unlinkFacebookAccount() {

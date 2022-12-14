@@ -1,5 +1,6 @@
 package com.xeniac.warrantyroster_manager.domain.repository
 
+import com.facebook.AccessToken
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseUser
@@ -40,7 +41,7 @@ interface UserRepository {
 
     suspend fun unlinkTwitterAccount()
 
-    suspend fun linkFacebookAccount()
+    suspend fun linkFacebookAccount(accessToken: AccessToken)
 
     suspend fun unlinkFacebookAccount()
 

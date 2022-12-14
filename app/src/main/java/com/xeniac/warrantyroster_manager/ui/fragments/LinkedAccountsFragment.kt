@@ -9,6 +9,11 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.facebook.CallbackManager
+import com.facebook.FacebookCallback
+import com.facebook.FacebookException
+import com.facebook.login.LoginManager
+import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_INDEFINITE
@@ -201,7 +206,6 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
             val options = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).apply {
                 requestIdToken(BuildConfig.GOOGLE_AUTH_SERVER_CLIENT_ID)
                 requestId()
-                requestEmail()
             }.build()
 
             val googleSignInClient = GoogleSignIn.getClient(requireContext(), options)
@@ -242,7 +246,7 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
                         binding.isGoogleConnected = false
                         response.message?.asString(requireContext())?.let {
                             snackbar = Snackbar.make(requireView(), it, LENGTH_INDEFINITE).apply {
-                                setAction(requireContext().getString(R.string.error_btn_retry)) { getLinkedAccounts() }
+                                setAction(requireContext().getString(R.string.error_btn_retry)) { launchGoogleSignInClient() }
                                 show()
                             }
                         }
@@ -327,11 +331,17 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
                     }
                     is Resource.Error -> {
                         hideTwitterLoadingAnimation()
-                        binding.isTwitterConnected = false
                         response.message?.asString(requireContext())?.let {
-                            snackbar = Snackbar.make(requireView(), it, LENGTH_INDEFINITE).apply {
-                                setAction(requireContext().getString(R.string.error_btn_retry)) { getLinkedAccounts() }
-                                show()
+                            if (it.contains("User has already been linked to the given provider")) {
+                                binding.isTwitterConnected = true
+                            } else {
+                                binding.isTwitterConnected = false
+                                snackbar = Snackbar.make(
+                                    requireView(), it, LENGTH_INDEFINITE
+                                ).apply {
+                                    setAction(requireContext().getString(R.string.error_btn_retry)) { linkTwitterAccount() }
+                                    show()
+                                }
                             }
                         }
                     }
@@ -370,7 +380,31 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
             }
         }
 
-    private fun linkFacebookAccount() = viewModel.linkFacebookAccount()
+    private fun linkFacebookAccount() {
+        showFacebookLoadingAnimation()
+
+        val callbackManager = CallbackManager.Factory.create()
+
+        val loginManager = LoginManager.getInstance()
+        loginManager.logInWithReadPermissions(this, callbackManager, listOf())
+
+        loginManager.registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
+            override fun onSuccess(result: LoginResult) {
+                Timber.i("onSuccess")
+                viewModel.linkFacebookAccount(result.accessToken)
+            }
+
+            override fun onCancel() {
+                Timber.i("onCancel")
+                hideFacebookLoadingAnimation()
+            }
+
+            override fun onError(error: FacebookException) {
+                Timber.e("onError: ${error.message}")
+                hideFacebookLoadingAnimation()
+            }
+        })
+    }
 
     private fun linkFacebookObserver() =
         viewModel.linkFacebookLiveData.observe(viewLifecycleOwner) { responseEvent ->
@@ -383,7 +417,19 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
                     }
                     is Resource.Error -> {
                         hideFacebookLoadingAnimation()
-                        binding.isFacebookConnected = false
+                        response.message?.asString(requireContext())?.let {
+//                            if (it.contains("User has already been linked to the given provider")) {
+//                                binding.isFacebookConnected = true
+//                            } else {
+                            binding.isFacebookConnected = false
+                            snackbar = Snackbar.make(
+                                requireView(), it, LENGTH_INDEFINITE
+                            ).apply {
+                                setAction(requireContext().getString(R.string.error_btn_retry)) { linkTwitterAccount() }
+                                show()
+                            }
+//                            }
+                        }
                     }
                 }
             }
