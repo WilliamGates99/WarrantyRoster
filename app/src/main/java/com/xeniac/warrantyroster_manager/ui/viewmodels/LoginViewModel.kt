@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.facebook.AccessToken
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.AuthCredential
 import com.xeniac.warrantyroster_manager.domain.repository.PreferencesRepository
@@ -43,6 +44,11 @@ class LoginViewModel @Inject constructor(
             MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
     val loginWithTwitterAccountLiveData:
             LiveData<Event<Resource<Nothing>>> = _loginWithTwitterAccountLiveData
+
+    private val _loginWithFacebookAccountLiveData:
+            MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
+    val loginWithFacebookAccountLiveData:
+            LiveData<Event<Resource<Nothing>>> = _loginWithFacebookAccountLiveData
 
     fun getCurrentAppLanguage() = viewModelScope.launch {
         safeGetCurrentAppLanguage()
@@ -118,7 +124,7 @@ class LoginViewModel @Inject constructor(
             userRepository.loginWithGoogleAccount(account)
             preferencesRepository.isUserLoggedIn(true)
             _loginWithGoogleAccountLiveData.postValue(Event(Resource.Success()))
-            Timber.i("${account.email} logged in successfully with Google account.")
+            Timber.i("Successfully logged in with Google account.")
         } catch (e: Exception) {
             Timber.e("safeAuthenticateGoogleAccountWithFirebase Exception: ${e.message}")
             _loginWithGoogleAccountLiveData.postValue(Event(Resource.Error(UiText.DynamicString(e.message.toString()))))
@@ -139,6 +145,23 @@ class LoginViewModel @Inject constructor(
         } catch (e: Exception) {
             Timber.e("safeLoginWithTwitterAccount Exception: ${e.message}")
             _loginWithTwitterAccountLiveData.postValue(Event(Resource.Error(UiText.DynamicString(e.message.toString()))))
+        }
+    }
+
+    fun loginWithFacebookAccount(accessToken: AccessToken) = viewModelScope.launch {
+        safeLoginWithFacebookAccount(accessToken)
+    }
+
+    private suspend fun safeLoginWithFacebookAccount(accessToken: AccessToken) {
+        _loginWithFacebookAccountLiveData.postValue(Event(Resource.Loading()))
+        try {
+            userRepository.loginWithFacebookAccount(accessToken)
+            preferencesRepository.isUserLoggedIn(true)
+            _loginWithFacebookAccountLiveData.postValue(Event(Resource.Success()))
+            Timber.i("Successfully logged in with Facebook account.")
+        } catch (e: Exception) {
+            Timber.e("safeLoginWithFacebookAccount Exception: ${e.message}")
+            _loginWithFacebookAccountLiveData.postValue(Event(Resource.Error(UiText.DynamicString(e.message.toString()))))
         }
     }
 }

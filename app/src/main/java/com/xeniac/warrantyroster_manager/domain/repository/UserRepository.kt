@@ -15,6 +15,8 @@ interface UserRepository {
 
     suspend fun loginWithTwitterAccount(credential: AuthCredential)
 
+    suspend fun loginWithFacebookAccount(accessToken: AccessToken)
+
     suspend fun sendResetPasswordEmail(email: String)
 
     fun getCurrentUser(): FirebaseUser

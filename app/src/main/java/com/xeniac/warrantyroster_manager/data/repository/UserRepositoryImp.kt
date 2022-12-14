@@ -31,6 +31,11 @@ class UserRepositoryImp @Inject constructor(
         firebaseAuth.signInWithCredential(credential).await()
     }
 
+    override suspend fun loginWithFacebookAccount(accessToken: AccessToken) {
+        val credential = FacebookAuthProvider.getCredential(accessToken.token)
+        firebaseAuth.signInWithCredential(credential).await()
+    }
+
     override suspend fun sendResetPasswordEmail(email: String) {
         firebaseAuth.sendPasswordResetEmail(email).await()
     }
