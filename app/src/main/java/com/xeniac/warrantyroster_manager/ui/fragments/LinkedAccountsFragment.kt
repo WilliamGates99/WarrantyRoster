@@ -15,7 +15,9 @@ import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.tasks.Task
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.OAuthProvider
 import com.xeniac.warrantyroster_manager.BuildConfig
@@ -93,26 +95,6 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
         snackbar?.dismiss()
         _binding = null
     }
-
-    /*
-    TODO MOVE THIS TO ON_VIEW_CREATED AND CREATE ITS OWN FUNCTION AND LIVEDATA IN VIEW_MODEL
-    TODO ALSO ADD TO LOGIN_FRAGMENT
-      // There's something already here! Finish the sign-in for your user.
-     firebaseAuth.pendingAuthResult?.let { pendingAuthResult ->
-         Timber.i("FirebaseAuth pending twitter auth result is not null.")
-         pendingAuthResult.addOnCompleteListener {
-             if (it.isSuccessful) {
-                 viewModel.linkTwitterAccount()
-             } else {
-                 hideTwitterLoadingAnimation()
-                 // TODO SHOW ERROR
-                 Timber.e("pendingResultTask is not null -> onFail:")
-                 Timber.e("Exception: ${it.exception?.message}")
-                 Timber.e("--------------------------------------------")
-             }
-         }
-     }
-      */
 
     private fun toolbarNavigationBackOnClick() = binding.toolbar.setNavigationOnClickListener {
         navigateBack()
@@ -311,7 +293,7 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
 
     private fun twitterOnClick() = binding.apply {
         cvTwitter.setOnClickListener {
-            if (isTwitterConnected!!) unlinkTwitterAccount() else linkTwitterAccount()
+            if (isTwitterConnected!!) unlinkTwitterAccount() else checkPendingLinkTwitterAccountAuthResult()
         }
     }
 
@@ -352,9 +334,64 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
             }
         }
 
-    private fun linkTwitterAccount() {
+    private fun checkPendingLinkTwitterAccountAuthResult() {
         showTwitterLoadingAnimation()
 
+        val pendingAuthResult = firebaseAuth.pendingAuthResult
+
+        if (pendingAuthResult != null) {
+            pendingLinkTwitterAccountAuthResult(pendingAuthResult)
+        } else {
+            linkTwitterAccount()
+        }
+    }
+
+    private fun pendingLinkTwitterAccountAuthResult(pendingAuthResult: Task<AuthResult>) {
+        pendingAuthResult.addOnCompleteListener {
+            if (it.isSuccessful) {
+                val authCredential = it.result.credential
+                authCredential?.let { credential ->
+                    viewModel.linkTwitterAccount(credential)
+                }
+            } else {
+                hideTwitterLoadingAnimation()
+                it.exception?.message?.let { message ->
+                    if (message.contains(ERROR_TWITTER_O_AUTH_PROVIDER_CANCELED)) {
+                        /* NO-OP */
+                    } else {
+                        snackbar = when {
+                            message.contains(ERROR_TWITTER_O_AUTH_PROVIDER_NETWORK_CONNECTION) -> {
+                                showNetworkConnectionError(requireContext(), requireView()) {
+                                    linkTwitterAccount()
+                                }
+                            }
+                            message.contains(
+                                ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIALS
+                            ) -> {
+                                showActionSnackbarError(
+                                    requireView(),
+                                    requireContext().getString(R.string.linked_accounts_error_email_exists_with_different_credentials),
+                                    requireContext().getString(R.string.error_btn_confirm)
+                                ) { snackbar?.dismiss() }
+                            }
+                            message.contains(ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS) -> {
+                                showActionSnackbarError(
+                                    requireView(),
+                                    requireContext().getString(R.string.linked_accounts_error_email_exists),
+                                    requireContext().getString(R.string.error_btn_confirm)
+                                ) { snackbar?.dismiss() }
+                            }
+                            else -> {
+                                showSomethingWentWrongError(requireContext(), requireView())
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun linkTwitterAccount() {
         val oAuthProvider = OAuthProvider.newBuilder(FIREBASE_AUTH_PROVIDER_ID_TWITTER)
         oAuthProvider.addCustomParameter("lang", currentAppLanguage)
 
