@@ -87,6 +87,9 @@ object Constants {
     const val ERROR_INPUT_INVALID_STARTING_DATE = "Invalid Starting Date"
 
     // Response Errors
+    const val ERROR_TWITTER_O_AUTH_PROVIDER_CANCELED = "The web operation was canceled by the user"
+    const val ERROR_GOOGLE_SIGN_IN_CLIENT_OFFLINE = "7"
+    const val ERROR_TWITTER_O_AUTH_PROVIDER_NETWORK_CONNECTION = "An internal error has occurred"
     const val ERROR_NETWORK_CONNECTION =
         "A network error (such as timeout, interrupted connection or unreachable host) has occurred"
     const val ERROR_FIREBASE_403 = "403"
@@ -94,10 +97,14 @@ object Constants {
         "We have blocked all requests from this device due to unusual activity"
     const val ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS =
         "The email address is already in use by another account"
+    const val ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIALS =
+        "An account already exists with the same email address but different sign-in credentials"
     const val ERROR_FIREBASE_AUTH_ACCOUNT_NOT_FOUND =
         "There is no user record corresponding to this identifier"
     const val ERROR_FIREBASE_AUTH_CREDENTIALS =
         "The password is invalid or the user does not have a password"
+    const val ERROR_FIREBASE_AUTH_ALREADY_LINKED =
+        "User has already been linked to the given provider"
     const val ERROR_TIMER_IS_NOT_ZERO = "Timer is not zero"
     const val ERROR_EMPTY_CATEGORY_LIST = "Category list is empty"
     const val ERROR_EMPTY_WARRANTY_LIST = "Warranty list is empty"

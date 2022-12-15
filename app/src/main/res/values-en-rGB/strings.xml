@@ -3,6 +3,7 @@
     <string name="app_name">Warranty Roster</string>
 
 
+    <string name="error_something_went_wrong">Something went wrong. Please try again later.</string>
     <string name="error_network_connection">Unable to connect to the internet.</string>
     <string name="error_network_failure">You\'re having network issues. Please try again later.</string>
     <string name="error_firebase_403">This service is not available in your region. Please consider changing your IP address by using a VPN.</string>
@@ -349,6 +350,8 @@
     <string name="linked_accounts_title_facebook">Facebook</string>
     <string name="linked_accounts_status_connect">Connect</string>
     <string name="linked_accounts_status_disconnect">Disconnect</string>
+    <string name="linked_accounts_error_email_exists_with_different_credentials">An account already exists with the same email address but different sign-in credentials.</string>
+    <string name="linked_accounts_error_email_exists">An account with the provided email already exists.</string>
 
 
     <string name="change_password_text_title">Change Password</string>

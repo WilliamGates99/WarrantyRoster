@@ -25,6 +25,7 @@ object SnackBarHelper {
         show()
     }
 
+    // TODO RENAME TO SHOW_OFFLINE_NETWORK_ERROR
     fun showNetworkConnectionError(
         context: Context,
         view: View,
@@ -56,9 +57,16 @@ object SnackBarHelper {
         show()
     }
 
+    // TODO MAYBE REMOVE IT AND USE SOMETHING_WENT_WRONG INSTEAD
     fun showNetworkFailureError(context: Context, view: View): Snackbar = Snackbar.make(
         view,
         context.getString(R.string.error_network_failure),
+        LENGTH_LONG
+    ).apply { show() }
+
+    fun showSomethingWentWrongError(context: Context, view: View): Snackbar = Snackbar.make(
+        view,
+        context.getString(R.string.error_something_went_wrong),
         LENGTH_LONG
     ).apply { show() }
 

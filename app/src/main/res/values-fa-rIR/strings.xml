@@ -3,6 +3,7 @@
     <string name="app_name">وارانتی راستر</string>
 
 
+    <string name="error_something_went_wrong">خطایی رخ داده. لطفا بعدا دوباره امتحان کنید.</string>
     <string name="error_network_connection">اتصال به اینترنت امکان‌پذیر نیست.</string>
     <string name="error_network_failure">مشکلی برای شبکه رخ داده است. لطفا بعدا دوباره امتحان کنید.</string>
     <string name="error_firebase_403">این سرویس در منطقه شما در دسترس نیست. لطفاً از نرم‌افزار تغییر آدرس IP استفاده کنید.</string>
@@ -349,6 +350,8 @@
     <string name="linked_accounts_title_facebook">فیسبوک</string>
     <string name="linked_accounts_status_connect">متصل کردن</string>
     <string name="linked_accounts_status_disconnect">قطع اتصال</string>
+    <string name="linked_accounts_error_email_exists_with_different_credentials">حسابی با ایمیل وارد شده اما با روش‌های ورود متفاوت از قبل وجود دارد.</string>
+    <string name="linked_accounts_error_email_exists">حسابی با ایمیل وارد شده از قبل وجود دارد.</string>
 
 
     <string name="change_password_text_title">تغییر رمز‌عبور</string>
