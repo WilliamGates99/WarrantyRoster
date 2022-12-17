@@ -161,13 +161,13 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
             }
         }
 
-    private fun updateTimerViews(isTimerTicking: Boolean) {
-        binding.isTimerTicking = isTimerTicking
-        setResendTvConstraintBottom()
+    private fun updateTimerViews(isTimerActive: Boolean) {
+        binding.isTimerTicking = isTimerActive
+        setResendTvConstraintBottom(isTimerActive)
     }
 
-    private fun setResendTvConstraintBottom() = binding.apply {
-        val constraintEndId = if (isTimerTicking) tvTimer.id else btnResend.id
+    private fun setResendTvConstraintBottom(isTimerActive: Boolean) = binding.apply {
+        val constraintEndId = if (isTimerActive) tvTimer.id else btnResend.id
 
         ConstraintSet().apply {
             clone(cl)
