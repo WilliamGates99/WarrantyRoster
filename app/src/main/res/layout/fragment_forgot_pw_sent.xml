@@ -1,168 +1,166 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fillViewport="true"
-    android:orientation="vertical"
-    android:overScrollMode="never"
-    android:paddingTop="@dimen/padding_12dp"
-    android:scrollbars="none">
+<layout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl"
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="isTimerTicking"
+            type="Boolean" />
+
+        <variable
+            name="isResendLoading"
+            type="Boolean" />
+
+        <variable
+            name="time"
+            type="String" />
+
+    </data>
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:animateLayoutChanges="true">
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:orientation="vertical"
+        android:overScrollMode="ifContentScrolls"
+        android:scrollbars="none">
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_description"
-            android:layout_width="@dimen/width_0dp"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/margin_24dp"
-            android:layout_marginTop="@dimen/margin_32dp"
-            android:fontFamily="@font/localized_extra_bold"
-            android:gravity="start|center_vertical"
-            android:text="@string/forgot_pw_sent_text_description"
-            android:textAlignment="gravity"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size_24sp"
-            app:layout_constraintBottom_toTopOf="@+id/lav_sent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0"
-            app:layout_constraintVertical_chainStyle="packed" />
+            android:animateLayoutChanges="true">
 
-        <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/lav_sent"
-            android:layout_width="@dimen/width_250dp"
-            android:layout_height="@dimen/height_250dp"
-            android:layout_marginHorizontal="@dimen/margin_4dp"
-            android:layout_marginTop="@dimen/margin_44dp"
-            app:layout_constraintBottom_toTopOf="@+id/tv_resend"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_description"
-            app:lottie_autoPlay="true"
-            app:lottie_loop="false"
-            app:lottie_rawRes="@raw/anim_email_sent"
-            app:lottie_speed="0.65" />
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_description"
+                android:layout_width="@dimen/width_0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_24dp"
+                android:layout_marginTop="@dimen/margin_44dp"
+                android:fontFamily="@font/localized_extra_bold"
+                android:gravity="start|center_vertical"
+                android:text="@string/forgot_pw_sent_text_description"
+                android:textAlignment="gravity"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_24sp"
+                app:layout_constraintBottom_toTopOf="@+id/lav_sent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0"
+                app:layout_constraintVertical_chainStyle="packed" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_resend"
-            android:layout_width="@dimen/width_0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/margin_4dp"
-            android:fontFamily="@font/localized_semi_bold"
-            android:gravity="center"
-            android:text="@string/forgot_pw_sent_text_resend"
-            android:textAlignment="gravity"
-            android:textColor="@color/grayDark"
-            android:textSize="@dimen/text_size_16sp"
-            app:layout_constraintBottom_toTopOf="@+id/btn_resend"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lav_sent" />
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/lav_sent"
+                android:layout_width="@dimen/width_250dp"
+                android:layout_height="@dimen/height_250dp"
+                android:layout_marginHorizontal="@dimen/margin_4dp"
+                android:layout_marginTop="@dimen/margin_44dp"
+                app:layout_constraintBottom_toTopOf="@id/tv_resend"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_description"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="false"
+                app:lottie_rawRes="@raw/anim_email_sent"
+                app:lottie_speed="0.65" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_resend"
-            style="@style/Theme.WarrantyRoster.TextButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/margin_4dp"
-            android:layout_marginTop="@dimen/margin_3dp"
-            android:gravity="center"
-            android:text="@string/forgot_pw_sent_btn_resend"
-            android:textAlignment="gravity"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size_16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_resend" />
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_resend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_24dp"
+                android:fontFamily="@{isTimerTicking ? @font/localized_semi_bold : @font/localized_semi_bold, default:@font/localized_semi_bold}"
+                android:text="@{isTimerTicking ? @string/forgot_pw_sent_text_resend : @string/forgot_pw_sent_text_resent, default=@string/forgot_pw_sent_text_resend}"
+                android:textAlignment="center"
+                android:textColor="@{isTimerTicking ? @color/grayDark : @color/black, default=@color/grayDark}"
+                android:textSize="@dimen/text_size_16sp"
+                app:layout_constrainedWidth="true"
+                app:layout_constraintBottom_toTopOf="@{isTimerTicking ? @id/btn_resend : @id/tv_timer, default=@id/btn_resend}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/lav_sent" />
 
-        <com.google.android.material.progressindicator.CircularProgressIndicator
-            android:id="@+id/cpi_resend"
-            style="@style/Theme.WarrantyRoster.LoadingProgressBar.TextButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/margin_4dp"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_resend" />
+            <!-- MARGIN_HORIZONTAL: 19 + 5 = 24DP -->
+            <!-- MARGIN_TOP: 3 + 5 = 8DP -->
+            <!-- MARGIN_BOTTOM: 14 + 5 + 5 = 24DP -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_resend"
+                style="@style/Theme.WarrantyRoster.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_19dp"
+                android:layout_marginTop="@dimen/margin_3dp"
+                android:layout_marginBottom="@dimen/margin_14dp"
+                android:text="@string/forgot_pw_sent_btn_resend"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_16sp"
+                android:visibility="@{isResendLoading ? View.VISIBLE : View.GONE, default=visible}"
+                app:layout_constrainedWidth="true"
+                app:layout_constraintBottom_toTopOf="@id/btn_return"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_resend" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_resent"
-            android:layout_width="@dimen/width_0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/margin_4dp"
-            android:fontFamily="@font/localized_semi_bold"
-            android:gravity="center"
-            android:text="@string/forgot_pw_sent_text_resent"
-            android:textAlignment="gravity"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size_16sp"
-            app:layout_constraintBottom_toTopOf="@+id/tv_timer"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lav_sent" />
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/cpi_resend"
+                style="@style/Theme.WarrantyRoster.LoadingProgressBar.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_24dp"
+                android:layout_marginTop="@dimen/margin_3dp"
+                android:layout_marginBottom="@dimen/margin_24dp"
+                android:visibility="@{isResendLoading ? View.GONE : View.VISIBLE, default=gone}"
+                app:layout_constraintBottom_toTopOf="@id/btn_return"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_resend"
+                app:layout_constraintVertical_bias="0" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_timer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/margin_4dp"
-            android:layout_marginTop="@dimen/margin_4dp"
-            android:fontFamily="@font/localized_regular"
-            android:gravity="center"
-            android:maxLines="1"
-            android:text="(01:58)"
-            android:textAlignment="gravity"
-            android:textColor="@color/green"
-            android:textSize="@dimen/text_size_14sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_resent"
-            tools:ignore="HardcodedText" />
+            <!-- MARGIN_BOTTOM: 19 + 5 = 24DP -->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tv_timer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_24dp"
+                android:layout_marginTop="@dimen/margin_4dp"
+                android:layout_marginBottom="@dimen/margin_19dp"
+                android:fontFamily="@font/localized_regular"
+                android:maxLines="1"
+                android:text="@{time}"
+                android:textAlignment="center"
+                android:textColor="@color/green"
+                android:textSize="@dimen/text_size_14sp"
+                android:visibility="@{isTimerTicking ? View.VISIBLE : View.GONE, default=gone}"
+                app:layout_constrainedWidth="true"
+                app:layout_constraintBottom_toTopOf="@id/btn_return"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_resend" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_return"
-            style="@style/Theme.WarrantyRoster.TextButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/margin_4dp"
-            android:layout_marginTop="@dimen/margin_35dp"
-            android:layout_marginBottom="@dimen/margin_19dp"
-            android:gravity="center"
-            android:text="@string/forgot_pw_sent_btn_return"
-            android:textAlignment="gravity"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_resend"
-            app:layout_constraintVertical_bias="1"
-            app:layout_constraintVertical_chainStyle="spread"
-            app:layout_goneMarginTop="@dimen/margin_79dp" />
+            <!-- MARGIN_HORIZONTAL: 19 + 5 = 24DP -->
+            <!-- MARGIN_BOTTOM: 19 + 5 = 24DP -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_return"
+                style="@style/Theme.WarrantyRoster.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_19dp"
+                android:layout_marginBottom="@dimen/margin_19dp"
+                android:gravity="center"
+                android:text="@string/forgot_pw_sent_btn_return"
+                android:textAlignment="gravity"
+                app:layout_constrainedWidth="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent" />
 
-        <androidx.constraintlayout.widget.Group
-            android:id="@+id/group_resend"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="visible"
-            app:constraint_referenced_ids="tv_resend,btn_resend" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.constraintlayout.widget.Group
-            android:id="@+id/group_timer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            app:constraint_referenced_ids="tv_resent,tv_timer" />
+    </ScrollView>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-</ScrollView>
+</layout>
