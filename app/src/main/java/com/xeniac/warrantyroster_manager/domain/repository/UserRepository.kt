@@ -9,7 +9,7 @@ interface UserRepository {
 
     suspend fun registerViaEmail(email: String, password: String)
 
-    suspend fun loginViaEmail(email: String, password: String)
+    suspend fun loginWithEmail(email: String, password: String)
 
     suspend fun loginWithGoogleAccount(account: GoogleSignInAccount)
 

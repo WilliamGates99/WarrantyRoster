@@ -18,7 +18,7 @@ class UserRepositoryImp @Inject constructor(
         firebaseAuth.createUserWithEmailAndPassword(email, password).await()
     }
 
-    override suspend fun loginViaEmail(email: String, password: String) {
+    override suspend fun loginWithEmail(email: String, password: String) {
         firebaseAuth.signInWithEmailAndPassword(email, password).await()
     }
 

@@ -50,6 +50,7 @@
     <string name="login_error_email">آدرس ایمیل وارد شده، معتبر نیست!</string>
     <string name="login_error_not_found">حسابی با ایمیل وارد شده وجود ندارد.</string>
     <string name="login_error_credentials">ایمیل و یا رمز‌عبور وارد شده نادرست است.</string>
+    <string name="login_error_email_exists_with_different_credentials">حسابی با ایمیل وارد شده اما با روش‌های ورود متفاوت از قبل وجود دارد.</string>
 
 
     <string name="register_text_title">ثبت‌نام</string>

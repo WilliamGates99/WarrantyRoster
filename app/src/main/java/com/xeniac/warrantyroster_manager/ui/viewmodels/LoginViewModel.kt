@@ -32,8 +32,9 @@ class LoginViewModel @Inject constructor(
     private val _currentLanguageLiveData: MutableLiveData<Event<String>> = MutableLiveData()
     val currentLanguageLiveData: LiveData<Event<String>> = _currentLanguageLiveData
 
-    private val _loginLiveData: MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
-    val loginLiveData: LiveData<Event<Resource<Nothing>>> = _loginLiveData
+    private val _loginWithEmailLiveData:
+            MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
+    val loginWithEmailLiveData: LiveData<Event<Resource<Nothing>>> = _loginWithEmailLiveData
 
     private val _loginWithGoogleAccountLiveData:
             MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
@@ -67,49 +68,49 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    fun validateLoginInputs(email: String, password: String) = viewModelScope.launch {
-        safeValidateLoginInputs(email, password)
+    fun validateLoginWithEmailInputs(email: String, password: String) = viewModelScope.launch {
+        safeValidateLoginWithEmailInputs(email, password)
     }
 
-    private fun safeValidateLoginInputs(email: String, password: String) {
+    private fun safeValidateLoginWithEmailInputs(email: String, password: String) {
         if (email.isBlank()) {
-            _loginLiveData.postValue(
+            _loginWithEmailLiveData.postValue(
                 Event(Resource.Error(UiText.DynamicString(ERROR_INPUT_BLANK_EMAIL)))
             )
             return
         }
 
         if (password.isBlank()) {
-            _loginLiveData.postValue(
+            _loginWithEmailLiveData.postValue(
                 Event(Resource.Error(UiText.DynamicString(ERROR_INPUT_BLANK_PASSWORD)))
             )
             return
         }
 
         if (!UserHelper.isEmailValid(email)) {
-            _loginLiveData.postValue(
+            _loginWithEmailLiveData.postValue(
                 Event(Resource.Error(UiText.DynamicString(ERROR_INPUT_EMAIL_INVALID)))
             )
             return
         }
 
-        loginViaEmail(email, password)
+        loginWithEmail(email, password)
     }
 
-    fun loginViaEmail(email: String, password: String) = viewModelScope.launch {
-        safeLoginViaEmail(email, password)
+    fun loginWithEmail(email: String, password: String) = viewModelScope.launch {
+        safeLoginWithEmail(email, password)
     }
 
-    private suspend fun safeLoginViaEmail(email: String, password: String) {
-        _loginLiveData.postValue(Event(Resource.Loading()))
+    private suspend fun safeLoginWithEmail(email: String, password: String) {
+        _loginWithEmailLiveData.postValue(Event(Resource.Loading()))
         try {
-            userRepository.loginViaEmail(email, password)
+            userRepository.loginWithEmail(email, password)
             preferencesRepository.isUserLoggedIn(true)
-            _loginLiveData.postValue(Event(Resource.Success()))
-            Timber.i("$email logged in successfully.")
+            _loginWithEmailLiveData.postValue(Event(Resource.Success()))
+            Timber.i("$email successfully logged in with email.")
         } catch (e: Exception) {
-            Timber.e("safeLoginViaEmail Exception: ${e.message}")
-            _loginLiveData.postValue(Event(Resource.Error(UiText.DynamicString(e.message.toString()))))
+            Timber.e("safeLoginWithEmail Exception: ${e.message}")
+            _loginWithEmailLiveData.postValue(Event(Resource.Error(UiText.DynamicString(e.message.toString()))))
         }
     }
 
@@ -126,7 +127,7 @@ class LoginViewModel @Inject constructor(
             _loginWithGoogleAccountLiveData.postValue(Event(Resource.Success()))
             Timber.i("Successfully logged in with Google account.")
         } catch (e: Exception) {
-            Timber.e("safeAuthenticateGoogleAccountWithFirebase Exception: ${e.message}")
+            Timber.e("safeLoginWithGoogleAccount Exception: ${e.message}")
             _loginWithGoogleAccountLiveData.postValue(Event(Resource.Error(UiText.DynamicString(e.message.toString()))))
         }
     }
