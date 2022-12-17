@@ -367,7 +367,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
                                     showNetworkConnectionError(
                                         requireContext(), requireView()
-                                    ) { validateLoginWithEmailInputs() }
+                                    ) { loginWithGoogleAccount() }
                                 }
                                 it.contains(ERROR_FIREBASE_403) -> {
                                     show403Error(requireContext(), requireView())
@@ -478,7 +478,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
                                     showNetworkConnectionError(
                                         requireContext(), requireView()
-                                    ) { validateLoginWithEmailInputs() }
+                                    ) { checkPendingLinkTwitterAccountAuthResult() }
                                 }
                                 it.contains(ERROR_FIREBASE_403) -> {
                                     show403Error(requireContext(), requireView())
@@ -551,7 +551,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
                                     showNetworkConnectionError(
                                         requireContext(), requireView()
-                                    ) { validateLoginWithEmailInputs() }
+                                    ) { loginWithFacebookAccount() }
                                 }
                                 it.contains(ERROR_FIREBASE_403) -> {
                                     show403Error(requireContext(), requireView())
