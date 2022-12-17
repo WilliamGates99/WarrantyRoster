@@ -224,9 +224,7 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
                 linkGoogleAccountResultLauncher.launch(googleSignInClient.signInIntent)
             } catch (e: Exception) {
                 hideGoogleLoadingAnimation()
-                snackbar = showSomethingWentWrongError(
-                    requireContext(), requireView()
-                )
+                snackbar = showSomethingWentWrongError(requireContext(), requireView())
                 Timber.e("linkGoogleAccount Exception: ${e.message}")
             }
         }
