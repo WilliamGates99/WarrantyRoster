@@ -3,6 +3,7 @@ package com.xeniac.warrantyroster_manager.ui.fragments.auth
 import android.os.Bundle
 import android.view.View
 import androidx.activity.OnBackPressedCallback
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -141,11 +142,11 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
                         0L -> {
                             CoroutineScope(Dispatchers.Main).launch {
                                 delay(500)
-                                isTimerTicking = false
+                                updateTimerViews(false)
                             }
                         }
                         else -> {
-                            isTimerTicking = true
+                            updateTimerViews(true)
 
                             tvResend.text = if (viewModel.isFirstSentEmail)
                                 requireContext().getString(R.string.forgot_pw_sent_text_first_time)
@@ -159,6 +160,26 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
                 }
             }
         }
+
+    private fun updateTimerViews(isTimerTicking: Boolean) {
+        binding.isTimerTicking = isTimerTicking
+        setResendTvConstraintBottom()
+    }
+
+    private fun setResendTvConstraintBottom() = binding.apply {
+        val constraintEndId = if (isTimerTicking) tvTimer.id else btnResend.id
+
+        ConstraintSet().apply {
+            clone(cl)
+            connect(
+                /* startID = */ tvResend.id,
+                /* startSide = */ ConstraintSet.BOTTOM,
+                /* endID = */ constraintEndId,
+                /* endSide = */ ConstraintSet.TOP
+            )
+            applyTo(cl)
+        }
+    }
 
     private fun showLoadingAnimation() {
         binding.isResendLoading = true
