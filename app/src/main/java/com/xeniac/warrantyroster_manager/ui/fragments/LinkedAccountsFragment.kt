@@ -225,13 +225,8 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
                 linkGoogleAccountResultLauncher.launch(googleSignInClient.signInIntent)
             } catch (e: Exception) {
                 hideGoogleLoadingAnimation()
-                e.message?.let {
-                    val isSignInClientCanceled = it.contains(ERROR_GOOGLE_SIGN_IN_CLIENT_CANCELED)
-                    if (!isSignInClientCanceled) {
-                        snackbar = showSomethingWentWrongError(requireContext(), requireView())
-                    }
-                    Timber.e("linkGoogleAccount Exception: $it")
-                }
+                snackbar = showSomethingWentWrongError(requireContext(), requireView())
+                Timber.e("linkGoogleAccount Exception: ${e.message}")
             }
         }
     }
@@ -245,14 +240,17 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
         } catch (e: Exception) {
             hideGoogleLoadingAnimation()
             e.message?.let {
-                snackbar = when {
+                when {
+                    it.contains(ERROR_GOOGLE_SIGN_IN_CLIENT_CANCELED) -> {
+                        /* NO-OP */
+                    }
                     it.contains(ERROR_GOOGLE_SIGN_IN_CLIENT_OFFLINE) -> {
-                        showNetworkConnectionError(
+                        snackbar = showNetworkConnectionError(
                             requireContext(), requireView()
                         ) { linkGoogleAccount() }
                     }
                     else -> {
-                        showSomethingWentWrongError(requireContext(), requireView())
+                        snackbar = showSomethingWentWrongError(requireContext(), requireView())
                     }
                 }
                 Timber.e("linkGoogleAccountResultLauncher Exception: $it")
