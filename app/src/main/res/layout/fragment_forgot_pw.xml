@@ -5,8 +5,7 @@
     android:layout_height="match_parent"
     android:fillViewport="true"
     android:orientation="vertical"
-    android:overScrollMode="never"
-    android:paddingTop="@dimen/padding_12dp"
+    android:overScrollMode="ifContentScrolls"
     android:scrollbars="none">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -18,7 +17,7 @@
             android:layout_width="@dimen/width_0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_24dp"
-            android:layout_marginTop="@dimen/margin_32dp"
+            android:layout_marginTop="@dimen/margin_44dp"
             android:fontFamily="@font/localized_extra_bold"
             android:gravity="start|center_vertical"
             android:text="@string/forgot_pw_text_description"
@@ -36,7 +35,7 @@
             android:id="@+id/tv_title_email"
             android:layout_width="@dimen/width_0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/margin_32dp"
+            android:layout_marginHorizontal="@dimen/margin_8dp"
             android:layout_marginTop="@dimen/margin_44dp"
             android:fontFamily="@font/localized_bold"
             android:gravity="start|center_vertical"
@@ -47,8 +46,8 @@
             android:textColor="@color/black"
             android:textSize="@dimen/text_size_14sp"
             app:layout_constraintBottom_toTopOf="@+id/ti_layout_email"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/ti_layout_email"
+            app:layout_constraintStart_toStartOf="@id/ti_layout_email"
             app:layout_constraintTop_toBottomOf="@+id/tv_description" />
 
         <com.google.android.material.textfield.TextInputLayout
@@ -78,6 +77,7 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <!-- MARGIN_BOTTOM: 19 + 5 = 24DP -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_send"
             style="@style/Theme.WarrantyRoster.Button"
@@ -85,8 +85,9 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_24dp"
             android:layout_marginTop="@dimen/margin_40dp"
+            android:layout_marginBottom="@dimen/margin_19dp"
             android:text="@string/forgot_pw_btn_send"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/btn_return"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ti_layout_email" />
@@ -102,24 +103,23 @@
             app:layout_constraintStart_toStartOf="@+id/btn_send"
             app:layout_constraintTop_toTopOf="@+id/btn_send" />
 
+        <!-- MARGIN_HORIZONTAL: 19 + 5 = 24DP -->
+        <!-- MARGIN_BOTTOM: 19 + 5 = 24DP -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_return"
             style="@style/Theme.WarrantyRoster.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/margin_4dp"
-            android:layout_marginTop="@dimen/margin_71dp"
+            android:layout_marginHorizontal="@dimen/margin_19dp"
             android:layout_marginBottom="@dimen/margin_19dp"
             android:gravity="center"
             android:text="@string/forgot_pw_btn_return"
             android:textAlignment="gravity"
+            app:layout_constrainedWidth="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_send"
-            app:layout_constraintVertical_bias="1"
-            app:layout_constraintVertical_chainStyle="spread" />
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
