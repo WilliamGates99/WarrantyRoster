@@ -403,8 +403,8 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
             } catch (e: Exception) {
                 hideGoogleLoadingAnimation()
                 e.message?.let {
-                    val isClientNotCanceled = !it.contains(ERROR_GOOGLE_SIGN_IN_CLIENT_CANCELED)
-                    if (isClientNotCanceled) {
+                    val isSignInClientCanceled = it.contains(ERROR_GOOGLE_SIGN_IN_CLIENT_CANCELED)
+                    if (!isSignInClientCanceled) {
                         snackbar = showSomethingWentWrongError(requireContext(), requireView())
                     }
                     Timber.e("registerWithGoogleAccount Exception: $it")
