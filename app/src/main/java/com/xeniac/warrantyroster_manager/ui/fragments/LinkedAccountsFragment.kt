@@ -345,47 +345,8 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
     }
 
     private fun pendingLinkTwitterAccountAuthResult(pendingAuthResult: Task<AuthResult>) {
-        pendingAuthResult.addOnCompleteListener {
-            if (it.isSuccessful) {
-                val authCredential = it.result.credential
-                authCredential?.let { credential ->
-                    viewModel.linkTwitterAccount(credential)
-                }
-            } else {
-                hideTwitterLoadingAnimation()
-                it.exception?.message?.let { message ->
-                    if (message.contains(ERROR_TWITTER_O_AUTH_PROVIDER_CANCELED)) {
-                        /* NO-OP */
-                    } else {
-                        snackbar = when {
-                            message.contains(ERROR_TWITTER_O_AUTH_PROVIDER_NETWORK_CONNECTION) -> {
-                                showNetworkConnectionError(requireContext(), requireView()) {
-                                    checkPendingLinkTwitterAccountAuthResult()
-                                }
-                            }
-                            message.contains(
-                                ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIALS
-                            ) -> {
-                                showActionSnackbarError(
-                                    requireView(),
-                                    requireContext().getString(R.string.linked_accounts_error_email_exists_with_different_credentials),
-                                    requireContext().getString(R.string.error_btn_confirm)
-                                ) { snackbar?.dismiss() }
-                            }
-                            message.contains(ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS) -> {
-                                showActionSnackbarError(
-                                    requireView(),
-                                    requireContext().getString(R.string.linked_accounts_error_email_exists),
-                                    requireContext().getString(R.string.error_btn_confirm)
-                                ) { snackbar?.dismiss() }
-                            }
-                            else -> {
-                                showSomethingWentWrongError(requireContext(), requireView())
-                            }
-                        }
-                    }
-                }
-            }
+        pendingAuthResult.addOnCompleteListener { task ->
+            handleLinkTwitterAccountAuthResult(task)
         }
     }
 
@@ -395,43 +356,47 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
 
         firebaseAuth.currentUser!!.startActivityForLinkWithProvider(
             requireActivity(), oAuthProvider.build()
-        ).addOnCompleteListener {
-            if (it.isSuccessful) {
-                val authCredential = it.result.credential
-                authCredential?.let { credential ->
-                    viewModel.linkTwitterAccount(credential)
-                }
-            } else {
-                hideTwitterLoadingAnimation()
-                it.exception?.message?.let { message ->
-                    if (message.contains(ERROR_TWITTER_O_AUTH_PROVIDER_CANCELED)) {
-                        /* NO-OP */
-                    } else {
-                        snackbar = when {
-                            message.contains(ERROR_TWITTER_O_AUTH_PROVIDER_NETWORK_CONNECTION) -> {
-                                showNetworkConnectionError(requireContext(), requireView()) {
-                                    checkPendingLinkTwitterAccountAuthResult()
-                                }
+        ).addOnCompleteListener { task ->
+            handleLinkTwitterAccountAuthResult(task)
+        }
+    }
+
+    private fun handleLinkTwitterAccountAuthResult(task: Task<AuthResult>) {
+        if (task.isSuccessful) {
+            val authCredential = task.result.credential
+            authCredential?.let { credential ->
+                viewModel.linkTwitterAccount(credential)
+            }
+        } else {
+            hideTwitterLoadingAnimation()
+            task.exception?.message?.let { message ->
+                if (message.contains(ERROR_TWITTER_O_AUTH_PROVIDER_CANCELED)) {
+                    /* NO-OP */
+                } else {
+                    snackbar = when {
+                        message.contains(ERROR_TWITTER_O_AUTH_PROVIDER_NETWORK_CONNECTION) -> {
+                            showNetworkConnectionError(requireContext(), requireView()) {
+                                checkPendingLinkTwitterAccountAuthResult()
                             }
-                            message.contains(
-                                ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIALS
-                            ) -> {
-                                showActionSnackbarError(
-                                    requireView(),
-                                    requireContext().getString(R.string.linked_accounts_error_email_exists_with_different_credentials),
-                                    requireContext().getString(R.string.error_btn_confirm)
-                                ) { snackbar?.dismiss() }
-                            }
-                            message.contains(ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS) -> {
-                                showActionSnackbarError(
-                                    requireView(),
-                                    requireContext().getString(R.string.linked_accounts_error_email_exists),
-                                    requireContext().getString(R.string.error_btn_confirm)
-                                ) { snackbar?.dismiss() }
-                            }
-                            else -> {
-                                showSomethingWentWrongError(requireContext(), requireView())
-                            }
+                        }
+                        message.contains(
+                            ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIALS
+                        ) -> {
+                            showActionSnackbarError(
+                                requireView(),
+                                requireContext().getString(R.string.linked_accounts_error_email_exists_with_different_credentials),
+                                requireContext().getString(R.string.error_btn_confirm)
+                            ) { snackbar?.dismiss() }
+                        }
+                        message.contains(ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS) -> {
+                            showActionSnackbarError(
+                                requireView(),
+                                requireContext().getString(R.string.linked_accounts_error_email_exists),
+                                requireContext().getString(R.string.error_btn_confirm)
+                            ) { snackbar?.dismiss() }
+                        }
+                        else -> {
+                            showSomethingWentWrongError(requireContext(), requireView())
                         }
                     }
                 }
