@@ -14,7 +14,7 @@ class UserRepositoryImp @Inject constructor(
     private val firebaseAuth: FirebaseAuth
 ) : UserRepository {
 
-    override suspend fun registerViaEmail(email: String, password: String) {
+    override suspend fun registerWithEmail(email: String, password: String) {
         firebaseAuth.createUserWithEmailAndPassword(email, password).await()
     }
 

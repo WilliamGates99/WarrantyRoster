@@ -77,6 +77,7 @@
     <string name="register_error_password_short">رمز‌عبور باید حداقل 6 کاراکتر باشد!</string>
     <string name="register_error_password_not_match">رمز‌عبور و تکرار رمز‌عبور وارد شده با هم مطابقت ندارند!</string>
     <string name="register_error_account_exists">حسابی با ایمیل وارد شده از قبل وجود دارد.</string>
+    <string name="register_error_email_exists_with_different_credentials">حسابی با ایمیل وارد شده اما با روش‌های ورود متفاوت از قبل وجود دارد.</string>
 
 
     <string name="forgot_pw_text_title">بازیابی\nرمز‌عبور</string>

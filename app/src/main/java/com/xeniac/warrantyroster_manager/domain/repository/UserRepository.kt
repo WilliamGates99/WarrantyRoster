@@ -7,7 +7,7 @@ import com.google.firebase.auth.FirebaseUser
 
 interface UserRepository {
 
-    suspend fun registerViaEmail(email: String, password: String)
+    suspend fun registerWithEmail(email: String, password: String)
 
     suspend fun loginWithEmail(email: String, password: String)
 

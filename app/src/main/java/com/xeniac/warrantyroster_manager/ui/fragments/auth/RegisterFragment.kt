@@ -9,19 +9,34 @@ import android.view.View.VISIBLE
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.facebook.CallbackManager
+import com.facebook.FacebookCallback
+import com.facebook.FacebookException
+import com.facebook.login.LoginManager
+import com.facebook.login.LoginResult
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.tasks.Task
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.AuthResult
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.OAuthProvider
+import com.xeniac.warrantyroster_manager.BuildConfig
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentRegisterBinding
 import com.xeniac.warrantyroster_manager.ui.MainActivity
 import com.xeniac.warrantyroster_manager.ui.viewmodels.RegisterViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIALS
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_GOOGLE_SIGN_IN_CLIENT_OFFLINE
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_EMAIL
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_PASSWORD
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_RETYPE_PASSWORD
@@ -29,20 +44,30 @@ import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_EMAIL_INVAL
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_PASSWORD_NOT_MATCH
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_PASSWORD_SHORT
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_TWITTER_O_AUTH_PROVIDER_CANCELED
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_TWITTER_O_AUTH_PROVIDER_NETWORK_CONNECTION
+import com.xeniac.warrantyroster_manager.utils.Constants.FIREBASE_AUTH_PROVIDER_ID_TWITTER
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_REGISTER_CONFIRM_PASSWORD
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_REGISTER_EMAIL
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_REGISTER_PASSWORD
 import com.xeniac.warrantyroster_manager.utils.Constants.URL_PRIVACY_POLICY
 import com.xeniac.warrantyroster_manager.utils.LinkHelper.openLink
 import com.xeniac.warrantyroster_manager.utils.Resource
-import com.xeniac.warrantyroster_manager.utils.SnackBarHelper
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.show403Error
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showActionSnackbarError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseDeviceBlockedError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkConnectionError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkFailureError
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showSomethingWentWrongError
 import com.xeniac.warrantyroster_manager.utils.UserHelper.passwordStrength
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import timber.log.Timber
 import java.util.*
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class RegisterFragment : Fragment(R.layout.fragment_register) {
@@ -51,6 +76,11 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     val binding get() = _binding!!
 
     lateinit var viewModel: RegisterViewModel
+
+    @Inject
+    lateinit var firebaseAuth: FirebaseAuth
+
+    private lateinit var currentAppLanguage: String
 
     private var snackbar: Snackbar? = null
 
@@ -62,10 +92,14 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         textInputsBackgroundColor()
         textInputsStrokeColor()
         subscribeToObservers()
+        getCurrentAppLanguage()
         agreementOnclick()
         loginOnClick()
         registerOnClick()
         registerActionDone()
+        googleOnClick()
+        twitterOnClick()
+        facebookOnClick()
         requireActivity().onBackPressedDispatcher.addCallback(onBackPressedCallback)
     }
 
@@ -208,8 +242,21 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     }
 
     private fun subscribeToObservers() {
-        registerObserver()
+        currentAppLanguageObserver()
+        registerWithEmailObserver()
+        registerWithGoogleAccountObserver()
+        registerWithTwitterAccountObserver()
+        registerWithFacebookAccountObserver()
     }
+
+    private fun getCurrentAppLanguage() = viewModel.getCurrentAppLanguage()
+
+    private fun currentAppLanguageObserver() =
+        viewModel.currentLanguageLiveData.observe(viewLifecycleOwner) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { language ->
+                currentAppLanguage = language
+            }
+        }
 
     private fun agreementOnclick() = binding.btnAgreement.setOnClickListener {
         openLink(requireContext(), requireView(), URL_PRIVACY_POLICY)
@@ -220,18 +267,18 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     }
 
     private fun registerOnClick() = binding.btnRegister.setOnClickListener {
-        validateRegisterInputs()
+        validateRegisterWithEmailInputs()
     }
 
     private fun registerActionDone() =
         binding.tiEditConfirmPassword.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                validateRegisterInputs()
+                validateRegisterWithEmailInputs()
             }
             false
         }
 
-    private fun validateRegisterInputs() {
+    private fun validateRegisterWithEmailInputs() {
         val inputMethodManager = requireContext()
             .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(requireView().applicationWindowToken, 0)
@@ -240,23 +287,20 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         val password = binding.tiEditPassword.text.toString().trim()
         val retypePassword = binding.tiEditConfirmPassword.text.toString().trim()
 
-        viewModel.validateRegisterInputs(email, password, retypePassword)
+        viewModel.validateRegisterWithEmailInputs(email, password, retypePassword)
     }
 
-    private fun registerObserver() =
-        viewModel.registerLiveData.observe(viewLifecycleOwner) { responseEvent ->
+    private fun registerWithEmailObserver() =
+        viewModel.registerWithEmailLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
-                    is Resource.Loading -> showLoadingAnimation()
+                    is Resource.Loading -> showRegisterWithEmailLoadingAnimation()
                     is Resource.Success -> {
-                        hideLoadingAnimation()
-                        requireActivity().apply {
-                            startActivity(Intent(this, MainActivity::class.java))
-                            finish()
-                        }
+                        hideRegisterWithEmailLoadingAnimation()
+                        navigateToMainActivity()
                     }
                     is Resource.Error -> {
-                        hideLoadingAnimation()
+                        hideRegisterWithEmailLoadingAnimation()
                         response.message?.asString(requireContext())?.let {
                             when {
                                 it.contains(ERROR_INPUT_BLANK_EMAIL) -> {
@@ -292,7 +336,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
                                     snackbar = showNetworkConnectionError(
                                         requireContext(), requireView()
-                                    ) { validateRegisterInputs() }
+                                    ) { validateRegisterWithEmailInputs() }
                                 }
                                 it.contains(ERROR_FIREBASE_403) -> {
                                     snackbar = show403Error(requireContext(), requireView())
@@ -303,11 +347,20 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                                     )
                                 }
                                 it.contains(ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS) -> {
-                                    snackbar = SnackBarHelper.showActionSnackbarError(
+                                    snackbar = showActionSnackbarError(
                                         requireView(),
                                         requireContext().getString(R.string.register_error_account_exists),
                                         requireContext().getString(R.string.register_btn_login)
                                     ) { popBackStack() }
+                                }
+                                it.contains(
+                                    ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIALS
+                                ) -> {
+                                    showActionSnackbarError(
+                                        requireView(),
+                                        requireContext().getString(R.string.register_error_email_exists_with_different_credentials),
+                                        requireContext().getString(R.string.error_btn_confirm)
+                                    ) { snackbar?.dismiss() }
                                 }
                                 else -> {
                                     snackbar = showNetworkFailureError(
@@ -321,21 +374,383 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
             }
         }
 
-    private fun showLoadingAnimation() = binding.apply {
+    private fun navigateToMainActivity() = requireActivity().apply {
+        startActivity(Intent(this, MainActivity::class.java))
+        finish()
+    }
+
+    private fun googleOnClick() = binding.btnGoogle.setOnClickListener {
+        registerWithGoogleAccount()
+    }
+
+    private fun registerWithGoogleAccount() {
+        CoroutineScope(Dispatchers.Main).launch {
+            try {
+                showGoogleLoadingAnimation()
+                val options = GoogleSignInOptions.Builder(
+                    GoogleSignInOptions.DEFAULT_SIGN_IN
+                ).apply {
+                    requestIdToken(BuildConfig.GOOGLE_AUTH_SERVER_CLIENT_ID)
+                    requestId()
+                    requestEmail()
+                }.build()
+
+                val googleSignInClient = GoogleSignIn.getClient(requireContext(), options)
+                googleSignInClient.signOut().await()
+
+                registerWithGoogleAccountResultLauncher.launch(googleSignInClient.signInIntent)
+            } catch (e: Exception) {
+                hideGoogleLoadingAnimation()
+                snackbar = showSomethingWentWrongError(requireContext(), requireView())
+                Timber.e("registerWithGoogleAccount Exception: ${e.message}")
+            }
+        }
+    }
+
+    private val registerWithGoogleAccountResultLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        try {
+            val account = GoogleSignIn.getSignedInAccountFromIntent(result.data).result
+            account?.let { viewModel.registerWithGoogleAccount(account) }
+        } catch (e: Exception) {
+            hideGoogleLoadingAnimation()
+            e.message?.let {
+                snackbar = when {
+                    it.contains(ERROR_GOOGLE_SIGN_IN_CLIENT_OFFLINE) -> {
+                        showNetworkConnectionError(
+                            requireContext(), requireView()
+                        ) { registerWithGoogleAccount() }
+                    }
+                    else -> {
+                        showSomethingWentWrongError(requireContext(), requireView())
+                    }
+                }
+                Timber.e("registerWithGoogleAccountResultLauncher Exception: $it")
+            }
+        }
+    }
+
+    private fun registerWithGoogleAccountObserver() =
+        viewModel.registerWithGoogleAccountLiveData.observe(viewLifecycleOwner) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { response ->
+                when (response) {
+                    is Resource.Loading -> showGoogleLoadingAnimation()
+                    is Resource.Success -> {
+                        hideGoogleLoadingAnimation()
+                        navigateToMainActivity()
+                    }
+                    is Resource.Error -> {
+                        hideGoogleLoadingAnimation()
+                        response.message?.asString(requireContext())?.let {
+                            snackbar = when {
+                                it.contains(ERROR_NETWORK_CONNECTION) -> {
+                                    showNetworkConnectionError(
+                                        requireContext(), requireView()
+                                    ) { registerWithGoogleAccount() }
+                                }
+                                it.contains(ERROR_FIREBASE_403) -> {
+                                    show403Error(requireContext(), requireView())
+                                }
+                                it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
+                                    showFirebaseDeviceBlockedError(requireContext(), requireView())
+                                }
+                                it.contains(
+                                    ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIALS
+                                ) -> {
+                                    showActionSnackbarError(
+                                        requireView(),
+                                        requireContext().getString(R.string.register_error_email_exists_with_different_credentials),
+                                        requireContext().getString(R.string.error_btn_confirm)
+                                    ) { snackbar?.dismiss() }
+                                }
+                                else -> {
+                                    showSomethingWentWrongError(requireContext(), requireView())
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+    private fun twitterOnClick() = binding.btnTwitter.setOnClickListener {
+        checkPendingLinkTwitterAccountAuthResult()
+    }
+
+    private fun checkPendingLinkTwitterAccountAuthResult() {
+        showTwitterLoadingAnimation()
+
+        val pendingAuthResult = firebaseAuth.pendingAuthResult
+
+        if (pendingAuthResult != null) {
+            pendingLoginWithTwitterAccountAuthResult(pendingAuthResult)
+        } else {
+            registerWithTwitterAccount()
+        }
+    }
+
+    private fun pendingLoginWithTwitterAccountAuthResult(pendingAuthResult: Task<AuthResult>) {
+        pendingAuthResult.addOnCompleteListener { task ->
+            handleLoginWithTwitterAccountAuthResult(task)
+        }
+    }
+
+    private fun registerWithTwitterAccount() {
+        val oAuthProvider = OAuthProvider.newBuilder(FIREBASE_AUTH_PROVIDER_ID_TWITTER)
+        oAuthProvider.addCustomParameter("lang", currentAppLanguage)
+
+        firebaseAuth.startActivityForSignInWithProvider(requireActivity(), oAuthProvider.build())
+            .addOnCompleteListener { task ->
+                handleLoginWithTwitterAccountAuthResult(task)
+            }
+    }
+
+    private fun handleLoginWithTwitterAccountAuthResult(task: Task<AuthResult>) {
+        if (task.isSuccessful) {
+            val authCredential = task.result.credential
+            authCredential?.let { credential ->
+                viewModel.registerWithTwitterAccount(credential)
+            }
+        } else {
+            hideTwitterLoadingAnimation()
+            task.exception?.message?.let { message ->
+                if (message.contains(ERROR_TWITTER_O_AUTH_PROVIDER_CANCELED)) {
+                    /* NO-OP */
+                } else {
+                    snackbar = when {
+                        message.contains(ERROR_TWITTER_O_AUTH_PROVIDER_NETWORK_CONNECTION) -> {
+                            showNetworkConnectionError(requireContext(), requireView()) {
+                                checkPendingLinkTwitterAccountAuthResult()
+                            }
+                        }
+                        message.contains(
+                            ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIALS
+                        ) -> {
+                            showActionSnackbarError(
+                                requireView(),
+                                requireContext().getString(R.string.register_error_email_exists_with_different_credentials),
+                                requireContext().getString(R.string.error_btn_confirm)
+                            ) { snackbar?.dismiss() }
+                        }
+                        else -> {
+                            showSomethingWentWrongError(requireContext(), requireView())
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun registerWithTwitterAccountObserver() =
+        viewModel.registerWithTwitterAccountLiveData.observe(viewLifecycleOwner) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { response ->
+                when (response) {
+                    is Resource.Loading -> showTwitterLoadingAnimation()
+                    is Resource.Success -> {
+                        hideTwitterLoadingAnimation()
+                        navigateToMainActivity()
+                    }
+                    is Resource.Error -> {
+                        hideTwitterLoadingAnimation()
+                        response.message?.asString(requireContext())?.let {
+                            snackbar = when {
+                                it.contains(ERROR_NETWORK_CONNECTION) -> {
+                                    showNetworkConnectionError(
+                                        requireContext(), requireView()
+                                    ) { checkPendingLinkTwitterAccountAuthResult() }
+                                }
+                                it.contains(ERROR_FIREBASE_403) -> {
+                                    show403Error(requireContext(), requireView())
+                                }
+                                it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
+                                    showFirebaseDeviceBlockedError(requireContext(), requireView())
+                                }
+                                it.contains(
+                                    ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIALS
+                                ) -> {
+                                    showActionSnackbarError(
+                                        requireView(),
+                                        requireContext().getString(R.string.register_error_email_exists_with_different_credentials),
+                                        requireContext().getString(R.string.error_btn_confirm)
+                                    ) { snackbar?.dismiss() }
+                                }
+                                else -> {
+                                    showSomethingWentWrongError(requireContext(), requireView())
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+    private fun facebookOnClick() = binding.btnFacebook.setOnClickListener {
+        registerWithFacebookAccount()
+    }
+
+    private fun registerWithFacebookAccount() {
+        showFacebookLoadingAnimation()
+
+        val callbackManager = CallbackManager.Factory.create()
+
+        val loginManager = LoginManager.getInstance()
+        loginManager.logInWithReadPermissions(this, callbackManager, listOf("email"))
+
+        loginManager.registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
+            override fun onSuccess(result: LoginResult) {
+                viewModel.registerWithFacebookAccount(result.accessToken)
+            }
+
+            override fun onCancel() {
+                hideFacebookLoadingAnimation()
+                Timber.i("registerWithFacebookAccount canceled.")
+            }
+
+            override fun onError(error: FacebookException) {
+                hideFacebookLoadingAnimation()
+                snackbar = showSomethingWentWrongError(requireContext(), requireView())
+                Timber.e("registerWithFacebookAccount Callback Exception: ${error.message}")
+            }
+        })
+    }
+
+    private fun registerWithFacebookAccountObserver() =
+        viewModel.registerWithFacebookAccountLiveData.observe(viewLifecycleOwner) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { response ->
+                when (response) {
+                    is Resource.Loading -> showFacebookLoadingAnimation()
+                    is Resource.Success -> {
+                        hideFacebookLoadingAnimation()
+                        navigateToMainActivity()
+                    }
+                    is Resource.Error -> {
+                        hideFacebookLoadingAnimation()
+                        response.message?.asString(requireContext())?.let {
+                            snackbar = when {
+                                it.contains(ERROR_NETWORK_CONNECTION) -> {
+                                    showNetworkConnectionError(
+                                        requireContext(), requireView()
+                                    ) { registerWithFacebookAccount() }
+                                }
+                                it.contains(ERROR_FIREBASE_403) -> {
+                                    show403Error(requireContext(), requireView())
+                                }
+                                it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
+                                    showFirebaseDeviceBlockedError(requireContext(), requireView())
+                                }
+                                it.contains(
+                                    ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIALS
+                                ) -> {
+                                    showActionSnackbarError(
+                                        requireView(),
+                                        requireContext().getString(R.string.register_error_email_exists_with_different_credentials),
+                                        requireContext().getString(R.string.error_btn_confirm)
+                                    ) { snackbar?.dismiss() }
+                                }
+                                else -> {
+                                    showSomethingWentWrongError(requireContext(), requireView())
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+    private fun showRegisterWithEmailLoadingAnimation() = binding.apply {
         tiEditEmail.isEnabled = false
         tiEditPassword.isEnabled = false
         tiEditConfirmPassword.isEnabled = false
         btnRegister.isClickable = false
+        btnGoogle.isClickable = false
+        btnTwitter.isClickable = false
+        btnFacebook.isClickable = false
         btnRegister.text = null
         cpiRegister.visibility = VISIBLE
     }
 
-    private fun hideLoadingAnimation() = binding.apply {
+    private fun hideRegisterWithEmailLoadingAnimation() = binding.apply {
         cpiRegister.visibility = GONE
         tiEditEmail.isEnabled = true
         tiEditPassword.isEnabled = true
         tiEditConfirmPassword.isEnabled = true
         btnRegister.isClickable = true
+        btnGoogle.isClickable = true
+        btnTwitter.isClickable = true
+        btnFacebook.isClickable = true
         btnRegister.text = requireContext().getString(R.string.register_btn_register)
+    }
+
+    private fun showGoogleLoadingAnimation() = binding.apply {
+        tiEditEmail.isEnabled = false
+        tiEditPassword.isEnabled = false
+        tiEditConfirmPassword.isEnabled = false
+        btnRegister.isClickable = false
+        btnGoogle.isClickable = false
+        btnTwitter.isClickable = false
+        btnFacebook.isClickable = false
+        btnGoogle.icon = null
+        cpiGoogle.visibility = VISIBLE
+    }
+
+    private fun hideGoogleLoadingAnimation() = binding.apply {
+        cpiGoogle.visibility = GONE
+        tiEditEmail.isEnabled = true
+        tiEditPassword.isEnabled = true
+        tiEditConfirmPassword.isEnabled = true
+        btnRegister.isClickable = true
+        btnGoogle.isClickable = true
+        btnTwitter.isClickable = true
+        btnFacebook.isClickable = true
+        btnGoogle.setIconResource(R.drawable.ic_auth_google)
+    }
+
+    private fun showTwitterLoadingAnimation() = binding.apply {
+        tiEditEmail.isEnabled = false
+        tiEditPassword.isEnabled = false
+        tiEditConfirmPassword.isEnabled = false
+        btnRegister.isClickable = false
+        btnGoogle.isClickable = false
+        btnTwitter.isClickable = false
+        btnFacebook.isClickable = false
+        btnTwitter.icon = null
+        cpiTwitter.visibility = VISIBLE
+    }
+
+    private fun hideTwitterLoadingAnimation() = binding.apply {
+        cpiTwitter.visibility = GONE
+        tiEditEmail.isEnabled = true
+        tiEditPassword.isEnabled = true
+        tiEditConfirmPassword.isEnabled = true
+        btnRegister.isClickable = true
+        btnGoogle.isClickable = true
+        btnTwitter.isClickable = true
+        btnFacebook.isClickable = true
+        btnTwitter.setIconResource(R.drawable.ic_auth_twitter)
+    }
+
+    private fun showFacebookLoadingAnimation() = binding.apply {
+        tiEditEmail.isEnabled = false
+        tiEditPassword.isEnabled = false
+        tiEditConfirmPassword.isEnabled = false
+        btnRegister.isClickable = false
+        btnGoogle.isClickable = false
+        btnTwitter.isClickable = false
+        btnFacebook.isClickable = false
+        btnFacebook.icon = null
+        cpiFacebook.visibility = VISIBLE
+    }
+
+    private fun hideFacebookLoadingAnimation() = binding.apply {
+        cpiFacebook.visibility = GONE
+        tiEditEmail.isEnabled = true
+        tiEditPassword.isEnabled = true
+        tiEditConfirmPassword.isEnabled = true
+        btnRegister.isClickable = true
+        btnGoogle.isClickable = true
+        btnTwitter.isClickable = true
+        btnFacebook.isClickable = true
+        btnFacebook.setIconResource(R.drawable.ic_auth_facebook)
     }
 }

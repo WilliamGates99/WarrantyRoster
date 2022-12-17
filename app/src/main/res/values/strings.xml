@@ -76,6 +76,7 @@
     <string name="register_error_password_short">Password should be at least 6 characters!</string>
     <string name="register_error_password_not_match">Your password and confirm password do not match!</string>
     <string name="register_error_account_exists">An account with the provided email already exists.</string>
+    <string name="register_error_email_exists_with_different_credentials">An account already exists with the same email address but different sign-in credentials.</string>
 
 
     <string name="forgot_pw_text_title">Reset\nPassword</string>
