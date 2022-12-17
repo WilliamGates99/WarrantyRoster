@@ -2,10 +2,7 @@ package com.xeniac.warrantyroster_manager.ui.fragments.auth
 
 import android.os.Bundle
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import androidx.activity.OnBackPressedCallback
-import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -98,7 +95,6 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
     private fun forgotPwSentObserver() =
         viewModel.forgotPwLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
-                showLoadingAnimation()
                 when (response) {
                     is Resource.Loading -> showLoadingAnimation()
                     is Resource.Success -> {
@@ -145,63 +141,30 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
                         0L -> {
                             CoroutineScope(Dispatchers.Main).launch {
                                 delay(500)
-                                resetConstraintToDefault()
-                                groupTimer.visibility = GONE
-                                groupResend.visibility = VISIBLE
+                                isTimerTicking = false
                             }
                         }
                         else -> {
-                            tvResent.text = if (viewModel.isFirstSentEmail)
+                            isTimerTicking = true
+
+                            tvResend.text = if (viewModel.isFirstSentEmail)
                                 requireContext().getString(R.string.forgot_pw_sent_text_first_time)
                             else requireContext().getString(R.string.forgot_pw_sent_text_resent)
 
-                            updateConstraintToTimer()
-                            groupResend.visibility = GONE
-                            groupTimer.visibility = VISIBLE
-
-                            val minutes = millisUntilFinished / 60000
-                            val seconds = (millisUntilFinished / 1000) % 60
-
-                            val time =
-                                "(${decimalFormat.format(minutes)}:${decimalFormat.format(seconds)})"
-                            tvTimer.text = time
+                            val minutes = decimalFormat.format(millisUntilFinished / 60000)
+                            val seconds = decimalFormat.format((millisUntilFinished / 1000) % 60)
+                            time = "($minutes:$seconds})"
                         }
                     }
                 }
             }
         }
 
-    private fun showLoadingAnimation() = binding.apply {
-        btnResend.visibility = GONE
-        cpiResend.visibility = VISIBLE
+    private fun showLoadingAnimation() {
+        binding.isResendLoading = true
     }
 
-    private fun hideLoadingAnimation() = binding.apply {
-        cpiResend.visibility = GONE
-        btnResend.visibility = VISIBLE
-    }
-
-    private fun updateConstraintToTimer() = binding.apply {
-        val constraintSet = ConstraintSet()
-        constraintSet.clone(cl)
-        constraintSet.connect(
-            lavSent.id,
-            ConstraintSet.BOTTOM,
-            tvResent.id,
-            ConstraintSet.TOP
-        )
-        constraintSet.applyTo(cl)
-    }
-
-    private fun resetConstraintToDefault() = binding.apply {
-        val constraintSet = ConstraintSet()
-        constraintSet.clone(cl)
-        constraintSet.connect(
-            lavSent.id,
-            ConstraintSet.BOTTOM,
-            tvResend.id,
-            ConstraintSet.TOP
-        )
-        constraintSet.applyTo(cl)
+    private fun hideLoadingAnimation() {
+        binding.isResendLoading = false
     }
 }
