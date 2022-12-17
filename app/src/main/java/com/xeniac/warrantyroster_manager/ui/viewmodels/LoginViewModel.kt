@@ -114,10 +114,9 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    fun loginWithGoogleAccount(account: GoogleSignInAccount) =
-        viewModelScope.launch {
-            safeLoginWithGoogleAccount(account)
-        }
+    fun loginWithGoogleAccount(account: GoogleSignInAccount) = viewModelScope.launch {
+        safeLoginWithGoogleAccount(account)
+    }
 
     private suspend fun safeLoginWithGoogleAccount(account: GoogleSignInAccount) {
         _loginWithGoogleAccountLiveData.postValue(Event(Resource.Loading()))
