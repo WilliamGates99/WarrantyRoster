@@ -301,7 +301,7 @@
             android:id="@+id/tv_register_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_4dp"
+            android:layout_marginStart="@dimen/margin_24dp"
             android:fontFamily="@font/localized_regular"
             android:gravity="center"
             android:maxLines="1"
@@ -316,12 +316,13 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <!-- MARGIN_BOTTOM: 19 + 5 = 24DP -->
+        <!-- MARGIN_END: 19 + 5 = 24DP -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_register"
             style="@style/Theme.WarrantyRoster.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/margin_4dp"
+            android:layout_marginEnd="@dimen/margin_19dp"
             android:layout_marginBottom="@dimen/margin_19dp"
             android:gravity="center"
             android:text="@string/login_btn_register"
