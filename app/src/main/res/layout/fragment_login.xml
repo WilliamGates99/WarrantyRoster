@@ -35,7 +35,7 @@
             android:id="@+id/tv_title_email"
             android:layout_width="@dimen/width_0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/margin_32dp"
+            android:layout_marginHorizontal="@dimen/margin_8dp"
             android:layout_marginTop="@dimen/margin_44dp"
             android:fontFamily="@font/localized_bold"
             android:gravity="start|center_vertical"
@@ -46,8 +46,8 @@
             android:textColor="@color/black"
             android:textSize="@dimen/text_size_14sp"
             app:layout_constraintBottom_toTopOf="@+id/ti_layout_email"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/ti_layout_email"
+            app:layout_constraintStart_toStartOf="@id/ti_layout_email"
             app:layout_constraintTop_toBottomOf="@+id/tv_description" />
 
         <com.google.android.material.textfield.TextInputLayout
@@ -81,7 +81,7 @@
             android:id="@+id/tv_title_password"
             android:layout_width="@dimen/width_0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/margin_32dp"
+            android:layout_marginHorizontal="@dimen/margin_8dp"
             android:layout_marginTop="@dimen/margin_16dp"
             android:fontFamily="@font/localized_bold"
             android:gravity="start|center_vertical"
@@ -92,8 +92,8 @@
             android:textColor="@color/black"
             android:textSize="@dimen/text_size_14sp"
             app:layout_constraintBottom_toTopOf="@+id/ti_layout_password"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/ti_layout_password"
+            app:layout_constraintStart_toStartOf="@id/ti_layout_password"
             app:layout_constraintTop_toBottomOf="@+id/ti_layout_email" />
 
         <com.google.android.material.textfield.TextInputLayout
