@@ -360,7 +360,7 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
                         snackbar = when {
                             message.contains(ERROR_TWITTER_O_AUTH_PROVIDER_NETWORK_CONNECTION) -> {
                                 showNetworkConnectionError(requireContext(), requireView()) {
-                                    linkTwitterAccount()
+                                    checkPendingLinkTwitterAccountAuthResult()
                                 }
                             }
                             message.contains(
@@ -410,7 +410,7 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
                         snackbar = when {
                             message.contains(ERROR_TWITTER_O_AUTH_PROVIDER_NETWORK_CONNECTION) -> {
                                 showNetworkConnectionError(requireContext(), requireView()) {
-                                    linkTwitterAccount()
+                                    checkPendingLinkTwitterAccountAuthResult()
                                 }
                             }
                             message.contains(
