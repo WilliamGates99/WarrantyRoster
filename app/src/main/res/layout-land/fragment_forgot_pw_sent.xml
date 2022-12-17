@@ -72,7 +72,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/margin_24dp"
-                android:fontFamily="@{isTimerTicking ? @font/localized_semi_bold : @font/localized_semi_bold, default:@font/localized_semi_bold}"
+                android:fontFamily="@font/localized_semi_bold"
                 android:text="@{isTimerTicking ? @string/forgot_pw_sent_text_resend : @string/forgot_pw_sent_text_resent, default=@string/forgot_pw_sent_text_resend}"
                 android:textAlignment="center"
                 android:textColor="@{isTimerTicking ? @color/grayDark : @color/black, default=@color/grayDark}"
