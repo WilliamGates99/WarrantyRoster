@@ -139,46 +139,58 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
             responseEvent.getContentIfNotHandled()?.let { millisUntilFinished ->
                 binding.apply {
                     when (millisUntilFinished) {
-                        0L -> {
-                            CoroutineScope(Dispatchers.Main).launch {
-                                delay(500)
-                                updateTimerViews(false)
-                            }
-                        }
-                        else -> {
-                            updateTimerViews(true)
-
-                            tvResend.text = if (viewModel.isFirstSentEmail)
-                                requireContext().getString(R.string.forgot_pw_sent_text_first_time)
-                            else requireContext().getString(R.string.forgot_pw_sent_text_resent)
-
-                            val minutes = decimalFormat.format(millisUntilFinished / 60000)
-                            val seconds = decimalFormat.format((millisUntilFinished / 1000) % 60)
-                            time = "($minutes:$seconds})"
-                        }
+                        0L -> hideTimer()
+                        else -> showTimer(millisUntilFinished)
                     }
                 }
             }
         }
 
-    private fun updateTimerViews(isTimerActive: Boolean) {
-        binding.isTimerTicking = isTimerActive
-        setResendTvConstraintBottom(isTimerActive)
+    private fun showTimer(millisUntilFinished: Long) = binding.apply {
+        setResendTvConstraintBottomToTopOfTimerTv()
+
+        resendText = if (viewModel.isFirstSentEmail) {
+            requireContext().getString(R.string.forgot_pw_sent_text_first_time)
+        } else {
+            requireContext().getString(R.string.forgot_pw_sent_text_resent)
+        }
+
+        val minutes = decimalFormat.format(millisUntilFinished / 60000)
+        val seconds = decimalFormat.format((millisUntilFinished / 1000) % 60)
+
+        time = "($minutes:$seconds)"
+        isTimerTicking = true
     }
 
-    private fun setResendTvConstraintBottom(isTimerActive: Boolean) = binding.apply {
-        val constraintEndId = if (isTimerActive) tvTimer.id else btnResend.id
+    private fun setResendTvConstraintBottomToTopOfTimerTv() = ConstraintSet().apply {
+        clone(binding.cl)
+        connect(
+            /* startID = */ binding.tvResend.id,
+            /* startSide = */ ConstraintSet.BOTTOM,
+            /* endID = */ binding.tvTimer.id,
+            /* endSide = */ ConstraintSet.TOP
+        )
+        applyTo(binding.cl)
+    }
 
-        ConstraintSet().apply {
-            clone(cl)
-            connect(
-                /* startID = */ tvResend.id,
-                /* startSide = */ ConstraintSet.BOTTOM,
-                /* endID = */ constraintEndId,
-                /* endSide = */ ConstraintSet.TOP
-            )
-            applyTo(cl)
+    private fun hideTimer() = CoroutineScope(Dispatchers.Main).launch {
+        delay(500)
+        binding.apply {
+            setResendTvConstraintBottomToTopOfResendBtn()
+            resendText = requireContext().getString(R.string.forgot_pw_sent_text_resend)
+            isTimerTicking = false
         }
+    }
+
+    private fun setResendTvConstraintBottomToTopOfResendBtn() = ConstraintSet().apply {
+        clone(binding.cl)
+        connect(
+            /* startID = */ binding.tvResend.id,
+            /* startSide = */ ConstraintSet.BOTTOM,
+            /* endID = */ binding.btnResend.id,
+            /* endSide = */ ConstraintSet.TOP
+        )
+        applyTo(binding.cl)
     }
 
     private fun showLoadingAnimation() {

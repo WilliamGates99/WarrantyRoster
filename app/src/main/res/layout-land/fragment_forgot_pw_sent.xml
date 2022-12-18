@@ -14,6 +14,10 @@
             type="Boolean" />
 
         <variable
+            name="resendText"
+            type="String" />
+
+        <variable
             name="time"
             type="String" />
 
@@ -74,12 +78,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/margin_24dp"
                 android:fontFamily="@font/localized_semi_bold"
-                android:text="@{isTimerTicking ? @string/forgot_pw_sent_text_resent : @string/forgot_pw_sent_text_resend, default=@string/forgot_pw_sent_text_resend}"
+                android:text="@{resendText}"
                 android:textAlignment="center"
-                android:textColor="@{isTimerTicking ? @color/black : @color/grayDark, default=@color/grayDark}"
+                android:textColor="@{isTimerTicking ? @color/black : @color/grayDark, default=@color/black}"
                 android:textSize="@dimen/text_size_16sp"
                 app:layout_constrainedWidth="true"
-                app:layout_constraintBottom_toTopOf="@id/btn_resend"
+                app:layout_constraintBottom_toTopOf="@id/tv_timer"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/lav_sent" />
@@ -99,7 +103,7 @@
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_16sp"
-                android:visibility="@{isResendLoading ? View.GONE : View.VISIBLE, default=visible}"
+                android:visibility="@{(isTimerTicking || isResendLoading) ? View.GONE : View.VISIBLE, default=gone}"
                 app:layout_constrainedWidth="true"
                 app:layout_constraintBottom_toTopOf="@id/btn_return"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -135,7 +139,7 @@
                 android:textAlignment="center"
                 android:textColor="@color/green"
                 android:textSize="@dimen/text_size_14sp"
-                android:visibility="@{isTimerTicking ? View.VISIBLE : View.GONE, default=gone}"
+                android:visibility="@{isTimerTicking ? View.VISIBLE : View.GONE, default=visible}"
                 app:layout_constrainedWidth="true"
                 app:layout_constraintBottom_toTopOf="@id/btn_return"
                 app:layout_constraintEnd_toEndOf="parent"
