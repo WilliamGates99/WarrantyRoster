@@ -346,7 +346,7 @@
     <string name="settings_dialog_item_theme_dark">تیره</string>
     <string name="settings_dialog_message">ایمیل تأیید با موفقیت به صندوق ایمیلتان ارسال شد.</string>
     <string name="settings_dialog_positive">تایید</string>
-    <string name="settings_error_email_verification_email_not_provided">باید یک ایمیل به حساب متصل شود.</string>
+    <string name="settings_error_email_verification_email_not_provided">ایمیلی به حساب متصل نیست.</string>
 
 
     <string name="linked_accounts_text_title">حساب‌های متصل</string>
