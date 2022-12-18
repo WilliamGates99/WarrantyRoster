@@ -346,6 +346,7 @@
     <string name="settings_dialog_item_theme_dark">Dark</string>
     <string name="settings_dialog_message">The verification email has been successfully sent to your inbox.</string>
     <string name="settings_dialog_positive">Confirm</string>
+    <string name="settings_error_email_verification_email_not_provided">An email address must be provided.</string>
 
 
     <string name="linked_accounts_text_title">Linked Accounts</string>

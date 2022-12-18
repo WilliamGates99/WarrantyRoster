@@ -28,6 +28,7 @@ import com.xeniac.warrantyroster_manager.ui.viewmodels.SettingsViewModel
 import com.xeniac.warrantyroster_manager.utils.AlertDialogHelper.showOneBtnAlertDialog
 import com.xeniac.warrantyroster_manager.utils.AlertDialogHelper.showSingleChoiceItemsDialog
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_EMAIL_VERIFICATION_EMAIL_NOT_PROVIDED
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.Constants.THEME_INDEX_DARK
@@ -44,6 +45,7 @@ import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showActionSnackbar
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseDeviceBlockedError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkConnectionError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkFailureError
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNormalSnackbarError
 import dagger.hilt.android.AndroidEntryPoint
 import ir.tapsell.plus.AdHolder
 import ir.tapsell.plus.AdRequestCallback
@@ -266,6 +268,14 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
                                 }
                                 it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
                                     showFirebaseDeviceBlockedError(requireContext(), requireView())
+                                }
+                                it.contains(
+                                    ERROR_FIREBASE_AUTH_EMAIL_VERIFICATION_EMAIL_NOT_PROVIDED
+                                ) -> {
+                                    showNormalSnackbarError(
+                                        requireView(),
+                                        requireContext().getString(R.string.settings_error_email_verification_email_not_provided)
+                                    )
                                 }
                                 else -> showNetworkFailureError(requireContext(), requireView())
                             }
