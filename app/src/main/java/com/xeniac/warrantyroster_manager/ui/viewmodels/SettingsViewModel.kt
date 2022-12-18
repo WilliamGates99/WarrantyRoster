@@ -46,15 +46,15 @@ class SettingsViewModel @Inject constructor(
     private val _currentAppThemeLiveData: MutableLiveData<Event<Int>> = MutableLiveData()
     val currentAppThemeLiveData: LiveData<Event<Int>> = _currentAppThemeLiveData
 
-    private val _reloadedAccountDetailsLiveData:
-            MutableLiveData<Event<Resource<FirebaseUser>>> = MutableLiveData()
-    val reloadedAccountDetailsLiveData:
-            LiveData<Event<Resource<FirebaseUser>>> = _reloadedAccountDetailsLiveData
-
     private val _cachedAccountDetailsLiveData:
             MutableLiveData<Event<Resource<FirebaseUser>>> = MutableLiveData()
     val cachedAccountDetailsLiveData:
             LiveData<Event<Resource<FirebaseUser>>> = _cachedAccountDetailsLiveData
+
+    private val _reloadedAccountDetailsLiveData:
+            MutableLiveData<Event<Resource<FirebaseUser>>> = MutableLiveData()
+    val reloadedAccountDetailsLiveData:
+            LiveData<Event<Resource<FirebaseUser>>> = _reloadedAccountDetailsLiveData
 
     private val _sendVerificationEmailLiveData:
             MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
@@ -159,23 +159,6 @@ class SettingsViewModel @Inject constructor(
         SettingsHelper.setAppTheme(index)
     }
 
-    fun getReloadedAccountDetails() = viewModelScope.launch {
-        safeGetReloadedAccountDetails()
-    }
-
-    private suspend fun safeGetReloadedAccountDetails() {
-        _reloadedAccountDetailsLiveData.postValue(Event(Resource.Loading()))
-        try {
-            userRepository.reloadCurrentUser()
-            val user = userRepository.getCurrentUser()
-            _reloadedAccountDetailsLiveData.postValue(Event(Resource.Success(user)))
-            Timber.i("Reloaded user email is ${user.email} and isVerified: ${user.isEmailVerified}")
-        } catch (e: Exception) {
-            Timber.e("safeGetReloadedAccountDetails Exception: ${e.message}")
-            _reloadedAccountDetailsLiveData.postValue(Event(Resource.Error(UiText.DynamicString(e.message.toString()))))
-        }
-    }
-
     fun getCachedAccountDetails() = viewModelScope.launch {
         safeGetCachedAccountDetails()
     }
@@ -189,6 +172,36 @@ class SettingsViewModel @Inject constructor(
         } catch (e: Exception) {
             Timber.e("safeGetCachedAccountDetails Exception: ${e.message}")
             _cachedAccountDetailsLiveData.postValue(Event(Resource.Error(UiText.DynamicString(e.message.toString()))))
+        }
+    }
+
+    fun getReloadedAccountDetails() = viewModelScope.launch {
+        safeGetReloadedAccountDetails()
+    }
+
+    private suspend fun safeGetReloadedAccountDetails() {
+        try {
+            val currentUser = userRepository.getCurrentUser()
+            val currentEmail = currentUser.email
+            val isCurrentVerified = currentUser.isEmailVerified
+
+            userRepository.reloadCurrentUser()
+            val reloadedUser = userRepository.getCurrentUser()
+            val reloadedEmail = reloadedUser.email
+            val isReloadedVerified = reloadedUser.isEmailVerified
+
+            val areUserDetailsChanged =
+                reloadedEmail != currentEmail || isReloadedVerified != isCurrentVerified
+
+            if (areUserDetailsChanged) {
+                _reloadedAccountDetailsLiveData.postValue(Event(Resource.Success(reloadedUser)))
+                Timber.i("Reloaded user email is $reloadedEmail and isVerified: $isReloadedVerified")
+            } else {
+                Timber.i("Reloaded user details are not changed.")
+            }
+        } catch (e: Exception) {
+            Timber.e("safeGetReloadedAccountDetails Exception: ${e.message}")
+            _reloadedAccountDetailsLiveData.postValue(Event(Resource.Error(UiText.DynamicString(e.message.toString()))))
         }
     }
 

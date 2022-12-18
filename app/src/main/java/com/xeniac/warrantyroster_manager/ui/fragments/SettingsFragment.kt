@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.airbnb.lottie.LottieDrawable
 import com.applovin.mediation.MaxAd
@@ -21,7 +22,9 @@ import com.applovin.mediation.nativeAds.MaxNativeAdViewBinder
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.BuildConfig
 import com.xeniac.warrantyroster_manager.R
+import com.xeniac.warrantyroster_manager.data.repository.NetworkConnectivityObserver
 import com.xeniac.warrantyroster_manager.databinding.FragmentSettingsBinding
+import com.xeniac.warrantyroster_manager.domain.repository.ConnectivityObserver
 import com.xeniac.warrantyroster_manager.ui.LandingActivity
 import com.xeniac.warrantyroster_manager.ui.MainActivity
 import com.xeniac.warrantyroster_manager.ui.viewmodels.SettingsViewModel
@@ -52,6 +55,8 @@ import ir.tapsell.plus.AdRequestCallback
 import ir.tapsell.plus.AdShowListener
 import ir.tapsell.plus.TapsellPlus
 import ir.tapsell.plus.model.TapsellPlusAdModel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 
 @AndroidEntryPoint
@@ -61,6 +66,9 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
     val binding get() = _binding!!
 
     lateinit var viewModel: SettingsViewModel
+
+    private lateinit var connectivityObserver: ConnectivityObserver
+    private lateinit var networkStatus: ConnectivityObserver.Status
 
     private var currentLocaleIndex = 0
     private var currentAppTheme = 0
@@ -77,9 +85,10 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentSettingsBinding.bind(view)
         viewModel = ViewModelProvider(requireActivity())[SettingsViewModel::class.java]
+        connectivityObserver = NetworkConnectivityObserver(requireContext())
 
         subscribeToObservers()
-        getReloadedAccountDetails()
+        getAccountDetails()
         getCurrentLanguage()
         getCurrentAppTheme()
         verifyOnClick()
@@ -104,8 +113,9 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
     }
 
     private fun subscribeToObservers() {
-        reloadedAccountDetailsObserver()
+        networkConnectivityObserver()
         cachedAccountDetailsObserver()
+        reloadedAccountDetailsObserver()
         currentLanguageObserver()
         currentLocaleIndexObserver()
         currentAppThemeObserver()
@@ -114,26 +124,18 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
         logoutObserver()
     }
 
-    private fun getReloadedAccountDetails() = viewModel.getReloadedAccountDetails()
+    private fun networkConnectivityObserver() = connectivityObserver.observe().onEach {
+        networkStatus = it
+        println("Network connectivity status is $it")
+    }.launchIn(lifecycleScope)
 
-    private fun reloadedAccountDetailsObserver() =
-        viewModel.reloadedAccountDetailsLiveData.observe(viewLifecycleOwner) { responseEvent ->
-            responseEvent.getContentIfNotHandled()?.let { response ->
-                when (response) {
-                    is Resource.Success -> {
-                        response.data?.let { user ->
-                            setAccountDetails(user.email.toString(), user.isEmailVerified)
-                        }
-                    }
-                    is Resource.Error -> {
-                        getCachedAccountDetails()
-                    }
-                    is Resource.Loading -> {
-                        /* NO-OP */
-                    }
-                }
-            }
+    private fun getAccountDetails() {
+        getCachedAccountDetails()
+
+        if (networkStatus == ConnectivityObserver.Status.AVAILABLE) {
+            getReloadedAccountDetails()
         }
+    }
 
     private fun getCachedAccountDetails() = viewModel.getCachedAccountDetails()
 
@@ -141,6 +143,9 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
         viewModel.cachedAccountDetailsLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
+                    is Resource.Loading -> {
+                        /* NO-OP */
+                    }
                     is Resource.Success -> {
                         response.data?.let { user ->
                             setAccountDetails(user.email.toString(), user.isEmailVerified)
@@ -155,8 +160,26 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
                             ) { snackbar?.dismiss() }
                         }
                     }
+                }
+            }
+        }
+
+    private fun getReloadedAccountDetails() = viewModel.getReloadedAccountDetails()
+
+    private fun reloadedAccountDetailsObserver() =
+        viewModel.reloadedAccountDetailsLiveData.observe(viewLifecycleOwner) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { response ->
+                when (response) {
                     is Resource.Loading -> {
                         /* NO-OP */
+                    }
+                    is Resource.Success -> {
+                        response.data?.let { user ->
+                            setAccountDetails(user.email.toString(), user.isEmailVerified)
+                        }
+                    }
+                    is Resource.Error -> {
+                        getCachedAccountDetails()
                     }
                 }
             }
