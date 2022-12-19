@@ -15,6 +15,8 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentChangePasswordBinding
+import com.xeniac.warrantyroster_manager.domain.repository.ConnectivityObserver
+import com.xeniac.warrantyroster_manager.ui.MainActivity
 import com.xeniac.warrantyroster_manager.ui.viewmodels.ChangePasswordViewModel
 import com.xeniac.warrantyroster_manager.utils.AlertDialogHelper.showOneBtnAlertDialog
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
@@ -32,11 +34,13 @@ import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_CHANGE_PA
 import com.xeniac.warrantyroster_manager.utils.Resource
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.show403Error
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseDeviceBlockedError
-import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkConnectionError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkFailureError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNormalSnackbarError
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showSomethingWentWrongError
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showUnavailableNetworkConnectionError
 import com.xeniac.warrantyroster_manager.utils.UserHelper.passwordStrength
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
@@ -226,11 +230,18 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
             .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(requireView().applicationWindowToken, 0)
 
-        val currentPassword = binding.tiEditCurrentPassword.text.toString().trim()
-        newPassword = binding.tiEditNewPassword.text.toString().trim()
-        val retypeNewPassword = binding.tiEditConfirmNewPassword.text.toString().trim()
+        if ((requireActivity() as MainActivity).networkStatus == ConnectivityObserver.Status.AVAILABLE) {
+            val currentPassword = binding.tiEditCurrentPassword.text.toString().trim()
+            newPassword = binding.tiEditNewPassword.text.toString().trim()
+            val retypeNewPassword = binding.tiEditConfirmNewPassword.text.toString().trim()
 
-        viewModel.validateChangePasswordInputs(currentPassword, newPassword, retypeNewPassword)
+            viewModel.validateChangePasswordInputs(currentPassword, newPassword, retypeNewPassword)
+        } else {
+            snackbar = showUnavailableNetworkConnectionError(
+                requireContext(), requireView()
+            ) { validateChangeUserPasswordInputs() }
+            Timber.e("validateChangeUserPasswordInputs Error: Offline")
+        }
     }
 
     private fun checkInputsObserver() =
@@ -270,7 +281,7 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
                                         requireContext().getString(R.string.change_password_error_match)
                                 }
                                 else -> {
-                                    snackbar = showNetworkFailureError(
+                                    snackbar = showSomethingWentWrongError(
                                         requireContext(), requireView()
                                     )
                                 }
@@ -294,9 +305,9 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
                         response.message?.asString(requireContext())?.let {
                             when {
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
-                                    snackbar = showNetworkConnectionError(
+                                    snackbar = showNetworkFailureError(
                                         requireContext(), requireView()
-                                    ) { validateChangeUserPasswordInputs() }
+                                    )
                                 }
                                 it.contains(ERROR_FIREBASE_403) -> {
                                     snackbar = show403Error(requireContext(), requireView())
@@ -314,7 +325,7 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
                                     )
                                 }
                                 else -> {
-                                    snackbar = showNetworkFailureError(
+                                    snackbar = showSomethingWentWrongError(
                                         requireContext(), requireView()
                                     )
                                 }
@@ -345,9 +356,7 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
                         response.message?.asString(requireContext())?.let {
                             snackbar = when {
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
-                                    showNetworkConnectionError(
-                                        requireContext(), requireView()
-                                    ) { validateChangeUserPasswordInputs() }
+                                    showNetworkFailureError(requireContext(), requireView())
                                 }
                                 it.contains(ERROR_FIREBASE_403) -> {
                                     show403Error(requireContext(), requireView())
@@ -355,7 +364,7 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
                                 it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
                                     showFirebaseDeviceBlockedError(requireContext(), requireView())
                                 }
-                                else -> showNetworkFailureError(requireContext(), requireView())
+                                else -> showSomethingWentWrongError(requireContext(), requireView())
                             }
                         }
                     }

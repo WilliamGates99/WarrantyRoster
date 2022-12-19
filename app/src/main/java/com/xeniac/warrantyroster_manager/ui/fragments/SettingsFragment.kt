@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.airbnb.lottie.LottieDrawable
 import com.applovin.mediation.MaxAd
@@ -22,7 +21,6 @@ import com.applovin.mediation.nativeAds.MaxNativeAdViewBinder
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.BuildConfig
 import com.xeniac.warrantyroster_manager.R
-import com.xeniac.warrantyroster_manager.data.repository.NetworkConnectivityObserver
 import com.xeniac.warrantyroster_manager.databinding.FragmentSettingsBinding
 import com.xeniac.warrantyroster_manager.domain.repository.ConnectivityObserver
 import com.xeniac.warrantyroster_manager.ui.LandingActivity
@@ -44,19 +42,17 @@ import com.xeniac.warrantyroster_manager.utils.LinkHelper.openLink
 import com.xeniac.warrantyroster_manager.utils.LinkHelper.openPlayStore
 import com.xeniac.warrantyroster_manager.utils.Resource
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.show403Error
-import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showActionSnackbarError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseDeviceBlockedError
-import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkConnectionError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkFailureError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNormalSnackbarError
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showSomethingWentWrongError
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showUnavailableNetworkConnectionError
 import dagger.hilt.android.AndroidEntryPoint
 import ir.tapsell.plus.AdHolder
 import ir.tapsell.plus.AdRequestCallback
 import ir.tapsell.plus.AdShowListener
 import ir.tapsell.plus.TapsellPlus
 import ir.tapsell.plus.model.TapsellPlusAdModel
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 
 @AndroidEntryPoint
@@ -66,9 +62,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
     val binding get() = _binding!!
 
     lateinit var viewModel: SettingsViewModel
-
-    private lateinit var connectivityObserver: ConnectivityObserver
-    private lateinit var networkStatus: ConnectivityObserver.Status
 
     private var currentLocaleIndex = 0
     private var currentAppTheme = 0
@@ -85,7 +78,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentSettingsBinding.bind(view)
         viewModel = ViewModelProvider(requireActivity())[SettingsViewModel::class.java]
-        connectivityObserver = NetworkConnectivityObserver(requireContext())
 
         subscribeToObservers()
         getAccountDetails()
@@ -113,7 +105,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
     }
 
     private fun subscribeToObservers() {
-        networkConnectivityObserver()
         cachedAccountDetailsObserver()
         reloadedAccountDetailsObserver()
         currentLanguageObserver()
@@ -124,15 +115,10 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
         logoutObserver()
     }
 
-    private fun networkConnectivityObserver() = connectivityObserver.observe().onEach {
-        networkStatus = it
-        println("Network connectivity status is $it")
-    }.launchIn(lifecycleScope)
-
     private fun getAccountDetails() {
         getCachedAccountDetails()
 
-        if (networkStatus == ConnectivityObserver.Status.AVAILABLE) {
+        if ((requireActivity() as MainActivity).networkStatus == ConnectivityObserver.Status.AVAILABLE) {
             getReloadedAccountDetails()
         }
     }
@@ -152,13 +138,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
                         }
                     }
                     is Resource.Error -> {
-                        response.message?.asString(requireContext())?.let {
-                            snackbar = showActionSnackbarError(
-                                view = requireView(),
-                                message = it,
-                                actionBtn = requireContext().getString(R.string.error_btn_confirm)
-                            ) { snackbar?.dismiss() }
-                        }
+                        snackbar = showSomethingWentWrongError(requireContext(), requireView())
                     }
                 }
             }
@@ -262,7 +242,16 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
         sendVerificationEmail()
     }
 
-    private fun sendVerificationEmail() = viewModel.sendVerificationEmail()
+    private fun sendVerificationEmail() {
+        if ((requireActivity() as MainActivity).networkStatus == ConnectivityObserver.Status.AVAILABLE) {
+            viewModel.sendVerificationEmail()
+        } else {
+            snackbar = showUnavailableNetworkConnectionError(
+                requireContext(), requireView()
+            ) { sendVerificationEmail() }
+            Timber.e("sendVerificationEmail Error: Offline")
+        }
+    }
 
     private fun sendVerificationEmailObserver() =
         viewModel.sendVerificationEmailLiveData.observe(viewLifecycleOwner) { responseEvent ->
@@ -282,9 +271,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
                         response.message?.asString(requireContext())?.let {
                             snackbar = when {
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
-                                    showNetworkConnectionError(
-                                        requireContext(), requireView()
-                                    ) { sendVerificationEmail() }
+                                    showNetworkFailureError(requireContext(), requireView())
                                 }
                                 it.contains(ERROR_FIREBASE_403) -> {
                                     show403Error(requireContext(), requireView())
@@ -300,7 +287,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
                                         requireContext().getString(R.string.settings_error_email_verification_email_not_provided)
                                     )
                                 }
-                                else -> showNetworkFailureError(requireContext(), requireView())
+                                else -> showSomethingWentWrongError(requireContext(), requireView())
                             }
                         }
                     }
@@ -399,15 +386,17 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
         viewModel.logoutLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
+                    is Resource.Loading -> {
+                        /* NO-OP */
+                    }
                     is Resource.Success -> {
                         requireActivity().apply {
                             startActivity(Intent(this, LandingActivity::class.java))
                             finish()
                         }
                     }
-                    is Resource.Error -> logoutUser()
-                    is Resource.Loading -> {
-                        /* NO-OP */
+                    is Resource.Error -> {
+                        snackbar = showSomethingWentWrongError(requireContext(), requireView())
                     }
                 }
             }

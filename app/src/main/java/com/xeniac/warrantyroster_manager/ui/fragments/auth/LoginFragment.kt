@@ -30,6 +30,7 @@ import com.google.firebase.auth.OAuthProvider
 import com.xeniac.warrantyroster_manager.BuildConfig
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentLoginBinding
+import com.xeniac.warrantyroster_manager.domain.repository.ConnectivityObserver
 import com.xeniac.warrantyroster_manager.ui.MainActivity
 import com.xeniac.warrantyroster_manager.ui.viewmodels.LoginViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
@@ -52,10 +53,10 @@ import com.xeniac.warrantyroster_manager.utils.Resource
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.show403Error
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showActionSnackbarError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseDeviceBlockedError
-import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkConnectionError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkFailureError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNormalSnackbarError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showSomethingWentWrongError
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showUnavailableNetworkConnectionError
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -223,10 +224,17 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(requireView().applicationWindowToken, 0)
 
-        val email = binding.tiEditEmail.text.toString().trim().lowercase(Locale.US)
-        val password = binding.tiEditPassword.text.toString().trim()
+        if ((requireParentFragment() as AuthFragment).networkStatus == ConnectivityObserver.Status.AVAILABLE) {
+            val email = binding.tiEditEmail.text.toString().trim().lowercase(Locale.US)
+            val password = binding.tiEditPassword.text.toString().trim()
 
-        viewModel.validateLoginWithEmailInputs(email, password)
+            viewModel.validateLoginWithEmailInputs(email, password)
+        } else {
+            snackbar = showUnavailableNetworkConnectionError(
+                requireContext(), requireView()
+            ) { validateLoginWithEmailInputs() }
+            Timber.e("validateLoginWithEmailInputs Error: Offline")
+        }
     }
 
     private fun loginWithEmailObserver() =
@@ -258,9 +266,9 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                                         requireContext().getString(R.string.login_error_email)
                                 }
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
-                                    snackbar = showNetworkConnectionError(
+                                    snackbar = showNetworkFailureError(
                                         requireContext(), requireView()
-                                    ) { validateLoginWithEmailInputs() }
+                                    )
                                 }
                                 it.contains(ERROR_FIREBASE_403) -> {
                                     snackbar = show403Error(requireContext(), requireView())
@@ -284,7 +292,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                                     )
                                 }
                                 else -> {
-                                    snackbar = showNetworkFailureError(
+                                    snackbar = showSomethingWentWrongError(
                                         requireContext(), requireView()
                                     )
                                 }
@@ -305,26 +313,35 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     }
 
     private fun loginWithGoogleAccount() {
-        CoroutineScope(Dispatchers.Main).launch {
-            try {
-                showGoogleLoadingAnimation()
-                val options = GoogleSignInOptions.Builder(
-                    GoogleSignInOptions.DEFAULT_SIGN_IN
-                ).apply {
-                    requestIdToken(BuildConfig.GOOGLE_AUTH_SERVER_CLIENT_ID)
-                    requestId()
-                    requestEmail()
-                }.build()
+        if ((requireParentFragment() as AuthFragment).networkStatus == ConnectivityObserver.Status.AVAILABLE) {
+            launchGoogleSignInClient()
+        } else {
+            snackbar = showUnavailableNetworkConnectionError(
+                requireContext(), requireView()
+            ) { loginWithGoogleAccount() }
+            Timber.e("loginWithGoogleAccount Error: Offline")
+        }
+    }
 
-                val googleSignInClient = GoogleSignIn.getClient(requireContext(), options)
-                googleSignInClient.signOut().await()
+    private fun launchGoogleSignInClient() = CoroutineScope(Dispatchers.Main).launch {
+        try {
+            showGoogleLoadingAnimation()
+            val options = GoogleSignInOptions.Builder(
+                GoogleSignInOptions.DEFAULT_SIGN_IN
+            ).apply {
+                requestIdToken(BuildConfig.GOOGLE_AUTH_SERVER_CLIENT_ID)
+                requestId()
+                requestEmail()
+            }.build()
 
-                loginWithGoogleAccountResultLauncher.launch(googleSignInClient.signInIntent)
-            } catch (e: Exception) {
-                hideGoogleLoadingAnimation()
-                snackbar = showSomethingWentWrongError(requireContext(), requireView())
-                Timber.e("loginWithGoogleAccount Exception: ${e.message}")
-            }
+            val googleSignInClient = GoogleSignIn.getClient(requireContext(), options)
+            googleSignInClient.signOut().await()
+
+            loginWithGoogleAccountResultLauncher.launch(googleSignInClient.signInIntent)
+        } catch (e: Exception) {
+            hideGoogleLoadingAnimation()
+            snackbar = showSomethingWentWrongError(requireContext(), requireView())
+            Timber.e("launchGoogleSignInClient Exception: ${e.message}")
         }
     }
 
@@ -342,7 +359,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                         /* NO-OP */
                     }
                     it.contains(ERROR_GOOGLE_SIGN_IN_CLIENT_OFFLINE) -> {
-                        snackbar = showNetworkConnectionError(
+                        snackbar = showUnavailableNetworkConnectionError(
                             requireContext(), requireView()
                         ) { loginWithGoogleAccount() }
                     }
@@ -369,9 +386,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                         response.message?.asString(requireContext())?.let {
                             snackbar = when {
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
-                                    showNetworkConnectionError(
-                                        requireContext(), requireView()
-                                    ) { loginWithGoogleAccount() }
+                                    showNetworkFailureError(requireContext(), requireView())
                                 }
                                 it.contains(ERROR_FIREBASE_403) -> {
                                     show403Error(requireContext(), requireView())
@@ -403,14 +418,21 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     }
 
     private fun checkPendingLinkTwitterAccountAuthResult() {
-        showTwitterLoadingAnimation()
+        if ((requireParentFragment() as AuthFragment).networkStatus == ConnectivityObserver.Status.AVAILABLE) {
+            showTwitterLoadingAnimation()
 
-        val pendingAuthResult = firebaseAuth.pendingAuthResult
+            val pendingAuthResult = firebaseAuth.pendingAuthResult
 
-        if (pendingAuthResult != null) {
-            pendingLoginWithTwitterAccountAuthResult(pendingAuthResult)
+            if (pendingAuthResult != null) {
+                pendingLoginWithTwitterAccountAuthResult(pendingAuthResult)
+            } else {
+                loginWithTwitterAccount()
+            }
         } else {
-            loginWithTwitterAccount()
+            snackbar = showUnavailableNetworkConnectionError(
+                requireContext(), requireView()
+            ) { checkPendingLinkTwitterAccountAuthResult() }
+            Timber.e("checkPendingLinkTwitterAccountAuthResult Error: Offline")
         }
     }
 
@@ -444,9 +466,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                 } else {
                     snackbar = when {
                         message.contains(ERROR_TWITTER_O_AUTH_PROVIDER_NETWORK_CONNECTION) -> {
-                            showNetworkConnectionError(requireContext(), requireView()) {
-                                checkPendingLinkTwitterAccountAuthResult()
-                            }
+                            showNetworkFailureError(requireContext(), requireView())
                         }
                         message.contains(
                             ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIALS
@@ -480,9 +500,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                         response.message?.asString(requireContext())?.let {
                             snackbar = when {
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
-                                    showNetworkConnectionError(
-                                        requireContext(), requireView()
-                                    ) { checkPendingLinkTwitterAccountAuthResult() }
+                                    showNetworkFailureError(requireContext(), requireView())
                                 }
                                 it.contains(ERROR_FIREBASE_403) -> {
                                     show403Error(requireContext(), requireView())
@@ -514,6 +532,17 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     }
 
     private fun loginWithFacebookAccount() {
+        if ((requireParentFragment() as AuthFragment).networkStatus == ConnectivityObserver.Status.AVAILABLE) {
+            launchFacebookLoginManager()
+        } else {
+            snackbar = showUnavailableNetworkConnectionError(
+                requireContext(), requireView()
+            ) { loginWithFacebookAccount() }
+            Timber.e("loginWithFacebookAccount Error: Offline")
+        }
+    }
+
+    private fun launchFacebookLoginManager() {
         showFacebookLoadingAnimation()
 
         val callbackManager = CallbackManager.Factory.create()
@@ -528,13 +557,13 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
             override fun onCancel() {
                 hideFacebookLoadingAnimation()
-                Timber.i("loginWithFacebookAccount canceled.")
+                Timber.i("launchFacebookLoginManager canceled.")
             }
 
             override fun onError(error: FacebookException) {
                 hideFacebookLoadingAnimation()
                 snackbar = showSomethingWentWrongError(requireContext(), requireView())
-                Timber.e("loginWithFacebookAccount Callback Exception: ${error.message}")
+                Timber.e("launchFacebookLoginManager Callback Exception: ${error.message}")
             }
         })
     }
@@ -553,9 +582,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                         response.message?.asString(requireContext())?.let {
                             snackbar = when {
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
-                                    showNetworkConnectionError(
-                                        requireContext(), requireView()
-                                    ) { loginWithFacebookAccount() }
+                                    showNetworkFailureError(requireContext(), requireView())
                                 }
                                 it.contains(ERROR_FIREBASE_403) -> {
                                     show403Error(requireContext(), requireView())

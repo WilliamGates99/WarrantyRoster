@@ -22,6 +22,8 @@ import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.data.remote.models.Category
 import com.xeniac.warrantyroster_manager.data.remote.models.Warranty
 import com.xeniac.warrantyroster_manager.databinding.FragmentEditWarrantyBinding
+import com.xeniac.warrantyroster_manager.domain.repository.ConnectivityObserver
+import com.xeniac.warrantyroster_manager.ui.MainActivity
 import com.xeniac.warrantyroster_manager.ui.viewmodels.WarrantyViewModel
 import com.xeniac.warrantyroster_manager.utils.CoilHelper.loadCategoryImage
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
@@ -46,10 +48,12 @@ import com.xeniac.warrantyroster_manager.utils.DateHelper.getTimeZoneOffsetInMil
 import com.xeniac.warrantyroster_manager.utils.Resource
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.show403Error
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseDeviceBlockedError
-import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkConnectionError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkFailureError
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showSomethingWentWrongError
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showUnavailableNetworkConnectionError
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -559,19 +563,26 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
             .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(requireView().applicationWindowToken, 0)
 
-        val title = binding.tiEditTitle.text.toString().trim()
-        val brand = binding.tiEditBrand.text?.toString()?.trim()
-        val model = binding.tiEditModel.text?.toString()?.trim()
-        val serialNumber = binding.tiEditSerial.text?.toString()?.trim()
-        val description = binding.tiEditDescription.text?.toString()?.trim()
-        val isLifetime = binding.cbLifetime.isChecked
-        val categoryId = selectedCategory?.id ?: "10"
+        if ((requireActivity() as MainActivity).networkStatus == ConnectivityObserver.Status.AVAILABLE) {
+            val title = binding.tiEditTitle.text.toString().trim()
+            val brand = binding.tiEditBrand.text?.toString()?.trim()
+            val model = binding.tiEditModel.text?.toString()?.trim()
+            val serialNumber = binding.tiEditSerial.text?.toString()?.trim()
+            val description = binding.tiEditDescription.text?.toString()?.trim()
+            val isLifetime = binding.cbLifetime.isChecked
+            val categoryId = selectedCategory?.id ?: "10"
 
-        viewModel.validateEditWarrantyInputs(
-            warranty.id, title, brand, model, serialNumber,
-            isLifetime, startingDateInput, expiryDateInput, description, categoryId,
-            selectedStartingDateInMillis, selectedExpiryDateInMillis
-        )
+            viewModel.validateEditWarrantyInputs(
+                warranty.id, title, brand, model, serialNumber,
+                isLifetime, startingDateInput, expiryDateInput, description, categoryId,
+                selectedStartingDateInMillis, selectedExpiryDateInMillis
+            )
+        } else {
+            snackbar = showUnavailableNetworkConnectionError(
+                requireContext(), requireView()
+            ) { validateWarrantyInputs() }
+            Timber.e("validateWarrantyInputs Error: Offline")
+        }
     }
 
     private fun updateWarrantyObserver() =
@@ -593,9 +604,9 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
                                 it.contains(ERROR_INPUT_BLANK_EXPIRY_DATE) -> binding.tiLayoutDateExpiry.requestFocus()
                                 it.contains(ERROR_INPUT_INVALID_STARTING_DATE) -> showDateError()
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
-                                    snackbar = showNetworkConnectionError(
+                                    snackbar = showNetworkFailureError(
                                         requireContext(), requireView()
-                                    ) { validateWarrantyInputs() }
+                                    )
                                 }
                                 it.contains(ERROR_FIREBASE_403) -> {
                                     snackbar = show403Error(requireContext(), requireView())
@@ -607,7 +618,7 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
                                     )
                                 }
                                 else -> {
-                                    snackbar = showNetworkFailureError(
+                                    snackbar = showSomethingWentWrongError(
                                         requireContext(), requireView()
                                     )
                                 }
@@ -637,10 +648,7 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
                         response.message?.asString(requireContext())?.let {
                             snackbar = when {
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
-                                    showNetworkConnectionError(
-                                        requireContext(),
-                                        requireView()
-                                    ) { getUpdatedWarrantyFromFirestore() }
+                                    showNetworkFailureError(requireContext(), requireView())
                                 }
                                 it.contains(ERROR_FIREBASE_403) -> {
                                     show403Error(requireContext(), requireView())
@@ -648,7 +656,7 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
                                 it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
                                     showFirebaseDeviceBlockedError(requireContext(), requireView())
                                 }
-                                else -> showNetworkFailureError(requireContext(), requireView())
+                                else -> showSomethingWentWrongError(requireContext(), requireView())
                             }
                         }
                     }

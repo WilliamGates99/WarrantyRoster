@@ -4,7 +4,7 @@
 
 
     <string name="error_something_went_wrong">خطایی رخ داده. لطفا بعدا دوباره امتحان کنید.</string>
-    <string name="error_network_connection">اتصال به اینترنت امکان‌پذیر نیست.</string>
+    <string name="error_network_connection_unavailable">اتصال به اینترنت امکان‌پذیر نیست.</string>
     <string name="error_network_failure">مشکلی برای شبکه رخ داده است. لطفا بعدا دوباره امتحان کنید.</string>
     <string name="error_firebase_403">این سرویس در منطقه شما در دسترس نیست. لطفاً از نرم‌افزار تغییر آدرس IP استفاده کنید.</string>
     <string name="error_firebase_device_blocked">ما تمام درخواست‌های این دستگاه را به دلیل فعالیت غیر‌عادی مسدود کرده‌ایم. لطفا بعدا دوباره تلاش کنید.</string>

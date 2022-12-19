@@ -23,6 +23,8 @@ import com.google.firebase.auth.OAuthProvider
 import com.xeniac.warrantyroster_manager.BuildConfig
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentLinkedAccountsBinding
+import com.xeniac.warrantyroster_manager.domain.repository.ConnectivityObserver
+import com.xeniac.warrantyroster_manager.ui.MainActivity
 import com.xeniac.warrantyroster_manager.ui.viewmodels.LinkedAccountsViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS
@@ -41,8 +43,9 @@ import com.xeniac.warrantyroster_manager.utils.Resource
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.show403Error
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showActionSnackbarError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseDeviceBlockedError
-import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkConnectionError
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkFailureError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showSomethingWentWrongError
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showUnavailableNetworkConnectionError
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -138,20 +141,12 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
                     }
                     is Resource.Error -> {
                         hideAllLoadingAnimations()
-
                         binding.apply {
                             googleClickable = false
                             twitterClickable = false
                             facebookClickable = false
                         }
-
-                        response.message?.asString(requireContext())?.let {
-                            snackbar = showActionSnackbarError(
-                                view = requireView(),
-                                message = requireContext().getString(R.string.error_something_went_wrong),
-                                actionBtn = requireContext().getString(R.string.error_btn_retry)
-                            ) { getLinkedAccounts() }
-                        }
+                        snackbar = showSomethingWentWrongError(requireContext(), requireView())
                     }
                 }
             }
@@ -171,7 +166,16 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
         }
     }
 
-    private fun unlinkGoogleAccount() = viewModel.unlinkGoogleAccount()
+    private fun unlinkGoogleAccount() {
+        if ((requireActivity() as MainActivity).networkStatus == ConnectivityObserver.Status.AVAILABLE) {
+            viewModel.unlinkGoogleAccount()
+        } else {
+            snackbar = showUnavailableNetworkConnectionError(
+                requireContext(), requireView()
+            ) { unlinkGoogleAccount() }
+            Timber.e("unlinkGoogleAccount Error: Offline")
+        }
+    }
 
     private fun unlinkGoogleAccountObserver() =
         viewModel.unlinkGoogleAccountLiveData.observe(viewLifecycleOwner) { responseEvent ->
@@ -188,9 +192,7 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
                         response.message?.asString(requireContext())?.let {
                             snackbar = when {
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
-                                    showNetworkConnectionError(
-                                        requireContext(), requireView()
-                                    ) { unlinkGoogleAccount() }
+                                    showNetworkFailureError(requireContext(), requireView())
                                 }
                                 it.contains(ERROR_FIREBASE_403) -> {
                                     show403Error(requireContext(), requireView())
@@ -209,25 +211,34 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
         }
 
     private fun linkGoogleAccount() {
-        CoroutineScope(Dispatchers.Main).launch {
-            try {
-                showGoogleLoadingAnimation()
-                val options = GoogleSignInOptions.Builder(
-                    GoogleSignInOptions.DEFAULT_SIGN_IN
-                ).apply {
-                    requestIdToken(BuildConfig.GOOGLE_AUTH_SERVER_CLIENT_ID)
-                    requestId()
-                }.build()
+        if ((requireActivity() as MainActivity).networkStatus == ConnectivityObserver.Status.AVAILABLE) {
+            launchGoogleSignInClient()
+        } else {
+            snackbar = showUnavailableNetworkConnectionError(
+                requireContext(), requireView()
+            ) { linkGoogleAccount() }
+            Timber.e("linkGoogleAccount Error: Offline")
+        }
+    }
 
-                val googleSignInClient = GoogleSignIn.getClient(requireContext(), options)
-                googleSignInClient.signOut().await()
+    private fun launchGoogleSignInClient() = CoroutineScope(Dispatchers.Main).launch {
+        try {
+            showGoogleLoadingAnimation()
+            val options = GoogleSignInOptions.Builder(
+                GoogleSignInOptions.DEFAULT_SIGN_IN
+            ).apply {
+                requestIdToken(BuildConfig.GOOGLE_AUTH_SERVER_CLIENT_ID)
+                requestId()
+            }.build()
 
-                linkGoogleAccountResultLauncher.launch(googleSignInClient.signInIntent)
-            } catch (e: Exception) {
-                hideGoogleLoadingAnimation()
-                snackbar = showSomethingWentWrongError(requireContext(), requireView())
-                Timber.e("linkGoogleAccount Exception: ${e.message}")
-            }
+            val googleSignInClient = GoogleSignIn.getClient(requireContext(), options)
+            googleSignInClient.signOut().await()
+
+            linkGoogleAccountResultLauncher.launch(googleSignInClient.signInIntent)
+        } catch (e: Exception) {
+            hideGoogleLoadingAnimation()
+            snackbar = showSomethingWentWrongError(requireContext(), requireView())
+            Timber.e("launchGoogleSignInClient Exception: ${e.message}")
         }
     }
 
@@ -245,7 +256,7 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
                         /* NO-OP */
                     }
                     it.contains(ERROR_GOOGLE_SIGN_IN_CLIENT_OFFLINE) -> {
-                        snackbar = showNetworkConnectionError(
+                        snackbar = showUnavailableNetworkConnectionError(
                             requireContext(), requireView()
                         ) { linkGoogleAccount() }
                     }
@@ -273,9 +284,7 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
                         response.message?.asString(requireContext())?.let {
                             snackbar = when {
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
-                                    showNetworkConnectionError(
-                                        requireContext(), requireView()
-                                    ) { unlinkGoogleAccount() }
+                                    showNetworkFailureError(requireContext(), requireView())
                                 }
                                 it.contains(ERROR_FIREBASE_403) -> {
                                     show403Error(requireContext(), requireView())
@@ -299,7 +308,16 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
         }
     }
 
-    private fun unlinkTwitterAccount() = viewModel.unlinkTwitterAccount()
+    private fun unlinkTwitterAccount() {
+        if ((requireActivity() as MainActivity).networkStatus == ConnectivityObserver.Status.AVAILABLE) {
+            viewModel.unlinkTwitterAccount()
+        } else {
+            snackbar = showUnavailableNetworkConnectionError(
+                requireContext(), requireView()
+            ) { unlinkTwitterAccount() }
+            Timber.e("unlinkTwitterAccount Error: Offline")
+        }
+    }
 
     private fun unlinkTwitterAccountObserver() =
         viewModel.unlinkTwitterAccountLiveData.observe(viewLifecycleOwner) { responseEvent ->
@@ -316,9 +334,7 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
                         response.message?.asString(requireContext())?.let {
                             snackbar = when {
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
-                                    showNetworkConnectionError(
-                                        requireContext(), requireView()
-                                    ) { unlinkGoogleAccount() }
+                                    showNetworkFailureError(requireContext(), requireView())
                                 }
                                 it.contains(ERROR_FIREBASE_403) -> {
                                     show403Error(requireContext(), requireView())
@@ -337,14 +353,21 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
         }
 
     private fun checkPendingLinkTwitterAccountAuthResult() {
-        showTwitterLoadingAnimation()
+        if ((requireActivity() as MainActivity).networkStatus == ConnectivityObserver.Status.AVAILABLE) {
+            showTwitterLoadingAnimation()
 
-        val pendingAuthResult = firebaseAuth.pendingAuthResult
+            val pendingAuthResult = firebaseAuth.pendingAuthResult
 
-        if (pendingAuthResult != null) {
-            pendingLinkTwitterAccountAuthResult(pendingAuthResult)
+            if (pendingAuthResult != null) {
+                pendingLinkTwitterAccountAuthResult(pendingAuthResult)
+            } else {
+                linkTwitterAccount()
+            }
         } else {
-            linkTwitterAccount()
+            snackbar = showUnavailableNetworkConnectionError(
+                requireContext(), requireView()
+            ) { checkPendingLinkTwitterAccountAuthResult() }
+            Timber.e("checkPendingLinkTwitterAccountAuthResult Error: Offline")
         }
     }
 
@@ -379,9 +402,7 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
                 } else {
                     snackbar = when {
                         message.contains(ERROR_TWITTER_O_AUTH_PROVIDER_NETWORK_CONNECTION) -> {
-                            showNetworkConnectionError(requireContext(), requireView()) {
-                                checkPendingLinkTwitterAccountAuthResult()
-                            }
+                            showNetworkFailureError(requireContext(), requireView())
                         }
                         message.contains(
                             ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIALS
@@ -426,9 +447,7 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
                             } else {
                                 snackbar = when {
                                     it.contains(ERROR_NETWORK_CONNECTION) -> {
-                                        showNetworkConnectionError(
-                                            requireContext(), requireView()
-                                        ) { unlinkGoogleAccount() }
+                                        showNetworkFailureError(requireContext(), requireView())
                                     }
                                     it.contains(ERROR_FIREBASE_403) -> {
                                         show403Error(requireContext(), requireView())
@@ -462,7 +481,16 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
         }
     }
 
-    private fun unlinkFacebookAccount() = viewModel.unlinkFacebookAccount()
+    private fun unlinkFacebookAccount() {
+        if ((requireActivity() as MainActivity).networkStatus == ConnectivityObserver.Status.AVAILABLE) {
+            viewModel.unlinkFacebookAccount()
+        } else {
+            snackbar = showUnavailableNetworkConnectionError(
+                requireContext(), requireView()
+            ) { unlinkFacebookAccount() }
+            Timber.e("unlinkFacebookAccount Error: Offline")
+        }
+    }
 
     private fun unlinkFacebookAccountObserver() =
         viewModel.unlinkFacebookAccountLiveData.observe(viewLifecycleOwner) { responseEvent ->
@@ -479,9 +507,7 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
                         response.message?.asString(requireContext())?.let {
                             snackbar = when {
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
-                                    showNetworkConnectionError(
-                                        requireContext(), requireView()
-                                    ) { unlinkGoogleAccount() }
+                                    showNetworkFailureError(requireContext(), requireView())
                                 }
                                 it.contains(ERROR_FIREBASE_403) -> {
                                     show403Error(requireContext(), requireView())
@@ -500,6 +526,17 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
         }
 
     private fun linkFacebookAccount() {
+        if ((requireActivity() as MainActivity).networkStatus == ConnectivityObserver.Status.AVAILABLE) {
+            launchFacebookLoginManager()
+        } else {
+            snackbar = showUnavailableNetworkConnectionError(
+                requireContext(), requireView()
+            ) { linkFacebookAccount() }
+            Timber.e("linkFacebookAccount Error: Offline")
+        }
+    }
+
+    private fun launchFacebookLoginManager() {
         showFacebookLoadingAnimation()
 
         val callbackManager = CallbackManager.Factory.create()
@@ -514,13 +551,13 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
 
             override fun onCancel() {
                 hideFacebookLoadingAnimation()
-                Timber.i("linkFacebookAccount canceled.")
+                Timber.i("launchFacebookLoginManager canceled.")
             }
 
             override fun onError(error: FacebookException) {
                 hideFacebookLoadingAnimation()
                 snackbar = showSomethingWentWrongError(requireContext(), requireView())
-                Timber.e("linkFacebookAccount Callback Exception: ${error.message}")
+                Timber.e("launchFacebookLoginManager Callback Exception: ${error.message}")
             }
         })
     }
@@ -539,9 +576,7 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
                         response.message?.asString(requireContext())?.let {
                             snackbar = when {
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
-                                    showNetworkConnectionError(
-                                        requireContext(), requireView()
-                                    ) { unlinkGoogleAccount() }
+                                    showNetworkFailureError(requireContext(), requireView())
                                 }
                                 it.contains(ERROR_FIREBASE_403) -> {
                                     show403Error(requireContext(), requireView())

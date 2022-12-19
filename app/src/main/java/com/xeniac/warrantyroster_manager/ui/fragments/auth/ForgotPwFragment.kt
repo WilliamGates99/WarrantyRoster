@@ -16,6 +16,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentForgotPwBinding
+import com.xeniac.warrantyroster_manager.domain.repository.ConnectivityObserver
 import com.xeniac.warrantyroster_manager.ui.viewmodels.ForgotPwViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_ACCOUNT_NOT_FOUND
@@ -29,10 +30,12 @@ import com.xeniac.warrantyroster_manager.utils.Resource
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.show403Error
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showActionSnackbarError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseDeviceBlockedError
-import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkConnectionError
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showUnavailableNetworkConnectionError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkFailureError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNormalSnackbarError
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showSomethingWentWrongError
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 import java.util.*
 
 @AndroidEntryPoint
@@ -140,9 +143,16 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
             .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(requireView().applicationWindowToken, 0)
 
-        val email = binding.tiEditEmail.text.toString().trim().lowercase(Locale.US)
+        if ((requireParentFragment() as AuthFragment).networkStatus == ConnectivityObserver.Status.AVAILABLE) {
+            val email = binding.tiEditEmail.text.toString().trim().lowercase(Locale.US)
 
-        viewModel.validateForgotPwInputs(email)
+            viewModel.validateForgotPwInputs(email)
+        } else {
+            snackbar = showUnavailableNetworkConnectionError(
+                requireContext(), requireView()
+            ) { validateResetPasswordInputs() }
+            Timber.e("validateResetPasswordInputs Error: Offline")
+        }
     }
 
     private fun forgotPwObserver() =
@@ -171,9 +181,9 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
                                         requireContext().getString(R.string.forgot_pw_error_email)
                                 }
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
-                                    snackbar = showNetworkConnectionError(
+                                    snackbar = showNetworkFailureError(
                                         requireContext(), requireView()
-                                    ) { validateResetPasswordInputs() }
+                                    )
                                 }
                                 it.contains(ERROR_FIREBASE_403) -> {
                                     snackbar = show403Error(requireContext(), requireView())
@@ -200,7 +210,7 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
                                     snackbar = showNormalSnackbarError(requireView(), message)
                                 }
                                 else -> {
-                                    snackbar = showNetworkFailureError(
+                                    snackbar = showSomethingWentWrongError(
                                         requireContext(), requireView()
                                     )
                                 }

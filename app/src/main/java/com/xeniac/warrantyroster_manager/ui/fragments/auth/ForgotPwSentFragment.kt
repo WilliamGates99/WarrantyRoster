@@ -11,6 +11,7 @@ import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentForgotPwSentBinding
+import com.xeniac.warrantyroster_manager.domain.repository.ConnectivityObserver
 import com.xeniac.warrantyroster_manager.ui.viewmodels.ForgotPwViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
@@ -19,14 +20,16 @@ import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_TIMER_IS_NOT_ZERO
 import com.xeniac.warrantyroster_manager.utils.Resource
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.show403Error
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseDeviceBlockedError
-import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkConnectionError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkFailureError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNormalSnackbarError
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showSomethingWentWrongError
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showUnavailableNetworkConnectionError
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.text.DecimalFormat
 import javax.inject.Inject
 
@@ -91,7 +94,16 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
         resendResetPasswordEmail()
     }
 
-    private fun resendResetPasswordEmail() = viewModel.sendResetPasswordEmail(email)
+    private fun resendResetPasswordEmail() {
+        if ((requireParentFragment() as AuthFragment).networkStatus == ConnectivityObserver.Status.AVAILABLE) {
+            viewModel.sendResetPasswordEmail(email)
+        } else {
+            snackbar = showUnavailableNetworkConnectionError(
+                requireContext(), requireView()
+            ) { resendResetPasswordEmail() }
+            Timber.e("resendResetPasswordEmail Error: Offline")
+        }
+    }
 
     private fun forgotPwSentObserver() =
         viewModel.forgotPwLiveData.observe(viewLifecycleOwner) { responseEvent ->
@@ -107,9 +119,7 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
                         response.message?.asString(requireContext())?.let {
                             snackbar = when {
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
-                                    showNetworkConnectionError(
-                                        requireContext(), requireView()
-                                    ) { resendResetPasswordEmail() }
+                                    showNetworkFailureError(requireContext(), requireView())
                                 }
                                 it.contains(ERROR_FIREBASE_403) -> {
                                     show403Error(requireContext(), requireView())
@@ -126,7 +136,7 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
                                     )
                                     showNormalSnackbarError(requireView(), message)
                                 }
-                                else -> showNetworkFailureError(requireContext(), requireView())
+                                else -> showSomethingWentWrongError(requireContext(), requireView())
                             }
                         }
                     }

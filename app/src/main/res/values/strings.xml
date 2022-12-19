@@ -3,7 +3,7 @@
 
 
     <string name="error_something_went_wrong">Something went wrong. Please try again later.</string>
-    <string name="error_network_connection">Unable to connect to the internet.</string>
+    <string name="error_network_connection_unavailable">Unable to connect to the internet.</string>
     <string name="error_network_failure">You\'re having network issues. Please try again later.</string>
     <string name="error_firebase_403">This service is not available in your region. Please consider changing your IP address by using a VPN.</string>
     <string name="error_firebase_device_blocked">We have blocked all requests from this device due to unusual activity. Please try again later.</string>

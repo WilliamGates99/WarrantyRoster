@@ -1,6 +1,7 @@
 package com.xeniac.warrantyroster_manager.ui.fragments.auth
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.DrawableRes
@@ -8,16 +9,22 @@ import androidx.annotation.StringRes
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import coil.load
 import com.xeniac.warrantyroster_manager.R
+import com.xeniac.warrantyroster_manager.data.repository.NetworkConnectivityObserver
 import com.xeniac.warrantyroster_manager.databinding.FragmentAuthBinding
+import com.xeniac.warrantyroster_manager.domain.repository.ConnectivityObserver
 import com.xeniac.warrantyroster_manager.ui.LandingActivity
 import com.xeniac.warrantyroster_manager.ui.viewmodels.LandingViewModel
 import com.xeniac.warrantyroster_manager.utils.AlertDialogHelper
 import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_INDEX_ENGLISH_GREAT_BRITAIN
 import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_INDEX_ENGLISH_UNITED_STATES
 import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_INDEX_PERSIAN_IRAN
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import timber.log.Timber
 
 class AuthFragment : Fragment(R.layout.fragment_auth) {
 
@@ -26,12 +33,16 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
 
     lateinit var viewModel: LandingViewModel
 
+    private lateinit var connectivityObserver: ConnectivityObserver
+    lateinit var networkStatus: ConnectivityObserver.Status
+
     private var currentLocaleIndex = 0
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentAuthBinding.bind(view)
         viewModel = ViewModelProvider(requireActivity())[LandingViewModel::class.java]
+        connectivityObserver = NetworkConnectivityObserver(requireActivity())
 
         subscribeToObservers()
         getCurrentLanguage()
@@ -45,8 +56,21 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
     }
 
     private fun subscribeToObservers() {
+        networkConnectivityObserver()
         currentAppLocaleObserver()
         changeCurrentLocaleObserver()
+    }
+
+    private fun networkConnectivityObserver() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            connectivityObserver.observe().onEach {
+                networkStatus = it
+                Timber.i("Network connectivity status inside of observer is $it")
+            }.launchIn(lifecycleScope)
+        } else {
+            networkStatus = ConnectivityObserver.Status.AVAILABLE
+            Timber.i("Network connectivity status outside of observer is $networkStatus")
+        }
     }
 
     private fun getCurrentLanguage() = viewModel.getCurrentLanguage()

@@ -7,7 +7,6 @@ import android.text.TextUtils
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.core.text.HtmlCompat
 import androidx.core.text.HtmlCompat.FROM_HTML_MODE_LEGACY
@@ -29,6 +28,7 @@ import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
 import com.xeniac.warrantyroster_manager.utils.Resource
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseDeviceBlockedError
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showSomethingWentWrongError
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -116,8 +116,9 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
                                     )
                                 }
                                 else -> {
-                                    binding.tvNetworkError.text =
-                                        requireContext().getString(R.string.error_network_connection)
+                                    binding.tvNetworkError.text = requireContext().getString(
+                                        R.string.error_network_failure
+                                    )
                                     showNetworkError()
                                 }
                             }
@@ -158,8 +159,9 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
                                     )
                                 }
                                 else -> {
-                                    binding.tvNetworkError.text =
-                                        requireContext().getString(R.string.error_network_connection)
+                                    binding.tvNetworkError.text = requireContext().getString(
+                                        R.string.error_network_failure
+                                    )
                                     showNetworkError()
                                 }
                             }
@@ -219,9 +221,11 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
                         response.message?.asString(requireContext())?.let {
                             when {
                                 it.contains(ERROR_EMPTY_SEARCH_RESULT_LIST) -> showEmptySearchResultListError()
-                                else -> Toast.makeText(
-                                    requireContext(), "Something went wrong!", Toast.LENGTH_SHORT
-                                ).show()
+                                else -> {
+                                    snackbar = showSomethingWentWrongError(
+                                        requireContext(), requireView()
+                                    )
+                                }
                             }
                         }
                     }

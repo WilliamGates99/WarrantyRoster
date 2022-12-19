@@ -21,6 +21,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.data.remote.models.Category
 import com.xeniac.warrantyroster_manager.databinding.FragmentAddWarrantyBinding
+import com.xeniac.warrantyroster_manager.domain.repository.ConnectivityObserver
 import com.xeniac.warrantyroster_manager.ui.MainActivity
 import com.xeniac.warrantyroster_manager.ui.viewmodels.WarrantyViewModel
 import com.xeniac.warrantyroster_manager.utils.CoilHelper.loadCategoryImage
@@ -45,10 +46,12 @@ import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_ADD_WARRA
 import com.xeniac.warrantyroster_manager.utils.Resource
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.show403Error
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseDeviceBlockedError
-import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkConnectionError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkFailureError
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showSomethingWentWrongError
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showUnavailableNetworkConnectionError
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.text.DecimalFormat
 import java.util.*
 import javax.inject.Inject
@@ -459,23 +462,27 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
     private fun validateWarrantyInputs() {
         val inputMethodManager = requireContext()
             .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.hideSoftInputFromWindow(
-            requireView().applicationWindowToken,
-            0
-        )
+        inputMethodManager.hideSoftInputFromWindow(requireView().applicationWindowToken, 0)
 
-        val title = binding.tiEditTitle.text.toString().trim()
-        val brand = binding.tiEditBrand.text?.toString()?.trim()
-        val model = binding.tiEditModel.text?.toString()?.trim()
-        val serialNumber = binding.tiEditSerial.text?.toString()?.trim()
-        val isLifetime = binding.cbLifetime.isChecked
-        val description = binding.tiEditDescription.text?.toString()?.trim()
-        val categoryId = selectedCategory?.id ?: "10"
+        if ((requireActivity() as MainActivity).networkStatus == ConnectivityObserver.Status.AVAILABLE) {
+            val title = binding.tiEditTitle.text.toString().trim()
+            val brand = binding.tiEditBrand.text?.toString()?.trim()
+            val model = binding.tiEditModel.text?.toString()?.trim()
+            val serialNumber = binding.tiEditSerial.text?.toString()?.trim()
+            val isLifetime = binding.cbLifetime.isChecked
+            val description = binding.tiEditDescription.text?.toString()?.trim()
+            val categoryId = selectedCategory?.id ?: "10"
 
-        viewModel.validateAddWarrantyInputs(
-            title, brand, model, serialNumber, isLifetime, startingDateInput, expiryDateInput,
-            description, categoryId, selectedStartingDateInMillis, selectedExpiryDateInMillis
-        )
+            viewModel.validateAddWarrantyInputs(
+                title, brand, model, serialNumber, isLifetime, startingDateInput, expiryDateInput,
+                description, categoryId, selectedStartingDateInMillis, selectedExpiryDateInMillis
+            )
+        } else {
+            snackbar = showUnavailableNetworkConnectionError(
+                requireContext(), requireView()
+            ) { validateWarrantyInputs() }
+            Timber.e("validateWarrantyInputs Error: Offline")
+        }
     }
 
     private fun addWarrantyObserver() =
@@ -505,9 +512,9 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
                                 it.contains(ERROR_INPUT_BLANK_EXPIRY_DATE) -> binding.tiLayoutDateExpiry.requestFocus()
                                 it.contains(ERROR_INPUT_INVALID_STARTING_DATE) -> showDateError()
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
-                                    snackbar = showNetworkConnectionError(
+                                    snackbar = showNetworkFailureError(
                                         requireContext(), requireView()
-                                    ) { validateWarrantyInputs() }
+                                    )
                                 }
                                 it.contains(ERROR_FIREBASE_403) -> {
                                     snackbar = show403Error(requireContext(), requireView())
@@ -518,7 +525,7 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
                                     )
                                 }
                                 else -> {
-                                    snackbar = showNetworkFailureError(
+                                    snackbar = showSomethingWentWrongError(
                                         requireContext(), requireView()
                                     )
                                 }
