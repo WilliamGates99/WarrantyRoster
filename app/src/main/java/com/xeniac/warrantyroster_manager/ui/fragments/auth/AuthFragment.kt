@@ -34,7 +34,7 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
     lateinit var viewModel: LandingViewModel
 
     private lateinit var connectivityObserver: ConnectivityObserver
-    lateinit var networkStatus: ConnectivityObserver.Status
+    var networkStatus: ConnectivityObserver.Status = ConnectivityObserver.Status.AVAILABLE
 
     private var currentLocaleIndex = 0
 
@@ -67,9 +67,6 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
                 networkStatus = it
                 Timber.i("Network connectivity status inside of observer is $it")
             }.launchIn(lifecycleScope)
-        } else {
-            networkStatus = ConnectivityObserver.Status.AVAILABLE
-            Timber.i("Network connectivity status outside of observer is $networkStatus")
         }
     }
 

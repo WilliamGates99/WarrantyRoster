@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity(), MaxAdListener {
     private lateinit var navController: NavController
 
     private lateinit var connectivityObserver: ConnectivityObserver
-    lateinit var networkStatus: ConnectivityObserver.Status
+    var networkStatus: ConnectivityObserver.Status = ConnectivityObserver.Status.AVAILABLE
 
     private lateinit var reviewManager: ReviewManager
     var reviewInfo: ReviewInfo? = null
@@ -100,9 +100,6 @@ class MainActivity : AppCompatActivity(), MaxAdListener {
                 networkStatus = it
                 Timber.i("Network connectivity status inside of observer is $it")
             }.launchIn(lifecycleScope)
-        } else {
-            networkStatus = ConnectivityObserver.Status.AVAILABLE
-            Timber.i("Network connectivity status outside of observer is $networkStatus")
         }
     }
 
