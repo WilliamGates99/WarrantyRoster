@@ -31,6 +31,7 @@ import com.xeniac.warrantyroster_manager.BuildConfig
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentLoginBinding
 import com.xeniac.warrantyroster_manager.domain.repository.ConnectivityObserver
+import com.xeniac.warrantyroster_manager.ui.LandingActivity
 import com.xeniac.warrantyroster_manager.ui.MainActivity
 import com.xeniac.warrantyroster_manager.ui.viewmodels.LoginViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
@@ -224,7 +225,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(requireView().applicationWindowToken, 0)
 
-        if ((requireParentFragment() as AuthFragment).networkStatus == ConnectivityObserver.Status.AVAILABLE) {
+        if ((requireActivity() as LandingActivity).networkStatus == ConnectivityObserver.Status.AVAILABLE) {
             val email = binding.tiEditEmail.text.toString().trim().lowercase(Locale.US)
             val password = binding.tiEditPassword.text.toString().trim()
 
@@ -313,7 +314,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     }
 
     private fun loginWithGoogleAccount() {
-        if ((requireParentFragment() as AuthFragment).networkStatus == ConnectivityObserver.Status.AVAILABLE) {
+        if ((requireActivity() as LandingActivity).networkStatus == ConnectivityObserver.Status.AVAILABLE) {
             launchGoogleSignInClient()
         } else {
             snackbar = showUnavailableNetworkConnectionError(
@@ -418,7 +419,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     }
 
     private fun checkPendingLinkTwitterAccountAuthResult() {
-        if ((requireParentFragment() as AuthFragment).networkStatus == ConnectivityObserver.Status.AVAILABLE) {
+        if ((requireActivity() as LandingActivity).networkStatus == ConnectivityObserver.Status.AVAILABLE) {
             showTwitterLoadingAnimation()
 
             val pendingAuthResult = firebaseAuth.pendingAuthResult
@@ -532,7 +533,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     }
 
     private fun loginWithFacebookAccount() {
-        if ((requireParentFragment() as AuthFragment).networkStatus == ConnectivityObserver.Status.AVAILABLE) {
+        if ((requireActivity() as LandingActivity).networkStatus == ConnectivityObserver.Status.AVAILABLE) {
             launchFacebookLoginManager()
         } else {
             snackbar = showUnavailableNetworkConnectionError(

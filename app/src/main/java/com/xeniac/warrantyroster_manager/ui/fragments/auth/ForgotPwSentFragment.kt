@@ -12,6 +12,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentForgotPwSentBinding
 import com.xeniac.warrantyroster_manager.domain.repository.ConnectivityObserver
+import com.xeniac.warrantyroster_manager.ui.LandingActivity
 import com.xeniac.warrantyroster_manager.ui.viewmodels.ForgotPwViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
@@ -95,7 +96,7 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
     }
 
     private fun resendResetPasswordEmail() {
-        if ((requireParentFragment() as AuthFragment).networkStatus == ConnectivityObserver.Status.AVAILABLE) {
+        if ((requireActivity() as LandingActivity).networkStatus == ConnectivityObserver.Status.AVAILABLE) {
             viewModel.sendResetPasswordEmail(email)
         } else {
             snackbar = showUnavailableNetworkConnectionError(
