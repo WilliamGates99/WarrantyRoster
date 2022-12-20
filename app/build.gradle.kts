@@ -276,7 +276,7 @@ dependencies {
     // Firebase Auth
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.android.gms:play-services-auth:20.4.0")
-    implementation("com.facebook.android:facebook-login:15.1.0")
+    implementation("com.facebook.android:facebook-login:15.2.0")
 
     // Firebase Firestore, Storage
     implementation("com.google.firebase:firebase-firestore-ktx")
@@ -301,7 +301,7 @@ dependencies {
     // AppLovin Libraries
     implementation("com.applovin:applovin-sdk:11.6.0")
     implementation("com.google.android.gms:play-services-ads-identifier:18.0.1")
-    implementation("com.applovin.mediation:google-adapter:21.3.0.2")
+    implementation("com.applovin.mediation:google-adapter:21.4.0.0")
 
     // Google AdMob Library
     implementation("com.google.android.gms:play-services-ads:21.3.0")
