@@ -244,6 +244,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_24dp"
+                android:ellipsize="end"
                 android:fontFamily="@font/localized_regular"
                 android:gravity="center"
                 android:maxLines="1"
@@ -251,13 +252,14 @@
                 android:textAlignment="gravity"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_14sp"
+                app:layout_constrainedWidth="true"
                 app:layout_constraintBaseline_toBaselineOf="@+id/btn_login"
                 app:layout_constraintEnd_toStartOf="@+id/btn_login"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toStartOf="parent" />
 
-            <!-- MARGIN_BOTTOM: 19 + 5 = 24DP -->
+            <!-- MARGIN_BOTTOM: 7 + 5 = 12DP -->
             <!-- MARGIN_END: 13 + 5 = 18DP -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_login"
@@ -265,10 +267,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/margin_13dp"
-                android:layout_marginBottom="@dimen/margin_19dp"
+                android:layout_marginBottom="@dimen/margin_7dp"
                 android:gravity="center"
                 android:text="@string/register_btn_login"
                 android:textAlignment="gravity"
+                app:layout_constrainedWidth="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/tv_login_title" />
