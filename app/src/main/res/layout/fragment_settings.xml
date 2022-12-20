@@ -9,20 +9,8 @@
             type="String" />
 
         <variable
-            name="verificationBtnBackgroundTint"
-            type="android.content.res.ColorStateList" />
-
-        <variable
-            name="isVerificationBtnClickable"
+            name="isUserVerified"
             type="Boolean" />
-
-        <variable
-            name="verificationBtnText"
-            type="String" />
-
-        <variable
-            name="verificationBtnTextColor"
-            type="Integer" />
 
         <variable
             name="currentLanguage"
@@ -106,6 +94,7 @@
                             android:layout_height="@dimen/height_26dp"
                             android:layout_marginStart="@dimen/margin_12dp"
                             android:layout_marginTop="@dimen/margin_12dp"
+                            android:background="@{isUserVerified ? @color/green10 : @color/red10}"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             app:shapeAppearance="@style/Theme.WarrantyRoster.ImageViewShapeAppearance.Settings" />
@@ -148,14 +137,14 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="@dimen/margin_12dp"
-                            android:backgroundTint="@{verificationBtnBackgroundTint}"
-                            android:clickable="@{isVerificationBtnClickable}"
+                            android:backgroundTint="@{isUserVerified ? @color/green20 : @color/blue20}"
+                            android:clickable="@{isUserVerified ? false : true}"
                             android:gravity="center"
                             android:minWidth="@dimen/elevation_10dp"
                             android:minHeight="@dimen/height_18dp"
-                            android:text="@{verificationBtnText}"
+                            android:text="@{isUserVerified ? @string/settings_btn_account_verified : @string/settings_btn_account_verify}"
                             android:textAlignment="gravity"
-                            android:textColor="@{verificationBtnTextColor}"
+                            android:textColor="@{isUserVerified ? @color/green : @color/blue}"
                             app:layout_constraintBottom_toBottomOf="@+id/iv_account_email"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="@+id/iv_account_email"

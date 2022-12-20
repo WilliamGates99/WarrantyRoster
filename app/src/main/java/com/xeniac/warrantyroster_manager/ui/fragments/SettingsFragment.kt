@@ -6,7 +6,6 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -168,31 +167,13 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
     private fun setAccountDetails(email: String, isEmailVerified: Boolean) {
         binding.apply {
             userEmail = email
-            isVerificationBtnClickable = !isEmailVerified
+            isUserVerified = isEmailVerified
 
             if (isEmailVerified) {
-                verificationBtnBackgroundTint = ContextCompat
-                    .getColorStateList(requireContext(), R.color.green20)
-                verificationBtnText = requireContext()
-                    .getString(R.string.settings_btn_account_verified)
-                verificationBtnTextColor =
-                    ContextCompat.getColor(requireContext(), R.color.green)
-                ivAccountEmail.setBackgroundColor(
-                    ContextCompat.getColor(requireContext(), R.color.green10)
-                )
                 lavAccountVerification.speed = 0.60f
                 lavAccountVerification.repeatCount = 0
                 lavAccountVerification.setAnimation(R.raw.anim_account_verified)
             } else {
-                verificationBtnBackgroundTint = ContextCompat
-                    .getColorStateList(requireContext(), R.color.blue20)
-                verificationBtnText = requireContext()
-                    .getString(R.string.settings_btn_account_verify)
-                verificationBtnTextColor =
-                    ContextCompat.getColor(requireContext(), R.color.blue)
-                ivAccountEmail.setBackgroundColor(
-                    ContextCompat.getColor(requireContext(), R.color.red10)
-                )
                 lavAccountVerification.speed = 1.00f
                 lavAccountVerification.repeatCount = LottieDrawable.INFINITE
                 lavAccountVerification.setAnimation(R.raw.anim_account_not_verified)
