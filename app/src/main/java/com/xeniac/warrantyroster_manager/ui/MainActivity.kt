@@ -122,7 +122,6 @@ class MainActivity : AppCompatActivity(), MaxAdListener {
         NavigationUI.setupWithNavController(binding.bnv, navController)
         binding.bnv.setOnItemReselectedListener { /* NO-OP */ }
 
-        // TODO FIX NOT HIDING NAVBAR ISSUE
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.warrantiesFragment -> showNavBar()
