@@ -136,6 +136,27 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!-- MARGIN_TOP: 3 + 5 = 8DP -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_forgot_pw"
+                style="@style/Theme.WarrantyRoster.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_8dp"
+                android:layout_marginTop="@dimen/margin_3dp"
+                android:fontFamily="@font/localized_light"
+                android:text="@string/login_btn_forgot_pw"
+                android:textAlignment="center"
+                android:textColor="@color/red"
+                android:textSize="@dimen/text_size_12sp"
+                app:layout_constrainedWidth="true"
+                app:layout_constraintBottom_toTopOf="@+id/btn_login"
+                app:layout_constraintEnd_toEndOf="@id/ti_layout_password"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toStartOf="@+id/ti_layout_password"
+                app:layout_constraintTop_toBottomOf="@+id/ti_layout_password" />
+
+            <!-- MARGIN_TOP: 19 + 5 = 24DP -->
             <!-- MARGIN_BOTTOM: 19 + 5 = 24DP -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_login"
@@ -143,14 +164,14 @@
                 android:layout_width="@dimen/width_0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_24dp"
-                android:layout_marginTop="@dimen/margin_24dp"
+                android:layout_marginTop="@dimen/margin_19dp"
                 android:layout_marginEnd="@dimen/margin_18dp"
                 android:layout_marginBottom="@dimen/margin_19dp"
                 android:text="@string/login_btn_login"
                 app:layout_constraintBottom_toTopOf="@+id/btn_register"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ti_layout_password" />
+                app:layout_constraintTop_toBottomOf="@+id/btn_forgot_pw" />
 
             <com.google.android.material.progressindicator.CircularProgressIndicator
                 android:id="@+id/cpi_login"
@@ -168,49 +189,36 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_24dp"
+                android:ellipsize="end"
                 android:fontFamily="@font/localized_regular"
                 android:maxLines="1"
                 android:text="@string/login_text_register_title"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_14sp"
-                app:layout_constraintBaseline_toBaselineOf="@id/btn_register"
+                app:layout_constrainedWidth="true"
+                app:layout_constraintBaseline_toBaselineOf="@+id/btn_register"
+                app:layout_constraintEnd_toStartOf="@+id/btn_register"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <!-- MARGIN_BOTTOM: 7 + 5 = 12DP -->
+            <!-- MARGIN_END: 13 + 5 = 18DP -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_register"
                 style="@style/Theme.WarrantyRoster.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_19dp"
+                android:layout_marginEnd="@dimen/margin_13dp"
                 android:layout_marginBottom="@dimen/margin_7dp"
                 android:gravity="center"
                 android:text="@string/login_btn_register"
                 android:textAlignment="gravity"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tv_register_title" />
-
-            <!-- MARGIN_END: 13 + 5 = 18DP -->
-            <!-- MARGIN_START: 3 + 5 = 8DP -->
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_forgot_pw"
-                style="@style/Theme.WarrantyRoster.TextButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_3dp"
-                android:layout_marginEnd="@dimen/margin_13dp"
-                android:fontFamily="@font/localized_light"
-                android:gravity="center"
-                android:text="@string/login_btn_forgot_pw"
-                android:textAlignment="gravity"
-                android:textColor="@color/red"
-                android:textSize="@dimen/text_size_12sp"
                 app:layout_constrainedWidth="true"
-                app:layout_constraintBaseline_toBaselineOf="@+id/btn_register"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1"
-                app:layout_constraintStart_toEndOf="@+id/btn_register" />
+                app:layout_constraintStart_toEndOf="@+id/tv_register_title" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
