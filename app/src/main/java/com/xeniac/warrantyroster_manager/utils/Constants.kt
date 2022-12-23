@@ -87,9 +87,11 @@ object Constants {
     const val ERROR_INPUT_INVALID_STARTING_DATE = "Invalid Starting Date"
 
     // Response Errors
-    const val ERROR_TWITTER_O_AUTH_PROVIDER_CANCELED = "The web operation was canceled by the user"
+    const val ERROR_GOOGLE_SIGN_IN_API_NOT_AVAILABLE =
+        "Auth.GOOGLE_SIGN_IN_API is not available on this device"
     const val ERROR_GOOGLE_SIGN_IN_CLIENT_CANCELED = "12501"
     const val ERROR_GOOGLE_SIGN_IN_CLIENT_OFFLINE = "7"
+    const val ERROR_TWITTER_O_AUTH_PROVIDER_CANCELED = "The web operation was canceled by the user"
     const val ERROR_TWITTER_O_AUTH_PROVIDER_NETWORK_CONNECTION = "An internal error has occurred"
     const val ERROR_NETWORK_CONNECTION =
         "A network error (such as timeout, interrupted connection or unreachable host) has occurred"
