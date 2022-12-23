@@ -8,7 +8,6 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
@@ -16,31 +15,49 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.facebook.CallbackManager
+import com.facebook.FacebookCallback
+import com.facebook.FacebookException
+import com.facebook.login.LoginManager
+import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.tasks.Task
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.AuthResult
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.OAuthProvider
 import com.xeniac.warrantyroster_manager.BuildConfig
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentLoginBinding
+import com.xeniac.warrantyroster_manager.domain.repository.ConnectivityObserver
+import com.xeniac.warrantyroster_manager.ui.LandingActivity
 import com.xeniac.warrantyroster_manager.ui.MainActivity
 import com.xeniac.warrantyroster_manager.ui.viewmodels.LoginViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIALS
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_ACCOUNT_NOT_FOUND
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_CREDENTIALS
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_GOOGLE_SIGN_IN_CLIENT_CANCELED
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_GOOGLE_SIGN_IN_CLIENT_OFFLINE
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_EMAIL
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_BLANK_PASSWORD
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_INPUT_EMAIL_INVALID
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_TWITTER_O_AUTH_PROVIDER_CANCELED
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_TWITTER_O_AUTH_PROVIDER_NETWORK_CONNECTION
+import com.xeniac.warrantyroster_manager.utils.Constants.FIREBASE_AUTH_PROVIDER_ID_TWITTER
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_LOGIN_EMAIL
 import com.xeniac.warrantyroster_manager.utils.Constants.SAVE_INSTANCE_LOGIN_PASSWORD
 import com.xeniac.warrantyroster_manager.utils.Resource
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.show403Error
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showActionSnackbarError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseDeviceBlockedError
-import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkConnectionError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkFailureError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNormalSnackbarError
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showSomethingWentWrongError
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showUnavailableNetworkConnectionError
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -48,6 +65,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 import java.util.*
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class LoginFragment : Fragment(R.layout.fragment_login) {
@@ -56,6 +74,11 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     val binding get() = _binding!!
 
     lateinit var viewModel: LoginViewModel
+
+    @Inject
+    lateinit var firebaseAuth: FirebaseAuth
+
+    private lateinit var currentAppLanguage: String
 
     var snackbar: Snackbar? = null
 
@@ -67,6 +90,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         textInputsBackgroundColor()
         textInputsStrokeColor()
         subscribeToObservers()
+        getCurrentAppLanguage()
         forgotPwOnClick()
         registerOnClick()
         loginOnClick()
@@ -154,9 +178,21 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     }
 
     private fun subscribeToObservers() {
-        loginObserver()
-        loginWithGoogleObserver()
+        currentAppLanguageObserver()
+        loginWithEmailObserver()
+        loginWithGoogleAccountObserver()
+        loginWithTwitterAccountObserver()
+        loginWithFacebookAccountObserver()
     }
+
+    private fun getCurrentAppLanguage() = viewModel.getCurrentAppLanguage()
+
+    private fun currentAppLanguageObserver() =
+        viewModel.currentLanguageLiveData.observe(viewLifecycleOwner) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { language ->
+                currentAppLanguage = language
+            }
+        }
 
     private fun forgotPwOnClick() = binding.btnForgotPw.setOnClickListener {
         navigateToForgotPw()
@@ -173,42 +209,46 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         .navigate(LoginFragmentDirections.actionLoginFragmentToRegisterFragment())
 
     private fun loginOnClick() = binding.btnLogin.setOnClickListener {
-        validateLoginInputs()
+        validateLoginWithEmailInputs()
     }
 
     private fun loginActionDone() =
         binding.tiEditPassword.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                validateLoginInputs()
+                validateLoginWithEmailInputs()
             }
             false
         }
 
-    private fun validateLoginInputs() {
+    private fun validateLoginWithEmailInputs() {
         val inputMethodManager = requireContext()
             .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(requireView().applicationWindowToken, 0)
 
-        val email = binding.tiEditEmail.text.toString().trim().lowercase(Locale.US)
-        val password = binding.tiEditPassword.text.toString().trim()
+        if ((requireActivity() as LandingActivity).networkStatus == ConnectivityObserver.Status.AVAILABLE) {
+            val email = binding.tiEditEmail.text.toString().trim().lowercase(Locale.US)
+            val password = binding.tiEditPassword.text.toString().trim()
 
-        viewModel.validateLoginInputs(email, password)
+            viewModel.validateLoginWithEmailInputs(email, password)
+        } else {
+            snackbar = showUnavailableNetworkConnectionError(
+                requireContext(), requireView()
+            ) { validateLoginWithEmailInputs() }
+            Timber.e("validateLoginWithEmailInputs Error: Offline")
+        }
     }
 
-    private fun loginObserver() =
-        viewModel.loginLiveData.observe(viewLifecycleOwner) { responseEvent ->
+    private fun loginWithEmailObserver() =
+        viewModel.loginWithEmailLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
-                    is Resource.Loading -> showLoginLoadingAnimation()
+                    is Resource.Loading -> showLoginWithEmailLoadingAnimation()
                     is Resource.Success -> {
-                        hideLoginLoadingAnimation()
-                        requireActivity().apply {
-                            startActivity(Intent(this, MainActivity::class.java))
-                            finish()
-                        }
+                        hideLoginWithEmailLoadingAnimation()
+                        navigateToMainActivity()
                     }
                     is Resource.Error -> {
-                        hideLoginLoadingAnimation()
+                        hideLoginWithEmailLoadingAnimation()
                         response.message?.asString(requireContext())?.let {
                             when {
                                 it.contains(ERROR_INPUT_BLANK_EMAIL) -> {
@@ -227,9 +267,9 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                                         requireContext().getString(R.string.login_error_email)
                                 }
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
-                                    snackbar = showNetworkConnectionError(
+                                    snackbar = showNetworkFailureError(
                                         requireContext(), requireView()
-                                    ) { validateLoginInputs() }
+                                    )
                                 }
                                 it.contains(ERROR_FIREBASE_403) -> {
                                     snackbar = show403Error(requireContext(), requireView())
@@ -253,7 +293,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                                     )
                                 }
                                 else -> {
-                                    snackbar = showNetworkFailureError(
+                                    snackbar = showSomethingWentWrongError(
                                         requireContext(), requireView()
                                     )
                                 }
@@ -264,13 +304,32 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             }
         }
 
+    private fun navigateToMainActivity() = requireActivity().apply {
+        startActivity(Intent(this, MainActivity::class.java))
+        finish()
+    }
+
     private fun googleOnClick() = binding.btnGoogle.setOnClickListener {
-        launchGoogleSignInClient()
+        loginWithGoogleAccount()
+    }
+
+    private fun loginWithGoogleAccount() {
+        if ((requireActivity() as LandingActivity).networkStatus == ConnectivityObserver.Status.AVAILABLE) {
+            launchGoogleSignInClient()
+        } else {
+            snackbar = showUnavailableNetworkConnectionError(
+                requireContext(), requireView()
+            ) { loginWithGoogleAccount() }
+            Timber.e("loginWithGoogleAccount Error: Offline")
+        }
     }
 
     private fun launchGoogleSignInClient() = CoroutineScope(Dispatchers.Main).launch {
         try {
-            val options = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).apply {
+            showGoogleLoadingAnimation()
+            val options = GoogleSignInOptions.Builder(
+                GoogleSignInOptions.DEFAULT_SIGN_IN
+            ).apply {
                 requestIdToken(BuildConfig.GOOGLE_AUTH_SERVER_CLIENT_ID)
                 requestId()
                 requestEmail()
@@ -279,57 +338,74 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             val googleSignInClient = GoogleSignIn.getClient(requireContext(), options)
             googleSignInClient.signOut().await()
 
-            googleResultLauncher.launch(googleSignInClient.signInIntent)
+            loginWithGoogleAccountResultLauncher.launch(googleSignInClient.signInIntent)
         } catch (e: Exception) {
-            Timber.e("await exception: $e")
+            hideGoogleLoadingAnimation()
+            snackbar = showSomethingWentWrongError(requireContext(), requireView())
+            Timber.e("launchGoogleSignInClient Exception: ${e.message}")
         }
     }
 
-    private val googleResultLauncher = registerForActivityResult(
+    private val loginWithGoogleAccountResultLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         try {
             val account = GoogleSignIn.getSignedInAccountFromIntent(result.data).result
-            // Got an ID token from Google. Use it to authenticate with Firebase.
-            account?.let { viewModel.authenticateGoogleAccountWithFirebase(account) }
+            account?.let { viewModel.loginWithGoogleAccount(account) }
         } catch (e: Exception) {
-            Timber.e("googleResultLauncher Exception: ${e.message}")
+            hideGoogleLoadingAnimation()
+            e.message?.let {
+                when {
+                    it.contains(ERROR_GOOGLE_SIGN_IN_CLIENT_CANCELED) -> {
+                        /* NO-OP */
+                    }
+                    it.contains(ERROR_GOOGLE_SIGN_IN_CLIENT_OFFLINE) -> {
+                        snackbar = showUnavailableNetworkConnectionError(
+                            requireContext(), requireView()
+                        ) { loginWithGoogleAccount() }
+                    }
+                    else -> {
+                        snackbar = showSomethingWentWrongError(requireContext(), requireView())
+                    }
+                }
+                Timber.e("loginWithGoogleAccountResultLauncher Exception: $it")
+            }
         }
     }
 
-    private fun loginWithGoogleObserver() =
-        viewModel.loginWithGoogleLiveData.observe(viewLifecycleOwner) { responseEvent ->
+    private fun loginWithGoogleAccountObserver() =
+        viewModel.loginWithGoogleAccountLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
                     is Resource.Loading -> showGoogleLoadingAnimation()
                     is Resource.Success -> {
                         hideGoogleLoadingAnimation()
-                        requireActivity().apply {
-                            startActivity(Intent(this, MainActivity::class.java))
-                            finish()
-                        }
+                        navigateToMainActivity()
                     }
                     is Resource.Error -> {
                         hideGoogleLoadingAnimation()
                         response.message?.asString(requireContext())?.let {
-                            when {
+                            snackbar = when {
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
-                                    snackbar = showNetworkConnectionError(
-                                        requireContext(), requireView()
-                                    ) { validateLoginInputs() }
+                                    showNetworkFailureError(requireContext(), requireView())
                                 }
                                 it.contains(ERROR_FIREBASE_403) -> {
-                                    snackbar = show403Error(requireContext(), requireView())
+                                    show403Error(requireContext(), requireView())
                                 }
                                 it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
-                                    snackbar = showFirebaseDeviceBlockedError(
-                                        requireContext(), requireView()
-                                    )
+                                    showFirebaseDeviceBlockedError(requireContext(), requireView())
+                                }
+                                it.contains(
+                                    ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIALS
+                                ) -> {
+                                    showActionSnackbarError(
+                                        requireView(),
+                                        requireContext().getString(R.string.login_error_email_exists_with_different_credentials),
+                                        requireContext().getString(R.string.error_btn_confirm)
+                                    ) { snackbar?.dismiss() }
                                 }
                                 else -> {
-                                    snackbar = showNetworkFailureError(
-                                        requireContext(), requireView()
-                                    )
+                                    showSomethingWentWrongError(requireContext(), requireView())
                                 }
                             }
                         }
@@ -339,14 +415,202 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         }
 
     private fun twitterOnClick() = binding.btnTwitter.setOnClickListener {
-        Toast.makeText(requireContext(), "twitter", Toast.LENGTH_SHORT).show()
+        checkPendingLinkTwitterAccountAuthResult()
     }
+
+    private fun checkPendingLinkTwitterAccountAuthResult() {
+        if ((requireActivity() as LandingActivity).networkStatus == ConnectivityObserver.Status.AVAILABLE) {
+            showTwitterLoadingAnimation()
+
+            val pendingAuthResult = firebaseAuth.pendingAuthResult
+
+            if (pendingAuthResult != null) {
+                pendingLoginWithTwitterAccountAuthResult(pendingAuthResult)
+            } else {
+                loginWithTwitterAccount()
+            }
+        } else {
+            snackbar = showUnavailableNetworkConnectionError(
+                requireContext(), requireView()
+            ) { checkPendingLinkTwitterAccountAuthResult() }
+            Timber.e("checkPendingLinkTwitterAccountAuthResult Error: Offline")
+        }
+    }
+
+    private fun pendingLoginWithTwitterAccountAuthResult(pendingAuthResult: Task<AuthResult>) {
+        pendingAuthResult.addOnCompleteListener { task ->
+            handleLoginWithTwitterAccountAuthResult(task)
+        }
+    }
+
+    private fun loginWithTwitterAccount() {
+        val oAuthProvider = OAuthProvider.newBuilder(FIREBASE_AUTH_PROVIDER_ID_TWITTER)
+        oAuthProvider.addCustomParameter("lang", currentAppLanguage)
+
+        firebaseAuth.startActivityForSignInWithProvider(requireActivity(), oAuthProvider.build())
+            .addOnCompleteListener { task ->
+                handleLoginWithTwitterAccountAuthResult(task)
+            }
+    }
+
+    private fun handleLoginWithTwitterAccountAuthResult(task: Task<AuthResult>) {
+        if (task.isSuccessful) {
+            val authCredential = task.result.credential
+            authCredential?.let { credential ->
+                viewModel.loginWithTwitterAccount(credential)
+            }
+        } else {
+            hideTwitterLoadingAnimation()
+            task.exception?.message?.let { message ->
+                if (message.contains(ERROR_TWITTER_O_AUTH_PROVIDER_CANCELED)) {
+                    /* NO-OP */
+                } else {
+                    snackbar = when {
+                        message.contains(ERROR_TWITTER_O_AUTH_PROVIDER_NETWORK_CONNECTION) -> {
+                            showNetworkFailureError(requireContext(), requireView())
+                        }
+                        message.contains(
+                            ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIALS
+                        ) -> {
+                            showActionSnackbarError(
+                                requireView(),
+                                requireContext().getString(R.string.login_error_email_exists_with_different_credentials),
+                                requireContext().getString(R.string.error_btn_confirm)
+                            ) { snackbar?.dismiss() }
+                        }
+                        else -> {
+                            showSomethingWentWrongError(requireContext(), requireView())
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun loginWithTwitterAccountObserver() =
+        viewModel.loginWithTwitterAccountLiveData.observe(viewLifecycleOwner) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { response ->
+                when (response) {
+                    is Resource.Loading -> showTwitterLoadingAnimation()
+                    is Resource.Success -> {
+                        hideTwitterLoadingAnimation()
+                        navigateToMainActivity()
+                    }
+                    is Resource.Error -> {
+                        hideTwitterLoadingAnimation()
+                        response.message?.asString(requireContext())?.let {
+                            snackbar = when {
+                                it.contains(ERROR_NETWORK_CONNECTION) -> {
+                                    showNetworkFailureError(requireContext(), requireView())
+                                }
+                                it.contains(ERROR_FIREBASE_403) -> {
+                                    show403Error(requireContext(), requireView())
+                                }
+                                it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
+                                    showFirebaseDeviceBlockedError(requireContext(), requireView())
+                                }
+                                it.contains(
+                                    ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIALS
+                                ) -> {
+                                    showActionSnackbarError(
+                                        requireView(),
+                                        requireContext().getString(R.string.login_error_email_exists_with_different_credentials),
+                                        requireContext().getString(R.string.error_btn_confirm)
+                                    ) { snackbar?.dismiss() }
+                                }
+                                else -> {
+                                    showSomethingWentWrongError(requireContext(), requireView())
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
     private fun facebookOnClick() = binding.btnFacebook.setOnClickListener {
-        Toast.makeText(requireContext(), "facebook", Toast.LENGTH_SHORT).show()
+        loginWithFacebookAccount()
     }
 
-    private fun showLoginLoadingAnimation() = binding.apply {
+    private fun loginWithFacebookAccount() {
+        if ((requireActivity() as LandingActivity).networkStatus == ConnectivityObserver.Status.AVAILABLE) {
+            launchFacebookLoginManager()
+        } else {
+            snackbar = showUnavailableNetworkConnectionError(
+                requireContext(), requireView()
+            ) { loginWithFacebookAccount() }
+            Timber.e("loginWithFacebookAccount Error: Offline")
+        }
+    }
+
+    private fun launchFacebookLoginManager() {
+        showFacebookLoadingAnimation()
+
+        val callbackManager = CallbackManager.Factory.create()
+
+        val loginManager = LoginManager.getInstance()
+        loginManager.logInWithReadPermissions(this, callbackManager, listOf("email"))
+
+        loginManager.registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
+            override fun onSuccess(result: LoginResult) {
+                viewModel.loginWithFacebookAccount(result.accessToken)
+            }
+
+            override fun onCancel() {
+                hideFacebookLoadingAnimation()
+                Timber.i("launchFacebookLoginManager canceled.")
+            }
+
+            override fun onError(error: FacebookException) {
+                hideFacebookLoadingAnimation()
+                snackbar = showSomethingWentWrongError(requireContext(), requireView())
+                Timber.e("launchFacebookLoginManager Callback Exception: ${error.message}")
+            }
+        })
+    }
+
+    private fun loginWithFacebookAccountObserver() =
+        viewModel.loginWithFacebookAccountLiveData.observe(viewLifecycleOwner) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { response ->
+                when (response) {
+                    is Resource.Loading -> showFacebookLoadingAnimation()
+                    is Resource.Success -> {
+                        hideFacebookLoadingAnimation()
+                        navigateToMainActivity()
+                    }
+                    is Resource.Error -> {
+                        hideFacebookLoadingAnimation()
+                        response.message?.asString(requireContext())?.let {
+                            snackbar = when {
+                                it.contains(ERROR_NETWORK_CONNECTION) -> {
+                                    showNetworkFailureError(requireContext(), requireView())
+                                }
+                                it.contains(ERROR_FIREBASE_403) -> {
+                                    show403Error(requireContext(), requireView())
+                                }
+                                it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
+                                    showFirebaseDeviceBlockedError(requireContext(), requireView())
+                                }
+                                it.contains(
+                                    ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIALS
+                                ) -> {
+                                    showActionSnackbarError(
+                                        requireView(),
+                                        requireContext().getString(R.string.login_error_email_exists_with_different_credentials),
+                                        requireContext().getString(R.string.error_btn_confirm)
+                                    ) { snackbar?.dismiss() }
+                                }
+                                else -> {
+                                    showSomethingWentWrongError(requireContext(), requireView())
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+    private fun showLoginWithEmailLoadingAnimation() = binding.apply {
         tiEditEmail.isEnabled = false
         tiEditPassword.isEnabled = false
         btnLogin.isClickable = false
@@ -357,7 +621,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         cpiLogin.visibility = VISIBLE
     }
 
-    private fun hideLoginLoadingAnimation() = binding.apply {
+    private fun hideLoginWithEmailLoadingAnimation() = binding.apply {
         cpiLogin.visibility = GONE
         tiEditEmail.isEnabled = true
         tiEditPassword.isEnabled = true

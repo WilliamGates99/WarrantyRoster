@@ -108,6 +108,12 @@ class SettingsFragmentTest {
     }
 
     @Test
+    fun clickOnLinkedAccountsBtn_navigatesToLinkedAccountsFragment() {
+        onView(withId(testBinding.clAccountLinkedAccounts.id)).perform(click())
+        assertThat(navController.currentDestination?.id).isEqualTo(R.id.linkedAccountsFragment)
+    }
+
+    @Test
     fun clickOnChangeEmailBtn_navigatesToChangeEmailFragment() {
         onView(withId(testBinding.clAccountChangeEmail.id)).perform(click())
         assertThat(navController.currentDestination?.id).isEqualTo(R.id.changeEmailFragment)

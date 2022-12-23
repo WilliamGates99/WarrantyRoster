@@ -25,13 +25,13 @@ object SnackBarHelper {
         show()
     }
 
-    fun showNetworkConnectionError(
+    fun showUnavailableNetworkConnectionError(
         context: Context,
         view: View,
         action: () -> Unit
     ): Snackbar = Snackbar.make(
         view,
-        context.getString(R.string.error_network_connection),
+        context.getString(R.string.error_network_connection_unavailable),
         LENGTH_INDEFINITE
     ).apply {
         setAction(context.getString(R.string.error_btn_retry)) { action() }
@@ -59,6 +59,12 @@ object SnackBarHelper {
     fun showNetworkFailureError(context: Context, view: View): Snackbar = Snackbar.make(
         view,
         context.getString(R.string.error_network_failure),
+        LENGTH_LONG
+    ).apply { show() }
+
+    fun showSomethingWentWrongError(context: Context, view: View): Snackbar = Snackbar.make(
+        view,
+        context.getString(R.string.error_something_went_wrong),
         LENGTH_LONG
     ).apply { show() }
 

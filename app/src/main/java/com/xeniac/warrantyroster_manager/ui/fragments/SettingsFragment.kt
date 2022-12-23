@@ -6,7 +6,6 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -22,12 +21,14 @@ import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.BuildConfig
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentSettingsBinding
+import com.xeniac.warrantyroster_manager.domain.repository.ConnectivityObserver
 import com.xeniac.warrantyroster_manager.ui.LandingActivity
 import com.xeniac.warrantyroster_manager.ui.MainActivity
 import com.xeniac.warrantyroster_manager.ui.viewmodels.SettingsViewModel
 import com.xeniac.warrantyroster_manager.utils.AlertDialogHelper.showOneBtnAlertDialog
 import com.xeniac.warrantyroster_manager.utils.AlertDialogHelper.showSingleChoiceItemsDialog
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_EMAIL_VERIFICATION_EMAIL_NOT_PROVIDED
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
 import com.xeniac.warrantyroster_manager.utils.Constants.THEME_INDEX_DARK
@@ -41,8 +42,10 @@ import com.xeniac.warrantyroster_manager.utils.LinkHelper.openPlayStore
 import com.xeniac.warrantyroster_manager.utils.Resource
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.show403Error
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseDeviceBlockedError
-import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkConnectionError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkFailureError
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNormalSnackbarError
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showSomethingWentWrongError
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showUnavailableNetworkConnectionError
 import dagger.hilt.android.AndroidEntryPoint
 import ir.tapsell.plus.AdHolder
 import ir.tapsell.plus.AdRequestCallback
@@ -80,6 +83,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
         getCurrentLanguage()
         getCurrentAppTheme()
         verifyOnClick()
+        linkedAccountsOnClick()
         changeEmailOnClick()
         changePasswordOnClick()
         languageOnClick()
@@ -100,7 +104,8 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
     }
 
     private fun subscribeToObservers() {
-        accountDetailsObserver()
+        cachedAccountDetailsObserver()
+        reloadedAccountDetailsObserver()
         currentLanguageObserver()
         currentLocaleIndexObserver()
         currentAppThemeObserver()
@@ -109,20 +114,51 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
         logoutObserver()
     }
 
-    private fun getAccountDetails() = viewModel.getAccountDetails()
+    private fun getAccountDetails() {
+        getCachedAccountDetails()
 
-    private fun accountDetailsObserver() =
-        viewModel.accountDetailsLiveData.observe(viewLifecycleOwner) { responseEvent ->
+        if ((requireActivity() as MainActivity).networkStatus == ConnectivityObserver.Status.AVAILABLE) {
+            getReloadedAccountDetails()
+        }
+    }
+
+    private fun getCachedAccountDetails() = viewModel.getCachedAccountDetails()
+
+    private fun cachedAccountDetailsObserver() =
+        viewModel.cachedAccountDetailsLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
+                    is Resource.Loading -> {
+                        /* NO-OP */
+                    }
                     is Resource.Success -> {
                         response.data?.let { user ->
                             setAccountDetails(user.email.toString(), user.isEmailVerified)
                         }
                     }
-                    is Resource.Error -> getAccountDetails()
+                    is Resource.Error -> {
+                        snackbar = showSomethingWentWrongError(requireContext(), requireView())
+                    }
+                }
+            }
+        }
+
+    private fun getReloadedAccountDetails() = viewModel.getReloadedAccountDetails()
+
+    private fun reloadedAccountDetailsObserver() =
+        viewModel.reloadedAccountDetailsLiveData.observe(viewLifecycleOwner) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { response ->
+                when (response) {
                     is Resource.Loading -> {
                         /* NO-OP */
+                    }
+                    is Resource.Success -> {
+                        response.data?.let { user ->
+                            setAccountDetails(user.email.toString(), user.isEmailVerified)
+                        }
+                    }
+                    is Resource.Error -> {
+                        getCachedAccountDetails()
                     }
                 }
             }
@@ -131,31 +167,13 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
     private fun setAccountDetails(email: String, isEmailVerified: Boolean) {
         binding.apply {
             userEmail = email
-            isVerificationBtnClickable = !isEmailVerified
+            isUserVerified = isEmailVerified
 
             if (isEmailVerified) {
-                verificationBtnBackgroundTint = ContextCompat
-                    .getColorStateList(requireContext(), R.color.green20)
-                verificationBtnText = requireContext()
-                    .getString(R.string.settings_btn_account_verified)
-                verificationBtnTextColor =
-                    ContextCompat.getColor(requireContext(), R.color.green)
-                ivAccountEmail.setBackgroundColor(
-                    ContextCompat.getColor(requireContext(), R.color.green10)
-                )
                 lavAccountVerification.speed = 0.60f
                 lavAccountVerification.repeatCount = 0
                 lavAccountVerification.setAnimation(R.raw.anim_account_verified)
             } else {
-                verificationBtnBackgroundTint = ContextCompat
-                    .getColorStateList(requireContext(), R.color.blue20)
-                verificationBtnText = requireContext()
-                    .getString(R.string.settings_btn_account_verify)
-                verificationBtnTextColor =
-                    ContextCompat.getColor(requireContext(), R.color.blue)
-                ivAccountEmail.setBackgroundColor(
-                    ContextCompat.getColor(requireContext(), R.color.red10)
-                )
                 lavAccountVerification.speed = 1.00f
                 lavAccountVerification.repeatCount = LottieDrawable.INFINITE
                 lavAccountVerification.setAnimation(R.raw.anim_account_not_verified)
@@ -205,7 +223,16 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
         sendVerificationEmail()
     }
 
-    private fun sendVerificationEmail() = viewModel.sendVerificationEmail()
+    private fun sendVerificationEmail() {
+        if ((requireActivity() as MainActivity).networkStatus == ConnectivityObserver.Status.AVAILABLE) {
+            viewModel.sendVerificationEmail()
+        } else {
+            snackbar = showUnavailableNetworkConnectionError(
+                requireContext(), requireView()
+            ) { sendVerificationEmail() }
+            Timber.e("sendVerificationEmail Error: Offline")
+        }
+    }
 
     private fun sendVerificationEmailObserver() =
         viewModel.sendVerificationEmailLiveData.observe(viewLifecycleOwner) { responseEvent ->
@@ -225,9 +252,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
                         response.message?.asString(requireContext())?.let {
                             snackbar = when {
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
-                                    showNetworkConnectionError(
-                                        requireContext(), requireView()
-                                    ) { sendVerificationEmail() }
+                                    showNetworkFailureError(requireContext(), requireView())
                                 }
                                 it.contains(ERROR_FIREBASE_403) -> {
                                     show403Error(requireContext(), requireView())
@@ -235,13 +260,25 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
                                 it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
                                     showFirebaseDeviceBlockedError(requireContext(), requireView())
                                 }
-                                else -> showNetworkFailureError(requireContext(), requireView())
+                                it.contains(
+                                    ERROR_FIREBASE_AUTH_EMAIL_VERIFICATION_EMAIL_NOT_PROVIDED
+                                ) -> {
+                                    showNormalSnackbarError(
+                                        requireView(),
+                                        requireContext().getString(R.string.settings_error_email_verification_email_not_provided)
+                                    )
+                                }
+                                else -> showSomethingWentWrongError(requireContext(), requireView())
                             }
                         }
                     }
                 }
             }
         }
+
+    private fun linkedAccountsOnClick() = binding.clAccountLinkedAccounts.setOnClickListener {
+        findNavController().navigate(SettingsFragmentDirections.actionSettingsFragmentToLinkedAccountsFragment())
+    }
 
     private fun changeEmailOnClick() = binding.clAccountChangeEmail.setOnClickListener {
         findNavController().navigate(SettingsFragmentDirections.actionSettingsFragmentToChangeEmailFragment())
@@ -330,15 +367,17 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
         viewModel.logoutLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
+                    is Resource.Loading -> {
+                        /* NO-OP */
+                    }
                     is Resource.Success -> {
                         requireActivity().apply {
                             startActivity(Intent(this, LandingActivity::class.java))
                             finish()
                         }
                     }
-                    is Resource.Error -> logoutUser()
-                    is Resource.Loading -> {
-                        /* NO-OP */
+                    is Resource.Error -> {
+                        snackbar = showSomethingWentWrongError(requireContext(), requireView())
                     }
                 }
             }

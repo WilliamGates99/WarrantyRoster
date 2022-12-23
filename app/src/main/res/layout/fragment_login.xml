@@ -33,21 +33,13 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_title_email"
-            android:layout_width="@dimen/width_0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/margin_32dp"
+            style="@style/Theme.FifaUltimateTeamCoin.TextInputLayout.Title"
             android:layout_marginTop="@dimen/margin_44dp"
-            android:fontFamily="@font/localized_bold"
-            android:gravity="start|center_vertical"
             android:labelFor="@+id/ti_layout_email"
-            android:maxLines="1"
             android:text="@string/login_title_email"
-            android:textAlignment="gravity"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size_14sp"
             app:layout_constraintBottom_toTopOf="@+id/ti_layout_email"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/ti_layout_email"
+            app:layout_constraintStart_toStartOf="@id/ti_layout_email"
             app:layout_constraintTop_toBottomOf="@+id/tv_description" />
 
         <com.google.android.material.textfield.TextInputLayout
@@ -79,21 +71,13 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_title_password"
-            android:layout_width="@dimen/width_0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/margin_32dp"
+            style="@style/Theme.FifaUltimateTeamCoin.TextInputLayout.Title"
             android:layout_marginTop="@dimen/margin_16dp"
-            android:fontFamily="@font/localized_bold"
-            android:gravity="start|center_vertical"
             android:labelFor="@+id/ti_layout_password"
-            android:maxLines="1"
             android:text="@string/login_title_password"
-            android:textAlignment="gravity"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size_14sp"
             app:layout_constraintBottom_toTopOf="@+id/ti_layout_password"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/ti_layout_password"
+            app:layout_constraintStart_toStartOf="@id/ti_layout_password"
             app:layout_constraintTop_toBottomOf="@+id/ti_layout_email" />
 
         <com.google.android.material.textfield.TextInputLayout
@@ -301,7 +285,7 @@
             android:id="@+id/tv_register_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/margin_4dp"
+            android:layout_marginStart="@dimen/margin_24dp"
             android:fontFamily="@font/localized_regular"
             android:gravity="center"
             android:maxLines="1"
@@ -316,12 +300,13 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <!-- MARGIN_BOTTOM: 19 + 5 = 24DP -->
+        <!-- MARGIN_END: 19 + 5 = 24DP -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_register"
             style="@style/Theme.WarrantyRoster.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/margin_4dp"
+            android:layout_marginEnd="@dimen/margin_19dp"
             android:layout_marginBottom="@dimen/margin_19dp"
             android:gravity="center"
             android:text="@string/login_btn_register"

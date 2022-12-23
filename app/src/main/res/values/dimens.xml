@@ -12,13 +12,13 @@
     <dimen name="width_24dp">24dp</dimen>
     <dimen name="width_26dp">26dp</dimen>
     <dimen name="width_32dp">32dp</dimen>
+    <dimen name="width_40dp">40dp</dimen>
     <dimen name="width_48dp">48dp</dimen>
     <dimen name="width_52dp">52dp</dimen>
     <dimen name="width_56dp">56dp</dimen>
     <dimen name="width_86dp">86dp</dimen>
     <dimen name="width_114dp">114dp</dimen>
     <dimen name="width_125dp">125dp</dimen>
-    <dimen name="width_180dp">180dp</dimen>
     <dimen name="width_250dp">250dp</dimen>
 
     <!--Height-->
@@ -31,6 +31,7 @@
     <dimen name="height_24dp">24dp</dimen>
     <dimen name="height_26dp">26dp</dimen>
     <dimen name="height_32dp">32dp</dimen>
+    <dimen name="height_40dp">40dp</dimen>
     <dimen name="height_48dp">48dp</dimen>
     <dimen name="height_52dp">52dp</dimen>
     <dimen name="height_86dp">86dp</dimen>
@@ -47,6 +48,7 @@
     <dimen name="margin_8dp">8dp</dimen>
     <dimen name="margin_12dp">12dp</dimen>
     <dimen name="margin_13dp">13dp</dimen>
+    <dimen name="margin_14dp">14dp</dimen>
     <dimen name="margin_16dp">16dp</dimen>
     <dimen name="margin_18dp">18dp</dimen>
     <dimen name="margin_19dp">19dp</dimen>
@@ -58,12 +60,8 @@
     <dimen name="margin_35dp">35dp</dimen>
     <dimen name="margin_40dp">40dp</dimen>
     <dimen name="margin_44dp">44dp</dimen>
-    <dimen name="margin_47dp">47dp</dimen>
-    <dimen name="margin_52dp">52dp</dimen>
     <dimen name="margin_60dp">60dp</dimen>
     <dimen name="margin_70dp">70dp</dimen>
-    <dimen name="margin_71dp">71dp</dimen>
-    <dimen name="margin_79dp">79dp</dimen>
 
     <!--Padding-->
     <dimen name="padding_0dp">0dp</dimen>
@@ -71,7 +69,6 @@
     <dimen name="padding_4dp">4dp</dimen>
     <dimen name="padding_5dp">5dp</dimen>
     <dimen name="padding_8dp">8dp</dimen>
-    <dimen name="padding_9dp">9dp</dimen>
     <dimen name="padding_12dp">12dp</dimen>
     <dimen name="padding_16dp">16dp</dimen>
     <dimen name="padding_24dp">24dp</dimen>
@@ -91,7 +88,6 @@
     <dimen name="radius_8dp">8dp</dimen>
     <dimen name="radius_12dp">12dp</dimen>
     <dimen name="radius_20dp">20dp</dimen>
-    <dimen name="radius_40dp">40dp</dimen>
     <dimen name="radius_48dp">48dp</dimen>
     <dimen name="radius_64dp">64dp</dimen>
     <dimen name="radius_50percent">50%</dimen>

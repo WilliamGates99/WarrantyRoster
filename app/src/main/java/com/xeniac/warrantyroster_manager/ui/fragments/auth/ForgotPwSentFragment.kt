@@ -2,8 +2,6 @@ package com.xeniac.warrantyroster_manager.ui.fragments.auth
 
 import android.os.Bundle
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.Fragment
@@ -13,6 +11,8 @@ import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentForgotPwSentBinding
+import com.xeniac.warrantyroster_manager.domain.repository.ConnectivityObserver
+import com.xeniac.warrantyroster_manager.ui.LandingActivity
 import com.xeniac.warrantyroster_manager.ui.viewmodels.ForgotPwViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
@@ -21,14 +21,16 @@ import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_TIMER_IS_NOT_ZERO
 import com.xeniac.warrantyroster_manager.utils.Resource
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.show403Error
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseDeviceBlockedError
-import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkConnectionError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkFailureError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNormalSnackbarError
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showSomethingWentWrongError
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showUnavailableNetworkConnectionError
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.text.DecimalFormat
 import javax.inject.Inject
 
@@ -93,12 +95,20 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
         resendResetPasswordEmail()
     }
 
-    private fun resendResetPasswordEmail() = viewModel.sendResetPasswordEmail(email)
+    private fun resendResetPasswordEmail() {
+        if ((requireActivity() as LandingActivity).networkStatus == ConnectivityObserver.Status.AVAILABLE) {
+            viewModel.sendResetPasswordEmail(email)
+        } else {
+            snackbar = showUnavailableNetworkConnectionError(
+                requireContext(), requireView()
+            ) { resendResetPasswordEmail() }
+            Timber.e("resendResetPasswordEmail Error: Offline")
+        }
+    }
 
     private fun forgotPwSentObserver() =
         viewModel.forgotPwLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
-                showLoadingAnimation()
                 when (response) {
                     is Resource.Loading -> showLoadingAnimation()
                     is Resource.Success -> {
@@ -110,9 +120,7 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
                         response.message?.asString(requireContext())?.let {
                             snackbar = when {
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
-                                    showNetworkConnectionError(
-                                        requireContext(), requireView()
-                                    ) { resendResetPasswordEmail() }
+                                    showNetworkFailureError(requireContext(), requireView())
                                 }
                                 it.contains(ERROR_FIREBASE_403) -> {
                                     show403Error(requireContext(), requireView())
@@ -129,7 +137,7 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
                                     )
                                     showNormalSnackbarError(requireView(), message)
                                 }
-                                else -> showNetworkFailureError(requireContext(), requireView())
+                                else -> showSomethingWentWrongError(requireContext(), requireView())
                             }
                         }
                     }
@@ -142,66 +150,65 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
             responseEvent.getContentIfNotHandled()?.let { millisUntilFinished ->
                 binding.apply {
                     when (millisUntilFinished) {
-                        0L -> {
-                            CoroutineScope(Dispatchers.Main).launch {
-                                delay(500)
-                                resetConstraintToDefault()
-                                groupTimer.visibility = GONE
-                                groupResend.visibility = VISIBLE
-                            }
-                        }
-                        else -> {
-                            tvResent.text = if (viewModel.isFirstSentEmail)
-                                requireContext().getString(R.string.forgot_pw_sent_text_first_time)
-                            else requireContext().getString(R.string.forgot_pw_sent_text_resent)
-
-                            updateConstraintToTimer()
-                            groupResend.visibility = GONE
-                            groupTimer.visibility = VISIBLE
-
-                            val minutes = millisUntilFinished / 60000
-                            val seconds = (millisUntilFinished / 1000) % 60
-
-                            val time =
-                                "(${decimalFormat.format(minutes)}:${decimalFormat.format(seconds)})"
-                            tvTimer.text = time
-                        }
+                        0L -> hideTimer()
+                        else -> showTimer(millisUntilFinished)
                     }
                 }
             }
         }
 
-    private fun showLoadingAnimation() = binding.apply {
-        btnResend.visibility = GONE
-        cpiResend.visibility = VISIBLE
+    private fun showTimer(millisUntilFinished: Long) = binding.apply {
+        setResendTvConstraintBottomToTopOfTimerTv()
+
+        resendText = if (viewModel.isFirstSentEmail) {
+            requireContext().getString(R.string.forgot_pw_sent_text_first_time)
+        } else {
+            requireContext().getString(R.string.forgot_pw_sent_text_resent)
+        }
+
+        val minutes = decimalFormat.format(millisUntilFinished / 60000)
+        val seconds = decimalFormat.format((millisUntilFinished / 1000) % 60)
+
+        time = "($minutes:$seconds)"
+        isTimerTicking = true
     }
 
-    private fun hideLoadingAnimation() = binding.apply {
-        cpiResend.visibility = GONE
-        btnResend.visibility = VISIBLE
-    }
-
-    private fun updateConstraintToTimer() = binding.apply {
-        val constraintSet = ConstraintSet()
-        constraintSet.clone(cl)
-        constraintSet.connect(
-            lavSent.id,
-            ConstraintSet.BOTTOM,
-            tvResent.id,
-            ConstraintSet.TOP
+    private fun setResendTvConstraintBottomToTopOfTimerTv() = ConstraintSet().apply {
+        clone(binding.cl)
+        connect(
+            /* startID = */ binding.tvResend.id,
+            /* startSide = */ ConstraintSet.BOTTOM,
+            /* endID = */ binding.tvTimer.id,
+            /* endSide = */ ConstraintSet.TOP
         )
-        constraintSet.applyTo(cl)
+        applyTo(binding.cl)
     }
 
-    private fun resetConstraintToDefault() = binding.apply {
-        val constraintSet = ConstraintSet()
-        constraintSet.clone(cl)
-        constraintSet.connect(
-            lavSent.id,
-            ConstraintSet.BOTTOM,
-            tvResend.id,
-            ConstraintSet.TOP
+    private fun hideTimer() = CoroutineScope(Dispatchers.Main).launch {
+        delay(500)
+        binding.apply {
+            setResendTvConstraintBottomToTopOfResendBtn()
+            resendText = requireContext().getString(R.string.forgot_pw_sent_text_resend)
+            isTimerTicking = false
+        }
+    }
+
+    private fun setResendTvConstraintBottomToTopOfResendBtn() = ConstraintSet().apply {
+        clone(binding.cl)
+        connect(
+            /* startID = */ binding.tvResend.id,
+            /* startSide = */ ConstraintSet.BOTTOM,
+            /* endID = */ binding.btnResend.id,
+            /* endSide = */ ConstraintSet.TOP
         )
-        constraintSet.applyTo(cl)
+        applyTo(binding.cl)
+    }
+
+    private fun showLoadingAnimation() {
+        binding.isResendLoading = true
+    }
+
+    private fun hideLoadingAnimation() {
+        binding.isResendLoading = false
     }
 }

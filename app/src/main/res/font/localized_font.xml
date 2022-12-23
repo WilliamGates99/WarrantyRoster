@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<font-family xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <font
+        android:font="@font/localized_extra_light"
+        android:fontStyle="normal"
+        android:fontWeight="200"
+        tools:targetApi="o" />
+
+    <font
+        android:font="@font/localized_light"
+        android:fontStyle="normal"
+        android:fontWeight="300"
+        tools:targetApi="o" />
+
+    <font
+        android:font="@font/localized_regular"
+        android:fontStyle="normal"
+        android:fontWeight="400"
+        tools:targetApi="o" />
+
+    <font
+        android:font="@font/localized_semi_bold"
+        android:fontStyle="normal"
+        android:fontWeight="600"
+        tools:targetApi="o" />
+
+    <font
+        android:font="@font/localized_bold"
+        android:fontStyle="normal"
+        android:fontWeight="700"
+        tools:targetApi="o" />
+
+    <font
+        android:font="@font/localized_extra_bold"
+        android:fontStyle="normal"
+        android:fontWeight="800"
+        tools:targetApi="o" />
+
+    <font
+        android:font="@font/localized_black"
+        android:fontStyle="normal"
+        android:fontWeight="900"
+        tools:targetApi="o" />
+
+</font-family>

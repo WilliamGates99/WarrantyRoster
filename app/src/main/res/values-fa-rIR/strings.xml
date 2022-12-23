@@ -3,7 +3,8 @@
     <string name="app_name">وارانتی راستر</string>
 
 
-    <string name="error_network_connection">اتصال به اینترنت امکان‌پذیر نیست.</string>
+    <string name="error_something_went_wrong">خطایی رخ داده. لطفا بعدا دوباره امتحان کنید.</string>
+    <string name="error_network_connection_unavailable">اتصال به اینترنت امکان‌پذیر نیست.</string>
     <string name="error_network_failure">مشکلی برای شبکه رخ داده است. لطفا بعدا دوباره امتحان کنید.</string>
     <string name="error_firebase_403">این سرویس در منطقه شما در دسترس نیست. لطفاً از نرم‌افزار تغییر آدرس IP استفاده کنید.</string>
     <string name="error_firebase_device_blocked">ما تمام درخواست‌های این دستگاه را به دلیل فعالیت غیر‌عادی مسدود کرده‌ایم. لطفا بعدا دوباره تلاش کنید.</string>
@@ -49,6 +50,7 @@
     <string name="login_error_email">آدرس ایمیل وارد شده، معتبر نیست!</string>
     <string name="login_error_not_found">حسابی با ایمیل وارد شده وجود ندارد.</string>
     <string name="login_error_credentials">ایمیل و یا رمز‌عبور وارد شده نادرست است.</string>
+    <string name="login_error_email_exists_with_different_credentials">حسابی با ایمیل وارد شده اما با روش‌های ورود متفاوت از قبل وجود دارد.</string>
 
 
     <string name="register_text_title">ثبت‌نام</string>
@@ -61,6 +63,8 @@
     <string name="register_title_confirm_password">تکرار رمز‌عبور</string>
     <string name="register_hint_confirm_password">رمز‌عبور را دوباره وارد کنید</string>
     <string name="register_btn_register">ثبت‌نام</string>
+    <string name="register_text_other_methods">یا ورود با</string>
+    <string name="register_text_other_methods_landscape">یا</string>
     <string name="register_text_login_title">در حال حاضر حساب کاربری دارید؟</string>
     <string name="register_btn_login">وارد شوید</string>
     <string name="register_helper_password_weak">ضعیف</string>
@@ -73,6 +77,7 @@
     <string name="register_error_password_short">رمز‌عبور باید حداقل 6 کاراکتر باشد!</string>
     <string name="register_error_password_not_match">رمز‌عبور و تکرار رمز‌عبور وارد شده با هم مطابقت ندارند!</string>
     <string name="register_error_account_exists">حسابی با ایمیل وارد شده از قبل وجود دارد.</string>
+    <string name="register_error_email_exists_with_different_credentials">حسابی با ایمیل وارد شده اما با روش‌های ورود متفاوت از قبل وجود دارد.</string>
 
 
     <string name="forgot_pw_text_title">بازیابی\nرمز‌عبور</string>
@@ -315,6 +320,7 @@
     <string name="settings_title_settings">تنظیمات</string>
     <string name="settings_btn_account_verify">تایید ایمیل</string>
     <string name="settings_btn_account_verified">تایید شده</string>
+    <string name="settings_text_account_linked_accounts">حساب‌های متصل</string>
     <string name="settings_text_account_change_email">تغییر آدرس ایمیل</string>
     <string name="settings_text_account_change_password">تغییر رمز‌عبور</string>
     <string name="settings_text_settings_language">زبان</string>
@@ -340,6 +346,17 @@
     <string name="settings_dialog_item_theme_dark">تیره</string>
     <string name="settings_dialog_message">ایمیل تأیید با موفقیت به صندوق ایمیلتان ارسال شد.</string>
     <string name="settings_dialog_positive">تایید</string>
+    <string name="settings_error_email_verification_email_not_provided">ایمیلی به حساب متصل نیست.</string>
+
+
+    <string name="linked_accounts_text_title">حساب‌های متصل</string>
+    <string name="linked_accounts_title_google">گوگل</string>
+    <string name="linked_accounts_title_twitter">توییتر</string>
+    <string name="linked_accounts_title_facebook">فیسبوک</string>
+    <string name="linked_accounts_status_connect">متصل کردن</string>
+    <string name="linked_accounts_status_disconnect">قطع اتصال</string>
+    <string name="linked_accounts_error_email_exists_with_different_credentials">حسابی با ایمیل وارد شده اما با روش‌های ورود متفاوت از قبل وجود دارد.</string>
+    <string name="linked_accounts_error_email_exists">حسابی با ایمیل وارد شده از قبل وجود دارد.</string>
 
 
     <string name="change_password_text_title">تغییر رمز‌عبور</string>

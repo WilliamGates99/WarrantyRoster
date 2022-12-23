@@ -59,20 +59,12 @@
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/tv_title_title"
-                        android:layout_width="@dimen/width_0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/margin_24dp"
+                        style="@style/Theme.FifaUltimateTeamCoin.TextInputLayout.Title"
                         android:layout_marginTop="@dimen/margin_16dp"
-                        android:fontFamily="@font/localized_bold"
-                        android:gravity="center_vertical|start"
                         android:labelFor="@+id/ti_layout_title"
-                        android:maxLines="1"
                         android:text="@string/edit_warranty_title_title"
-                        android:textAlignment="gravity"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_14sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="@id/ti_layout_title"
+                        app:layout_constraintStart_toStartOf="@id/ti_layout_title"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -103,18 +95,10 @@
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/tv_title_date_starting"
-                        android:layout_width="@dimen/width_0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/margin_8dp"
+                        style="@style/Theme.FifaUltimateTeamCoin.TextInputLayout.Title"
                         android:layout_marginTop="@dimen/margin_16dp"
-                        android:fontFamily="@font/localized_bold"
-                        android:gravity="center_vertical|start"
                         android:labelFor="@+id/ti_layout_date_starting"
-                        android:maxLines="1"
                         android:text="@string/edit_warranty_title_date_starting"
-                        android:textAlignment="gravity"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_14sp"
                         app:layout_constraintEnd_toEndOf="@+id/ti_layout_date_starting"
                         app:layout_constraintStart_toStartOf="@+id/ti_layout_date_starting"
                         app:layout_constraintTop_toBottomOf="@+id/ti_layout_title" />
@@ -150,18 +134,10 @@
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/tv_title_date_expiry"
-                        android:layout_width="@dimen/width_0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/margin_8dp"
+                        style="@style/Theme.FifaUltimateTeamCoin.TextInputLayout.Title"
                         android:layout_marginTop="@dimen/margin_16dp"
-                        android:fontFamily="@font/localized_bold"
-                        android:gravity="center_vertical|start"
                         android:labelFor="@+id/ti_layout_date_expiry"
-                        android:maxLines="1"
                         android:text="@string/edit_warranty_title_date_expiry"
-                        android:textAlignment="gravity"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_14sp"
                         app:layout_constraintEnd_toEndOf="@+id/ti_layout_date_expiry"
                         app:layout_constraintStart_toStartOf="@+id/ti_layout_date_expiry"
                         app:layout_constraintTop_toBottomOf="@+id/ti_layout_title" />
@@ -267,20 +243,12 @@
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/tv_title_brand"
-                        android:layout_width="@dimen/width_0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/margin_24dp"
+                        style="@style/Theme.FifaUltimateTeamCoin.TextInputLayout.Title"
                         android:layout_marginTop="@dimen/margin_16dp"
-                        android:fontFamily="@font/localized_bold"
-                        android:gravity="center_vertical|start"
                         android:labelFor="@+id/ti_layout_brand"
-                        android:maxLines="1"
                         android:text="@string/edit_warranty_title_brand"
-                        android:textAlignment="gravity"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_14sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="@id/ti_layout_brand"
+                        app:layout_constraintStart_toStartOf="@id/ti_layout_brand"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -312,20 +280,12 @@
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/tv_title_model"
-                        android:layout_width="@dimen/width_0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/margin_24dp"
+                        style="@style/Theme.FifaUltimateTeamCoin.TextInputLayout.Title"
                         android:layout_marginTop="@dimen/margin_16dp"
-                        android:fontFamily="@font/localized_bold"
-                        android:gravity="center_vertical|start"
                         android:labelFor="@+id/ti_layout_model"
-                        android:maxLines="1"
                         android:text="@string/edit_warranty_title_model"
-                        android:textAlignment="gravity"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_14sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="@id/ti_layout_model"
+                        app:layout_constraintStart_toStartOf="@id/ti_layout_model"
                         app:layout_constraintTop_toBottomOf="@+id/ti_layout_brand" />
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -357,20 +317,12 @@
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/tv_title_serial"
-                        android:layout_width="@dimen/width_0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/margin_24dp"
+                        style="@style/Theme.FifaUltimateTeamCoin.TextInputLayout.Title"
                         android:layout_marginTop="@dimen/margin_16dp"
-                        android:fontFamily="@font/localized_bold"
-                        android:gravity="center_vertical|start"
                         android:labelFor="@+id/ti_layout_serial"
-                        android:maxLines="1"
                         android:text="@string/edit_warranty_title_serial"
-                        android:textAlignment="gravity"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_14sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="@id/ti_layout_serial"
+                        app:layout_constraintStart_toStartOf="@id/ti_layout_serial"
                         app:layout_constraintTop_toBottomOf="@+id/ti_layout_model" />
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -425,20 +377,12 @@
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/tv_title_category"
-                        android:layout_width="@dimen/width_0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/margin_24dp"
+                        style="@style/Theme.FifaUltimateTeamCoin.TextInputLayout.Title"
                         android:layout_marginTop="@dimen/margin_16dp"
-                        android:fontFamily="@font/localized_bold"
-                        android:gravity="center_vertical|start"
                         android:labelFor="@+id/ti_layout_category"
-                        android:maxLines="1"
                         android:text="@string/edit_warranty_title_category"
-                        android:textAlignment="gravity"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_14sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="@id/ti_layout_category"
+                        app:layout_constraintStart_toStartOf="@id/ti_layout_category"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -495,20 +439,12 @@
 
                     <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/tv_title_description"
-                        android:layout_width="@dimen/width_0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/margin_24dp"
+                        style="@style/Theme.FifaUltimateTeamCoin.TextInputLayout.Title"
                         android:layout_marginTop="@dimen/margin_16dp"
-                        android:fontFamily="@font/localized_bold"
-                        android:gravity="center_vertical|start"
                         android:labelFor="@+id/ti_layout_description"
-                        android:maxLines="1"
                         android:text="@string/edit_warranty_title_description"
-                        android:textAlignment="gravity"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_14sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="@id/ti_layout_description"
+                        app:layout_constraintStart_toStartOf="@id/ti_layout_description"
                         app:layout_constraintTop_toBottomOf="@+id/ti_layout_category" />
 
                     <com.google.android.material.textfield.TextInputLayout

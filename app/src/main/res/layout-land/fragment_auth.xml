@@ -8,15 +8,22 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.25" />
+
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/iv_header"
-            android:layout_width="@dimen/width_180dp"
+            android:layout_width="@dimen/width_0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_4dp"
             android:layout_marginVertical="@dimen/margin_4dp"
             android:adjustViewBounds="true"
             android:alpha="0.90"
-            android:scaleType="centerCrop"
+            android:scaleType="fitCenter"
             android:tintMode="multiply"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/fcv"
@@ -78,7 +85,7 @@
             app:defaultNavHost="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/iv_header"
+            app:layout_constraintStart_toStartOf="@+id/guideline"
             app:layout_constraintTop_toTopOf="parent"
             app:navGraph="@navigation/nav_graph_auth" />
 

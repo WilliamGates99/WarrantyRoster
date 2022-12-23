@@ -15,6 +15,8 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentChangeEmailBinding
+import com.xeniac.warrantyroster_manager.domain.repository.ConnectivityObserver
+import com.xeniac.warrantyroster_manager.ui.MainActivity
 import com.xeniac.warrantyroster_manager.ui.viewmodels.ChangeEmailViewModel
 import com.xeniac.warrantyroster_manager.utils.AlertDialogHelper.showOneBtnAlertDialog
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
@@ -32,10 +34,12 @@ import com.xeniac.warrantyroster_manager.utils.Resource
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.show403Error
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showActionSnackbarError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseDeviceBlockedError
-import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkConnectionError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkFailureError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNormalSnackbarError
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showSomethingWentWrongError
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showUnavailableNetworkConnectionError
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 import java.util.*
 
 @AndroidEntryPoint
@@ -57,8 +61,8 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
 
         textInputsBackgroundColor()
         textInputsStrokeColor()
-        subscribeToObservers()
         toolbarNavigationBackOnClick()
+        subscribeToObservers()
         changeEmailOnClick()
         changeEmailActionDone()
     }
@@ -133,18 +137,18 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
         }
     }
 
-    private fun subscribeToObservers() {
-        checkInputsObserver()
-        reAuthenticateUserObserver()
-        changeUserEmailObserver()
-    }
-
     private fun toolbarNavigationBackOnClick() = binding.toolbar.setNavigationOnClickListener {
         navigateBack()
     }
 
     private fun navigateBack() {
         findNavController().popBackStack()
+    }
+
+    private fun subscribeToObservers() {
+        checkInputsObserver()
+        reAuthenticateUserObserver()
+        changeUserEmailObserver()
     }
 
     private fun changeEmailOnClick() = binding.btnChangeEmail.setOnClickListener {
@@ -164,10 +168,17 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
             .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(requireView().applicationWindowToken, 0)
 
-        val password = binding.tiEditPassword.text.toString().trim()
-        newEmail = binding.tiEditNewEmail.text.toString().trim().lowercase(Locale.US)
+        if ((requireActivity() as MainActivity).networkStatus == ConnectivityObserver.Status.AVAILABLE) {
+            val password = binding.tiEditPassword.text.toString().trim()
+            newEmail = binding.tiEditNewEmail.text.toString().trim().lowercase(Locale.US)
 
-        viewModel.validateChangeEmailInputs(password, newEmail)
+            viewModel.validateChangeEmailInputs(password, newEmail)
+        } else {
+            snackbar = showUnavailableNetworkConnectionError(
+                requireContext(), requireView()
+            ) { validateChangeUserEmailInputs() }
+            Timber.e("validateChangeUserEmailInputs Error: Offline")
+        }
     }
 
     private fun checkInputsObserver() =
@@ -202,7 +213,7 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
                                         requireContext().getString(R.string.change_email_error_email_same)
                                 }
                                 else -> {
-                                    snackbar = showNetworkFailureError(
+                                    snackbar = showSomethingWentWrongError(
                                         requireContext(), requireView()
                                     )
                                 }
@@ -226,9 +237,9 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
                         response.message?.asString(requireContext())?.let {
                             when {
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
-                                    snackbar = showNetworkConnectionError(
+                                    snackbar = showNetworkFailureError(
                                         requireContext(), requireView()
-                                    ) { validateChangeUserEmailInputs() }
+                                    )
                                 }
                                 it.contains(ERROR_FIREBASE_403) -> {
                                     snackbar = show403Error(requireContext(), requireView())
@@ -245,7 +256,7 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
                                     )
                                 }
                                 else -> {
-                                    snackbar = showNetworkFailureError(
+                                    snackbar = showSomethingWentWrongError(
                                         requireContext(), requireView()
                                     )
                                 }
@@ -276,9 +287,7 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
                         response.message?.asString(requireContext())?.let {
                             snackbar = when {
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
-                                    showNetworkConnectionError(
-                                        requireContext(), requireView()
-                                    ) { validateChangeUserEmailInputs() }
+                                    showNetworkFailureError(requireContext(), requireView())
                                 }
                                 it.contains(ERROR_FIREBASE_403) -> {
                                     show403Error(requireContext(), requireView())
@@ -293,7 +302,7 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
                                         requireContext().getString(R.string.error_btn_confirm)
                                     ) { snackbar?.dismiss() }
                                 }
-                                else -> showNetworkFailureError(requireContext(), requireView())
+                                else -> showSomethingWentWrongError(requireContext(), requireView())
                             }
                         }
                     }

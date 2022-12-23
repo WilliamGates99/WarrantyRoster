@@ -28,14 +28,29 @@ android {
         applicationId = "com.xeniac.warrantyroster_manager"
         minSdk = 21
         targetSdk = 33
-        versionCode = 17 // TODO UPGRADE FOR RELEASE
-        versionName = "1.5.2" // TODO UPGRADE FOR RELEASE
+        versionCode = 18 // TODO UPGRADE FOR RELEASE
+        versionName = "2.0.0" // TODO UPGRADE FOR RELEASE
 
         /**
          * Keeps language resources for only the locales specified below.
          */
         resourceConfigurations += mutableSetOf("en-rUS", "en-rGB", "fa-rIR")
 
+        resValue(
+            "string",
+            "fb_login_protocol_scheme",
+            properties.getProperty("FACEBOOK_AUTH_LOGIN_PROTOCOL_SCHEME")
+        )
+        resValue(
+            "string",
+            "facebook_app_id",
+            properties.getProperty("FACEBOOK_AUTH_APP_ID")
+        )
+        resValue(
+            "string",
+            "facebook_client_token",
+            properties.getProperty("FACEBOOK_AUTH_CLIENT_TOKEN")
+        )
         buildConfigField(
             "String",
             "GOOGLE_AUTH_SERVER_CLIENT_ID",
@@ -261,6 +276,7 @@ dependencies {
     // Firebase Auth
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.android.gms:play-services-auth:20.4.0")
+    implementation("com.facebook.android:facebook-login:15.2.0")
 
     // Firebase Firestore, Storage
     implementation("com.google.firebase:firebase-firestore-ktx")
@@ -283,7 +299,7 @@ dependencies {
     implementation("com.google.android.play:review-ktx:2.0.1")
 
     // AppLovin Libraries
-    implementation("com.applovin:applovin-sdk:11.5.5")
+    implementation("com.applovin:applovin-sdk:11.6.0")
     implementation("com.google.android.gms:play-services-ads-identifier:18.0.1")
     implementation("com.applovin.mediation:google-adapter:21.3.0.2")
 
@@ -312,7 +328,7 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-intents:3.5.0")
     androidTestImplementation("com.google.dagger:hilt-android-testing:2.44.2")
     kaptAndroidTest("com.google.dagger:hilt-compiler:2.44.2")
-    debugImplementation("androidx.fragment:fragment-testing:1.5.4")
+    debugImplementation("androidx.fragment:fragment-testing:1.5.5")
 }
 
 tasks.register<Copy>("copyReleaseApk") {
