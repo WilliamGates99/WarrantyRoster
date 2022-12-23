@@ -16,6 +16,7 @@
         <item name="snackbarButtonStyle">@style/Theme.WarrantyRoster.Snackbar.ActionButton</item>
         <item name="materialAlertDialogTheme">@style/Theme.WarrantyRoster.AlertDialog</item>
         <item name="materialCalendarTheme">@style/Theme.WarrantyRoster.DatePicker</item>
+        <item name="android:fontFamily">@font/localized_font</item>
     </style>
 
     <style name="Theme.WarrantyRoster.Landing" parent="Theme.WarrantyRoster">

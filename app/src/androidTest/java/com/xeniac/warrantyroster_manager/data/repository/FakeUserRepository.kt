@@ -1,5 +1,6 @@
 package com.xeniac.warrantyroster_manager.data.repository
 
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.xeniac.warrantyroster_manager.data.TestUser
 import com.xeniac.warrantyroster_manager.domain.repository.UserRepository
 
@@ -21,8 +22,8 @@ class FakeUserRepository : UserRepository {
         if (shouldReturnNetworkError) {
             throw Exception()
         } else {
-            for (u in users) {
-                if (u.email == email) {
+            users.forEach { user ->
+                if (user.email == email) {
                     throw Exception()
                 }
             }
@@ -36,6 +37,24 @@ class FakeUserRepository : UserRepository {
         } else {
             if (!users.contains(TestUser(email, password))) {
                 throw Exception()
+            }
+        }
+    }
+
+    override suspend fun authenticateGoogleAccountWithFirebase(account: GoogleSignInAccount) {
+        if (shouldReturnNetworkError) {
+            throw Exception()
+        } else {
+            if (account.account == null) {
+                throw Exception()
+            }
+
+            account.email?.let { email ->
+                users.forEach { user ->
+                    if (user.email != email) {
+                        users.add(TestUser(email, ""))
+                    }
+                }
             }
         }
     }

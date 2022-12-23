@@ -1,7 +1,9 @@
 <resources>
     <string name="app_name">Warranty Roster</string>
 
-    <string name="error_network_connection">Unable to connect to the internet.</string>
+
+    <string name="error_something_went_wrong">Something went wrong. Please try again later.</string>
+    <string name="error_network_connection_unavailable">Unable to connect to the internet.</string>
     <string name="error_network_failure">You\'re having network issues. Please try again later.</string>
     <string name="error_firebase_403">This service is not available in your region. Please consider changing your IP address by using a VPN.</string>
     <string name="error_firebase_device_blocked">We have blocked all requests from this device due to unusual activity. Please try again later.</string>
@@ -9,10 +11,26 @@
     <string name="error_btn_retry">Retry</string>
     <string name="error_btn_confirm">Confirm</string>
 
-    <string name="landing_text_language">Language</string>
-    <string name="landing_text_language_english_us">English (United States)</string>
-    <string name="landing_text_language_english_gb">English (United Kingdom)</string>
-    <string name="landing_text_language_persian_ir">Persian</string>
+
+    <string name="onboarding_dialog_title_language">Language</string>
+    <string name="onboarding_dialog_item_language_english_us">English (United States)</string>
+    <string name="onboarding_dialog_item_language_english_gb">English (United Kingdom)</string>
+    <string name="onboarding_dialog_item_language_persian_ir">Persian</string>
+    <string name="onboarding_btn_skip">Skip</string>
+    <string name="onboarding_btn_back">Back</string>
+    <string name="onboarding_btn_next">Next</string>
+    <string name="onboarding_1st_title">Never lose track of your product warranties anymore.</string>
+    <string name="onboarding_2nd_title">Keep track if a warranty is about to expire.</string>
+    <string name="onboarding_3rd_title">Save money by using warranties before their expiry date.</string>
+    <string name="onboarding_4th_title">All data are automatically backed up to the cloud.</string>
+    <string name="onboarding_4th_btn_start">Get Started</string>
+
+
+    <string name="auth_dialog_title_language">Language</string>
+    <string name="auth_dialog_item_language_english_us">English (United States)</string>
+    <string name="auth_dialog_item_language_english_gb">English (United Kingdom)</string>
+    <string name="auth_dialog_item_language_persian_ir">Persian</string>
+
 
     <string name="login_text_title">Login</string>
     <string name="login_text_description">Let\'s log you in.</string>
@@ -22,6 +40,8 @@
     <string name="login_hint_password">Enter your password</string>
     <string name="login_btn_forgot_pw">Forgot Password?</string>
     <string name="login_btn_login">Login</string>
+    <string name="login_text_other_methods">Or continue with</string>
+    <string name="login_text_other_methods_landscape">Or</string>
     <string name="login_text_register_title">Don’t have an account?</string>
     <string name="login_btn_register">Register</string>
     <string name="login_error_blank_email">Enter your email address!</string>
@@ -29,6 +49,8 @@
     <string name="login_error_email">The entered email address is not valid!</string>
     <string name="login_error_not_found">The account with the provided email does not exist.</string>
     <string name="login_error_credentials">The provided credentials are incorrect.</string>
+    <string name="login_error_email_exists_with_different_credentials">An account already exists with the same email address but different sign-in credentials.</string>
+
 
     <string name="register_text_title">Register</string>
     <string name="register_text_description">Enter your information below.</string>
@@ -40,6 +62,8 @@
     <string name="register_title_confirm_password">Confirm Password</string>
     <string name="register_hint_confirm_password">Re-enter your password</string>
     <string name="register_btn_register">Register</string>
+    <string name="register_text_other_methods">Or continue with</string>
+    <string name="register_text_other_methods_landscape">Or</string>
     <string name="register_text_login_title">Already have an account?</string>
     <string name="register_btn_login">Login</string>
     <string name="register_helper_password_weak">Weak</string>
@@ -52,6 +76,8 @@
     <string name="register_error_password_short">Password should be at least 6 characters!</string>
     <string name="register_error_password_not_match">Your password and confirm password do not match!</string>
     <string name="register_error_account_exists">An account with the provided email already exists.</string>
+    <string name="register_error_email_exists_with_different_credentials">An account already exists with the same email address but different sign-in credentials.</string>
+
 
     <string name="forgot_pw_text_title">Reset\nPassword</string>
     <string name="forgot_pw_text_description">Enter your verified email to receive password reset instructions.</string>
@@ -69,13 +95,15 @@
     <string name="forgot_pw_error_email">The entered email address is not valid!</string>
     <string name="forgot_pw_error_not_found">The account with the provided email does not exist.</string>
 
-    <string name="forgot_pw_sent_text_title">Check\nYour\nInbox</string>
+
+    <string name="forgot_pw_sent_text_title">Reset\nPassword</string>
     <string name="forgot_pw_sent_text_description">Please check your inbox and click on the received link to reset your password.</string>
     <string name="forgot_pw_sent_text_resend">Didn\'t receive the link?</string>
     <string name="forgot_pw_sent_btn_resend">Resend</string>
     <string name="forgot_pw_sent_text_first_time">The email has been sent.</string>
     <string name="forgot_pw_sent_text_resent">A new email has been sent.</string>
     <string name="forgot_pw_sent_btn_return">Return To Login</string>
+
 
     <string name="main_menu_title_warranties">Warranty List</string>
     <string name="main_menu_title_settings">Settings</string>
@@ -86,6 +114,7 @@
     <string name="main_rate_app_dialog_positive">Rate now</string>
     <string name="main_rate_app_dialog_negative">No, Thanks</string>
     <string name="main_rate_app_dialog_neutral">Remind me later</string>
+
 
     <string name="warranties_text_title">Warranty List</string>
     <string name="warranties_menu_hint_search">Search by title…</string>
@@ -156,6 +185,7 @@
         <item>December</item>
     </string-array>
 
+
     <string name="add_warranty_text_title">Add Warranty</string>
     <string name="add_warranty_menu_title_add">Add Warranty</string>
     <string name="add_warranty_title_title">Title</string>
@@ -183,6 +213,7 @@
     • fa-IR: روز/ماه/سال
     -->
     <string name="add_warranty_hint_date">mm/dd/yyyy</string>
+    <string name="add_warranty_helper_optional">Optional</string>
     <string name="add_warranty_title_date_picker_starting">Select Starting Date</string>
     <string name="add_warranty_title_date_picker_expiry">Select Expiry Date</string>
     <string name="add_warranty_error_blank_title">Enter the title!</string>
@@ -200,6 +231,7 @@
     • fa-IR: 2022/12/25
     -->
     <string name="add_warranty_format_date">%1$s/%2$s/%3$d</string>
+
 
     <string name="warranty_details_fab_edit">Edit</string>
     <string name="warranty_details_menu_title_delete">Delete Warranty</string>
@@ -236,6 +268,7 @@
     -->
     <string name="warranty_details_format_date">%1$s/%2$s/%3$d</string>
 
+
     <string name="edit_warranty_text_title">Edit Warranty</string>
     <string name="edit_warranty_menu_title_edit">Edit Warranty</string>
     <string name="edit_warranty_title_title">Title</string>
@@ -263,6 +296,7 @@
     • fa-IR: روز/ماه/سال
     -->
     <string name="edit_warranty_hint_date">mm/dd/yyyy</string>
+    <string name="edit_warranty_helper_optional">Optional</string>
     <string name="edit_warranty_title_date_picker_starting">Select Starting Date</string>
     <string name="edit_warranty_title_date_picker_expiry">Select Expiry Date</string>
     <string name="edit_warranty_error_blank_title">Enter the title!</string>
@@ -281,20 +315,19 @@
     -->
     <string name="edit_warranty_format_date">%1$s/%2$s/%3$d</string>
 
+
     <string name="settings_text_title">Settings</string>
     <string name="settings_title_account">Account</string>
     <string name="settings_title_settings">Settings</string>
     <string name="settings_btn_account_verify">Verify Email</string>
     <string name="settings_btn_account_verified">Verified</string>
+    <string name="settings_text_account_linked_accounts">Linked Accounts</string>
     <string name="settings_text_account_change_email">Change Email Address</string>
     <string name="settings_text_account_change_password">Change Password</string>
     <string name="settings_text_settings_language">Language</string>
     <string name="settings_text_settings_language_english_us">English (US)</string>
     <string name="settings_text_settings_language_english_gb">English (UK)</string>
     <string name="settings_text_settings_language_persian_ir">Persian</string>
-    <string name="settings_dialog_item_language_english_us">English (United States)</string>
-    <string name="settings_dialog_item_language_english_gb">English (United Kingdom)</string>
-    <string name="settings_dialog_item_language_persian_ir">Persian</string>
     <string name="settings_text_settings_theme">Theme</string>
     <string name="settings_text_settings_theme_default">System Default</string>
     <string name="settings_text_settings_theme_light">Light</string>
@@ -304,9 +337,29 @@
     <string name="settings_text_settings_rate_us">Rate Us</string>
     <string name="settings_text_settings_privacy_policy">Privacy Policy</string>
     <string name="settings_btn_logout">Logout</string>
+    <string name="settings_dialog_title_language">Language</string>
+    <string name="settings_dialog_item_language_english_us">English (United States)</string>
+    <string name="settings_dialog_item_language_english_gb">English (United Kingdom)</string>
+    <string name="settings_dialog_item_language_persian_ir">Persian</string>
+    <string name="settings_dialog_title_theme">Theme</string>
+    <string name="settings_dialog_item_theme_default">System Default</string>
+    <string name="settings_dialog_item_theme_light">Light</string>
+    <string name="settings_dialog_item_theme_dark">Dark</string>
     <string name="settings_dialog_message">The verification email has been successfully sent to your inbox.</string>
     <string name="settings_dialog_positive">Confirm</string>
+    <string name="settings_error_email_verification_email_not_provided">An email address must be provided.</string>
     <string name="settings_ad_indicator" translatable="false">Ad</string>
+
+
+    <string name="linked_accounts_text_title">Linked Accounts</string>
+    <string name="linked_accounts_title_google">Google</string>
+    <string name="linked_accounts_title_twitter">Twitter</string>
+    <string name="linked_accounts_title_facebook">Facebook</string>
+    <string name="linked_accounts_status_connect">Connect</string>
+    <string name="linked_accounts_status_disconnect">Disconnect</string>
+    <string name="linked_accounts_error_email_exists_with_different_credentials">An account already exists with the same email address but different sign-in credentials.</string>
+    <string name="linked_accounts_error_email_exists">An account with the provided email already exists.</string>
+
 
     <string name="change_password_text_title">Change Password</string>
     <string name="change_password_title_current_password">Current Password</string>
@@ -327,6 +380,7 @@
     <string name="change_password_error_credentials">The provided credentials are incorrect.</string>
     <string name="change_password_dialog_message">Your password has been successfully changed.</string>
     <string name="change_password_dialog_positive">Confirm</string>
+
 
     <string name="change_email_text_title">Change Email Address</string>
     <string name="change_email_title_password">Password</string>

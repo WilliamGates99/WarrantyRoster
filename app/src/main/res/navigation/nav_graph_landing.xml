@@ -3,59 +3,28 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph_landing"
-    app:startDestination="@id/loginFragment">
+    app:startDestination="@id/onBoardingFragment">
 
     <fragment
-        android:id="@+id/loginFragment"
-        android:name="com.xeniac.warrantyroster_manager.ui.landing.fragments.LoginFragment"
-        android:label="LoginFragment"
-        tools:layout="@layout/fragment_login">
+        android:id="@+id/onBoardingFragment"
+        android:name="com.xeniac.warrantyroster_manager.ui.fragments.onboarding.OnBoardingFragment"
+        android:label="OnBoardingFragment"
+        tools:layout="@layout/fragment_onboarding">
         <action
-            android:id="@+id/action_loginFragment_to_registerFragment"
-            app:destination="@id/registerFragment"
-            app:enterAnim="@anim/from_down"
-            app:exitAnim="@anim/to_up"
-            app:popEnterAnim="@anim/from_up"
-            app:popExitAnim="@anim/to_down" />
-        <action
-            android:id="@+id/action_loginFragment_to_forgotPasswordFragment"
-            app:destination="@id/forgotPwFragment"
-            app:enterAnim="@anim/from_down"
-            app:exitAnim="@anim/to_up"
-            app:popEnterAnim="@anim/from_up"
-            app:popExitAnim="@anim/to_down" />
+            android:id="@+id/action_onBoardingFragment_to_authFragment"
+            app:destination="@id/authFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            app:popUpTo="@id/onBoardingFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
-        android:id="@+id/registerFragment"
-        android:name="com.xeniac.warrantyroster_manager.ui.landing.fragments.RegisterFragment"
-        android:label="RegisterFragment"
-        tools:layout="@layout/fragment_register" />
-
-    <fragment
-        android:id="@+id/forgotPwFragment"
-        android:name="com.xeniac.warrantyroster_manager.ui.landing.fragments.ForgotPwFragment"
-        android:label="ForgotPwFragment"
-        tools:layout="@layout/fragment_forgot_pw">
-        <action
-            android:id="@+id/action_forgotPasswordFragment_to_forgotPwSentFragment"
-            app:destination="@id/forgotPwSentFragment"
-            app:enterAnim="@anim/from_down"
-            app:exitAnim="@anim/to_up"
-            app:popEnterAnim="@anim/from_up"
-            app:popExitAnim="@anim/to_down"
-            app:popUpTo="@id/loginFragment" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/forgotPwSentFragment"
-        android:name="com.xeniac.warrantyroster_manager.ui.landing.fragments.ForgotPwSentFragment"
-        android:label="ForgotPwSentFragment"
-        tools:layout="@layout/fragment_forgot_pw_sent">
-        <argument
-            android:name="email"
-            app:argType="string"
-            app:nullable="false" />
-    </fragment>
+        android:id="@+id/authFragment"
+        android:name="com.xeniac.warrantyroster_manager.ui.fragments.auth.AuthFragment"
+        android:label="AuthFragment"
+        tools:layout="@layout/fragment_auth" />
 
 </navigation>

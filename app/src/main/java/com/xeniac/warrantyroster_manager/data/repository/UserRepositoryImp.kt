@@ -1,9 +1,12 @@
 package com.xeniac.warrantyroster_manager.data.repository
 
-import com.google.firebase.auth.EmailAuthProvider
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
+import com.facebook.AccessToken
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.firebase.auth.*
 import com.xeniac.warrantyroster_manager.domain.repository.UserRepository
+import com.xeniac.warrantyroster_manager.utils.Constants.FIREBASE_AUTH_PROVIDER_ID_FACEBOOK
+import com.xeniac.warrantyroster_manager.utils.Constants.FIREBASE_AUTH_PROVIDER_ID_GOOGLE
+import com.xeniac.warrantyroster_manager.utils.Constants.FIREBASE_AUTH_PROVIDER_ID_TWITTER
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -11,12 +14,26 @@ class UserRepositoryImp @Inject constructor(
     private val firebaseAuth: FirebaseAuth
 ) : UserRepository {
 
-    override suspend fun registerViaEmail(email: String, password: String) {
+    override suspend fun registerWithEmail(email: String, password: String) {
         firebaseAuth.createUserWithEmailAndPassword(email, password).await()
     }
 
-    override suspend fun loginViaEmail(email: String, password: String) {
+    override suspend fun loginWithEmail(email: String, password: String) {
         firebaseAuth.signInWithEmailAndPassword(email, password).await()
+    }
+
+    override suspend fun loginWithGoogleAccount(account: GoogleSignInAccount) {
+        val credentials = GoogleAuthProvider.getCredential(account.idToken, null)
+        firebaseAuth.signInWithCredential(credentials).await()
+    }
+
+    override suspend fun loginWithTwitterAccount(credential: AuthCredential) {
+        firebaseAuth.signInWithCredential(credential).await()
+    }
+
+    override suspend fun loginWithFacebookAccount(accessToken: AccessToken) {
+        val credential = FacebookAuthProvider.getCredential(accessToken.token)
+        firebaseAuth.signInWithCredential(credential).await()
     }
 
     override suspend fun sendResetPasswordEmail(email: String) {
@@ -44,6 +61,42 @@ class UserRepositoryImp @Inject constructor(
             val credential = EmailAuthProvider.getCredential(it.email.toString(), password)
             it.reauthenticate(credential).await()
         }
+    }
+
+    override suspend fun getCurrentUserProviderIds(): List<String> {
+        val providerIds = mutableListOf<String>()
+
+        getCurrentUser().providerData.forEach { userInfo ->
+            providerIds.add(userInfo.providerId)
+        }
+
+        return providerIds
+    }
+
+    override suspend fun linkGoogleAccount(account: GoogleSignInAccount) {
+        val credential = GoogleAuthProvider.getCredential(account.idToken, null)
+        getCurrentUser().linkWithCredential(credential).await()
+    }
+
+    override suspend fun unlinkGoogleAccount() {
+        getCurrentUser().unlink(FIREBASE_AUTH_PROVIDER_ID_GOOGLE).await()
+    }
+
+    override suspend fun linkTwitterAccount(credential: AuthCredential) {
+        getCurrentUser().linkWithCredential(credential).await()
+    }
+
+    override suspend fun unlinkTwitterAccount() {
+        getCurrentUser().unlink(FIREBASE_AUTH_PROVIDER_ID_TWITTER).await()
+    }
+
+    override suspend fun linkFacebookAccount(accessToken: AccessToken) {
+        val credential = FacebookAuthProvider.getCredential(accessToken.token)
+        getCurrentUser().linkWithCredential(credential).await()
+    }
+
+    override suspend fun unlinkFacebookAccount() {
+        getCurrentUser().unlink(FIREBASE_AUTH_PROVIDER_ID_FACEBOOK).await()
     }
 
     override suspend fun updateUserEmail(newEmail: String) {

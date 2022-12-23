@@ -9,20 +9,8 @@
             type="String" />
 
         <variable
-            name="verificationBtnBackgroundTint"
-            type="android.content.res.ColorStateList" />
-
-        <variable
-            name="isVerificationBtnClickable"
+            name="isUserVerified"
             type="Boolean" />
-
-        <variable
-            name="verificationBtnText"
-            type="String" />
-
-        <variable
-            name="verificationBtnTextColor"
-            type="Integer" />
 
         <variable
             name="currentLanguage"
@@ -106,6 +94,7 @@
                             android:layout_height="@dimen/height_26dp"
                             android:layout_marginStart="@dimen/margin_12dp"
                             android:layout_marginTop="@dimen/margin_12dp"
+                            android:background="@{isUserVerified ? @color/green10 : @color/red10}"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             app:shapeAppearance="@style/Theme.WarrantyRoster.ImageViewShapeAppearance.Settings" />
@@ -148,14 +137,14 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="@dimen/margin_12dp"
-                            android:backgroundTint="@{verificationBtnBackgroundTint}"
-                            android:clickable="@{isVerificationBtnClickable}"
+                            android:backgroundTint="@{isUserVerified ? @color/green20 : @color/blue20}"
+                            android:clickable="@{isUserVerified ? false : true}"
                             android:gravity="center"
                             android:minWidth="@dimen/elevation_10dp"
                             android:minHeight="@dimen/height_18dp"
-                            android:text="@{verificationBtnText}"
+                            android:text="@{isUserVerified ? @string/settings_btn_account_verified : @string/settings_btn_account_verify}"
                             android:textAlignment="gravity"
-                            android:textColor="@{verificationBtnTextColor}"
+                            android:textColor="@{isUserVerified ? @color/green : @color/blue}"
                             app:layout_constraintBottom_toBottomOf="@+id/iv_account_email"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="@+id/iv_account_email"
@@ -175,7 +164,7 @@
                             app:layout_constraintVertical_bias="0.5" />
 
                         <View
-                            android:id="@+id/divider_account_change_email"
+                            android:id="@+id/divider_account_linked_accounts"
                             android:layout_width="@dimen/width_0dp"
                             android:layout_height="@dimen/height_1dp"
                             android:layout_marginTop="@dimen/margin_12dp"
@@ -183,6 +172,71 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/iv_account_email" />
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/cl_account_linked_accounts"
+                            android:layout_width="@dimen/width_0dp"
+                            android:layout_height="wrap_content"
+                            android:background="?attr/selectableItemBackground"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:paddingVertical="@dimen/padding_12dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/divider_account_linked_accounts">
+
+                            <com.google.android.material.imageview.ShapeableImageView
+                                android:id="@+id/iv_account_linked_accounts"
+                                android:layout_width="@dimen/width_26dp"
+                                android:layout_height="@dimen/height_26dp"
+                                android:layout_marginStart="@dimen/margin_12dp"
+                                android:background="@color/navyBlue10"
+                                android:src="@drawable/ic_settings_linked_accounts"
+                                app:contentPadding="@dimen/padding_4dp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:shapeAppearance="@style/Theme.WarrantyRoster.ImageViewShapeAppearance.Settings" />
+
+                            <com.google.android.material.textview.MaterialTextView
+                                android:id="@+id/tv_account_linked_accounts"
+                                android:layout_width="@dimen/width_0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginHorizontal="@dimen/margin_12dp"
+                                android:ellipsize="end"
+                                android:fontFamily="@font/localized_semi_bold"
+                                android:gravity="center_vertical|start"
+                                android:maxLines="1"
+                                android:text="@string/settings_text_account_linked_accounts"
+                                android:textAlignment="gravity"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/text_size_16sp"
+                                app:layout_constraintBottom_toBottomOf="@+id/iv_account_linked_accounts"
+                                app:layout_constraintEnd_toStartOf="@+id/iv_account_linked_accounts_arrow"
+                                app:layout_constraintStart_toEndOf="@+id/iv_account_linked_accounts"
+                                app:layout_constraintTop_toTopOf="@+id/iv_account_linked_accounts"
+                                app:layout_constraintVertical_bias="0.5" />
+
+                            <com.google.android.material.imageview.ShapeableImageView
+                                android:id="@+id/iv_account_linked_accounts_arrow"
+                                android:layout_width="@dimen/width_18dp"
+                                android:layout_height="@dimen/height_18dp"
+                                android:layout_marginEnd="@dimen/margin_12dp"
+                                android:src="@drawable/ic_settings_arrow"
+                                app:layout_constraintBottom_toBottomOf="@+id/iv_account_linked_accounts"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="@+id/iv_account_linked_accounts"
+                                app:layout_constraintVertical_bias="0.5" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <View
+                            android:id="@+id/divider_account_change_email"
+                            android:layout_width="@dimen/width_0dp"
+                            android:layout_height="@dimen/height_1dp"
+                            android:background="@color/grayLight"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/cl_account_linked_accounts" />
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:id="@+id/cl_account_change_email"

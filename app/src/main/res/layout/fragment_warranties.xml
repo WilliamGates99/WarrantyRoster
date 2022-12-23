@@ -14,7 +14,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:title="@string/warranties_text_title">
 
-        <!-- TODO CHANGE FONT STYLE -->
         <androidx.appcompat.widget.SearchView
             android:id="@+id/search_view"
             android:layout_width="wrap_content"

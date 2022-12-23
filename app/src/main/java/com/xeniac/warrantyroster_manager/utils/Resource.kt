@@ -1,17 +1,13 @@
 package com.xeniac.warrantyroster_manager.utils
 
-data class Resource<out T>(
+sealed class Resource<T>(
     val status: Status,
     val data: T? = null,
-    val message: String? = null
+    val message: UiText? = null
 ) {
-    companion object {
-        fun <T> success(data: T?) = Resource(Status.SUCCESS, data)
-
-        fun <T> error(message: String, data: T? = null) = Resource(Status.ERROR, data, message)
-
-        fun <T> loading(data: T? = null) = Resource(Status.LOADING, data)
-    }
+    class Success<T>(data: T? = null) : Resource<T>(Status.SUCCESS, data)
+    class Error<T>(message: UiText, data: T? = null) : Resource<T>(Status.ERROR, data, message)
+    class Loading<T> : Resource<T>(Status.LOADING)
 }
 
 enum class Status {

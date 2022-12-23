@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content>
+
+    <!--
+    Backup rules for Android 11 (API level 30) or lower.
+    Sample backup rules file; uncomment and customize as necessary.
+    See https://developer.android.com/guide/topics/data/autobackup
+    for details.
+    Note: This file is ignored for devices newer than Android 12 (API level 31).
+    See https://developer.android.com/about/versions/12/backup-restore
+    -->
+
+    <exclude domain="sharedpref" />
+    <exclude domain="root" />
+    <exclude domain="database" />
+    <exclude domain="file" />
+    <exclude domain="external" />
+
+</full-backup-content>
