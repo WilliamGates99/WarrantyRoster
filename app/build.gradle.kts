@@ -331,6 +331,22 @@ dependencies {
     debugImplementation("androidx.fragment:fragment-testing:1.5.5")
 }
 
+tasks.register<Copy>("copyDevPreviewApk") {
+    val releaseRootDir = "${rootDir}/app"
+    val destinationDir = "D:\\01 My Files\\Projects\\Xeniac\\Warranty Roster\\APK"
+
+    val versionName = "${android.defaultConfig.versionName}"
+    val renamedFileName = "Warranty Roster $versionName (Developer Preview)"
+
+    val bundleFile = "app-dev-playStore-release.apk"
+    val bundleSourceDir = "${releaseRootDir}/devPlayStore/release/${bundleFile}"
+
+    from(bundleSourceDir)
+    into(destinationDir)
+
+    rename(bundleFile, "${renamedFileName}.apk")
+}
+
 tasks.register<Copy>("copyReleaseApk") {
     val releaseRootDir = "${rootDir}/app"
     val destinationDir = "D:\\01 My Files\\Projects\\Xeniac\\Warranty Roster\\APK"
