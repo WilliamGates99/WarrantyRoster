@@ -31,6 +31,7 @@ import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_ACC
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIALS
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_ALREADY_LINKED
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
+import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_GOOGLE_SIGN_IN_API_NOT_AVAILABLE
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_GOOGLE_SIGN_IN_CLIENT_CANCELED
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_GOOGLE_SIGN_IN_CLIENT_OFFLINE
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_NETWORK_CONNECTION
@@ -43,6 +44,7 @@ import com.xeniac.warrantyroster_manager.utils.Resource
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.show403Error
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showActionSnackbarError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseDeviceBlockedError
+import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showIntentAppNotFoundError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkFailureError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showSomethingWentWrongError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showUnavailableNetworkConnectionError
@@ -237,8 +239,14 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
             linkGoogleAccountResultLauncher.launch(googleSignInClient.signInIntent)
         } catch (e: Exception) {
             hideGoogleLoadingAnimation()
-            snackbar = showSomethingWentWrongError(requireContext(), requireView())
-            Timber.e("launchGoogleSignInClient Exception: ${e.message}")
+            e.message?.let { message ->
+                snackbar = if (message.contains(ERROR_GOOGLE_SIGN_IN_API_NOT_AVAILABLE)) {
+                    showIntentAppNotFoundError(requireContext(), requireView())
+                } else {
+                    showSomethingWentWrongError(requireContext(), requireView())
+                }
+                Timber.e("launchGoogleSignInClient Exception: $message")
+            }
         }
     }
 

@@ -161,16 +161,13 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- MARGIN_TOP: 3 + 5 = 8DP -->
-            <!-- MARGIN_START: 19 + 5 = 24DP -->
-            <!-- MARGIN_END: 13 + 5 = 18DP -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_agreement"
                 style="@style/Theme.WarrantyRoster.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_19dp"
+                android:layout_marginHorizontal="@dimen/margin_8dp"
                 android:layout_marginTop="@dimen/margin_3dp"
-                android:layout_marginEnd="@dimen/margin_13dp"
                 android:clickable="true"
                 android:focusable="true"
                 android:fontFamily="@font/localized_light"
@@ -182,9 +179,9 @@
                 android:textSize="@dimen/text_size_12sp"
                 app:layout_constrainedWidth="true"
                 app:layout_constraintBottom_toTopOf="@+id/btn_register"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/ti_layout_confirm_password"
                 app:layout_constraintHorizontal_bias="0"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toStartOf="@id/ti_layout_confirm_password"
                 app:layout_constraintTop_toBottomOf="@+id/ti_layout_confirm_password" />
 
             <!-- MARGIN_TOP: 19 + 5 = 24DP -->
