@@ -29,6 +29,8 @@ class ForgotPwViewModel @Inject constructor(
     private val _timerLiveData: MutableLiveData<Event<Long>> = MutableLiveData()
     val timerLiveData: LiveData<Event<Long>> = _timerLiveData
 
+    private var countDownTimer: CountDownTimer? = null
+
     var forgotPwEmail: String? = null
     var isFirstSentEmail = true
     var timerInMillis: Long = 0
@@ -84,10 +86,12 @@ class ForgotPwViewModel @Inject constructor(
     }
 
     private fun startCountdown() {
+        countDownTimer?.cancel()
+
         val startTimeInMillis = 120 * 1000L // 120 Seconds
         val countDownIntervalInMillis = 1000L // 1 Second
 
-        object : CountDownTimer(startTimeInMillis, countDownIntervalInMillis) {
+        countDownTimer = object : CountDownTimer(startTimeInMillis, countDownIntervalInMillis) {
             override fun onTick(millisUntilFinished: Long) {
                 timerInMillis = millisUntilFinished
                 _timerLiveData.postValue(Event(millisUntilFinished))

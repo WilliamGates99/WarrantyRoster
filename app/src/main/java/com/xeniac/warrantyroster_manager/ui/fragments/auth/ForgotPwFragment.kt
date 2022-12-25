@@ -237,6 +237,6 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
         cpiSend.visibility = GONE
         tiEditEmail.isEnabled = true
         btnSend.isClickable = true
-        btnSend.text = requireContext().getString(R.string.login_btn_login)
+        btnSend.text = requireContext().getString(R.string.forgot_pw_btn_send)
     }
 }
