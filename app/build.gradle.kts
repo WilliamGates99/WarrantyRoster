@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage")
+
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 
 plugins {
@@ -51,6 +53,7 @@ android {
             "facebook_client_token",
             properties.getProperty("FACEBOOK_AUTH_CLIENT_TOKEN")
         )
+
         buildConfigField(
             "String",
             "GOOGLE_AUTH_SERVER_CLIENT_ID",
@@ -71,7 +74,11 @@ android {
             "APPLOVIN_WARRANTIES_NATIVE_UNIT_ID",
             properties.getProperty("APPLOVIN_WARRANTIES_NATIVE_UNIT_ID")
         )
-        buildConfigField("String", "TAPSELL_KEY", properties.getProperty("TAPSELL_KEY"))
+        buildConfigField(
+            "String",
+            "TAPSELL_KEY",
+            properties.getProperty("TAPSELL_KEY")
+        )
         buildConfigField(
             "String",
             "TAPSELL_INTERSTITIAL_ZONE_ID",
@@ -95,10 +102,6 @@ android {
         getByName("debug") {
             versionNameSuffix = " - debug"
             applicationIdSuffix = ".debug"
-            extra.apply {
-                set("enableCrashlytics", false)
-                set("alwaysUpdateBuildId", false)
-            }
         }
 
         getByName("release") {
@@ -174,12 +177,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
 
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "11"
     }
 
     bundle {
@@ -232,8 +235,8 @@ kapt {
 
 dependencies {
     implementation("androidx.core:core-ktx:1.9.0")
-    implementation("androidx.appcompat:appcompat:1.6.0-rc01")
-    implementation("com.google.android.material:material:1.7.0")
+    implementation("androidx.appcompat:appcompat:1.6.0")
+    implementation("com.google.android.material:material:1.8.0")
     implementation("androidx.core:core-splashscreen:1.0.0")
 
     // Navigation Component
@@ -262,7 +265,7 @@ dependencies {
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
     // Firebase BoM and Analytics
-    implementation(platform("com.google.firebase:firebase-bom:31.0.3"))
+    implementation(platform("com.google.firebase:firebase-bom:31.1.1"))
     implementation("com.google.firebase:firebase-analytics-ktx")
 
     // Firebase App Check
@@ -275,7 +278,7 @@ dependencies {
 
     // Firebase Auth
     implementation("com.google.firebase:firebase-auth-ktx")
-    implementation("com.google.android.gms:play-services-auth:20.4.0")
+    implementation("com.google.android.gms:play-services-auth:20.4.1")
     implementation("com.facebook.android:facebook-login:15.2.0")
 
     // Firebase Firestore, Storage
@@ -299,12 +302,12 @@ dependencies {
     implementation("com.google.android.play:review-ktx:2.0.1")
 
     // AppLovin Libraries
-    implementation("com.applovin:applovin-sdk:11.6.0")
+    implementation("com.applovin:applovin-sdk:11.7.0")
     implementation("com.google.android.gms:play-services-ads-identifier:18.0.1")
-    implementation("com.applovin.mediation:google-adapter:21.3.0.2")
+    implementation("com.applovin.mediation:google-adapter:21.5.0.0")
 
     // Google AdMob Library
-    implementation("com.google.android.gms:play-services-ads:21.3.0")
+    implementation("com.google.android.gms:play-services-ads:21.5.0")
 
     // Tapsell Library
     implementation("ir.tapsell.plus:tapsell-plus-sdk-android:2.1.8")
@@ -319,13 +322,13 @@ dependencies {
     androidTestImplementation("com.google.truth:truth:1.1.3")
     androidTestImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test:core:1.5.0")
-    androidTestImplementation("androidx.test.ext:junit:1.1.4")
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.arch.core:core-testing:2.1.0")
     androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
     androidTestImplementation("androidx.navigation:navigation-testing:2.5.3")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.0")
-    androidTestImplementation("androidx.test.espresso:espresso-contrib:3.5.0")
-    androidTestImplementation("androidx.test.espresso:espresso-intents:3.5.0")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    androidTestImplementation("androidx.test.espresso:espresso-contrib:3.5.1")
+    androidTestImplementation("androidx.test.espresso:espresso-intents:3.5.1")
     androidTestImplementation("com.google.dagger:hilt-android-testing:2.44.2")
     kaptAndroidTest("com.google.dagger:hilt-compiler:2.44.2")
     debugImplementation("androidx.fragment:fragment-testing:1.5.5")
