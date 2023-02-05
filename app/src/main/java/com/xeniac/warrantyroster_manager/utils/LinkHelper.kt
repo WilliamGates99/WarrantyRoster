@@ -20,7 +20,7 @@ object LinkHelper {
         showIntentAppNotFoundError(context, view)
     }
 
-    fun openPlayStore(context: Context, view: View) = try {
+    fun openAppPageInStore(context: Context, view: View) = try {
         Intent().apply {
             action = Intent.ACTION_VIEW
             data = Uri.parse(BuildConfig.URL_APP_STORE)
