@@ -31,7 +31,7 @@ object Constants {
     const val ONBOARDING_1ST_INDEX = 0
     const val ONBOARDING_2ND_INDEX = 1
     const val ONBOARDING_3RD_INDEX = 2
-    const val ONBOARDING_4TG_INDEX = 3
+    const val ONBOARDING_4TH_INDEX = 3
 
     // Google Play In-App Reviews API Constants
     const val IN_APP_REVIEWS_DAYS_FROM_FIRST_INSTALL_TIME = 10
