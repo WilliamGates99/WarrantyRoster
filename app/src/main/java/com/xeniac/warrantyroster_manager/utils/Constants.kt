@@ -33,6 +33,10 @@ object Constants {
     const val ONBOARDING_3RD_INDEX = 2
     const val ONBOARDING_4TG_INDEX = 3
 
+    // Google Play In-App Reviews API Constants
+    const val IN_APP_REVIEWS_DAYS_FROM_FIRST_INSTALL_TIME = 10
+    const val IN_APP_REVIEWS_DAYS_FROM_PREVIOUS_REQUEST_TIME = 5
+
     // Warranty Adapter View Type Constants
     const val VIEW_TYPE_WARRANTY = 0
     const val VIEW_TYPE_AD = 1
