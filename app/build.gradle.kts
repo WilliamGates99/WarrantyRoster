@@ -341,13 +341,13 @@ tasks.register<Copy>("copyDevPreviewApk") {
     val versionName = "${android.defaultConfig.versionName}"
     val renamedFileName = "Warranty Roster $versionName (Developer Preview)"
 
-    val bundleFile = "app-dev-playStore-release.apk"
-    val bundleSourceDir = "${releaseRootDir}/devPlayStore/release/${bundleFile}"
+    val apkFile = "app-dev-playStore-release.apk"
+    val apkSourceDir = "${releaseRootDir}/devPlayStore/release/${apkFile}"
 
-    from(bundleSourceDir)
+    from(apkSourceDir)
     into(destinationDir)
 
-    rename(bundleFile, "${renamedFileName}.apk")
+    rename(apkFile, "${renamedFileName}.apk")
 }
 
 tasks.register<Copy>("copyReleaseApk") {
@@ -359,6 +359,7 @@ tasks.register<Copy>("copyReleaseApk") {
 
     val amazonApkFile = "app-prod-amazon-release.apk"
     val cafeBazaarApkFile = "app-prod-cafeBazaar-release.apk"
+
     val amazonApkSourceDir = "${releaseRootDir}/prodAmazon/release/${amazonApkFile}"
     val cafeBazaarApkSourceDir = "${releaseRootDir}/prodCafeBazaar/release/${cafeBazaarApkFile}"
 
@@ -379,21 +380,18 @@ tasks.register<Copy>("copyReleaseBundle") {
     val versionName = "${android.defaultConfig.versionName}"
     val renamedFileName = "Warranty Roster $versionName"
 
-    val bundleFile = "app-prod-playStore-release.aab"
-    val bundleSourceDir = "${releaseRootDir}/prodPlayStore/release/${bundleFile}"
+    val playStoreBundleFile = "app-prod-playStore-release.aab"
+    val playStoreBundleSourceDir = "${releaseRootDir}/prodPlayStore/release/${playStoreBundleFile}"
 
-    from(bundleSourceDir)
+    from(playStoreBundleSourceDir)
     into(destinationDir)
 
-    rename(bundleFile, "${renamedFileName}.aab")
+    rename(playStoreBundleFile, "${renamedFileName}.aab")
 }
 
 tasks.register<Copy>("copyObfuscationFolder") {
-    val releaseRootDir = "${rootDir}/app"
-    val destinationDir = "D:\\01 My Files\\Projects\\Xeniac\\Warranty Roster\\APK"
-
-    val obfuscationSourceDir = "${releaseRootDir}/obfuscation"
-    val obfuscationDestDir = "${destinationDir}\\obfuscation"
+    val obfuscationSourceDir = "${rootDir}/app/obfuscation"
+    val obfuscationDestDir = "D:\\01 My Files\\Projects\\Xeniac\\Warranty Roster\\APK\\obfuscation"
 
     from(obfuscationSourceDir)
     into(obfuscationDestDir)
