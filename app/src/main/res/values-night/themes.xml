@@ -23,6 +23,7 @@
         <item name="android:colorBackground">@color/blue</item>
         <item name="android:statusBarColor">@color/blue</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
+        <item name="android:fontFamily">@font/localized_font</item>
     </style>
 
 </resources>
