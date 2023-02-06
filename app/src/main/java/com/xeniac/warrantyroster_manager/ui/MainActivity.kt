@@ -28,6 +28,8 @@ import com.xeniac.warrantyroster_manager.databinding.ActivityMainBinding
 import com.xeniac.warrantyroster_manager.domain.repository.ConnectivityObserver
 import com.xeniac.warrantyroster_manager.ui.viewmodels.MainViewModel
 import com.xeniac.warrantyroster_manager.utils.AlertDialogHelper.showThreeBtnAlertDialog
+import com.xeniac.warrantyroster_manager.utils.Constants.IN_APP_REVIEWS_DAYS_FROM_FIRST_INSTALL_TIME
+import com.xeniac.warrantyroster_manager.utils.Constants.IN_APP_REVIEWS_DAYS_FROM_PREVIOUS_REQUEST_TIME
 import com.xeniac.warrantyroster_manager.utils.DateHelper.getDaysFromFirstInstallTime
 import com.xeniac.warrantyroster_manager.utils.DateHelper.getDaysFromPreviousRequestTime
 import dagger.hilt.android.AndroidEntryPoint
@@ -182,7 +184,7 @@ class MainActivity : AppCompatActivity(), MaxAdListener {
         val daysFromFirstInstallTime = getDaysFromFirstInstallTime(this)
         Timber.i("It's been $daysFromFirstInstallTime days from first install time.")
 
-        if (daysFromFirstInstallTime >= 5) {
+        if (daysFromFirstInstallTime >= IN_APP_REVIEWS_DAYS_FROM_FIRST_INSTALL_TIME) {
             requestInAppReviews()
         }
     }
@@ -201,7 +203,7 @@ class MainActivity : AppCompatActivity(), MaxAdListener {
             getDaysFromPreviousRequestTime(previousRequestTimeInMillis)
         Timber.i("It's been $daysFromPreviousRequestTime days from the previous request time.")
 
-        if (daysFromPreviousRequestTime >= 3) {
+        if (daysFromPreviousRequestTime >= IN_APP_REVIEWS_DAYS_FROM_PREVIOUS_REQUEST_TIME) {
             requestInAppReviews()
         }
     }

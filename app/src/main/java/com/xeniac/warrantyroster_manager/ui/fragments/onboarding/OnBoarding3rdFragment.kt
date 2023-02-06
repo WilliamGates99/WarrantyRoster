@@ -7,7 +7,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentOnboarding3rdBinding
 import com.xeniac.warrantyroster_manager.utils.Constants.ONBOARDING_2ND_INDEX
-import com.xeniac.warrantyroster_manager.utils.Constants.ONBOARDING_4TG_INDEX
+import com.xeniac.warrantyroster_manager.utils.Constants.ONBOARDING_4TH_INDEX
 
 class OnBoarding3rdFragment : Fragment(R.layout.fragment_onboarding_3rd) {
 
@@ -38,6 +38,6 @@ class OnBoarding3rdFragment : Fragment(R.layout.fragment_onboarding_3rd) {
 
     private fun nextOnClick() = binding.btnNext.setOnClickListener {
         // ViewPager items start from 0
-        viewPager?.currentItem = ONBOARDING_4TG_INDEX
+        viewPager?.currentItem = ONBOARDING_4TH_INDEX
     }
 }

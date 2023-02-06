@@ -30,6 +30,7 @@
     <style name="Theme.WarrantyRoster.Landing" parent="Theme.WarrantyRoster">
         <item name="android:colorBackground">@color/blue</item>
         <item name="android:statusBarColor">@color/blue</item>
+        <item name="android:fontFamily">@font/localized_font</item>
     </style>
 
     <style name="Theme.WarrantyRoster.Snackbar" parent="Widget.MaterialComponents.Snackbar">
@@ -277,6 +278,8 @@
     </style>
 
     <style name="Theme.WarrantyRoster.Toolbar" parent="Widget.MaterialComponents.Toolbar">
+        <item name="android:layout_width">@dimen/width_0dp</item>
+        <item name="android:layout_height">?attr/actionBarSize</item>
         <item name="titleTextAppearance">@style/Theme.WarrantyRoster.Toolbar.Title</item>
         <item name="android:background">@color/surface</item>
         <item name="android:elevation">@dimen/elevation_3dp</item>

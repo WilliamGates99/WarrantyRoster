@@ -3,7 +3,7 @@ package com.xeniac.warrantyroster_manager.utils
 object Constants {
     // Web URLs
     const val URL_PRIVACY_POLICY = "https://xeniacdev.github.io/WarrantyRoster/privacy_policy"
-    const val URL_DONATE = "https://xeniacdev.github.io/WarrantyRoster/donate"
+    const val URL_DONATE = "https://xeniacdev.github.io/donate"
     const val URL_CROWDIN = "https://crowdin.com/project/warranty-roster"
 
     // DataStore Constants
@@ -31,7 +31,11 @@ object Constants {
     const val ONBOARDING_1ST_INDEX = 0
     const val ONBOARDING_2ND_INDEX = 1
     const val ONBOARDING_3RD_INDEX = 2
-    const val ONBOARDING_4TG_INDEX = 3
+    const val ONBOARDING_4TH_INDEX = 3
+
+    // Google Play In-App Reviews API Constants
+    const val IN_APP_REVIEWS_DAYS_FROM_FIRST_INSTALL_TIME = 10
+    const val IN_APP_REVIEWS_DAYS_FROM_PREVIOUS_REQUEST_TIME = 5
 
     // Warranty Adapter View Type Constants
     const val VIEW_TYPE_WARRANTY = 0

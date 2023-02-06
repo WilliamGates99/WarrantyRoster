@@ -405,6 +405,7 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
         } else {
             hideTwitterLoadingAnimation()
             task.exception?.message?.let { message ->
+                Timber.e("handleLinkTwitterAccountAuthResult Exception: $message")
                 if (message.contains(ERROR_TWITTER_O_AUTH_PROVIDER_CANCELED)) {
                     /* NO-OP */
                 } else {

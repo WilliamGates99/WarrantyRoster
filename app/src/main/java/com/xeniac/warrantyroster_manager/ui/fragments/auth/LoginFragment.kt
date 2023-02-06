@@ -470,6 +470,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         } else {
             hideTwitterLoadingAnimation()
             task.exception?.message?.let { message ->
+                Timber.e("handleLoginWithTwitterAccountAuthResult Exception: $message")
                 if (message.contains(ERROR_TWITTER_O_AUTH_PROVIDER_CANCELED)) {
                     /* NO-OP */
                 } else {

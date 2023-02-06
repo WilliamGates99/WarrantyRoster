@@ -38,7 +38,7 @@ import com.xeniac.warrantyroster_manager.utils.Constants.URL_CROWDIN
 import com.xeniac.warrantyroster_manager.utils.Constants.URL_DONATE
 import com.xeniac.warrantyroster_manager.utils.Constants.URL_PRIVACY_POLICY
 import com.xeniac.warrantyroster_manager.utils.LinkHelper.openLink
-import com.xeniac.warrantyroster_manager.utils.LinkHelper.openPlayStore
+import com.xeniac.warrantyroster_manager.utils.LinkHelper.openAppPageInStore
 import com.xeniac.warrantyroster_manager.utils.Resource
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.show403Error
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseDeviceBlockedError
@@ -350,7 +350,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
         }
 
     private fun rateUsOnClick() = binding.clSettingsRateUs.setOnClickListener {
-        openPlayStore(requireContext(), requireView())
+        openAppPageInStore(requireContext(), requireView())
     }
 
     private fun privacyPolicyOnClick() = binding.clSettingsPrivacyPolicy.setOnClickListener {

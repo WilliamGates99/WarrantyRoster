@@ -20,7 +20,7 @@ import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_INDEX_PERSIAN_IR
 import com.xeniac.warrantyroster_manager.utils.Constants.ONBOARDING_1ST_INDEX
 import com.xeniac.warrantyroster_manager.utils.Constants.ONBOARDING_2ND_INDEX
 import com.xeniac.warrantyroster_manager.utils.Constants.ONBOARDING_3RD_INDEX
-import com.xeniac.warrantyroster_manager.utils.Constants.ONBOARDING_4TG_INDEX
+import com.xeniac.warrantyroster_manager.utils.Constants.ONBOARDING_4TH_INDEX
 
 class OnBoardingFragment : Fragment(R.layout.fragment_onboarding) {
 
@@ -54,7 +54,7 @@ class OnBoardingFragment : Fragment(R.layout.fragment_onboarding) {
                 when (currentItem) {
                     ONBOARDING_2ND_INDEX -> currentItem = ONBOARDING_1ST_INDEX
                     ONBOARDING_3RD_INDEX -> currentItem = ONBOARDING_2ND_INDEX
-                    ONBOARDING_4TG_INDEX -> currentItem = ONBOARDING_3RD_INDEX
+                    ONBOARDING_4TH_INDEX -> currentItem = ONBOARDING_3RD_INDEX
                 }
             }
         }
@@ -85,7 +85,7 @@ class OnBoardingFragment : Fragment(R.layout.fragment_onboarding) {
                     ONBOARDING_1ST_INDEX -> false
                     ONBOARDING_2ND_INDEX -> true
                     ONBOARDING_3RD_INDEX -> true
-                    ONBOARDING_4TG_INDEX -> true
+                    ONBOARDING_4TH_INDEX -> true
                     else -> false
                 }
             }
