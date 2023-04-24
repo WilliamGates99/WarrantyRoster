@@ -12,19 +12,19 @@ plugins {
     id("dagger.hilt.android.plugin")
     id("com.google.firebase.crashlytics")
     id("com.google.firebase.firebase-perf")
-//    id("applovin-quality-service")
+    id("applovin-quality-service")
 }
 
 val properties = gradleLocalProperties(rootDir)
 
-//applovin {
-//    apiKey = properties.getProperty("APPLOVIN_API_KEY")
-//}
+applovin {
+    apiKey = properties.getProperty("APPLOVIN_API_KEY")
+}
 
 android {
     namespace = "com.xeniac.warrantyroster_manager"
     compileSdk = 33
-    buildToolsVersion = "33.0.1"
+    buildToolsVersion = "34.0.0 rc3"
 
     defaultConfig {
         applicationId = "com.xeniac.warrantyroster_manager"
@@ -36,7 +36,7 @@ android {
         /**
          * Keeps language resources for only the locales specified below.
          */
-        resourceConfigurations += mutableSetOf("en-rUS", "en-rGB", "fa-rIR")
+        resourceConfigurations.addAll(listOf("en-rUS", "en-rGB", "fa-rIR"))
 
         resValue(
             "string",
@@ -105,8 +105,20 @@ android {
         }
 
         getByName("release") {
+            /**
+             * Enables code shrinking, obfuscation, and optimization for only
+             * your project's release build type.
+             */
             isMinifyEnabled = true
+
+            /**
+             * Enables resource shrinking, which is performed by the Android Gradle plugin.
+             */
             isShrinkResources = true
+
+            /**
+             * Includes the default ProGuard rules files that are packaged with the Android Gradle plugin.
+             */
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -172,17 +184,24 @@ android {
     }
 
     buildFeatures {
+        buildConfig = true
         viewBinding = true
         dataBinding = true
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
+    }
+
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
     }
 
     bundle {
@@ -234,25 +253,25 @@ kapt {
 }
 
 dependencies {
-    implementation("androidx.core:core-ktx:1.9.0")
-    implementation("androidx.appcompat:appcompat:1.6.0")
+    implementation("androidx.core:core-ktx:1.10.0")
+    implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.8.0")
-    implementation("androidx.core:core-splashscreen:1.0.0")
+    implementation("androidx.core:core-splashscreen:1.0.1")
 
     // Navigation Component
     implementation("androidx.navigation:navigation-fragment-ktx:2.5.3")
     implementation("androidx.navigation:navigation-ui-ktx:2.5.3")
 
     // Dagger - Hilt
-    implementation("com.google.dagger:hilt-android:2.44.2")
-    kapt("com.google.dagger:hilt-compiler:2.44.2")
+    implementation("com.google.dagger:hilt-android:2.45")
+    kapt("com.google.dagger:hilt-compiler:2.45")
 
     // Activity KTX for Injecting ViewModels into Fragments
-    implementation("androidx.activity:activity-ktx:1.6.1")
+    implementation("androidx.activity:activity-ktx:1.7.1")
 
     // Architectural Components
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
 
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
@@ -265,7 +284,7 @@ dependencies {
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
     // Firebase BoM and Analytics
-    implementation(platform("com.google.firebase:firebase-bom:31.1.1"))
+    implementation(platform("com.google.firebase:firebase-bom:31.5.0"))
     implementation("com.google.firebase:firebase-analytics-ktx")
 
     // Firebase App Check
@@ -278,8 +297,8 @@ dependencies {
 
     // Firebase Auth
     implementation("com.google.firebase:firebase-auth-ktx")
-    implementation("com.google.android.gms:play-services-auth:20.4.1")
-    implementation("com.facebook.android:facebook-login:15.2.0")
+    implementation("com.google.android.gms:play-services-auth:20.5.0")
+    implementation("com.facebook.android:facebook-login:16.0.1")
 
     // Firebase Firestore, Storage
     implementation("com.google.firebase:firebase-firestore-ktx")
@@ -289,11 +308,11 @@ dependencies {
     implementation("com.jakewharton.timber:timber:5.0.1")
 
     // Lottie Library
-    implementation("com.airbnb.android:lottie:5.2.0")
+    implementation("com.airbnb.android:lottie:6.0.0")
 
     // Coil Library
-    implementation("io.coil-kt:coil:2.2.2")
-    implementation("io.coil-kt:coil-svg:2.2.2")
+    implementation("io.coil-kt:coil:2.3.0")
+    implementation("io.coil-kt:coil-svg:2.3.0")
 
     // Dots Indicator Library
     implementation("com.tbuonomo:dotsindicator:4.3")
@@ -302,12 +321,12 @@ dependencies {
     implementation("com.google.android.play:review-ktx:2.0.1")
 
     // AppLovin Libraries
-    implementation("com.applovin:applovin-sdk:11.7.0")
+    implementation("com.applovin:applovin-sdk:11.9.0")
     implementation("com.google.android.gms:play-services-ads-identifier:18.0.1")
-    implementation("com.applovin.mediation:google-adapter:21.5.0.0")
+    implementation("com.applovin.mediation:google-adapter:22.0.0.2")
 
     // Google AdMob Library
-    implementation("com.google.android.gms:play-services-ads:21.5.0")
+    implementation("com.google.android.gms:play-services-ads:22.0.0")
 
     // Tapsell Library
     implementation("ir.tapsell.plus:tapsell-plus-sdk-android:2.1.8")
@@ -315,23 +334,25 @@ dependencies {
     // Local Unit Test Libraries
     testImplementation("com.google.truth:truth:1.1.3")
     testImplementation("junit:junit:4.13.2")
-    testImplementation("androidx.arch.core:core-testing:2.1.0")
+    testImplementation("androidx.arch.core:core-testing:2.2.0")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
 
     // Instrumentation Test Libraries
     androidTestImplementation("com.google.truth:truth:1.1.3")
     androidTestImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test:core:1.5.0")
+    androidTestImplementation("androidx.test:core:1.4.0") // DO NOT UPGRADE
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.arch.core:core-testing:2.1.0")
+    androidTestImplementation("androidx.arch.core:core-testing:2.2.0")
     androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
+    androidTestImplementation("com.google.dagger:hilt-android-testing:2.45")
+    kaptAndroidTest("com.google.dagger:hilt-compiler:2.45")
+
+    // UI Test Libraries
     androidTestImplementation("androidx.navigation:navigation-testing:2.5.3")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    androidTestImplementation("androidx.test.espresso:espresso-contrib:3.5.1")
-    androidTestImplementation("androidx.test.espresso:espresso-intents:3.5.1")
-    androidTestImplementation("com.google.dagger:hilt-android-testing:2.44.2")
-    kaptAndroidTest("com.google.dagger:hilt-compiler:2.44.2")
-    debugImplementation("androidx.fragment:fragment-testing:1.5.5")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.3.0") // DO NOT UPGRADE
+    androidTestImplementation("androidx.test.espresso:espresso-contrib:3.3.0") // DO NOT UPGRADE
+    androidTestImplementation("androidx.test.espresso:espresso-intents:3.3.0") // DO NOT UPGRADE
+    debugImplementation("androidx.fragment:fragment-testing:1.5.7")
 }
 
 tasks.register<Copy>("copyDevPreviewApk") {
