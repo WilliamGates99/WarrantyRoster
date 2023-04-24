@@ -37,11 +37,9 @@
             android:name=".ui.LandingActivity"
             android:theme="@style/Theme.WarrantyRoster.Landing" />
 
-
         <activity
             android:name="com.facebook.FacebookActivity"
-            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:label="@string/app_name" />
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation" />
 
         <activity
             android:name="com.facebook.CustomTabActivity"
