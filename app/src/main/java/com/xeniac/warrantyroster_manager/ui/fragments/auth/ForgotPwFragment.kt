@@ -52,7 +52,7 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
     lateinit var viewModel: ForgotPwViewModel
 
     private lateinit var connectivityObserver: ConnectivityObserver
-    private var networkStatus: ConnectivityObserver.Status = ConnectivityObserver.Status.AVAILABLE
+    private var networkStatus: ConnectivityObserver.Status = ConnectivityObserver.Status.UNAVAILABLE
 
     private var snackbar: Snackbar? = null
 

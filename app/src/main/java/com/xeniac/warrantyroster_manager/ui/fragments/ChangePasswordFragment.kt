@@ -57,7 +57,7 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
     private lateinit var newPassword: String
 
     private lateinit var connectivityObserver: ConnectivityObserver
-    private var networkStatus: ConnectivityObserver.Status = ConnectivityObserver.Status.AVAILABLE
+    private var networkStatus: ConnectivityObserver.Status = ConnectivityObserver.Status.UNAVAILABLE
 
     private var snackbar: Snackbar? = null
 

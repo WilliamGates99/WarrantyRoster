@@ -52,7 +52,7 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
     lateinit var decimalFormat: DecimalFormat
 
     private lateinit var connectivityObserver: ConnectivityObserver
-    private var networkStatus: ConnectivityObserver.Status = ConnectivityObserver.Status.AVAILABLE
+    private var networkStatus: ConnectivityObserver.Status = ConnectivityObserver.Status.UNAVAILABLE
 
     private var snackbar: Snackbar? = null
 

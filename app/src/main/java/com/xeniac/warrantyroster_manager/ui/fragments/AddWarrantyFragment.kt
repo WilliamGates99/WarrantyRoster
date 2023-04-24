@@ -83,7 +83,7 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
     private var expiryDateInput: String? = null
 
     private lateinit var connectivityObserver: ConnectivityObserver
-    private var networkStatus: ConnectivityObserver.Status = ConnectivityObserver.Status.AVAILABLE
+    private var networkStatus: ConnectivityObserver.Status = ConnectivityObserver.Status.UNAVAILABLE
 
     private var snackbar: Snackbar? = null
 

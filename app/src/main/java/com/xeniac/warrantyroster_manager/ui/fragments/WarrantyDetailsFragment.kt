@@ -68,7 +68,7 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
     private lateinit var warranty: Warranty
 
     private lateinit var connectivityObserver: ConnectivityObserver
-    private var networkStatus: ConnectivityObserver.Status = ConnectivityObserver.Status.AVAILABLE
+    private var networkStatus: ConnectivityObserver.Status = ConnectivityObserver.Status.UNAVAILABLE
 
     private var snackbar: Snackbar? = null
 

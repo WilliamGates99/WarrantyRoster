@@ -87,7 +87,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     private lateinit var currentAppLanguage: String
 
     private lateinit var connectivityObserver: ConnectivityObserver
-    private var networkStatus: ConnectivityObserver.Status = ConnectivityObserver.Status.AVAILABLE
+    private var networkStatus: ConnectivityObserver.Status = ConnectivityObserver.Status.UNAVAILABLE
 
     var snackbar: Snackbar? = null
 
