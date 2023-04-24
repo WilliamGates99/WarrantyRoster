@@ -28,6 +28,7 @@ class OnBoarding4thFragment : Fragment(R.layout.fragment_onboarding_4th) {
         navigateToLoginFragment()
     }
 
-    private fun navigateToLoginFragment() =
-        findNavController().navigate(OnBoardingFragmentDirections.actionOnBoardingFragmentToAuthFragment())
+    private fun navigateToLoginFragment() = findNavController().navigate(
+        OnBoardingFragmentDirections.actionOnBoardingFragmentToAuthFragment()
+    )
 }
