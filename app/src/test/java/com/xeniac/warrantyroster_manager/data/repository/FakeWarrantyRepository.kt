@@ -3,9 +3,9 @@ package com.xeniac.warrantyroster_manager.data.repository
 import com.google.firebase.firestore.Query
 import com.xeniac.warrantyroster_manager.data.remote.models.Warranty
 import com.xeniac.warrantyroster_manager.data.remote.models.WarrantyInput
-import com.xeniac.warrantyroster_manager.domain.repository.MainRepository
+import com.xeniac.warrantyroster_manager.domain.repository.WarrantyRepository
 
-class FakeMainRepository : MainRepository {
+class FakeWarrantyRepository : WarrantyRepository {
 
     //    private val categories = mutableListOf<Category>()
     private val warranties = mutableListOf<Warranty>()

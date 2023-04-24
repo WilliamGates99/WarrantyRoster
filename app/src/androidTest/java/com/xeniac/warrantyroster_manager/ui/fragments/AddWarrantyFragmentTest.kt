@@ -15,7 +15,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withParent
 import com.google.common.truth.Truth.assertThat
 import com.xeniac.warrantyroster_manager.NavGraphMainDirections
 import com.xeniac.warrantyroster_manager.R
-import com.xeniac.warrantyroster_manager.data.repository.FakeMainRepository
+import com.xeniac.warrantyroster_manager.data.repository.FakeWarrantyRepository
 import com.xeniac.warrantyroster_manager.data.repository.FakeUserRepository
 import com.xeniac.warrantyroster_manager.databinding.FragmentAddWarrantyBinding
 import com.xeniac.warrantyroster_manager.getOrAwaitValue
@@ -54,7 +54,7 @@ class AddWarrantyFragmentTest {
         context = ApplicationProvider.getApplicationContext()
         navController = TestNavHostController(context)
 
-        testViewModel = WarrantyViewModel(FakeUserRepository(), FakeMainRepository())
+        testViewModel = WarrantyViewModel(FakeUserRepository(), FakeWarrantyRepository())
 
         launchFragmentInHiltContainer<AddWarrantyFragment> {
             navController.setGraph(R.navigation.nav_graph_main)

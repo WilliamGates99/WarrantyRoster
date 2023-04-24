@@ -9,7 +9,7 @@ import com.xeniac.warrantyroster_manager.data.remote.models.Category
 import com.xeniac.warrantyroster_manager.data.remote.models.ListItemType
 import com.xeniac.warrantyroster_manager.data.remote.models.Warranty
 import com.xeniac.warrantyroster_manager.data.remote.models.WarrantyInput
-import com.xeniac.warrantyroster_manager.domain.repository.MainRepository
+import com.xeniac.warrantyroster_manager.domain.repository.WarrantyRepository
 import com.xeniac.warrantyroster_manager.domain.repository.UserRepository
 import com.xeniac.warrantyroster_manager.utils.Constants.CATEGORIES_ICON
 import com.xeniac.warrantyroster_manager.utils.Constants.CATEGORIES_TITLE
@@ -44,7 +44,7 @@ import javax.inject.Inject
 @HiltViewModel
 class WarrantyViewModel @Inject constructor(
     private val userRepository: UserRepository,
-    private val mainRepository: MainRepository
+    private val warrantyRepository: WarrantyRepository
 ) : ViewModel() {
 
     private val _categoriesLiveData:
@@ -138,7 +138,7 @@ class WarrantyViewModel @Inject constructor(
 
     fun getCategoriesFromFirestore() = viewModelScope.launch {
         _categoriesLiveData.postValue(Event(Resource.Loading()))
-        mainRepository.getCategoriesFromFirestore().addSnapshotListener { value, error ->
+        warrantyRepository.getCategoriesFromFirestore().addSnapshotListener { value, error ->
             error?.let {
                 Timber.e("getCategoriesFromFirestore Error: ${it.message}")
                 _categoriesLiveData.postValue(Event(Resource.Error(UiText.DynamicString(it.message.toString()))))
@@ -174,7 +174,7 @@ class WarrantyViewModel @Inject constructor(
 
     fun getWarrantiesListFromFirestore() = viewModelScope.launch {
         _warrantiesLiveData.postValue(Event(Resource.Loading()))
-        mainRepository.getWarrantiesFromFirestore().addSnapshotListener { value, error ->
+        warrantyRepository.getWarrantiesFromFirestore().addSnapshotListener { value, error ->
             error?.let {
                 Timber.e("getWarrantiesListFromFirestore Error: ${it.message}")
                 _warrantiesLiveData.postValue(Event(Resource.Error(UiText.DynamicString(it.message.toString()))))
@@ -325,7 +325,7 @@ class WarrantyViewModel @Inject constructor(
     private suspend fun safeAddWarrantyToFirestore(warrantyInput: WarrantyInput) {
         _addWarrantyLiveData.postValue(Event(Resource.Loading()))
         try {
-            mainRepository.addWarrantyToFirestore(warrantyInput)
+            warrantyRepository.addWarrantyToFirestore(warrantyInput)
             _addWarrantyLiveData.postValue(Event(Resource.Success()))
             Timber.i("Warranty successfully added.")
         } catch (e: Exception) {
@@ -409,7 +409,7 @@ class WarrantyViewModel @Inject constructor(
     ) {
         _updateWarrantyLiveData.postValue(Event(Resource.Loading()))
         try {
-            mainRepository.updateWarrantyInFirestore(warrantyId, warrantyInput)
+            warrantyRepository.updateWarrantyInFirestore(warrantyId, warrantyInput)
             _updateWarrantyLiveData.postValue(Event(Resource.Success()))
             Timber.i("Warranty successfully updated.")
         } catch (e: Exception) {
@@ -425,7 +425,7 @@ class WarrantyViewModel @Inject constructor(
     private suspend fun safeGetUpdatedWarrantyFromFirestore(warrantyId: String) {
         _updatedWarrantyLiveData.postValue(Event(Resource.Loading()))
         try {
-            val updatedWarranty = mainRepository.getUpdatedWarrantyFromFirestore(warrantyId)
+            val updatedWarranty = warrantyRepository.getUpdatedWarrantyFromFirestore(warrantyId)
             _updatedWarrantyLiveData.postValue(Event(Resource.Success(updatedWarranty)))
             Timber.i("Updated warranty successfully retrieved.")
         } catch (e: Exception) {
@@ -441,7 +441,7 @@ class WarrantyViewModel @Inject constructor(
     private suspend fun safeDeleteWarrantyFromFirestore(warrantyId: String) {
         _deleteWarrantyLiveData.postValue(Event(Resource.Loading()))
         try {
-            mainRepository.deleteWarrantyFromFirestore(warrantyId)
+            warrantyRepository.deleteWarrantyFromFirestore(warrantyId)
             _deleteWarrantyLiveData.postValue(Event(Resource.Success()))
             Timber.i("$warrantyId successfully deleted.")
         } catch (e: Exception) {

@@ -10,7 +10,7 @@ import com.xeniac.warrantyroster_manager.utils.Constants.FIREBASE_AUTH_PROVIDER_
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
-class UserRepositoryImp @Inject constructor(
+class UserRepositoryImpl @Inject constructor(
     private val firebaseAuth: FirebaseAuth
 ) : UserRepository {
 

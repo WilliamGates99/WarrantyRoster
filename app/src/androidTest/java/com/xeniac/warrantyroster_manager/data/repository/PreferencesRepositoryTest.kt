@@ -44,7 +44,7 @@ class PreferencesRepositoryTest {
         produceFile = { context.preferencesDataStoreFile("settings_test") }
     )
 
-    private val testRepository: PreferencesRepository = PreferencesRepositoryImp(testDataStore)
+    private val testRepository: PreferencesRepository = PreferencesRepositoryImpl(testDataStore)
 
     @After
     fun tearDown() {

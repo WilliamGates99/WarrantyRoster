@@ -4,7 +4,7 @@ import com.google.firebase.firestore.Query
 import com.xeniac.warrantyroster_manager.data.remote.models.Warranty
 import com.xeniac.warrantyroster_manager.data.remote.models.WarrantyInput
 
-interface MainRepository {
+interface WarrantyRepository {
 
     fun getCategoriesFromFirestore(): Query
 

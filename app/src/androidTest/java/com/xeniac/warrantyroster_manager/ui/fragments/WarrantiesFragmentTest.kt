@@ -13,7 +13,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import com.google.common.truth.Truth.assertThat
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.data.remote.models.WarrantyInput
-import com.xeniac.warrantyroster_manager.data.repository.FakeMainRepository
+import com.xeniac.warrantyroster_manager.data.repository.FakeWarrantyRepository
 import com.xeniac.warrantyroster_manager.data.repository.FakeUserRepository
 import com.xeniac.warrantyroster_manager.databinding.FragmentWarrantiesBinding
 import com.xeniac.warrantyroster_manager.launchFragmentInHiltContainer
@@ -40,7 +40,7 @@ class WarrantiesFragmentTest {
     private lateinit var navController: TestNavHostController
     private lateinit var testBinding: FragmentWarrantiesBinding
 
-    private lateinit var fakeMainRepository: FakeMainRepository
+    private lateinit var fakeMainRepository: FakeWarrantyRepository
     private lateinit var testViewModel: WarrantyViewModel
 
     @Before
@@ -50,7 +50,7 @@ class WarrantiesFragmentTest {
         context = ApplicationProvider.getApplicationContext()
         navController = TestNavHostController(context)
 
-        fakeMainRepository = FakeMainRepository()
+        fakeMainRepository = FakeWarrantyRepository()
 
         testViewModel = WarrantyViewModel(FakeUserRepository(), fakeMainRepository)
 

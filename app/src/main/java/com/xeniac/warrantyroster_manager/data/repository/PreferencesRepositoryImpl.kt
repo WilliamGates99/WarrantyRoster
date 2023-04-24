@@ -12,7 +12,7 @@ import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 import javax.inject.Inject
 
-class PreferencesRepositoryImp @Inject constructor(
+class PreferencesRepositoryImpl @Inject constructor(
     private val settingsDataStore: DataStore<Preferences>
 ) : PreferencesRepository {
 
