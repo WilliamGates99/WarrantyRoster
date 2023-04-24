@@ -1,5 +1,6 @@
 package com.xeniac.warrantyroster_manager.ui.fragments
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +8,7 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
@@ -22,9 +24,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.OAuthProvider
 import com.xeniac.warrantyroster_manager.BuildConfig
 import com.xeniac.warrantyroster_manager.R
+import com.xeniac.warrantyroster_manager.data.repository.NetworkConnectivityObserver
 import com.xeniac.warrantyroster_manager.databinding.FragmentLinkedAccountsBinding
 import com.xeniac.warrantyroster_manager.domain.repository.ConnectivityObserver
-import com.xeniac.warrantyroster_manager.ui.MainActivity
 import com.xeniac.warrantyroster_manager.ui.viewmodels.LinkedAccountsViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS
@@ -51,6 +53,8 @@ import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showUnavailableNet
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
@@ -69,6 +73,9 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
 
     private lateinit var currentAppLanguage: String
 
+    private lateinit var connectivityObserver: ConnectivityObserver
+    private var networkStatus: ConnectivityObserver.Status = ConnectivityObserver.Status.AVAILABLE
+
     private var snackbar: Snackbar? = null
 
     override fun onCreateView(
@@ -86,7 +93,9 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentLinkedAccountsBinding.bind(view)
         viewModel = ViewModelProvider(requireActivity())[LinkedAccountsViewModel::class.java]
+        connectivityObserver = NetworkConnectivityObserver(requireContext())
 
+        networkConnectivityObserver()
         toolbarNavigationBackOnClick()
         subscribeToObservers()
         getCurrentAppLanguage()
@@ -100,6 +109,15 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
         super.onDestroyView()
         snackbar?.dismiss()
         _binding = null
+    }
+
+    private fun networkConnectivityObserver() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            connectivityObserver.observe().onEach {
+                networkStatus = it
+                Timber.i("Network connectivity status inside of observer is $it")
+            }.launchIn(lifecycleScope)
+        }
     }
 
     private fun toolbarNavigationBackOnClick() = binding.toolbar.setNavigationOnClickListener {
@@ -169,7 +187,7 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
     }
 
     private fun unlinkGoogleAccount() {
-        if ((requireActivity() as MainActivity).networkStatus == ConnectivityObserver.Status.AVAILABLE) {
+        if (networkStatus == ConnectivityObserver.Status.AVAILABLE) {
             viewModel.unlinkGoogleAccount()
         } else {
             snackbar = showUnavailableNetworkConnectionError(
@@ -213,7 +231,7 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
         }
 
     private fun linkGoogleAccount() {
-        if ((requireActivity() as MainActivity).networkStatus == ConnectivityObserver.Status.AVAILABLE) {
+        if (networkStatus == ConnectivityObserver.Status.AVAILABLE) {
             launchGoogleSignInClient()
         } else {
             snackbar = showUnavailableNetworkConnectionError(
@@ -317,7 +335,7 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
     }
 
     private fun unlinkTwitterAccount() {
-        if ((requireActivity() as MainActivity).networkStatus == ConnectivityObserver.Status.AVAILABLE) {
+        if (networkStatus == ConnectivityObserver.Status.AVAILABLE) {
             viewModel.unlinkTwitterAccount()
         } else {
             snackbar = showUnavailableNetworkConnectionError(
@@ -361,7 +379,7 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
         }
 
     private fun checkPendingLinkTwitterAccountAuthResult() {
-        if ((requireActivity() as MainActivity).networkStatus == ConnectivityObserver.Status.AVAILABLE) {
+        if (networkStatus == ConnectivityObserver.Status.AVAILABLE) {
             showTwitterLoadingAnimation()
 
             val pendingAuthResult = firebaseAuth.pendingAuthResult
@@ -491,7 +509,7 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
     }
 
     private fun unlinkFacebookAccount() {
-        if ((requireActivity() as MainActivity).networkStatus == ConnectivityObserver.Status.AVAILABLE) {
+        if (networkStatus == ConnectivityObserver.Status.AVAILABLE) {
             viewModel.unlinkFacebookAccount()
         } else {
             snackbar = showUnavailableNetworkConnectionError(
@@ -535,7 +553,7 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
         }
 
     private fun linkFacebookAccount() {
-        if ((requireActivity() as MainActivity).networkStatus == ConnectivityObserver.Status.AVAILABLE) {
+        if (networkStatus == ConnectivityObserver.Status.AVAILABLE) {
             launchFacebookLoginManager()
         } else {
             snackbar = showUnavailableNetworkConnectionError(

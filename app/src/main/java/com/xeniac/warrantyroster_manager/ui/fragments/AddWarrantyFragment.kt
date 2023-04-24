@@ -1,6 +1,7 @@
 package com.xeniac.warrantyroster_manager.ui.fragments
 
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.text.InputType
 import android.view.View
@@ -20,6 +21,7 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.data.remote.models.Category
+import com.xeniac.warrantyroster_manager.data.repository.NetworkConnectivityObserver
 import com.xeniac.warrantyroster_manager.databinding.FragmentAddWarrantyBinding
 import com.xeniac.warrantyroster_manager.domain.repository.ConnectivityObserver
 import com.xeniac.warrantyroster_manager.ui.MainActivity
@@ -50,10 +52,12 @@ import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNetworkFailure
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showSomethingWentWrongError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showUnavailableNetworkConnectionError
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.text.DecimalFormat
-import java.util.*
+import java.util.Calendar
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -78,13 +82,18 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
     private var selectedExpiryDateInMillis = 0L
     private var expiryDateInput: String? = null
 
+    private lateinit var connectivityObserver: ConnectivityObserver
+    private var networkStatus: ConnectivityObserver.Status = ConnectivityObserver.Status.AVAILABLE
+
     private var snackbar: Snackbar? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentAddWarrantyBinding.bind(view)
         viewModel = ViewModelProvider(requireActivity())[WarrantyViewModel::class.java]
+        connectivityObserver = NetworkConnectivityObserver(requireContext())
 
+        networkConnectivityObserver()
         textInputsBackgroundColor()
         textInputsStrokeColor()
         subscribeToObservers()
@@ -209,6 +218,15 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
             }
         }
         super.onViewStateRestored(savedInstanceState)
+    }
+
+    private fun networkConnectivityObserver() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            connectivityObserver.observe().onEach {
+                networkStatus = it
+                Timber.i("Network connectivity status inside of observer is $it")
+            }.launchIn(lifecycleScope)
+        }
     }
 
     private fun textInputsBackgroundColor() = binding.apply {
@@ -464,7 +482,7 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
             .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(requireView().applicationWindowToken, 0)
 
-        if ((requireActivity() as MainActivity).networkStatus == ConnectivityObserver.Status.AVAILABLE) {
+        if (networkStatus == ConnectivityObserver.Status.AVAILABLE) {
             val title = binding.tiEditTitle.text.toString().trim()
             val brand = binding.tiEditBrand.text?.toString()?.trim()
             val model = binding.tiEditModel.text?.toString()?.trim()

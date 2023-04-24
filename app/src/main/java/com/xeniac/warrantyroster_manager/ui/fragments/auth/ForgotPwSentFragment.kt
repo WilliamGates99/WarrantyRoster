@@ -62,8 +62,8 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
         viewModel = ViewModelProvider(requireActivity())[ForgotPwViewModel::class.java]
         connectivityObserver = NetworkConnectivityObserver(requireContext())
 
-        getEmailFromArgs()
         networkConnectivityObserver()
+        getEmailFromArgs()
         subscribeToObservers()
         returnOnClick()
         resendOnClick()
@@ -86,11 +86,6 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
         findNavController().popBackStack()
     }
 
-    private fun getEmailFromArgs() {
-        val args: ForgotPwSentFragmentArgs by navArgs()
-        email = args.email
-    }
-
     private fun networkConnectivityObserver() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             connectivityObserver.observe().onEach {
@@ -98,6 +93,11 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
                 Timber.i("Network connectivity status inside of observer is $it")
             }.launchIn(lifecycleScope)
         }
+    }
+
+    private fun getEmailFromArgs() {
+        val args: ForgotPwSentFragmentArgs by navArgs()
+        email = args.email
     }
 
     private fun subscribeToObservers() {

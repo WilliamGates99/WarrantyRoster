@@ -1,6 +1,7 @@
 package com.xeniac.warrantyroster_manager.ui.fragments
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.View.GONE
@@ -8,6 +9,7 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.airbnb.lottie.LottieDrawable
 import com.applovin.mediation.MaxAd
@@ -20,6 +22,7 @@ import com.applovin.mediation.nativeAds.MaxNativeAdViewBinder
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.BuildConfig
 import com.xeniac.warrantyroster_manager.R
+import com.xeniac.warrantyroster_manager.data.repository.NetworkConnectivityObserver
 import com.xeniac.warrantyroster_manager.databinding.FragmentSettingsBinding
 import com.xeniac.warrantyroster_manager.domain.repository.ConnectivityObserver
 import com.xeniac.warrantyroster_manager.ui.LandingActivity
@@ -37,8 +40,8 @@ import com.xeniac.warrantyroster_manager.utils.Constants.THEME_INDEX_LIGHT
 import com.xeniac.warrantyroster_manager.utils.Constants.URL_CROWDIN
 import com.xeniac.warrantyroster_manager.utils.Constants.URL_DONATE
 import com.xeniac.warrantyroster_manager.utils.Constants.URL_PRIVACY_POLICY
-import com.xeniac.warrantyroster_manager.utils.LinkHelper.openLink
 import com.xeniac.warrantyroster_manager.utils.LinkHelper.openAppPageInStore
+import com.xeniac.warrantyroster_manager.utils.LinkHelper.openLink
 import com.xeniac.warrantyroster_manager.utils.Resource
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.show403Error
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseDeviceBlockedError
@@ -52,6 +55,8 @@ import ir.tapsell.plus.AdRequestCallback
 import ir.tapsell.plus.AdShowListener
 import ir.tapsell.plus.TapsellPlus
 import ir.tapsell.plus.model.TapsellPlusAdModel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 
 @AndroidEntryPoint
@@ -71,13 +76,18 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
 
     private var tapsellResponseId: String? = null
 
+    private lateinit var connectivityObserver: ConnectivityObserver
+    private var networkStatus: ConnectivityObserver.Status = ConnectivityObserver.Status.AVAILABLE
+
     private var snackbar: Snackbar? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentSettingsBinding.bind(view)
         viewModel = ViewModelProvider(requireActivity())[SettingsViewModel::class.java]
+        connectivityObserver = NetworkConnectivityObserver(requireContext())
 
+        networkConnectivityObserver()
         subscribeToObservers()
         getAccountDetails()
         getCurrentLanguage()
@@ -103,6 +113,15 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
         _binding = null
     }
 
+    private fun networkConnectivityObserver() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            connectivityObserver.observe().onEach {
+                networkStatus = it
+                Timber.i("Network connectivity status inside of observer is $it")
+            }.launchIn(lifecycleScope)
+        }
+    }
+
     private fun subscribeToObservers() {
         cachedAccountDetailsObserver()
         reloadedAccountDetailsObserver()
@@ -117,7 +136,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
     private fun getAccountDetails() {
         getCachedAccountDetails()
 
-        if ((requireActivity() as MainActivity).networkStatus == ConnectivityObserver.Status.AVAILABLE) {
+        if (networkStatus == ConnectivityObserver.Status.AVAILABLE) {
             getReloadedAccountDetails()
         }
     }
@@ -224,7 +243,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
     }
 
     private fun sendVerificationEmail() {
-        if ((requireActivity() as MainActivity).networkStatus == ConnectivityObserver.Status.AVAILABLE) {
+        if (networkStatus == ConnectivityObserver.Status.AVAILABLE) {
             viewModel.sendVerificationEmail()
         } else {
             snackbar = showUnavailableNetworkConnectionError(

@@ -1,14 +1,12 @@
 package com.xeniac.warrantyroster_manager.ui
 
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
@@ -23,9 +21,7 @@ import com.google.android.play.core.review.ReviewManager
 import com.google.android.play.core.review.ReviewManagerFactory
 import com.xeniac.warrantyroster_manager.BuildConfig
 import com.xeniac.warrantyroster_manager.R
-import com.xeniac.warrantyroster_manager.data.repository.NetworkConnectivityObserver
 import com.xeniac.warrantyroster_manager.databinding.ActivityMainBinding
-import com.xeniac.warrantyroster_manager.domain.repository.ConnectivityObserver
 import com.xeniac.warrantyroster_manager.ui.viewmodels.MainViewModel
 import com.xeniac.warrantyroster_manager.utils.AlertDialogHelper.showThreeBtnAlertDialog
 import com.xeniac.warrantyroster_manager.utils.Constants.IN_APP_REVIEWS_DAYS_FROM_FIRST_INSTALL_TIME
@@ -36,8 +32,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import ir.tapsell.plus.AdRequestCallback
 import ir.tapsell.plus.TapsellPlus
 import ir.tapsell.plus.model.TapsellPlusAdModel
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 
 @AndroidEntryPoint
@@ -48,9 +42,6 @@ class MainActivity : AppCompatActivity(), MaxAdListener {
 
     lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
-
-    private lateinit var connectivityObserver: ConnectivityObserver
-    var networkStatus: ConnectivityObserver.Status = ConnectivityObserver.Status.AVAILABLE
 
     private lateinit var reviewManager: ReviewManager
     var reviewInfo: ReviewInfo? = null
@@ -85,24 +76,13 @@ class MainActivity : AppCompatActivity(), MaxAdListener {
     private fun mainInit() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        connectivityObserver = NetworkConnectivityObserver(this)
 
-        networkConnectivityObserver()
         bottomAppBarStyle()
         bottomNavActions()
         fabOnClick()
         subscribeToObservers()
         getRateAppDialogChoice()
         requestAppLovinInterstitial()
-    }
-
-    private fun networkConnectivityObserver() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            connectivityObserver.observe().onEach {
-                networkStatus = it
-                Timber.i("Network connectivity status inside of observer is $it")
-            }.launchIn(lifecycleScope)
-        }
     }
 
     private fun bottomAppBarStyle() {

@@ -1,6 +1,7 @@
 package com.xeniac.warrantyroster_manager.ui.fragments
 
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.View.GONE
@@ -11,12 +12,13 @@ import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
+import com.xeniac.warrantyroster_manager.data.repository.NetworkConnectivityObserver
 import com.xeniac.warrantyroster_manager.databinding.FragmentChangeEmailBinding
 import com.xeniac.warrantyroster_manager.domain.repository.ConnectivityObserver
-import com.xeniac.warrantyroster_manager.ui.MainActivity
 import com.xeniac.warrantyroster_manager.ui.viewmodels.ChangeEmailViewModel
 import com.xeniac.warrantyroster_manager.utils.AlertDialogHelper.showOneBtnAlertDialog
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
@@ -39,8 +41,10 @@ import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNormalSnackbar
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showSomethingWentWrongError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showUnavailableNetworkConnectionError
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
-import java.util.*
+import java.util.Locale
 
 @AndroidEntryPoint
 class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
@@ -52,13 +56,18 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
 
     private lateinit var newEmail: String
 
+    private lateinit var connectivityObserver: ConnectivityObserver
+    private var networkStatus: ConnectivityObserver.Status = ConnectivityObserver.Status.AVAILABLE
+
     private var snackbar: Snackbar? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentChangeEmailBinding.bind(view)
         viewModel = ViewModelProvider(requireActivity())[ChangeEmailViewModel::class.java]
+        connectivityObserver = NetworkConnectivityObserver(requireContext())
 
+        networkConnectivityObserver()
         textInputsBackgroundColor()
         textInputsStrokeColor()
         toolbarNavigationBackOnClick()
@@ -101,6 +110,15 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
             }
         }
         super.onViewStateRestored(savedInstanceState)
+    }
+
+    private fun networkConnectivityObserver() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            connectivityObserver.observe().onEach {
+                networkStatus = it
+                Timber.i("Network connectivity status inside of observer is $it")
+            }.launchIn(lifecycleScope)
+        }
     }
 
     private fun textInputsBackgroundColor() = binding.apply {
@@ -168,7 +186,7 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
             .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(requireView().applicationWindowToken, 0)
 
-        if ((requireActivity() as MainActivity).networkStatus == ConnectivityObserver.Status.AVAILABLE) {
+        if (networkStatus == ConnectivityObserver.Status.AVAILABLE) {
             val password = binding.tiEditPassword.text.toString().trim()
             newEmail = binding.tiEditNewEmail.text.toString().trim().lowercase(Locale.US)
 
