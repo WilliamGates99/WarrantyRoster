@@ -1,9 +1,9 @@
-package com.xeniac.warrantyroster_manager.utils
+package com.xeniac.warrantyroster_manager.util
 
 import androidx.appcompat.app.AppCompatDelegate
-import com.xeniac.warrantyroster_manager.utils.Constants.THEME_INDEX_DARK
-import com.xeniac.warrantyroster_manager.utils.Constants.THEME_INDEX_DEFAULT
-import com.xeniac.warrantyroster_manager.utils.Constants.THEME_INDEX_LIGHT
+import com.xeniac.warrantyroster_manager.util.Constants.THEME_INDEX_DARK
+import com.xeniac.warrantyroster_manager.util.Constants.THEME_INDEX_DEFAULT
+import com.xeniac.warrantyroster_manager.util.Constants.THEME_INDEX_LIGHT
 
 object SettingsHelper {
 

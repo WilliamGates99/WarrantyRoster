@@ -7,7 +7,7 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.appcheck.FirebaseAppCheck
 import com.google.firebase.appcheck.debug.DebugAppCheckProviderFactory
 import com.google.firebase.appcheck.playintegrity.PlayIntegrityAppCheckProviderFactory
-import com.xeniac.warrantyroster_manager.utils.SettingsHelper
+import com.xeniac.warrantyroster_manager.util.SettingsHelper
 import dagger.hilt.android.HiltAndroidApp
 import ir.tapsell.plus.TapsellPlus
 import ir.tapsell.plus.TapsellPlusInitListener

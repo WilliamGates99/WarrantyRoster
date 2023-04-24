@@ -16,7 +16,7 @@ import com.xeniac.warrantyroster_manager.databinding.FragmentForgotPwBinding
 import com.xeniac.warrantyroster_manager.getOrAwaitValue
 import com.xeniac.warrantyroster_manager.launchFragmentInHiltContainer
 import com.xeniac.warrantyroster_manager.ui.viewmodels.ForgotPwViewModel
-import com.xeniac.warrantyroster_manager.utils.Resource
+import com.xeniac.warrantyroster_manager.util.Resource
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi

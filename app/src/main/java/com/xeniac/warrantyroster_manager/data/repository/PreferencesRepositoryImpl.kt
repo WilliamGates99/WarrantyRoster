@@ -3,10 +3,10 @@ package com.xeniac.warrantyroster_manager.data.repository
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.*
 import com.xeniac.warrantyroster_manager.domain.repository.PreferencesRepository
-import com.xeniac.warrantyroster_manager.utils.Constants.DATASTORE_IS_LOGGED_IN_KEY
-import com.xeniac.warrantyroster_manager.utils.Constants.DATASTORE_PREVIOUS_REQUEST_TIME_IN_MILLIS_KEY
-import com.xeniac.warrantyroster_manager.utils.Constants.DATASTORE_RATE_APP_DIALOG_CHOICE_KEY
-import com.xeniac.warrantyroster_manager.utils.Constants.DATASTORE_THEME_KEY
+import com.xeniac.warrantyroster_manager.util.Constants.DATASTORE_IS_LOGGED_IN_KEY
+import com.xeniac.warrantyroster_manager.util.Constants.DATASTORE_PREVIOUS_REQUEST_TIME_IN_MILLIS_KEY
+import com.xeniac.warrantyroster_manager.util.Constants.DATASTORE_RATE_APP_DIALOG_CHOICE_KEY
+import com.xeniac.warrantyroster_manager.util.Constants.DATASTORE_THEME_KEY
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import timber.log.Timber

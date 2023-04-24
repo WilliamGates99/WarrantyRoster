@@ -5,7 +5,7 @@ import com.google.common.truth.Truth.assertThat
 import com.xeniac.warrantyroster_manager.MainCoroutineRule
 import com.xeniac.warrantyroster_manager.data.repository.FakeUserRepository
 import com.xeniac.warrantyroster_manager.getOrAwaitValue
-import com.xeniac.warrantyroster_manager.utils.Resource
+import com.xeniac.warrantyroster_manager.util.Resource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Before
 import org.junit.Rule

@@ -1,4 +1,4 @@
-package com.xeniac.warrantyroster_manager.utils
+package com.xeniac.warrantyroster_manager.util
 
 object Constants {
     // Web URLs

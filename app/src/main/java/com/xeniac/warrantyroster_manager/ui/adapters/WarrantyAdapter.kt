@@ -24,10 +24,10 @@ import com.xeniac.warrantyroster_manager.data.remote.models.Warranty
 import com.xeniac.warrantyroster_manager.databinding.AdContainerListBinding
 import com.xeniac.warrantyroster_manager.databinding.ListItemWarrantyBinding
 import com.xeniac.warrantyroster_manager.ui.viewmodels.WarrantyViewModel
-import com.xeniac.warrantyroster_manager.utils.CoilHelper.loadCategoryImage
-import com.xeniac.warrantyroster_manager.utils.Constants.VIEW_TYPE_AD
-import com.xeniac.warrantyroster_manager.utils.Constants.VIEW_TYPE_WARRANTY
-import com.xeniac.warrantyroster_manager.utils.DateHelper.getDaysUntilExpiry
+import com.xeniac.warrantyroster_manager.util.CoilHelper.loadCategoryImage
+import com.xeniac.warrantyroster_manager.util.Constants.VIEW_TYPE_AD
+import com.xeniac.warrantyroster_manager.util.Constants.VIEW_TYPE_WARRANTY
+import com.xeniac.warrantyroster_manager.util.DateHelper.getDaysUntilExpiry
 import ir.tapsell.plus.AdHolder
 import ir.tapsell.plus.AdRequestCallback
 import ir.tapsell.plus.AdShowListener

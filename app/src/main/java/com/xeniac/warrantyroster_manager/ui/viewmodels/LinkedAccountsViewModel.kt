@@ -9,10 +9,10 @@ import com.facebook.AccessToken
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.AuthCredential
 import com.xeniac.warrantyroster_manager.domain.repository.UserRepository
-import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_ENGLISH
-import com.xeniac.warrantyroster_manager.utils.Event
-import com.xeniac.warrantyroster_manager.utils.Resource
-import com.xeniac.warrantyroster_manager.utils.UiText
+import com.xeniac.warrantyroster_manager.util.Constants.LOCALE_ENGLISH
+import com.xeniac.warrantyroster_manager.util.Event
+import com.xeniac.warrantyroster_manager.util.Resource
+import com.xeniac.warrantyroster_manager.util.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import timber.log.Timber

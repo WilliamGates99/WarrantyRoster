@@ -6,8 +6,8 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentOnboarding1stBinding
-import com.xeniac.warrantyroster_manager.utils.Constants.ONBOARDING_2ND_INDEX
-import com.xeniac.warrantyroster_manager.utils.Constants.ONBOARDING_4TH_INDEX
+import com.xeniac.warrantyroster_manager.util.Constants.ONBOARDING_2ND_INDEX
+import com.xeniac.warrantyroster_manager.util.Constants.ONBOARDING_4TH_INDEX
 
 class OnBoarding1stFragment : Fragment(R.layout.fragment_onboarding_1st) {
 

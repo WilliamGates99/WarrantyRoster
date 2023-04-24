@@ -14,10 +14,10 @@ import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.FragmentAuthBinding
 import com.xeniac.warrantyroster_manager.ui.LandingActivity
 import com.xeniac.warrantyroster_manager.ui.viewmodels.LandingViewModel
-import com.xeniac.warrantyroster_manager.utils.AlertDialogHelper
-import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_INDEX_ENGLISH_GREAT_BRITAIN
-import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_INDEX_ENGLISH_UNITED_STATES
-import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_INDEX_PERSIAN_IRAN
+import com.xeniac.warrantyroster_manager.util.AlertDialogHelper
+import com.xeniac.warrantyroster_manager.util.Constants.LOCALE_INDEX_ENGLISH_GREAT_BRITAIN
+import com.xeniac.warrantyroster_manager.util.Constants.LOCALE_INDEX_ENGLISH_UNITED_STATES
+import com.xeniac.warrantyroster_manager.util.Constants.LOCALE_INDEX_PERSIAN_IRAN
 
 class AuthFragment : Fragment(R.layout.fragment_auth) {
 

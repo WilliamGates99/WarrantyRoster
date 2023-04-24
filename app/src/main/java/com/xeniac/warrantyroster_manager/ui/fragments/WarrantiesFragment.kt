@@ -21,14 +21,14 @@ import com.xeniac.warrantyroster_manager.databinding.FragmentWarrantiesBinding
 import com.xeniac.warrantyroster_manager.ui.adapters.WarrantyAdapter
 import com.xeniac.warrantyroster_manager.ui.adapters.WarrantyListClickInterface
 import com.xeniac.warrantyroster_manager.ui.viewmodels.WarrantyViewModel
-import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_EMPTY_CATEGORY_LIST
-import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_EMPTY_SEARCH_RESULT_LIST
-import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_EMPTY_WARRANTY_LIST
-import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
-import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
-import com.xeniac.warrantyroster_manager.utils.Resource
-import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showFirebaseDeviceBlockedError
-import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showSomethingWentWrongError
+import com.xeniac.warrantyroster_manager.util.Constants.ERROR_EMPTY_CATEGORY_LIST
+import com.xeniac.warrantyroster_manager.util.Constants.ERROR_EMPTY_SEARCH_RESULT_LIST
+import com.xeniac.warrantyroster_manager.util.Constants.ERROR_EMPTY_WARRANTY_LIST
+import com.xeniac.warrantyroster_manager.util.Constants.ERROR_FIREBASE_403
+import com.xeniac.warrantyroster_manager.util.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
+import com.xeniac.warrantyroster_manager.util.Resource
+import com.xeniac.warrantyroster_manager.util.SnackBarHelper.showFirebaseDeviceBlockedError
+import com.xeniac.warrantyroster_manager.util.SnackBarHelper.showSomethingWentWrongError
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

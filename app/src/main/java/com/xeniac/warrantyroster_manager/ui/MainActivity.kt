@@ -23,11 +23,11 @@ import com.xeniac.warrantyroster_manager.BuildConfig
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.databinding.ActivityMainBinding
 import com.xeniac.warrantyroster_manager.ui.viewmodels.MainViewModel
-import com.xeniac.warrantyroster_manager.utils.AlertDialogHelper.showThreeBtnAlertDialog
-import com.xeniac.warrantyroster_manager.utils.Constants.IN_APP_REVIEWS_DAYS_FROM_FIRST_INSTALL_TIME
-import com.xeniac.warrantyroster_manager.utils.Constants.IN_APP_REVIEWS_DAYS_FROM_PREVIOUS_REQUEST_TIME
-import com.xeniac.warrantyroster_manager.utils.DateHelper.getDaysFromFirstInstallTime
-import com.xeniac.warrantyroster_manager.utils.DateHelper.getDaysFromPreviousRequestTime
+import com.xeniac.warrantyroster_manager.util.AlertDialogHelper.showThreeBtnAlertDialog
+import com.xeniac.warrantyroster_manager.util.Constants.IN_APP_REVIEWS_DAYS_FROM_FIRST_INSTALL_TIME
+import com.xeniac.warrantyroster_manager.util.Constants.IN_APP_REVIEWS_DAYS_FROM_PREVIOUS_REQUEST_TIME
+import com.xeniac.warrantyroster_manager.util.DateHelper.getDaysFromFirstInstallTime
+import com.xeniac.warrantyroster_manager.util.DateHelper.getDaysFromPreviousRequestTime
 import dagger.hilt.android.AndroidEntryPoint
 import ir.tapsell.plus.AdRequestCallback
 import ir.tapsell.plus.TapsellPlus

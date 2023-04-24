@@ -13,14 +13,14 @@ import com.xeniac.warrantyroster_manager.databinding.FragmentOnboardingBinding
 import com.xeniac.warrantyroster_manager.ui.LandingActivity
 import com.xeniac.warrantyroster_manager.ui.adapters.OnBoardingAdapter
 import com.xeniac.warrantyroster_manager.ui.viewmodels.LandingViewModel
-import com.xeniac.warrantyroster_manager.utils.AlertDialogHelper.showSingleChoiceItemsDialog
-import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_INDEX_ENGLISH_GREAT_BRITAIN
-import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_INDEX_ENGLISH_UNITED_STATES
-import com.xeniac.warrantyroster_manager.utils.Constants.LOCALE_INDEX_PERSIAN_IRAN
-import com.xeniac.warrantyroster_manager.utils.Constants.ONBOARDING_1ST_INDEX
-import com.xeniac.warrantyroster_manager.utils.Constants.ONBOARDING_2ND_INDEX
-import com.xeniac.warrantyroster_manager.utils.Constants.ONBOARDING_3RD_INDEX
-import com.xeniac.warrantyroster_manager.utils.Constants.ONBOARDING_4TH_INDEX
+import com.xeniac.warrantyroster_manager.util.AlertDialogHelper.showSingleChoiceItemsDialog
+import com.xeniac.warrantyroster_manager.util.Constants.LOCALE_INDEX_ENGLISH_GREAT_BRITAIN
+import com.xeniac.warrantyroster_manager.util.Constants.LOCALE_INDEX_ENGLISH_UNITED_STATES
+import com.xeniac.warrantyroster_manager.util.Constants.LOCALE_INDEX_PERSIAN_IRAN
+import com.xeniac.warrantyroster_manager.util.Constants.ONBOARDING_1ST_INDEX
+import com.xeniac.warrantyroster_manager.util.Constants.ONBOARDING_2ND_INDEX
+import com.xeniac.warrantyroster_manager.util.Constants.ONBOARDING_3RD_INDEX
+import com.xeniac.warrantyroster_manager.util.Constants.ONBOARDING_4TH_INDEX
 
 class OnBoardingFragment : Fragment(R.layout.fragment_onboarding) {
 

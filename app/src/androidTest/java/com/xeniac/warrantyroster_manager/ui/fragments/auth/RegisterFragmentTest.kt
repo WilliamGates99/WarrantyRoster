@@ -22,8 +22,8 @@ import com.xeniac.warrantyroster_manager.databinding.FragmentRegisterBinding
 import com.xeniac.warrantyroster_manager.getOrAwaitValue
 import com.xeniac.warrantyroster_manager.launchFragmentInHiltContainer
 import com.xeniac.warrantyroster_manager.ui.viewmodels.RegisterViewModel
-import com.xeniac.warrantyroster_manager.utils.Constants.URL_PRIVACY_POLICY
-import com.xeniac.warrantyroster_manager.utils.Resource
+import com.xeniac.warrantyroster_manager.util.Constants.URL_PRIVACY_POLICY
+import com.xeniac.warrantyroster_manager.util.Resource
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
