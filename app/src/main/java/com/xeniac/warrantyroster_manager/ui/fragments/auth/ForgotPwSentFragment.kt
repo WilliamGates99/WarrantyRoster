@@ -1,18 +1,20 @@
 package com.xeniac.warrantyroster_manager.ui.fragments.auth
 
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
+import com.xeniac.warrantyroster_manager.data.repository.NetworkConnectivityObserver
 import com.xeniac.warrantyroster_manager.databinding.FragmentForgotPwSentBinding
 import com.xeniac.warrantyroster_manager.domain.repository.ConnectivityObserver
-import com.xeniac.warrantyroster_manager.ui.LandingActivity
 import com.xeniac.warrantyroster_manager.ui.viewmodels.ForgotPwViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
@@ -29,6 +31,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.text.DecimalFormat
@@ -47,14 +51,19 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
     @Inject
     lateinit var decimalFormat: DecimalFormat
 
+    private lateinit var connectivityObserver: ConnectivityObserver
+    private var networkStatus: ConnectivityObserver.Status = ConnectivityObserver.Status.AVAILABLE
+
     private var snackbar: Snackbar? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentForgotPwSentBinding.bind(view)
         viewModel = ViewModelProvider(requireActivity())[ForgotPwViewModel::class.java]
+        connectivityObserver = NetworkConnectivityObserver(requireContext())
 
         getEmailFromArgs()
+        networkConnectivityObserver()
         subscribeToObservers()
         returnOnClick()
         resendOnClick()
@@ -82,6 +91,15 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
         email = args.email
     }
 
+    private fun networkConnectivityObserver() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            connectivityObserver.observe().onEach {
+                networkStatus = it
+                Timber.i("Network connectivity status inside of observer is $it")
+            }.launchIn(lifecycleScope)
+        }
+    }
+
     private fun subscribeToObservers() {
         forgotPwSentObserver()
         timerObserver()
@@ -96,7 +114,7 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
     }
 
     private fun resendResetPasswordEmail() {
-        if ((requireActivity() as LandingActivity).networkStatus == ConnectivityObserver.Status.AVAILABLE) {
+        if (networkStatus == ConnectivityObserver.Status.AVAILABLE) {
             viewModel.sendResetPasswordEmail(email)
         } else {
             snackbar = showUnavailableNetworkConnectionError(

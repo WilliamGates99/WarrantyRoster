@@ -1,6 +1,7 @@
 package com.xeniac.warrantyroster_manager.ui.fragments.auth
 
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.View.GONE
@@ -12,12 +13,13 @@ import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
+import com.xeniac.warrantyroster_manager.data.repository.NetworkConnectivityObserver
 import com.xeniac.warrantyroster_manager.databinding.FragmentForgotPwBinding
 import com.xeniac.warrantyroster_manager.domain.repository.ConnectivityObserver
-import com.xeniac.warrantyroster_manager.ui.LandingActivity
 import com.xeniac.warrantyroster_manager.ui.viewmodels.ForgotPwViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_AUTH_ACCOUNT_NOT_FOUND
@@ -36,8 +38,10 @@ import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showNormalSnackbar
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showSomethingWentWrongError
 import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showUnavailableNetworkConnectionError
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
-import java.util.*
+import java.util.Locale
 
 @AndroidEntryPoint
 class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
@@ -47,13 +51,18 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
 
     lateinit var viewModel: ForgotPwViewModel
 
+    private lateinit var connectivityObserver: ConnectivityObserver
+    private var networkStatus: ConnectivityObserver.Status = ConnectivityObserver.Status.AVAILABLE
+
     private var snackbar: Snackbar? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentForgotPwBinding.bind(view)
         viewModel = ViewModelProvider(requireActivity())[ForgotPwViewModel::class.java]
+        connectivityObserver = NetworkConnectivityObserver(requireContext())
 
+        networkConnectivityObserver()
         textInputsBackgroundColor()
         textInputsStrokeColor()
         subscribeToObservers()
@@ -100,6 +109,15 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
         super.onViewStateRestored(savedInstanceState)
     }
 
+    private fun networkConnectivityObserver() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            connectivityObserver.observe().onEach {
+                networkStatus = it
+                Timber.i("Network connectivity status inside of observer is $it")
+            }.launchIn(lifecycleScope)
+        }
+    }
+
     private fun textInputsBackgroundColor() = binding.apply {
         tiEditEmail.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
@@ -144,7 +162,7 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
             .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(requireView().applicationWindowToken, 0)
 
-        if ((requireActivity() as LandingActivity).networkStatus == ConnectivityObserver.Status.AVAILABLE) {
+        if (networkStatus == ConnectivityObserver.Status.AVAILABLE) {
             val email = binding.tiEditEmail.text.toString().trim().lowercase(Locale.US)
 
             viewModel.validateForgotPwInputs(email)

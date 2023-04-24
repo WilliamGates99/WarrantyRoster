@@ -2,6 +2,7 @@ package com.xeniac.warrantyroster_manager.ui.fragments.auth
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.View.GONE
@@ -14,6 +15,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
@@ -29,9 +31,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.OAuthProvider
 import com.xeniac.warrantyroster_manager.BuildConfig
 import com.xeniac.warrantyroster_manager.R
+import com.xeniac.warrantyroster_manager.data.repository.NetworkConnectivityObserver
 import com.xeniac.warrantyroster_manager.databinding.FragmentLoginBinding
 import com.xeniac.warrantyroster_manager.domain.repository.ConnectivityObserver
-import com.xeniac.warrantyroster_manager.ui.LandingActivity
 import com.xeniac.warrantyroster_manager.ui.MainActivity
 import com.xeniac.warrantyroster_manager.ui.viewmodels.LoginViewModel
 import com.xeniac.warrantyroster_manager.utils.Constants.ERROR_FIREBASE_403
@@ -63,10 +65,12 @@ import com.xeniac.warrantyroster_manager.utils.SnackBarHelper.showUnavailableNet
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
-import java.util.*
+import java.util.Locale
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -82,13 +86,18 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
     private lateinit var currentAppLanguage: String
 
+    private lateinit var connectivityObserver: ConnectivityObserver
+    private var networkStatus: ConnectivityObserver.Status = ConnectivityObserver.Status.AVAILABLE
+
     var snackbar: Snackbar? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentLoginBinding.bind(view)
         viewModel = ViewModelProvider(requireActivity())[LoginViewModel::class.java]
+        connectivityObserver = NetworkConnectivityObserver(requireContext())
 
+        networkConnectivityObserver()
         textInputsBackgroundColor()
         textInputsStrokeColor()
         subscribeToObservers()
@@ -143,6 +152,15 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             }
         }
         super.onViewStateRestored(savedInstanceState)
+    }
+
+    private fun networkConnectivityObserver() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            connectivityObserver.observe().onEach {
+                networkStatus = it
+                Timber.i("Network connectivity status inside of observer is $it")
+            }.launchIn(lifecycleScope)
+        }
     }
 
     private fun textInputsBackgroundColor() = binding.apply {
@@ -227,7 +245,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(requireView().applicationWindowToken, 0)
 
-        if ((requireActivity() as LandingActivity).networkStatus == ConnectivityObserver.Status.AVAILABLE) {
+        if (networkStatus == ConnectivityObserver.Status.AVAILABLE) {
             val email = binding.tiEditEmail.text.toString().trim().lowercase(Locale.US)
             val password = binding.tiEditPassword.text.toString().trim()
 
@@ -316,7 +334,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     }
 
     private fun loginWithGoogleAccount() {
-        if ((requireActivity() as LandingActivity).networkStatus == ConnectivityObserver.Status.AVAILABLE) {
+        if (networkStatus == ConnectivityObserver.Status.AVAILABLE) {
             launchGoogleSignInClient()
         } else {
             snackbar = showUnavailableNetworkConnectionError(
@@ -427,7 +445,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     }
 
     private fun checkPendingLinkTwitterAccountAuthResult() {
-        if ((requireActivity() as LandingActivity).networkStatus == ConnectivityObserver.Status.AVAILABLE) {
+        if (networkStatus == ConnectivityObserver.Status.AVAILABLE) {
             showTwitterLoadingAnimation()
 
             val pendingAuthResult = firebaseAuth.pendingAuthResult
@@ -542,7 +560,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     }
 
     private fun loginWithFacebookAccount() {
-        if ((requireActivity() as LandingActivity).networkStatus == ConnectivityObserver.Status.AVAILABLE) {
+        if (networkStatus == ConnectivityObserver.Status.AVAILABLE) {
             launchFacebookLoginManager()
         } else {
             snackbar = showUnavailableNetworkConnectionError(
