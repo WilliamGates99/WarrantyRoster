@@ -102,6 +102,8 @@ android {
         getByName("debug") {
             versionNameSuffix = " - debug"
             applicationIdSuffix = ".debug"
+
+            resValue("color", "appIconBackground", "#FF9100") // Orange
         }
 
         getByName("release") {
@@ -132,12 +134,12 @@ android {
             dimension = "build"
             versionNameSuffix = " - Developer Preview"
             applicationIdSuffix = ".dev"
-            resValue("color", "appIconBackground", "@color/appIconBackgroundDev")
+            resValue("color", "appIconBackground", "#FF0011") // Red
         }
 
         create("prod") {
             dimension = "build"
-            resValue("color", "appIconBackground", "@color/appIconBackgroundProd")
+            resValue("color", "appIconBackground", "#1C53F4") // Blue
         }
 
         create("playStore") {
