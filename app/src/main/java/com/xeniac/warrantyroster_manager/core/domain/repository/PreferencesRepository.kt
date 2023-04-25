@@ -6,6 +6,10 @@ interface PreferencesRepository {
 
     fun isUserLoggedInSynchronously(): Boolean
 
+    suspend fun getCurrentAppLocaleIndex(): Int
+
+    suspend fun getCurrentAppLanguage(): String
+
     suspend fun getCurrentAppTheme(): Int
 
     suspend fun getRateAppDialogChoice(): Int
@@ -13,6 +17,8 @@ interface PreferencesRepository {
     suspend fun getPreviousRequestTimeInMillis(): Long
 
     suspend fun isUserLoggedIn(isLoggedIn: Boolean)
+
+    suspend fun setCurrentAppLocale(index: Int): Boolean
 
     suspend fun setCurrentAppTheme(index: Int)
 

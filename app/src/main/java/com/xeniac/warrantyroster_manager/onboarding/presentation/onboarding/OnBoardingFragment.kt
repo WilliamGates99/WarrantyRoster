@@ -8,9 +8,9 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
+import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.core.presentation.landing.LandingActivity
-import com.xeniac.warrantyroster_manager.core.presentation.landing.LandingViewModel
 import com.xeniac.warrantyroster_manager.databinding.FragmentOnboardingBinding
 import com.xeniac.warrantyroster_manager.onboarding.presentation.OnBoarding1stFragment
 import com.xeniac.warrantyroster_manager.onboarding.presentation.OnBoarding2ndFragment
@@ -24,24 +24,28 @@ import com.xeniac.warrantyroster_manager.util.Constants.ONBOARDING_1ST_INDEX
 import com.xeniac.warrantyroster_manager.util.Constants.ONBOARDING_2ND_INDEX
 import com.xeniac.warrantyroster_manager.util.Constants.ONBOARDING_3RD_INDEX
 import com.xeniac.warrantyroster_manager.util.Constants.ONBOARDING_4TH_INDEX
+import com.xeniac.warrantyroster_manager.util.Resource
+import com.xeniac.warrantyroster_manager.util.SnackBarHelper.showSomethingWentWrongError
 
 class OnBoardingFragment : Fragment(R.layout.fragment_onboarding) {
 
     private var _binding: FragmentOnboardingBinding? = null
     private val binding get() = _binding!!
 
-    lateinit var viewModel: LandingViewModel
+    lateinit var viewModel: OnBoardingViewModel
 
     private var currentLocaleIndex = 0
+
+    var snackbar: Snackbar? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentOnboardingBinding.bind(view)
-        viewModel = ViewModelProvider(requireActivity())[LandingViewModel::class.java]
+        viewModel = ViewModelProvider(requireActivity())[OnBoardingViewModel::class.java]
 
         setupViewPager()
         subscribeToObservers()
-        getCurrentLanguage()
+        getCurrentAppLocaleIndex()
         languageOnClick()
         requireActivity().onBackPressedDispatcher.addCallback(onBackPressedCallback)
     }
@@ -95,23 +99,35 @@ class OnBoardingFragment : Fragment(R.layout.fragment_onboarding) {
         })
 
     private fun subscribeToObservers() {
-        currentAppLocaleObserver()
-        changeCurrentLocaleObserver()
+        currentAppLocaleIndexObserver()
+        changeCurrentAppLocaleObserver()
     }
 
-    private fun getCurrentLanguage() = viewModel.getCurrentLanguage()
+    private fun getCurrentAppLocaleIndex() = viewModel.getCurrentAppLocaleIndex()
 
-    private fun currentAppLocaleObserver() =
-        viewModel.currentLocaleIndexLiveData.observe(viewLifecycleOwner) { responseEvent ->
-            responseEvent.getContentIfNotHandled()?.let { index ->
-                currentLocaleIndex = index
-                setCurrentLanguageFlag(index)
+    private fun currentAppLocaleIndexObserver() =
+        viewModel.currentAppLocaleIndexLiveData.observe(viewLifecycleOwner) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { response ->
+                when (response) {
+                    is Resource.Loading -> Unit
+                    is Resource.Success -> {
+                        response.data?.let { localeIndex ->
+                            currentLocaleIndex = localeIndex
+                            setCurrentAppLocaleFlag(localeIndex)
+                        }
+                    }
+                    is Resource.Error -> {
+                        snackbar = showSomethingWentWrongError(
+                            requireContext(), requireView()
+                        )
+                    }
+                }
             }
         }
 
-    private fun setCurrentLanguageFlag(index: Int) {
+    private fun setCurrentAppLocaleFlag(localeIndex: Int) {
         binding.apply {
-            when (index) {
+            when (localeIndex) {
                 LOCALE_INDEX_ENGLISH_UNITED_STATES -> ivLanguageFlag.setImageDrawable(
                     AppCompatResources.getDrawable(requireContext(), R.drawable.ic_flag_usa)
                 )
@@ -138,22 +154,34 @@ class OnBoardingFragment : Fragment(R.layout.fragment_onboarding) {
             localeTextItems,
             currentLocaleIndex
         ) { index ->
-            changeCurrentLocale(index)
+            changeCurrentAppLocale(index)
         }
     }
 
-    private fun changeCurrentLocale(index: Int) = viewModel.changeCurrentLocale(index)
+    private fun changeCurrentAppLocale(index: Int) = viewModel.changeCurrentAppLocale(index)
 
-    private fun changeCurrentLocaleObserver() =
-        viewModel.changeCurrentLocaleLiveData.observe(viewLifecycleOwner) { responseEvent ->
-            responseEvent.getContentIfNotHandled()?.let { isActivityRestartNeeded ->
-                if (isActivityRestartNeeded) {
-                    requireActivity().apply {
-                        startActivity(Intent(this, LandingActivity::class.java))
-                        finish()
+    private fun changeCurrentAppLocaleObserver() =
+        viewModel.changeCurrentAppLocaleLiveData.observe(viewLifecycleOwner) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { response ->
+                when (response) {
+                    is Resource.Loading -> Unit
+                    is Resource.Success -> {
+                        response.data?.let { isActivityRestartNeeded ->
+                            if (isActivityRestartNeeded) {
+                                requireActivity().apply {
+                                    startActivity(Intent(this, LandingActivity::class.java))
+                                    finish()
+                                }
+                            } else {
+                                viewModel.getCurrentAppLocaleIndex()
+                            }
+                        }
                     }
-                } else {
-                    viewModel.getCurrentLanguage()
+                    is Resource.Error -> {
+                        snackbar = showSomethingWentWrongError(
+                            requireContext(), requireView()
+                        )
+                    }
                 }
             }
         }
