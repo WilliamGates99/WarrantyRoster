@@ -3,8 +3,6 @@ package com.xeniac.warrantyroster_manager.warranty_management.data.repository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.Query
-import com.xeniac.warrantyroster_manager.data.remote.models.Warranty
-import com.xeniac.warrantyroster_manager.warranty_management.data.remote.dto.WarrantyInput
 import com.xeniac.warrantyroster_manager.di.CategoriesCollection
 import com.xeniac.warrantyroster_manager.di.WarrantiesCollection
 import com.xeniac.warrantyroster_manager.util.Constants.CATEGORIES_TITLE
@@ -18,6 +16,8 @@ import com.xeniac.warrantyroster_manager.util.Constants.WARRANTIES_SERIAL_NUMBER
 import com.xeniac.warrantyroster_manager.util.Constants.WARRANTIES_STARTING_DATE
 import com.xeniac.warrantyroster_manager.util.Constants.WARRANTIES_TITLE
 import com.xeniac.warrantyroster_manager.util.Constants.WARRANTIES_UUID
+import com.xeniac.warrantyroster_manager.warranty_management.data.remote.dto.Warranty
+import com.xeniac.warrantyroster_manager.warranty_management.data.remote.dto.WarrantyInput
 import com.xeniac.warrantyroster_manager.warranty_management.domain.repository.WarrantyRepository
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject

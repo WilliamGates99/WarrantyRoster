@@ -1,7 +1,7 @@
 package com.xeniac.warrantyroster_manager.warranty_management.domain.repository
 
 import com.google.firebase.firestore.Query
-import com.xeniac.warrantyroster_manager.data.remote.models.Warranty
+import com.xeniac.warrantyroster_manager.warranty_management.data.remote.dto.Warranty
 import com.xeniac.warrantyroster_manager.warranty_management.data.remote.dto.WarrantyInput
 
 interface WarrantyRepository {

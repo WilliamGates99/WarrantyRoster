@@ -1,7 +1,6 @@
-package com.xeniac.warrantyroster_manager.data.remote.models
+package com.xeniac.warrantyroster_manager.warranty_management.data.remote.dto
 
 import android.os.Parcelable
-import com.xeniac.warrantyroster_manager.data.remote.models.ListItemType.WARRANTY
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -16,5 +15,10 @@ data class Warranty(
     val expiryDate: String? = null,
     val description: String? = null,
     val categoryId: String? = "10",
-    val itemType: ListItemType = WARRANTY
+    val itemType: ListItemType = ListItemType.WARRANTY
 ) : Parcelable
+
+enum class ListItemType {
+    WARRANTY,
+    AD
+}

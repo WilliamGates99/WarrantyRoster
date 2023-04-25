@@ -16,7 +16,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
-import com.xeniac.warrantyroster_manager.data.remote.models.Warranty
 import com.xeniac.warrantyroster_manager.databinding.FragmentWarrantiesBinding
 import com.xeniac.warrantyroster_manager.util.Constants.ERROR_EMPTY_CATEGORY_LIST
 import com.xeniac.warrantyroster_manager.util.Constants.ERROR_EMPTY_SEARCH_RESULT_LIST
@@ -26,6 +25,7 @@ import com.xeniac.warrantyroster_manager.util.Constants.ERROR_FIREBASE_DEVICE_BL
 import com.xeniac.warrantyroster_manager.util.Resource
 import com.xeniac.warrantyroster_manager.util.SnackBarHelper.showFirebaseDeviceBlockedError
 import com.xeniac.warrantyroster_manager.util.SnackBarHelper.showSomethingWentWrongError
+import com.xeniac.warrantyroster_manager.warranty_management.data.remote.dto.Warranty
 import com.xeniac.warrantyroster_manager.warranty_management.presentation.WarrantyViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject

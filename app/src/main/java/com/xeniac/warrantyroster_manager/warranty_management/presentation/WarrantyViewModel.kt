@@ -6,10 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.xeniac.warrantyroster_manager.core.domain.UserRepository
-import com.xeniac.warrantyroster_manager.warranty_management.data.remote.dto.Category
-import com.xeniac.warrantyroster_manager.data.remote.models.ListItemType
-import com.xeniac.warrantyroster_manager.data.remote.models.Warranty
-import com.xeniac.warrantyroster_manager.warranty_management.data.remote.dto.WarrantyInput
 import com.xeniac.warrantyroster_manager.util.Constants.CATEGORIES_ICON
 import com.xeniac.warrantyroster_manager.util.Constants.CATEGORIES_TITLE
 import com.xeniac.warrantyroster_manager.util.Constants.ERROR_EMPTY_CATEGORY_LIST
@@ -35,6 +31,10 @@ import com.xeniac.warrantyroster_manager.util.DateHelper.isStartingDateValid
 import com.xeniac.warrantyroster_manager.util.Event
 import com.xeniac.warrantyroster_manager.util.Resource
 import com.xeniac.warrantyroster_manager.util.UiText
+import com.xeniac.warrantyroster_manager.warranty_management.data.remote.dto.Category
+import com.xeniac.warrantyroster_manager.warranty_management.data.remote.dto.ListItemType
+import com.xeniac.warrantyroster_manager.warranty_management.data.remote.dto.Warranty
+import com.xeniac.warrantyroster_manager.warranty_management.data.remote.dto.WarrantyInput
 import com.xeniac.warrantyroster_manager.warranty_management.domain.repository.WarrantyRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch

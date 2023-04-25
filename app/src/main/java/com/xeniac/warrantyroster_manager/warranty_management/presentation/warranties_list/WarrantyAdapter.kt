@@ -19,14 +19,14 @@ import com.applovin.mediation.nativeAds.MaxNativeAdView
 import com.applovin.mediation.nativeAds.MaxNativeAdViewBinder
 import com.xeniac.warrantyroster_manager.BuildConfig
 import com.xeniac.warrantyroster_manager.R
-import com.xeniac.warrantyroster_manager.data.remote.models.ListItemType
-import com.xeniac.warrantyroster_manager.data.remote.models.Warranty
 import com.xeniac.warrantyroster_manager.databinding.AdContainerListBinding
 import com.xeniac.warrantyroster_manager.databinding.ListItemWarrantyBinding
 import com.xeniac.warrantyroster_manager.util.CoilHelper.loadCategoryImage
 import com.xeniac.warrantyroster_manager.util.Constants.VIEW_TYPE_AD
 import com.xeniac.warrantyroster_manager.util.Constants.VIEW_TYPE_WARRANTY
 import com.xeniac.warrantyroster_manager.util.DateHelper.getDaysUntilExpiry
+import com.xeniac.warrantyroster_manager.warranty_management.data.remote.dto.ListItemType
+import com.xeniac.warrantyroster_manager.warranty_management.data.remote.dto.Warranty
 import com.xeniac.warrantyroster_manager.warranty_management.presentation.WarrantyViewModel
 import ir.tapsell.plus.AdHolder
 import ir.tapsell.plus.AdRequestCallback
