@@ -226,6 +226,8 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
                 networkStatus = it
                 Timber.i("Network connectivity status inside of observer is $it")
             }.launchIn(lifecycleScope)
+        } else {
+            networkStatus = ConnectivityObserver.Status.AVAILABLE
         }
     }
 

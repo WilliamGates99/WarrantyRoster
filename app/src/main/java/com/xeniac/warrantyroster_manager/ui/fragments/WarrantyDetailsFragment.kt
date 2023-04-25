@@ -99,6 +99,8 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
                 networkStatus = it
                 Timber.i("Network connectivity status inside of observer is $it")
             }.launchIn(lifecycleScope)
+        } else {
+            networkStatus = ConnectivityObserver.Status.AVAILABLE
         }
     }
 

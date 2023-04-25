@@ -160,6 +160,8 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                 networkStatus = it
                 Timber.i("Network connectivity status inside of observer is $it")
             }.launchIn(lifecycleScope)
+        } else {
+            networkStatus = ConnectivityObserver.Status.AVAILABLE
         }
     }
 

@@ -132,6 +132,8 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
                 networkStatus = it
                 Timber.i("Network connectivity status inside of observer is $it")
             }.launchIn(lifecycleScope)
+        } else {
+            networkStatus = ConnectivityObserver.Status.AVAILABLE
         }
     }
 

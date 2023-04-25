@@ -92,6 +92,8 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
                 networkStatus = it
                 Timber.i("Network connectivity status inside of observer is $it")
             }.launchIn(lifecycleScope)
+        } else {
+            networkStatus = ConnectivityObserver.Status.AVAILABLE
         }
     }
 

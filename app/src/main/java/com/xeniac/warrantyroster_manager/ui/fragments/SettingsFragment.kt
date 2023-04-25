@@ -119,6 +119,8 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
                 networkStatus = it
                 Timber.i("Network connectivity status inside of observer is $it")
             }.launchIn(lifecycleScope)
+        } else {
+            networkStatus = ConnectivityObserver.Status.AVAILABLE
         }
     }
 

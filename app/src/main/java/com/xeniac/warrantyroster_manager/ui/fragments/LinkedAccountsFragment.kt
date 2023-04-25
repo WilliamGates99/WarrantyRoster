@@ -117,6 +117,8 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
                 networkStatus = it
                 Timber.i("Network connectivity status inside of observer is $it")
             }.launchIn(lifecycleScope)
+        } else {
+            networkStatus = ConnectivityObserver.Status.AVAILABLE
         }
     }
 
