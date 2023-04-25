@@ -23,7 +23,7 @@ import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.core.data.repository.NetworkConnectivityObserver
 import com.xeniac.warrantyroster_manager.core.domain.ConnectivityObserver
 import com.xeniac.warrantyroster_manager.core.presentation.main.MainActivity
-import com.xeniac.warrantyroster_manager.data.remote.models.Category
+import com.xeniac.warrantyroster_manager.warranty_management.data.remote.dto.Category
 import com.xeniac.warrantyroster_manager.databinding.FragmentAddWarrantyBinding
 import com.xeniac.warrantyroster_manager.util.CoilHelper.loadCategoryImage
 import com.xeniac.warrantyroster_manager.util.Constants.ERROR_FIREBASE_403
