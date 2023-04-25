@@ -4,7 +4,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.Query
 import com.xeniac.warrantyroster_manager.data.remote.models.Warranty
-import com.xeniac.warrantyroster_manager.data.remote.models.WarrantyInput
+import com.xeniac.warrantyroster_manager.warranty_management.data.remote.dto.WarrantyInput
 import com.xeniac.warrantyroster_manager.di.CategoriesCollection
 import com.xeniac.warrantyroster_manager.di.WarrantiesCollection
 import com.xeniac.warrantyroster_manager.util.Constants.CATEGORIES_TITLE

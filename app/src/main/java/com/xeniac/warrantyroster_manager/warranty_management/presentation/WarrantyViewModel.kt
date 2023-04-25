@@ -9,7 +9,7 @@ import com.xeniac.warrantyroster_manager.core.domain.UserRepository
 import com.xeniac.warrantyroster_manager.warranty_management.data.remote.dto.Category
 import com.xeniac.warrantyroster_manager.data.remote.models.ListItemType
 import com.xeniac.warrantyroster_manager.data.remote.models.Warranty
-import com.xeniac.warrantyroster_manager.data.remote.models.WarrantyInput
+import com.xeniac.warrantyroster_manager.warranty_management.data.remote.dto.WarrantyInput
 import com.xeniac.warrantyroster_manager.util.Constants.CATEGORIES_ICON
 import com.xeniac.warrantyroster_manager.util.Constants.CATEGORIES_TITLE
 import com.xeniac.warrantyroster_manager.util.Constants.ERROR_EMPTY_CATEGORY_LIST

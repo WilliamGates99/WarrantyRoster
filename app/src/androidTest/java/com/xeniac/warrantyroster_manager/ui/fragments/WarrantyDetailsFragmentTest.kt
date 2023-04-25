@@ -19,7 +19,7 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import com.google.common.truth.Truth.assertThat
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.data.remote.models.Warranty
-import com.xeniac.warrantyroster_manager.data.remote.models.WarrantyInput
+import com.xeniac.warrantyroster_manager.warranty_management.data.remote.dto.WarrantyInput
 import com.xeniac.warrantyroster_manager.data.repository.FakeWarrantyRepository
 import com.xeniac.warrantyroster_manager.data.repository.FakeUserRepository
 import com.xeniac.warrantyroster_manager.databinding.FragmentWarrantyDetailsBinding
