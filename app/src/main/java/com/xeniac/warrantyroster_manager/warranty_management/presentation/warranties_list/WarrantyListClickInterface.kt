@@ -1,4 +1,4 @@
-package com.xeniac.warrantyroster_manager.ui.adapters
+package com.xeniac.warrantyroster_manager.warranty_management.presentation.warranties_list
 
 import com.xeniac.warrantyroster_manager.data.remote.models.Warranty
 

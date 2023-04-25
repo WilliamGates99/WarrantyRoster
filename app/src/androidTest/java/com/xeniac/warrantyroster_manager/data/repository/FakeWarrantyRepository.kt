@@ -3,7 +3,7 @@ package com.xeniac.warrantyroster_manager.data.repository
 import com.google.firebase.firestore.Query
 import com.xeniac.warrantyroster_manager.data.remote.models.Warranty
 import com.xeniac.warrantyroster_manager.data.remote.models.WarrantyInput
-import com.xeniac.warrantyroster_manager.domain.repository.WarrantyRepository
+import com.xeniac.warrantyroster_manager.warranty_management.domain.repository.WarrantyRepository
 
 class FakeWarrantyRepository : WarrantyRepository {
 

@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/warrantiesFragment"
-        android:name="com.xeniac.warrantyroster_manager.ui.fragments.WarrantiesFragment"
+        android:name="com.xeniac.warrantyroster_manager.warranty_management.presentation.warranties_list.WarrantiesFragment"
         android:label="WarrantiesFragment"
         tools:layout="@layout/fragment_warranties">
         <action
@@ -49,7 +49,7 @@
 
     <fragment
         android:id="@+id/warrantyDetailsFragment"
-        android:name="com.xeniac.warrantyroster_manager.ui.fragments.WarrantyDetailsFragment"
+        android:name="com.xeniac.warrantyroster_manager.warranty_management.presentation.warranty_details.WarrantyDetailsFragment"
         android:label="WarrantyDetailsFragment"
         tools:layout="@layout/fragment_warranty_details">
         <argument
@@ -67,7 +67,7 @@
 
     <fragment
         android:id="@+id/addWarrantyFragment"
-        android:name="com.xeniac.warrantyroster_manager.ui.fragments.AddWarrantyFragment"
+        android:name="com.xeniac.warrantyroster_manager.warranty_management.presentation.add_warranty.AddWarrantyFragment"
         android:label="AddWarrantyFragment"
         tools:layout="@layout/fragment_add_warranty">
         <action
@@ -83,7 +83,7 @@
 
     <fragment
         android:id="@+id/editWarrantyFragment"
-        android:name="com.xeniac.warrantyroster_manager.ui.fragments.EditWarrantyFragment"
+        android:name="com.xeniac.warrantyroster_manager.warranty_management.presentation.edit_warranty.EditWarrantyFragment"
         android:label="EditWarrantyFragment"
         tools:layout="@layout/fragment_edit_warranty">
         <argument

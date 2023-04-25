@@ -1,4 +1,4 @@
-package com.xeniac.warrantyroster_manager.ui.fragments
+package com.xeniac.warrantyroster_manager.warranty_management.presentation.warranty_details
 
 import android.os.Build
 import android.os.Bundle
@@ -22,7 +22,6 @@ import com.xeniac.warrantyroster_manager.core.domain.ConnectivityObserver
 import com.xeniac.warrantyroster_manager.core.presentation.main.MainActivity
 import com.xeniac.warrantyroster_manager.data.remote.models.Warranty
 import com.xeniac.warrantyroster_manager.databinding.FragmentWarrantyDetailsBinding
-import com.xeniac.warrantyroster_manager.ui.viewmodels.WarrantyViewModel
 import com.xeniac.warrantyroster_manager.util.AlertDialogHelper.showTwoBtnAlertDialog
 import com.xeniac.warrantyroster_manager.util.CoilHelper.loadCategoryImage
 import com.xeniac.warrantyroster_manager.util.Constants.ERROR_FIREBASE_403
@@ -35,6 +34,7 @@ import com.xeniac.warrantyroster_manager.util.SnackBarHelper.showFirebaseDeviceB
 import com.xeniac.warrantyroster_manager.util.SnackBarHelper.showNetworkFailureError
 import com.xeniac.warrantyroster_manager.util.SnackBarHelper.showSomethingWentWrongError
 import com.xeniac.warrantyroster_manager.util.SnackBarHelper.showUnavailableNetworkConnectionError
+import com.xeniac.warrantyroster_manager.warranty_management.presentation.WarrantyViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import ir.tapsell.plus.AdShowListener
 import ir.tapsell.plus.TapsellPlus

@@ -17,8 +17,9 @@ import com.xeniac.warrantyroster_manager.data.repository.FakeWarrantyRepository
 import com.xeniac.warrantyroster_manager.data.repository.FakeUserRepository
 import com.xeniac.warrantyroster_manager.databinding.FragmentWarrantiesBinding
 import com.xeniac.warrantyroster_manager.launchFragmentInHiltContainer
-import com.xeniac.warrantyroster_manager.ui.adapters.WarrantyAdapter
-import com.xeniac.warrantyroster_manager.ui.viewmodels.WarrantyViewModel
+import com.xeniac.warrantyroster_manager.warranty_management.presentation.warranties_list.WarrantyAdapter
+import com.xeniac.warrantyroster_manager.warranty_management.presentation.WarrantyViewModel
+import com.xeniac.warrantyroster_manager.warranty_management.presentation.warranties_list.WarrantiesFragment
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi

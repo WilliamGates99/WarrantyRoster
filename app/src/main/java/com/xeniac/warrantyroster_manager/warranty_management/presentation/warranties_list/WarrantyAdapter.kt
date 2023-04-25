@@ -1,4 +1,4 @@
-package com.xeniac.warrantyroster_manager.ui.adapters
+package com.xeniac.warrantyroster_manager.warranty_management.presentation.warranties_list
 
 import android.app.Activity
 import android.content.Context
@@ -23,11 +23,11 @@ import com.xeniac.warrantyroster_manager.data.remote.models.ListItemType
 import com.xeniac.warrantyroster_manager.data.remote.models.Warranty
 import com.xeniac.warrantyroster_manager.databinding.AdContainerListBinding
 import com.xeniac.warrantyroster_manager.databinding.ListItemWarrantyBinding
-import com.xeniac.warrantyroster_manager.ui.viewmodels.WarrantyViewModel
 import com.xeniac.warrantyroster_manager.util.CoilHelper.loadCategoryImage
 import com.xeniac.warrantyroster_manager.util.Constants.VIEW_TYPE_AD
 import com.xeniac.warrantyroster_manager.util.Constants.VIEW_TYPE_WARRANTY
 import com.xeniac.warrantyroster_manager.util.DateHelper.getDaysUntilExpiry
+import com.xeniac.warrantyroster_manager.warranty_management.presentation.WarrantyViewModel
 import ir.tapsell.plus.AdHolder
 import ir.tapsell.plus.AdRequestCallback
 import ir.tapsell.plus.AdShowListener
@@ -39,7 +39,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
 import javax.inject.Inject
 
 class WarrantyAdapter @Inject constructor(

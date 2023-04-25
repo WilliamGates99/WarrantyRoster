@@ -1,4 +1,4 @@
-package com.xeniac.warrantyroster_manager.ui.fragments
+package com.xeniac.warrantyroster_manager.warranty_management.presentation.edit_warranty
 
 import android.content.Context
 import android.os.Build
@@ -10,22 +10,21 @@ import android.view.View.VISIBLE
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
-import androidx.core.view.get
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import coil.ImageLoader
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.core.data.repository.NetworkConnectivityObserver
 import com.xeniac.warrantyroster_manager.core.domain.ConnectivityObserver
-import com.xeniac.warrantyroster_manager.core.presentation.main.MainActivity
 import com.xeniac.warrantyroster_manager.data.remote.models.Category
-import com.xeniac.warrantyroster_manager.databinding.FragmentAddWarrantyBinding
-import com.xeniac.warrantyroster_manager.ui.viewmodels.WarrantyViewModel
+import com.xeniac.warrantyroster_manager.data.remote.models.Warranty
+import com.xeniac.warrantyroster_manager.databinding.FragmentEditWarrantyBinding
 import com.xeniac.warrantyroster_manager.util.CoilHelper.loadCategoryImage
 import com.xeniac.warrantyroster_manager.util.Constants.ERROR_FIREBASE_403
 import com.xeniac.warrantyroster_manager.util.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
@@ -34,36 +33,39 @@ import com.xeniac.warrantyroster_manager.util.Constants.ERROR_INPUT_BLANK_STARTI
 import com.xeniac.warrantyroster_manager.util.Constants.ERROR_INPUT_BLANK_TITLE
 import com.xeniac.warrantyroster_manager.util.Constants.ERROR_INPUT_INVALID_STARTING_DATE
 import com.xeniac.warrantyroster_manager.util.Constants.ERROR_NETWORK_CONNECTION
-import com.xeniac.warrantyroster_manager.util.Constants.FRAGMENT_TAG_ADD_CALENDAR_EXPIRY
-import com.xeniac.warrantyroster_manager.util.Constants.FRAGMENT_TAG_ADD_CALENDAR_STARTING
-import com.xeniac.warrantyroster_manager.util.Constants.SAVE_INSTANCE_ADD_WARRANTY_BRAND
-import com.xeniac.warrantyroster_manager.util.Constants.SAVE_INSTANCE_ADD_WARRANTY_CATEGORY_ID
-import com.xeniac.warrantyroster_manager.util.Constants.SAVE_INSTANCE_ADD_WARRANTY_DESCRIPTION
-import com.xeniac.warrantyroster_manager.util.Constants.SAVE_INSTANCE_ADD_WARRANTY_EXPIRY_DATE_IN_MILLIS
-import com.xeniac.warrantyroster_manager.util.Constants.SAVE_INSTANCE_ADD_WARRANTY_IS_LIFETIME
-import com.xeniac.warrantyroster_manager.util.Constants.SAVE_INSTANCE_ADD_WARRANTY_MODEL
-import com.xeniac.warrantyroster_manager.util.Constants.SAVE_INSTANCE_ADD_WARRANTY_SERIAL
-import com.xeniac.warrantyroster_manager.util.Constants.SAVE_INSTANCE_ADD_WARRANTY_STARTING_DATE_IN_MILLIS
-import com.xeniac.warrantyroster_manager.util.Constants.SAVE_INSTANCE_ADD_WARRANTY_TITLE
+import com.xeniac.warrantyroster_manager.util.Constants.FRAGMENT_TAG_EDIT_CALENDAR_EXPIRY
+import com.xeniac.warrantyroster_manager.util.Constants.FRAGMENT_TAG_EDIT_CALENDAR_STARTING
+import com.xeniac.warrantyroster_manager.util.Constants.SAVE_INSTANCE_EDIT_WARRANTY_BRAND
+import com.xeniac.warrantyroster_manager.util.Constants.SAVE_INSTANCE_EDIT_WARRANTY_CATEGORY_ID
+import com.xeniac.warrantyroster_manager.util.Constants.SAVE_INSTANCE_EDIT_WARRANTY_DESCRIPTION
+import com.xeniac.warrantyroster_manager.util.Constants.SAVE_INSTANCE_EDIT_WARRANTY_EXPIRY_DATE_IN_MILLIS
+import com.xeniac.warrantyroster_manager.util.Constants.SAVE_INSTANCE_EDIT_WARRANTY_IS_LIFETIME
+import com.xeniac.warrantyroster_manager.util.Constants.SAVE_INSTANCE_EDIT_WARRANTY_MODEL
+import com.xeniac.warrantyroster_manager.util.Constants.SAVE_INSTANCE_EDIT_WARRANTY_SERIAL
+import com.xeniac.warrantyroster_manager.util.Constants.SAVE_INSTANCE_EDIT_WARRANTY_STARTING_DATE_IN_MILLIS
+import com.xeniac.warrantyroster_manager.util.Constants.SAVE_INSTANCE_EDIT_WARRANTY_TITLE
+import com.xeniac.warrantyroster_manager.util.DateHelper.getTimeZoneOffsetInMillis
 import com.xeniac.warrantyroster_manager.util.Resource
 import com.xeniac.warrantyroster_manager.util.SnackBarHelper.show403Error
 import com.xeniac.warrantyroster_manager.util.SnackBarHelper.showFirebaseDeviceBlockedError
 import com.xeniac.warrantyroster_manager.util.SnackBarHelper.showNetworkFailureError
 import com.xeniac.warrantyroster_manager.util.SnackBarHelper.showSomethingWentWrongError
 import com.xeniac.warrantyroster_manager.util.SnackBarHelper.showUnavailableNetworkConnectionError
+import com.xeniac.warrantyroster_manager.warranty_management.presentation.WarrantyViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.text.DecimalFormat
+import java.text.SimpleDateFormat
 import java.util.Calendar
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
+class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
 
-    private var _binding: FragmentAddWarrantyBinding? = null
+    private var _binding: FragmentEditWarrantyBinding? = null
     val binding get() = _binding!!
 
     lateinit var viewModel: WarrantyViewModel
@@ -74,13 +76,19 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
     @Inject
     lateinit var decimalFormat: DecimalFormat
 
+    @Inject
+    lateinit var dateFormat: SimpleDateFormat
+
+    private lateinit var warranty: Warranty
     private var selectedCategory: Category? = null
 
     private var selectedStartingDateInMillis = 0L
-    var startingDateInput: String? = null
+    private var startingDateInput: String? = null
 
     private var selectedExpiryDateInMillis = 0L
     private var expiryDateInput: String? = null
+
+    private val offset = getTimeZoneOffsetInMillis()
 
     private lateinit var connectivityObserver: ConnectivityObserver
     private var networkStatus: ConnectivityObserver.Status = ConnectivityObserver.Status.UNAVAILABLE
@@ -89,7 +97,7 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentAddWarrantyBinding.bind(view)
+        _binding = FragmentEditWarrantyBinding.bind(view)
         viewModel = ViewModelProvider(requireActivity())[WarrantyViewModel::class.java]
         connectivityObserver = NetworkConnectivityObserver(requireContext())
 
@@ -102,8 +110,9 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
         lifetimeWarrantyCheckBoxListener()
         startingDatePickerOnFocusListener()
         expiryDatePickerOnFocusListener()
-        returnToMainActivity()
-        addWarrantyOnClick()
+        returnToWarrantyDetailsFragment()
+        getWarranty()
+        editWarrantyOnClick()
     }
 
     override fun onDestroyView() {
@@ -128,36 +137,36 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
             val isLifetime = binding.cbLifetime.isChecked
 
             if (title.isNotBlank()) {
-                outState.putString(SAVE_INSTANCE_ADD_WARRANTY_TITLE, title)
+                outState.putString(SAVE_INSTANCE_EDIT_WARRANTY_TITLE, title)
             }
 
             if (brand.isNotBlank()) {
-                outState.putString(SAVE_INSTANCE_ADD_WARRANTY_BRAND, brand)
+                outState.putString(SAVE_INSTANCE_EDIT_WARRANTY_BRAND, brand)
             }
 
             if (model.isNotBlank()) {
-                outState.putString(SAVE_INSTANCE_ADD_WARRANTY_MODEL, model)
+                outState.putString(SAVE_INSTANCE_EDIT_WARRANTY_MODEL, model)
             }
 
             if (serialNumber.isNotBlank()) {
-                outState.putString(SAVE_INSTANCE_ADD_WARRANTY_SERIAL, serialNumber)
+                outState.putString(SAVE_INSTANCE_EDIT_WARRANTY_SERIAL, serialNumber)
             }
 
             if (description.isNotBlank()) {
-                outState.putString(SAVE_INSTANCE_ADD_WARRANTY_DESCRIPTION, description)
+                outState.putString(SAVE_INSTANCE_EDIT_WARRANTY_DESCRIPTION, description)
             }
 
-            outState.putString(SAVE_INSTANCE_ADD_WARRANTY_CATEGORY_ID, categoryId)
+            outState.putString(SAVE_INSTANCE_EDIT_WARRANTY_CATEGORY_ID, categoryId)
 
-            outState.putBoolean(SAVE_INSTANCE_ADD_WARRANTY_IS_LIFETIME, isLifetime)
+            outState.putBoolean(SAVE_INSTANCE_EDIT_WARRANTY_IS_LIFETIME, isLifetime)
 
             outState.putLong(
-                SAVE_INSTANCE_ADD_WARRANTY_STARTING_DATE_IN_MILLIS,
+                SAVE_INSTANCE_EDIT_WARRANTY_STARTING_DATE_IN_MILLIS,
                 selectedStartingDateInMillis
             )
 
             outState.putLong(
-                SAVE_INSTANCE_ADD_WARRANTY_EXPIRY_DATE_IN_MILLIS,
+                SAVE_INSTANCE_EDIT_WARRANTY_EXPIRY_DATE_IN_MILLIS,
                 selectedExpiryDateInMillis
             )
         }
@@ -168,27 +177,27 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         lifecycleScope.launch {
             savedInstanceState?.let {
-                it.getString(SAVE_INSTANCE_ADD_WARRANTY_TITLE)?.let { restoredTitle ->
+                it.getString(SAVE_INSTANCE_EDIT_WARRANTY_TITLE)?.let { restoredTitle ->
                     binding.tiEditTitle.setText(restoredTitle)
                 }
 
-                it.getString(SAVE_INSTANCE_ADD_WARRANTY_BRAND)?.let { restoredBrand ->
+                it.getString(SAVE_INSTANCE_EDIT_WARRANTY_BRAND)?.let { restoredBrand ->
                     binding.tiEditBrand.setText(restoredBrand)
                 }
 
-                it.getString(SAVE_INSTANCE_ADD_WARRANTY_MODEL)?.let { restoredModel ->
+                it.getString(SAVE_INSTANCE_EDIT_WARRANTY_MODEL)?.let { restoredModel ->
                     binding.tiEditModel.setText(restoredModel)
                 }
 
-                it.getString(SAVE_INSTANCE_ADD_WARRANTY_SERIAL)?.let { restoredSerial ->
+                it.getString(SAVE_INSTANCE_EDIT_WARRANTY_SERIAL)?.let { restoredSerial ->
                     binding.tiEditSerial.setText(restoredSerial)
                 }
 
-                it.getString(SAVE_INSTANCE_ADD_WARRANTY_DESCRIPTION)?.let { restoredDescription ->
+                it.getString(SAVE_INSTANCE_EDIT_WARRANTY_DESCRIPTION)?.let { restoredDescription ->
                     binding.tiEditDescription.setText(restoredDescription)
                 }
 
-                it.getString(SAVE_INSTANCE_ADD_WARRANTY_CATEGORY_ID)?.let { restoredCategoryId ->
+                it.getString(SAVE_INSTANCE_EDIT_WARRANTY_CATEGORY_ID)?.let { restoredCategoryId ->
                     selectedCategory = viewModel.getCategoryById(restoredCategoryId)
 
                     selectedCategory?.let { category ->
@@ -197,19 +206,20 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
                     }
                 }
 
-                it.getBoolean(SAVE_INSTANCE_ADD_WARRANTY_IS_LIFETIME).let { restoredIsLifetime ->
+                it.getBoolean(SAVE_INSTANCE_EDIT_WARRANTY_IS_LIFETIME).let { restoredIsLifetime ->
                     binding.cbLifetime.isChecked = restoredIsLifetime
                     setExpiryDateActivation(restoredIsLifetime)
                 }
 
-                it.getLong(SAVE_INSTANCE_ADD_WARRANTY_STARTING_DATE_IN_MILLIS).let { restoredDate ->
-                    if (restoredDate != 0L) {
-                        selectedStartingDateInMillis = restoredDate
-                        setStartingDate()
+                it.getLong(SAVE_INSTANCE_EDIT_WARRANTY_STARTING_DATE_IN_MILLIS)
+                    .let { restoredDate ->
+                        if (restoredDate != 0L) {
+                            selectedStartingDateInMillis = restoredDate
+                            setStartingDate()
+                        }
                     }
-                }
 
-                it.getLong(SAVE_INSTANCE_ADD_WARRANTY_EXPIRY_DATE_IN_MILLIS).let { restoredDate ->
+                it.getLong(SAVE_INSTANCE_EDIT_WARRANTY_EXPIRY_DATE_IN_MILLIS).let { restoredDate ->
                     if (restoredDate != 0L) {
                         selectedExpiryDateInMillis = restoredDate
                         setExpiryDate()
@@ -329,7 +339,8 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
     }
 
     private fun subscribeToObservers() {
-        addWarrantyObserver()
+        updateWarrantyObserver()
+        getUpdatedWarrantyObserver()
     }
 
     private fun categoryDropDown() = binding.tiDdCategory.setAdapter(
@@ -342,10 +353,6 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
             selectedCategory = viewModel.getCategoryByTitle(categoryTitle)
             selectedCategory?.let { loadCategoryIcon(it.icon) }
         }
-
-    private fun loadCategoryIcon(categoryIcon: String) = loadCategoryImage(
-        requireContext(), categoryIcon, imageLoader, binding.ivIconCategory, binding.cpiIconCategory
-    )
 
     private fun categoryDropDownOnDismiss() = binding.tiDdCategory.setOnDismissListener {
         binding.tiDdCategory.clearFocus()
@@ -373,7 +380,7 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
 
     private fun openStartingDatePicker() {
         val datePickerBuilder = MaterialDatePicker.Builder.datePicker().apply {
-            setTitleText(requireContext().getString(R.string.add_warranty_title_date_picker_starting))
+            setTitleText(requireContext().getString(R.string.edit_warranty_title_date_picker_starting))
             setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
         }
 
@@ -383,7 +390,7 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
             datePickerBuilder.setSelection(selectedStartingDateInMillis).build()
         }
 
-        startingDP.show(parentFragmentManager, FRAGMENT_TAG_ADD_CALENDAR_STARTING)
+        startingDP.show(parentFragmentManager, FRAGMENT_TAG_EDIT_CALENDAR_STARTING)
 
         startingDP.addOnPositiveButtonClickListener { selectionInMillis ->
             selectedStartingDateInMillis = selectionInMillis
@@ -397,7 +404,11 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
 
     private fun setStartingDate() {
         Calendar.getInstance().apply {
-            timeInMillis = selectedStartingDateInMillis
+            timeInMillis = if (offset < 0) {
+                selectedStartingDateInMillis - offset
+            } else {
+                selectedStartingDateInMillis
+            }
 
             val day = decimalFormat.format(get(Calendar.DAY_OF_MONTH))
             val month = decimalFormat.format((get(Calendar.MONTH)) + 1)
@@ -406,7 +417,7 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
             startingDateInput = "$year-$month-$day"
 
             val startingDateText = requireContext().getString(
-                R.string.add_warranty_format_date,
+                R.string.edit_warranty_format_date,
                 month, day, year
             )
 
@@ -428,7 +439,7 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
 
     private fun openExpiryDatePicker() {
         val datePickerBuilder = MaterialDatePicker.Builder.datePicker().apply {
-            setTitleText(requireContext().getString(R.string.add_warranty_title_date_picker_expiry))
+            setTitleText(requireContext().getString(R.string.edit_warranty_title_date_picker_expiry))
             setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
         }
 
@@ -438,7 +449,7 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
             datePickerBuilder.setSelection(selectedExpiryDateInMillis).build()
         }
 
-        expiryDP.show(parentFragmentManager, FRAGMENT_TAG_ADD_CALENDAR_EXPIRY)
+        expiryDP.show(parentFragmentManager, FRAGMENT_TAG_EDIT_CALENDAR_EXPIRY)
 
         expiryDP.addOnPositiveButtonClickListener { selectionInMillis ->
             selectedExpiryDateInMillis = selectionInMillis
@@ -452,7 +463,11 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
 
     private fun setExpiryDate() {
         Calendar.getInstance().apply {
-            timeInMillis = selectedExpiryDateInMillis
+            timeInMillis = if (offset < 0) {
+                selectedExpiryDateInMillis - offset
+            } else {
+                selectedExpiryDateInMillis
+            }
 
             val day = decimalFormat.format(get(Calendar.DAY_OF_MONTH))
             val month = decimalFormat.format((get(Calendar.MONTH)) + 1)
@@ -461,7 +476,7 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
             expiryDateInput = "$year-$month-$day"
 
             val expiryDateText = requireContext().getString(
-                R.string.add_warranty_format_date,
+                R.string.edit_warranty_format_date,
                 month, day, year
             )
 
@@ -470,11 +485,94 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
         }
     }
 
-    private fun returnToMainActivity() = binding.toolbar.setNavigationOnClickListener {
+    private fun returnToWarrantyDetailsFragment() = binding.toolbar.setNavigationOnClickListener {
         findNavController().popBackStack()
     }
 
-    private fun addWarrantyOnClick() = binding.toolbar.menu[0].setOnMenuItemClickListener {
+    private fun getWarranty() {
+        val args: EditWarrantyFragmentArgs by navArgs()
+        warranty = args.warranty
+        setWarrantyDetails()
+    }
+
+    private fun setWarrantyDetails() = lifecycleScope.launch {
+        binding.apply {
+            tiEditTitle.setText(warranty.title)
+            tiEditBrand.setText(warranty.brand)
+            tiEditModel.setText(warranty.model)
+            tiEditSerial.setText(warranty.serialNumber)
+            tiEditDescription.setText(warranty.description)
+
+            setStartingDateText(warranty.startingDate!!)
+            setExpiryDateText()
+
+            selectedCategory = viewModel.getCategoryById(warranty.categoryId!!)
+            selectedCategory?.let {
+                tiDdCategory.setText(it.title[viewModel.getCategoryTitleMapKey()])
+                loadCategoryIcon(it.icon)
+            }
+        }
+    }
+
+    private fun setStartingDateText(startingDate: String) {
+        Calendar.getInstance().apply {
+            dateFormat.parse(startingDate)?.let { time = it }
+
+            val day = decimalFormat.format(get(Calendar.DAY_OF_MONTH))
+            val month = decimalFormat.format((get(Calendar.MONTH)) + 1)
+            val year = get(Calendar.YEAR)
+
+            startingDateInput = "$year-$month-$day"
+
+            val startingDateText = requireContext().getString(
+                R.string.edit_warranty_format_date,
+                month, day, year
+            )
+
+            binding.tiEditDateStarting.setText(startingDateText)
+
+            // Add/Subtract offset to Prevent the Calendar to Show the Previous Day
+            selectedStartingDateInMillis = if (offset < 0) {
+                timeInMillis - offset
+            } else {
+                timeInMillis + offset
+            }
+        }
+    }
+
+    private fun setExpiryDateText() {
+        val isLifetime = warranty.isLifetime ?: false
+        if (isLifetime) {
+            binding.cbLifetime.isChecked = true
+        } else {
+            binding.cbLifetime.isChecked = false
+            Calendar.getInstance().apply {
+                dateFormat.parse(warranty.expiryDate!!)?.let { time = it }
+
+                val day = decimalFormat.format(get(Calendar.DAY_OF_MONTH))
+                val month = decimalFormat.format((get(Calendar.MONTH)) + 1)
+                val year = get(Calendar.YEAR)
+
+                expiryDateInput = "$year-$month-$day"
+
+                val expiryDateText = requireContext().getString(
+                    R.string.edit_warranty_format_date,
+                    month, day, year
+                )
+
+                binding.tiEditDateExpiry.setText(expiryDateText)
+
+                // Add/Subtract offset to Prevent the Calendar to Show the Previous Day
+                selectedExpiryDateInMillis = if (offset < 0) {
+                    timeInMillis - offset
+                } else {
+                    timeInMillis + offset
+                }
+            }
+        }
+    }
+
+    private fun editWarrantyOnClick() = binding.toolbar.menu.getItem(0).setOnMenuItemClickListener {
         validateWarrantyInputs()
         false
     }
@@ -489,13 +587,14 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
             val brand = binding.tiEditBrand.text?.toString()?.trim()
             val model = binding.tiEditModel.text?.toString()?.trim()
             val serialNumber = binding.tiEditSerial.text?.toString()?.trim()
-            val isLifetime = binding.cbLifetime.isChecked
             val description = binding.tiEditDescription.text?.toString()?.trim()
+            val isLifetime = binding.cbLifetime.isChecked
             val categoryId = selectedCategory?.id ?: "10"
 
-            viewModel.validateAddWarrantyInputs(
-                title, brand, model, serialNumber, isLifetime, startingDateInput, expiryDateInput,
-                description, categoryId, selectedStartingDateInMillis, selectedExpiryDateInMillis
+            viewModel.validateEditWarrantyInputs(
+                warranty.id, title, brand, model, serialNumber,
+                isLifetime, startingDateInput, expiryDateInput, description, categoryId,
+                selectedStartingDateInMillis, selectedExpiryDateInMillis
             )
         } else {
             snackbar = showUnavailableNetworkConnectionError(
@@ -505,30 +604,22 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
         }
     }
 
-    private fun addWarrantyObserver() =
-        viewModel.addWarrantyLiveData.observe(viewLifecycleOwner) { responseEvent ->
+    private fun updateWarrantyObserver() =
+        viewModel.updateWarrantyLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
                     is Resource.Loading -> showLoadingAnimation()
-                    is Resource.Success -> {
-                        hideLoadingAnimation()
-                        findNavController().navigate(
-                            AddWarrantyFragmentDirections.actionAddWarrantyFragmentToWarrantiesFragment()
-                        )
-                        (requireActivity() as MainActivity).showRateAppDialog()
-                    }
+                    is Resource.Success -> getUpdatedWarrantyFromFirestore()
                     is Resource.Error -> {
                         hideLoadingAnimation()
                         response.message?.asString(requireContext())?.let {
                             when {
                                 it.contains(ERROR_INPUT_BLANK_TITLE) -> {
                                     binding.tiLayoutTitle.error =
-                                        requireContext().getString(R.string.add_warranty_error_blank_title)
+                                        requireContext().getString(R.string.edit_warranty_error_blank_title)
                                     binding.tiLayoutTitle.requestFocus()
                                 }
-                                it.contains(ERROR_INPUT_BLANK_STARTING_DATE) -> {
-                                    binding.tiLayoutDateStarting.requestFocus()
-                                }
+                                it.contains(ERROR_INPUT_BLANK_STARTING_DATE) -> binding.tiLayoutDateStarting.requestFocus()
                                 it.contains(ERROR_INPUT_BLANK_EXPIRY_DATE) -> binding.tiLayoutDateExpiry.requestFocus()
                                 it.contains(ERROR_INPUT_INVALID_STARTING_DATE) -> showDateError()
                                 it.contains(ERROR_NETWORK_CONNECTION) -> {
@@ -541,7 +632,8 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
                                 }
                                 it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
                                     snackbar = showFirebaseDeviceBlockedError(
-                                        requireContext(), requireView()
+                                        requireContext(),
+                                        requireView()
                                     )
                                 }
                                 else -> {
@@ -556,8 +648,53 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
             }
         }
 
+    private fun getUpdatedWarrantyFromFirestore() =
+        viewModel.getUpdatedWarrantyFromFirestore(warranty.id)
+
+    private fun getUpdatedWarrantyObserver() =
+        viewModel.updatedWarrantyLiveData.observe(viewLifecycleOwner) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { response ->
+                when (response) {
+                    is Resource.Loading -> showLoadingAnimation()
+                    is Resource.Success -> {
+                        hideLoadingAnimation()
+                        response.data?.let { updatedWarranty ->
+                            navigateToWarrantyDetails(updatedWarranty)
+                        }
+                    }
+                    is Resource.Error -> {
+                        hideLoadingAnimation()
+                        response.message?.asString(requireContext())?.let {
+                            snackbar = when {
+                                it.contains(ERROR_NETWORK_CONNECTION) -> {
+                                    showNetworkFailureError(requireContext(), requireView())
+                                }
+                                it.contains(ERROR_FIREBASE_403) -> {
+                                    show403Error(requireContext(), requireView())
+                                }
+                                it.contains(ERROR_FIREBASE_DEVICE_BLOCKED) -> {
+                                    showFirebaseDeviceBlockedError(requireContext(), requireView())
+                                }
+                                else -> showSomethingWentWrongError(requireContext(), requireView())
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+    private fun navigateToWarrantyDetails(updatedWarranty: Warranty) = findNavController().navigate(
+        EditWarrantyFragmentDirections.actionEditWarrantyFragmentToWarrantyDetailsFragment(
+            updatedWarranty
+        )
+    )
+
+    private fun loadCategoryIcon(categoryIcon: String) = loadCategoryImage(
+        requireContext(), categoryIcon, imageLoader, binding.ivIconCategory, binding.cpiIconCategory
+    )
+
     private fun showLoadingAnimation() = binding.apply {
-        toolbar.menu[0].isVisible = false
+        toolbar.menu.getItem(0).isVisible = false
         tiEditTitle.isEnabled = false
         tiDdCategory.isEnabled = false
         tiEditBrand.isEnabled = false
@@ -566,12 +703,12 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
         tiEditDateStarting.isEnabled = false
         tiEditDateExpiry.isEnabled = false
         tiEditDescription.isEnabled = false
-        cpiAdd.visibility = VISIBLE
+        cpiEdit.visibility = VISIBLE
     }
 
     private fun hideLoadingAnimation() = binding.apply {
-        cpiAdd.visibility = GONE
-        toolbar.menu[0].isVisible = true
+        cpiEdit.visibility = GONE
+        toolbar.menu.getItem(0).isVisible = true
         tiEditTitle.isEnabled = true
         tiDdCategory.isEnabled = true
         tiEditBrand.isEnabled = true
