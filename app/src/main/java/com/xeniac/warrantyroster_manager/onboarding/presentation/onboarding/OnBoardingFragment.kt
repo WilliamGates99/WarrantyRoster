@@ -34,7 +34,7 @@ class OnBoardingFragment : Fragment(R.layout.fragment_onboarding) {
 
     lateinit var viewModel: OnBoardingViewModel
 
-    private var currentLocaleIndex = 0
+    private var currentAppLocaleIndex = 0
 
     var snackbar: Snackbar? = null
 
@@ -112,7 +112,7 @@ class OnBoardingFragment : Fragment(R.layout.fragment_onboarding) {
                     is Resource.Loading -> Unit
                     is Resource.Success -> {
                         response.data?.let { localeIndex ->
-                            currentLocaleIndex = localeIndex
+                            currentAppLocaleIndex = localeIndex
                             setCurrentAppLocaleFlag(localeIndex)
                         }
                     }
@@ -152,7 +152,7 @@ class OnBoardingFragment : Fragment(R.layout.fragment_onboarding) {
             requireContext(),
             R.string.onboarding_dialog_title_language,
             localeTextItems,
-            currentLocaleIndex
+            currentAppLocaleIndex
         ) { index ->
             changeCurrentAppLocale(index)
         }
