@@ -1,24 +1,24 @@
-package com.xeniac.warrantyroster_manager.ui.fragments.onboarding
+package com.xeniac.warrantyroster_manager.onboarding.presentation
 
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.xeniac.warrantyroster_manager.R
-import com.xeniac.warrantyroster_manager.databinding.FragmentOnboarding3rdBinding
-import com.xeniac.warrantyroster_manager.util.Constants.ONBOARDING_2ND_INDEX
-import com.xeniac.warrantyroster_manager.util.Constants.ONBOARDING_4TH_INDEX
+import com.xeniac.warrantyroster_manager.databinding.FragmentOnboarding2ndBinding
+import com.xeniac.warrantyroster_manager.util.Constants.ONBOARDING_1ST_INDEX
+import com.xeniac.warrantyroster_manager.util.Constants.ONBOARDING_3RD_INDEX
 
-class OnBoarding3rdFragment : Fragment(R.layout.fragment_onboarding_3rd) {
+class OnBoarding2ndFragment : Fragment(R.layout.fragment_onboarding_2nd) {
 
-    private var _binding: FragmentOnboarding3rdBinding? = null
+    private var _binding: FragmentOnboarding2ndBinding? = null
     private val binding get() = _binding!!
 
     private var viewPager: ViewPager2? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        _binding = FragmentOnboarding3rdBinding.bind(view)
+        _binding = FragmentOnboarding2ndBinding.bind(view)
 
         viewPager = requireActivity().findViewById(R.id.viewpager)
 
@@ -33,11 +33,11 @@ class OnBoarding3rdFragment : Fragment(R.layout.fragment_onboarding_3rd) {
 
     private fun backOnClick() = binding.btnBack.setOnClickListener {
         // ViewPager items start from 0
-        viewPager?.currentItem = ONBOARDING_2ND_INDEX
+        viewPager?.currentItem = ONBOARDING_1ST_INDEX
     }
 
     private fun nextOnClick() = binding.btnNext.setOnClickListener {
         // ViewPager items start from 0
-        viewPager?.currentItem = ONBOARDING_4TH_INDEX
+        viewPager?.currentItem = ONBOARDING_3RD_INDEX
     }
 }

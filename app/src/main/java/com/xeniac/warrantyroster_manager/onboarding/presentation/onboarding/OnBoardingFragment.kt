@@ -1,4 +1,4 @@
-package com.xeniac.warrantyroster_manager.ui.fragments.onboarding
+package com.xeniac.warrantyroster_manager.onboarding.presentation.onboarding
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,10 +9,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.xeniac.warrantyroster_manager.R
-import com.xeniac.warrantyroster_manager.databinding.FragmentOnboardingBinding
 import com.xeniac.warrantyroster_manager.core.presentation.landing.LandingActivity
-import com.xeniac.warrantyroster_manager.ui.adapters.OnBoardingAdapter
 import com.xeniac.warrantyroster_manager.core.presentation.landing.LandingViewModel
+import com.xeniac.warrantyroster_manager.databinding.FragmentOnboardingBinding
+import com.xeniac.warrantyroster_manager.onboarding.presentation.OnBoarding1stFragment
+import com.xeniac.warrantyroster_manager.onboarding.presentation.OnBoarding2ndFragment
+import com.xeniac.warrantyroster_manager.onboarding.presentation.OnBoarding3rdFragment
+import com.xeniac.warrantyroster_manager.onboarding.presentation.OnBoarding4thFragment
 import com.xeniac.warrantyroster_manager.util.AlertDialogHelper.showSingleChoiceItemsDialog
 import com.xeniac.warrantyroster_manager.util.Constants.LOCALE_INDEX_ENGLISH_GREAT_BRITAIN
 import com.xeniac.warrantyroster_manager.util.Constants.LOCALE_INDEX_ENGLISH_UNITED_STATES

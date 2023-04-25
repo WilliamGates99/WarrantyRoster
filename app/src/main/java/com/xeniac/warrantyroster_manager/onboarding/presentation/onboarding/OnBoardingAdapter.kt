@@ -1,4 +1,4 @@
-package com.xeniac.warrantyroster_manager.ui.adapters
+package com.xeniac.warrantyroster_manager.onboarding.presentation.onboarding
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
