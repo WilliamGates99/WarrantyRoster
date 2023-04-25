@@ -13,12 +13,12 @@ import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.core.domain.repository.PreferencesRepository
 import com.xeniac.warrantyroster_manager.core.domain.repository.UserRepository
 import com.xeniac.warrantyroster_manager.core.domain.model.UserInfo
-import com.xeniac.warrantyroster_manager.util.Constants.LOCALE_ENGLISH_GREAT_BRITAIN
-import com.xeniac.warrantyroster_manager.util.Constants.LOCALE_ENGLISH_UNITED_STATES
+import com.xeniac.warrantyroster_manager.util.Constants.LOCALE_TAG_ENGLISH_GREAT_BRITAIN
+import com.xeniac.warrantyroster_manager.util.Constants.LOCALE_TAG_ENGLISH_UNITED_STATES
 import com.xeniac.warrantyroster_manager.util.Constants.LOCALE_INDEX_ENGLISH_GREAT_BRITAIN
 import com.xeniac.warrantyroster_manager.util.Constants.LOCALE_INDEX_ENGLISH_UNITED_STATES
 import com.xeniac.warrantyroster_manager.util.Constants.LOCALE_INDEX_PERSIAN_IRAN
-import com.xeniac.warrantyroster_manager.util.Constants.LOCALE_PERSIAN_IRAN
+import com.xeniac.warrantyroster_manager.util.Constants.LOCALE_TAG_PERSIAN_IRAN
 import com.xeniac.warrantyroster_manager.util.Event
 import com.xeniac.warrantyroster_manager.util.Resource
 import com.xeniac.warrantyroster_manager.util.SettingsHelper
@@ -120,19 +120,19 @@ class SettingsViewModel @Inject constructor(
             0 -> {
                 isActivityRestartNeeded = isActivityRestartNeeded(LayoutDirection.LTR)
                 AppCompatDelegate.setApplicationLocales(
-                    LocaleListCompat.forLanguageTags(LOCALE_ENGLISH_UNITED_STATES)
+                    LocaleListCompat.forLanguageTags(LOCALE_TAG_ENGLISH_UNITED_STATES)
                 )
             }
             1 -> {
                 isActivityRestartNeeded = isActivityRestartNeeded(LayoutDirection.LTR)
                 AppCompatDelegate.setApplicationLocales(
-                    LocaleListCompat.forLanguageTags(LOCALE_ENGLISH_GREAT_BRITAIN)
+                    LocaleListCompat.forLanguageTags(LOCALE_TAG_ENGLISH_GREAT_BRITAIN)
                 )
             }
             2 -> {
                 isActivityRestartNeeded = isActivityRestartNeeded(LayoutDirection.RTL)
                 AppCompatDelegate.setApplicationLocales(
-                    LocaleListCompat.forLanguageTags(LOCALE_PERSIAN_IRAN)
+                    LocaleListCompat.forLanguageTags(LOCALE_TAG_PERSIAN_IRAN)
                 )
             }
         }

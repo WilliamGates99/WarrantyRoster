@@ -13,7 +13,7 @@ import com.xeniac.warrantyroster_manager.core.domain.repository.UserRepository
 import com.xeniac.warrantyroster_manager.util.Constants.ERROR_INPUT_BLANK_EMAIL
 import com.xeniac.warrantyroster_manager.util.Constants.ERROR_INPUT_BLANK_PASSWORD
 import com.xeniac.warrantyroster_manager.util.Constants.ERROR_INPUT_EMAIL_INVALID
-import com.xeniac.warrantyroster_manager.util.Constants.LOCALE_ENGLISH
+import com.xeniac.warrantyroster_manager.util.Constants.LANGUAGE_DEFAULT_OR_EMPTY
 import com.xeniac.warrantyroster_manager.util.Event
 import com.xeniac.warrantyroster_manager.util.Resource
 import com.xeniac.warrantyroster_manager.util.UiText
@@ -59,8 +59,8 @@ class LoginViewModel @Inject constructor(
         val localeList = AppCompatDelegate.getApplicationLocales()
 
         if (localeList.isEmpty) {
-            _currentLanguageLiveData.postValue(Event(LOCALE_ENGLISH))
-            Timber.i("Locale list is Empty. -> Current app language is $LOCALE_ENGLISH")
+            _currentLanguageLiveData.postValue(Event(LANGUAGE_DEFAULT_OR_EMPTY))
+            Timber.i("Locale list is Empty. -> Current app language is $LANGUAGE_DEFAULT_OR_EMPTY")
         } else {
             val currentLanguage = localeList[0]!!.language
             _currentLanguageLiveData.postValue(Event(currentLanguage))

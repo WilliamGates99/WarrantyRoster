@@ -15,9 +15,9 @@ import com.xeniac.warrantyroster_manager.util.Constants.ERROR_INPUT_BLANK_EXPIRY
 import com.xeniac.warrantyroster_manager.util.Constants.ERROR_INPUT_BLANK_STARTING_DATE
 import com.xeniac.warrantyroster_manager.util.Constants.ERROR_INPUT_BLANK_TITLE
 import com.xeniac.warrantyroster_manager.util.Constants.ERROR_INPUT_INVALID_STARTING_DATE
-import com.xeniac.warrantyroster_manager.util.Constants.LOCALE_ENGLISH_GREAT_BRITAIN
-import com.xeniac.warrantyroster_manager.util.Constants.LOCALE_ENGLISH_UNITED_STATES
-import com.xeniac.warrantyroster_manager.util.Constants.LOCALE_PERSIAN_IRAN
+import com.xeniac.warrantyroster_manager.util.Constants.LOCALE_TAG_ENGLISH_GREAT_BRITAIN
+import com.xeniac.warrantyroster_manager.util.Constants.LOCALE_TAG_ENGLISH_UNITED_STATES
+import com.xeniac.warrantyroster_manager.util.Constants.LOCALE_TAG_PERSIAN_IRAN
 import com.xeniac.warrantyroster_manager.util.Constants.WARRANTIES_BRAND
 import com.xeniac.warrantyroster_manager.util.Constants.WARRANTIES_CATEGORY_ID
 import com.xeniac.warrantyroster_manager.util.Constants.WARRANTIES_DESCRIPTION
@@ -82,16 +82,16 @@ class WarrantyViewModel @Inject constructor(
 
         return if (localeList.isEmpty) {
             Timber.i("Locale list is Empty.")
-            LOCALE_ENGLISH_UNITED_STATES
+            LOCALE_TAG_ENGLISH_UNITED_STATES
         } else {
             val localeString = localeList[0].toString()
             Timber.i("Current language is $localeString")
 
             when (localeString) {
-                "en_US" -> LOCALE_ENGLISH_UNITED_STATES
-                "en_GB" -> LOCALE_ENGLISH_GREAT_BRITAIN
-                "fa_IR" -> LOCALE_PERSIAN_IRAN
-                else -> LOCALE_ENGLISH_UNITED_STATES
+                "en_US" -> LOCALE_TAG_ENGLISH_UNITED_STATES
+                "en_GB" -> LOCALE_TAG_ENGLISH_GREAT_BRITAIN
+                "fa_IR" -> LOCALE_TAG_PERSIAN_IRAN
+                else -> LOCALE_TAG_ENGLISH_UNITED_STATES
             }
         }
     }
