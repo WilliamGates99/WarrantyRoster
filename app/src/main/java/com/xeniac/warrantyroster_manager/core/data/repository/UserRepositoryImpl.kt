@@ -6,13 +6,15 @@ import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
+import com.xeniac.warrantyroster_manager.core.data.mapper.toUserInfo
 import com.xeniac.warrantyroster_manager.core.domain.UserRepository
+import com.xeniac.warrantyroster_manager.core.domain.model.UserInfo
 import com.xeniac.warrantyroster_manager.util.Constants.FIREBASE_AUTH_PROVIDER_ID_FACEBOOK
 import com.xeniac.warrantyroster_manager.util.Constants.FIREBASE_AUTH_PROVIDER_ID_GOOGLE
 import com.xeniac.warrantyroster_manager.util.Constants.FIREBASE_AUTH_PROVIDER_ID_TWITTER
 import kotlinx.coroutines.tasks.await
+import timber.log.Timber
 import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(
@@ -45,24 +47,43 @@ class UserRepositoryImpl @Inject constructor(
         firebaseAuth.sendPasswordResetEmail(email).await()
     }
 
-    override fun getCurrentUser(): FirebaseUser = firebaseAuth.currentUser!!
-
-    override fun getCurrentUserUid(): String = getCurrentUser().uid
-
-    override fun getCurrentUserEmail(): String = getCurrentUser().email.toString()
-
-    override suspend fun sendVerificationEmail() {
-        getCurrentUser().sendEmailVerification().await()
+    override suspend fun reloadCurrentUser() {
+        firebaseAuth.currentUser!!.reload().await()
     }
 
-    override suspend fun reloadCurrentUser() {
-        getCurrentUser().reload().await()
+    override fun getCachedUserInfo(): UserInfo = firebaseAuth.currentUser!!.toUserInfo()
+
+    override suspend fun getReloadedUserInfo(): UserInfo {
+        val cachedUserInfo = getCachedUserInfo()
+
+        reloadCurrentUser()
+        val currentUser = firebaseAuth.currentUser!!
+        val reloadedUserInfo = currentUser.toUserInfo()
+
+        val isUserInfoChanged = reloadedUserInfo != cachedUserInfo
+
+        return if (isUserInfoChanged) {
+            Timber.i("Reloaded user info is $reloadedUserInfo")
+            reloadedUserInfo
+        } else {
+            Timber.i("Reloaded user info is not changed.")
+            Timber.i("Cached user info is $cachedUserInfo")
+            cachedUserInfo
+        }
+    }
+
+    override fun getCurrentUserUid(): String = firebaseAuth.currentUser!!.uid
+
+    override fun getCurrentUserEmail(): String = firebaseAuth.currentUser!!.email.toString()
+
+    override suspend fun sendVerificationEmail() {
+        firebaseAuth.currentUser!!.sendEmailVerification().await()
     }
 
     override fun logoutUser() = firebaseAuth.signOut()
 
     override suspend fun reAuthenticateUser(password: String) {
-        getCurrentUser().let {
+        firebaseAuth.currentUser?.let {
             val credential = EmailAuthProvider.getCredential(it.email.toString(), password)
             it.reauthenticate(credential).await()
         }
@@ -71,7 +92,7 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun getCurrentUserProviderIds(): List<String> {
         val providerIds = mutableListOf<String>()
 
-        getCurrentUser().providerData.forEach { userInfo ->
+        firebaseAuth.currentUser!!.providerData.forEach { userInfo ->
             providerIds.add(userInfo.providerId)
         }
 
@@ -80,35 +101,35 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun linkGoogleAccount(account: GoogleSignInAccount) {
         val credential = GoogleAuthProvider.getCredential(account.idToken, null)
-        getCurrentUser().linkWithCredential(credential).await()
+        firebaseAuth.currentUser!!.linkWithCredential(credential).await()
     }
 
     override suspend fun unlinkGoogleAccount() {
-        getCurrentUser().unlink(FIREBASE_AUTH_PROVIDER_ID_GOOGLE).await()
+        firebaseAuth.currentUser!!.unlink(FIREBASE_AUTH_PROVIDER_ID_GOOGLE).await()
     }
 
     override suspend fun linkTwitterAccount(credential: AuthCredential) {
-        getCurrentUser().linkWithCredential(credential).await()
+        firebaseAuth.currentUser!!.linkWithCredential(credential).await()
     }
 
     override suspend fun unlinkTwitterAccount() {
-        getCurrentUser().unlink(FIREBASE_AUTH_PROVIDER_ID_TWITTER).await()
+        firebaseAuth.currentUser!!.unlink(FIREBASE_AUTH_PROVIDER_ID_TWITTER).await()
     }
 
     override suspend fun linkFacebookAccount(accessToken: AccessToken) {
         val credential = FacebookAuthProvider.getCredential(accessToken.token)
-        getCurrentUser().linkWithCredential(credential).await()
+        firebaseAuth.currentUser!!.linkWithCredential(credential).await()
     }
 
     override suspend fun unlinkFacebookAccount() {
-        getCurrentUser().unlink(FIREBASE_AUTH_PROVIDER_ID_FACEBOOK).await()
+        firebaseAuth.currentUser!!.unlink(FIREBASE_AUTH_PROVIDER_ID_FACEBOOK).await()
     }
 
     override suspend fun updateUserEmail(newEmail: String) {
-        getCurrentUser().updateEmail(newEmail).await()
+        firebaseAuth.currentUser!!.updateEmail(newEmail).await()
     }
 
     override suspend fun updateUserPassword(newPassword: String) {
-        getCurrentUser().updatePassword(newPassword).await()
+        firebaseAuth.currentUser!!.updatePassword(newPassword).await()
     }
 }

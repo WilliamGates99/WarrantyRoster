@@ -54,9 +54,14 @@ import ir.tapsell.plus.AdRequestCallback
 import ir.tapsell.plus.AdShowListener
 import ir.tapsell.plus.TapsellPlus
 import ir.tapsell.plus.model.TapsellPlusAdModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import timber.log.Timber
+import kotlin.time.Duration.Companion.seconds
 
 @AndroidEntryPoint
 class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListener {
@@ -88,7 +93,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
 
         networkConnectivityObserver()
         subscribeToObservers()
-        getAccountDetails()
+        getUserInfo()
         getCurrentLanguage()
         getCurrentAppTheme()
         verifyOnClick()
@@ -124,8 +129,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
     }
 
     private fun subscribeToObservers() {
-        cachedAccountDetailsObserver()
-        reloadedAccountDetailsObserver()
+        userInfoObserver()
         currentLanguageObserver()
         currentLocaleIndexObserver()
         currentAppThemeObserver()
@@ -134,51 +138,39 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
         logoutObserver()
     }
 
-    private fun getAccountDetails() {
-        getCachedAccountDetails()
+    private fun getUserInfo() = CoroutineScope(Dispatchers.IO).launch {
+        getCachedUserInfo()
 
+        delay(1.seconds)
         if (networkStatus == ConnectivityObserver.Status.AVAILABLE) {
-            getReloadedAccountDetails()
+            Timber.i("net is available")
+            getReloadedAccountInfo()
+        } else {
+            Timber.e("net is $networkStatus")
         }
     }
 
-    private fun getCachedAccountDetails() = viewModel.getCachedAccountDetails()
+    private fun getCachedUserInfo() = viewModel.getCachedUserInfo()
 
-    private fun cachedAccountDetailsObserver() =
-        viewModel.cachedAccountDetailsLiveData.observe(viewLifecycleOwner) { responseEvent ->
+    private fun getReloadedAccountInfo() = viewModel.getReloadedUserInfo()
+
+    private fun userInfoObserver() =
+        viewModel.userInfoLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
                     is Resource.Loading -> {
                         /* NO-OP */
                     }
                     is Resource.Success -> {
-                        response.data?.let { user ->
-                            setAccountDetails(user.email.toString(), user.isEmailVerified)
+                        response.data?.let { userInfo ->
+                            setAccountDetails(
+                                userInfo.email.toString(),
+                                userInfo.isEmailVerified
+                            )
                         }
                     }
                     is Resource.Error -> {
                         snackbar = showSomethingWentWrongError(requireContext(), requireView())
-                    }
-                }
-            }
-        }
-
-    private fun getReloadedAccountDetails() = viewModel.getReloadedAccountDetails()
-
-    private fun reloadedAccountDetailsObserver() =
-        viewModel.reloadedAccountDetailsLiveData.observe(viewLifecycleOwner) { responseEvent ->
-            responseEvent.getContentIfNotHandled()?.let { response ->
-                when (response) {
-                    is Resource.Loading -> {
-                        /* NO-OP */
-                    }
-                    is Resource.Success -> {
-                        response.data?.let { user ->
-                            setAccountDetails(user.email.toString(), user.isEmailVerified)
-                        }
-                    }
-                    is Resource.Error -> {
-                        getCachedAccountDetails()
                     }
                 }
             }

@@ -9,10 +9,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.auth.FirebaseUser
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.core.domain.PreferencesRepository
 import com.xeniac.warrantyroster_manager.core.domain.UserRepository
+import com.xeniac.warrantyroster_manager.core.domain.model.UserInfo
 import com.xeniac.warrantyroster_manager.util.Constants.LOCALE_ENGLISH_GREAT_BRITAIN
 import com.xeniac.warrantyroster_manager.util.Constants.LOCALE_ENGLISH_UNITED_STATES
 import com.xeniac.warrantyroster_manager.util.Constants.LOCALE_INDEX_ENGLISH_GREAT_BRITAIN
@@ -46,15 +46,8 @@ class SettingsViewModel @Inject constructor(
     private val _currentAppThemeLiveData: MutableLiveData<Event<Int>> = MutableLiveData()
     val currentAppThemeLiveData: LiveData<Event<Int>> = _currentAppThemeLiveData
 
-    private val _cachedAccountDetailsLiveData:
-            MutableLiveData<Event<Resource<FirebaseUser>>> = MutableLiveData()
-    val cachedAccountDetailsLiveData:
-            LiveData<Event<Resource<FirebaseUser>>> = _cachedAccountDetailsLiveData
-
-    private val _reloadedAccountDetailsLiveData:
-            MutableLiveData<Event<Resource<FirebaseUser>>> = MutableLiveData()
-    val reloadedAccountDetailsLiveData:
-            LiveData<Event<Resource<FirebaseUser>>> = _reloadedAccountDetailsLiveData
+    private val _userInfoLiveData: MutableLiveData<Event<Resource<UserInfo>>> = MutableLiveData()
+    val userInfoLiveData: LiveData<Event<Resource<UserInfo>>> = _userInfoLiveData
 
     private val _sendVerificationEmailLiveData:
             MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
@@ -159,49 +152,35 @@ class SettingsViewModel @Inject constructor(
         SettingsHelper.setAppTheme(index)
     }
 
-    fun getCachedAccountDetails() = viewModelScope.launch {
-        safeGetCachedAccountDetails()
+    fun getCachedUserInfo() = viewModelScope.launch {
+        safeGetCachedUserInfo()
     }
 
-    private fun safeGetCachedAccountDetails() {
-        _cachedAccountDetailsLiveData.postValue(Event(Resource.Loading()))
+    private fun safeGetCachedUserInfo() {
+        _userInfoLiveData.postValue(Event(Resource.Loading()))
         try {
-            val user = userRepository.getCurrentUser()
-            _cachedAccountDetailsLiveData.postValue(Event(Resource.Success(user)))
-            Timber.i("Cached user email is ${user.email} and isVerified: ${user.isEmailVerified}")
+            val userInfo = userRepository.getCachedUserInfo()
+            _userInfoLiveData.postValue(Event(Resource.Success(userInfo)))
+            Timber.i("Cached user info is $userInfo")
         } catch (e: Exception) {
-            Timber.e("safeGetCachedAccountDetails Exception: ${e.message}")
-            _cachedAccountDetailsLiveData.postValue(Event(Resource.Error(UiText.DynamicString(e.message.toString()))))
+            Timber.e("safeGetCachedUserInfo Exception: ${e.message}")
+            _userInfoLiveData.postValue(Event(Resource.Error(UiText.DynamicString(e.message.toString()))))
         }
     }
 
-    fun getReloadedAccountDetails() = viewModelScope.launch {
-        safeGetReloadedAccountDetails()
+    fun getReloadedUserInfo() = viewModelScope.launch {
+        safeGetReloadedUserInfo()
     }
 
-    private suspend fun safeGetReloadedAccountDetails() {
+    private suspend fun safeGetReloadedUserInfo() {
+        _userInfoLiveData.postValue(Event(Resource.Loading()))
         try {
-            val currentUser = userRepository.getCurrentUser()
-            val currentEmail = currentUser.email
-            val isCurrentVerified = currentUser.isEmailVerified
-
-            userRepository.reloadCurrentUser()
-            val reloadedUser = userRepository.getCurrentUser()
-            val reloadedEmail = reloadedUser.email
-            val isReloadedVerified = reloadedUser.isEmailVerified
-
-            val areUserDetailsChanged =
-                reloadedEmail != currentEmail || isReloadedVerified != isCurrentVerified
-
-            if (areUserDetailsChanged) {
-                _reloadedAccountDetailsLiveData.postValue(Event(Resource.Success(reloadedUser)))
-                Timber.i("Reloaded user email is $reloadedEmail and isVerified: $isReloadedVerified")
-            } else {
-                Timber.i("Reloaded user details are not changed.")
-            }
+            val userInfo = userRepository.getReloadedUserInfo()
+            _userInfoLiveData.postValue(Event(Resource.Success(userInfo)))
+            Timber.i("Reloaded user info is $userInfo")
         } catch (e: Exception) {
-            Timber.e("safeGetReloadedAccountDetails Exception: ${e.message}")
-            _reloadedAccountDetailsLiveData.postValue(Event(Resource.Error(UiText.DynamicString(e.message.toString()))))
+            Timber.e("safeGetReloadedUserInfo Exception: ${e.message}")
+            _userInfoLiveData.postValue(Event(Resource.Error(UiText.DynamicString(e.message.toString()))))
         }
     }
 

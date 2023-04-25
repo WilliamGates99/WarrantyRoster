@@ -3,7 +3,7 @@ package com.xeniac.warrantyroster_manager.core.domain
 import com.facebook.AccessToken
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.AuthCredential
-import com.google.firebase.auth.FirebaseUser
+import com.xeniac.warrantyroster_manager.core.domain.model.UserInfo
 
 interface UserRepository {
 
@@ -19,15 +19,17 @@ interface UserRepository {
 
     suspend fun sendResetPasswordEmail(email: String)
 
-    fun getCurrentUser(): FirebaseUser
+    suspend fun reloadCurrentUser()
+
+    fun getCachedUserInfo(): UserInfo
+
+    suspend fun getReloadedUserInfo(): UserInfo
 
     fun getCurrentUserUid(): String
 
     fun getCurrentUserEmail(): String
 
     suspend fun sendVerificationEmail()
-
-    suspend fun reloadCurrentUser()
 
     fun logoutUser()
 
