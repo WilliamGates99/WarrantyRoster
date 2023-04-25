@@ -11,8 +11,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import com.xeniac.warrantyroster_manager.MainCoroutineRule
-import com.xeniac.warrantyroster_manager.core.data.repository.PreferencesRepositoryImpl
-import com.xeniac.warrantyroster_manager.core.domain.repository.PreferencesRepository
+import com.xeniac.warrantyroster_manager.domain.repository.PreferencesRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel

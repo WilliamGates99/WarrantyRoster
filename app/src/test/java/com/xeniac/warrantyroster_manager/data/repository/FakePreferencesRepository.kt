@@ -1,6 +1,6 @@
 package com.xeniac.warrantyroster_manager.data.repository
 
-import com.xeniac.warrantyroster_manager.core.domain.repository.PreferencesRepository
+import com.xeniac.warrantyroster_manager.domain.repository.PreferencesRepository
 
 class FakePreferencesRepository : PreferencesRepository {
 

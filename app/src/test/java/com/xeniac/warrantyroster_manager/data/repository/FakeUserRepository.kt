@@ -2,7 +2,7 @@ package com.xeniac.warrantyroster_manager.data.repository
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.xeniac.warrantyroster_manager.data.TestUser
-import com.xeniac.warrantyroster_manager.core.domain.repository.UserRepository
+import com.xeniac.warrantyroster_manager.domain.repository.UserRepository
 
 class FakeUserRepository : UserRepository {
 
