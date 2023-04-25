@@ -1,4 +1,4 @@
-package com.xeniac.warrantyroster_manager.ui.viewmodels
+package com.xeniac.warrantyroster_manager.authentication.presentation.forgot_password
 
 import android.os.CountDownTimer
 import androidx.lifecycle.LiveData

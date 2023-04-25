@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.xeniac.warrantyroster_manager.ui.fragments.auth.LoginFragment"
+        android:name="com.xeniac.warrantyroster_manager.authentication.presentation.login.LoginFragment"
         android:label="LoginFragment"
         tools:layout="@layout/fragment_login">
         <action
@@ -28,13 +28,13 @@
 
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.xeniac.warrantyroster_manager.ui.fragments.auth.RegisterFragment"
+        android:name="com.xeniac.warrantyroster_manager.authentication.presentation.register.RegisterFragment"
         android:label="RegisterFragment"
         tools:layout="@layout/fragment_register" />
 
     <fragment
         android:id="@+id/forgotPwFragment"
-        android:name="com.xeniac.warrantyroster_manager.ui.fragments.auth.ForgotPwFragment"
+        android:name="com.xeniac.warrantyroster_manager.authentication.presentation.forgot_password.ForgotPwFragment"
         android:label="ForgotPwFragment"
         tools:layout="@layout/fragment_forgot_pw">
         <action
@@ -49,7 +49,7 @@
 
     <fragment
         android:id="@+id/forgotPwSentFragment"
-        android:name="com.xeniac.warrantyroster_manager.ui.fragments.auth.ForgotPwSentFragment"
+        android:name="com.xeniac.warrantyroster_manager.authentication.presentation.forgot_password.ForgotPwSentFragment"
         android:label="ForgotPwSentFragment"
         tools:layout="@layout/fragment_forgot_pw_sent">
         <argument

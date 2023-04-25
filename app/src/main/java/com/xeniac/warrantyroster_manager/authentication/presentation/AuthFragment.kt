@@ -1,4 +1,4 @@
-package com.xeniac.warrantyroster_manager.ui.fragments.auth
+package com.xeniac.warrantyroster_manager.authentication.presentation
 
 import android.content.Intent
 import android.os.Bundle
@@ -11,9 +11,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import coil.load
 import com.xeniac.warrantyroster_manager.R
-import com.xeniac.warrantyroster_manager.databinding.FragmentAuthBinding
 import com.xeniac.warrantyroster_manager.core.presentation.landing.LandingActivity
 import com.xeniac.warrantyroster_manager.core.presentation.landing.LandingViewModel
+import com.xeniac.warrantyroster_manager.databinding.FragmentAuthBinding
 import com.xeniac.warrantyroster_manager.util.AlertDialogHelper
 import com.xeniac.warrantyroster_manager.util.Constants.LOCALE_INDEX_ENGLISH_GREAT_BRITAIN
 import com.xeniac.warrantyroster_manager.util.Constants.LOCALE_INDEX_ENGLISH_UNITED_STATES

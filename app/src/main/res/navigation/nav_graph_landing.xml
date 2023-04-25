@@ -23,7 +23,7 @@
 
     <fragment
         android:id="@+id/authFragment"
-        android:name="com.xeniac.warrantyroster_manager.ui.fragments.auth.AuthFragment"
+        android:name="com.xeniac.warrantyroster_manager.authentication.presentation.AuthFragment"
         android:label="AuthFragment"
         tools:layout="@layout/fragment_auth" />
 

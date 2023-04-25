@@ -3,6 +3,7 @@ package com.xeniac.warrantyroster_manager.ui.viewmodels
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.common.truth.Truth.assertThat
 import com.xeniac.warrantyroster_manager.MainCoroutineRule
+import com.xeniac.warrantyroster_manager.authentication.presentation.forgot_password.ForgotPwViewModel
 import com.xeniac.warrantyroster_manager.data.repository.FakeUserRepository
 import com.xeniac.warrantyroster_manager.getOrAwaitValue
 import com.xeniac.warrantyroster_manager.util.Resource

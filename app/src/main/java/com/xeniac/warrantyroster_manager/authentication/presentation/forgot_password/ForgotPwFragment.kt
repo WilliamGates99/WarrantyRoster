@@ -1,4 +1,4 @@
-package com.xeniac.warrantyroster_manager.ui.fragments.auth
+package com.xeniac.warrantyroster_manager.authentication.presentation.forgot_password
 
 import android.content.Context
 import android.os.Build
@@ -20,7 +20,6 @@ import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.core.repository.NetworkConnectivityObserver
 import com.xeniac.warrantyroster_manager.databinding.FragmentForgotPwBinding
 import com.xeniac.warrantyroster_manager.domain.repository.ConnectivityObserver
-import com.xeniac.warrantyroster_manager.ui.viewmodels.ForgotPwViewModel
 import com.xeniac.warrantyroster_manager.util.Constants.ERROR_FIREBASE_403
 import com.xeniac.warrantyroster_manager.util.Constants.ERROR_FIREBASE_AUTH_ACCOUNT_NOT_FOUND
 import com.xeniac.warrantyroster_manager.util.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
