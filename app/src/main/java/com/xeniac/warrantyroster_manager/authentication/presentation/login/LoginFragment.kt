@@ -31,10 +31,10 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.OAuthProvider
 import com.xeniac.warrantyroster_manager.BuildConfig
 import com.xeniac.warrantyroster_manager.R
+import com.xeniac.warrantyroster_manager.core.data.repository.NetworkConnectivityObserver
+import com.xeniac.warrantyroster_manager.core.domain.ConnectivityObserver
 import com.xeniac.warrantyroster_manager.core.presentation.main.MainActivity
-import com.xeniac.warrantyroster_manager.core.repository.NetworkConnectivityObserver
 import com.xeniac.warrantyroster_manager.databinding.FragmentLoginBinding
-import com.xeniac.warrantyroster_manager.domain.repository.ConnectivityObserver
 import com.xeniac.warrantyroster_manager.util.Constants.ERROR_FIREBASE_403
 import com.xeniac.warrantyroster_manager.util.Constants.ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIALS
 import com.xeniac.warrantyroster_manager.util.Constants.ERROR_FIREBASE_AUTH_ACCOUNT_NOT_FOUND

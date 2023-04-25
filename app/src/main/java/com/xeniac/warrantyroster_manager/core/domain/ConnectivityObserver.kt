@@ -1,4 +1,4 @@
-package com.xeniac.warrantyroster_manager.domain.repository
+package com.xeniac.warrantyroster_manager.core.domain
 
 import kotlinx.coroutines.flow.Flow
 

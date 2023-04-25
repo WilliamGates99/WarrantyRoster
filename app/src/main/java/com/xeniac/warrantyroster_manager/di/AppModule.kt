@@ -16,7 +16,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.xeniac.warrantyroster_manager.BuildConfig
-import com.xeniac.warrantyroster_manager.domain.repository.PreferencesRepository
+import com.xeniac.warrantyroster_manager.core.domain.PreferencesRepository
 import com.xeniac.warrantyroster_manager.util.Constants.COLLECTION_CATEGORIES
 import com.xeniac.warrantyroster_manager.util.Constants.COLLECTION_WARRANTIES
 import com.xeniac.warrantyroster_manager.util.Constants.DATASTORE_NAME_SETTINGS

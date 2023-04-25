@@ -17,11 +17,11 @@ import androidx.navigation.fragment.navArgs
 import coil.ImageLoader
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
-import com.xeniac.warrantyroster_manager.data.remote.models.Warranty
-import com.xeniac.warrantyroster_manager.core.repository.NetworkConnectivityObserver
-import com.xeniac.warrantyroster_manager.databinding.FragmentWarrantyDetailsBinding
-import com.xeniac.warrantyroster_manager.domain.repository.ConnectivityObserver
+import com.xeniac.warrantyroster_manager.core.data.repository.NetworkConnectivityObserver
+import com.xeniac.warrantyroster_manager.core.domain.ConnectivityObserver
 import com.xeniac.warrantyroster_manager.core.presentation.main.MainActivity
+import com.xeniac.warrantyroster_manager.data.remote.models.Warranty
+import com.xeniac.warrantyroster_manager.databinding.FragmentWarrantyDetailsBinding
 import com.xeniac.warrantyroster_manager.ui.viewmodels.WarrantyViewModel
 import com.xeniac.warrantyroster_manager.util.AlertDialogHelper.showTwoBtnAlertDialog
 import com.xeniac.warrantyroster_manager.util.CoilHelper.loadCategoryImage
