@@ -1,14 +1,15 @@
-package com.xeniac.warrantyroster_manager.ui.viewmodels
+package com.xeniac.warrantyroster_manager.settings.presentation.change_password
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.xeniac.warrantyroster_manager.domain.repository.UserRepository
-import com.xeniac.warrantyroster_manager.util.Constants.ERROR_INPUT_BLANK_EMAIL
+import com.xeniac.warrantyroster_manager.util.Constants.ERROR_INPUT_BLANK_NEW_PASSWORD
 import com.xeniac.warrantyroster_manager.util.Constants.ERROR_INPUT_BLANK_PASSWORD
-import com.xeniac.warrantyroster_manager.util.Constants.ERROR_INPUT_EMAIL_INVALID
-import com.xeniac.warrantyroster_manager.util.Constants.ERROR_INPUT_EMAIL_SAME
+import com.xeniac.warrantyroster_manager.util.Constants.ERROR_INPUT_BLANK_RETYPE_PASSWORD
+import com.xeniac.warrantyroster_manager.util.Constants.ERROR_INPUT_PASSWORD_NOT_MATCH
+import com.xeniac.warrantyroster_manager.util.Constants.ERROR_INPUT_PASSWORD_SHORT
 import com.xeniac.warrantyroster_manager.util.Event
 import com.xeniac.warrantyroster_manager.util.Resource
 import com.xeniac.warrantyroster_manager.util.UiText
@@ -19,7 +20,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
-class ChangeEmailViewModel @Inject constructor(
+class ChangePasswordViewModel @Inject constructor(
     private val userRepository: UserRepository
 ) : ViewModel() {
 
@@ -30,52 +31,55 @@ class ChangeEmailViewModel @Inject constructor(
             MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
     val reAuthenticateUserLiveData: LiveData<Event<Resource<Nothing>>> = _reAuthenticateUserLiveData
 
-    private val _changeUserEmailLiveData:
+    private val _changeUserPasswordLiveData:
             MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
-    val changeUserEmailLiveData: LiveData<Event<Resource<Nothing>>> = _changeUserEmailLiveData
+    val changeUserPasswordLiveData: LiveData<Event<Resource<Nothing>>> = _changeUserPasswordLiveData
 
-    fun validateChangeEmailInputs(
-        password: String,
-        newEmail: String,
-        currentUserEmail: String = userRepository.getCurrentUserEmail()
+    fun validateChangePasswordInputs(
+        currentPassword: String, newPassword: String, retypeNewPassword: String
     ) = viewModelScope.launch {
-        safeValidateChangeEmailInputs(password, newEmail, currentUserEmail)
+        safeValidateChangePasswordInputs(currentPassword, newPassword, retypeNewPassword)
     }
 
-    private fun safeValidateChangeEmailInputs(
-        password: String,
-        newEmail: String,
-        currentUserEmail: String = userRepository.getCurrentUserEmail()
+    private fun safeValidateChangePasswordInputs(
+        currentPassword: String, newPassword: String, retypeNewPassword: String
     ) {
-        if (password.isBlank()) {
+        if (currentPassword.isBlank()) {
             _checkInputsLiveData.postValue(
                 Event(Resource.Error(UiText.DynamicString(ERROR_INPUT_BLANK_PASSWORD)))
             )
             return
         }
 
-        if (newEmail.isBlank()) {
+        if (newPassword.isBlank()) {
             _checkInputsLiveData.postValue(
-                Event(Resource.Error(UiText.DynamicString(ERROR_INPUT_BLANK_EMAIL)))
+                Event(Resource.Error(UiText.DynamicString(ERROR_INPUT_BLANK_NEW_PASSWORD)))
             )
             return
         }
 
-        if (!UserHelper.isEmailValid(newEmail)) {
+        if (retypeNewPassword.isBlank()) {
             _checkInputsLiveData.postValue(
-                Event(Resource.Error(UiText.DynamicString(ERROR_INPUT_EMAIL_INVALID)))
+                Event(Resource.Error(UiText.DynamicString(ERROR_INPUT_BLANK_RETYPE_PASSWORD)))
             )
             return
         }
 
-        if (newEmail == currentUserEmail) {
+        if (UserHelper.passwordStrength(newPassword) == (-1).toByte()) {
             _checkInputsLiveData.postValue(
-                Event(Resource.Error(UiText.DynamicString(ERROR_INPUT_EMAIL_SAME)))
+                Event(Resource.Error(UiText.DynamicString(ERROR_INPUT_PASSWORD_SHORT)))
             )
             return
         }
 
-        _checkInputsLiveData.postValue(Event(Resource.Success(password)))
+        if (!UserHelper.isRetypePasswordValid(newPassword, retypeNewPassword)) {
+            _checkInputsLiveData.postValue(
+                Event(Resource.Error(UiText.DynamicString(ERROR_INPUT_PASSWORD_NOT_MATCH)))
+            )
+            return
+        }
+
+        _checkInputsLiveData.postValue(Event(Resource.Success(currentPassword)))
     }
 
     fun reAuthenticateUser(password: String) = viewModelScope.launch {
@@ -94,19 +98,19 @@ class ChangeEmailViewModel @Inject constructor(
         }
     }
 
-    fun changeUserEmail(newEmail: String) = viewModelScope.launch {
-        safeChangeUserEmail(newEmail)
+    fun changeUserPassword(newPassword: String) = viewModelScope.launch {
+        safeChangeUserPassword(newPassword)
     }
 
-    private suspend fun safeChangeUserEmail(newEmail: String) {
-        _changeUserEmailLiveData.postValue(Event(Resource.Loading()))
+    private suspend fun safeChangeUserPassword(newPassword: String) {
+        _changeUserPasswordLiveData.postValue(Event(Resource.Loading()))
         try {
-            userRepository.updateUserEmail(newEmail)
-            _changeUserEmailLiveData.postValue(Event(Resource.Success()))
-            Timber.i("User email updated to ${newEmail}.")
+            userRepository.updateUserPassword(newPassword)
+            _changeUserPasswordLiveData.postValue(Event(Resource.Success()))
+            Timber.i("User password updated.")
         } catch (e: Exception) {
-            Timber.e("safeChangeUserEmail Exception: ${e.message}")
-            _changeUserEmailLiveData.postValue(Event(Resource.Error(UiText.DynamicString(e.message.toString()))))
+            Timber.e("safeChangeUserPassword Exception: ${e.message}")
+            _changeUserPasswordLiveData.postValue(Event(Resource.Error(UiText.DynamicString(e.message.toString()))))
         }
     }
 }

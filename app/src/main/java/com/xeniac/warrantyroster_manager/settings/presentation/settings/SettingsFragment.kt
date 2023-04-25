@@ -1,4 +1,4 @@
-package com.xeniac.warrantyroster_manager.ui.fragments
+package com.xeniac.warrantyroster_manager.settings.presentation.settings
 
 import android.content.Intent
 import android.os.Build
@@ -22,12 +22,11 @@ import com.applovin.mediation.nativeAds.MaxNativeAdViewBinder
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.BuildConfig
 import com.xeniac.warrantyroster_manager.R
+import com.xeniac.warrantyroster_manager.core.presentation.landing.LandingActivity
+import com.xeniac.warrantyroster_manager.core.presentation.main.MainActivity
 import com.xeniac.warrantyroster_manager.core.repository.NetworkConnectivityObserver
 import com.xeniac.warrantyroster_manager.databinding.FragmentSettingsBinding
 import com.xeniac.warrantyroster_manager.domain.repository.ConnectivityObserver
-import com.xeniac.warrantyroster_manager.core.presentation.landing.LandingActivity
-import com.xeniac.warrantyroster_manager.core.presentation.main.MainActivity
-import com.xeniac.warrantyroster_manager.ui.viewmodels.SettingsViewModel
 import com.xeniac.warrantyroster_manager.util.AlertDialogHelper.showOneBtnAlertDialog
 import com.xeniac.warrantyroster_manager.util.AlertDialogHelper.showSingleChoiceItemsDialog
 import com.xeniac.warrantyroster_manager.util.Constants.ERROR_FIREBASE_403

@@ -1,4 +1,4 @@
-package com.xeniac.warrantyroster_manager.ui.viewmodels
+package com.xeniac.warrantyroster_manager.settings.presentation.linked_accounts
 
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.LiveData

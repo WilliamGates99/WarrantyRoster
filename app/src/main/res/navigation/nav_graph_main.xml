@@ -21,7 +21,7 @@
 
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.xeniac.warrantyroster_manager.ui.fragments.SettingsFragment"
+        android:name="com.xeniac.warrantyroster_manager.settings.presentation.settings.SettingsFragment"
         android:label="SettingsFragment"
         tools:layout="@layout/fragment_settings">
         <action
@@ -102,19 +102,19 @@
 
     <fragment
         android:id="@+id/linkedAccountsFragment"
-        android:name="com.xeniac.warrantyroster_manager.ui.fragments.LinkedAccountsFragment"
+        android:name="com.xeniac.warrantyroster_manager.settings.presentation.linked_accounts.LinkedAccountsFragment"
         android:label="LinkedAccountsFragment"
         tools:layout="@layout/fragment_linked_accounts" />
 
     <fragment
         android:id="@+id/changeEmailFragment"
-        android:name="com.xeniac.warrantyroster_manager.ui.fragments.ChangeEmailFragment"
+        android:name="com.xeniac.warrantyroster_manager.settings.presentation.change_email.ChangeEmailFragment"
         android:label="ChangeEmailFragment"
         tools:layout="@layout/fragment_change_email" />
 
     <fragment
         android:id="@+id/changePasswordFragment"
-        android:name="com.xeniac.warrantyroster_manager.ui.fragments.ChangePasswordFragment"
+        android:name="com.xeniac.warrantyroster_manager.settings.presentation.change_password.ChangePasswordFragment"
         android:label="ChangePasswordFragment"
         tools:layout="@layout/fragment_change_password" />
 
