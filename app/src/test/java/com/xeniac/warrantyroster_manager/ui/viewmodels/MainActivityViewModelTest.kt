@@ -3,6 +3,7 @@ package com.xeniac.warrantyroster_manager.ui.viewmodels
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.common.truth.Truth.assertThat
 import com.xeniac.warrantyroster_manager.MainCoroutineRule
+import com.xeniac.warrantyroster_manager.core.presentation.main.MainActivityViewModel
 import com.xeniac.warrantyroster_manager.data.repository.FakePreferencesRepository
 import com.xeniac.warrantyroster_manager.data.repository.FakeUserRepository
 import com.xeniac.warrantyroster_manager.getOrAwaitValue
@@ -12,7 +13,7 @@ import org.junit.Rule
 import org.junit.Test
 
 @ExperimentalCoroutinesApi
-class MainViewModelTest {
+class MainActivityViewModelTest {
 
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
@@ -22,12 +23,12 @@ class MainViewModelTest {
 
     private lateinit var fakeUserRepository: FakeUserRepository
 
-    private lateinit var testViewModel: MainViewModel
+    private lateinit var testViewModel: MainActivityViewModel
 
     @Before
     fun setUp() {
         fakeUserRepository = FakeUserRepository()
-        testViewModel = MainViewModel(FakePreferencesRepository())
+        testViewModel = MainActivityViewModel(FakePreferencesRepository())
     }
 
     @Test

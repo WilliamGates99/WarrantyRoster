@@ -12,7 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
-import com.xeniac.warrantyroster_manager.data.repository.NetworkConnectivityObserver
+import com.xeniac.warrantyroster_manager.core.repository.NetworkConnectivityObserver
 import com.xeniac.warrantyroster_manager.databinding.FragmentForgotPwSentBinding
 import com.xeniac.warrantyroster_manager.domain.repository.ConnectivityObserver
 import com.xeniac.warrantyroster_manager.ui.viewmodels.ForgotPwViewModel

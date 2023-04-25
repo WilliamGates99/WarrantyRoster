@@ -1,4 +1,4 @@
-package com.xeniac.warrantyroster_manager.ui.viewmodels
+package com.xeniac.warrantyroster_manager.core.presentation.landing
 
 import android.os.Build
 import android.util.LayoutDirection

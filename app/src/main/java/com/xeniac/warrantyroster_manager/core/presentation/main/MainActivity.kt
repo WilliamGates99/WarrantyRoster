@@ -1,4 +1,4 @@
-package com.xeniac.warrantyroster_manager.ui
+package com.xeniac.warrantyroster_manager.core.presentation.main
 
 import android.content.Intent
 import android.os.Bundle
@@ -21,8 +21,8 @@ import com.google.android.play.core.review.ReviewManager
 import com.google.android.play.core.review.ReviewManagerFactory
 import com.xeniac.warrantyroster_manager.BuildConfig
 import com.xeniac.warrantyroster_manager.R
+import com.xeniac.warrantyroster_manager.core.presentation.landing.LandingActivity
 import com.xeniac.warrantyroster_manager.databinding.ActivityMainBinding
-import com.xeniac.warrantyroster_manager.ui.viewmodels.MainViewModel
 import com.xeniac.warrantyroster_manager.util.AlertDialogHelper.showThreeBtnAlertDialog
 import com.xeniac.warrantyroster_manager.util.Constants.IN_APP_REVIEWS_DAYS_FROM_FIRST_INSTALL_TIME
 import com.xeniac.warrantyroster_manager.util.Constants.IN_APP_REVIEWS_DAYS_FROM_PREVIOUS_REQUEST_TIME
@@ -37,7 +37,7 @@ import timber.log.Timber
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), MaxAdListener {
 
-    private val viewModel by viewModels<MainViewModel>()
+    private val viewModel by viewModels<MainActivityViewModel>()
     private var shouldShowSplashScreen = true
 
     lateinit var binding: ActivityMainBinding

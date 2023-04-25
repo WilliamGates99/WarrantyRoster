@@ -1,4 +1,4 @@
-package com.xeniac.warrantyroster_manager.ui.viewmodels
+package com.xeniac.warrantyroster_manager.core.presentation.main
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -12,7 +12,7 @@ import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(
+class MainActivityViewModel @Inject constructor(
     private val preferencesRepository: PreferencesRepository
 ) : ViewModel() {
 

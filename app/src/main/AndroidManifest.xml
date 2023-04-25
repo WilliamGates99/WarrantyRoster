@@ -23,7 +23,7 @@
         tools:targetApi="tiramisu">
 
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".core.presentation.main.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.WarrantyRoster.Splash"
             android:windowSoftInputMode="adjustPan|stateHidden">
@@ -34,7 +34,7 @@
         </activity>
 
         <activity
-            android:name=".ui.LandingActivity"
+            android:name=".core.presentation.landing.LandingActivity"
             android:theme="@style/Theme.WarrantyRoster.Landing" />
 
         <activity

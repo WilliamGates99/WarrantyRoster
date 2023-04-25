@@ -16,7 +16,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
-import com.xeniac.warrantyroster_manager.data.repository.NetworkConnectivityObserver
+import com.xeniac.warrantyroster_manager.core.repository.NetworkConnectivityObserver
 import com.xeniac.warrantyroster_manager.databinding.FragmentChangePasswordBinding
 import com.xeniac.warrantyroster_manager.domain.repository.ConnectivityObserver
 import com.xeniac.warrantyroster_manager.ui.viewmodels.ChangePasswordViewModel

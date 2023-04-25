@@ -1,8 +1,8 @@
 package com.xeniac.warrantyroster_manager.di
 
 import com.xeniac.warrantyroster_manager.data.repository.WarrantyRepositoryImpl
-import com.xeniac.warrantyroster_manager.data.repository.PreferencesRepositoryImpl
-import com.xeniac.warrantyroster_manager.data.repository.UserRepositoryImpl
+import com.xeniac.warrantyroster_manager.core.repository.PreferencesRepositoryImpl
+import com.xeniac.warrantyroster_manager.core.repository.UserRepositoryImpl
 import com.xeniac.warrantyroster_manager.domain.repository.WarrantyRepository
 import com.xeniac.warrantyroster_manager.domain.repository.PreferencesRepository
 import com.xeniac.warrantyroster_manager.domain.repository.UserRepository

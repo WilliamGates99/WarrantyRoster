@@ -1,4 +1,4 @@
-package com.xeniac.warrantyroster_manager.data.repository
+package com.xeniac.warrantyroster_manager.core.repository
 
 import android.content.Context
 import android.net.ConnectivityManager

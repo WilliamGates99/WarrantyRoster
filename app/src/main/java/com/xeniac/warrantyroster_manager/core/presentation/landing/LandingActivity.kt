@@ -1,4 +1,4 @@
-package com.xeniac.warrantyroster_manager.ui
+package com.xeniac.warrantyroster_manager.core.presentation.landing
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
