@@ -6,7 +6,7 @@ import android.net.ConnectivityManager.NetworkCallback
 import android.net.Network
 import android.os.Build
 import androidx.annotation.RequiresApi
-import com.xeniac.warrantyroster_manager.core.domain.ConnectivityObserver
+import com.xeniac.warrantyroster_manager.core.domain.repository.ConnectivityObserver
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow

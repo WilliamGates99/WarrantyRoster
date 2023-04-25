@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.xeniac.warrantyroster_manager.core.domain.UserRepository
+import com.xeniac.warrantyroster_manager.core.domain.repository.UserRepository
 import com.xeniac.warrantyroster_manager.util.Constants.ERROR_INPUT_BLANK_EMAIL
 import com.xeniac.warrantyroster_manager.util.Constants.ERROR_INPUT_EMAIL_INVALID
 import com.xeniac.warrantyroster_manager.util.Constants.ERROR_TIMER_IS_NOT_ZERO

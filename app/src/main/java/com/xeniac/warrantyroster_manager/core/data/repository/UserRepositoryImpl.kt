@@ -8,8 +8,8 @@ import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.xeniac.warrantyroster_manager.core.data.mapper.toUserInfo
-import com.xeniac.warrantyroster_manager.core.domain.UserRepository
 import com.xeniac.warrantyroster_manager.core.domain.model.UserInfo
+import com.xeniac.warrantyroster_manager.core.domain.repository.UserRepository
 import com.xeniac.warrantyroster_manager.util.Constants.FIREBASE_AUTH_PROVIDER_ID_FACEBOOK
 import com.xeniac.warrantyroster_manager.util.Constants.FIREBASE_AUTH_PROVIDER_ID_GOOGLE
 import com.xeniac.warrantyroster_manager.util.Constants.FIREBASE_AUTH_PROVIDER_ID_TWITTER

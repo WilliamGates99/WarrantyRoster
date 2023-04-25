@@ -32,7 +32,7 @@ import com.google.firebase.auth.OAuthProvider
 import com.xeniac.warrantyroster_manager.BuildConfig
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.core.data.repository.NetworkConnectivityObserver
-import com.xeniac.warrantyroster_manager.core.domain.ConnectivityObserver
+import com.xeniac.warrantyroster_manager.core.domain.repository.ConnectivityObserver
 import com.xeniac.warrantyroster_manager.core.presentation.main.MainActivity
 import com.xeniac.warrantyroster_manager.databinding.FragmentRegisterBinding
 import com.xeniac.warrantyroster_manager.util.Constants.ERROR_FIREBASE_403

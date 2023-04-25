@@ -21,7 +21,7 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.Snackbar
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.core.data.repository.NetworkConnectivityObserver
-import com.xeniac.warrantyroster_manager.core.domain.ConnectivityObserver
+import com.xeniac.warrantyroster_manager.core.domain.repository.ConnectivityObserver
 import com.xeniac.warrantyroster_manager.databinding.FragmentEditWarrantyBinding
 import com.xeniac.warrantyroster_manager.util.CoilHelper.loadCategoryImage
 import com.xeniac.warrantyroster_manager.util.Constants.ERROR_FIREBASE_403

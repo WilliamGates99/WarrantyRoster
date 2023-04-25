@@ -2,8 +2,8 @@ package com.xeniac.warrantyroster_manager.di
 
 import com.xeniac.warrantyroster_manager.core.data.repository.PreferencesRepositoryImpl
 import com.xeniac.warrantyroster_manager.core.data.repository.UserRepositoryImpl
-import com.xeniac.warrantyroster_manager.core.domain.PreferencesRepository
-import com.xeniac.warrantyroster_manager.core.domain.UserRepository
+import com.xeniac.warrantyroster_manager.core.domain.repository.PreferencesRepository
+import com.xeniac.warrantyroster_manager.core.domain.repository.UserRepository
 import com.xeniac.warrantyroster_manager.warranty_management.data.repository.WarrantyRepositoryImpl
 import com.xeniac.warrantyroster_manager.warranty_management.domain.repository.WarrantyRepository
 import dagger.Binds

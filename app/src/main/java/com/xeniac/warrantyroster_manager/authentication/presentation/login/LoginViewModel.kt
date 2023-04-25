@@ -8,8 +8,8 @@ import androidx.lifecycle.viewModelScope
 import com.facebook.AccessToken
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.AuthCredential
-import com.xeniac.warrantyroster_manager.core.domain.PreferencesRepository
-import com.xeniac.warrantyroster_manager.core.domain.UserRepository
+import com.xeniac.warrantyroster_manager.core.domain.repository.PreferencesRepository
+import com.xeniac.warrantyroster_manager.core.domain.repository.UserRepository
 import com.xeniac.warrantyroster_manager.util.Constants.ERROR_INPUT_BLANK_EMAIL
 import com.xeniac.warrantyroster_manager.util.Constants.ERROR_INPUT_BLANK_PASSWORD
 import com.xeniac.warrantyroster_manager.util.Constants.ERROR_INPUT_EMAIL_INVALID

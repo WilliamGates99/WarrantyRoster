@@ -1,4 +1,4 @@
-package com.xeniac.warrantyroster_manager.core.domain
+package com.xeniac.warrantyroster_manager.core.domain.repository
 
 import com.facebook.AccessToken
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
