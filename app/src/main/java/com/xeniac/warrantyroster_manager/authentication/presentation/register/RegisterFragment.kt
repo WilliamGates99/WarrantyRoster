@@ -276,9 +276,19 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     private fun getCurrentAppLanguage() = viewModel.getCurrentAppLanguage()
 
     private fun currentAppLanguageObserver() =
-        viewModel.currentLanguageLiveData.observe(viewLifecycleOwner) { responseEvent ->
-            responseEvent.getContentIfNotHandled()?.let { language ->
-                currentAppLanguage = language
+        viewModel.currentAppLanguageLiveData.observe(viewLifecycleOwner) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { response ->
+                when (response) {
+                    is Resource.Loading -> Unit
+                    is Resource.Success -> {
+                        response.data?.let { language ->
+                            currentAppLanguage = language
+                        }
+                    }
+                    is Resource.Error -> {
+                        snackbar = showSomethingWentWrongError(requireContext(), requireView())
+                    }
+                }
             }
         }
 

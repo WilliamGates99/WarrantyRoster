@@ -1,6 +1,5 @@
 package com.xeniac.warrantyroster_manager.authentication.presentation.register
 
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -16,7 +15,6 @@ import com.xeniac.warrantyroster_manager.util.Constants.ERROR_INPUT_BLANK_RETYPE
 import com.xeniac.warrantyroster_manager.util.Constants.ERROR_INPUT_EMAIL_INVALID
 import com.xeniac.warrantyroster_manager.util.Constants.ERROR_INPUT_PASSWORD_NOT_MATCH
 import com.xeniac.warrantyroster_manager.util.Constants.ERROR_INPUT_PASSWORD_SHORT
-import com.xeniac.warrantyroster_manager.util.Constants.LANGUAGE_DEFAULT_OR_EMPTY
 import com.xeniac.warrantyroster_manager.util.Event
 import com.xeniac.warrantyroster_manager.util.Resource
 import com.xeniac.warrantyroster_manager.util.UiText
@@ -32,43 +30,42 @@ class RegisterViewModel @Inject constructor(
     private val preferencesRepository: PreferencesRepository
 ) : ViewModel() {
 
-    private val _currentLanguageLiveData: MutableLiveData<Event<String>> = MutableLiveData()
-    val currentLanguageLiveData: LiveData<Event<String>> = _currentLanguageLiveData
+    private val _currentAppLanguageLiveData: MutableLiveData<Event<Resource<String>>> =
+        MutableLiveData()
+    val currentAppLanguageLiveData: LiveData<Event<Resource<String>>> = _currentAppLanguageLiveData
 
-    private val _registerWithEmailLiveData:
-            MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
-    val registerWithEmailLiveData:
-            LiveData<Event<Resource<Nothing>>> = _registerWithEmailLiveData
+    private val _registerWithEmailLiveData: MutableLiveData<Event<Resource<Nothing>>> =
+        MutableLiveData()
+    val registerWithEmailLiveData: LiveData<Event<Resource<Nothing>>> = _registerWithEmailLiveData
 
-    private val _registerWithGoogleAccountLiveData:
-            MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
-    val registerWithGoogleAccountLiveData:
-            LiveData<Event<Resource<Nothing>>> = _registerWithGoogleAccountLiveData
+    private val _registerWithGoogleAccountLiveData: MutableLiveData<Event<Resource<Nothing>>> =
+        MutableLiveData()
+    val registerWithGoogleAccountLiveData: LiveData<Event<Resource<Nothing>>> =
+        _registerWithGoogleAccountLiveData
 
-    private val _registerWithTwitterAccountLiveData:
-            MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
-    val registerWithTwitterAccountLiveData:
-            LiveData<Event<Resource<Nothing>>> = _registerWithTwitterAccountLiveData
+    private val _registerWithTwitterAccountLiveData: MutableLiveData<Event<Resource<Nothing>>> =
+        MutableLiveData()
+    val registerWithTwitterAccountLiveData: LiveData<Event<Resource<Nothing>>> =
+        _registerWithTwitterAccountLiveData
 
-    private val _registerWithFacebookAccountLiveData:
-            MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
-    val registerWithFacebookAccountLiveData:
-            LiveData<Event<Resource<Nothing>>> = _registerWithFacebookAccountLiveData
+    private val _registerWithFacebookAccountLiveData: MutableLiveData<Event<Resource<Nothing>>> =
+        MutableLiveData()
+    val registerWithFacebookAccountLiveData: LiveData<Event<Resource<Nothing>>> =
+        _registerWithFacebookAccountLiveData
 
     fun getCurrentAppLanguage() = viewModelScope.launch {
         safeGetCurrentAppLanguage()
     }
 
-    private fun safeGetCurrentAppLanguage() {
-        val localeList = AppCompatDelegate.getApplicationLocales()
-
-        if (localeList.isEmpty) {
-            _currentLanguageLiveData.postValue(Event(LANGUAGE_DEFAULT_OR_EMPTY))
-            Timber.i("Locale list is Empty. -> Current app language is $LANGUAGE_DEFAULT_OR_EMPTY")
-        } else {
-            val currentLanguage = localeList[0]!!.language
-            _currentLanguageLiveData.postValue(Event(currentLanguage))
-            Timber.i("Current app language is $currentLanguage")
+    private suspend fun safeGetCurrentAppLanguage() {
+        _currentAppLanguageLiveData.postValue(Event(Resource.Loading()))
+        try {
+            val language = preferencesRepository.getCurrentAppLanguage()
+            _currentAppLanguageLiveData.postValue(Event(Resource.Success(language)))
+            Timber.i("Current app language is $language")
+        } catch (e: Exception) {
+            Timber.e("safeGetCurrentAppLanguage Exception: ${e.message}")
+            _currentAppLanguageLiveData.postValue(Event(Resource.Error(UiText.DynamicString(e.message.toString()))))
         }
     }
 
