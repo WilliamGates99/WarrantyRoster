@@ -116,7 +116,7 @@ class ChangeEmailFragmentTest {
             onView(withId(tiEditPassword.id)).perform(pressImeActionButton())
         }
 
-        val responseEvent = testViewModel.checkInputsLiveData.getOrAwaitValue()
+        val responseEvent = testViewModel.validateInputsLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)
     }
 
@@ -128,7 +128,7 @@ class ChangeEmailFragmentTest {
             onView(withId(tiEditPassword.id)).perform(pressImeActionButton())
         }
 
-        val responseEvent = testViewModel.checkInputsLiveData.getOrAwaitValue()
+        val responseEvent = testViewModel.validateInputsLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Success::class.java)
     }
 

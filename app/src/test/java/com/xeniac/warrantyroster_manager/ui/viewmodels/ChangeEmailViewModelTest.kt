@@ -64,7 +64,7 @@ class ChangeEmailViewModelTest {
         fakeUserRepository.addUser("email@test.com", "password")
         testViewModel.validateChangeEmailInputs("", "new_email@test.com")
 
-        val responseEvent = testViewModel.checkInputsLiveData.getOrAwaitValue()
+        val responseEvent = testViewModel.validateInputsLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)
     }
 
@@ -74,7 +74,7 @@ class ChangeEmailViewModelTest {
         fakeUserRepository.addUser("email@test.com", password)
         testViewModel.validateChangeEmailInputs(password, "email")
 
-        val responseEvent = testViewModel.checkInputsLiveData.getOrAwaitValue()
+        val responseEvent = testViewModel.validateInputsLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)
     }
 
@@ -85,7 +85,7 @@ class ChangeEmailViewModelTest {
         fakeUserRepository.addUser(email, password)
         testViewModel.validateChangeEmailInputs(password, email)
 
-        val responseEvent = testViewModel.checkInputsLiveData.getOrAwaitValue()
+        val responseEvent = testViewModel.validateInputsLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)
     }
 

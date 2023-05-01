@@ -23,15 +23,16 @@ class ChangeEmailViewModel @Inject constructor(
     private val userRepository: UserRepository
 ) : ViewModel() {
 
-    private val _checkInputsLiveData: MutableLiveData<Event<Resource<String>>> = MutableLiveData()
-    val checkInputsLiveData: LiveData<Event<Resource<String>>> = _checkInputsLiveData
+    private val _validateInputsLiveData: MutableLiveData<Event<Resource<String>>> =
+        MutableLiveData()
+    val validateInputsLiveData: LiveData<Event<Resource<String>>> = _validateInputsLiveData
 
-    private val _reAuthenticateUserLiveData:
-            MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
+    private val _reAuthenticateUserLiveData: MutableLiveData<Event<Resource<Nothing>>> =
+        MutableLiveData()
     val reAuthenticateUserLiveData: LiveData<Event<Resource<Nothing>>> = _reAuthenticateUserLiveData
 
-    private val _changeUserEmailLiveData:
-            MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
+    private val _changeUserEmailLiveData: MutableLiveData<Event<Resource<Nothing>>> =
+        MutableLiveData()
     val changeUserEmailLiveData: LiveData<Event<Resource<Nothing>>> = _changeUserEmailLiveData
 
     fun validateChangeEmailInputs(
@@ -48,34 +49,34 @@ class ChangeEmailViewModel @Inject constructor(
         currentUserEmail: String = userRepository.getCurrentUserEmail()
     ) {
         if (password.isBlank()) {
-            _checkInputsLiveData.postValue(
+            _validateInputsLiveData.postValue(
                 Event(Resource.Error(UiText.DynamicString(ERROR_INPUT_BLANK_PASSWORD)))
             )
             return
         }
 
         if (newEmail.isBlank()) {
-            _checkInputsLiveData.postValue(
+            _validateInputsLiveData.postValue(
                 Event(Resource.Error(UiText.DynamicString(ERROR_INPUT_BLANK_EMAIL)))
             )
             return
         }
 
         if (!UserHelper.isEmailValid(newEmail)) {
-            _checkInputsLiveData.postValue(
+            _validateInputsLiveData.postValue(
                 Event(Resource.Error(UiText.DynamicString(ERROR_INPUT_EMAIL_INVALID)))
             )
             return
         }
 
         if (newEmail == currentUserEmail) {
-            _checkInputsLiveData.postValue(
+            _validateInputsLiveData.postValue(
                 Event(Resource.Error(UiText.DynamicString(ERROR_INPUT_EMAIL_SAME)))
             )
             return
         }
 
-        _checkInputsLiveData.postValue(Event(Resource.Success(password)))
+        _validateInputsLiveData.postValue(Event(Resource.Success(password)))
     }
 
     fun reAuthenticateUser(password: String) = viewModelScope.launch {

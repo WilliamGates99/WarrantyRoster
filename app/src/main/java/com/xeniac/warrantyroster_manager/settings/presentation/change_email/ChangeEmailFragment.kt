@@ -165,7 +165,7 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
     }
 
     private fun subscribeToObservers() {
-        checkInputsObserver()
+        validateInputsObserver()
         reAuthenticateUserObserver()
         changeUserEmailObserver()
     }
@@ -200,8 +200,8 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
         }
     }
 
-    private fun checkInputsObserver() =
-        viewModel.checkInputsLiveData.observe(viewLifecycleOwner) { responseEvent ->
+    private fun validateInputsObserver() =
+        viewModel.validateInputsLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
                     is Resource.Loading -> {
