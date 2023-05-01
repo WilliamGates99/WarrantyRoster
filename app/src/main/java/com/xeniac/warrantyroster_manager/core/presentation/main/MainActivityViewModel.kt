@@ -19,10 +19,10 @@ class MainActivityViewModel @Inject constructor(
     private val _rateAppDialogChoiceLiveData: MutableLiveData<Event<Int>> = MutableLiveData()
     val rateAppDialogChoiceLiveData: LiveData<Event<Int>> = _rateAppDialogChoiceLiveData
 
-    private val _previousRequestTimeInMillisLiveData:
-            MutableLiveData<Event<Long>> = MutableLiveData()
-    val previousRequestTimeInMillisLiveData:
-            LiveData<Event<Long>> = _previousRequestTimeInMillisLiveData
+    private val _previousRequestTimeInMillisLiveData: MutableLiveData<Event<Long>> =
+        MutableLiveData()
+    val previousRequestTimeInMillisLiveData: LiveData<Event<Long>> =
+        _previousRequestTimeInMillisLiveData
 
     fun isUserLoggedIn() = preferencesRepository.isUserLoggedInSynchronously()
 
