@@ -248,6 +248,13 @@ androidComponents {
     }
 }
 
+ksp {
+    /**
+     * Room DB schema directory
+     */
+    arg("room.schemaLocation", "$projectDir/roomDbSchemas")
+}
+
 kapt {
     /**
      * Allow references to generated code
@@ -282,6 +289,13 @@ dependencies {
 
     // Coroutines Support for Firebase
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4")
+
+    // Room Library
+    implementation("androidx.room:room-runtime:2.5.1")
+    ksp("androidx.room:room-compiler:2.5.1")
+
+    // Kotlin Extensions and Coroutines Support for Room
+    implementation("androidx.room:room-ktx:2.5.1")
 
     // Preferences DataStore
     implementation("androidx.datastore:datastore-preferences:1.0.0")
