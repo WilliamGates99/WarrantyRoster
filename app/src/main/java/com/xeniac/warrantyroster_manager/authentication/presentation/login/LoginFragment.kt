@@ -209,9 +209,19 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     private fun getCurrentAppLanguage() = viewModel.getCurrentAppLanguage()
 
     private fun currentAppLanguageObserver() =
-        viewModel.currentLanguageLiveData.observe(viewLifecycleOwner) { responseEvent ->
-            responseEvent.getContentIfNotHandled()?.let { language ->
-                currentAppLanguage = language
+        viewModel.currentAppLanguageLiveData.observe(viewLifecycleOwner) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { response ->
+                when (response) {
+                    is Resource.Loading -> Unit
+                    is Resource.Success -> {
+                        response.data?.let { language ->
+                            currentAppLanguage = language
+                        }
+                    }
+                    is Resource.Error -> {
+                        snackbar = showSomethingWentWrongError(requireContext(), requireView())
+                    }
+                }
             }
         }
 
@@ -219,15 +229,17 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         navigateToForgotPw()
     }
 
-    private fun navigateToForgotPw() = findNavController()
-        .navigate(LoginFragmentDirections.actionLoginFragmentToForgotPasswordFragment())
+    private fun navigateToForgotPw() = findNavController().navigate(
+        LoginFragmentDirections.actionLoginFragmentToForgotPasswordFragment()
+    )
 
     private fun registerOnClick() = binding.btnRegister.setOnClickListener {
         navigateToRegister()
     }
 
-    private fun navigateToRegister() = findNavController()
-        .navigate(LoginFragmentDirections.actionLoginFragmentToRegisterFragment())
+    private fun navigateToRegister() = findNavController().navigate(
+        LoginFragmentDirections.actionLoginFragmentToRegisterFragment()
+    )
 
     private fun loginOnClick() = binding.btnLogin.setOnClickListener {
         validateLoginWithEmailInputs()
