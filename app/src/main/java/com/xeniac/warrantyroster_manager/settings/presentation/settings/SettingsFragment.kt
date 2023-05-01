@@ -179,19 +179,22 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
 
     private fun setAccountDetails(email: String, isEmailVerified: Boolean) {
         binding.apply {
-            userEmail = email
-            isUserVerified = isEmailVerified
+            val shouldUpdateUi = email != userEmail || isEmailVerified != isUserVerified
+            if (shouldUpdateUi) {
+                userEmail = email
+                isUserVerified = isEmailVerified
 
-            if (isEmailVerified) {
-                lavAccountVerification.speed = 0.60f
-                lavAccountVerification.repeatCount = 0
-                lavAccountVerification.setAnimation(R.raw.anim_account_verified)
-            } else {
-                lavAccountVerification.speed = 1.00f
-                lavAccountVerification.repeatCount = LottieDrawable.INFINITE
-                lavAccountVerification.setAnimation(R.raw.anim_account_not_verified)
+                if (isEmailVerified) {
+                    lavAccountVerification.speed = 0.60f
+                    lavAccountVerification.repeatCount = 0
+                    lavAccountVerification.setAnimation(R.raw.anim_account_verified)
+                } else {
+                    lavAccountVerification.speed = 1.00f
+                    lavAccountVerification.repeatCount = LottieDrawable.INFINITE
+                    lavAccountVerification.setAnimation(R.raw.anim_account_not_verified)
+                }
+                lavAccountVerification.playAnimation()
             }
-            lavAccountVerification.playAnimation()
         }
     }
 
@@ -596,7 +599,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
     }
 
     private fun destroyAd() {
-        // TODO CHECK FOR BINDING!=NULL
 
         appLovinNativeAd?.let {
             appLovinAdLoader.destroy(it)
