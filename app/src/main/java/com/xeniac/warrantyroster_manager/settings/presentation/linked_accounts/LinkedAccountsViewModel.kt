@@ -1,6 +1,5 @@
 package com.xeniac.warrantyroster_manager.settings.presentation.linked_accounts
 
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,8 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.facebook.AccessToken
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.AuthCredential
+import com.xeniac.warrantyroster_manager.core.domain.repository.PreferencesRepository
 import com.xeniac.warrantyroster_manager.core.domain.repository.UserRepository
-import com.xeniac.warrantyroster_manager.util.Constants.LANGUAGE_DEFAULT_OR_EMPTY
 import com.xeniac.warrantyroster_manager.util.Event
 import com.xeniac.warrantyroster_manager.util.Resource
 import com.xeniac.warrantyroster_manager.util.UiText
@@ -20,11 +19,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LinkedAccountsViewModel @Inject constructor(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val preferencesRepository: PreferencesRepository
 ) : ViewModel() {
 
-    private val _currentLanguageLiveData: MutableLiveData<Event<String>> = MutableLiveData()
-    val currentLanguageLiveData: LiveData<Event<String>> = _currentLanguageLiveData
+    private val _currentAppLanguageLiveData: MutableLiveData<Event<Resource<String>>> =
+        MutableLiveData()
+    val currentAppLanguageLiveData: LiveData<Event<Resource<String>>> = _currentAppLanguageLiveData
 
     private val _linkedAccountsLiveData: MutableLiveData<Event<Resource<List<String>>>> =
         MutableLiveData()
@@ -62,16 +63,15 @@ class LinkedAccountsViewModel @Inject constructor(
         safeGetCurrentAppLanguage()
     }
 
-    private fun safeGetCurrentAppLanguage() {
-        val localeList = AppCompatDelegate.getApplicationLocales()
-
-        if (localeList.isEmpty) {
-            _currentLanguageLiveData.postValue(Event(LANGUAGE_DEFAULT_OR_EMPTY))
-            Timber.i("Locale list is Empty. -> Current app language is $LANGUAGE_DEFAULT_OR_EMPTY")
-        } else {
-            val currentLanguage = localeList[0]!!.language
-            _currentLanguageLiveData.postValue(Event(currentLanguage))
-            Timber.i("Current app language is $currentLanguage")
+    private suspend fun safeGetCurrentAppLanguage() {
+        _currentAppLanguageLiveData.postValue(Event(Resource.Loading()))
+        try {
+            val language = preferencesRepository.getCurrentAppLanguage()
+            _currentAppLanguageLiveData.postValue(Event(Resource.Success(language)))
+            Timber.i("Current app language is $language")
+        } catch (e: Exception) {
+            Timber.e("safeGetCurrentAppLanguage Exception: ${e.message}")
+            _currentAppLanguageLiveData.postValue(Event(Resource.Error(UiText.DynamicString(e.message.toString()))))
         }
     }
 
