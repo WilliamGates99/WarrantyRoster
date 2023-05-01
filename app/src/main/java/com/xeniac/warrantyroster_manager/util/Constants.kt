@@ -34,6 +34,10 @@ object Constants {
     const val ONBOARDING_3RD_INDEX = 2
     const val ONBOARDING_4TH_INDEX = 3
 
+    // Forgot PW Timer Constants
+    const val TIMER_START_TIME_IN_MILLIS = 120 * 1000L // 120 Seconds
+    const val TIMER_COUNTDOWN_INTERVAL_IN_MILLIS = 1000L // 1 Second
+
     // Google Play In-App Reviews API Constants
     const val IN_APP_REVIEWS_DAYS_FROM_FIRST_INSTALL_TIME = 10
     const val IN_APP_REVIEWS_DAYS_FROM_PREVIOUS_REQUEST_TIME = 5

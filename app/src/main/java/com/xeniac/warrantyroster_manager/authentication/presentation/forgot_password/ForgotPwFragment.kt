@@ -50,6 +50,8 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
 
     lateinit var viewModel: ForgotPwViewModel
 
+    private var timerMillisUntilFinished = 0L
+
     private lateinit var connectivityObserver: ConnectivityObserver
     private var networkStatus: ConnectivityObserver.Status = ConnectivityObserver.Status.UNAVAILABLE
 
@@ -139,7 +141,8 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
     }
 
     private fun subscribeToObservers() {
-        forgotPwObserver()
+        sendResetPasswordEmailObserver()
+        timerMillisUntilFinishedObserver()
     }
 
     private fun returnOnClick() = binding.btnReturn.setOnClickListener {
@@ -147,18 +150,18 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
     }
 
     private fun sendOnClick() = binding.btnSend.setOnClickListener {
-        validateResetPasswordInputs()
+        validateSendResetPasswordEmail()
     }
 
     private fun sendActionDone() =
         binding.tiEditEmail.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                validateResetPasswordInputs()
+                validateSendResetPasswordEmail()
             }
             false
         }
 
-    private fun validateResetPasswordInputs() {
+    private fun validateSendResetPasswordEmail() {
         val inputMethodManager = requireContext()
             .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(requireView().applicationWindowToken, 0)
@@ -166,17 +169,17 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
         if (networkStatus == ConnectivityObserver.Status.AVAILABLE) {
             val email = binding.tiEditEmail.text.toString().trim().lowercase(Locale.US)
 
-            viewModel.validateForgotPwInputs(email)
+            viewModel.validateSendResetPasswordEmail(email)
         } else {
             snackbar = showUnavailableNetworkConnectionError(
                 requireContext(), requireView()
-            ) { validateResetPasswordInputs() }
+            ) { validateSendResetPasswordEmail() }
             Timber.e("validateResetPasswordInputs Error: Offline")
         }
     }
 
-    private fun forgotPwObserver() =
-        viewModel.forgotPwLiveData.observe(viewLifecycleOwner) { responseEvent ->
+    private fun sendResetPasswordEmailObserver() =
+        viewModel.sendResetPasswordEmailLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
                     is Resource.Loading -> showLoadingAnimation()
@@ -221,7 +224,7 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
                                     ) { snackbar?.dismiss() }
                                 }
                                 it.contains(ERROR_TIMER_IS_NOT_ZERO) -> {
-                                    val seconds = (viewModel.timerInMillis / 1000).toInt()
+                                    val seconds = (timerMillisUntilFinished / 1000).toInt()
                                     val message = requireContext().resources.getQuantityString(
                                         R.plurals.forgot_pw_error_timer_is_not_zero,
                                         seconds,
@@ -238,6 +241,13 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
                         }
                     }
                 }
+            }
+        }
+
+    private fun timerMillisUntilFinishedObserver() =
+        viewModel.timerMillisUntilFinishedLiveData.observe(viewLifecycleOwner) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { millisUntilFinished ->
+                timerMillisUntilFinished = millisUntilFinished
             }
         }
 

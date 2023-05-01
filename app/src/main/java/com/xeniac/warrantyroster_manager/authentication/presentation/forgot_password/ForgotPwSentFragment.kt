@@ -46,6 +46,8 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
     lateinit var viewModel: ForgotPwViewModel
 
     private lateinit var email: String
+    private var isFirstTimeSendingEmail = true
+    private var timerMillisUntilFinished = 0L
 
     @Inject
     lateinit var decimalFormat: DecimalFormat
@@ -102,8 +104,9 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
     }
 
     private fun subscribeToObservers() {
-        forgotPwSentObserver()
-        timerObserver()
+        resendResetPasswordEmailObserver()
+        isNotFirstTimeSendingEmailObserver()
+        timerMillisUntilFinishedObserver()
     }
 
     private fun returnOnClick() = binding.btnReturn.setOnClickListener {
@@ -125,8 +128,8 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
         }
     }
 
-    private fun forgotPwSentObserver() =
-        viewModel.forgotPwLiveData.observe(viewLifecycleOwner) { responseEvent ->
+    private fun resendResetPasswordEmailObserver() =
+        viewModel.sendResetPasswordEmailLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
                     is Resource.Loading -> showLoadingAnimation()
@@ -148,7 +151,7 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
                                     showFirebaseDeviceBlockedError(requireContext(), requireView())
                                 }
                                 it.contains(ERROR_TIMER_IS_NOT_ZERO) -> {
-                                    val seconds = (viewModel.timerInMillis / 1000).toInt()
+                                    val seconds = (timerMillisUntilFinished / 1000).toInt()
                                     val message = requireContext().resources.getQuantityString(
                                         R.plurals.forgot_pw_error_timer_is_not_zero,
                                         seconds,
@@ -164,9 +167,15 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
             }
         }
 
-    private fun timerObserver() =
-        viewModel.timerLiveData.observe(viewLifecycleOwner) { responseEvent ->
+    private fun isNotFirstTimeSendingEmailObserver() =
+        viewModel.isNotFirstTimeSendingEmailLiveData.observe(viewLifecycleOwner) { isNotFirstTime ->
+            isFirstTimeSendingEmail = !isNotFirstTime
+        }
+
+    private fun timerMillisUntilFinishedObserver() =
+        viewModel.timerMillisUntilFinishedLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { millisUntilFinished ->
+                timerMillisUntilFinished = millisUntilFinished
                 binding.apply {
                     when (millisUntilFinished) {
                         0L -> hideTimer()
@@ -179,7 +188,7 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
     private fun showTimer(millisUntilFinished: Long) = binding.apply {
         setResendTvConstraintBottomToTopOfTimerTv()
 
-        resendText = if (viewModel.isFirstSentEmail) {
+        resendText = if (isFirstTimeSendingEmail) {
             requireContext().getString(R.string.forgot_pw_sent_text_first_time)
         } else {
             requireContext().getString(R.string.forgot_pw_sent_text_resent)
