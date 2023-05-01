@@ -173,7 +173,7 @@ class OnBoardingFragment : Fragment(R.layout.fragment_onboarding) {
                                     finish()
                                 }
                             } else {
-                                viewModel.getCurrentAppLocaleIndex()
+                                getCurrentAppLocaleIndex()
                             }
                         }
                     }

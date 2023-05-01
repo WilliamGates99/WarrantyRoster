@@ -153,7 +153,7 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
                                     finish()
                                 }
                             } else {
-                                viewModel.getCurrentAppLocaleIndex()
+                                getCurrentAppLocaleIndex()
                             }
                         }
                     }
