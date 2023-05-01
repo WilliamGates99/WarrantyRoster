@@ -17,7 +17,8 @@ import com.xeniac.warrantyroster_manager.data.repository.FakeUserRepository
 import com.xeniac.warrantyroster_manager.databinding.FragmentChangeEmailBinding
 import com.xeniac.warrantyroster_manager.getOrAwaitValue
 import com.xeniac.warrantyroster_manager.launchFragmentInHiltContainer
-import com.xeniac.warrantyroster_manager.ui.viewmodels.ChangeEmailViewModel
+import com.xeniac.warrantyroster_manager.settings.presentation.change_email.ChangeEmailFragment
+import com.xeniac.warrantyroster_manager.settings.presentation.change_email.ChangeEmailViewModel
 import com.xeniac.warrantyroster_manager.util.Resource
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -115,7 +116,7 @@ class ChangeEmailFragmentTest {
             onView(withId(tiEditPassword.id)).perform(pressImeActionButton())
         }
 
-        val responseEvent = testViewModel.checkInputsLiveData.getOrAwaitValue()
+        val responseEvent = testViewModel.validateInputsLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)
     }
 
@@ -127,7 +128,7 @@ class ChangeEmailFragmentTest {
             onView(withId(tiEditPassword.id)).perform(pressImeActionButton())
         }
 
-        val responseEvent = testViewModel.checkInputsLiveData.getOrAwaitValue()
+        val responseEvent = testViewModel.validateInputsLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Success::class.java)
     }
 

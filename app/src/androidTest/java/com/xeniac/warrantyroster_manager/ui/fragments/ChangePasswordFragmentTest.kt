@@ -17,7 +17,8 @@ import com.xeniac.warrantyroster_manager.data.repository.FakeUserRepository
 import com.xeniac.warrantyroster_manager.databinding.FragmentChangePasswordBinding
 import com.xeniac.warrantyroster_manager.getOrAwaitValue
 import com.xeniac.warrantyroster_manager.launchFragmentInHiltContainer
-import com.xeniac.warrantyroster_manager.ui.viewmodels.ChangePasswordViewModel
+import com.xeniac.warrantyroster_manager.settings.presentation.change_password.ChangePasswordFragment
+import com.xeniac.warrantyroster_manager.settings.presentation.change_password.ChangePasswordViewModel
 import com.xeniac.warrantyroster_manager.util.Resource
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -137,7 +138,7 @@ class ChangePasswordFragmentTest {
             onView(withId(tiEditConfirmNewPassword.id)).perform(pressImeActionButton())
         }
 
-        val responseEvent = testViewModel.checkInputsLiveData.getOrAwaitValue()
+        val responseEvent = testViewModel.validateInputsLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)
     }
 
@@ -151,7 +152,7 @@ class ChangePasswordFragmentTest {
             onView(withId(tiEditConfirmNewPassword.id)).perform(pressImeActionButton())
         }
 
-        val responseEvent = testViewModel.checkInputsLiveData.getOrAwaitValue()
+        val responseEvent = testViewModel.validateInputsLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Success::class.java)
     }
 

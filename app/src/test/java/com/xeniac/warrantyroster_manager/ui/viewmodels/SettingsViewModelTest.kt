@@ -6,6 +6,7 @@ import com.xeniac.warrantyroster_manager.MainCoroutineRule
 import com.xeniac.warrantyroster_manager.data.repository.FakePreferencesRepository
 import com.xeniac.warrantyroster_manager.data.repository.FakeUserRepository
 import com.xeniac.warrantyroster_manager.getOrAwaitValue
+import com.xeniac.warrantyroster_manager.settings.presentation.settings.SettingsViewModel
 import com.xeniac.warrantyroster_manager.util.Constants.THEME_INDEX_DARK
 import com.xeniac.warrantyroster_manager.util.Constants.THEME_INDEX_DEFAULT
 import com.xeniac.warrantyroster_manager.util.Resource
@@ -43,18 +44,18 @@ class SettingsViewModelTest {
     @Test
     fun getCurrentAppTheme_returnsDefaultThemeIndex() {
         val defaultThemeIndex = THEME_INDEX_DEFAULT
-        testViewModel.getCurrentAppTheme()
+        testViewModel.getCurrentAppThemeIndex()
 
-        val responseEvent = testViewModel.currentAppThemeLiveData.getOrAwaitValue()
+        val responseEvent = testViewModel.currentAppThemeIndexLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()).isEqualTo(defaultThemeIndex)
     }
 
     @Test
     fun changeCurrentTheme_returnsNewThemeIndex() {
         val newThemeIndex = THEME_INDEX_DARK
-        testViewModel.changeCurrentTheme(newThemeIndex)
+        testViewModel.changeCurrentAppTheme(newThemeIndex)
 
-        val responseEvent = testViewModel.currentAppThemeLiveData.getOrAwaitValue()
+        val responseEvent = testViewModel.currentAppThemeIndexLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()).isEqualTo(newThemeIndex)
     }
 

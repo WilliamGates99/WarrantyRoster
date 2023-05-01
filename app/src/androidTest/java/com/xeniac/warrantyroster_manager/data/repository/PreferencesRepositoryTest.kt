@@ -11,7 +11,8 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import com.xeniac.warrantyroster_manager.MainCoroutineRule
-import com.xeniac.warrantyroster_manager.domain.repository.PreferencesRepository
+import com.xeniac.warrantyroster_manager.core.data.repository.PreferencesRepositoryImpl
+import com.xeniac.warrantyroster_manager.core.domain.repository.PreferencesRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
@@ -64,7 +65,7 @@ class PreferencesRepositoryTest {
     fun fetchInitialSynchronousPreferences() = testScope.runTest {
         testDataStore.edit { it.clear() }
 
-        val initialCurrentAppTheme = testRepository.getCurrentAppThemeSynchronously()
+        val initialCurrentAppTheme = testRepository.getCurrentAppThemeIndexSynchronously()
         val initialIsUserLoggedIn = testRepository.isUserLoggedInSynchronously()
 
         assertThat(initialCurrentAppTheme).isEqualTo(0)
@@ -75,7 +76,7 @@ class PreferencesRepositoryTest {
     fun fetchInitialPreferences() = testScope.runTest {
         testDataStore.edit { it.clear() }
 
-        val initialCurrentAppTheme = testRepository.getCurrentAppTheme()
+        val initialCurrentAppTheme = testRepository.getCurrentAppThemeIndex()
         val initialRateAppDialogChoice = testRepository.getRateAppDialogChoice()
         val initialPreviousRequestTimeInMillis = testRepository.getPreviousRequestTimeInMillis()
 
@@ -109,7 +110,7 @@ class PreferencesRepositoryTest {
         val testValue = 1
         testRepository.setCurrentAppTheme(testValue)
 
-        val currentAppTheme = testRepository.getCurrentAppTheme()
+        val currentAppTheme = testRepository.getCurrentAppThemeIndex()
         assertThat(currentAppTheme).isEqualTo(testValue)
     }
 

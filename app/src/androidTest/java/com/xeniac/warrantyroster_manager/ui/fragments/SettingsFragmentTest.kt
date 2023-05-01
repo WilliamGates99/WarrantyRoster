@@ -21,7 +21,8 @@ import com.xeniac.warrantyroster_manager.data.repository.FakeUserRepository
 import com.xeniac.warrantyroster_manager.databinding.FragmentSettingsBinding
 import com.xeniac.warrantyroster_manager.getOrAwaitValue
 import com.xeniac.warrantyroster_manager.launchFragmentInHiltContainer
-import com.xeniac.warrantyroster_manager.ui.viewmodels.SettingsViewModel
+import com.xeniac.warrantyroster_manager.settings.presentation.settings.SettingsFragment
+import com.xeniac.warrantyroster_manager.settings.presentation.settings.SettingsViewModel
 import com.xeniac.warrantyroster_manager.util.Constants.URL_CROWDIN
 import com.xeniac.warrantyroster_manager.util.Constants.URL_DONATE
 import com.xeniac.warrantyroster_manager.util.Constants.URL_PRIVACY_POLICY

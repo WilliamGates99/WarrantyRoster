@@ -3,6 +3,7 @@ package com.xeniac.warrantyroster_manager.ui.viewmodels
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.common.truth.Truth.assertThat
 import com.xeniac.warrantyroster_manager.MainCoroutineRule
+import com.xeniac.warrantyroster_manager.authentication.presentation.forgot_password.ForgotPwViewModel
 import com.xeniac.warrantyroster_manager.data.repository.FakeUserRepository
 import com.xeniac.warrantyroster_manager.getOrAwaitValue
 import com.xeniac.warrantyroster_manager.util.Resource
@@ -33,17 +34,17 @@ class ForgotPwViewModelTest {
 
     @Test
     fun checkForgotPwInputsWithBlankFields_returnsError() {
-        testViewModel.validateForgotPwInputs("", false)
+        testViewModel.validateSendResetPasswordEmailInputs("", false)
 
-        val responseEvent = testViewModel.forgotPwLiveData.getOrAwaitValue()
+        val responseEvent = testViewModel.sendResetPasswordEmailLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)
     }
 
     @Test
     fun checkForgotPwInputsWithInvalidEmail_returnsError() {
-        testViewModel.validateForgotPwInputs("email", false)
+        testViewModel.validateSendResetPasswordEmailInputs("email", false)
 
-        val responseEvent = testViewModel.forgotPwLiveData.getOrAwaitValue()
+        val responseEvent = testViewModel.sendResetPasswordEmailLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)
     }
 
@@ -51,9 +52,9 @@ class ForgotPwViewModelTest {
     fun checkForgotPwInputsWithValidInputs_returnsSuccess() = runTest {
         val email = "email@test.com"
         fakeUserRepository.addUser(email, "password")
-        testViewModel.validateForgotPwInputs(email, false)
+        testViewModel.validateSendResetPasswordEmailInputs(email, false)
 
-        val responseEvent = testViewModel.forgotPwLiveData.getOrAwaitValue()
+        val responseEvent = testViewModel.sendResetPasswordEmailLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Success::class.java)
     }
 
@@ -65,7 +66,7 @@ class ForgotPwViewModelTest {
         fakeUserRepository.setShouldReturnNetworkError(true)
         testViewModel.sendResetPasswordEmail(email, false)
 
-        val responseEvent = testViewModel.forgotPwLiveData.getOrAwaitValue()
+        val responseEvent = testViewModel.sendResetPasswordEmailLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)
     }
 
@@ -73,7 +74,7 @@ class ForgotPwViewModelTest {
     fun sendResetPasswordEmailWithNonExistingEmail_returnsError() {
         testViewModel.sendResetPasswordEmail("email@test.com", false)
 
-        val responseEvent = testViewModel.forgotPwLiveData.getOrAwaitValue()
+        val responseEvent = testViewModel.sendResetPasswordEmailLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)
     }
 
@@ -81,11 +82,11 @@ class ForgotPwViewModelTest {
     fun sendResetPasswordEmailWhileTimerIsNotZero_returnsError() {
         val email = "email@test.com"
         testViewModel.forgotPwEmail = email
-        testViewModel.timerInMillis = 1L
+        testViewModel.timerMillisUntilFinished = 1L
         fakeUserRepository.addUser(email, "password")
         testViewModel.sendResetPasswordEmail(email, false)
 
-        val responseEvent = testViewModel.forgotPwLiveData.getOrAwaitValue()
+        val responseEvent = testViewModel.sendResetPasswordEmailLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)
     }
 }

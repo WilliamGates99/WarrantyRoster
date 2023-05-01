@@ -9,7 +9,7 @@ object Constants {
     // DataStore Constants
     const val DATASTORE_NAME_SETTINGS = "settings"
     const val DATASTORE_IS_LOGGED_IN_KEY = "isUserLoggedIn"
-    const val DATASTORE_THEME_KEY = "theme"
+    const val DATASTORE_APP_THEME_INDEX_KEY = "theme"
     const val DATASTORE_RATE_APP_DIALOG_CHOICE_KEY = "rateAppDialogChoice"
     const val DATASTORE_PREVIOUS_REQUEST_TIME_IN_MILLIS_KEY = "previousRequestTimeInMillis"
 
@@ -19,10 +19,11 @@ object Constants {
     const val THEME_INDEX_DARK = 2
 
     // App Locale Constants
-    const val LOCALE_ENGLISH = "en"
-    const val LOCALE_ENGLISH_UNITED_STATES = "en-US"
-    const val LOCALE_ENGLISH_GREAT_BRITAIN = "en-GB"
-    const val LOCALE_PERSIAN_IRAN = "fa-IR"
+    const val LANGUAGE_DEFAULT_OR_EMPTY = "en"
+    const val LOCALE_TAG_ENGLISH_UNITED_STATES = "en-US"
+    const val LOCALE_TAG_ENGLISH_GREAT_BRITAIN = "en-GB"
+    const val LOCALE_TAG_PERSIAN_IRAN = "fa-IR"
+    const val LOCALE_INDEX_DEFAULT_OR_EMPTY = -1
     const val LOCALE_INDEX_ENGLISH_UNITED_STATES = 0
     const val LOCALE_INDEX_ENGLISH_GREAT_BRITAIN = 1
     const val LOCALE_INDEX_PERSIAN_IRAN = 2
@@ -32,6 +33,10 @@ object Constants {
     const val ONBOARDING_2ND_INDEX = 1
     const val ONBOARDING_3RD_INDEX = 2
     const val ONBOARDING_4TH_INDEX = 3
+
+    // Forgot PW Timer Constants
+    const val TIMER_START_TIME_IN_MILLIS = 120 * 1000L // 120 Seconds
+    const val TIMER_COUNTDOWN_INTERVAL_IN_MILLIS = 1000L // 1 Second
 
     // Google Play In-App Reviews API Constants
     const val IN_APP_REVIEWS_DAYS_FROM_FIRST_INSTALL_TIME = 10

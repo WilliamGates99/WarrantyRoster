@@ -16,12 +16,13 @@ import androidx.test.espresso.intent.matcher.IntentMatchers.hasData
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import com.google.common.truth.Truth.assertThat
 import com.xeniac.warrantyroster_manager.R
+import com.xeniac.warrantyroster_manager.authentication.presentation.register.RegisterFragment
 import com.xeniac.warrantyroster_manager.data.repository.FakePreferencesRepository
 import com.xeniac.warrantyroster_manager.data.repository.FakeUserRepository
 import com.xeniac.warrantyroster_manager.databinding.FragmentRegisterBinding
 import com.xeniac.warrantyroster_manager.getOrAwaitValue
 import com.xeniac.warrantyroster_manager.launchFragmentInHiltContainer
-import com.xeniac.warrantyroster_manager.ui.viewmodels.RegisterViewModel
+import com.xeniac.warrantyroster_manager.authentication.presentation.register.RegisterViewModel
 import com.xeniac.warrantyroster_manager.util.Constants.URL_PRIVACY_POLICY
 import com.xeniac.warrantyroster_manager.util.Resource
 import dagger.hilt.android.testing.HiltAndroidRule

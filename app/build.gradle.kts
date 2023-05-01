@@ -248,6 +248,13 @@ androidComponents {
 }
 
 kapt {
+    arguments {
+        /**
+         * Room DB schema directory
+         */
+        arg("room.schemaLocation", "$projectDir/roomDbSchemas")
+    }
+
     /**
      * Allow references to generated code
      */
@@ -265,8 +272,8 @@ dependencies {
     implementation("androidx.navigation:navigation-ui-ktx:2.5.3")
 
     // Dagger - Hilt
-    implementation("com.google.dagger:hilt-android:2.45")
-    kapt("com.google.dagger:hilt-compiler:2.45")
+    implementation("com.google.dagger:hilt-android:2.46")
+    kapt("com.google.dagger:hilt-compiler:2.46")
 
     // Activity KTX for Injecting ViewModels into Fragments
     implementation("androidx.activity:activity-ktx:1.7.1")
@@ -281,6 +288,13 @@ dependencies {
 
     // Coroutines Support for Firebase
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4")
+
+    // Room Library
+    implementation("androidx.room:room-runtime:2.5.1")
+    kapt("androidx.room:room-compiler:2.5.1")
+
+    // Kotlin Extensions and Coroutines Support for Room
+    implementation("androidx.room:room-ktx:2.5.1")
 
     // Preferences DataStore
     implementation("androidx.datastore:datastore-preferences:1.0.0")
@@ -346,8 +360,8 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.arch.core:core-testing:2.2.0")
     androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
-    androidTestImplementation("com.google.dagger:hilt-android-testing:2.45")
-    kaptAndroidTest("com.google.dagger:hilt-compiler:2.45")
+    androidTestImplementation("com.google.dagger:hilt-android-testing:2.46")
+    kaptAndroidTest("com.google.dagger:hilt-compiler:2.46")
 
     // UI Test Libraries
     androidTestImplementation("androidx.navigation:navigation-testing:2.5.3")
