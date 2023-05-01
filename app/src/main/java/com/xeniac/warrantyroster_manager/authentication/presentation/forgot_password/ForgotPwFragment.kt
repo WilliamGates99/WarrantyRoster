@@ -150,18 +150,18 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
     }
 
     private fun sendOnClick() = binding.btnSend.setOnClickListener {
-        validateSendResetPasswordEmail()
+        validateSendResetPasswordEmailInputs()
     }
 
     private fun sendActionDone() =
         binding.tiEditEmail.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                validateSendResetPasswordEmail()
+                validateSendResetPasswordEmailInputs()
             }
             false
         }
 
-    private fun validateSendResetPasswordEmail() {
+    private fun validateSendResetPasswordEmailInputs() {
         val inputMethodManager = requireContext()
             .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(requireView().applicationWindowToken, 0)
@@ -169,11 +169,11 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
         if (networkStatus == ConnectivityObserver.Status.AVAILABLE) {
             val email = binding.tiEditEmail.text.toString().trim().lowercase(Locale.US)
 
-            viewModel.validateSendResetPasswordEmail(email)
+            viewModel.validateSendResetPasswordEmailInputs(email)
         } else {
             snackbar = showUnavailableNetworkConnectionError(
                 requireContext(), requireView()
-            ) { validateSendResetPasswordEmail() }
+            ) { validateSendResetPasswordEmailInputs() }
             Timber.e("validateResetPasswordInputs Error: Offline")
         }
     }

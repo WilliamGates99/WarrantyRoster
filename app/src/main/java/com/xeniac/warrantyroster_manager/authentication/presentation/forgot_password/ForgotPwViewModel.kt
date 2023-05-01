@@ -42,7 +42,7 @@ class ForgotPwViewModel @Inject constructor(
         savedStateHandle.getLiveData("isNotFirstTimeSendingEmail", false)
     val isNotFirstTimeSendingEmailLiveData: LiveData<Boolean> = _isNotFirstTimeSendingEmailLiveData
 
-    fun validateSendResetPasswordEmail(
+    fun validateSendResetPasswordEmailInputs(
         email: String, activateCountDown: Boolean = true
     ) = viewModelScope.launch {
         safeValidateSendResetPasswordEmailInputs(email, activateCountDown)
