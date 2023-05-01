@@ -24,15 +24,16 @@ class ChangePasswordViewModel @Inject constructor(
     private val userRepository: UserRepository
 ) : ViewModel() {
 
-    private val _checkInputsLiveData: MutableLiveData<Event<Resource<String>>> = MutableLiveData()
-    val checkInputsLiveData: LiveData<Event<Resource<String>>> = _checkInputsLiveData
+    private val _validateInputsLiveData: MutableLiveData<Event<Resource<String>>> =
+        MutableLiveData()
+    val validateInputsLiveData: LiveData<Event<Resource<String>>> = _validateInputsLiveData
 
-    private val _reAuthenticateUserLiveData:
-            MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
+    private val _reAuthenticateUserLiveData: MutableLiveData<Event<Resource<Nothing>>> =
+        MutableLiveData()
     val reAuthenticateUserLiveData: LiveData<Event<Resource<Nothing>>> = _reAuthenticateUserLiveData
 
-    private val _changeUserPasswordLiveData:
-            MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
+    private val _changeUserPasswordLiveData: MutableLiveData<Event<Resource<Nothing>>> =
+        MutableLiveData()
     val changeUserPasswordLiveData: LiveData<Event<Resource<Nothing>>> = _changeUserPasswordLiveData
 
     fun validateChangePasswordInputs(
@@ -45,41 +46,41 @@ class ChangePasswordViewModel @Inject constructor(
         currentPassword: String, newPassword: String, retypeNewPassword: String
     ) {
         if (currentPassword.isBlank()) {
-            _checkInputsLiveData.postValue(
+            _validateInputsLiveData.postValue(
                 Event(Resource.Error(UiText.DynamicString(ERROR_INPUT_BLANK_PASSWORD)))
             )
             return
         }
 
         if (newPassword.isBlank()) {
-            _checkInputsLiveData.postValue(
+            _validateInputsLiveData.postValue(
                 Event(Resource.Error(UiText.DynamicString(ERROR_INPUT_BLANK_NEW_PASSWORD)))
             )
             return
         }
 
         if (retypeNewPassword.isBlank()) {
-            _checkInputsLiveData.postValue(
+            _validateInputsLiveData.postValue(
                 Event(Resource.Error(UiText.DynamicString(ERROR_INPUT_BLANK_RETYPE_PASSWORD)))
             )
             return
         }
 
         if (UserHelper.passwordStrength(newPassword) == (-1).toByte()) {
-            _checkInputsLiveData.postValue(
+            _validateInputsLiveData.postValue(
                 Event(Resource.Error(UiText.DynamicString(ERROR_INPUT_PASSWORD_SHORT)))
             )
             return
         }
 
         if (!UserHelper.isRetypePasswordValid(newPassword, retypeNewPassword)) {
-            _checkInputsLiveData.postValue(
+            _validateInputsLiveData.postValue(
                 Event(Resource.Error(UiText.DynamicString(ERROR_INPUT_PASSWORD_NOT_MATCH)))
             )
             return
         }
 
-        _checkInputsLiveData.postValue(Event(Resource.Success(currentPassword)))
+        _validateInputsLiveData.postValue(Event(Resource.Success(currentPassword)))
     }
 
     fun reAuthenticateUser(password: String) = viewModelScope.launch {

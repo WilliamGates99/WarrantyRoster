@@ -227,7 +227,7 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
     }
 
     private fun subscribeToObservers() {
-        checkInputsObserver()
+        validateInputsObserver()
         reAuthenticateUserObserver()
         changeUserPasswordObserver()
     }
@@ -263,8 +263,8 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
         }
     }
 
-    private fun checkInputsObserver() =
-        viewModel.checkInputsLiveData.observe(viewLifecycleOwner) { responseEvent ->
+    private fun validateInputsObserver() =
+        viewModel.validateInputsLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
                     is Resource.Loading -> {

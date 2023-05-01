@@ -64,7 +64,7 @@ class ChangePasswordViewModelTest {
         fakeUserRepository.addUser("email@test.com", "password")
         testViewModel.validateChangePasswordInputs("", "", "")
 
-        val responseEvent = testViewModel.checkInputsLiveData.getOrAwaitValue()
+        val responseEvent = testViewModel.validateInputsLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)
     }
 
@@ -75,7 +75,7 @@ class ChangePasswordViewModelTest {
         fakeUserRepository.addUser("email@test.com", password)
         testViewModel.validateChangePasswordInputs(password, shortPassword, shortPassword)
 
-        val responseEvent = testViewModel.checkInputsLiveData.getOrAwaitValue()
+        val responseEvent = testViewModel.validateInputsLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)
     }
 
@@ -85,7 +85,7 @@ class ChangePasswordViewModelTest {
         fakeUserRepository.addUser("email@test.com", password)
         testViewModel.validateChangePasswordInputs(password, "new_password", "1234")
 
-        val responseEvent = testViewModel.checkInputsLiveData.getOrAwaitValue()
+        val responseEvent = testViewModel.validateInputsLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)
     }
 

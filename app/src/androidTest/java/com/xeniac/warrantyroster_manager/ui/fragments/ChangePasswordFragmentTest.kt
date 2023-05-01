@@ -138,7 +138,7 @@ class ChangePasswordFragmentTest {
             onView(withId(tiEditConfirmNewPassword.id)).perform(pressImeActionButton())
         }
 
-        val responseEvent = testViewModel.checkInputsLiveData.getOrAwaitValue()
+        val responseEvent = testViewModel.validateInputsLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)
     }
 
@@ -152,7 +152,7 @@ class ChangePasswordFragmentTest {
             onView(withId(tiEditConfirmNewPassword.id)).perform(pressImeActionButton())
         }
 
-        val responseEvent = testViewModel.checkInputsLiveData.getOrAwaitValue()
+        val responseEvent = testViewModel.validateInputsLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Success::class.java)
     }
 
