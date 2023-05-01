@@ -1,5 +1,7 @@
 package com.xeniac.warrantyroster_manager.core.domain.repository
 
+import com.xeniac.warrantyroster_manager.util.UiText
+
 interface PreferencesRepository {
 
     fun getCurrentAppThemeSynchronously(): Int
@@ -9,6 +11,8 @@ interface PreferencesRepository {
     suspend fun getCurrentAppLocaleIndex(): Int
 
     suspend fun getCurrentAppLanguage(): String
+
+    suspend fun getCurrentAppLocaleUiText(): UiText
 
     suspend fun getCurrentAppTheme(): Int
 

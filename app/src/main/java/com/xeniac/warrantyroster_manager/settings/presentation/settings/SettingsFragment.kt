@@ -71,7 +71,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
 
     lateinit var viewModel: SettingsViewModel
 
-    private var currentLocaleIndex = 0
+    private var currentAppLocaleIndex = 0
     private var currentAppTheme = 0
 
     private lateinit var appLovinNativeAdContainer: ViewGroup
@@ -94,7 +94,8 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
         networkConnectivityObserver()
         subscribeToObservers()
         getUserInfo()
-        getCurrentLanguage()
+        getCurrentAppLocaleIndex()
+        getCurrentAppLocaleUiText()
         getCurrentAppTheme()
         verifyOnClick()
         linkedAccountsOnClick()
@@ -130,10 +131,10 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
 
     private fun subscribeToObservers() {
         userInfoObserver()
-        currentLanguageObserver()
-        currentLocaleIndexObserver()
+        currentAppLocaleIndexObserver()
+        currentAppLocaleUiTextObserver()
         currentAppThemeObserver()
-        changeCurrentLocaleObserver()
+        changeCurrentAppLocaleObserver()
         sendVerificationEmailObserver()
         logoutObserver()
     }
@@ -194,19 +195,45 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
         }
     }
 
-    private fun getCurrentLanguage() = viewModel.getCurrentLanguage()
+    private fun getCurrentAppLocaleIndex() = viewModel.getCurrentAppLocaleIndex()
 
-    private fun currentLanguageObserver() =
-        viewModel.currentLanguageLiveData.observe(viewLifecycleOwner) { responseEvent ->
-            responseEvent.getContentIfNotHandled()?.let { currentLanguage ->
-                binding.currentLanguage = currentLanguage.asString(requireContext())
+    private fun currentAppLocaleIndexObserver() =
+        viewModel.currentAppLocaleIndexLiveData.observe(viewLifecycleOwner) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { response ->
+                when (response) {
+                    is Resource.Loading -> Unit
+                    is Resource.Success -> {
+                        response.data?.let { localeIndex ->
+                            currentAppLocaleIndex = localeIndex
+                        }
+                    }
+                    is Resource.Error -> {
+                        snackbar = showSomethingWentWrongError(
+                            requireContext(), requireView()
+                        )
+                    }
+                }
             }
         }
 
-    private fun currentLocaleIndexObserver() =
-        viewModel.currentLocaleIndexLiveData.observe(viewLifecycleOwner) { responseEvent ->
-            responseEvent.getContentIfNotHandled()?.let { index ->
-                currentLocaleIndex = index
+    private fun getCurrentAppLocaleUiText() = viewModel.getCurrentAppLocaleUiText()
+
+    private fun currentAppLocaleUiTextObserver() =
+        viewModel.currentAppLocaleUiTextLiveData.observe(viewLifecycleOwner) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { response ->
+                when (response) {
+                    is Resource.Loading -> Unit
+                    is Resource.Success -> {
+                        response.data?.let { localeUiText ->
+                            binding.currentLanguage = localeUiText.asString(requireContext())
+                        }
+                    }
+                    is Resource.Error -> {
+                        snackbar = showSomethingWentWrongError(
+                            requireContext(), requireView()
+                        )
+                    }
+                }
             }
         }
 
@@ -311,24 +338,36 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
             requireContext(),
             R.string.settings_dialog_title_language,
             localeTextItems,
-            currentLocaleIndex
+            currentAppLocaleIndex
         ) { index ->
-            changeCurrentLocale(index)
+            changeCurrentAppLocale(index)
         }
     }
 
-    private fun changeCurrentLocale(index: Int) = viewModel.changeCurrentLocale(index)
+    private fun changeCurrentAppLocale(index: Int) = viewModel.changeCurrentAppLocale(index)
 
-    private fun changeCurrentLocaleObserver() =
-        viewModel.changeCurrentLocaleLiveData.observe(viewLifecycleOwner) { responseEvent ->
-            responseEvent.getContentIfNotHandled()?.let { isActivityRestartNeeded ->
-                if (isActivityRestartNeeded) {
-                    requireActivity().apply {
-                        startActivity(Intent(this, MainActivity::class.java))
-                        finish()
+    private fun changeCurrentAppLocaleObserver() =
+        viewModel.changeCurrentAppLocaleLiveData.observe(viewLifecycleOwner) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { response ->
+                when (response) {
+                    is Resource.Loading -> Unit
+                    is Resource.Success -> {
+                        response.data?.let { isActivityRestartNeeded ->
+                            if (isActivityRestartNeeded) {
+                                requireActivity().apply {
+                                    startActivity(Intent(this, MainActivity::class.java))
+                                    finish()
+                                }
+                            } else {
+                                viewModel.getCurrentAppLocaleIndex()
+                            }
+                        }
                     }
-                } else {
-                    viewModel.getCurrentLanguage()
+                    is Resource.Error -> {
+                        snackbar = showSomethingWentWrongError(
+                            requireContext(), requireView()
+                        )
+                    }
                 }
             }
         }
@@ -517,6 +556,8 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
     }
 
     private fun destroyAd() {
+        // TODO CHECK FOR BINDING!=NULL
+
         appLovinNativeAd?.let {
             appLovinAdLoader.destroy(it)
         }

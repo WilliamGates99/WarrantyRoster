@@ -11,6 +11,7 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.longPreferencesKey
+import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.core.domain.repository.PreferencesRepository
 import com.xeniac.warrantyroster_manager.util.Constants.DATASTORE_IS_LOGGED_IN_KEY
 import com.xeniac.warrantyroster_manager.util.Constants.DATASTORE_PREVIOUS_REQUEST_TIME_IN_MILLIS_KEY
@@ -24,6 +25,7 @@ import com.xeniac.warrantyroster_manager.util.Constants.LOCALE_INDEX_PERSIAN_IRA
 import com.xeniac.warrantyroster_manager.util.Constants.LOCALE_TAG_ENGLISH_GREAT_BRITAIN
 import com.xeniac.warrantyroster_manager.util.Constants.LOCALE_TAG_ENGLISH_UNITED_STATES
 import com.xeniac.warrantyroster_manager.util.Constants.LOCALE_TAG_PERSIAN_IRAN
+import com.xeniac.warrantyroster_manager.util.UiText
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import timber.log.Timber
@@ -108,6 +110,28 @@ class PreferencesRepositoryImpl @Inject constructor(
     } catch (e: Exception) {
         Timber.e("getCurrentAppLocaleString Exception: $e")
         LANGUAGE_DEFAULT_OR_EMPTY
+    }
+
+    override suspend fun getCurrentAppLocaleUiText(): UiText = try {
+        val localeList = AppCompatDelegate.getApplicationLocales()
+
+        if (localeList.isEmpty) {
+            Timber.i("Locale list is Empty.")
+            UiText.DynamicString(LOCALE_INDEX_DEFAULT_OR_EMPTY.toString())
+        } else {
+            val localeString = localeList[0].toString()
+            Timber.i("Current locale is $localeString")
+
+            when (localeString) {
+                "en_US" -> UiText.StringResource(R.string.settings_text_settings_language_english_us)
+                "en_GB" -> UiText.StringResource(R.string.settings_text_settings_language_english_gb)
+                "fa_IR" -> UiText.StringResource(R.string.settings_text_settings_language_persian_ir)
+                else -> UiText.DynamicString(LOCALE_INDEX_DEFAULT_OR_EMPTY.toString())
+            }
+        }
+    } catch (e: Exception) {
+        Timber.e("getCurrentAppLocaleIndex Exception: $e")
+        UiText.DynamicString(LOCALE_INDEX_DEFAULT_OR_EMPTY.toString())
     }
 
     override suspend fun getCurrentAppTheme(): Int = try {
