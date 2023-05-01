@@ -65,7 +65,7 @@ class PreferencesRepositoryTest {
     fun fetchInitialSynchronousPreferences() = testScope.runTest {
         testDataStore.edit { it.clear() }
 
-        val initialCurrentAppTheme = testRepository.getCurrentAppThemeSynchronously()
+        val initialCurrentAppTheme = testRepository.getCurrentAppThemeIndexSynchronously()
         val initialIsUserLoggedIn = testRepository.isUserLoggedInSynchronously()
 
         assertThat(initialCurrentAppTheme).isEqualTo(0)
@@ -76,7 +76,7 @@ class PreferencesRepositoryTest {
     fun fetchInitialPreferences() = testScope.runTest {
         testDataStore.edit { it.clear() }
 
-        val initialCurrentAppTheme = testRepository.getCurrentAppTheme()
+        val initialCurrentAppTheme = testRepository.getCurrentAppThemeIndex()
         val initialRateAppDialogChoice = testRepository.getRateAppDialogChoice()
         val initialPreviousRequestTimeInMillis = testRepository.getPreviousRequestTimeInMillis()
 
@@ -110,7 +110,7 @@ class PreferencesRepositoryTest {
         val testValue = 1
         testRepository.setCurrentAppTheme(testValue)
 
-        val currentAppTheme = testRepository.getCurrentAppTheme()
+        val currentAppTheme = testRepository.getCurrentAppThemeIndex()
         assertThat(currentAppTheme).isEqualTo(testValue)
     }
 

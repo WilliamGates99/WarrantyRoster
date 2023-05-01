@@ -51,7 +51,7 @@ object AppModule {
 
     @Provides
     fun provideAppThemeIndex(preferencesRepository: PreferencesRepository): Int =
-        preferencesRepository.getCurrentAppThemeSynchronously()
+        preferencesRepository.getCurrentAppThemeIndexSynchronously()
 
     @Singleton
     @Provides

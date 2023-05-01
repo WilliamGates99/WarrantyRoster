@@ -4,7 +4,7 @@ import com.xeniac.warrantyroster_manager.util.UiText
 
 interface PreferencesRepository {
 
-    fun getCurrentAppThemeSynchronously(): Int
+    fun getCurrentAppThemeIndexSynchronously(): Int
 
     fun isUserLoggedInSynchronously(): Boolean
 
@@ -14,7 +14,9 @@ interface PreferencesRepository {
 
     suspend fun getCurrentAppLocaleUiText(): UiText
 
-    suspend fun getCurrentAppTheme(): Int
+    suspend fun getCurrentAppThemeIndex(): Int
+
+    suspend fun getCurrentAppThemeUiText(): UiText
 
     suspend fun getRateAppDialogChoice(): Int
 

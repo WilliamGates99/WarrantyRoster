@@ -13,10 +13,10 @@ import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.longPreferencesKey
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.core.domain.repository.PreferencesRepository
+import com.xeniac.warrantyroster_manager.util.Constants.DATASTORE_APP_THEME_INDEX_KEY
 import com.xeniac.warrantyroster_manager.util.Constants.DATASTORE_IS_LOGGED_IN_KEY
 import com.xeniac.warrantyroster_manager.util.Constants.DATASTORE_PREVIOUS_REQUEST_TIME_IN_MILLIS_KEY
 import com.xeniac.warrantyroster_manager.util.Constants.DATASTORE_RATE_APP_DIALOG_CHOICE_KEY
-import com.xeniac.warrantyroster_manager.util.Constants.DATASTORE_THEME_KEY
 import com.xeniac.warrantyroster_manager.util.Constants.LANGUAGE_DEFAULT_OR_EMPTY
 import com.xeniac.warrantyroster_manager.util.Constants.LOCALE_INDEX_DEFAULT_OR_EMPTY
 import com.xeniac.warrantyroster_manager.util.Constants.LOCALE_INDEX_ENGLISH_GREAT_BRITAIN
@@ -25,6 +25,9 @@ import com.xeniac.warrantyroster_manager.util.Constants.LOCALE_INDEX_PERSIAN_IRA
 import com.xeniac.warrantyroster_manager.util.Constants.LOCALE_TAG_ENGLISH_GREAT_BRITAIN
 import com.xeniac.warrantyroster_manager.util.Constants.LOCALE_TAG_ENGLISH_UNITED_STATES
 import com.xeniac.warrantyroster_manager.util.Constants.LOCALE_TAG_PERSIAN_IRAN
+import com.xeniac.warrantyroster_manager.util.Constants.THEME_INDEX_DARK
+import com.xeniac.warrantyroster_manager.util.Constants.THEME_INDEX_DEFAULT
+import com.xeniac.warrantyroster_manager.util.Constants.THEME_INDEX_LIGHT
 import com.xeniac.warrantyroster_manager.util.UiText
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -37,18 +40,18 @@ class PreferencesRepositoryImpl @Inject constructor(
 
     private object PreferencesKeys {
         val IS_USER_LOGGED_IN = booleanPreferencesKey(DATASTORE_IS_LOGGED_IN_KEY)
-        val CURRENT_APP_THEME = intPreferencesKey(DATASTORE_THEME_KEY)
+        val CURRENT_APP_THEME_INDEX = intPreferencesKey(DATASTORE_APP_THEME_INDEX_KEY)
         val RATE_APP_DIALOG_CHOICE = intPreferencesKey(DATASTORE_RATE_APP_DIALOG_CHOICE_KEY)
         val PREVIOUS_REQUEST_TIME_IN_MILLIS = longPreferencesKey(
             DATASTORE_PREVIOUS_REQUEST_TIME_IN_MILLIS_KEY
         )
     }
 
-    override fun getCurrentAppThemeSynchronously(): Int = runBlocking {
+    override fun getCurrentAppThemeIndexSynchronously(): Int = runBlocking {
         try {
-            settingsDataStore.data.first()[PreferencesKeys.CURRENT_APP_THEME] ?: 0
+            settingsDataStore.data.first()[PreferencesKeys.CURRENT_APP_THEME_INDEX] ?: 0
         } catch (e: Exception) {
-            Timber.e("getCurrentAppThemeSynchronously Exception: $e")
+            Timber.e("getCurrentAppThemeIndexSynchronously Exception: $e")
             0
         }
     }
@@ -134,11 +137,24 @@ class PreferencesRepositoryImpl @Inject constructor(
         UiText.DynamicString(LOCALE_INDEX_DEFAULT_OR_EMPTY.toString())
     }
 
-    override suspend fun getCurrentAppTheme(): Int = try {
-        settingsDataStore.data.first()[PreferencesKeys.CURRENT_APP_THEME] ?: 0
+    override suspend fun getCurrentAppThemeIndex(): Int = try {
+        settingsDataStore.data
+            .first()[PreferencesKeys.CURRENT_APP_THEME_INDEX] ?: THEME_INDEX_DEFAULT
     } catch (e: Exception) {
-        Timber.e("getCurrentAppTheme Exception: $e")
-        0
+        Timber.e("getCurrentAppThemeIndex Exception: $e")
+        THEME_INDEX_DEFAULT
+    }
+
+    override suspend fun getCurrentAppThemeUiText(): UiText = try {
+        when (getCurrentAppThemeIndex()) {
+            THEME_INDEX_DEFAULT -> UiText.StringResource(R.string.settings_text_settings_theme_default)
+            THEME_INDEX_LIGHT -> UiText.StringResource(R.string.settings_text_settings_theme_light)
+            THEME_INDEX_DARK -> UiText.StringResource(R.string.settings_text_settings_theme_dark)
+            else -> UiText.StringResource(R.string.settings_text_settings_theme_default)
+        }
+    } catch (e: Exception) {
+        Timber.e("getCurrentAppThemeUiText Exception: $e")
+        UiText.StringResource(R.string.settings_text_settings_theme_default)
     }
 
     override suspend fun getRateAppDialogChoice(): Int = try {
@@ -201,11 +217,11 @@ class PreferencesRepositoryImpl @Inject constructor(
     override suspend fun setCurrentAppTheme(index: Int) {
         try {
             settingsDataStore.edit {
-                it[PreferencesKeys.CURRENT_APP_THEME] = index
+                it[PreferencesKeys.CURRENT_APP_THEME_INDEX] = index
                 Timber.i("AppTheme edited to $index")
             }
         } catch (e: Exception) {
-            Timber.e("setAppTheme Exception: $e")
+            Timber.e("setCurrentAppTheme Exception: $e")
         }
     }
 

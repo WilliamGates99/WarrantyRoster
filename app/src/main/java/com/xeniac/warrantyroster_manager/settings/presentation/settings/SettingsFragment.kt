@@ -33,9 +33,6 @@ import com.xeniac.warrantyroster_manager.util.Constants.ERROR_FIREBASE_403
 import com.xeniac.warrantyroster_manager.util.Constants.ERROR_FIREBASE_AUTH_EMAIL_VERIFICATION_EMAIL_NOT_PROVIDED
 import com.xeniac.warrantyroster_manager.util.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
 import com.xeniac.warrantyroster_manager.util.Constants.ERROR_NETWORK_CONNECTION
-import com.xeniac.warrantyroster_manager.util.Constants.THEME_INDEX_DARK
-import com.xeniac.warrantyroster_manager.util.Constants.THEME_INDEX_DEFAULT
-import com.xeniac.warrantyroster_manager.util.Constants.THEME_INDEX_LIGHT
 import com.xeniac.warrantyroster_manager.util.Constants.URL_CROWDIN
 import com.xeniac.warrantyroster_manager.util.Constants.URL_DONATE
 import com.xeniac.warrantyroster_manager.util.Constants.URL_PRIVACY_POLICY
@@ -72,7 +69,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
     lateinit var viewModel: SettingsViewModel
 
     private var currentAppLocaleIndex = 0
-    private var currentAppTheme = 0
+    private var currentAppThemeIndex = 0
 
     private lateinit var appLovinNativeAdContainer: ViewGroup
     private lateinit var appLovinAdLoader: MaxNativeAdLoader
@@ -96,7 +93,8 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
         getUserInfo()
         getCurrentAppLocaleIndex()
         getCurrentAppLocaleUiText()
-        getCurrentAppTheme()
+        getCurrentAppThemeIndex()
+        getCurrentAppThemeUiText()
         verifyOnClick()
         linkedAccountsOnClick()
         changeEmailOnClick()
@@ -133,8 +131,10 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
         userInfoObserver()
         currentAppLocaleIndexObserver()
         currentAppLocaleUiTextObserver()
-        currentAppThemeObserver()
+        currentAppThemeIndexObserver()
+        currentAppThemeUiTextObserver()
         changeCurrentAppLocaleObserver()
+        changeCurrentAppThemeObserver()
         sendVerificationEmailObserver()
         logoutObserver()
     }
@@ -237,26 +237,47 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
             }
         }
 
-    private fun getCurrentAppTheme() = viewModel.getCurrentAppTheme()
+    private fun getCurrentAppThemeIndex() = viewModel.getCurrentAppThemeIndex()
 
-    private fun currentAppThemeObserver() =
-        viewModel.currentAppThemeLiveData.observe(viewLifecycleOwner) { responseEvent ->
-            responseEvent.getContentIfNotHandled()?.let { currentThemeIndex ->
-                currentAppTheme = currentThemeIndex
-                setCurrentThemeText()
+    private fun currentAppThemeIndexObserver() =
+        viewModel.currentAppThemeIndexLiveData.observe(viewLifecycleOwner) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { response ->
+                when (response) {
+                    is Resource.Loading -> Unit
+                    is Resource.Success -> {
+                        response.data?.let { currentThemeIndex ->
+                            currentAppThemeIndex = currentThemeIndex
+                        }
+                    }
+                    is Resource.Error -> {
+                        snackbar = showSomethingWentWrongError(
+                            requireContext(), requireView()
+                        )
+                    }
+                }
             }
         }
 
-    private fun setCurrentThemeText() {
-        requireContext().apply {
-            binding.currentTheme = when (currentAppTheme) {
-                THEME_INDEX_DEFAULT -> getString(R.string.settings_text_settings_theme_default)
-                THEME_INDEX_LIGHT -> getString(R.string.settings_text_settings_theme_light)
-                THEME_INDEX_DARK -> getString(R.string.settings_text_settings_theme_dark)
-                else -> getString(R.string.settings_text_settings_theme_default)
+    private fun getCurrentAppThemeUiText() = viewModel.getCurrentAppThemeUiText()
+
+    private fun currentAppThemeUiTextObserver() =
+        viewModel.currentAppThemeUiTextLiveData.observe(viewLifecycleOwner) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { response ->
+                when (response) {
+                    is Resource.Loading -> Unit
+                    is Resource.Success -> {
+                        response.data?.let { themeUiText ->
+                            binding.currentTheme = themeUiText.asString(requireContext())
+                        }
+                    }
+                    is Resource.Error -> {
+                        snackbar = showSomethingWentWrongError(
+                            requireContext(), requireView()
+                        )
+                    }
+                }
             }
         }
-    }
 
     private fun verifyOnClick() = binding.btnAccountVerification.setOnClickListener {
         sendVerificationEmail()
@@ -359,7 +380,8 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
                                     finish()
                                 }
                             } else {
-                                viewModel.getCurrentAppLocaleIndex()
+                                getCurrentAppLocaleIndex()
+                                getCurrentAppLocaleUiText()
                             }
                         }
                     }
@@ -383,13 +405,31 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
             requireContext(),
             R.string.settings_dialog_title_theme,
             themeItems,
-            currentAppTheme
+            currentAppThemeIndex
         ) { index ->
-            changeCurrentTheme(index)
+            changeCurrentAppTheme(index)
         }
     }
 
-    private fun changeCurrentTheme(index: Int) = viewModel.changeCurrentTheme(index)
+    private fun changeCurrentAppTheme(index: Int) = viewModel.changeCurrentAppTheme(index)
+
+    private fun changeCurrentAppThemeObserver() =
+        viewModel.changeCurrentAppThemeLiveData.observe(viewLifecycleOwner) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { response ->
+                when (response) {
+                    is Resource.Loading -> Unit
+                    is Resource.Success -> {
+                        getCurrentAppThemeIndex()
+                        getCurrentAppThemeUiText()
+                    }
+                    is Resource.Error -> {
+                        snackbar = showSomethingWentWrongError(
+                            requireContext(), requireView()
+                        )
+                    }
+                }
+            }
+        }
 
     private fun donateOnClick() = binding.clSettingsDonate.setOnClickListener {
         openLink(requireContext(), requireView(), URL_DONATE)

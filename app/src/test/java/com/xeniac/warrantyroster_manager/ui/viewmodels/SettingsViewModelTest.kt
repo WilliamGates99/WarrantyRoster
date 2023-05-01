@@ -44,18 +44,18 @@ class SettingsViewModelTest {
     @Test
     fun getCurrentAppTheme_returnsDefaultThemeIndex() {
         val defaultThemeIndex = THEME_INDEX_DEFAULT
-        testViewModel.getCurrentAppTheme()
+        testViewModel.getCurrentAppThemeIndex()
 
-        val responseEvent = testViewModel.currentAppThemeLiveData.getOrAwaitValue()
+        val responseEvent = testViewModel.currentAppThemeIndexLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()).isEqualTo(defaultThemeIndex)
     }
 
     @Test
     fun changeCurrentTheme_returnsNewThemeIndex() {
         val newThemeIndex = THEME_INDEX_DARK
-        testViewModel.changeCurrentTheme(newThemeIndex)
+        testViewModel.changeCurrentAppTheme(newThemeIndex)
 
-        val responseEvent = testViewModel.currentAppThemeLiveData.getOrAwaitValue()
+        val responseEvent = testViewModel.currentAppThemeIndexLiveData.getOrAwaitValue()
         assertThat(responseEvent.getContentIfNotHandled()).isEqualTo(newThemeIndex)
     }
 

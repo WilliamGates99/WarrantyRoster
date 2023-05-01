@@ -9,11 +9,11 @@ class FakePreferencesRepository : PreferencesRepository {
     private var rateAppDialogChoice = 0
     private var previousRequestTimeInMillis = 0L
 
-    override fun getCurrentAppThemeSynchronously(): Int = currentAppTheme
+    override fun getCurrentAppThemeIndexSynchronously(): Int = currentAppTheme
 
     override fun isUserLoggedInSynchronously(): Boolean = isUserLoggedIn
 
-    override suspend fun getCurrentAppTheme(): Int = currentAppTheme
+    override suspend fun getCurrentAppThemeIndex(): Int = currentAppTheme
 
     override suspend fun getRateAppDialogChoice(): Int = rateAppDialogChoice
 

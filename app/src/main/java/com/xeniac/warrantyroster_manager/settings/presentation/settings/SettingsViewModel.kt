@@ -1,8 +1,5 @@
 package com.xeniac.warrantyroster_manager.settings.presentation.settings
 
-import android.os.Build
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.text.layoutDirection
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -42,8 +39,19 @@ class SettingsViewModel @Inject constructor(
     val changeCurrentAppLocaleLiveData: LiveData<Event<Resource<Boolean>>> =
         _changeCurrentAppLocaleLiveData
 
-    private val _currentAppThemeLiveData: MutableLiveData<Event<Int>> = MutableLiveData()
-    val currentAppThemeLiveData: LiveData<Event<Int>> = _currentAppThemeLiveData
+    private val _currentAppThemeIndexLiveData: MutableLiveData<Event<Resource<Int>>> =
+        MutableLiveData()
+    val currentAppThemeIndexLiveData: LiveData<Event<Resource<Int>>> = _currentAppThemeIndexLiveData
+
+    private val _currentAppThemeUiTextLiveData: MutableLiveData<Event<Resource<UiText>>> =
+        MutableLiveData()
+    val currentAppThemeUiTextLiveData: LiveData<Event<Resource<UiText>>> =
+        _currentAppThemeUiTextLiveData
+
+    private val _changeCurrentAppThemeLiveData: MutableLiveData<Event<Resource<Nothing>>> =
+        MutableLiveData()
+    val changeCurrentAppThemeLiveData: LiveData<Event<Resource<Nothing>>> =
+        _changeCurrentAppThemeLiveData
 
     private val _userInfoLiveData: MutableLiveData<Event<Resource<UserInfo>>> = MutableLiveData()
     val userInfoLiveData: LiveData<Event<Resource<UserInfo>>> = _userInfoLiveData
@@ -92,12 +100,35 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    fun getCurrentAppTheme() = viewModelScope.launch {
-        safeGetCurrentAppTheme()
+    fun getCurrentAppThemeIndex() = viewModelScope.launch {
+        safeGetCurrentAppThemeIndex()
     }
 
-    private suspend fun safeGetCurrentAppTheme() {
-        _currentAppThemeLiveData.postValue(Event(preferencesRepository.getCurrentAppTheme()))
+    private suspend fun safeGetCurrentAppThemeIndex() {
+        _currentAppThemeIndexLiveData.postValue(Event(Resource.Loading()))
+        try {
+            val themeIndex = preferencesRepository.getCurrentAppThemeIndex()
+            _currentAppThemeIndexLiveData.postValue(Event(Resource.Success(themeIndex)))
+            Timber.i("Current theme index is $themeIndex")
+        } catch (e: Exception) {
+            Timber.e("safeGetCurrentAppThemeIndex Exception: ${e.message}")
+            _currentAppThemeIndexLiveData.postValue(Event(Resource.Error(UiText.DynamicString(e.message.toString()))))
+        }
+    }
+
+    fun getCurrentAppThemeUiText() = viewModelScope.launch {
+        safeGetCurrentAppThemeUiText()
+    }
+
+    private suspend fun safeGetCurrentAppThemeUiText() {
+        _currentAppThemeUiTextLiveData.postValue(Event(Resource.Loading()))
+        try {
+            val themeUiText = preferencesRepository.getCurrentAppThemeUiText()
+            _currentAppThemeUiTextLiveData.postValue(Event(Resource.Success(themeUiText)))
+        } catch (e: Exception) {
+            Timber.e("safeGetCurrentAppThemeUiText Exception: ${e.message}")
+            _currentAppThemeUiTextLiveData.postValue(Event(Resource.Error(UiText.DynamicString(e.message.toString()))))
+        }
     }
 
     fun changeCurrentAppLocale(index: Int) = viewModelScope.launch {
@@ -116,14 +147,21 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    fun changeCurrentTheme(index: Int) = viewModelScope.launch {
-        safeChangeCurrentTheme(index)
+    fun changeCurrentAppTheme(index: Int) = viewModelScope.launch {
+        safeChangeCurrentAppTheme(index)
     }
 
-    private suspend fun safeChangeCurrentTheme(index: Int) {
-        preferencesRepository.setCurrentAppTheme(index)
-        _currentAppThemeLiveData.postValue(Event(index))
-        SettingsHelper.setAppTheme(index)
+    private suspend fun safeChangeCurrentAppTheme(index: Int) {
+        _changeCurrentAppThemeLiveData.postValue(Event(Resource.Loading()))
+        try {
+            preferencesRepository.setCurrentAppTheme(index)
+            SettingsHelper.setAppTheme(index)
+            _changeCurrentAppThemeLiveData.postValue(Event(Resource.Success()))
+            Timber.i("App theme index changed to $index")
+        } catch (e: Exception) {
+            Timber.e("safeChangeCurrentAppTheme Exception: ${e.message}")
+            _changeCurrentAppThemeLiveData.postValue(Event(Resource.Error(UiText.DynamicString(e.message.toString()))))
+        }
     }
 
     fun getCachedUserInfo() = viewModelScope.launch {
