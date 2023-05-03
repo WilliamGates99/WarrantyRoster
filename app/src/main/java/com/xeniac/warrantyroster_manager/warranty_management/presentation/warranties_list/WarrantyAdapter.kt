@@ -25,9 +25,8 @@ import com.xeniac.warrantyroster_manager.util.CoilHelper.loadCategoryImage
 import com.xeniac.warrantyroster_manager.util.Constants.VIEW_TYPE_AD
 import com.xeniac.warrantyroster_manager.util.Constants.VIEW_TYPE_WARRANTY
 import com.xeniac.warrantyroster_manager.util.DateHelper.getDaysUntilExpiry
-import com.xeniac.warrantyroster_manager.warranty_management.data.remote.dto.ListItemType
-import com.xeniac.warrantyroster_manager.warranty_management.data.remote.dto.Warranty
-import com.xeniac.warrantyroster_manager.warranty_management.presentation.WarrantyViewModel
+import com.xeniac.warrantyroster_manager.warranty_management.domain.model.ListItemType
+import com.xeniac.warrantyroster_manager.warranty_management.domain.model.Warranty
 import ir.tapsell.plus.AdHolder
 import ir.tapsell.plus.AdRequestCallback
 import ir.tapsell.plus.AdShowListener
@@ -49,7 +48,8 @@ class WarrantyAdapter @Inject constructor(
 
     lateinit var activity: Activity
     lateinit var context: Context
-    lateinit var warrantyViewModel: WarrantyViewModel
+    lateinit var warrantiesViewModel: WarrantiesViewModel
+    lateinit var categoryTitleMapKey: String
 
     private lateinit var warrantyClickInterface: WarrantyListClickInterface
 
@@ -152,12 +152,12 @@ class WarrantyAdapter @Inject constructor(
 
             delay(1) // Delay fixed issue #22
             val category = warranty.categoryId?.let {
-                warrantyViewModel.getCategoryById(it)
+                warrantiesViewModel.getCategoryById(it)
+                warrantiesViewModel.getFoundCategoryById()
             }
 
-
             category?.let {
-                binding.categoryTitle = it.title[warrantyViewModel.getCategoryTitleMapKey()]
+                binding.categoryTitle = it.title[categoryTitleMapKey]
                 loadCategoryImage(context, it.icon, imageLoader, binding.ivIcon, binding.cpiIcon)
             }
 
