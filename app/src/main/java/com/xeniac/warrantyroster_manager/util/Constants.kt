@@ -54,13 +54,14 @@ object Constants {
     const val FRAGMENT_TAG_EDIT_CALENDAR_STARTING = "fragment_tag_edit_calendar_starting"
     const val FRAGMENT_TAG_EDIT_CALENDAR_EXPIRY = "fragment_tag_edit_calendar_expiry"
 
-    // Firestore Collections ID Constants
-    const val COLLECTION_CATEGORIES = "categories"
-    const val COLLECTION_WARRANTIES = "warranties"
+    // Firestore Collections Constants
+    const val FIRESTORE_CATEGORIES_COLLECTION_SIZE = 22
+    const val COLLECTION_ID_CATEGORIES = "categories"
+    const val COLLECTION_ID_WARRANTIES = "warranties"
 
     // Firestore Categories Collection Fields Constants
-    const val CATEGORIES_TITLE = "title"
-    const val CATEGORIES_ICON = "icon"
+    const val FIRESTORE_CATEGORIES_TITLE = "title"
+    const val FIRESTORE_CATEGORIES_ICON = "icon"
 
     // Firestore Warranties Collection Fields Constants
     const val WARRANTIES_TITLE = "title"
