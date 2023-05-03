@@ -73,8 +73,6 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
     @Inject
     lateinit var decimalFormat: DecimalFormat
 
-    private lateinit var categoryTitleMapKey: String
-    private lateinit var categoryTitlesList: List<String>
     private var selectedCategory: Category? = null
 
     private var selectedStartingDateInMillis = 0L
@@ -98,7 +96,7 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
         textInputsBackgroundColor()
         textInputsStrokeColor()
         subscribeToObservers()
-        getCategoryTitleMapKey()
+        setupCategoryDropDown()
         categoryDropDownOnItemClick()
         categoryDropDownOnDismiss()
         lifetimeWarrantyCheckBoxListener()
@@ -116,7 +114,7 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
 
     override fun onResume() {
         super.onResume()
-        setupCategoryDropDown(categoryTitlesList)
+        setupCategoryDropDown()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -191,7 +189,11 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
                 }
 
                 it.getString(SAVE_INSTANCE_ADD_WARRANTY_CATEGORY_ID)?.let { restoredCategoryId ->
-                    getCategoryById(restoredCategoryId)
+                    selectedCategory = getCategoryById(restoredCategoryId)
+                    selectedCategory?.let { category ->
+                        binding.tiDdCategory.setText(category.title[getCategoryTitleMapKey()])
+                        loadCategoryIcon(category.icon)
+                    }
                 }
 
                 it.getBoolean(SAVE_INSTANCE_ADD_WARRANTY_IS_LIFETIME).let { restoredIsLifetime ->
@@ -326,112 +328,36 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
     }
 
     private fun subscribeToObservers() {
-        categoryTitleMapKeyObserver()
-        allCategoryTitlesObserver()
-        categoryByTitleObserver()
-        categoryByIdObserver()
         addWarrantyObserver()
     }
 
-    private fun getCategoryTitleMapKey() = viewModel.getCategoryTitleMapKey()
-
-    private fun categoryTitleMapKeyObserver() =
-        viewModel.categoryTitleMapKeyLiveData.observe(viewLifecycleOwner) { responseEvent ->
-            responseEvent.getContentIfNotHandled()?.let { response ->
-                when (response) {
-                    is Resource.Loading -> Unit
-                    is Resource.Success -> {
-                        response.data?.let { titleMapKey ->
-                            categoryTitleMapKey = titleMapKey
-                            getAllCategoryTitles(categoryTitleMapKey)
-                        }
-                    }
-                    is Resource.Error -> {
-                        snackbar = showSomethingWentWrongError(requireContext(), requireView())
-                    }
-                }
-            }
-        }
-
-    private fun getAllCategoryTitles(titleMapKey: String) =
-        viewModel.getAllCategoryTitles(titleMapKey)
-
-    private fun allCategoryTitlesObserver() =
-        viewModel.allCategoryTitlesLiveData.observe(viewLifecycleOwner) { responseEvent ->
-            responseEvent.getContentIfNotHandled()?.let { response ->
-                when (response) {
-                    is Resource.Loading -> Unit
-                    is Resource.Success -> {
-                        response.data?.let { titlesList ->
-                            categoryTitlesList = titlesList
-                            setupCategoryDropDown(categoryTitlesList)
-                        }
-                    }
-                    is Resource.Error -> {
-                        snackbar = showSomethingWentWrongError(requireContext(), requireView())
-                    }
-                }
-            }
-        }
-
-    private fun setupCategoryDropDown(categoryTitlesList: List<String>) =
-        binding.tiDdCategory.setAdapter(
-            ArrayAdapter(requireContext(), R.layout.dropdown_category, categoryTitlesList)
+    private fun setupCategoryDropDown() = binding.tiDdCategory.setAdapter(
+        ArrayAdapter(
+            requireContext(),
+            R.layout.dropdown_category,
+            getAllCategoryTitles()
         )
+    )
 
     private fun categoryDropDownOnItemClick() =
         binding.tiDdCategory.setOnItemClickListener { adapterView, _, position, _ ->
             val categoryTitle = adapterView.getItemAtPosition(position).toString()
-            getCategoryByTitle(categoryTitle)
+            selectedCategory = getCategoryByTitle(categoryTitle)
+            selectedCategory?.let { loadCategoryIcon(it.icon) }
         }
 
     private fun categoryDropDownOnDismiss() = binding.tiDdCategory.setOnDismissListener {
         binding.tiDdCategory.clearFocus()
     }
 
+    private fun getAllCategoryTitles() = viewModel.getAllCategoryTitles(getCategoryTitleMapKey())
+
+    private fun getCategoryTitleMapKey() = viewModel.getCategoryTitleMapKey()
+
     private fun getCategoryByTitle(categoryTitle: String) =
         viewModel.getCategoryByTitle(categoryTitle)
 
-    private fun categoryByTitleObserver() =
-        viewModel.categoryByTitleLiveData.observe(viewLifecycleOwner) { responseEvent ->
-            responseEvent.getContentIfNotHandled()?.let { response ->
-                when (response) {
-                    is Resource.Loading -> Unit
-                    is Resource.Success -> {
-                        response.data?.let { category ->
-                            selectedCategory = category
-                            selectedCategory?.let { loadCategoryIcon(it.icon) }
-                        }
-                    }
-                    is Resource.Error -> {
-                        snackbar = showSomethingWentWrongError(requireContext(), requireView())
-                    }
-                }
-            }
-        }
-
     private fun getCategoryById(categoryId: String) = viewModel.getCategoryById(categoryId)
-
-    private fun categoryByIdObserver() =
-        viewModel.categoryByIdLiveData.observe(viewLifecycleOwner) { responseEvent ->
-            responseEvent.getContentIfNotHandled()?.let { response ->
-                when (response) {
-                    is Resource.Loading -> Unit
-                    is Resource.Success -> {
-                        response.data?.let { category ->
-                            selectedCategory = category
-                            selectedCategory?.let {
-                                binding.tiDdCategory.setText(it.title[categoryTitleMapKey])
-                                loadCategoryIcon(it.icon)
-                            }
-                        }
-                    }
-                    is Resource.Error -> {
-                        snackbar = showSomethingWentWrongError(requireContext(), requireView())
-                    }
-                }
-            }
-        }
 
     private fun loadCategoryIcon(categoryIcon: String) = loadCategoryImage(
         requireContext(), categoryIcon, imageLoader, binding.ivIconCategory, binding.cpiIconCategory

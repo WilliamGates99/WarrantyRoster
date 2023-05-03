@@ -8,8 +8,9 @@ import com.xeniac.warrantyroster_manager.di.CategoriesCollection
 import com.xeniac.warrantyroster_manager.util.Constants.FIRESTORE_CATEGORIES_COLLECTION_SIZE
 import com.xeniac.warrantyroster_manager.util.Constants.FIRESTORE_CATEGORIES_ICON
 import com.xeniac.warrantyroster_manager.util.Constants.FIRESTORE_CATEGORIES_TITLE
-import com.xeniac.warrantyroster_manager.util.Resource
-import com.xeniac.warrantyroster_manager.util.UiText
+import com.xeniac.warrantyroster_manager.util.Constants.LOCALE_TAG_ENGLISH_GREAT_BRITAIN
+import com.xeniac.warrantyroster_manager.util.Constants.LOCALE_TAG_ENGLISH_UNITED_STATES
+import com.xeniac.warrantyroster_manager.util.Constants.LOCALE_TAG_PERSIAN_IRAN
 import com.xeniac.warrantyroster_manager.warranty_management.data.mapper.toCategory
 import com.xeniac.warrantyroster_manager.warranty_management.data.remote.dto.CategoryDto
 import com.xeniac.warrantyroster_manager.warranty_management.domain.model.Category
@@ -21,6 +22,8 @@ import javax.inject.Inject
 class CategoryRepositoryImpl @Inject constructor(
     @CategoriesCollection private val categoriesCollectionRef: CollectionReference,
 ) : CategoryRepository {
+
+    private lateinit var categoriesList: List<Category>
 
     override suspend fun getAllCategoriesList(): List<Category> {
         var documents = getCachedCategoryDocuments()
@@ -36,7 +39,7 @@ class CategoryRepositoryImpl @Inject constructor(
             documents
         }
 
-        val categoriesList = mutableListOf<Category>()
+        val categories = mutableListOf<Category>()
 
         documents.forEach { document ->
             @Suppress("UNCHECKED_CAST")
@@ -45,10 +48,12 @@ class CategoryRepositoryImpl @Inject constructor(
                 document.get(FIRESTORE_CATEGORIES_TITLE) as Map<String, String>,
                 document.get(FIRESTORE_CATEGORIES_ICON).toString()
             )
-            categoriesList.add(categoryDto.toCategory())
+            categories.add(categoryDto.toCategory())
         }
 
-        return categoriesList
+        categoriesList = categories
+
+        return categories
     }
 
     override suspend fun getCachedCategoryDocuments(): List<DocumentSnapshot> = try {
@@ -77,9 +82,8 @@ class CategoryRepositoryImpl @Inject constructor(
         emptyList()
     }
 
-    override suspend fun getAllCategoryTitlesList(titleMapKey: String): Resource<List<String>> =
+    override fun getAllCategoryTitlesList(titleMapKey: String): List<String> =
         try {
-            val categoriesList = getAllCategoriesList()
             val titlesList = mutableListOf<String>()
 
             categoriesList.forEach { category ->
@@ -88,41 +92,71 @@ class CategoryRepositoryImpl @Inject constructor(
 
             Timber.i("All category titles retrieved successfully.")
 
-            Resource.Success(titlesList)
+            titlesList
         } catch (e: Exception) {
             Timber.e("getAllCategoryTitlesList Error: ${e.message}")
-            Resource.Error(UiText.DynamicString(e.message.toString()))
+            emptyList()
         }
 
-    override suspend fun getCategoryById(categoryId: String): Resource<Category> = try {
-        val categoriesList = getAllCategoriesList()
+    override fun getCategoryById(categoryId: String): Category = try {
         val category = categoriesList.find { it.id == categoryId }
 
         if (category != null) {
             Timber.i("Category successfully found by id.")
-            Resource.Success(category)
+            category
         } else {
             Timber.e("Couldn't find category by id.")
-            Resource.Error(UiText.DynamicString("Couldn't find category by id."))
+            Category(
+                id = "10",
+                title = mapOf(
+                    Pair(LOCALE_TAG_ENGLISH_UNITED_STATES, "Miscellaneous"),
+                    Pair(LOCALE_TAG_ENGLISH_GREAT_BRITAIN, "Miscellaneous"),
+                    Pair(LOCALE_TAG_PERSIAN_IRAN, "متفرقه")
+                ),
+                icon = "https://firebasestorage.googleapis.com/v0/b/xeniac-warranty-roster.appspot.com/o/categories%2Fic_category_miscellaneous.svg?alt=media&token=7f3b3abe-403d-4aa1-bc6b-11b203d1fdc4"
+            )
         }
     } catch (e: Exception) {
         Timber.e("getCategoryById Error: ${e.message}")
-        Resource.Error(UiText.DynamicString(e.message.toString()))
+        Category(
+            id = "10",
+            title = mapOf(
+                Pair(LOCALE_TAG_ENGLISH_UNITED_STATES, "Miscellaneous"),
+                Pair(LOCALE_TAG_ENGLISH_GREAT_BRITAIN, "Miscellaneous"),
+                Pair(LOCALE_TAG_PERSIAN_IRAN, "متفرقه")
+            ),
+            icon = "https://firebasestorage.googleapis.com/v0/b/xeniac-warranty-roster.appspot.com/o/categories%2Fic_category_miscellaneous.svg?alt=media&token=7f3b3abe-403d-4aa1-bc6b-11b203d1fdc4"
+        )
     }
 
-    override suspend fun getCategoryByTitle(categoryTitle: String): Resource<Category> = try {
-        val categoriesList = getAllCategoriesList()
+    override fun getCategoryByTitle(categoryTitle: String): Category = try {
         val category = categoriesList.find { it.title.containsValue(categoryTitle) }
 
         if (category != null) {
             Timber.i("Category successfully found by title.")
-            Resource.Success(category)
+            category
         } else {
             Timber.e("Couldn't find category by title.")
-            Resource.Error(UiText.DynamicString("Couldn't find category by id."))
+            Category(
+                id = "10",
+                title = mapOf(
+                    Pair(LOCALE_TAG_ENGLISH_UNITED_STATES, "Miscellaneous"),
+                    Pair(LOCALE_TAG_ENGLISH_GREAT_BRITAIN, "Miscellaneous"),
+                    Pair(LOCALE_TAG_PERSIAN_IRAN, "متفرقه")
+                ),
+                icon = "https://firebasestorage.googleapis.com/v0/b/xeniac-warranty-roster.appspot.com/o/categories%2Fic_category_miscellaneous.svg?alt=media&token=7f3b3abe-403d-4aa1-bc6b-11b203d1fdc4"
+            )
         }
     } catch (e: Exception) {
         Timber.e("getCategoryByTitle Error: ${e.message}")
-        Resource.Error(UiText.DynamicString(e.message.toString()))
+        Category(
+            id = "10",
+            title = mapOf(
+                Pair(LOCALE_TAG_ENGLISH_UNITED_STATES, "Miscellaneous"),
+                Pair(LOCALE_TAG_ENGLISH_GREAT_BRITAIN, "Miscellaneous"),
+                Pair(LOCALE_TAG_PERSIAN_IRAN, "متفرقه")
+            ),
+            icon = "https://firebasestorage.googleapis.com/v0/b/xeniac-warranty-roster.appspot.com/o/categories%2Fic_category_miscellaneous.svg?alt=media&token=7f3b3abe-403d-4aa1-bc6b-11b203d1fdc4"
+        )
     }
 }

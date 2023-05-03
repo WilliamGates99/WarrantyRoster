@@ -21,28 +21,14 @@ class WarrantyDetailsViewModel @Inject constructor(
     private val warrantyRepository: WarrantyRepository
 ) : ViewModel() {
 
-    private val _categoryByIdLiveData: MutableLiveData<Event<Resource<Category>>> =
-        MutableLiveData()
-    val categoryByIdLiveData: LiveData<Event<Resource<Category>>> = _categoryByIdLiveData
-
     private val _deleteWarrantyLiveData: MutableLiveData<Event<Resource<Nothing>>> =
         MutableLiveData()
     val deleteWarrantyLiveData: LiveData<Event<Resource<Nothing>>> = _deleteWarrantyLiveData
 
-    fun getCategoryById(categoryId: String) = viewModelScope.launch {
-        safeGetCategoryById(categoryId)
-    }
-
-    private suspend fun safeGetCategoryById(categoryId: String) {
-        _categoryByIdLiveData.postValue(Event(Resource.Loading()))
-        try {
-            val category = categoryRepository.getCategoryById(categoryId)
-            _categoryByIdLiveData.postValue(Event(category))
-            Timber.i("Category found by id is $category")
-        } catch (e: Exception) {
-            Timber.e("safeGetCategoryById Exception: ${e.message}")
-            _categoryByIdLiveData.postValue(Event(Resource.Error(UiText.DynamicString(e.message.toString()))))
-        }
+    fun getCategoryById(categoryId: String): Category {
+        val category = categoryRepository.getCategoryById(categoryId)
+        Timber.i("Category found by id is $category")
+        return category
     }
 
     fun deleteWarrantyFromFirestore(warrantyId: String) = viewModelScope.launch {

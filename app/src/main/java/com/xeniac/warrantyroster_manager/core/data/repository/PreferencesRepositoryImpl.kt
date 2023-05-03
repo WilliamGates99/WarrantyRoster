@@ -171,7 +171,7 @@ class PreferencesRepositoryImpl @Inject constructor(
         0L
     }
 
-    override suspend fun getCategoryTitleMapKey(): String = try {
+    override fun getCategoryTitleMapKey(): String = try {
         val localeList = AppCompatDelegate.getApplicationLocales()
 
         if (localeList.isEmpty) {

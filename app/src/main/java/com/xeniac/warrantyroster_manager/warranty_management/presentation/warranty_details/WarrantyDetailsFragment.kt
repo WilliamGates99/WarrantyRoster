@@ -104,7 +104,6 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
     }
 
     private fun subscribeToObservers() {
-        categoryByIdObserver()
         deleteWarrantyObserver()
     }
 
@@ -162,7 +161,10 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
                 warranty.description
             }
 
-            warranty.categoryId?.let { getCategoryById(it) }
+            warranty.categoryId?.let {
+                val category = getCategoryById(it)
+                loadCategoryImage(requireContext(), category.icon, imageLoader, ivIcon, cpiIcon)
+            }
 
             Calendar.getInstance().apply {
                 dateFormat.parse(warranty.startingDate!!)?.let { time = it }
@@ -231,29 +233,6 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
     }
 
     private fun getCategoryById(categoryId: String) = viewModel.getCategoryById(categoryId)
-
-    private fun categoryByIdObserver() =
-        viewModel.categoryByIdLiveData.observe(viewLifecycleOwner) { responseEvent ->
-            responseEvent.getContentIfNotHandled()?.let { response ->
-                when (response) {
-                    is Resource.Loading -> Unit
-                    is Resource.Success -> {
-                        response.data?.let { category ->
-                            loadCategoryImage(
-                                context = requireContext(),
-                                categoryIcon = category.icon,
-                                imageLoader = imageLoader,
-                                imageView = binding.ivIcon,
-                                progressBar = binding.cpiIcon
-                            )
-                        }
-                    }
-                    is Resource.Error -> {
-                        snackbar = showSomethingWentWrongError(requireContext(), requireView())
-                    }
-                }
-            }
-        }
 
     private fun editWarrantyOnClick() = binding.fab.setOnClickListener {
         findNavController().navigate(

@@ -51,8 +51,9 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
         viewModel = ViewModelProvider(requireActivity())[WarrantiesViewModel::class.java]
 
         subscribeToObservers()
+        getAllCategoriesList()
         retryNetworkBtn()
-        getCategoryTitleMapKey()
+        setupRecyclerView()
         setupSearchView()
     }
 
@@ -68,38 +69,10 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
     }
 
     private fun subscribeToObservers() {
-        categoryTitleMapKeyObserver()
         categoriesListObserver()
         warrantiesListObserver()
         searchWarrantiesObserver()
     }
-
-    private fun retryNetworkBtn() = binding.btnNetworkRetry.setOnClickListener {
-        getCategoryTitleMapKey()
-    }
-
-    private fun getCategoryTitleMapKey() = viewModel.getCategoryTitleMapKey()
-
-    private fun categoryTitleMapKeyObserver() =
-        viewModel.categoryTitleMapKeyLiveData.observe(viewLifecycleOwner) { responseEvent ->
-            responseEvent.getContentIfNotHandled()?.let { response ->
-                when (response) {
-                    is Resource.Loading -> Unit
-                    is Resource.Success -> {
-                        response.data?.let { titleMapKey ->
-                            setupRecyclerView(titleMapKey)
-                            getAllCategoriesList()
-                        }
-                    }
-                    is Resource.Error -> {
-                        binding.tvNetworkError.text = requireContext().getString(
-                            R.string.error_something_went_wrong
-                        )
-                        showNetworkError()
-                    }
-                }
-            }
-        }
 
     private fun getAllCategoriesList() = viewModel.getAllCategoriesList()
 
@@ -184,13 +157,16 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
         }
     }
 
-    private fun setupRecyclerView(titleMapKey: String) {
+    private fun retryNetworkBtn() = binding.btnNetworkRetry.setOnClickListener {
+        getAllCategoriesList()
+    }
+
+    private fun setupRecyclerView() {
         warrantyAdapter.apply {
             setOnWarrantyItemClickListener(this@WarrantiesFragment)
             activity = requireActivity()
             context = requireContext()
             warrantiesViewModel = viewModel
-            categoryTitleMapKey = titleMapKey
         }
         binding.rv.adapter = warrantyAdapter
     }

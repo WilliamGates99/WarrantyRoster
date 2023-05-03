@@ -49,7 +49,6 @@ class WarrantyAdapter @Inject constructor(
     lateinit var activity: Activity
     lateinit var context: Context
     lateinit var warrantiesViewModel: WarrantiesViewModel
-    lateinit var categoryTitleMapKey: String
 
     private lateinit var warrantyClickInterface: WarrantyListClickInterface
 
@@ -153,11 +152,10 @@ class WarrantyAdapter @Inject constructor(
             delay(1) // Delay fixed issue #22
             val category = warranty.categoryId?.let {
                 warrantiesViewModel.getCategoryById(it)
-                warrantiesViewModel.getFoundCategoryById()
             }
 
             category?.let {
-                binding.categoryTitle = it.title[categoryTitleMapKey]
+                binding.categoryTitle = it.title[warrantiesViewModel.getCategoryTitleMapKey()]
                 loadCategoryImage(context, it.icon, imageLoader, binding.ivIcon, binding.cpiIcon)
             }
 

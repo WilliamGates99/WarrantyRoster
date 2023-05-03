@@ -1,7 +1,6 @@
 package com.xeniac.warrantyroster_manager.warranty_management.domain.repository
 
 import com.google.firebase.firestore.DocumentSnapshot
-import com.xeniac.warrantyroster_manager.util.Resource
 import com.xeniac.warrantyroster_manager.warranty_management.domain.model.Category
 
 interface CategoryRepository {
@@ -12,9 +11,9 @@ interface CategoryRepository {
 
     suspend fun getCategoryDocumentsFromFirestore(): List<DocumentSnapshot>
 
-    suspend fun getAllCategoryTitlesList(titleMapKey: String): Resource<List<String>>
+    fun getAllCategoryTitlesList(titleMapKey: String): List<String>
 
-    suspend fun getCategoryById(categoryId: String): Resource<Category>
+    fun getCategoryById(categoryId: String): Category
 
-    suspend fun getCategoryByTitle(categoryTitle: String): Resource<Category>
+    fun getCategoryByTitle(categoryTitle: String): Category
 }

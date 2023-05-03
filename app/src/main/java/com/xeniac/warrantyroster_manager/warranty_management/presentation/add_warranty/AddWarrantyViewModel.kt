@@ -31,89 +31,31 @@ class AddWarrantyViewModel @Inject constructor(
     private val preferencesRepository: PreferencesRepository
 ) : ViewModel() {
 
-    private val _categoryTitleMapKeyLiveData: MutableLiveData<Event<Resource<String>>> =
-        MutableLiveData()
-    val categoryTitleMapKeyLiveData: LiveData<Event<Resource<String>>> =
-        _categoryTitleMapKeyLiveData
-
-    private val _allCategoryTitlesLiveData: MutableLiveData<Event<Resource<List<String>>>> =
-        MutableLiveData()
-    val allCategoryTitlesLiveData: LiveData<Event<Resource<List<String>>>> =
-        _allCategoryTitlesLiveData
-
-    private val _categoryByIdLiveData: MutableLiveData<Event<Resource<Category>>> =
-        MutableLiveData()
-    val categoryByIdLiveData: LiveData<Event<Resource<Category>>> = _categoryByIdLiveData
-
-    private val _categoryByTitleLiveData: MutableLiveData<Event<Resource<Category>>> =
-        MutableLiveData()
-    val categoryByTitleLiveData: LiveData<Event<Resource<Category>>> = _categoryByTitleLiveData
-
     private val _addWarrantyLiveData: MutableLiveData<Event<Resource<Nothing>>> = MutableLiveData()
     val addWarrantyLiveData: LiveData<Event<Resource<Nothing>>> = _addWarrantyLiveData
 
-    fun getCategoryTitleMapKey() = viewModelScope.launch {
-        safeGetCategoryTitleMapKey()
+    fun getCategoryTitleMapKey(): String {
+        val categoryTitleMapKey = preferencesRepository.getCategoryTitleMapKey()
+        Timber.i("Category title map key is $categoryTitleMapKey")
+        return categoryTitleMapKey
     }
 
-    private suspend fun safeGetCategoryTitleMapKey() {
-        _categoryTitleMapKeyLiveData.postValue(Event(Resource.Loading()))
-        try {
-            val categoryTitleMapKey = preferencesRepository.getCategoryTitleMapKey()
-            _categoryTitleMapKeyLiveData.postValue(Event(Resource.Success(categoryTitleMapKey)))
-            Timber.i("Category title map key is $categoryTitleMapKey")
-        } catch (e: Exception) {
-            Timber.e("safeGetCategoryTitleMapKey Exception: ${e.message}")
-            _categoryTitleMapKeyLiveData.postValue(Event(Resource.Error(UiText.DynamicString(e.message.toString()))))
-        }
+    fun getAllCategoryTitles(titleMapKey: String): List<String> {
+        val allCategoryTitlesList = categoryRepository.getAllCategoryTitlesList(titleMapKey)
+        Timber.i("All category titles are $allCategoryTitlesList")
+        return allCategoryTitlesList
     }
 
-    fun getAllCategoryTitles(titleMapKey: String) = viewModelScope.launch {
-        safeGetAllCategoryTitles(titleMapKey)
+    fun getCategoryById(categoryId: String): Category {
+        val category = categoryRepository.getCategoryById(categoryId)
+        Timber.i("Category found by id is $category")
+        return category
     }
 
-    private suspend fun safeGetAllCategoryTitles(titleMapKey: String) {
-        _allCategoryTitlesLiveData.postValue(Event(Resource.Loading()))
-        try {
-            val allCategoryTitlesList = categoryRepository.getAllCategoryTitlesList(titleMapKey)
-            _allCategoryTitlesLiveData.postValue(Event(allCategoryTitlesList))
-            Timber.i("All category titles are $allCategoryTitlesList")
-        } catch (e: Exception) {
-            Timber.e("safeGetAllCategoryTitles Exception: ${e.message}")
-            _allCategoryTitlesLiveData.postValue(Event(Resource.Error(UiText.DynamicString(e.message.toString()))))
-        }
-    }
-
-    fun getCategoryById(categoryId: String) = viewModelScope.launch {
-        safeGetCategoryById(categoryId)
-    }
-
-    private suspend fun safeGetCategoryById(categoryId: String) {
-        _categoryByIdLiveData.postValue(Event(Resource.Loading()))
-        try {
-            val category = categoryRepository.getCategoryById(categoryId)
-            _categoryByIdLiveData.postValue(Event(category))
-            Timber.i("Category found by id is $category")
-        } catch (e: Exception) {
-            Timber.e("safeGetCategoryById Exception: ${e.message}")
-            _categoryByIdLiveData.postValue(Event(Resource.Error(UiText.DynamicString(e.message.toString()))))
-        }
-    }
-
-    fun getCategoryByTitle(categoryTitle: String) = viewModelScope.launch {
-        safeGetCategoryByTitle(categoryTitle)
-    }
-
-    private suspend fun safeGetCategoryByTitle(categoryTitle: String) {
-        _categoryByTitleLiveData.postValue(Event(Resource.Loading()))
-        try {
-            val category = categoryRepository.getCategoryByTitle(categoryTitle)
-            _categoryByTitleLiveData.postValue(Event(category))
-            Timber.i("Category found by title is $category")
-        } catch (e: Exception) {
-            Timber.e("safeGetCategoryByTitle Exception: ${e.message}")
-            _categoryByTitleLiveData.postValue(Event(Resource.Error(UiText.DynamicString(e.message.toString()))))
-        }
+    fun getCategoryByTitle(categoryTitle: String): Category {
+        val category = categoryRepository.getCategoryByTitle(categoryTitle)
+        Timber.i("Category found by title is $category")
+        return category
     }
 
     fun validateAddWarrantyInputs(

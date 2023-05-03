@@ -22,7 +22,7 @@ interface PreferencesRepository {
 
     suspend fun getPreviousRequestTimeInMillis(): Long
 
-    suspend fun getCategoryTitleMapKey(): String
+    fun getCategoryTitleMapKey(): String
 
     suspend fun isUserLoggedIn(isLoggedIn: Boolean)
 
