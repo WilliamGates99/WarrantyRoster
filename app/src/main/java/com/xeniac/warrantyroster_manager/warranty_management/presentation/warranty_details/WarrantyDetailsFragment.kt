@@ -33,8 +33,7 @@ import com.xeniac.warrantyroster_manager.util.SnackBarHelper.showFirebaseDeviceB
 import com.xeniac.warrantyroster_manager.util.SnackBarHelper.showNetworkFailureError
 import com.xeniac.warrantyroster_manager.util.SnackBarHelper.showSomethingWentWrongError
 import com.xeniac.warrantyroster_manager.util.SnackBarHelper.showUnavailableNetworkConnectionError
-import com.xeniac.warrantyroster_manager.warranty_management.data.remote.dto.Warranty
-import com.xeniac.warrantyroster_manager.warranty_management.presentation.WarrantyViewModel
+import com.xeniac.warrantyroster_manager.warranty_management.domain.model.Warranty
 import dagger.hilt.android.AndroidEntryPoint
 import ir.tapsell.plus.AdShowListener
 import ir.tapsell.plus.TapsellPlus
@@ -54,7 +53,7 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
     private var _binding: FragmentWarrantyDetailsBinding? = null
     val binding get() = _binding!!
 
-    lateinit var viewModel: WarrantyViewModel
+    lateinit var viewModel: WarrantyDetailsViewModel
 
     @Inject
     lateinit var imageLoader: ImageLoader
@@ -75,7 +74,7 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentWarrantyDetailsBinding.bind(view)
-        viewModel = ViewModelProvider(requireActivity())[WarrantyViewModel::class.java]
+        viewModel = ViewModelProvider(requireActivity())[WarrantyDetailsViewModel::class.java]
         connectivityObserver = NetworkConnectivityObserver(requireContext())
 
         networkConnectivityObserver()
@@ -105,6 +104,7 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
     }
 
     private fun subscribeToObservers() {
+        categoryByIdObserver()
         deleteWarrantyObserver()
     }
 
@@ -124,13 +124,11 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
     private fun getWarranty() {
         val args: WarrantyDetailsFragmentArgs by navArgs()
         warranty = args.warranty
-        setWarrantyDetails()
+        setWarrantyDetails(warranty)
     }
 
-    private fun setWarrantyDetails() {
+    private fun setWarrantyDetails(warranty: Warranty) {
         binding.apply {
-            val warranty = this@WarrantyDetailsFragment.warranty
-
             warrantyTitle = warranty.title
 
             warrantyBrand = if (warranty.brand.isNullOrBlank()) {
@@ -164,10 +162,7 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
                 warranty.description
             }
 
-            val category = viewModel.getCategoryById(warranty.categoryId!!)
-            category?.let {
-                loadCategoryImage(requireContext(), it.icon, imageLoader, ivIcon, cpiIcon)
-            }
+            warranty.categoryId?.let { getCategoryById(it) }
 
             Calendar.getInstance().apply {
                 dateFormat.parse(warranty.startingDate!!)?.let { time = it }
@@ -234,6 +229,31 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
             }
         }
     }
+
+    private fun getCategoryById(categoryId: String) = viewModel.getCategoryById(categoryId)
+
+    private fun categoryByIdObserver() =
+        viewModel.categoryByIdLiveData.observe(viewLifecycleOwner) { responseEvent ->
+            responseEvent.getContentIfNotHandled()?.let { response ->
+                when (response) {
+                    is Resource.Loading -> Unit
+                    is Resource.Success -> {
+                        response.data?.let { category ->
+                            loadCategoryImage(
+                                context = requireContext(),
+                                categoryIcon = category.icon,
+                                imageLoader = imageLoader,
+                                imageView = binding.ivIcon,
+                                progressBar = binding.cpiIcon
+                            )
+                        }
+                    }
+                    is Resource.Error -> {
+                        snackbar = showSomethingWentWrongError(requireContext(), requireView())
+                    }
+                }
+            }
+        }
 
     private fun editWarrantyOnClick() = binding.fab.setOnClickListener {
         findNavController().navigate(
@@ -328,9 +348,10 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
     }
 
     private fun showInterstitialAd() = (requireActivity() as MainActivity).apply {
-        when {
-            appLovinAd.isReady -> appLovinAd.showAd()
-            tapsellResponseId != null -> showTapsellInterstitialAd(tapsellResponseId!!)
+        if (appLovinAd.isReady) {
+            appLovinAd.showAd()
+        } else if (tapsellResponseId != null) {
+            showTapsellInterstitialAd(tapsellResponseId!!)
         }
 
         requestAppLovinInterstitial()
