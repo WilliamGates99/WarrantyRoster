@@ -6,7 +6,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.xeniac.warrantyroster_manager.core.domain.repository.PreferencesRepository
 import com.xeniac.warrantyroster_manager.core.domain.repository.UserRepository
-import com.xeniac.warrantyroster_manager.util.Constants
+import com.xeniac.warrantyroster_manager.util.Constants.ERROR_INPUT_BLANK_EXPIRY_DATE
+import com.xeniac.warrantyroster_manager.util.Constants.ERROR_INPUT_BLANK_STARTING_DATE
+import com.xeniac.warrantyroster_manager.util.Constants.ERROR_INPUT_BLANK_TITLE
+import com.xeniac.warrantyroster_manager.util.Constants.ERROR_INPUT_INVALID_STARTING_DATE
 import com.xeniac.warrantyroster_manager.util.DateHelper
 import com.xeniac.warrantyroster_manager.util.Event
 import com.xeniac.warrantyroster_manager.util.Resource
@@ -133,21 +136,21 @@ class AddWarrantyViewModel @Inject constructor(
     ) {
         if (title.isBlank()) {
             _addWarrantyLiveData.postValue(
-                Event(Resource.Error(UiText.DynamicString(Constants.ERROR_INPUT_BLANK_TITLE)))
+                Event(Resource.Error(UiText.DynamicString(ERROR_INPUT_BLANK_TITLE)))
             )
             return
         }
 
         if (startingDateInput.isNullOrBlank()) {
             _addWarrantyLiveData.postValue(
-                Event(Resource.Error(UiText.DynamicString(Constants.ERROR_INPUT_BLANK_STARTING_DATE)))
+                Event(Resource.Error(UiText.DynamicString(ERROR_INPUT_BLANK_STARTING_DATE)))
             )
             return
         }
 
         if (!isLifetime && expiryDateInput.isNullOrBlank()) {
             _addWarrantyLiveData.postValue(
-                Event(Resource.Error(UiText.DynamicString(Constants.ERROR_INPUT_BLANK_EXPIRY_DATE)))
+                Event(Resource.Error(UiText.DynamicString(ERROR_INPUT_BLANK_EXPIRY_DATE)))
             )
             return
         }
@@ -159,7 +162,7 @@ class AddWarrantyViewModel @Inject constructor(
             )
         ) {
             _addWarrantyLiveData.postValue(
-                Event(Resource.Error(UiText.DynamicString(Constants.ERROR_INPUT_INVALID_STARTING_DATE)))
+                Event(Resource.Error(UiText.DynamicString(ERROR_INPUT_INVALID_STARTING_DATE)))
             )
             return
         }
