@@ -49,10 +49,11 @@ class PreferencesRepositoryImpl @Inject constructor(
 
     override fun getCurrentAppThemeIndexSynchronously(): Int = runBlocking {
         try {
-            settingsDataStore.data.first()[PreferencesKeys.CURRENT_APP_THEME_INDEX] ?: 0
+            settingsDataStore.data
+                .first()[PreferencesKeys.CURRENT_APP_THEME_INDEX] ?: THEME_INDEX_DEFAULT
         } catch (e: Exception) {
             Timber.e("getCurrentAppThemeIndexSynchronously Exception: $e")
-            0
+            THEME_INDEX_DEFAULT
         }
     }
 
