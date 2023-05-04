@@ -33,6 +33,7 @@ class AuthViewModelTest {
     @Test
     fun getCurrentAppLocaleIndex_returnsDefaultAppLocaleIndex() {
         val defaultAppLocaleIndex = LOCALE_INDEX_ENGLISH_UNITED_STATES
+
         testViewModel.getCurrentAppLocaleIndex()
 
         val responseEvent = testViewModel.currentAppLocaleIndexLiveData.getOrAwaitValue()
@@ -44,6 +45,7 @@ class AuthViewModelTest {
     @Test
     fun changeCurrentAppLocale_returnsNewAppLocaleIndex() {
         val testIndex = LOCALE_INDEX_ENGLISH_GREAT_BRITAIN
+
         testViewModel.changeCurrentAppLocale(testIndex)
         testViewModel.getCurrentAppLocaleIndex()
 

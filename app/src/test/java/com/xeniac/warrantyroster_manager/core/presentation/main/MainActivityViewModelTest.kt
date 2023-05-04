@@ -36,6 +36,7 @@ class MainActivityViewModelTest {
     @Test
     fun getRateAppDialogChoice_returnsDefaultRateAppDialogChoice() {
         val defaultRateAppDialogChoice = 0
+
         testViewModel.getRateAppDialogChoice()
 
         val responseEvent = testViewModel.rateAppDialogChoiceLiveData.getOrAwaitValue()
@@ -46,6 +47,7 @@ class MainActivityViewModelTest {
     @Test
     fun getPreviousRequestTimeInMillis_returnsDefaultPreviousRequestTimeInMillis() {
         val defaultPreviousRequestTimeInMillis = 0L
+
         testViewModel.getPreviousRequestTimeInMillis()
 
         val responseEvent = testViewModel.previousRequestTimeInMillisLiveData.getOrAwaitValue()
@@ -57,6 +59,7 @@ class MainActivityViewModelTest {
     @Test
     fun setRateAppDialogChoice_returnsNewRateAppDialogChoice() {
         val newRateAppDialogChoice = 1
+
         testViewModel.setRateAppDialogChoice(newRateAppDialogChoice)
 
         val responseEvent = testViewModel.rateAppDialogChoiceLiveData.getOrAwaitValue()
