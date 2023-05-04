@@ -89,7 +89,6 @@ class PreferencesRepositoryTest {
     fun fetchInitialPreferences() = testScope.runTest {
         testDataStore.edit { it.clear() }
 
-        val initialCurrentAppTheme = testRepository.getCurrentAppThemeIndex()
         val initialCurrentAppLocaleIndex = testRepository.getCurrentAppLocaleIndex()
         val initialCurrentAppLanguage = testRepository.getCurrentAppLanguage()
         val initialCurrentAppLocaleUiText = testRepository.getCurrentAppLocaleUiText()
@@ -98,11 +97,10 @@ class PreferencesRepositoryTest {
         val initialRateAppDialogChoice = testRepository.getRateAppDialogChoice()
         val initialPreviousRequestTimeInMillis = testRepository.getPreviousRequestTimeInMillis()
 
-        assertThat(initialCurrentAppTheme).isEqualTo(LOCALE_INDEX_DEFAULT_OR_EMPTY)
         assertThat(initialCurrentAppLocaleIndex).isEqualTo(LOCALE_INDEX_DEFAULT_OR_EMPTY)
         assertThat(initialCurrentAppLanguage).isEqualTo(LANGUAGE_DEFAULT_OR_EMPTY)
         assertThat(initialCurrentAppLocaleUiText.asString(context)).isEqualTo(
-            LOCALE_INDEX_DEFAULT_OR_EMPTY
+            LOCALE_INDEX_DEFAULT_OR_EMPTY.toString()
         )
         assertThat(initialCurrentAppThemeIndex).isEqualTo(THEME_INDEX_DEFAULT)
         assertThat(initialCurrentAppThemeUiText.asString(context)).isEqualTo(
