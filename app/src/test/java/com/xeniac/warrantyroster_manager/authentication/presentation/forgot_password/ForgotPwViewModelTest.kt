@@ -1,10 +1,10 @@
-package com.xeniac.warrantyroster_manager.ui.viewmodels
+package com.xeniac.warrantyroster_manager.authentication.presentation.forgot_password
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.SavedStateHandle
 import com.google.common.truth.Truth.assertThat
 import com.xeniac.warrantyroster_manager.MainCoroutineRule
-import com.xeniac.warrantyroster_manager.authentication.presentation.forgot_password.ForgotPwViewModel
-import com.xeniac.warrantyroster_manager.data.repository.FakeUserRepository
+import com.xeniac.warrantyroster_manager.core.data.repository.FakeUserRepository
 import com.xeniac.warrantyroster_manager.getOrAwaitValue
 import com.xeniac.warrantyroster_manager.util.Resource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -29,45 +29,41 @@ class ForgotPwViewModelTest {
     @Before
     fun setUp() {
         fakeUserRepository = FakeUserRepository()
-        testViewModel = ForgotPwViewModel(fakeUserRepository)
+
+        testViewModel = ForgotPwViewModel(
+            fakeUserRepository,
+            SavedStateHandle()
+        )
     }
 
     @Test
-    fun checkForgotPwInputsWithBlankFields_returnsError() {
+    fun validateSendResetPasswordEmailInputsWithBlankFields_returnsError() {
         testViewModel.validateSendResetPasswordEmailInputs("", false)
 
         val responseEvent = testViewModel.sendResetPasswordEmailLiveData.getOrAwaitValue()
+
         assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)
     }
 
     @Test
-    fun checkForgotPwInputsWithInvalidEmail_returnsError() {
+    fun validateSendResetPasswordEmailInputsWithInvalidEmail_returnsError() {
         testViewModel.validateSendResetPasswordEmailInputs("email", false)
 
         val responseEvent = testViewModel.sendResetPasswordEmailLiveData.getOrAwaitValue()
+
         assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)
     }
 
     @Test
-    fun checkForgotPwInputsWithValidInputs_returnsSuccess() = runTest {
+    fun validateSendResetPasswordEmailInputsWithValidInputs_returnsSuccess() = runTest {
         val email = "email@test.com"
+
         fakeUserRepository.addUser(email, "password")
         testViewModel.validateSendResetPasswordEmailInputs(email, false)
 
         val responseEvent = testViewModel.sendResetPasswordEmailLiveData.getOrAwaitValue()
+
         assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Success::class.java)
-    }
-
-    @Test
-    fun sendResetPasswordEmailWithNoInternet_returnsError() {
-        val email = "email@test.com"
-        fakeUserRepository.addUser(email, "password")
-
-        fakeUserRepository.setShouldReturnNetworkError(true)
-        testViewModel.sendResetPasswordEmail(email, false)
-
-        val responseEvent = testViewModel.sendResetPasswordEmailLiveData.getOrAwaitValue()
-        assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)
     }
 
     @Test
@@ -75,18 +71,46 @@ class ForgotPwViewModelTest {
         testViewModel.sendResetPasswordEmail("email@test.com", false)
 
         val responseEvent = testViewModel.sendResetPasswordEmailLiveData.getOrAwaitValue()
+
         assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)
+    }
+
+    @Test
+    fun sendResetPasswordEmailWithValidInputsWithNoInternet_returnsError() {
+        val email = "email@test.com"
+
+        fakeUserRepository.addUser(email, "password")
+        fakeUserRepository.setShouldReturnNetworkError(true)
+        testViewModel.sendResetPasswordEmail(email, false)
+
+        val responseEvent = testViewModel.sendResetPasswordEmailLiveData.getOrAwaitValue()
+
+        assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)
+    }
+
+    @Test
+    fun sendResetPasswordEmailWithValidInputs_returnsSuccess() {
+        val email = "email@test.com"
+
+        fakeUserRepository.addUser(email, "password")
+        testViewModel.sendResetPasswordEmail(email, false)
+
+        val responseEvent = testViewModel.sendResetPasswordEmailLiveData.getOrAwaitValue()
+
+        assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Success::class.java)
     }
 
     @Test
     fun sendResetPasswordEmailWhileTimerIsNotZero_returnsError() {
         val email = "email@test.com"
-        testViewModel.forgotPwEmail = email
-        testViewModel.timerMillisUntilFinished = 1L
+        testViewModel.previousSentEmail = email
+        testViewModel.timerMillisUntilFinished = 10 * 1000L // 10 Seconds
+
         fakeUserRepository.addUser(email, "password")
         testViewModel.sendResetPasswordEmail(email, false)
 
         val responseEvent = testViewModel.sendResetPasswordEmailLiveData.getOrAwaitValue()
+
         assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)
     }
 }

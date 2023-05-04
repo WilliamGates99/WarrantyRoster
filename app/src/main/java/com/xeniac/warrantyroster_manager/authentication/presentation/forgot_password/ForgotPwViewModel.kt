@@ -27,7 +27,9 @@ class ForgotPwViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private var previousSentEmail: String? = null
+    var previousSentEmail: String? = null
+    var timerMillisUntilFinished = 0L
+    
     private var countDownTimer: CountDownTimer? = null
 
     private val _sendResetPasswordEmailLiveData: MutableLiveData<Event<Resource<String>>> =
@@ -78,11 +80,7 @@ class ForgotPwViewModel @Inject constructor(
         _sendResetPasswordEmailLiveData.postValue(Event(Resource.Loading()))
         try {
             val isNotFirstTimeSendingEmail = email == previousSentEmail
-
-            val isTimerNotZero = timerMillisUntilFinishedLiveData.value?.let {
-                it.peekContent() != 0L
-            } ?: false
-
+            val isTimerNotZero = timerMillisUntilFinished != 0L
             val shouldShowTimerIsNotZeroError = isNotFirstTimeSendingEmail && isTimerNotZero
 
             if (shouldShowTimerIsNotZeroError) {
@@ -117,11 +115,13 @@ class ForgotPwViewModel @Inject constructor(
             TIMER_COUNTDOWN_INTERVAL_IN_MILLIS
         ) {
             override fun onTick(millisUntilFinished: Long) {
+                timerMillisUntilFinished = millisUntilFinished
                 _timerMillisUntilFinishedLiveData.postValue(Event(millisUntilFinished))
                 Timber.i(": ${millisUntilFinished / 1000} seconds until timer is finished.")
             }
 
             override fun onFinish() {
+                timerMillisUntilFinished = 0L
                 _timerMillisUntilFinishedLiveData.postValue(Event(0L))
                 _isNotFirstTimeSendingEmailLiveData.postValue(
                     savedStateHandle["isFirstTimeSendingEmail"] ?: false
