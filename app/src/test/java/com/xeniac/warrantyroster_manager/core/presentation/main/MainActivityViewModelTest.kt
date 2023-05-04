@@ -1,11 +1,9 @@
-package com.xeniac.warrantyroster_manager.ui.viewmodels
+package com.xeniac.warrantyroster_manager.core.presentation.main
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.common.truth.Truth.assertThat
 import com.xeniac.warrantyroster_manager.MainCoroutineRule
-import com.xeniac.warrantyroster_manager.core.presentation.main.MainActivityViewModel
-import com.xeniac.warrantyroster_manager.data.repository.FakePreferencesRepository
-import com.xeniac.warrantyroster_manager.data.repository.FakeUserRepository
+import com.xeniac.warrantyroster_manager.core.data.repository.FakePreferencesRepository
 import com.xeniac.warrantyroster_manager.getOrAwaitValue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Before
@@ -21,19 +19,17 @@ class MainActivityViewModelTest {
     @get:Rule
     var mainCoroutineRule = MainCoroutineRule()
 
-    private lateinit var fakeUserRepository: FakeUserRepository
-
     private lateinit var testViewModel: MainActivityViewModel
 
     @Before
     fun setUp() {
-        fakeUserRepository = FakeUserRepository()
         testViewModel = MainActivityViewModel(FakePreferencesRepository())
     }
 
     @Test
     fun isUserLoggedIn_returnsDefaultValue() {
         val isUserLoggedIn = testViewModel.isUserLoggedIn()
+
         assertThat(isUserLoggedIn).isFalse()
     }
 
@@ -43,6 +39,7 @@ class MainActivityViewModelTest {
         testViewModel.getRateAppDialogChoice()
 
         val responseEvent = testViewModel.rateAppDialogChoiceLiveData.getOrAwaitValue()
+
         assertThat(responseEvent.getContentIfNotHandled()).isEqualTo(defaultRateAppDialogChoice)
     }
 
@@ -52,6 +49,7 @@ class MainActivityViewModelTest {
         testViewModel.getPreviousRequestTimeInMillis()
 
         val responseEvent = testViewModel.previousRequestTimeInMillisLiveData.getOrAwaitValue()
+
         assertThat(responseEvent.getContentIfNotHandled())
             .isEqualTo(defaultPreviousRequestTimeInMillis)
     }
@@ -62,6 +60,20 @@ class MainActivityViewModelTest {
         testViewModel.setRateAppDialogChoice(newRateAppDialogChoice)
 
         val responseEvent = testViewModel.rateAppDialogChoiceLiveData.getOrAwaitValue()
+
         assertThat(responseEvent.getContentIfNotHandled()).isEqualTo(newRateAppDialogChoice)
+    }
+
+    @Test
+    fun setPreviousRequestTimeInMillis_returnsNewPreviousRequestTimeInMillis() {
+        val defaultPreviousRequestTimeInMillis = 0L
+
+        testViewModel.setPreviousRequestTimeInMillis()
+        testViewModel.getPreviousRequestTimeInMillis()
+
+        val responseEvent = testViewModel.previousRequestTimeInMillisLiveData.getOrAwaitValue()
+
+        assertThat(responseEvent.getContentIfNotHandled())
+            .isNotEqualTo(defaultPreviousRequestTimeInMillis)
     }
 }
