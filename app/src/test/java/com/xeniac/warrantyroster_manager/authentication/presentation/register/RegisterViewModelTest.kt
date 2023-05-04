@@ -144,7 +144,7 @@ class RegisterViewModelTest {
     }
 
     @Test
-    fun registerWithEmailWithValidInputs_returnsError() {
+    fun registerWithEmailWithValidInputs_returnsSuccess() {
         testViewModel.registerWithEmail("email@test.com", "password")
 
         val responseEvent = testViewModel.registerWithEmailLiveData.getOrAwaitValue()
