@@ -8,6 +8,7 @@ import com.xeniac.warrantyroster_manager.getOrAwaitValue
 import com.xeniac.warrantyroster_manager.onboarding.presentation.onboarding.OnBoardingViewModel
 import com.xeniac.warrantyroster_manager.util.Constants.LOCALE_INDEX_ENGLISH_GREAT_BRITAIN
 import com.xeniac.warrantyroster_manager.util.Constants.LOCALE_INDEX_ENGLISH_UNITED_STATES
+import com.xeniac.warrantyroster_manager.util.Resource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Before
 import org.junit.Rule
@@ -36,6 +37,7 @@ class AuthViewModelTest {
 
         val responseEvent = testViewModel.currentAppLocaleIndexLiveData.getOrAwaitValue()
 
+        assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Success::class.java)
         assertThat(responseEvent.getContentIfNotHandled()?.data).isEqualTo(defaultAppLocaleIndex)
     }
 
@@ -47,6 +49,7 @@ class AuthViewModelTest {
 
         val responseEvent = testViewModel.currentAppLocaleIndexLiveData.getOrAwaitValue()
 
+        assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Success::class.java)
         assertThat(responseEvent.getContentIfNotHandled()?.data).isEqualTo(testIndex)
     }
 }
