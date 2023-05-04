@@ -4,6 +4,7 @@ import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.Source
+import com.xeniac.warrantyroster_manager.BuildConfig
 import com.xeniac.warrantyroster_manager.di.CategoriesCollection
 import com.xeniac.warrantyroster_manager.util.Constants.FIRESTORE_CATEGORIES_COLLECTION_SIZE
 import com.xeniac.warrantyroster_manager.util.Constants.FIRESTORE_CATEGORIES_ICON
@@ -113,7 +114,7 @@ class CategoryRepositoryImpl @Inject constructor(
                     Pair(LOCALE_TAG_ENGLISH_GREAT_BRITAIN, "Miscellaneous"),
                     Pair(LOCALE_TAG_PERSIAN_IRAN, "متفرقه")
                 ),
-                icon = "https://firebasestorage.googleapis.com/v0/b/xeniac-warranty-roster.appspot.com/o/categories%2Fic_category_miscellaneous.svg?alt=media&token=7f3b3abe-403d-4aa1-bc6b-11b203d1fdc4"
+                icon = BuildConfig.CATEGORY_MISCELLANEOUS_ICON
             )
         }
     } catch (e: Exception) {
@@ -125,7 +126,7 @@ class CategoryRepositoryImpl @Inject constructor(
                 Pair(LOCALE_TAG_ENGLISH_GREAT_BRITAIN, "Miscellaneous"),
                 Pair(LOCALE_TAG_PERSIAN_IRAN, "متفرقه")
             ),
-            icon = "https://firebasestorage.googleapis.com/v0/b/xeniac-warranty-roster.appspot.com/o/categories%2Fic_category_miscellaneous.svg?alt=media&token=7f3b3abe-403d-4aa1-bc6b-11b203d1fdc4"
+            icon = BuildConfig.CATEGORY_MISCELLANEOUS_ICON
         )
     }
 
@@ -144,7 +145,7 @@ class CategoryRepositoryImpl @Inject constructor(
                     Pair(LOCALE_TAG_ENGLISH_GREAT_BRITAIN, "Miscellaneous"),
                     Pair(LOCALE_TAG_PERSIAN_IRAN, "متفرقه")
                 ),
-                icon = "https://firebasestorage.googleapis.com/v0/b/xeniac-warranty-roster.appspot.com/o/categories%2Fic_category_miscellaneous.svg?alt=media&token=7f3b3abe-403d-4aa1-bc6b-11b203d1fdc4"
+                icon = BuildConfig.CATEGORY_MISCELLANEOUS_ICON
             )
         }
     } catch (e: Exception) {
@@ -156,7 +157,7 @@ class CategoryRepositoryImpl @Inject constructor(
                 Pair(LOCALE_TAG_ENGLISH_GREAT_BRITAIN, "Miscellaneous"),
                 Pair(LOCALE_TAG_PERSIAN_IRAN, "متفرقه")
             ),
-            icon = "https://firebasestorage.googleapis.com/v0/b/xeniac-warranty-roster.appspot.com/o/categories%2Fic_category_miscellaneous.svg?alt=media&token=7f3b3abe-403d-4aa1-bc6b-11b203d1fdc4"
+            icon = BuildConfig.CATEGORY_MISCELLANEOUS_ICON
         )
     }
 }

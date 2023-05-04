@@ -63,6 +63,12 @@ android {
             properties.getProperty("GOOGLE_AUTH_SERVER_CLIENT_ID")
         )
 
+        buildConfigField(
+            "String",
+            "CATEGORY_MISCELLANEOUS_ICON",
+            properties.getProperty("CATEGORY_MISCELLANEOUS_ICON")
+        )
+
         testInstrumentationRunner = "com.xeniac.warrantyroster_manager.HiltTestRunner"
     }
 
