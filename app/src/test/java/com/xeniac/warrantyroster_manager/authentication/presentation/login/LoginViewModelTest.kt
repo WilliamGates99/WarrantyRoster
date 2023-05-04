@@ -44,8 +44,8 @@ class LoginViewModelTest {
 
         val responseEvent = testViewModel.currentAppLanguageLiveData.getOrAwaitValue()
 
-        assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Success::class.java)
-        assertThat(responseEvent.getContentIfNotHandled()?.data).isEqualTo(defaultAppLanguage)
+        assertThat(responseEvent.peekContent()).isInstanceOf(Resource.Success::class.java)
+        assertThat(responseEvent.peekContent().data).isEqualTo(defaultAppLanguage)
     }
 
     @Test
