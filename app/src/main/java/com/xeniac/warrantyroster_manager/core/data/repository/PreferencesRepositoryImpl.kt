@@ -191,7 +191,7 @@ class PreferencesRepositoryImpl @Inject constructor(
         }
     } catch (e: Exception) {
         Timber.e("getCurrentAppLocaleString Exception: $e")
-        LANGUAGE_DEFAULT_OR_EMPTY
+        LOCALE_TAG_ENGLISH_UNITED_STATES
     }
 
     override suspend fun isUserLoggedIn(isLoggedIn: Boolean) {
