@@ -119,7 +119,7 @@ class LoginViewModelTest {
     }
 
     @Test
-    fun loginWithEmailWithValidCredentialsWithEmailWithNoInternet_returnsError() {
+    fun loginWithEmailWithValidCredentialsWithNoInternet_returnsError() {
         val email = "email@test.com"
         val password = "password"
 
