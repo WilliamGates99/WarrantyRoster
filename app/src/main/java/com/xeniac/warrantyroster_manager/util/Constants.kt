@@ -6,6 +6,17 @@ object Constants {
     const val URL_DONATE = "https://xeniacdev.github.io/donate"
     const val URL_CROWDIN = "https://crowdin.com/project/warranty-roster"
 
+    // APPLOVIN CONSTANTS
+    const val APPLOVIN_INTERSTITIAL_UNIT_ID = "c9d93a2239fc9743"
+    const val APPLOVIN_SETTINGS_NATIVE_UNIT_ID = "a9fa57c943b79d48"
+    const val APPLOVIN_WARRANTIES_NATIVE_UNIT_ID = "f7095c429a9d7575"
+
+    // TAPSELL CONSTANTS
+    const val TAPSELL_KEY = "phbftfiakptpjbkegafmqmmkdsjcjmkldcahhapfssfftdnbgpqeimkjiitfpcoingqkad"
+    const val TAPSELL_INTERSTITIAL_ZONE_ID = "616476f7b2c8056d868b66cb"
+    const val TAPSELL_WARRANTIES_NATIVE_ZONE_ID = "61647159b2c8056d868b66c6"
+    const val TAPSELL_SETTINGS_NATIVE_ZONE_ID = "616b0d4cb2c8056d868b6a1a"
+
     // DataStore Constants
     const val DATASTORE_NAME_SETTINGS = "settings"
     const val DATASTORE_IS_LOGGED_IN_KEY = "isUserLoggedIn"
@@ -54,13 +65,14 @@ object Constants {
     const val FRAGMENT_TAG_EDIT_CALENDAR_STARTING = "fragment_tag_edit_calendar_starting"
     const val FRAGMENT_TAG_EDIT_CALENDAR_EXPIRY = "fragment_tag_edit_calendar_expiry"
 
-    // Firestore Collections ID Constants
-    const val COLLECTION_CATEGORIES = "categories"
-    const val COLLECTION_WARRANTIES = "warranties"
+    // Firestore Collections Constants
+    const val FIRESTORE_CATEGORIES_COLLECTION_SIZE = 22
+    const val COLLECTION_ID_CATEGORIES = "categories"
+    const val COLLECTION_ID_WARRANTIES = "warranties"
 
     // Firestore Categories Collection Fields Constants
-    const val CATEGORIES_TITLE = "title"
-    const val CATEGORIES_ICON = "icon"
+    const val FIRESTORE_CATEGORIES_TITLE = "title"
+    const val FIRESTORE_CATEGORIES_ICON = "icon"
 
     // Firestore Warranties Collection Fields Constants
     const val WARRANTIES_TITLE = "title"

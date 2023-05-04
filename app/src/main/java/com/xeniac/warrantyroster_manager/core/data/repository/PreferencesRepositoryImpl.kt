@@ -49,10 +49,11 @@ class PreferencesRepositoryImpl @Inject constructor(
 
     override fun getCurrentAppThemeIndexSynchronously(): Int = runBlocking {
         try {
-            settingsDataStore.data.first()[PreferencesKeys.CURRENT_APP_THEME_INDEX] ?: 0
+            settingsDataStore.data
+                .first()[PreferencesKeys.CURRENT_APP_THEME_INDEX] ?: THEME_INDEX_DEFAULT
         } catch (e: Exception) {
             Timber.e("getCurrentAppThemeIndexSynchronously Exception: $e")
-            0
+            THEME_INDEX_DEFAULT
         }
     }
 
@@ -73,23 +74,23 @@ class PreferencesRepositoryImpl @Inject constructor(
             LOCALE_INDEX_DEFAULT_OR_EMPTY
         } else {
             val localeString = localeList[0].toString()
-            Timber.i("Current locale is $localeString")
+            Timber.i("Current app locale is $localeString")
 
             when (localeString) {
                 "en_US" -> {
-                    Timber.i("Current locale index is 0 (en_US).")
+                    Timber.i("Current app locale index is 0 (en_US).")
                     LOCALE_INDEX_ENGLISH_UNITED_STATES
                 }
                 "en_GB" -> {
-                    Timber.i("Current locale index is 1 (en_GB).")
+                    Timber.i("Current app locale index is 1 (en_GB).")
                     LOCALE_INDEX_ENGLISH_GREAT_BRITAIN
                 }
                 "fa_IR" -> {
-                    Timber.i("Current locale index is 2 (fa_IR).")
+                    Timber.i("Current app locale index is 2 (fa_IR).")
                     LOCALE_INDEX_PERSIAN_IRAN
                 }
                 else -> {
-                    Timber.i("Current language is System Default.")
+                    Timber.i("Current app locale is System Default.")
                     LOCALE_INDEX_DEFAULT_OR_EMPTY
                 }
             }
@@ -123,7 +124,7 @@ class PreferencesRepositoryImpl @Inject constructor(
             UiText.DynamicString(LOCALE_INDEX_DEFAULT_OR_EMPTY.toString())
         } else {
             val localeString = localeList[0].toString()
-            Timber.i("Current locale is $localeString")
+            Timber.i("Current app locale is $localeString")
 
             when (localeString) {
                 "en_US" -> UiText.StringResource(R.string.settings_text_settings_language_english_us)
@@ -169,6 +170,28 @@ class PreferencesRepositoryImpl @Inject constructor(
     } catch (e: Exception) {
         Timber.e("getPreviousRequestTimeInMillis Exception: $e")
         0L
+    }
+
+    override fun getCategoryTitleMapKey(): String = try {
+        val localeList = AppCompatDelegate.getApplicationLocales()
+
+        if (localeList.isEmpty) {
+            Timber.i("Locale list is Empty. -> Current category title map key is $LOCALE_TAG_ENGLISH_UNITED_STATES")
+            LOCALE_TAG_ENGLISH_UNITED_STATES
+        } else {
+            val localeString = localeList[0].toString()
+            Timber.i("Current app locale is $localeString")
+
+            when (localeString) {
+                "en_US" -> LOCALE_TAG_ENGLISH_UNITED_STATES
+                "en_GB" -> LOCALE_TAG_ENGLISH_GREAT_BRITAIN
+                "fa_IR" -> LOCALE_TAG_PERSIAN_IRAN
+                else -> LOCALE_TAG_ENGLISH_UNITED_STATES
+            }
+        }
+    } catch (e: Exception) {
+        Timber.e("getCurrentAppLocaleString Exception: $e")
+        LOCALE_TAG_ENGLISH_UNITED_STATES
     }
 
     override suspend fun isUserLoggedIn(isLoggedIn: Boolean) {

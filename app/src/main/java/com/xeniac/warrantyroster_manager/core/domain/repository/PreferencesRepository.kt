@@ -22,6 +22,8 @@ interface PreferencesRepository {
 
     suspend fun getPreviousRequestTimeInMillis(): Long
 
+    fun getCategoryTitleMapKey(): String
+
     suspend fun isUserLoggedIn(isLoggedIn: Boolean)
 
     suspend fun setCurrentAppLocale(index: Int): Boolean

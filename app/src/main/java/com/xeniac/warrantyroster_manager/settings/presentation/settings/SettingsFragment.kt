@@ -20,7 +20,6 @@ import com.applovin.mediation.nativeAds.MaxNativeAdLoader
 import com.applovin.mediation.nativeAds.MaxNativeAdView
 import com.applovin.mediation.nativeAds.MaxNativeAdViewBinder
 import com.google.android.material.snackbar.Snackbar
-import com.xeniac.warrantyroster_manager.BuildConfig
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.core.data.repository.NetworkConnectivityObserver
 import com.xeniac.warrantyroster_manager.core.domain.repository.ConnectivityObserver
@@ -29,10 +28,12 @@ import com.xeniac.warrantyroster_manager.core.presentation.main.MainActivity
 import com.xeniac.warrantyroster_manager.databinding.FragmentSettingsBinding
 import com.xeniac.warrantyroster_manager.util.AlertDialogHelper.showOneBtnAlertDialog
 import com.xeniac.warrantyroster_manager.util.AlertDialogHelper.showSingleChoiceItemsDialog
+import com.xeniac.warrantyroster_manager.util.Constants.APPLOVIN_SETTINGS_NATIVE_UNIT_ID
 import com.xeniac.warrantyroster_manager.util.Constants.ERROR_FIREBASE_403
 import com.xeniac.warrantyroster_manager.util.Constants.ERROR_FIREBASE_AUTH_EMAIL_VERIFICATION_EMAIL_NOT_PROVIDED
 import com.xeniac.warrantyroster_manager.util.Constants.ERROR_FIREBASE_DEVICE_BLOCKED
 import com.xeniac.warrantyroster_manager.util.Constants.ERROR_NETWORK_CONNECTION
+import com.xeniac.warrantyroster_manager.util.Constants.TAPSELL_SETTINGS_NATIVE_ZONE_ID
 import com.xeniac.warrantyroster_manager.util.Constants.URL_CROWDIN
 import com.xeniac.warrantyroster_manager.util.Constants.URL_DONATE
 import com.xeniac.warrantyroster_manager.util.Constants.URL_PRIVACY_POLICY
@@ -490,15 +491,14 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
 
     private fun requestAppLovinNativeAd() {
         appLovinNativeAdContainer = binding.flAdContainerNative
-        appLovinAdLoader =
-            MaxNativeAdLoader(
-                BuildConfig.APPLOVIN_SETTINGS_NATIVE_UNIT_ID,
-                requireContext()
-            ).apply {
-                setRevenueListener(this@SettingsFragment)
-                setNativeAdListener(AppLovinNativeAdListener())
-                loadAd(createNativeAdView())
-            }
+        appLovinAdLoader = MaxNativeAdLoader(
+            APPLOVIN_SETTINGS_NATIVE_UNIT_ID,
+            requireContext()
+        ).apply {
+            setRevenueListener(this@SettingsFragment)
+            setNativeAdListener(AppLovinNativeAdListener())
+            loadAd(createNativeAdView())
+        }
     }
 
     private fun createNativeAdView(): MaxNativeAdView {
@@ -555,8 +555,10 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
 
     private fun requestTapsellNativeAd(adHolder: AdHolder) {
         _binding?.let {
-            TapsellPlus.requestNativeAd(requireActivity(),
-                BuildConfig.TAPSELL_SETTINGS_NATIVE_ZONE_ID, object : AdRequestCallback() {
+            TapsellPlus.requestNativeAd(
+                requireActivity(),
+                TAPSELL_SETTINGS_NATIVE_ZONE_ID,
+                object : AdRequestCallback() {
                     override fun response(tapsellPlusAdModel: TapsellPlusAdModel?) {
                         super.response(tapsellPlusAdModel)
                         Timber.i("requestTapsellNativeAd onResponse")
@@ -573,7 +575,8 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
                         Timber.e("requestTapsellNativeAd onError: $error")
                         requestTapsellNativeAd(adHolder)
                     }
-                })
+                }
+            )
         }
     }
 

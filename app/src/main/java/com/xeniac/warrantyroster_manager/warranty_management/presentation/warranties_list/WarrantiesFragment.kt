@@ -25,8 +25,7 @@ import com.xeniac.warrantyroster_manager.util.Constants.ERROR_FIREBASE_DEVICE_BL
 import com.xeniac.warrantyroster_manager.util.Resource
 import com.xeniac.warrantyroster_manager.util.SnackBarHelper.showFirebaseDeviceBlockedError
 import com.xeniac.warrantyroster_manager.util.SnackBarHelper.showSomethingWentWrongError
-import com.xeniac.warrantyroster_manager.warranty_management.data.remote.dto.Warranty
-import com.xeniac.warrantyroster_manager.warranty_management.presentation.WarrantyViewModel
+import com.xeniac.warrantyroster_manager.warranty_management.domain.model.Warranty
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -36,7 +35,7 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
     private var _binding: FragmentWarrantiesBinding? = null
     val binding get() = _binding!!
 
-    lateinit var viewModel: WarrantyViewModel
+    lateinit var viewModel: WarrantiesViewModel
 
     @Inject
     lateinit var warrantyAdapter: WarrantyAdapter
@@ -49,12 +48,12 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentWarrantiesBinding.bind(view)
-        viewModel = ViewModelProvider(requireActivity())[WarrantyViewModel::class.java]
+        viewModel = ViewModelProvider(requireActivity())[WarrantiesViewModel::class.java]
 
-        setupRecyclerView()
         subscribeToObservers()
+        getAllCategoriesList()
         retryNetworkBtn()
-        getCategoriesFromFirestore()
+        setupRecyclerView()
         setupSearchView()
     }
 
@@ -69,30 +68,16 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
         binding.searchView.onActionViewCollapsed()
     }
 
-    private fun setupRecyclerView() {
-        warrantyAdapter.apply {
-            setOnWarrantyItemClickListener(this@WarrantiesFragment)
-            activity = requireActivity()
-            context = requireContext()
-            warrantyViewModel = viewModel
-        }
-        binding.rv.adapter = warrantyAdapter
-    }
-
     private fun subscribeToObservers() {
         categoriesListObserver()
         warrantiesListObserver()
         searchWarrantiesObserver()
     }
 
-    private fun retryNetworkBtn() = binding.btnNetworkRetry.setOnClickListener {
-        getCategoriesFromFirestore()
-    }
+    private fun getAllCategoriesList() = viewModel.getAllCategoriesList()
 
-    private fun getCategoriesFromFirestore() = viewModel.getCategoriesFromFirestore()
-
-    private fun categoriesListObserver() {
-        viewModel.categoriesLiveData.observe(viewLifecycleOwner) { responseEvent ->
+    private fun categoriesListObserver() =
+        viewModel.categoriesListLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.peekContent().let { response ->
                 when (response) {
                     is Resource.Loading -> showLoadingAnimation()
@@ -101,7 +86,10 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
                         response.message?.asString(requireContext())?.let {
                             when {
                                 it.contains(ERROR_EMPTY_CATEGORY_LIST) -> {
-                                    getCategoriesFromFirestore()
+                                    binding.tvNetworkError.text = requireContext().getString(
+                                        R.string.error_something_went_wrong
+                                    )
+                                    showNetworkError()
                                 }
                                 it.contains(ERROR_FIREBASE_403) -> {
                                     binding.tvNetworkError.text =
@@ -125,12 +113,11 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
                 }
             }
         }
-    }
 
     private fun getWarrantiesListFromFirestore() = viewModel.getWarrantiesListFromFirestore()
 
     private fun warrantiesListObserver() {
-        viewModel.warrantiesLiveData.observe(viewLifecycleOwner) { responseEvent ->
+        viewModel.warrantiesListLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
                     is Resource.Loading -> showLoadingAnimation()
@@ -168,6 +155,20 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
                 }
             }
         }
+    }
+
+    private fun retryNetworkBtn() = binding.btnNetworkRetry.setOnClickListener {
+        getAllCategoriesList()
+    }
+
+    private fun setupRecyclerView() {
+        warrantyAdapter.apply {
+            setOnWarrantyItemClickListener(this@WarrantiesFragment)
+            activity = requireActivity()
+            context = requireContext()
+            warrantiesViewModel = viewModel
+        }
+        binding.rv.adapter = warrantyAdapter
     }
 
     private fun setupSearchView() = binding.apply {

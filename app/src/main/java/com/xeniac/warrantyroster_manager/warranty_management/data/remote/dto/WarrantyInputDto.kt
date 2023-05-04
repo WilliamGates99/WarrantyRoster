@@ -3,7 +3,7 @@ package com.xeniac.warrantyroster_manager.warranty_management.data.remote.dto
 import androidx.annotation.Keep
 
 @Keep
-data class WarrantyInput(
+data class WarrantyInputDto(
     val title: String,
     val brand: String?,
     val model: String?,

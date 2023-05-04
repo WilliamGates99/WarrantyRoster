@@ -49,8 +49,7 @@ import com.xeniac.warrantyroster_manager.util.SnackBarHelper.showFirebaseDeviceB
 import com.xeniac.warrantyroster_manager.util.SnackBarHelper.showNetworkFailureError
 import com.xeniac.warrantyroster_manager.util.SnackBarHelper.showSomethingWentWrongError
 import com.xeniac.warrantyroster_manager.util.SnackBarHelper.showUnavailableNetworkConnectionError
-import com.xeniac.warrantyroster_manager.warranty_management.data.remote.dto.Category
-import com.xeniac.warrantyroster_manager.warranty_management.presentation.WarrantyViewModel
+import com.xeniac.warrantyroster_manager.warranty_management.domain.model.Category
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -66,7 +65,7 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
     private var _binding: FragmentAddWarrantyBinding? = null
     val binding get() = _binding!!
 
-    lateinit var viewModel: WarrantyViewModel
+    lateinit var viewModel: AddWarrantyViewModel
 
     @Inject
     lateinit var imageLoader: ImageLoader
@@ -90,14 +89,15 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentAddWarrantyBinding.bind(view)
-        viewModel = ViewModelProvider(requireActivity())[WarrantyViewModel::class.java]
+        viewModel = ViewModelProvider(requireActivity())[AddWarrantyViewModel::class.java]
         connectivityObserver = NetworkConnectivityObserver(requireContext())
 
         networkConnectivityObserver()
         textInputsBackgroundColor()
         textInputsStrokeColor()
         subscribeToObservers()
-        categoryDropDownSelection()
+        setupCategoryDropDown()
+        categoryDropDownOnItemClick()
         categoryDropDownOnDismiss()
         lifetimeWarrantyCheckBoxListener()
         startingDatePickerOnFocusListener()
@@ -114,7 +114,7 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
 
     override fun onResume() {
         super.onResume()
-        categoryDropDown()
+        setupCategoryDropDown()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -189,10 +189,9 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
                 }
 
                 it.getString(SAVE_INSTANCE_ADD_WARRANTY_CATEGORY_ID)?.let { restoredCategoryId ->
-                    selectedCategory = viewModel.getCategoryById(restoredCategoryId)
-
+                    selectedCategory = getCategoryById(restoredCategoryId)
                     selectedCategory?.let { category ->
-                        binding.tiDdCategory.setText(category.title[viewModel.getCategoryTitleMapKey()])
+                        binding.tiDdCategory.setText(category.title[getCategoryTitleMapKey()])
                         loadCategoryIcon(category.icon)
                     }
                 }
@@ -332,24 +331,37 @@ class AddWarrantyFragment : Fragment(R.layout.fragment_add_warranty) {
         addWarrantyObserver()
     }
 
-    private fun categoryDropDown() = binding.tiDdCategory.setAdapter(
-        ArrayAdapter(requireContext(), R.layout.dropdown_category, viewModel.getAllCategoryTitles())
+    private fun setupCategoryDropDown() = binding.tiDdCategory.setAdapter(
+        ArrayAdapter(
+            requireContext(),
+            R.layout.dropdown_category,
+            getAllCategoryTitles()
+        )
     )
 
-    private fun categoryDropDownSelection() =
+    private fun categoryDropDownOnItemClick() =
         binding.tiDdCategory.setOnItemClickListener { adapterView, _, position, _ ->
             val categoryTitle = adapterView.getItemAtPosition(position).toString()
-            selectedCategory = viewModel.getCategoryByTitle(categoryTitle)
+            selectedCategory = getCategoryByTitle(categoryTitle)
             selectedCategory?.let { loadCategoryIcon(it.icon) }
         }
-
-    private fun loadCategoryIcon(categoryIcon: String) = loadCategoryImage(
-        requireContext(), categoryIcon, imageLoader, binding.ivIconCategory, binding.cpiIconCategory
-    )
 
     private fun categoryDropDownOnDismiss() = binding.tiDdCategory.setOnDismissListener {
         binding.tiDdCategory.clearFocus()
     }
+
+    private fun getAllCategoryTitles() = viewModel.getAllCategoryTitles(getCategoryTitleMapKey())
+
+    private fun getCategoryTitleMapKey() = viewModel.getCategoryTitleMapKey()
+
+    private fun getCategoryByTitle(categoryTitle: String) =
+        viewModel.getCategoryByTitle(categoryTitle)
+
+    private fun getCategoryById(categoryId: String) = viewModel.getCategoryById(categoryId)
+
+    private fun loadCategoryIcon(categoryIcon: String) = loadCategoryImage(
+        requireContext(), categoryIcon, imageLoader, binding.ivIconCategory, binding.cpiIconCategory
+    )
 
     private fun lifetimeWarrantyCheckBoxListener() =
         binding.cbLifetime.setOnCheckedChangeListener { _, isChecked ->
