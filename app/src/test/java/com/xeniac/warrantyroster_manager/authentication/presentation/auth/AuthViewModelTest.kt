@@ -49,5 +49,4 @@ class AuthViewModelTest {
 
         assertThat(responseEvent.getContentIfNotHandled()?.data).isEqualTo(testIndex)
     }
-
 }
