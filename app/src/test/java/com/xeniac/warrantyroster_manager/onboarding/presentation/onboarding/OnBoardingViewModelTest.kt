@@ -37,8 +37,8 @@ class OnBoardingViewModelTest {
 
         val responseEvent = testViewModel.currentAppLocaleIndexLiveData.getOrAwaitValue()
 
-        assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Success::class.java)
-        assertThat(responseEvent.getContentIfNotHandled()?.data).isEqualTo(defaultAppLocaleIndex)
+        assertThat(responseEvent.peekContent()).isInstanceOf(Resource.Success::class.java)
+        assertThat(responseEvent.peekContent().data).isEqualTo(defaultAppLocaleIndex)
     }
 
     @Test
@@ -50,7 +50,7 @@ class OnBoardingViewModelTest {
 
         val responseEvent = testViewModel.currentAppLocaleIndexLiveData.getOrAwaitValue()
 
-        assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Success::class.java)
-        assertThat(responseEvent.getContentIfNotHandled()?.data).isEqualTo(testIndex)
+        assertThat(responseEvent.peekContent()).isInstanceOf(Resource.Success::class.java)
+        assertThat(responseEvent.peekContent().data).isEqualTo(testIndex)
     }
 }
