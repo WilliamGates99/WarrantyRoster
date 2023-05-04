@@ -19,13 +19,14 @@ import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.play.core.review.ReviewInfo
 import com.google.android.play.core.review.ReviewManager
 import com.google.android.play.core.review.ReviewManagerFactory
-import com.xeniac.warrantyroster_manager.BuildConfig
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.core.presentation.landing.LandingActivity
 import com.xeniac.warrantyroster_manager.databinding.ActivityMainBinding
 import com.xeniac.warrantyroster_manager.util.AlertDialogHelper.showThreeBtnAlertDialog
+import com.xeniac.warrantyroster_manager.util.Constants.APPLOVIN_INTERSTITIAL_UNIT_ID
 import com.xeniac.warrantyroster_manager.util.Constants.IN_APP_REVIEWS_DAYS_FROM_FIRST_INSTALL_TIME
 import com.xeniac.warrantyroster_manager.util.Constants.IN_APP_REVIEWS_DAYS_FROM_PREVIOUS_REQUEST_TIME
+import com.xeniac.warrantyroster_manager.util.Constants.TAPSELL_INTERSTITIAL_ZONE_ID
 import com.xeniac.warrantyroster_manager.util.DateHelper.getDaysFromFirstInstallTime
 import com.xeniac.warrantyroster_manager.util.DateHelper.getDaysFromPreviousRequestTime
 import dagger.hilt.android.AndroidEntryPoint
@@ -248,7 +249,7 @@ class MainActivity : AppCompatActivity(), MaxAdListener {
     }
 
     fun requestAppLovinInterstitial() {
-        appLovinAd = MaxInterstitialAd(BuildConfig.APPLOVIN_INTERSTITIAL_UNIT_ID, this).apply {
+        appLovinAd = MaxInterstitialAd(APPLOVIN_INTERSTITIAL_UNIT_ID, this).apply {
             setListener(this@MainActivity)
             loadAd()
         }
@@ -282,8 +283,10 @@ class MainActivity : AppCompatActivity(), MaxAdListener {
     }
 
     private fun requestTapsellInterstitial() {
-        TapsellPlus.requestInterstitialAd(this,
-            BuildConfig.TAPSELL_INTERSTITIAL_ZONE_ID, object : AdRequestCallback() {
+        TapsellPlus.requestInterstitialAd(
+            this,
+            TAPSELL_INTERSTITIAL_ZONE_ID,
+            object : AdRequestCallback() {
                 override fun response(tapsellPlusAdModel: TapsellPlusAdModel?) {
                     super.response(tapsellPlusAdModel)
                     Timber.i("requestTapsellInterstitial onResponse")
@@ -294,6 +297,7 @@ class MainActivity : AppCompatActivity(), MaxAdListener {
                     super.error(error)
                     Timber.e("requestTapsellInterstitial onError: $error")
                 }
-            })
+            }
+        )
     }
 }

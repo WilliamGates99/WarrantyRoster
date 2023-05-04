@@ -18,7 +18,8 @@ plugins {
 val properties = gradleLocalProperties(rootDir)
 
 applovin {
-    apiKey = properties.getProperty("APPLOVIN_API_KEY")
+    apiKey =
+        "wPNW70TAHp3xrcTl2HOeZEpvt5kn19fKosui1hEugVWrFDKCh_411hghugSX5ln5ewRrMMRB8W1Ce_S3hcPh4c"
 }
 
 android {
@@ -43,11 +44,13 @@ android {
             "fb_login_protocol_scheme",
             properties.getProperty("FACEBOOK_AUTH_LOGIN_PROTOCOL_SCHEME")
         )
+
         resValue(
             "string",
             "facebook_app_id",
             properties.getProperty("FACEBOOK_AUTH_APP_ID")
         )
+
         resValue(
             "string",
             "facebook_client_token",
@@ -58,41 +61,6 @@ android {
             "String",
             "GOOGLE_AUTH_SERVER_CLIENT_ID",
             properties.getProperty("GOOGLE_AUTH_SERVER_CLIENT_ID")
-        )
-        buildConfigField(
-            "String",
-            "APPLOVIN_INTERSTITIAL_UNIT_ID",
-            properties.getProperty("APPLOVIN_INTERSTITIAL_UNIT_ID")
-        )
-        buildConfigField(
-            "String",
-            "APPLOVIN_SETTINGS_NATIVE_UNIT_ID",
-            properties.getProperty("APPLOVIN_SETTINGS_NATIVE_UNIT_ID")
-        )
-        buildConfigField(
-            "String",
-            "APPLOVIN_WARRANTIES_NATIVE_UNIT_ID",
-            properties.getProperty("APPLOVIN_WARRANTIES_NATIVE_UNIT_ID")
-        )
-        buildConfigField(
-            "String",
-            "TAPSELL_KEY",
-            properties.getProperty("TAPSELL_KEY")
-        )
-        buildConfigField(
-            "String",
-            "TAPSELL_INTERSTITIAL_ZONE_ID",
-            properties.getProperty("TAPSELL_INTERSTITIAL_ZONE_ID")
-        )
-        buildConfigField(
-            "String",
-            "TAPSELL_WARRANTIES_NATIVE_ZONE_ID",
-            properties.getProperty("TAPSELL_WARRANTIES_NATIVE_ZONE_ID")
-        )
-        buildConfigField(
-            "String",
-            "TAPSELL_SETTINGS_NATIVE_ZONE_ID",
-            properties.getProperty("TAPSELL_SETTINGS_NATIVE_ZONE_ID")
         )
 
         testInstrumentationRunner = "com.xeniac.warrantyroster_manager.HiltTestRunner"
@@ -147,12 +115,12 @@ android {
             buildConfigField(
                 "String",
                 "URL_APP_STORE",
-                properties.getProperty("URL_PLAY_STORE")
+                "\"https://play.google.com/store/apps/details?id=com.xeniac.warrantyroster_manager\""
             )
             buildConfigField(
                 "String",
                 "PACKAGE_NAME_APP_STORE",
-                properties.getProperty("PACKAGE_NAME_PLAY_STORE")
+                "\"com.android.vending\""
             )
         }
 
@@ -161,12 +129,12 @@ android {
             buildConfigField(
                 "String",
                 "URL_APP_STORE",
-                properties.getProperty("URL_AMAZON")
+                "\"https://www.amazon.com/gp/product/B09PSK6W9Z\""
             )
             buildConfigField(
                 "String",
                 "PACKAGE_NAME_APP_STORE",
-                properties.getProperty("PACKAGE_NAME_AMAZON")
+                "\"com.amazon.venezia\""
             )
         }
 
@@ -175,12 +143,12 @@ android {
             buildConfigField(
                 "String",
                 "URL_APP_STORE",
-                properties.getProperty("URL_CAFEBAZAAR")
+                "\"https://cafebazaar.ir/app/com.xeniac.warrantyroster_manager\""
             )
             buildConfigField(
                 "String",
                 "PACKAGE_NAME_APP_STORE",
-                properties.getProperty("PACKAGE_NAME_CAFEBAZAAR")
+                "\"com.farsitel.bazaar\""
             )
         }
     }
