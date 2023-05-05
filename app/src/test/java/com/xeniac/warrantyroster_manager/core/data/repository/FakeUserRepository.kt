@@ -21,13 +21,15 @@ class FakeUserRepository : UserRepository {
     fun addUser(
         email: String,
         password: String? = null,
-        providerIds: MutableList<String> = mutableListOf()
+        providerIds: MutableList<String> = mutableListOf(),
+        isEmailVerified: Boolean = false
     ) {
         users.add(
             TestUserDto(
                 email = email,
                 password = password,
-                providerIds = providerIds
+                providerIds = providerIds,
+                isEmailVerified = isEmailVerified
             ).toTestUser()
         )
     }
@@ -69,7 +71,8 @@ class FakeUserRepository : UserRepository {
             if (userDoesNotExist) {
                 addUser(
                     email = account.email.toString(),
-                    providerIds = mutableListOf(FIREBASE_AUTH_PROVIDER_ID_GOOGLE)
+                    providerIds = mutableListOf(FIREBASE_AUTH_PROVIDER_ID_GOOGLE),
+                    isEmailVerified = true
                 )
             } else {
                 val isUserNotLinkedToGoogle = !user!!.providerIds.contains(
@@ -179,7 +182,10 @@ class FakeUserRepository : UserRepository {
             )
 
             if (isUserNotLinkedToGoogle) {
-                users[0].providerIds.add(FIREBASE_AUTH_PROVIDER_ID_GOOGLE)
+                users[0].apply {
+                    providerIds.add(FIREBASE_AUTH_PROVIDER_ID_GOOGLE)
+                    isEmailVerified = true
+                }
             }
         }
     }
@@ -207,7 +213,10 @@ class FakeUserRepository : UserRepository {
             )
 
             if (isUserNotLinkedToTwitter) {
-                users[0].providerIds.add(FIREBASE_AUTH_PROVIDER_ID_TWITTER)
+                users[0].apply {
+                    providerIds.add(FIREBASE_AUTH_PROVIDER_ID_TWITTER)
+                    isEmailVerified = true
+                }
             }
         }
     }
@@ -235,7 +244,10 @@ class FakeUserRepository : UserRepository {
             )
 
             if (isUserNotLinkedToFacebook) {
-                users[0].providerIds.add(FIREBASE_AUTH_PROVIDER_ID_FACEBOOK)
+                users[0].apply {
+                    providerIds.add(FIREBASE_AUTH_PROVIDER_ID_FACEBOOK)
+                    isEmailVerified = true
+                }
             }
         }
     }
