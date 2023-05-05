@@ -32,7 +32,10 @@ class ChangeEmailViewModelTest {
 
     @Test
     fun validateChangeEmailInputsWithBlankFields_returnsError() {
-        testViewModel.validateChangeEmailInputs("", "")
+        testViewModel.validateChangeEmailInputs(
+            password = "",
+            newEmail = ""
+        )
 
         val responseEvent = testViewModel.validateInputsLiveData.getOrAwaitValue()
 
@@ -41,7 +44,10 @@ class ChangeEmailViewModelTest {
 
     @Test
     fun validateChangeEmailInputsWithBlankPassword_returnsError() {
-        testViewModel.validateChangeEmailInputs("", "email@test.com")
+        testViewModel.validateChangeEmailInputs(
+            password = "",
+            newEmail = "email@test.com"
+        )
 
         val responseEvent = testViewModel.validateInputsLiveData.getOrAwaitValue()
 
@@ -50,7 +56,10 @@ class ChangeEmailViewModelTest {
 
     @Test
     fun validateChangeEmailInputsWithBlankNewEmail_returnsError() {
-        testViewModel.validateChangeEmailInputs("password", "")
+        testViewModel.validateChangeEmailInputs(
+            password = "password",
+            newEmail = ""
+        )
 
         val responseEvent = testViewModel.validateInputsLiveData.getOrAwaitValue()
 
@@ -59,7 +68,10 @@ class ChangeEmailViewModelTest {
 
     @Test
     fun validateChangeEmailInputsWithInvalidNewEmail_returnsError() {
-        testViewModel.validateChangeEmailInputs("password", "email")
+        testViewModel.validateChangeEmailInputs(
+            password = "password",
+            newEmail = "email"
+        )
 
         val responseEvent = testViewModel.validateInputsLiveData.getOrAwaitValue()
 
