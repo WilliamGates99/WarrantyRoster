@@ -32,6 +32,10 @@ class ChangeEmailViewModelTest {
 
     @Test
     fun validateChangeEmailInputsWithBlankFields_returnsError() {
+        val email = "email@test.com"
+        val password = "password"
+
+        fakeUserRepository.addUser(email, password)
         testViewModel.validateChangeEmailInputs(
             password = "",
             newEmail = ""
@@ -44,9 +48,14 @@ class ChangeEmailViewModelTest {
 
     @Test
     fun validateChangeEmailInputsWithBlankPassword_returnsError() {
+        val email = "email@test.com"
+        val password = "password"
+        val newEmail = "new_email@test.com"
+
+        fakeUserRepository.addUser(email, password)
         testViewModel.validateChangeEmailInputs(
             password = "",
-            newEmail = "email@test.com"
+            newEmail = newEmail
         )
 
         val responseEvent = testViewModel.validateInputsLiveData.getOrAwaitValue()
@@ -56,8 +65,12 @@ class ChangeEmailViewModelTest {
 
     @Test
     fun validateChangeEmailInputsWithBlankNewEmail_returnsError() {
+        val email = "email@test.com"
+        val password = "password"
+
+        fakeUserRepository.addUser(email, password)
         testViewModel.validateChangeEmailInputs(
-            password = "password",
+            password = password,
             newEmail = ""
         )
 
@@ -68,9 +81,14 @@ class ChangeEmailViewModelTest {
 
     @Test
     fun validateChangeEmailInputsWithInvalidNewEmail_returnsError() {
+        val email = "email@test.com"
+        val password = "password"
+        val newEmail = "new_email"
+
+        fakeUserRepository.addUser(email, password)
         testViewModel.validateChangeEmailInputs(
-            password = "password",
-            newEmail = "email"
+            password = password,
+            newEmail = newEmail
         )
 
         val responseEvent = testViewModel.validateInputsLiveData.getOrAwaitValue()
@@ -84,7 +102,10 @@ class ChangeEmailViewModelTest {
         val password = "password"
 
         fakeUserRepository.addUser(email, password)
-        testViewModel.validateChangeEmailInputs(password, email)
+        testViewModel.validateChangeEmailInputs(
+            password = password,
+            newEmail = email
+        )
 
         val responseEvent = testViewModel.validateInputsLiveData.getOrAwaitValue()
 
@@ -98,7 +119,10 @@ class ChangeEmailViewModelTest {
         val newEmail = "new_email@test.com"
 
         fakeUserRepository.addUser(email, password)
-        testViewModel.validateChangeEmailInputs(password, newEmail)
+        testViewModel.validateChangeEmailInputs(
+            password = password,
+            newEmail = newEmail
+        )
 
         val responseEvent = testViewModel.validateInputsLiveData.getOrAwaitValue()
 
