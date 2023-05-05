@@ -200,6 +200,8 @@ class FakeUserRepository : UserRepository {
 
             if (isUserLinkedToGoogle) {
                 users[0].providerIds.remove(FIREBASE_AUTH_PROVIDER_ID_GOOGLE)
+            } else {
+                throw Exception()
             }
         }
     }
@@ -231,6 +233,8 @@ class FakeUserRepository : UserRepository {
 
             if (isUserLinkedToTwitter) {
                 users[0].providerIds.remove(FIREBASE_AUTH_PROVIDER_ID_TWITTER)
+            } else {
+                throw Exception()
             }
         }
     }
@@ -262,6 +266,8 @@ class FakeUserRepository : UserRepository {
 
             if (isUserLinkedToFacebook) {
                 users[0].providerIds.remove(FIREBASE_AUTH_PROVIDER_ID_FACEBOOK)
+            } else {
+                throw Exception()
             }
         }
     }
