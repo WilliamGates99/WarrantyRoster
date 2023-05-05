@@ -79,7 +79,6 @@ class WarrantiesViewModelTest {
     @Test
     fun getCategoryById_returnsCategory() {
         val id = "3"
-
         val testCategory = Category(
             id = id,
             title = mapOf(Pair(LOCALE_TAG_ENGLISH_UNITED_STATES, "Title $id")),
