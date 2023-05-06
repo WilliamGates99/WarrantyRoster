@@ -1,28 +1,32 @@
-package com.xeniac.warrantyroster_manager.ui.fragments.auth
+package com.xeniac.warrantyroster_manager.authentication.presentation.forgot_password
 
 import android.content.Context
 import android.os.Bundle
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.core.view.isVisible
+import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.Navigation
 import androidx.navigation.testing.TestNavHostController
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.pressBackUnconditionally
+import androidx.test.espresso.action.ViewActions.scrollTo
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.google.common.truth.Truth.assertThat
 import com.xeniac.warrantyroster_manager.R
-import com.xeniac.warrantyroster_manager.authentication.presentation.forgot_password.ForgotPwSentFragment
-import com.xeniac.warrantyroster_manager.data.repository.FakeUserRepository
+import com.xeniac.warrantyroster_manager.authentication.presentation.login.LoginFragmentDirections
+import com.xeniac.warrantyroster_manager.core.data.repository.FakeUserRepository
 import com.xeniac.warrantyroster_manager.databinding.FragmentForgotPwSentBinding
 import com.xeniac.warrantyroster_manager.getOrAwaitValue
 import com.xeniac.warrantyroster_manager.launchFragmentInHiltContainer
-import com.xeniac.warrantyroster_manager.authentication.presentation.forgot_password.ForgotPwViewModel
 import com.xeniac.warrantyroster_manager.util.Resource
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import org.hamcrest.Matchers.not
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -47,7 +51,6 @@ class ForgotPwSentFragmentTest {
 
     private val email = "email@test.com"
 
-    /*
     @Before
     fun setUp() {
         hiltRule.inject()
@@ -57,9 +60,13 @@ class ForgotPwSentFragmentTest {
 
         fakeUserRepository = FakeUserRepository()
         fakeUserRepository.addUser(email, "password")
-        testViewModel = ForgotPwViewModel(fakeUserRepository)
 
-        navController.setGraph(R.navigation.nav_graph_landing)
+        testViewModel = ForgotPwViewModel(
+            fakeUserRepository,
+            SavedStateHandle()
+        )
+
+        navController.setGraph(R.navigation.nav_graph_auth)
         navController.navigate(LoginFragmentDirections.actionLoginFragmentToForgotPasswordFragment())
         navController.navigate(
             ForgotPwFragmentDirections.actionForgotPasswordFragmentToForgotPwSentFragment(email)
@@ -76,42 +83,72 @@ class ForgotPwSentFragmentTest {
 
     @Test
     fun pressBack_popsBackStack() {
-        pressBack()
+        pressBackUnconditionally()
+
         assertThat(navController.currentDestination?.id).isEqualTo(R.id.loginFragment)
     }
 
     @Test
     fun clickOnReturnBtn_popsBackStack() {
-        onView(withId(testBinding.btnReturn.id)).perform(click())
+        onView(withId(testBinding.btnReturn.id))
+            .perform(scrollTo())
+            .check(matches(isDisplayed()))
+            .perform(click())
+
         assertThat(navController.currentDestination?.id).isEqualTo(R.id.loginFragment)
     }
 
     @Test
     fun clickOnResendBtnWithRemainingTimer_returnsError() {
-        testViewModel.forgotPwEmail = email
-        testViewModel.timerMillisUntilFinished = 10L
-        onView(withId(testBinding.btnResend.id)).perform(click())
+        testViewModel.previousSentEmail = email
+        testViewModel.timerMillisUntilFinished = 10 * 1000L // 10 Seconds
+
+        onView(withId(testBinding.btnResend.id))
+            .perform(scrollTo())
+            .check(matches(isDisplayed()))
+            .perform(click())
 
         val responseEvent = testViewModel.sendResetPasswordEmailLiveData.getOrAwaitValue()
+
         assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)
     }
 
     @Test
     fun clickOnResendBtnWithSuccessStatus_returnsSuccess() {
-        onView(withId(testBinding.btnResend.id)).perform(click())
+        onView(withId(testBinding.btnResend.id))
+            .perform(scrollTo())
+            .check(matches(isDisplayed()))
+            .perform(click())
 
         val responseEvent = testViewModel.sendResetPasswordEmailLiveData.getOrAwaitValue()
+
         assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Success::class.java)
     }
 
     @Test
-    fun timerWith0RemainingTime_showsGroupResend() {
-        testBinding.apply {
-            onView(withId(btnResend.id)).perform(click())
+    fun clickOnResendBtnWithErrorStatus_hidesTimer() {
+        testViewModel.previousSentEmail = email
+        testViewModel.timerMillisUntilFinished = 10 * 1000L // 10 Seconds
 
-            assertThat(groupTimer.isVisible).isFalse()
-            assertThat(groupResend.isVisible).isTrue()
-        }
+        onView(withId(testBinding.btnResend.id))
+            .perform(scrollTo())
+            .check(matches(isDisplayed()))
+            .perform(click())
+
+        assertThat(testBinding.isTimerTicking).isFalse()
+        onView(withId(testBinding.tvTimer.id)).check(matches(not(isDisplayed())))
+        onView(withText(context.getString(R.string.forgot_pw_sent_text_resend)))
+            .check(matches(isDisplayed()))
     }
-     */
+
+    @Test
+    fun clickOnResendBtnWithSuccessStatus_startsTimer() {
+        onView(withId(testBinding.btnResend.id))
+            .perform(scrollTo())
+            .check(matches(isDisplayed()))
+            .perform(click())
+
+        assertThat(testBinding.isTimerTicking).isTrue()
+        onView(withId(testBinding.tvTimer.id)).check(matches(isDisplayed()))
+    }
 }
