@@ -167,21 +167,29 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     private fun textInputsBackgroundColor() = binding.apply {
         tiEditEmail.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                tiLayoutEmail.boxBackgroundColor =
-                    ContextCompat.getColor(requireContext(), R.color.background)
+                tiLayoutEmail.boxBackgroundColor = ContextCompat.getColor(
+                    requireContext(),
+                    R.color.background
+                )
             } else {
-                tiLayoutEmail.boxBackgroundColor =
-                    ContextCompat.getColor(requireContext(), R.color.grayLight)
+                tiLayoutEmail.boxBackgroundColor = ContextCompat.getColor(
+                    requireContext(),
+                    R.color.grayLight
+                )
             }
         }
 
         tiEditPassword.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                tiLayoutPassword.boxBackgroundColor =
-                    ContextCompat.getColor(requireContext(), R.color.background)
+                tiLayoutPassword.boxBackgroundColor = ContextCompat.getColor(
+                    requireContext(),
+                    R.color.background
+                )
             } else {
-                tiLayoutPassword.boxBackgroundColor =
-                    ContextCompat.getColor(requireContext(), R.color.grayLight)
+                tiLayoutPassword.boxBackgroundColor = ContextCompat.getColor(
+                    requireContext(),
+                    R.color.grayLight
+                )
             }
         }
     }
@@ -189,12 +197,18 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     private fun textInputsStrokeColor() = binding.apply {
         tiEditEmail.addTextChangedListener {
             tiLayoutEmail.isErrorEnabled = false
-            tiLayoutEmail.boxStrokeColor = ContextCompat.getColor(requireContext(), R.color.blue)
+            tiLayoutEmail.boxStrokeColor = ContextCompat.getColor(
+                requireContext(),
+                R.color.blue
+            )
         }
 
         tiEditPassword.addTextChangedListener {
             tiLayoutPassword.isErrorEnabled = false
-            tiLayoutPassword.boxStrokeColor = ContextCompat.getColor(requireContext(), R.color.blue)
+            tiLayoutPassword.boxStrokeColor = ContextCompat.getColor(
+                requireContext(),
+                R.color.blue
+            )
         }
     }
 
