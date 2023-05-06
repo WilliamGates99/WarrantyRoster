@@ -135,9 +135,8 @@ class ForgotPwSentFragmentTest {
             .check(matches(isDisplayed()))
             .perform(click())
 
-        assertThat(testBinding.isTimerTicking).isFalse()
         onView(withId(testBinding.tvTimer.id)).check(matches(not(isDisplayed())))
-        onView(withText(context.getString(R.string.forgot_pw_sent_text_resend)))
+        onView(withText(context.getString(R.string.forgot_pw_sent_btn_resend)))
             .check(matches(isDisplayed()))
     }
 
@@ -148,7 +147,10 @@ class ForgotPwSentFragmentTest {
             .check(matches(isDisplayed()))
             .perform(click())
 
-        assertThat(testBinding.isTimerTicking).isTrue()
+        Thread.sleep(2000)
+
         onView(withId(testBinding.tvTimer.id)).check(matches(isDisplayed()))
+        onView(withText(context.getString(R.string.forgot_pw_sent_btn_resend)))
+            .check(matches(not(isDisplayed())))
     }
 }
