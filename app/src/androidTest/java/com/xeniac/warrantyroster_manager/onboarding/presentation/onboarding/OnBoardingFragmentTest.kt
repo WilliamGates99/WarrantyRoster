@@ -168,10 +168,10 @@ class OnBoardingFragmentTest {
     fun getCurrentAppLocaleIndex_setsCurrentLocaleFlagToUsaFlag() {
         onView(withId(testBinding.clLanguage.id)).check(matches(isDisplayed()))
 
-        val usaFlagDrawable = context.getDrawable(R.drawable.ic_flag_usa)
+        val usaFlag = context.getDrawable(R.drawable.ic_flag_usa)
         val currentLocaleFlag = testBinding.ivLocaleFlag.drawable
 
-        val isUsaFlagShowing = currentLocaleFlag.pixelsEqualTo(usaFlagDrawable)
+        val isUsaFlagShowing = currentLocaleFlag.pixelsEqualTo(usaFlag)
 
         assertThat(isUsaFlagShowing).isTrue()
     }
