@@ -124,11 +124,15 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
     private fun textInputsBackgroundColor() = binding.apply {
         tiEditEmail.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                tiLayoutEmail.boxBackgroundColor =
-                    ContextCompat.getColor(requireContext(), R.color.background)
+                tiLayoutEmail.boxBackgroundColor = ContextCompat.getColor(
+                    requireContext(),
+                    R.color.background
+                )
             } else {
-                tiLayoutEmail.boxBackgroundColor =
-                    ContextCompat.getColor(requireContext(), R.color.grayLight)
+                tiLayoutEmail.boxBackgroundColor = ContextCompat.getColor(
+                    requireContext(),
+                    R.color.grayLight
+                )
             }
         }
     }
@@ -136,7 +140,10 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
     private fun textInputsStrokeColor() = binding.apply {
         tiEditEmail.addTextChangedListener {
             tiLayoutEmail.isErrorEnabled = false
-            tiLayoutEmail.boxStrokeColor = ContextCompat.getColor(requireContext(), R.color.blue)
+            tiLayoutEmail.boxStrokeColor = ContextCompat.getColor(
+                requireContext(),
+                R.color.blue
+            )
         }
     }
 
