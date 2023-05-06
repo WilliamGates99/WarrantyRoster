@@ -12,7 +12,7 @@ import com.xeniac.warrantyroster_manager.util.Constants.ONBOARDING_4TH_INDEX
 class OnBoarding3rdFragment : Fragment(R.layout.fragment_onboarding_3rd) {
 
     private var _binding: FragmentOnboarding3rdBinding? = null
-    private val binding get() = _binding!!
+    val binding get() = _binding!!
 
     private var viewPager: ViewPager2? = null
 
