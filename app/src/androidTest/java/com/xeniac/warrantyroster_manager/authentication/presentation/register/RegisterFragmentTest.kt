@@ -21,6 +21,7 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import com.google.common.truth.Truth.assertThat
 import com.xeniac.warrantyroster_manager.R
+import com.xeniac.warrantyroster_manager.authentication.presentation.login.LoginFragmentDirections
 import com.xeniac.warrantyroster_manager.core.data.repository.FakePreferencesRepository
 import com.xeniac.warrantyroster_manager.core.data.repository.FakeUserRepository
 import com.xeniac.warrantyroster_manager.databinding.FragmentRegisterBinding
@@ -67,8 +68,7 @@ class RegisterFragmentTest {
         launchFragmentInHiltContainer<RegisterFragment> {
             navController.setGraph(R.navigation.nav_graph_auth)
             Navigation.setViewNavController(requireView(), navController)
-//            navController.navigate(LoginFragmentDirections.actionLoginFragmentToRegisterFragment())
-            navController.navigate(R.id.action_loginFragment_to_registerFragment)
+            navController.navigate(LoginFragmentDirections.actionLoginFragmentToRegisterFragment())
 
             viewModel = testViewModel
             testBinding = binding
