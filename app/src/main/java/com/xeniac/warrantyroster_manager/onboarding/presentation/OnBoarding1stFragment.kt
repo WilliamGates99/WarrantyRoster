@@ -31,12 +31,12 @@ class OnBoarding1stFragment : Fragment(R.layout.fragment_onboarding_1st) {
         _binding = null
     }
 
-    private fun skipOnClick() = binding.btnSkip.setOnClickListener {
+    private fun skipOnClick() = binding.btnOnboarding1stSkip.setOnClickListener {
         // ViewPager items start from 0
         viewPager?.currentItem = ONBOARDING_4TH_INDEX
     }
 
-    private fun nextOnClick() = binding.btnNext.setOnClickListener {
+    private fun nextOnClick() = binding.btnOnboarding1stNext.setOnClickListener {
         // ViewPager items start from 0
         viewPager?.currentItem = ONBOARDING_2ND_INDEX
     }

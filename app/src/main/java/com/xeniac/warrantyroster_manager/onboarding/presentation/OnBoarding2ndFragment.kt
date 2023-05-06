@@ -31,12 +31,12 @@ class OnBoarding2ndFragment : Fragment(R.layout.fragment_onboarding_2nd) {
         _binding = null
     }
 
-    private fun backOnClick() = binding.btnBack.setOnClickListener {
+    private fun backOnClick() = binding.btnOnboarding2ndBack.setOnClickListener {
         // ViewPager items start from 0
         viewPager?.currentItem = ONBOARDING_1ST_INDEX
     }
 
-    private fun nextOnClick() = binding.btnNext.setOnClickListener {
+    private fun nextOnClick() = binding.btnOnboarding2ndNext.setOnClickListener {
         // ViewPager items start from 0
         viewPager?.currentItem = ONBOARDING_3RD_INDEX
     }

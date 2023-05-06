@@ -25,7 +25,7 @@ class OnBoarding4thFragment : Fragment(R.layout.fragment_onboarding_4th) {
         _binding = null
     }
 
-    private fun startOnClick() = binding.btnStart.setOnClickListener {
+    private fun startOnClick() = binding.btnOnboarding4thStart.setOnClickListener {
         navigateToLoginFragment()
     }
 
