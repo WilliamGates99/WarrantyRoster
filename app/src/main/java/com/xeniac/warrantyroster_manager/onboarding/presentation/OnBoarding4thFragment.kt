@@ -11,7 +11,7 @@ import com.xeniac.warrantyroster_manager.onboarding.presentation.onboarding.OnBo
 class OnBoarding4thFragment : Fragment(R.layout.fragment_onboarding_4th) {
 
     private var _binding: FragmentOnboarding4thBinding? = null
-    private val binding get() = _binding!!
+    val binding get() = _binding!!
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
