@@ -120,7 +120,7 @@ class OnBoardingFragmentTest {
     }
 
     @Test
-    fun clickOnOnBoarding4thStartBtn_navigatesToAuthFragment() {
+    fun clickOnOnBoarding3rdNextBtn_shows4thOnBoardingFragment() {
         onView(withId(testBinding.viewpager.id)).check(matches(isDisplayed()))
 
         // Swipe to 3rd page
@@ -130,7 +130,8 @@ class OnBoardingFragmentTest {
         // Click on Next button
         onView(withId(R.id.btn_onboarding_3rd_next)).perform(click())
 
-        assertThat(navController.currentDestination?.id).isEqualTo(R.id.authFragment)
+        onView(withText(context.getString(R.string.onboarding_4th_title))).check(matches(isDisplayed()))
+        assertThat(testBinding.viewpager.currentItem).isEqualTo(ONBOARDING_4TH_INDEX)
     }
 
     @Test
@@ -149,7 +150,7 @@ class OnBoardingFragmentTest {
     }
 
     @Test
-    fun clickOnOnBoarding3rdNextBtn_shows4thOnBoardingFragment() {
+    fun clickOnOnBoarding4thStartBtn_navigatesToAuthFragment() {
         onView(withId(testBinding.viewpager.id)).check(matches(isDisplayed()))
 
         // Swipe to 4th page
@@ -160,8 +161,7 @@ class OnBoardingFragmentTest {
         // Click on Start button
         onView(withId(R.id.btn_onboarding_4th_start)).perform(click())
 
-        onView(withText(context.getString(R.string.onboarding_4th_title))).check(matches(isDisplayed()))
-        assertThat(testBinding.viewpager.currentItem).isEqualTo(ONBOARDING_4TH_INDEX)
+        assertThat(navController.currentDestination?.id).isEqualTo(R.id.authFragment)
     }
 
     @Test
