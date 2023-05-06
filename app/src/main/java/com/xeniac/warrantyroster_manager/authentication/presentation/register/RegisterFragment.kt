@@ -185,32 +185,44 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     private fun textInputsBackgroundColor() = binding.apply {
         tiEditEmail.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                tiLayoutEmail.boxBackgroundColor =
-                    ContextCompat.getColor(requireContext(), R.color.background)
+                tiLayoutEmail.boxBackgroundColor = ContextCompat.getColor(
+                    requireContext(),
+                    R.color.background
+                )
             } else {
-                tiLayoutEmail.boxBackgroundColor =
-                    ContextCompat.getColor(requireContext(), R.color.grayLight)
+                tiLayoutEmail.boxBackgroundColor = ContextCompat.getColor(
+                    requireContext(),
+                    R.color.grayLight
+                )
             }
         }
 
         tiEditPassword.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                tiLayoutPassword.boxBackgroundColor =
-                    ContextCompat.getColor(requireContext(), R.color.background)
+                tiLayoutPassword.boxBackgroundColor = ContextCompat.getColor(
+                    requireContext(),
+                    R.color.background
+                )
             } else {
-                tiLayoutPassword.boxBackgroundColor =
-                    ContextCompat.getColor(requireContext(), R.color.grayLight)
+                tiLayoutPassword.boxBackgroundColor = ContextCompat.getColor(
+                    requireContext(),
+                    R.color.grayLight
+                )
                 tiLayoutPassword.isHelperTextEnabled = false
             }
         }
 
         tiEditConfirmPassword.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                tiLayoutConfirmPassword.boxBackgroundColor =
-                    ContextCompat.getColor(requireContext(), R.color.background)
+                tiLayoutConfirmPassword.boxBackgroundColor = ContextCompat.getColor(
+                    requireContext(),
+                    R.color.background
+                )
             } else {
-                tiLayoutConfirmPassword.boxBackgroundColor =
-                    ContextCompat.getColor(requireContext(), R.color.grayLight)
+                tiLayoutConfirmPassword.boxBackgroundColor = ContextCompat.getColor(
+                    requireContext(),
+                    R.color.grayLight
+                )
             }
         }
     }
@@ -218,8 +230,10 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     private fun textInputsStrokeColor() = binding.apply {
         tiEditEmail.addTextChangedListener {
             tiLayoutEmail.isErrorEnabled = false
-            tiLayoutEmail.boxStrokeColor =
-                ContextCompat.getColor(requireContext(), R.color.blue)
+            tiLayoutEmail.boxStrokeColor = ContextCompat.getColor(
+                requireContext(),
+                R.color.blue
+            )
         }
 
         tiEditPassword.addTextChangedListener { inputPassword ->
@@ -228,28 +242,37 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
             if (tiLayoutPassword.hasFocus()) {
                 when (passwordStrength(inputPassword.toString())) {
                     (-1).toByte() -> {
-                        tiLayoutPassword.boxStrokeColor =
-                            ContextCompat.getColor(requireContext(), R.color.red)
-                        tiLayoutPassword.helperText =
-                            getString(R.string.register_helper_password_weak)
+                        tiLayoutPassword.boxStrokeColor = ContextCompat.getColor(
+                            requireContext(),
+                            R.color.red
+                        )
+                        tiLayoutPassword.helperText = getString(
+                            R.string.register_helper_password_weak
+                        )
                         tiLayoutPassword.setHelperTextColor(
                             ContextCompat.getColorStateList(requireContext(), R.color.red)
                         )
                     }
                     (0).toByte() -> {
-                        tiLayoutPassword.boxStrokeColor =
-                            ContextCompat.getColor(requireContext(), R.color.orange)
-                        tiLayoutPassword.helperText =
-                            getString(R.string.register_helper_password_mediocre)
+                        tiLayoutPassword.boxStrokeColor = ContextCompat.getColor(
+                            requireContext(),
+                            R.color.orange
+                        )
+                        tiLayoutPassword.helperText = getString(
+                            R.string.register_helper_password_mediocre
+                        )
                         tiLayoutPassword.setHelperTextColor(
                             ContextCompat.getColorStateList(requireContext(), R.color.orange)
                         )
                     }
                     (1).toByte() -> {
-                        tiLayoutPassword.boxStrokeColor =
-                            ContextCompat.getColor(requireContext(), R.color.green)
-                        tiLayoutPassword.helperText =
-                            getString(R.string.register_helper_password_strong)
+                        tiLayoutPassword.boxStrokeColor = ContextCompat.getColor(
+                            requireContext(),
+                            R.color.green
+                        )
+                        tiLayoutPassword.helperText = getString(
+                            R.string.register_helper_password_strong
+                        )
                         tiLayoutPassword.setHelperTextColor(
                             ContextCompat.getColorStateList(requireContext(), R.color.green)
                         )
@@ -260,8 +283,10 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
 
         tiEditConfirmPassword.addTextChangedListener {
             tiLayoutConfirmPassword.isErrorEnabled = false
-            tiLayoutConfirmPassword.boxStrokeColor =
-                ContextCompat.getColor(requireContext(), R.color.blue)
+            tiLayoutConfirmPassword.boxStrokeColor = ContextCompat.getColor(
+                requireContext(),
+                R.color.blue
+            )
         }
     }
 
