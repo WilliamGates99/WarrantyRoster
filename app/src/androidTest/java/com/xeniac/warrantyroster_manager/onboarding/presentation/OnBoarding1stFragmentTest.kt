@@ -6,7 +6,7 @@ import androidx.navigation.Navigation
 import androidx.navigation.testing.TestNavHostController
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
@@ -54,7 +54,7 @@ class OnBoarding1stFragmentTest {
     fun clickOnNextBtn_shows2ndOnBoardingFragment() {
         onView(withText(context.getString(R.string.onboarding_1st_title))).check(matches(isDisplayed()))
 
-        onView(withId(R.id.btn_onboarding_1st_next)).perform(ViewActions.click())
+        onView(withId(R.id.btn_onboarding_1st_next)).perform(click())
 
         onView(withText(context.getString(R.string.onboarding_2nd_title))).check(matches(isDisplayed()))
     }
@@ -63,7 +63,7 @@ class OnBoarding1stFragmentTest {
     fun clickOnOnSkipBtn_shows4thOnBoardingFragment() {
         onView(withText(context.getString(R.string.onboarding_1st_title))).check(matches(isDisplayed()))
 
-        onView(withId(R.id.btn_onboarding_1st_skip)).perform(ViewActions.click())
+        onView(withId(R.id.btn_onboarding_1st_skip)).perform(click())
 
         onView(withText(context.getString(R.string.onboarding_4th_title))).check(matches(isDisplayed()))
     }
