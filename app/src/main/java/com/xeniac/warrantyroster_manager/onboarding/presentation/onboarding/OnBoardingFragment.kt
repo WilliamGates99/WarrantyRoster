@@ -30,7 +30,7 @@ import com.xeniac.warrantyroster_manager.util.SnackBarHelper.showSomethingWentWr
 class OnBoardingFragment : Fragment(R.layout.fragment_onboarding) {
 
     private var _binding: FragmentOnboardingBinding? = null
-    private val binding get() = _binding!!
+    val binding get() = _binding!!
 
     lateinit var viewModel: OnBoardingViewModel
 
