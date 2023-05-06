@@ -128,13 +128,13 @@ class OnBoardingFragment : Fragment(R.layout.fragment_onboarding) {
     private fun setCurrentAppLocaleFlag(localeIndex: Int) {
         binding.apply {
             when (localeIndex) {
-                LOCALE_INDEX_ENGLISH_UNITED_STATES -> ivLanguageFlag.setImageDrawable(
+                LOCALE_INDEX_ENGLISH_UNITED_STATES -> ivLocaleFlag.setImageDrawable(
                     AppCompatResources.getDrawable(requireContext(), R.drawable.ic_flag_usa)
                 )
-                LOCALE_INDEX_ENGLISH_GREAT_BRITAIN -> ivLanguageFlag.setImageDrawable(
+                LOCALE_INDEX_ENGLISH_GREAT_BRITAIN -> ivLocaleFlag.setImageDrawable(
                     AppCompatResources.getDrawable(requireContext(), R.drawable.ic_flag_gb)
                 )
-                LOCALE_INDEX_PERSIAN_IRAN -> ivLanguageFlag.setImageDrawable(
+                LOCALE_INDEX_PERSIAN_IRAN -> ivLocaleFlag.setImageDrawable(
                     AppCompatResources.getDrawable(requireContext(), R.drawable.ic_flag_iran)
                 )
             }
