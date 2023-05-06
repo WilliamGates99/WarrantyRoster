@@ -24,7 +24,7 @@ import com.xeniac.warrantyroster_manager.util.SnackBarHelper.showSomethingWentWr
 class AuthFragment : Fragment(R.layout.fragment_auth) {
 
     private var _binding: FragmentAuthBinding? = null
-    private val binding get() = _binding!!
+    val binding get() = _binding!!
 
     lateinit var viewModel: AuthViewModel
 
