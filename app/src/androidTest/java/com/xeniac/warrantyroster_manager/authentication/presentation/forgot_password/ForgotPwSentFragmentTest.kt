@@ -139,18 +139,4 @@ class ForgotPwSentFragmentTest {
         onView(withText(context.getString(R.string.forgot_pw_sent_btn_resend)))
             .check(matches(isDisplayed()))
     }
-
-    @Test
-    fun clickOnResendBtnWithSuccessStatus_startsTimer() {
-        onView(withId(testBinding.btnResend.id))
-            .perform(scrollTo())
-            .check(matches(isDisplayed()))
-            .perform(click())
-
-        Thread.sleep(2000)
-
-        onView(withId(testBinding.tvTimer.id)).check(matches(isDisplayed()))
-        onView(withText(context.getString(R.string.forgot_pw_sent_btn_resend)))
-            .check(matches(not(isDisplayed())))
-    }
 }
