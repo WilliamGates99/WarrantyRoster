@@ -369,17 +369,17 @@ class RegisterFragment @Inject constructor(
                         hideRegisterWithEmailLoadingAnimation()
                         response.message?.asString(requireContext())?.let {
                             when {
-                                it.contains(ERROR_INPUT_BLANK_EMAIL) -> {
+                                it == ERROR_INPUT_BLANK_EMAIL -> {
                                     binding.tiLayoutEmail.error =
                                         requireContext().getString(R.string.register_error_blank_email)
                                     binding.tiLayoutEmail.requestFocus()
                                 }
-                                it.contains(ERROR_INPUT_BLANK_PASSWORD) -> {
+                                it == ERROR_INPUT_BLANK_PASSWORD -> {
                                     binding.tiLayoutPassword.error =
                                         requireContext().getString(R.string.register_error_blank_password)
                                     binding.tiLayoutPassword.requestFocus()
                                 }
-                                it.contains(ERROR_INPUT_BLANK_RETYPE_PASSWORD) -> {
+                                it == ERROR_INPUT_BLANK_RETYPE_PASSWORD -> {
                                     binding.tiLayoutConfirmPassword.error =
                                         requireContext().getString(R.string.register_error_blank_confirm_password)
                                     binding.tiLayoutConfirmPassword.requestFocus()
