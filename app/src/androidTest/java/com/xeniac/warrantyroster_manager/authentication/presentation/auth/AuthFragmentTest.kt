@@ -15,7 +15,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.google.common.truth.Truth.assertThat
 import com.xeniac.warrantyroster_manager.R
-import com.xeniac.warrantyroster_manager.core.data.repository.FakePreferencesRepository
+import com.xeniac.warrantyroster_manager.core.presentation.landing.TestLandingFragmentFactory
 import com.xeniac.warrantyroster_manager.databinding.FragmentAuthBinding
 import com.xeniac.warrantyroster_manager.launchFragmentInHiltContainer
 import com.xeniac.warrantyroster_manager.util.pixelsEqualTo
@@ -25,6 +25,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
 @HiltAndroidTest
@@ -36,11 +37,12 @@ class AuthFragmentTest {
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
+    @Inject
+    lateinit var testFragmentFactory: TestLandingFragmentFactory
+
     private lateinit var context: Context
     private lateinit var navController: TestNavHostController
     private lateinit var testBinding: FragmentAuthBinding
-
-    private lateinit var testViewModel: AuthViewModel
 
     @Before
     fun setUp() {
@@ -49,13 +51,11 @@ class AuthFragmentTest {
         context = ApplicationProvider.getApplicationContext()
         navController = TestNavHostController(context)
 
-        testViewModel = AuthViewModel(FakePreferencesRepository())
+        navController.setGraph(R.navigation.nav_graph_landing)
 
-        launchFragmentInHiltContainer<AuthFragment> {
-            navController.setGraph(R.navigation.nav_graph_landing)
+        launchFragmentInHiltContainer<AuthFragment>(fragmentFactory = testFragmentFactory) {
             Navigation.setViewNavController(requireView(), navController)
 
-            viewModel = testViewModel
             testBinding = binding
         }
     }
@@ -65,6 +65,7 @@ class AuthFragmentTest {
         val loginTitle = context.getString(R.string.login_text_title)
         val currentTitle = testBinding.tvTitle.text
 
+        onView(withId(testBinding.tvTitle.id)).check(matches(isDisplayed()))
         assertThat(currentTitle).isEqualTo(loginTitle)
     }
 
@@ -77,6 +78,7 @@ class AuthFragmentTest {
         val loginTitle = context.getString(R.string.register_text_title)
         val currentTitle = testBinding.tvTitle.text
 
+        onView(withId(testBinding.tvTitle.id)).check(matches(isDisplayed()))
         assertThat(currentTitle).isEqualTo(loginTitle)
     }
 
@@ -89,6 +91,7 @@ class AuthFragmentTest {
         val forgotPwTitle = context.getString(R.string.forgot_pw_text_title)
         val currentTitle = testBinding.tvTitle.text
 
+        onView(withId(testBinding.tvTitle.id)).check(matches(isDisplayed()))
         assertThat(currentTitle).isEqualTo(forgotPwTitle)
     }
 

@@ -20,13 +20,14 @@ import com.xeniac.warrantyroster_manager.util.Constants.LOCALE_INDEX_ENGLISH_UNI
 import com.xeniac.warrantyroster_manager.util.Constants.LOCALE_INDEX_PERSIAN_IRAN
 import com.xeniac.warrantyroster_manager.util.Resource
 import com.xeniac.warrantyroster_manager.util.SnackBarHelper.showSomethingWentWrongError
+import javax.inject.Inject
 
-class AuthFragment : Fragment(R.layout.fragment_auth) {
+class AuthFragment @Inject constructor(
+    var viewModel: AuthViewModel?
+) : Fragment(R.layout.fragment_auth) {
 
     private var _binding: FragmentAuthBinding? = null
     val binding get() = _binding!!
-
-    lateinit var viewModel: AuthViewModel
 
     private var currentAppLocaleIndex = 0
 
@@ -35,7 +36,7 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentAuthBinding.bind(view)
-        viewModel = ViewModelProvider(requireActivity())[AuthViewModel::class.java]
+        viewModel = viewModel ?: ViewModelProvider(requireActivity())[AuthViewModel::class.java]
 
         subscribeToObservers()
         headerSetup()
@@ -83,10 +84,10 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
         }
     }
 
-    private fun getCurrentAppLocaleIndex() = viewModel.getCurrentAppLocaleIndex()
+    private fun getCurrentAppLocaleIndex() = viewModel!!.getCurrentAppLocaleIndex()
 
     private fun currentAppLocaleIndexObserver() =
-        viewModel.currentAppLocaleIndexLiveData.observe(viewLifecycleOwner) { responseEvent ->
+        viewModel!!.currentAppLocaleIndexLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
                     is Resource.Loading -> Unit
@@ -138,10 +139,10 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
         }
     }
 
-    private fun changeCurrentAppLocale(index: Int) = viewModel.changeCurrentAppLocale(index)
+    private fun changeCurrentAppLocale(index: Int) = viewModel!!.changeCurrentAppLocale(index)
 
     private fun changeCurrentAppLocaleObserver() =
-        viewModel.changeCurrentAppLocaleLiveData.observe(viewLifecycleOwner) { responseEvent ->
+        viewModel!!.changeCurrentAppLocaleLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
                     is Resource.Loading -> Unit
