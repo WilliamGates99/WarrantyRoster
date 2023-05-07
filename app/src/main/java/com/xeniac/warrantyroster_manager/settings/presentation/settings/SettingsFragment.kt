@@ -143,6 +143,10 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
     private fun getUserInfo() = CoroutineScope(Dispatchers.IO).launch {
         getCachedUserInfo()
 
+        /*
+        Delay solved the issue that even though networkStatus was Available,
+        the getReloadedAccountInfo() wouldn't be called.
+         */
         delay(1.seconds)
         if (networkStatus == ConnectivityObserver.Status.AVAILABLE) {
             Timber.i("net is available")
