@@ -4,6 +4,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
 import com.xeniac.warrantyroster_manager.core.data.repository.FakePreferencesRepository
 import com.xeniac.warrantyroster_manager.core.data.repository.FakeUserRepository
+import com.xeniac.warrantyroster_manager.settings.presentation.change_email.ChangeEmailFragment
+import com.xeniac.warrantyroster_manager.settings.presentation.change_email.ChangeEmailViewModel
 import com.xeniac.warrantyroster_manager.settings.presentation.settings.SettingsFragment
 import com.xeniac.warrantyroster_manager.settings.presentation.settings.SettingsViewModel
 import javax.inject.Inject
@@ -29,6 +31,9 @@ class TestMainFragmentFactory @Inject constructor() : FragmentFactory() {
                     fakeUserRepository,
                     FakePreferencesRepository()
                 )
+            )
+            ChangeEmailFragment::class.java.name -> ChangeEmailFragment(
+                ChangeEmailViewModel(fakeUserRepository)
             )
             else -> super.instantiate(classLoader, className)
         }
