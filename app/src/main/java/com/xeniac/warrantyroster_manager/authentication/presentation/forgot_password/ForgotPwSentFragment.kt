@@ -47,7 +47,7 @@ class ForgotPwSentFragment @Inject constructor(
 
     private lateinit var email: String
     private var isFirstTimeSendingEmail = true
-    private var timerMillisUntilFinished = 0L
+    var timerMillisUntilFinished = 0L
 
     @Inject
     lateinit var decimalFormat: DecimalFormat

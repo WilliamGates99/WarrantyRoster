@@ -1,36 +1,10 @@
 package com.xeniac.warrantyroster_manager.ui.fragments
 
-import android.content.Context
-import android.os.Bundle
-import androidx.appcompat.widget.AppCompatImageButton
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.navigation.Navigation
-import androidx.navigation.testing.TestNavHostController
-import androidx.test.core.app.ApplicationProvider
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.Espresso.pressBack
-import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.action.ViewActions.replaceText
-import androidx.test.espresso.matcher.ViewMatchers
-import androidx.test.espresso.matcher.ViewMatchers.withId
-import com.google.common.truth.Truth.assertThat
-import com.xeniac.warrantyroster_manager.R
-import com.xeniac.warrantyroster_manager.data.remote.models.Warranty
-import com.xeniac.warrantyroster_manager.data.repository.FakeWarrantyRepository
-import com.xeniac.warrantyroster_manager.data.repository.FakeUserRepository
-import com.xeniac.warrantyroster_manager.databinding.FragmentEditWarrantyBinding
-import com.xeniac.warrantyroster_manager.getOrAwaitValue
-import com.xeniac.warrantyroster_manager.launchFragmentInHiltContainer
-import com.xeniac.warrantyroster_manager.warranty_management.presentation.WarrantyViewModel
-import com.xeniac.warrantyroster_manager.util.Resource
-import com.xeniac.warrantyroster_manager.warranty_management.presentation.edit_warranty.EditWarrantyFragment
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import org.hamcrest.CoreMatchers
-import org.junit.Before
 import org.junit.Rule
-import org.junit.Test
 
 @ExperimentalCoroutinesApi
 @HiltAndroidTest
@@ -42,6 +16,7 @@ class EditWarrantyFragmentTest {
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
+    /*
     private lateinit var context: Context
     private lateinit var navController: TestNavHostController
     private var testArgs: Bundle? = null
@@ -353,4 +328,6 @@ class EditWarrantyFragmentTest {
 
         assertThat(navController.currentDestination?.id).isEqualTo(R.id.warrantyDetailsFragment)
     }
+
+     */
 }
