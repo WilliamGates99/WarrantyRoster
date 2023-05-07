@@ -78,12 +78,12 @@ import java.util.Locale
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class RegisterFragment : Fragment(R.layout.fragment_register) {
+class RegisterFragment @Inject constructor(
+    var viewModel: RegisterViewModel?
+) : Fragment(R.layout.fragment_register) {
 
     private var _binding: FragmentRegisterBinding? = null
     val binding get() = _binding!!
-
-    lateinit var viewModel: RegisterViewModel
 
     @Inject
     lateinit var firebaseAuth: FirebaseAuth
@@ -98,7 +98,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentRegisterBinding.bind(view)
-        viewModel = ViewModelProvider(requireActivity())[RegisterViewModel::class.java]
+        viewModel = viewModel ?: ViewModelProvider(requireActivity())[RegisterViewModel::class.java]
         connectivityObserver = NetworkConnectivityObserver(requireContext())
 
         networkConnectivityObserver()
@@ -298,10 +298,10 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         registerWithFacebookAccountObserver()
     }
 
-    private fun getCurrentAppLanguage() = viewModel.getCurrentAppLanguage()
+    private fun getCurrentAppLanguage() = viewModel!!.getCurrentAppLanguage()
 
     private fun currentAppLanguageObserver() =
-        viewModel.currentAppLanguageLiveData.observe(viewLifecycleOwner) { responseEvent ->
+        viewModel!!.currentAppLanguageLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
                     is Resource.Loading -> Unit
@@ -347,7 +347,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
             val password = binding.tiEditPassword.text.toString().trim()
             val retypePassword = binding.tiEditConfirmPassword.text.toString().trim()
 
-            viewModel.validateRegisterWithEmailInputs(email, password, retypePassword)
+            viewModel!!.validateRegisterWithEmailInputs(email, password, retypePassword)
         } else {
             snackbar = showUnavailableNetworkConnectionError(
                 requireContext(), requireView()
@@ -357,7 +357,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     }
 
     private fun registerWithEmailObserver() =
-        viewModel.registerWithEmailLiveData.observe(viewLifecycleOwner) { responseEvent ->
+        viewModel!!.registerWithEmailLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
                     is Resource.Loading -> showRegisterWithEmailLoadingAnimation()
@@ -493,7 +493,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     ) { result ->
         try {
             val account = GoogleSignIn.getSignedInAccountFromIntent(result.data).result
-            account?.let { viewModel.registerWithGoogleAccount(account) }
+            account?.let { viewModel!!.registerWithGoogleAccount(account) }
         } catch (e: Exception) {
             hideGoogleLoadingAnimation()
             e.message?.let {
@@ -516,7 +516,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     }
 
     private fun registerWithGoogleAccountObserver() =
-        viewModel.registerWithGoogleAccountLiveData.observe(viewLifecycleOwner) { responseEvent ->
+        viewModel!!.registerWithGoogleAccountLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
                     is Resource.Loading -> showGoogleLoadingAnimation()
@@ -599,7 +599,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         if (task.isSuccessful) {
             val authCredential = task.result.credential
             authCredential?.let { credential ->
-                viewModel.registerWithTwitterAccount(credential)
+                viewModel!!.registerWithTwitterAccount(credential)
             }
         } else {
             hideTwitterLoadingAnimation()
@@ -631,7 +631,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     }
 
     private fun registerWithTwitterAccountObserver() =
-        viewModel.registerWithTwitterAccountLiveData.observe(viewLifecycleOwner) { responseEvent ->
+        viewModel!!.registerWithTwitterAccountLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
                     is Resource.Loading -> showTwitterLoadingAnimation()
@@ -696,7 +696,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
 
         loginManager.registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
             override fun onSuccess(result: LoginResult) {
-                viewModel.registerWithFacebookAccount(result.accessToken)
+                viewModel!!.registerWithFacebookAccount(result.accessToken)
             }
 
             override fun onCancel() {
@@ -713,7 +713,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     }
 
     private fun registerWithFacebookAccountObserver() =
-        viewModel.registerWithFacebookAccountLiveData.observe(viewLifecycleOwner) { responseEvent ->
+        viewModel!!.registerWithFacebookAccountLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
                     is Resource.Loading -> showFacebookLoadingAnimation()
