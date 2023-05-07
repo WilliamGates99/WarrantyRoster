@@ -52,19 +52,23 @@ class OnBoarding1stFragmentTest {
 
     @Test
     fun clickOnNextBtn_shows2ndOnBoardingFragment() {
-        onView(withText(context.getString(R.string.onboarding_1st_title))).check(matches(isDisplayed()))
+        onView(withText(context.getString(R.string.onboarding_1st_title)))
+            .check(matches(isDisplayed()))
 
         onView(withId(R.id.btn_onboarding_1st_next)).perform(click())
 
-        onView(withText(context.getString(R.string.onboarding_2nd_title))).check(matches(isDisplayed()))
+        onView(withText(context.getString(R.string.onboarding_2nd_title)))
+            .check(matches(isDisplayed()))
     }
 
     @Test
     fun clickOnOnSkipBtn_shows4thOnBoardingFragment() {
-        onView(withText(context.getString(R.string.onboarding_1st_title))).check(matches(isDisplayed()))
+        onView(withText(context.getString(R.string.onboarding_1st_title)))
+            .check(matches(isDisplayed()))
 
         onView(withId(R.id.btn_onboarding_1st_skip)).perform(click())
 
-        onView(withText(context.getString(R.string.onboarding_4th_title))).check(matches(isDisplayed()))
+        onView(withText(context.getString(R.string.onboarding_4th_title)))
+            .check(matches(isDisplayed()))
     }
 }
