@@ -2,8 +2,11 @@ package com.xeniac.warrantyroster_manager.core.presentation.landing
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
+import androidx.lifecycle.SavedStateHandle
 import com.xeniac.warrantyroster_manager.authentication.presentation.auth.AuthFragment
 import com.xeniac.warrantyroster_manager.authentication.presentation.auth.AuthViewModel
+import com.xeniac.warrantyroster_manager.authentication.presentation.forgot_password.ForgotPwFragment
+import com.xeniac.warrantyroster_manager.authentication.presentation.forgot_password.ForgotPwViewModel
 import com.xeniac.warrantyroster_manager.authentication.presentation.login.LoginFragment
 import com.xeniac.warrantyroster_manager.authentication.presentation.login.LoginViewModel
 import com.xeniac.warrantyroster_manager.authentication.presentation.register.RegisterFragment
@@ -46,6 +49,12 @@ class TestLandingFragmentFactory @Inject constructor() : FragmentFactory() {
                 RegisterViewModel(
                     fakeUserRepository,
                     FakePreferencesRepository()
+                )
+            )
+            ForgotPwFragment::class.java.name -> ForgotPwFragment(
+                ForgotPwViewModel(
+                    fakeUserRepository,
+                    SavedStateHandle()
                 )
             )
             else -> super.instantiate(classLoader, className)

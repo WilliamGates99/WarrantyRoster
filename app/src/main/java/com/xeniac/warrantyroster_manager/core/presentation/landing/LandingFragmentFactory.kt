@@ -3,6 +3,7 @@ package com.xeniac.warrantyroster_manager.core.presentation.landing
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
 import com.xeniac.warrantyroster_manager.authentication.presentation.auth.AuthFragment
+import com.xeniac.warrantyroster_manager.authentication.presentation.forgot_password.ForgotPwFragment
 import com.xeniac.warrantyroster_manager.authentication.presentation.login.LoginFragment
 import com.xeniac.warrantyroster_manager.authentication.presentation.register.RegisterFragment
 import com.xeniac.warrantyroster_manager.onboarding.presentation.onboarding.OnBoardingFragment
@@ -16,6 +17,7 @@ class LandingFragmentFactory @Inject constructor() : FragmentFactory() {
             AuthFragment::class.java.name -> AuthFragment(null)
             LoginFragment::class.java.name -> LoginFragment(null)
             RegisterFragment::class.java.name -> RegisterFragment(null)
+            ForgotPwFragment::class.java.name -> ForgotPwFragment(null)
             else -> super.instantiate(classLoader, className)
         }
     }
