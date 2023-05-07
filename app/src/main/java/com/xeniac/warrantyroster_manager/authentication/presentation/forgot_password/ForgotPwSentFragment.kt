@@ -197,7 +197,11 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
         val minutes = decimalFormat.format(millisUntilFinished / 60000)
         val seconds = decimalFormat.format((millisUntilFinished / 1000) % 60)
 
-        time = "($minutes:$seconds)"
+        time = requireContext().getString(
+            R.string.forgot_pw_sent_text_timer,
+            minutes,
+            seconds
+        )
         isTimerTicking = true
     }
 

@@ -108,6 +108,13 @@
     <string name="forgot_pw_sent_btn_resend">Resend</string>
     <string name="forgot_pw_sent_text_first_time">The email has been sent.</string>
     <string name="forgot_pw_sent_text_resent">A new email has been sent.</string>
+    <!--
+    Placeholders:
+    • %1$s: Minute
+    • %2$s: Seconds
+    Sample: 02:52
+    -->
+    <string name="forgot_pw_sent_text_timer" translatable="false">%1$s:%2$s</string>
     <string name="forgot_pw_sent_btn_return">Return To Login</string>
 
 
