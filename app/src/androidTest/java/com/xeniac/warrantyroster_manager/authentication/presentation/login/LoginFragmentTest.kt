@@ -11,22 +11,26 @@ import androidx.test.espresso.action.ViewActions.pressImeActionButton
 import androidx.test.espresso.action.ViewActions.replaceText
 import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.intent.Intents
+import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
+import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.google.common.truth.Truth.assertThat
 import com.xeniac.warrantyroster_manager.R
-import com.xeniac.warrantyroster_manager.core.data.repository.FakePreferencesRepository
-import com.xeniac.warrantyroster_manager.core.data.repository.FakeUserRepository
+import com.xeniac.warrantyroster_manager.core.presentation.landing.TestLandingFragmentFactory
+import com.xeniac.warrantyroster_manager.core.presentation.main.MainActivity
 import com.xeniac.warrantyroster_manager.databinding.FragmentLoginBinding
-import com.xeniac.warrantyroster_manager.getOrAwaitValue
 import com.xeniac.warrantyroster_manager.launchFragmentInHiltContainer
-import com.xeniac.warrantyroster_manager.util.Resource
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
 @HiltAndroidTest
@@ -38,12 +42,15 @@ class LoginFragmentTest {
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
+    @Inject
+    lateinit var testFragmentFactory: TestLandingFragmentFactory
+
     private lateinit var context: Context
     private lateinit var navController: TestNavHostController
     private lateinit var testBinding: FragmentLoginBinding
 
-    private lateinit var fakeUserRepository: FakeUserRepository
-    private lateinit var testViewModel: LoginViewModel
+    private val email = "email@test.com"
+    private val password = "password"
 
     @Before
     fun setUp() {
@@ -51,18 +58,11 @@ class LoginFragmentTest {
 
         context = ApplicationProvider.getApplicationContext()
         navController = TestNavHostController(context)
+        navController.setGraph(R.navigation.nav_graph_auth)
 
-        fakeUserRepository = FakeUserRepository()
-        testViewModel = LoginViewModel(
-            fakeUserRepository,
-            FakePreferencesRepository()
-        )
-
-        launchFragmentInHiltContainer<LoginFragment> {
-            navController.setGraph(R.navigation.nav_graph_auth)
+        launchFragmentInHiltContainer<LoginFragment>(fragmentFactory = testFragmentFactory) {
             Navigation.setViewNavController(requireView(), navController)
 
-            viewModel = testViewModel
             testBinding = binding
         }
     }
@@ -138,28 +138,69 @@ class LoginFragmentTest {
     }
 
     @Test
-    fun pressImeActionOnPasswordEditTextWithErrorStatus_returnsError() {
+    fun pressImeActionOnPasswordEditTextWithBlankEmail_showsEmailError() {
         onView(withId(testBinding.tiEditEmail.id)).perform(
             scrollTo(),
-            replaceText("email")
+            replaceText("")
         )
         onView(withId(testBinding.tiEditPassword.id)).perform(
             scrollTo(),
-            replaceText("password"),
+            replaceText(password),
             pressImeActionButton()
         )
 
-        val responseEvent = testViewModel.loginWithEmailLiveData.getOrAwaitValue()
-
-        assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)
+        assertThat(testBinding.tiLayoutEmail.error).isNotNull()
     }
 
     @Test
-    fun pressImeActionOnPasswordEditTextWithSuccessStatus_returnsSuccess() {
-        val email = "email@test.com"
-        val password = "password"
+    fun pressImeActionOnPasswordEditTextWithBlankPassword_showsPasswordError() {
+        onView(withId(testBinding.tiEditEmail.id)).perform(
+            scrollTo(),
+            replaceText(email)
+        )
+        onView(withId(testBinding.tiEditPassword.id)).perform(
+            scrollTo(),
+            replaceText(""),
+            pressImeActionButton()
+        )
 
-        fakeUserRepository.addUser(email, password)
+        assertThat(testBinding.tiLayoutPassword.error).isNotNull()
+    }
+
+    @Test
+    fun pressImeActionOnPasswordEditTextWithInvalidEmail_showsEmailError() {
+        onView(withId(testBinding.tiEditEmail.id)).perform(
+            scrollTo(),
+            replaceText("invalid_email")
+        )
+        onView(withId(testBinding.tiEditPassword.id)).perform(
+            scrollTo(),
+            replaceText(password),
+            pressImeActionButton()
+        )
+
+        assertThat(testBinding.tiLayoutEmail.error).isNotNull()
+    }
+
+    @Test
+    fun pressImeActionOnPasswordEditTextWithInvalidCredentials_showsCredentialsErrorSnackbar() {
+        onView(withId(testBinding.tiEditEmail.id)).perform(
+            scrollTo(),
+            replaceText(email)
+        )
+        onView(withId(testBinding.tiEditPassword.id)).perform(
+            scrollTo(),
+            replaceText("wrong_password"),
+            pressImeActionButton()
+        )
+
+        onView(withText(context.getString(R.string.login_error_credentials)))
+            .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
+    }
+
+    @Test
+    fun pressImeActionOnPasswordEditTextWithSuccessStatus_navigatesToMainActivity() {
+        Intents.init()
 
         onView(withId(testBinding.tiEditEmail.id)).perform(
             scrollTo(),
@@ -171,37 +212,89 @@ class LoginFragmentTest {
             pressImeActionButton()
         )
 
-        val responseEvent = testViewModel.loginWithEmailLiveData.getOrAwaitValue()
+        Intents.intended(
+            hasComponent(MainActivity::class.java.name)
+        )
 
-        assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Success::class.java)
+        Intents.release()
     }
 
     @Test
-    fun clickOnLoginBtnWithErrorStatus_returnsError() {
+    fun clickOnLoginBtnWithBlankEmail_showsEmailError() {
         onView(withId(testBinding.tiEditEmail.id)).perform(
             scrollTo(),
-            replaceText("email")
+            replaceText("")
         )
         onView(withId(testBinding.tiEditPassword.id)).perform(
             scrollTo(),
-            replaceText("password")
+            replaceText(password)
         )
         onView(withId(testBinding.btnLogin.id)).perform(
             scrollTo(),
             click()
         )
 
-        val responseEvent = testViewModel.loginWithEmailLiveData.getOrAwaitValue()
-
-        assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Error::class.java)
+        assertThat(testBinding.tiLayoutEmail.error).isNotNull()
     }
 
     @Test
-    fun clickOnLoginBtnWithSuccessStatus_returnsSuccess() {
-        val email = "email@test.com"
-        val password = "password"
+    fun clickOnLoginBtnWithBlankPassword_showsPasswordError() {
+        onView(withId(testBinding.tiEditEmail.id)).perform(
+            scrollTo(),
+            replaceText(email)
+        )
+        onView(withId(testBinding.tiEditPassword.id)).perform(
+            scrollTo(),
+            replaceText("")
+        )
+        onView(withId(testBinding.btnLogin.id)).perform(
+            scrollTo(),
+            click()
+        )
 
-        fakeUserRepository.addUser(email, password)
+        assertThat(testBinding.tiLayoutPassword.error).isNotNull()
+    }
+
+    @Test
+    fun clickOnLoginBtnWithInvalidEmail_showsEmailError() {
+        onView(withId(testBinding.tiEditEmail.id)).perform(
+            scrollTo(),
+            replaceText("invalid_email")
+        )
+        onView(withId(testBinding.tiEditPassword.id)).perform(
+            scrollTo(),
+            replaceText(password)
+        )
+        onView(withId(testBinding.btnLogin.id)).perform(
+            scrollTo(),
+            click()
+        )
+
+        assertThat(testBinding.tiLayoutEmail.error).isNotNull()
+    }
+
+    @Test
+    fun clickOnLoginBtnWithInvalidCredentials_showsCredentialsErrorSnackbar() {
+        onView(withId(testBinding.tiEditEmail.id)).perform(
+            scrollTo(),
+            replaceText(email)
+        )
+        onView(withId(testBinding.tiEditPassword.id)).perform(
+            scrollTo(),
+            replaceText("wrong_password")
+        )
+        onView(withId(testBinding.btnLogin.id)).perform(
+            scrollTo(),
+            click()
+        )
+
+        onView(withText(context.getString(R.string.login_error_credentials)))
+            .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
+    }
+
+    @Test
+    fun clickOnLoginBtnWithSuccessStatus_navigatesToMainActivity() {
+        Intents.init()
 
         onView(withId(testBinding.tiEditEmail.id)).perform(
             scrollTo(),
@@ -209,16 +302,17 @@ class LoginFragmentTest {
         )
         onView(withId(testBinding.tiEditPassword.id)).perform(
             scrollTo(),
-            replaceText(password),
-            pressImeActionButton()
+            replaceText(password)
         )
         onView(withId(testBinding.btnLogin.id)).perform(
             scrollTo(),
             click()
         )
 
-        val responseEvent = testViewModel.loginWithEmailLiveData.getOrAwaitValue()
+        Intents.intended(
+            hasComponent(MainActivity::class.java.name)
+        )
 
-        assertThat(responseEvent.getContentIfNotHandled()).isInstanceOf(Resource.Success::class.java)
+        Intents.release()
     }
 }

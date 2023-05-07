@@ -4,6 +4,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
 import com.xeniac.warrantyroster_manager.authentication.presentation.auth.AuthFragment
 import com.xeniac.warrantyroster_manager.authentication.presentation.auth.AuthViewModel
+import com.xeniac.warrantyroster_manager.authentication.presentation.login.LoginFragment
+import com.xeniac.warrantyroster_manager.authentication.presentation.login.LoginViewModel
 import com.xeniac.warrantyroster_manager.core.data.repository.FakePreferencesRepository
 import com.xeniac.warrantyroster_manager.core.data.repository.FakeUserRepository
 import com.xeniac.warrantyroster_manager.onboarding.presentation.onboarding.OnBoardingFragment
@@ -31,6 +33,12 @@ class TestLandingFragmentFactory @Inject constructor() : FragmentFactory() {
             )
             AuthFragment::class.java.name -> AuthFragment(
                 AuthViewModel(FakePreferencesRepository())
+            )
+            LoginFragment::class.java.name -> LoginFragment(
+                LoginViewModel(
+                    fakeUserRepository,
+                    FakePreferencesRepository()
+                )
             )
             else -> super.instantiate(classLoader, className)
         }
