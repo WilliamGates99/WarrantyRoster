@@ -6,6 +6,7 @@ import androidx.navigation.Navigation
 import androidx.navigation.testing.TestNavHostController
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.Espresso.pressBackUnconditionally
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.RootMatchers.isDialog
@@ -14,7 +15,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.google.common.truth.Truth.assertThat
 import com.xeniac.warrantyroster_manager.R
-import com.xeniac.warrantyroster_manager.core.data.repository.FakePreferencesRepository
+import com.xeniac.warrantyroster_manager.core.presentation.landing.TestLandingFragmentFactory
 import com.xeniac.warrantyroster_manager.databinding.FragmentOnboardingBinding
 import com.xeniac.warrantyroster_manager.launchFragmentInHiltContainer
 import com.xeniac.warrantyroster_manager.util.Constants.ONBOARDING_1ST_INDEX
@@ -28,6 +29,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
 @HiltAndroidTest
@@ -39,11 +41,12 @@ class OnBoardingFragmentTest {
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
+    @Inject
+    lateinit var testFragmentFactory: TestLandingFragmentFactory
+
     private lateinit var context: Context
     private lateinit var navController: TestNavHostController
     private lateinit var testBinding: FragmentOnboardingBinding
-
-    private lateinit var testViewModel: OnBoardingViewModel
 
     @Before
     fun setUp() {
@@ -51,14 +54,11 @@ class OnBoardingFragmentTest {
 
         context = ApplicationProvider.getApplicationContext()
         navController = TestNavHostController(context)
+        navController.setGraph(R.navigation.nav_graph_landing)
 
-        testViewModel = OnBoardingViewModel(FakePreferencesRepository())
-
-        launchFragmentInHiltContainer<OnBoardingFragment> {
-            navController.setGraph(R.navigation.nav_graph_landing)
+        launchFragmentInHiltContainer<OnBoardingFragment>(fragmentFactory = testFragmentFactory) {
             Navigation.setViewNavController(requireView(), navController)
 
-            viewModel = testViewModel
             testBinding = binding
         }
     }
@@ -67,7 +67,8 @@ class OnBoardingFragmentTest {
     fun launchingOnBoardingFragment_shows1stOnBoardingFragment() {
         onView(withId(testBinding.viewpager.id)).check(matches(isDisplayed()))
 
-        onView(withText(context.getString(R.string.onboarding_1st_title))).check(matches(isDisplayed()))
+        onView(withText(context.getString(R.string.onboarding_1st_title)))
+            .check(matches(isDisplayed()))
         assertThat(testBinding.viewpager.currentItem).isEqualTo(ONBOARDING_1ST_INDEX)
     }
 
@@ -77,7 +78,8 @@ class OnBoardingFragmentTest {
 
         onView(withId(R.id.btn_onboarding_1st_next)).perform(click())
 
-        onView(withText(context.getString(R.string.onboarding_2nd_title))).check(matches(isDisplayed()))
+        onView(withText(context.getString(R.string.onboarding_2nd_title)))
+            .check(matches(isDisplayed()))
         assertThat(testBinding.viewpager.currentItem).isEqualTo(ONBOARDING_2ND_INDEX)
     }
 
@@ -87,7 +89,8 @@ class OnBoardingFragmentTest {
 
         onView(withId(R.id.btn_onboarding_1st_skip)).perform(click())
 
-        onView(withText(context.getString(R.string.onboarding_4th_title))).check(matches(isDisplayed()))
+        onView(withText(context.getString(R.string.onboarding_4th_title)))
+            .check(matches(isDisplayed()))
         assertThat(testBinding.viewpager.currentItem).isEqualTo(ONBOARDING_4TH_INDEX)
     }
 
@@ -101,7 +104,8 @@ class OnBoardingFragmentTest {
         // Click on Next button
         onView(withId(R.id.btn_onboarding_2nd_next)).perform(click())
 
-        onView(withText(context.getString(R.string.onboarding_3rd_title))).check(matches(isDisplayed()))
+        onView(withText(context.getString(R.string.onboarding_3rd_title)))
+            .check(matches(isDisplayed()))
         assertThat(testBinding.viewpager.currentItem).isEqualTo(ONBOARDING_3RD_INDEX)
     }
 
@@ -115,7 +119,8 @@ class OnBoardingFragmentTest {
         // Click on Back button
         onView(withId(R.id.btn_onboarding_2nd_back)).perform(click())
 
-        onView(withText(context.getString(R.string.onboarding_1st_title))).check(matches(isDisplayed()))
+        onView(withText(context.getString(R.string.onboarding_1st_title)))
+            .check(matches(isDisplayed()))
         assertThat(testBinding.viewpager.currentItem).isEqualTo(ONBOARDING_1ST_INDEX)
     }
 
@@ -130,7 +135,8 @@ class OnBoardingFragmentTest {
         // Click on Next button
         onView(withId(R.id.btn_onboarding_3rd_next)).perform(click())
 
-        onView(withText(context.getString(R.string.onboarding_4th_title))).check(matches(isDisplayed()))
+        onView(withText(context.getString(R.string.onboarding_4th_title)))
+            .check(matches(isDisplayed()))
         assertThat(testBinding.viewpager.currentItem).isEqualTo(ONBOARDING_4TH_INDEX)
     }
 
@@ -145,7 +151,8 @@ class OnBoardingFragmentTest {
         // Click on Back button
         onView(withId(R.id.btn_onboarding_3rd_back)).perform(click())
 
-        onView(withText(context.getString(R.string.onboarding_2nd_title))).check(matches(isDisplayed()))
+        onView(withText(context.getString(R.string.onboarding_2nd_title)))
+            .check(matches(isDisplayed()))
         assertThat(testBinding.viewpager.currentItem).isEqualTo(ONBOARDING_2ND_INDEX)
     }
 
@@ -162,6 +169,51 @@ class OnBoardingFragmentTest {
         onView(withId(R.id.btn_onboarding_4th_start)).perform(click())
 
         assertThat(navController.currentDestination?.id).isEqualTo(R.id.authFragment)
+    }
+
+    @Test
+    fun pressBackOn2ndOnBoardingPage_shows1stOnBoardingFragment() {
+        onView(withId(testBinding.viewpager.id)).check(matches(isDisplayed()))
+
+        // Swipe to 2nd page
+        onView(withId(R.id.btn_onboarding_1st_next)).perform(click())
+
+        pressBackUnconditionally()
+
+        onView(withText(context.getString(R.string.onboarding_1st_title)))
+            .check(matches(isDisplayed()))
+        assertThat(testBinding.viewpager.currentItem).isEqualTo(ONBOARDING_1ST_INDEX)
+    }
+
+    @Test
+    fun pressBackOn3rdOnBoardingPage_shows2ndOnBoardingFragment() {
+        onView(withId(testBinding.viewpager.id)).check(matches(isDisplayed()))
+
+        // Swipe to 3rd page
+        onView(withId(R.id.btn_onboarding_1st_next)).perform(click())
+        onView(withId(R.id.btn_onboarding_2nd_next)).perform(click())
+
+        pressBackUnconditionally()
+
+        onView(withText(context.getString(R.string.onboarding_2nd_title)))
+            .check(matches(isDisplayed()))
+        assertThat(testBinding.viewpager.currentItem).isEqualTo(ONBOARDING_2ND_INDEX)
+    }
+
+    @Test
+    fun pressBackOn4thOnBoardingPage_shows3rdOnBoardingFragment() {
+        onView(withId(testBinding.viewpager.id)).check(matches(isDisplayed()))
+
+        // Swipe to 4th page
+        onView(withId(R.id.btn_onboarding_1st_next)).perform(click())
+        onView(withId(R.id.btn_onboarding_2nd_next)).perform(click())
+        onView(withId(R.id.btn_onboarding_3rd_next)).perform(click())
+
+        pressBackUnconditionally()
+
+        onView(withText(context.getString(R.string.onboarding_3rd_title)))
+            .check(matches(isDisplayed()))
+        assertThat(testBinding.viewpager.currentItem).isEqualTo(ONBOARDING_3RD_INDEX)
     }
 
     @Test
