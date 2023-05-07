@@ -41,9 +41,9 @@ class OnBoarding1stFragmentTest {
 
         context = ApplicationProvider.getApplicationContext()
         navController = TestNavHostController(context)
+        navController.setGraph(R.navigation.nav_graph_landing)
 
         launchFragmentInHiltContainer<OnBoarding1stFragment> {
-            navController.setGraph(R.navigation.nav_graph_landing)
             Navigation.setViewNavController(requireView(), navController)
 
             testBinding = binding
