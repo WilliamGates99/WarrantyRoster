@@ -8,6 +8,7 @@ import com.xeniac.warrantyroster_manager.core.data.mapper.toTestUser
 import com.xeniac.warrantyroster_manager.core.domain.model.TestUser
 import com.xeniac.warrantyroster_manager.core.domain.model.UserInfo
 import com.xeniac.warrantyroster_manager.core.domain.repository.UserRepository
+import com.xeniac.warrantyroster_manager.util.Constants.ERROR_FIREBASE_AUTH_CREDENTIALS
 import com.xeniac.warrantyroster_manager.util.Constants.FIREBASE_AUTH_PROVIDER_ID_FACEBOOK
 import com.xeniac.warrantyroster_manager.util.Constants.FIREBASE_AUTH_PROVIDER_ID_GOOGLE
 import com.xeniac.warrantyroster_manager.util.Constants.FIREBASE_AUTH_PROVIDER_ID_TWITTER
@@ -166,7 +167,7 @@ class FakeUserRepository : UserRepository {
         } else {
             val isPasswordNotCorrect = users[0].password != password
             if (isPasswordNotCorrect) {
-                throw Exception()
+                throw Exception(ERROR_FIREBASE_AUTH_CREDENTIALS)
             }
         }
     }
