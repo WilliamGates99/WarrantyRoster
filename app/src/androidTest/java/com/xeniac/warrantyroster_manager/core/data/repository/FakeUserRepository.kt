@@ -58,7 +58,9 @@ class FakeUserRepository : UserRepository {
         if (shouldReturnNetworkError) {
             throw Exception()
         } else {
-            users.find { it.email == email && it.password == password } ?: throw Exception()
+            users.find {
+                it.email == email && it.password == password
+            } ?: throw Exception(ERROR_FIREBASE_AUTH_CREDENTIALS)
         }
     }
 
