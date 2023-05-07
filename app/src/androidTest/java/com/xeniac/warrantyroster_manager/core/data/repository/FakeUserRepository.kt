@@ -9,6 +9,7 @@ import com.xeniac.warrantyroster_manager.core.domain.model.TestUser
 import com.xeniac.warrantyroster_manager.core.domain.model.UserInfo
 import com.xeniac.warrantyroster_manager.core.domain.repository.UserRepository
 import com.xeniac.warrantyroster_manager.util.Constants.ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS
+import com.xeniac.warrantyroster_manager.util.Constants.ERROR_FIREBASE_AUTH_ACCOUNT_NOT_FOUND
 import com.xeniac.warrantyroster_manager.util.Constants.ERROR_FIREBASE_AUTH_CREDENTIALS
 import com.xeniac.warrantyroster_manager.util.Constants.FIREBASE_AUTH_PROVIDER_ID_FACEBOOK
 import com.xeniac.warrantyroster_manager.util.Constants.FIREBASE_AUTH_PROVIDER_ID_GOOGLE
@@ -124,7 +125,9 @@ class FakeUserRepository : UserRepository {
         if (shouldReturnNetworkError) {
             throw Exception()
         } else {
-            users.find { it.email == email } ?: throw Exception("email not found")
+            users.find {
+                it.email == email
+            } ?: throw Exception(ERROR_FIREBASE_AUTH_ACCOUNT_NOT_FOUND)
         }
     }
 
