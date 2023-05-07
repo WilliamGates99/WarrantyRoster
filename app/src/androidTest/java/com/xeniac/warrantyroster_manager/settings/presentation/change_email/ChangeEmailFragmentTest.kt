@@ -346,12 +346,8 @@ class ChangeEmailFragmentTest {
             )
         }
 
-        Thread.sleep(2000L)
-
         onView(withText(context.getString(R.string.change_email_error_credentials)))
             .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
-
-        Thread.sleep(2000L)
     }
 
     @Test
