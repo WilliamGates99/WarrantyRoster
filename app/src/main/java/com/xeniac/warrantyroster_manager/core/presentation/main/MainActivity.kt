@@ -34,9 +34,13 @@ import ir.tapsell.plus.AdRequestCallback
 import ir.tapsell.plus.TapsellPlus
 import ir.tapsell.plus.model.TapsellPlusAdModel
 import timber.log.Timber
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), MaxAdListener {
+
+    @Inject
+    lateinit var fragmentFactory: MainFragmentFactory
 
     private val viewModel by viewModels<MainActivityViewModel>()
     private var shouldShowSplashScreen = true
@@ -53,6 +57,8 @@ class MainActivity : AppCompatActivity(), MaxAdListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        supportFragmentManager.fragmentFactory = fragmentFactory
+
         splashScreen()
     }
 
