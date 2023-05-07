@@ -102,6 +102,8 @@ class ForgotPwSentFragmentTest {
 
     @Test
     fun clickOnResendBtnWithRemainingTimer_showsTimerIsNotZeroErrorSnackbar() {
+        var millisUntilFinished = 0L
+
         launchFragmentInHiltContainer<ForgotPwSentFragment>(
             fragmentArgs = testArgs,
             fragmentFactory = testFragmentFactory
@@ -112,6 +114,8 @@ class ForgotPwSentFragmentTest {
 
             viewModel!!.previousSentEmail = email
             viewModel!!.timerMillisUntilFinished = 10 * 1000L // 10 Seconds
+
+            millisUntilFinished = timerMillisUntilFinished
         }
 
         onView(withId(testBinding.btnResend.id))
@@ -119,8 +123,13 @@ class ForgotPwSentFragmentTest {
             .check(matches(isDisplayed()))
             .perform(click())
 
-        onView(withText(context.getString(R.string.forgot_pw_error_timer_is_not_zero_zero)))
-            .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
+        val message = context.resources.getQuantityString(
+            R.plurals.forgot_pw_error_timer_is_not_zero,
+            millisUntilFinished.toInt(),
+            millisUntilFinished.toInt()
+        )
+
+        onView(withText(message)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
     }
 
     @Test
