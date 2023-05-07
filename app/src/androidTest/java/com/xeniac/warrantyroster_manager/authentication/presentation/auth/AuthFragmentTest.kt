@@ -50,7 +50,6 @@ class AuthFragmentTest {
 
         context = ApplicationProvider.getApplicationContext()
         navController = TestNavHostController(context)
-
         navController.setGraph(R.navigation.nav_graph_landing)
 
         launchFragmentInHiltContainer<AuthFragment>(fragmentFactory = testFragmentFactory) {
