@@ -65,8 +65,8 @@ class ChangeEmailFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentChangeEmailBinding.bind(view)
-        viewModel =
-            viewModel ?: ViewModelProvider(requireActivity())[ChangeEmailViewModel::class.java]
+        viewModel = viewModel
+            ?: ViewModelProvider(requireActivity())[ChangeEmailViewModel::class.java]
         connectivityObserver = NetworkConnectivityObserver(requireContext())
 
         networkConnectivityObserver()
