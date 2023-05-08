@@ -53,6 +53,10 @@ class ChangeEmailFragmentTest {
     private lateinit var navController: TestNavHostController
     private lateinit var testBinding: FragmentChangeEmailBinding
 
+    private var backgroundColor = 0
+    private var grayLightColor = 0
+    private var blueColor = 0
+
     private val currentEmail = "email@test.com"
     private val password = "password"
     private val newEmail = "new_email@test.com"
@@ -62,8 +66,12 @@ class ChangeEmailFragmentTest {
         hiltRule.inject()
 
         context = ApplicationProvider.getApplicationContext()
-        navController = TestNavHostController(context)
 
+        backgroundColor = context.getColor(R.color.background)
+        grayLightColor = context.getColor(R.color.grayLight)
+        blueColor = context.getColor(R.color.blue)
+
+        navController = TestNavHostController(context)
         navController.setGraph(R.navigation.nav_graph_main)
         navController.setCurrentDestination(R.id.settingsFragment)
         navController.navigate(SettingsFragmentDirections.actionSettingsFragmentToChangeEmailFragment())
@@ -83,8 +91,8 @@ class ChangeEmailFragmentTest {
                 .check(matches(isDisplayed()))
                 .perform(click())
 
-            assertThat(tiLayoutPassword.boxBackgroundColor).isEqualTo(context.getColor(R.color.background))
-            assertThat(tiLayoutNewEmail.boxBackgroundColor).isEqualTo(context.getColor(R.color.grayLight))
+            assertThat(tiLayoutPassword.boxBackgroundColor).isEqualTo(backgroundColor)
+            assertThat(tiLayoutNewEmail.boxBackgroundColor).isEqualTo(grayLightColor)
         }
     }
 
@@ -96,8 +104,8 @@ class ChangeEmailFragmentTest {
                 .check(matches(isDisplayed()))
                 .perform(click())
 
-            assertThat(tiLayoutPassword.boxBackgroundColor).isEqualTo(context.getColor(R.color.grayLight))
-            assertThat(tiLayoutNewEmail.boxBackgroundColor).isEqualTo(context.getColor(R.color.background))
+            assertThat(tiLayoutPassword.boxBackgroundColor).isEqualTo(grayLightColor)
+            assertThat(tiLayoutNewEmail.boxBackgroundColor).isEqualTo(backgroundColor)
         }
     }
 
@@ -109,7 +117,7 @@ class ChangeEmailFragmentTest {
                 .check(matches(isDisplayed()))
                 .perform(click())
 
-            assertThat(tiLayoutPassword.boxStrokeColor).isEqualTo(context.getColor(R.color.blue))
+            assertThat(tiLayoutPassword.boxStrokeColor).isEqualTo(blueColor)
         }
     }
 
@@ -121,7 +129,7 @@ class ChangeEmailFragmentTest {
                 .check(matches(isDisplayed()))
                 .perform(click())
 
-            assertThat(tiLayoutNewEmail.boxStrokeColor).isEqualTo(context.getColor(R.color.blue))
+            assertThat(tiLayoutNewEmail.boxStrokeColor).isEqualTo(blueColor)
         }
     }
 

@@ -56,6 +56,7 @@ class ForgotPwFragmentTest {
         hiltRule.inject()
 
         context = ApplicationProvider.getApplicationContext()
+
         navController = TestNavHostController(context)
         navController.setGraph(R.navigation.nav_graph_auth)
         navController.navigate(LoginFragmentDirections.actionLoginFragmentToForgotPasswordFragment())
@@ -69,24 +70,28 @@ class ForgotPwFragmentTest {
 
     @Test
     fun clickOnEmailEditText_changesBoxBackgroundColor() {
+        val backgroundColor = context.getColor(R.color.background)
+
         testBinding.apply {
             onView(withId(tiEditEmail.id))
                 .perform(scrollTo())
                 .check(matches(isDisplayed()))
                 .perform(click())
 
-            assertThat(tiLayoutEmail.boxBackgroundColor).isEqualTo(context.getColor(R.color.background))
+            assertThat(tiLayoutEmail.boxBackgroundColor).isEqualTo(backgroundColor)
         }
     }
 
     @Test
     fun clickOnEmailEditText_changesBoxStrokeColor() {
+        val blueColor = context.getColor(R.color.blue)
+
         onView(withId(testBinding.tiEditEmail.id))
             .perform(scrollTo())
             .check(matches(isDisplayed()))
             .perform(click())
 
-        assertThat(testBinding.tiLayoutEmail.boxStrokeColor).isEqualTo(context.getColor(R.color.blue))
+        assertThat(testBinding.tiLayoutEmail.boxStrokeColor).isEqualTo(blueColor)
     }
 
     @Test

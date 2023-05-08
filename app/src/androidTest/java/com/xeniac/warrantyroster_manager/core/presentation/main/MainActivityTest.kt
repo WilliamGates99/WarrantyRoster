@@ -49,13 +49,15 @@ class MainActivityTest {
         Intents.init()
 
         context = ApplicationProvider.getApplicationContext()
+
         navController = TestNavHostController(context)
         navController.setGraph(R.navigation.nav_graph_main)
 
         activityScenario = ActivityScenario.launch(MainActivity::class.java)
         activityScenario.onActivity {
-            testBinding = it.binding
             Navigation.setViewNavController(testBinding.root, navController)
+
+            testBinding = it.binding
         }
     }
 

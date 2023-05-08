@@ -53,6 +53,10 @@ class ChangePasswordFragmentTest {
     private lateinit var navController: TestNavHostController
     private lateinit var testBinding: FragmentChangePasswordBinding
 
+    private var backgroundColor = 0
+    private var grayLightColor = 0
+    private var blueColor = 0
+
     private val currentPassword = "password"
     private val newPassword = "new_password"
 
@@ -61,8 +65,12 @@ class ChangePasswordFragmentTest {
         hiltRule.inject()
 
         context = ApplicationProvider.getApplicationContext()
-        navController = TestNavHostController(context)
 
+        backgroundColor = context.getColor(R.color.background)
+        grayLightColor = context.getColor(R.color.grayLight)
+        blueColor = context.getColor(R.color.blue)
+
+        navController = TestNavHostController(context)
         navController.setGraph(R.navigation.nav_graph_main)
         navController.setCurrentDestination(R.id.settingsFragment)
         navController.navigate(SettingsFragmentDirections.actionSettingsFragmentToChangePasswordFragment())
@@ -82,9 +90,9 @@ class ChangePasswordFragmentTest {
                 .check(matches(isDisplayed()))
                 .perform(click())
 
-            assertThat(tiLayoutCurrentPassword.boxBackgroundColor).isEqualTo(context.getColor(R.color.background))
-            assertThat(tiLayoutNewPassword.boxBackgroundColor).isEqualTo(context.getColor(R.color.grayLight))
-            assertThat(tiLayoutConfirmNewPassword.boxBackgroundColor).isEqualTo(context.getColor(R.color.grayLight))
+            assertThat(tiLayoutCurrentPassword.boxBackgroundColor).isEqualTo(backgroundColor)
+            assertThat(tiLayoutNewPassword.boxBackgroundColor).isEqualTo(grayLightColor)
+            assertThat(tiLayoutConfirmNewPassword.boxBackgroundColor).isEqualTo(grayLightColor)
         }
     }
 
@@ -96,9 +104,9 @@ class ChangePasswordFragmentTest {
                 .check(matches(isDisplayed()))
                 .perform(click())
 
-            assertThat(tiLayoutCurrentPassword.boxBackgroundColor).isEqualTo(context.getColor(R.color.grayLight))
-            assertThat(tiLayoutNewPassword.boxBackgroundColor).isEqualTo(context.getColor(R.color.background))
-            assertThat(tiLayoutConfirmNewPassword.boxBackgroundColor).isEqualTo(context.getColor(R.color.grayLight))
+            assertThat(tiLayoutCurrentPassword.boxBackgroundColor).isEqualTo(grayLightColor)
+            assertThat(tiLayoutNewPassword.boxBackgroundColor).isEqualTo(backgroundColor)
+            assertThat(tiLayoutConfirmNewPassword.boxBackgroundColor).isEqualTo(grayLightColor)
         }
     }
 
@@ -110,9 +118,9 @@ class ChangePasswordFragmentTest {
                 .check(matches(isDisplayed()))
                 .perform(click())
 
-            assertThat(tiLayoutCurrentPassword.boxBackgroundColor).isEqualTo(context.getColor(R.color.grayLight))
-            assertThat(tiLayoutNewPassword.boxBackgroundColor).isEqualTo(context.getColor(R.color.grayLight))
-            assertThat(tiLayoutConfirmNewPassword.boxBackgroundColor).isEqualTo(context.getColor(R.color.background))
+            assertThat(tiLayoutCurrentPassword.boxBackgroundColor).isEqualTo(grayLightColor)
+            assertThat(tiLayoutNewPassword.boxBackgroundColor).isEqualTo(grayLightColor)
+            assertThat(tiLayoutConfirmNewPassword.boxBackgroundColor).isEqualTo(backgroundColor)
         }
     }
 
@@ -124,7 +132,7 @@ class ChangePasswordFragmentTest {
                 .check(matches(isDisplayed()))
                 .perform(click())
 
-            assertThat(tiLayoutCurrentPassword.boxStrokeColor).isEqualTo(context.getColor(R.color.blue))
+            assertThat(tiLayoutCurrentPassword.boxStrokeColor).isEqualTo(blueColor)
         }
     }
 
@@ -136,7 +144,7 @@ class ChangePasswordFragmentTest {
                 .check(matches(isDisplayed()))
                 .perform(click())
 
-            assertThat(tiLayoutNewPassword.boxStrokeColor).isEqualTo(context.getColor(R.color.blue))
+            assertThat(tiLayoutNewPassword.boxStrokeColor).isEqualTo(blueColor)
         }
     }
 
@@ -148,7 +156,7 @@ class ChangePasswordFragmentTest {
                 .check(matches(isDisplayed()))
                 .perform(click())
 
-            assertThat(tiLayoutConfirmNewPassword.boxStrokeColor).isEqualTo(context.getColor(R.color.blue))
+            assertThat(tiLayoutConfirmNewPassword.boxStrokeColor).isEqualTo(blueColor)
         }
     }
 

@@ -1,6 +1,7 @@
 package com.xeniac.warrantyroster_manager.settings.presentation.linked_accounts
 
 import android.content.Context
+import android.content.res.ColorStateList
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.core.content.ContextCompat
@@ -48,11 +49,18 @@ class LinkedAccountsFragmentTest {
     private lateinit var navController: TestNavHostController
     private lateinit var testBinding: FragmentLinkedAccountsBinding
 
+    private lateinit var greenColor: ColorStateList
+    private lateinit var redColor: ColorStateList
+
     @Before
     fun setUp() {
         hiltRule.inject()
 
         context = ApplicationProvider.getApplicationContext()
+
+        greenColor = ContextCompat.getColorStateList(context, R.color.green)!!
+        redColor = ContextCompat.getColorStateList(context, R.color.red)!!
+
         navController = TestNavHostController(context)
 
         navController.setGraph(R.navigation.nav_graph_main)
@@ -93,8 +101,6 @@ class LinkedAccountsFragmentTest {
 
     @Test
     fun userWithLinkedGoogleAccount_setsStatusIndicatorsToGreen() {
-        val greenColor = ContextCompat.getColorStateList(context, R.color.green)
-
         launchFragmentInHiltContainer<LinkedAccountsFragment>(fragmentFactory = testFragmentFactory) {
             Navigation.setViewNavController(requireView(), navController)
 
@@ -110,8 +116,6 @@ class LinkedAccountsFragmentTest {
 
     @Test
     fun userWithLinkedTwitterAccount_setsStatusIndicatorsToGreen() {
-        val greenColor = ContextCompat.getColorStateList(context, R.color.green)
-
         launchFragmentInHiltContainer<LinkedAccountsFragment>(fragmentFactory = testFragmentFactory) {
             Navigation.setViewNavController(requireView(), navController)
 
@@ -127,8 +131,6 @@ class LinkedAccountsFragmentTest {
 
     @Test
     fun userWithLinkedFacebookAccount_setsStatusIndicatorsToGreen() {
-        val greenColor = ContextCompat.getColorStateList(context, R.color.green)
-
         launchFragmentInHiltContainer<LinkedAccountsFragment>(fragmentFactory = testFragmentFactory) {
             Navigation.setViewNavController(requireView(), navController)
 
@@ -144,8 +146,6 @@ class LinkedAccountsFragmentTest {
 
     @Test
     fun userWithoutLinkedGoogleAccount_setsStatusIndicatorsToRed() {
-        val redColor = ContextCompat.getColorStateList(context, R.color.red)
-
         launchFragmentInHiltContainer<LinkedAccountsFragment>(fragmentFactory = testFragmentFactory) {
             Navigation.setViewNavController(requireView(), navController)
 
@@ -163,8 +163,6 @@ class LinkedAccountsFragmentTest {
 
     @Test
     fun userWithoutLinkedTwitterAccount_setsStatusIndicatorsToRed() {
-        val redColor = ContextCompat.getColorStateList(context, R.color.red)
-
         launchFragmentInHiltContainer<LinkedAccountsFragment>(fragmentFactory = testFragmentFactory) {
             Navigation.setViewNavController(requireView(), navController)
 
@@ -182,8 +180,6 @@ class LinkedAccountsFragmentTest {
 
     @Test
     fun userWithoutLinkedFacebookAccount_setsStatusIndicatorsToRed() {
-        val redColor = ContextCompat.getColorStateList(context, R.color.red)
-
         launchFragmentInHiltContainer<LinkedAccountsFragment>(fragmentFactory = testFragmentFactory) {
             Navigation.setViewNavController(requireView(), navController)
 
@@ -201,8 +197,6 @@ class LinkedAccountsFragmentTest {
 
     @Test
     fun clickOnGoogleBtnOnUserWithLinkedGoogleAccount_unlinksGoogleAccount() {
-        val redColor = ContextCompat.getColorStateList(context, R.color.red)
-
         launchFragmentInHiltContainer<LinkedAccountsFragment>(fragmentFactory = testFragmentFactory) {
             Navigation.setViewNavController(requireView(), navController)
 
@@ -223,8 +217,6 @@ class LinkedAccountsFragmentTest {
 
     @Test
     fun clickOnTwitterBtnOnUserWithLinkedTwitterAccount_unlinksTwitterAccount() {
-        val redColor = ContextCompat.getColorStateList(context, R.color.red)
-
         launchFragmentInHiltContainer<LinkedAccountsFragment>(fragmentFactory = testFragmentFactory) {
             Navigation.setViewNavController(requireView(), navController)
 
@@ -245,8 +237,6 @@ class LinkedAccountsFragmentTest {
 
     @Test
     fun clickOnFacebookBtnOnUserWithLinkedFacebookAccount_unlinksFacebookAccount() {
-        val redColor = ContextCompat.getColorStateList(context, R.color.red)
-
         launchFragmentInHiltContainer<LinkedAccountsFragment>(fragmentFactory = testFragmentFactory) {
             Navigation.setViewNavController(requireView(), navController)
 
