@@ -207,8 +207,6 @@ class LinkedAccountsFragmentTest {
             Navigation.setViewNavController(requireView(), navController)
 
             testBinding = binding
-
-            viewModel!!.unlinkGoogleAccount()
         }
 
         onView(withId(testBinding.cvGoogle.id))
@@ -231,8 +229,6 @@ class LinkedAccountsFragmentTest {
             Navigation.setViewNavController(requireView(), navController)
 
             testBinding = binding
-
-            viewModel!!.unlinkTwitterAccount()
         }
 
         onView(withId(testBinding.cvTwitter.id))
@@ -255,8 +251,6 @@ class LinkedAccountsFragmentTest {
             Navigation.setViewNavController(requireView(), navController)
 
             testBinding = binding
-
-            viewModel!!.unlinkFacebookAccount()
         }
 
         onView(withId(testBinding.cvFacebook.id))
