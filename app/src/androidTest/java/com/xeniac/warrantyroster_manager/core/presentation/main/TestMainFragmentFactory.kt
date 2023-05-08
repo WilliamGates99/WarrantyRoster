@@ -6,6 +6,8 @@ import com.xeniac.warrantyroster_manager.core.data.repository.FakePreferencesRep
 import com.xeniac.warrantyroster_manager.core.data.repository.FakeUserRepository
 import com.xeniac.warrantyroster_manager.settings.presentation.change_email.ChangeEmailFragment
 import com.xeniac.warrantyroster_manager.settings.presentation.change_email.ChangeEmailViewModel
+import com.xeniac.warrantyroster_manager.settings.presentation.change_password.ChangePasswordFragment
+import com.xeniac.warrantyroster_manager.settings.presentation.change_password.ChangePasswordViewModel
 import com.xeniac.warrantyroster_manager.settings.presentation.settings.SettingsFragment
 import com.xeniac.warrantyroster_manager.settings.presentation.settings.SettingsViewModel
 import javax.inject.Inject
@@ -34,6 +36,9 @@ class TestMainFragmentFactory @Inject constructor() : FragmentFactory() {
             )
             ChangeEmailFragment::class.java.name -> ChangeEmailFragment(
                 ChangeEmailViewModel(fakeUserRepository)
+            )
+            ChangePasswordFragment::class.java.name -> ChangePasswordFragment(
+                ChangePasswordViewModel(fakeUserRepository)
             )
             else -> super.instantiate(classLoader, className)
         }

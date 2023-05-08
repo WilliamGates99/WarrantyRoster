@@ -44,14 +44,15 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
+import javax.inject.Inject
 
 @AndroidEntryPoint
-class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
+class ChangePasswordFragment @Inject constructor(
+    var viewModel: ChangePasswordViewModel?
+) : Fragment(R.layout.fragment_change_password) {
 
     private var _binding: FragmentChangePasswordBinding? = null
     val binding get() = _binding!!
-
-    lateinit var viewModel: ChangePasswordViewModel
 
     private lateinit var newPassword: String
 
@@ -63,7 +64,8 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentChangePasswordBinding.bind(view)
-        viewModel = ViewModelProvider(requireActivity())[ChangePasswordViewModel::class.java]
+        viewModel = viewModel
+            ?: ViewModelProvider(requireActivity())[ChangePasswordViewModel::class.java]
         connectivityObserver = NetworkConnectivityObserver(requireContext())
 
         networkConnectivityObserver()
@@ -254,7 +256,11 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
             newPassword = binding.tiEditNewPassword.text.toString().trim()
             val retypeNewPassword = binding.tiEditConfirmNewPassword.text.toString().trim()
 
-            viewModel.validateChangePasswordInputs(currentPassword, newPassword, retypeNewPassword)
+            viewModel!!.validateChangePasswordInputs(
+                currentPassword,
+                newPassword,
+                retypeNewPassword
+            )
         } else {
             snackbar = showUnavailableNetworkConnectionError(
                 requireContext(), requireView()
@@ -264,7 +270,7 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
     }
 
     private fun validateInputsObserver() =
-        viewModel.validateInputsLiveData.observe(viewLifecycleOwner) { responseEvent ->
+        viewModel!!.validateInputsLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
                     is Resource.Loading -> {
@@ -274,17 +280,17 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
                     is Resource.Error -> {
                         response.message?.asString(requireContext())?.let {
                             when {
-                                it.contains(ERROR_INPUT_BLANK_PASSWORD) -> {
+                                it == ERROR_INPUT_BLANK_PASSWORD -> {
                                     binding.tiLayoutCurrentPassword.error =
                                         requireContext().getString(R.string.change_password_error_blank_current)
                                     binding.tiLayoutCurrentPassword.requestFocus()
                                 }
-                                it.contains(ERROR_INPUT_BLANK_NEW_PASSWORD) -> {
+                                it == ERROR_INPUT_BLANK_NEW_PASSWORD -> {
                                     binding.tiLayoutNewPassword.error =
                                         requireContext().getString(R.string.change_password_error_blank_new)
                                     binding.tiLayoutNewPassword.requestFocus()
                                 }
-                                it.contains(ERROR_INPUT_BLANK_RETYPE_PASSWORD) -> {
+                                it == ERROR_INPUT_BLANK_RETYPE_PASSWORD -> {
                                     binding.tiLayoutConfirmNewPassword.error =
                                         requireContext().getString(R.string.change_password_error_blank_confirm)
                                     binding.tiLayoutConfirmNewPassword.requestFocus()
@@ -311,10 +317,10 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
             }
         }
 
-    private fun reAuthenticateUser(password: String) = viewModel.reAuthenticateUser(password)
+    private fun reAuthenticateUser(password: String) = viewModel!!.reAuthenticateUser(password)
 
     private fun reAuthenticateUserObserver() =
-        viewModel.reAuthenticateUserLiveData.observe(viewLifecycleOwner) { responseEvent ->
+        viewModel!!.reAuthenticateUserLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
                     is Resource.Loading -> showLoadingAnimation()
@@ -355,10 +361,10 @@ class ChangePasswordFragment : Fragment(R.layout.fragment_change_password) {
             }
         }
 
-    private fun changeUserPassword() = viewModel.changeUserPassword(newPassword)
+    private fun changeUserPassword() = viewModel!!.changeUserPassword(newPassword)
 
     private fun changeUserPasswordObserver() =
-        viewModel.changeUserPasswordLiveData.observe(viewLifecycleOwner) { responseEvent ->
+        viewModel!!.changeUserPasswordLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
                     is Resource.Loading -> showLoadingAnimation()
