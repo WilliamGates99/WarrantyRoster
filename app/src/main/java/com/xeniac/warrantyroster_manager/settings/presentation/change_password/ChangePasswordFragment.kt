@@ -149,31 +149,43 @@ class ChangePasswordFragment @Inject constructor(
     private fun textInputsBackgroundColor() = binding.apply {
         tiEditCurrentPassword.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                tiLayoutCurrentPassword.boxBackgroundColor =
-                    ContextCompat.getColor(requireContext(), R.color.background)
+                tiLayoutCurrentPassword.boxBackgroundColor = ContextCompat.getColor(
+                    requireContext(),
+                    R.color.background
+                )
             } else {
-                tiLayoutCurrentPassword.boxBackgroundColor =
-                    ContextCompat.getColor(requireContext(), R.color.grayLight)
+                tiLayoutCurrentPassword.boxBackgroundColor = ContextCompat.getColor(
+                    requireContext(),
+                    R.color.grayLight
+                )
             }
         }
 
         tiEditNewPassword.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                tiLayoutNewPassword.boxBackgroundColor =
-                    ContextCompat.getColor(requireContext(), R.color.background)
+                tiLayoutNewPassword.boxBackgroundColor = ContextCompat.getColor(
+                    requireContext(),
+                    R.color.background
+                )
             } else {
-                tiLayoutNewPassword.boxBackgroundColor =
-                    ContextCompat.getColor(requireContext(), R.color.grayLight)
+                tiLayoutNewPassword.boxBackgroundColor = ContextCompat.getColor(
+                    requireContext(),
+                    R.color.grayLight
+                )
             }
         }
 
         tiEditConfirmNewPassword.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                tiLayoutConfirmNewPassword.boxBackgroundColor =
-                    ContextCompat.getColor(requireContext(), R.color.background)
+                tiLayoutConfirmNewPassword.boxBackgroundColor = ContextCompat.getColor(
+                    requireContext(),
+                    R.color.background
+                )
             } else {
-                tiLayoutConfirmNewPassword.boxBackgroundColor =
-                    ContextCompat.getColor(requireContext(), R.color.grayLight)
+                tiLayoutConfirmNewPassword.boxBackgroundColor = ContextCompat.getColor(
+                    requireContext(),
+                    R.color.grayLight
+                )
             }
         }
     }
@@ -181,8 +193,10 @@ class ChangePasswordFragment @Inject constructor(
     private fun textInputsStrokeColor() = binding.apply {
         tiEditCurrentPassword.addTextChangedListener {
             tiLayoutCurrentPassword.isErrorEnabled = false
-            tiLayoutCurrentPassword.boxStrokeColor =
-                ContextCompat.getColor(requireContext(), R.color.blue)
+            tiLayoutCurrentPassword.boxStrokeColor = ContextCompat.getColor(
+                requireContext(),
+                R.color.blue
+            )
         }
 
         tiEditNewPassword.addTextChangedListener { inputPassword ->
@@ -191,28 +205,37 @@ class ChangePasswordFragment @Inject constructor(
             if (tiLayoutNewPassword.hasFocus()) {
                 when (passwordStrength(inputPassword.toString())) {
                     (-1).toByte() -> {
-                        tiLayoutNewPassword.boxStrokeColor =
-                            ContextCompat.getColor(requireContext(), R.color.red)
-                        tiLayoutNewPassword.helperText =
-                            getString(R.string.change_password_helper_password_weak)
+                        tiLayoutNewPassword.boxStrokeColor = ContextCompat.getColor(
+                            requireContext(),
+                            R.color.red
+                        )
+                        tiLayoutNewPassword.helperText = getString(
+                            R.string.change_password_helper_password_weak
+                        )
                         tiLayoutNewPassword.setHelperTextColor(
                             ContextCompat.getColorStateList(requireContext(), R.color.red)
                         )
                     }
                     (0).toByte() -> {
-                        tiLayoutNewPassword.boxStrokeColor =
-                            ContextCompat.getColor(requireContext(), R.color.orange)
-                        tiLayoutNewPassword.helperText =
-                            getString(R.string.change_password_helper_password_mediocre)
+                        tiLayoutNewPassword.boxStrokeColor = ContextCompat.getColor(
+                            requireContext(),
+                            R.color.orange
+                        )
+                        tiLayoutNewPassword.helperText = getString(
+                            R.string.change_password_helper_password_mediocre
+                        )
                         tiLayoutNewPassword.setHelperTextColor(
                             ContextCompat.getColorStateList(requireContext(), R.color.orange)
                         )
                     }
                     (1).toByte() -> {
-                        tiLayoutNewPassword.boxStrokeColor =
-                            ContextCompat.getColor(requireContext(), R.color.green)
-                        tiLayoutNewPassword.helperText =
-                            getString(R.string.change_password_helper_password_strong)
+                        tiLayoutNewPassword.boxStrokeColor = ContextCompat.getColor(
+                            requireContext(),
+                            R.color.green
+                        )
+                        tiLayoutNewPassword.helperText = getString(
+                            R.string.change_password_helper_password_strong
+                        )
                         tiLayoutNewPassword.setHelperTextColor(
                             ContextCompat.getColorStateList(requireContext(), R.color.green)
                         )
@@ -223,8 +246,10 @@ class ChangePasswordFragment @Inject constructor(
 
         tiEditConfirmNewPassword.addTextChangedListener {
             tiLayoutCurrentPassword.isErrorEnabled = false
-            tiLayoutCurrentPassword.boxStrokeColor =
-                ContextCompat.getColor(requireContext(), R.color.blue)
+            tiLayoutCurrentPassword.boxStrokeColor = ContextCompat.getColor(
+                requireContext(),
+                R.color.blue
+            )
         }
     }
 
