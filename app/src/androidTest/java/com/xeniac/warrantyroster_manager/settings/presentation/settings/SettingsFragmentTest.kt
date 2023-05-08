@@ -107,6 +107,18 @@ class SettingsFragmentTest {
     }
 
     @Test
+    fun clickOnVerifyBtn_showsSelectLanguageDialog() {
+        onView(withId(testBinding.btnAccountVerification.id))
+            .perform(scrollTo())
+            .check(matches(isDisplayed()))
+            .perform(click())
+
+        onView(withText(context.getString(R.string.settings_dialog_message_verification_email_sent)))
+            .inRoot(isDialog())
+            .check(matches(isDisplayed()))
+    }
+
+    @Test
     fun clickOnLinkedAccountsBtn_navigatesToLinkedAccountsFragment() {
         onView(withId(testBinding.clAccountLinkedAccounts.id))
             .perform(scrollTo())
