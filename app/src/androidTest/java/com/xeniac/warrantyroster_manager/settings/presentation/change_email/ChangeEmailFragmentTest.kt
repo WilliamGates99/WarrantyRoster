@@ -53,7 +53,7 @@ class ChangeEmailFragmentTest {
     private lateinit var navController: TestNavHostController
     private lateinit var testBinding: FragmentChangeEmailBinding
 
-    private val email = "email@test.com"
+    private val currentEmail = "email@test.com"
     private val password = "password"
     private val newEmail = "new_email@test.com"
 
@@ -153,7 +153,7 @@ class ChangeEmailFragmentTest {
             )
             onView(withId(tiEditNewEmail.id)).perform(
                 scrollTo(),
-                replaceText(email),
+                replaceText(currentEmail),
                 pressImeActionButton()
             )
 
@@ -204,7 +204,7 @@ class ChangeEmailFragmentTest {
             )
             onView(withId(tiEditNewEmail.id)).perform(
                 scrollTo(),
-                replaceText(email),
+                replaceText(currentEmail),
                 pressImeActionButton()
             )
 
@@ -258,7 +258,7 @@ class ChangeEmailFragmentTest {
             )
             onView(withId(tiEditNewEmail.id)).perform(
                 scrollTo(),
-                replaceText(email)
+                replaceText(currentEmail)
             )
             onView(withId(btnChangeEmail.id)).perform(
                 scrollTo(),
@@ -318,7 +318,7 @@ class ChangeEmailFragmentTest {
             )
             onView(withId(tiEditNewEmail.id)).perform(
                 scrollTo(),
-                replaceText(email)
+                replaceText(currentEmail)
             )
             onView(withId(btnChangeEmail.id)).perform(
                 scrollTo(),
