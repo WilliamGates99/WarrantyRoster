@@ -79,14 +79,12 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class RegisterFragment @Inject constructor(
-    var viewModel: RegisterViewModel?
+    private val firebaseAuth: FirebaseAuth,
+    var viewModel: RegisterViewModel? = null
 ) : Fragment(R.layout.fragment_register) {
 
     private var _binding: FragmentRegisterBinding? = null
     val binding get() = _binding!!
-
-    @Inject
-    lateinit var firebaseAuth: FirebaseAuth
 
     private lateinit var currentAppLanguage: String
 

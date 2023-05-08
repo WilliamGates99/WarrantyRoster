@@ -74,14 +74,15 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class LoginFragment @Inject constructor(
-    var viewModel: LoginViewModel?
+    private val firebaseAuth: FirebaseAuth,
+    var viewModel: LoginViewModel? = null
 ) : Fragment(R.layout.fragment_login) {
 
     private var _binding: FragmentLoginBinding? = null
     val binding get() = _binding!!
 
-    @Inject
-    lateinit var firebaseAuth: FirebaseAuth
+//    @Inject
+//    lateinit var firebaseAuth: FirebaseAuth
 
     private lateinit var currentAppLanguage: String
 

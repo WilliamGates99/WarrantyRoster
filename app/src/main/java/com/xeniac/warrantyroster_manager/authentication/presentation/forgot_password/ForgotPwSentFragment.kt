@@ -39,7 +39,8 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class ForgotPwSentFragment @Inject constructor(
-    var viewModel: ForgotPwViewModel?
+    private val decimalFormat: DecimalFormat,
+    var viewModel: ForgotPwViewModel? = null
 ) : Fragment(R.layout.fragment_forgot_pw_sent) {
 
     private var _binding: FragmentForgotPwSentBinding? = null
@@ -48,9 +49,6 @@ class ForgotPwSentFragment @Inject constructor(
     private lateinit var email: String
     private var isFirstTimeSendingEmail = true
     var timerMillisUntilFinished = 0L
-
-    @Inject
-    lateinit var decimalFormat: DecimalFormat
 
     private lateinit var connectivityObserver: ConnectivityObserver
     private var networkStatus: ConnectivityObserver.Status = ConnectivityObserver.Status.UNAVAILABLE

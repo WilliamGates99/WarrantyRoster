@@ -3,6 +3,7 @@ package com.xeniac.warrantyroster_manager.core.presentation.landing
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
 import androidx.lifecycle.SavedStateHandle
+import com.google.firebase.auth.FirebaseAuth
 import com.xeniac.warrantyroster_manager.authentication.presentation.auth.AuthFragment
 import com.xeniac.warrantyroster_manager.authentication.presentation.auth.AuthViewModel
 import com.xeniac.warrantyroster_manager.authentication.presentation.forgot_password.ForgotPwFragment
@@ -16,9 +17,13 @@ import com.xeniac.warrantyroster_manager.core.data.repository.FakePreferencesRep
 import com.xeniac.warrantyroster_manager.core.data.repository.FakeUserRepository
 import com.xeniac.warrantyroster_manager.onboarding.presentation.onboarding.OnBoardingFragment
 import com.xeniac.warrantyroster_manager.onboarding.presentation.onboarding.OnBoardingViewModel
+import java.text.DecimalFormat
 import javax.inject.Inject
 
-class TestLandingFragmentFactory @Inject constructor() : FragmentFactory() {
+class TestLandingFragmentFactory @Inject constructor(
+    private val firebaseAuth: FirebaseAuth,
+    private val decimalFormat: DecimalFormat
+) : FragmentFactory() {
 
     private val email = "email@test.com"
     private val password = "password"
@@ -41,12 +46,14 @@ class TestLandingFragmentFactory @Inject constructor() : FragmentFactory() {
                 AuthViewModel(FakePreferencesRepository())
             )
             LoginFragment::class.java.name -> LoginFragment(
+                firebaseAuth,
                 LoginViewModel(
                     fakeUserRepository,
                     FakePreferencesRepository()
                 )
             )
             RegisterFragment::class.java.name -> RegisterFragment(
+                firebaseAuth,
                 RegisterViewModel(
                     fakeUserRepository,
                     FakePreferencesRepository()
@@ -59,6 +66,7 @@ class TestLandingFragmentFactory @Inject constructor() : FragmentFactory() {
                 )
             )
             ForgotPwSentFragment::class.java.name -> ForgotPwSentFragment(
+                decimalFormat,
                 ForgotPwViewModel(
                     fakeUserRepository,
                     SavedStateHandle()
