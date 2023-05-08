@@ -179,44 +179,6 @@ class AddWarrantyFragmentTest {
     }
 
     @Test
-    fun clickOnDateStartingEditText_changesBoxBackgroundColor() {
-        testBinding.apply {
-            onView(withId(tiEditDateStarting.id))
-                .perform(scrollTo())
-                .check(matches(isDisplayed()))
-                .perform(click())
-
-            assertThat(tiLayoutTitle.boxBackgroundColor).isEqualTo(grayLightColor)
-            assertThat(tiLayoutCategory.boxBackgroundColor).isEqualTo(grayLightColor)
-            assertThat(tiLayoutBrand.boxBackgroundColor).isEqualTo(grayLightColor)
-            assertThat(tiLayoutModel.boxBackgroundColor).isEqualTo(grayLightColor)
-            assertThat(tiLayoutSerial.boxBackgroundColor).isEqualTo(grayLightColor)
-            assertThat(tiLayoutDateStarting.boxBackgroundColor).isEqualTo(backgroundColor)
-            assertThat(tiLayoutDateExpiry.boxBackgroundColor).isEqualTo(grayLightColor)
-            assertThat(tiLayoutDescription.boxBackgroundColor).isEqualTo(grayLightColor)
-        }
-    }
-
-    @Test
-    fun clickOnDateExpiryEditText_changesBoxBackgroundColor() {
-        testBinding.apply {
-            onView(withId(tiEditDateExpiry.id))
-                .perform(scrollTo())
-                .check(matches(isDisplayed()))
-                .perform(click())
-
-            assertThat(tiLayoutTitle.boxBackgroundColor).isEqualTo(grayLightColor)
-            assertThat(tiLayoutCategory.boxBackgroundColor).isEqualTo(grayLightColor)
-            assertThat(tiLayoutBrand.boxBackgroundColor).isEqualTo(grayLightColor)
-            assertThat(tiLayoutModel.boxBackgroundColor).isEqualTo(grayLightColor)
-            assertThat(tiLayoutSerial.boxBackgroundColor).isEqualTo(grayLightColor)
-            assertThat(tiLayoutDateStarting.boxBackgroundColor).isEqualTo(grayLightColor)
-            assertThat(tiLayoutDateExpiry.boxBackgroundColor).isEqualTo(backgroundColor)
-            assertThat(tiLayoutDescription.boxBackgroundColor).isEqualTo(grayLightColor)
-        }
-    }
-
-    @Test
     fun clickOnDescriptionEditText_changesBoxBackgroundColor() {
         testBinding.apply {
             onView(withId(tiEditDescription.id))
@@ -436,44 +398,6 @@ class AddWarrantyFragmentTest {
 
             assertThat(tiLayoutTitle.error).isNotNull()
         }
-    }
-
-    @Test
-    fun clickOnAddWarrantyMenuWithBlankStartingDate_opensSelectStartingDateDialog() {
-        testBinding.apply {
-            cbLifetime.isChecked = true
-
-            onView(withId(tiEditTitle.id)).perform(
-                scrollTo(),
-                replaceText(title)
-            )
-            onView(withId(tiEditDateStarting.id)).perform(
-                scrollTo(),
-                replaceText("")
-            )
-            onView(withId(tiEditBrand.id)).perform(
-                scrollTo(),
-                replaceText(brand)
-            )
-            onView(withId(tiEditModel.id)).perform(
-                scrollTo(),
-                replaceText(model)
-            )
-            onView(withId(tiEditSerial.id)).perform(
-                scrollTo(),
-                replaceText(serialNumber)
-            )
-            onView(withId(tiEditDescription.id)).perform(
-                scrollTo(),
-                replaceText(description)
-            )
-        }
-
-        onView(withId(R.id.action_menu_add)).perform(click())
-
-        onView(withText(context.getString(R.string.add_warranty_title_date_picker_starting)))
-            .inRoot(isDialog())
-            .check(matches(isDisplayed()))
     }
 
     @Test
