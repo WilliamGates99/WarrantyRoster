@@ -150,10 +150,10 @@ class SettingsFragment @Inject constructor(
          */
         delay(1.seconds)
         if (networkStatus == ConnectivityObserver.Status.AVAILABLE) {
-            Timber.i("net is available")
+            Timber.i("Network Status is $networkStatus")
             getReloadedAccountInfo()
         } else {
-            Timber.e("net is $networkStatus")
+            Timber.e("Network Status is $networkStatus")
         }
     }
 
