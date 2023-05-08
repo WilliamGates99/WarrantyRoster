@@ -311,9 +311,9 @@ class SettingsFragment @Inject constructor(
                     is Resource.Success -> {
                         hideLoadingAnimation()
                         showOneBtnAlertDialog(
-                            requireContext(),
-                            R.string.settings_dialog_message,
-                            R.string.settings_dialog_positive
+                            context = requireContext(),
+                            message = R.string.settings_dialog_message_verification_email_sent,
+                            positiveBtn = R.string.settings_dialog_btn_positive_verification_email_sent
                         )
                     }
                     is Resource.Error -> {
