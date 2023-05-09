@@ -10,12 +10,15 @@ import com.xeniac.warrantyroster_manager.settings.presentation.linked_accounts.L
 import com.xeniac.warrantyroster_manager.settings.presentation.settings.SettingsFragment
 import com.xeniac.warrantyroster_manager.warranty_management.presentation.add_warranty.AddWarrantyFragment
 import com.xeniac.warrantyroster_manager.warranty_management.presentation.edit_warranty.EditWarrantyFragment
+import com.xeniac.warrantyroster_manager.warranty_management.presentation.warranties_list.WarrantiesFragment
+import com.xeniac.warrantyroster_manager.warranty_management.presentation.warranties_list.WarrantyAdapter
 import com.xeniac.warrantyroster_manager.warranty_management.presentation.warranty_details.WarrantyDetailsFragment
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import javax.inject.Inject
 
 class MainFragmentFactory @Inject constructor(
+    private val warrantyAdapter: WarrantyAdapter,
     private val imageLoader: ImageLoader,
     private val decimalFormat: DecimalFormat,
     private val dateFormat: SimpleDateFormat,
@@ -24,6 +27,7 @@ class MainFragmentFactory @Inject constructor(
 
     override fun instantiate(classLoader: ClassLoader, className: String): Fragment {
         return when (className) {
+            WarrantiesFragment::class.java.name -> WarrantiesFragment(warrantyAdapter)
             AddWarrantyFragment::class.java.name -> AddWarrantyFragment(imageLoader, decimalFormat)
             WarrantyDetailsFragment::class.java.name -> WarrantyDetailsFragment(
                 imageLoader, decimalFormat, dateFormat

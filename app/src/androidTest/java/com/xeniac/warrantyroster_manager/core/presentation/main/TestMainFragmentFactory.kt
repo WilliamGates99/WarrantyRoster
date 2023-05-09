@@ -25,6 +25,9 @@ import com.xeniac.warrantyroster_manager.warranty_management.presentation.add_wa
 import com.xeniac.warrantyroster_manager.warranty_management.presentation.add_warranty.AddWarrantyViewModel
 import com.xeniac.warrantyroster_manager.warranty_management.presentation.edit_warranty.EditWarrantyFragment
 import com.xeniac.warrantyroster_manager.warranty_management.presentation.edit_warranty.EditWarrantyViewModel
+import com.xeniac.warrantyroster_manager.warranty_management.presentation.warranties_list.WarrantiesFragment
+import com.xeniac.warrantyroster_manager.warranty_management.presentation.warranties_list.WarrantiesViewModel
+import com.xeniac.warrantyroster_manager.warranty_management.presentation.warranties_list.WarrantyAdapter
 import com.xeniac.warrantyroster_manager.warranty_management.presentation.warranty_details.WarrantyDetailsFragment
 import com.xeniac.warrantyroster_manager.warranty_management.presentation.warranty_details.WarrantyDetailsViewModel
 import java.text.DecimalFormat
@@ -32,6 +35,7 @@ import java.text.SimpleDateFormat
 import javax.inject.Inject
 
 class TestMainFragmentFactory @Inject constructor(
+    private val warrantyAdapter: WarrantyAdapter,
     private val imageLoader: ImageLoader,
     private val decimalFormat: DecimalFormat,
     private val dateFormat: SimpleDateFormat,
@@ -52,6 +56,14 @@ class TestMainFragmentFactory @Inject constructor(
         addTestWarrantyToWarrantyRepository()
 
         return when (className) {
+            WarrantiesFragment::class.java.name -> WarrantiesFragment(
+                warrantyAdapter,
+                WarrantiesViewModel(
+                    fakeCategoryRepository,
+                    fakeWarrantyRepository,
+                    FakePreferencesRepository()
+                )
+            )
             AddWarrantyFragment::class.java.name -> AddWarrantyFragment(
                 imageLoader,
                 decimalFormat,

@@ -30,15 +30,13 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListClickInterface {
+class WarrantiesFragment @Inject constructor(
+    private val warrantyAdapter: WarrantyAdapter,
+    var viewModel: WarrantiesViewModel? = null
+) : Fragment(R.layout.fragment_warranties), WarrantyListClickInterface {
 
     private var _binding: FragmentWarrantiesBinding? = null
     val binding get() = _binding!!
-
-    lateinit var viewModel: WarrantiesViewModel
-
-    @Inject
-    lateinit var warrantyAdapter: WarrantyAdapter
 
     private var warrantiesListBeforeSearch: MutableList<Warranty>? = null
     private lateinit var searchQuery: String
@@ -48,7 +46,8 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentWarrantiesBinding.bind(view)
-        viewModel = ViewModelProvider(requireActivity())[WarrantiesViewModel::class.java]
+        viewModel = viewModel
+            ?: ViewModelProvider(requireActivity())[WarrantiesViewModel::class.java]
 
         subscribeToObservers()
         getAllCategoriesList()
@@ -74,10 +73,10 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
         searchWarrantiesObserver()
     }
 
-    private fun getAllCategoriesList() = viewModel.getAllCategoriesList()
+    private fun getAllCategoriesList() = viewModel!!.getAllCategoriesList()
 
     private fun categoriesListObserver() =
-        viewModel.categoriesListLiveData.observe(viewLifecycleOwner) { responseEvent ->
+        viewModel!!.categoriesListLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.peekContent().let { response ->
                 when (response) {
                     is Resource.Loading -> showLoadingAnimation()
@@ -114,10 +113,10 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
             }
         }
 
-    private fun getWarrantiesListFromFirestore() = viewModel.getWarrantiesListFromFirestore()
+    private fun getWarrantiesListFromFirestore() = viewModel!!.getWarrantiesListFromFirestore()
 
     private fun warrantiesListObserver() {
-        viewModel.warrantiesListLiveData.observe(viewLifecycleOwner) { responseEvent ->
+        viewModel!!.warrantiesListLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
                     is Resource.Loading -> showLoadingAnimation()
@@ -166,7 +165,7 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
             setOnWarrantyItemClickListener(this@WarrantiesFragment)
             activity = requireActivity()
             context = requireContext()
-            warrantiesViewModel = viewModel
+            warrantiesViewModel = viewModel!!
         }
         binding.rv.adapter = warrantyAdapter
     }
@@ -196,7 +195,7 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
                     }
                 } else {
                     searchQuery = newText.trim().lowercase()
-                    viewModel.searchWarrantiesByTitle(searchQuery)
+                    viewModel!!.searchWarrantiesByTitle(searchQuery)
                 }
 
                 return false
@@ -205,7 +204,7 @@ class WarrantiesFragment : Fragment(R.layout.fragment_warranties), WarrantyListC
     }
 
     private fun searchWarrantiesObserver() =
-        viewModel.searchWarrantiesLiveData.observe(viewLifecycleOwner) { responseEvent ->
+        viewModel!!.searchWarrantiesLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
                     is Resource.Loading -> {
