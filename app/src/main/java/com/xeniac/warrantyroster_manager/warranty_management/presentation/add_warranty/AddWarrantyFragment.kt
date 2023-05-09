@@ -90,10 +90,10 @@ class AddWarrantyFragment @Inject constructor(
             ?: ViewModelProvider(requireActivity())[AddWarrantyViewModel::class.java]
         connectivityObserver = NetworkConnectivityObserver(requireContext())
 
-        navigateUpOnClick()
         networkConnectivityObserver()
         textInputsBackgroundColor()
         textInputsStrokeColor()
+        navigateUpOnClick()
         subscribeToObservers()
         setupCategoryDropDown()
         categoryDropDownOnItemClick()
@@ -226,10 +226,6 @@ class AddWarrantyFragment @Inject constructor(
             }
         }
         super.onViewStateRestored(savedInstanceState)
-    }
-
-    private fun navigateUpOnClick() = binding.toolbar.setNavigationOnClickListener {
-        navigateBack()
     }
 
     private fun networkConnectivityObserver() {
@@ -373,6 +369,10 @@ class AddWarrantyFragment @Inject constructor(
         tiEditDateExpiry.addTextChangedListener {
             hideDateError()
         }
+    }
+
+    private fun navigateUpOnClick() = binding.toolbar.setNavigationOnClickListener {
+        navigateBack()
     }
 
     private fun subscribeToObservers() {
