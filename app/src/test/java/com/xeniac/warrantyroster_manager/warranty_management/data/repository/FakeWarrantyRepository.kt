@@ -48,8 +48,8 @@ class FakeWarrantyRepository : WarrantyRepository {
             throw Exception()
         }
 
-        if (warranties.size == 0) {
-            throw Exception()
+        if (warranties.isEmpty()) {
+            throw Exception(ERROR_EMPTY_WARRANTY_LIST)
         }
 
         return warranties

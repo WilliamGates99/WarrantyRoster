@@ -2,6 +2,7 @@ package com.xeniac.warrantyroster_manager.warranty_management.data.repository
 
 import com.google.firebase.firestore.DocumentSnapshot
 import com.xeniac.warrantyroster_manager.BuildConfig
+import com.xeniac.warrantyroster_manager.util.Constants.ERROR_EMPTY_CATEGORY_LIST
 import com.xeniac.warrantyroster_manager.util.Constants.LOCALE_TAG_ENGLISH_GREAT_BRITAIN
 import com.xeniac.warrantyroster_manager.util.Constants.LOCALE_TAG_ENGLISH_UNITED_STATES
 import com.xeniac.warrantyroster_manager.util.Constants.LOCALE_TAG_PERSIAN_IRAN
@@ -31,7 +32,13 @@ class FakeCategoryRepository : CategoryRepository {
         shouldReturnNetworkError = value
     }
 
-    override suspend fun getAllCategoriesList(): List<Category> = categoriesList
+    override suspend fun getAllCategoriesList(): List<Category> {
+        if (categoriesList.isEmpty()) {
+            throw Exception(ERROR_EMPTY_CATEGORY_LIST)
+        }
+
+        return categoriesList
+    }
 
     override suspend fun getCachedCategoryDocuments(): List<DocumentSnapshot> = emptyList()
 
