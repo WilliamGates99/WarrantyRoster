@@ -9,18 +9,24 @@ import com.xeniac.warrantyroster_manager.settings.presentation.change_password.C
 import com.xeniac.warrantyroster_manager.settings.presentation.linked_accounts.LinkedAccountsFragment
 import com.xeniac.warrantyroster_manager.settings.presentation.settings.SettingsFragment
 import com.xeniac.warrantyroster_manager.warranty_management.presentation.add_warranty.AddWarrantyFragment
+import com.xeniac.warrantyroster_manager.warranty_management.presentation.warranty_details.WarrantyDetailsFragment
 import java.text.DecimalFormat
+import java.text.SimpleDateFormat
 import javax.inject.Inject
 
 class MainFragmentFactory @Inject constructor(
     private val imageLoader: ImageLoader,
     private val decimalFormat: DecimalFormat,
+    private val dateFormat: SimpleDateFormat,
     private val firebaseAuth: FirebaseAuth
 ) : FragmentFactory() {
 
     override fun instantiate(classLoader: ClassLoader, className: String): Fragment {
         return when (className) {
             AddWarrantyFragment::class.java.name -> AddWarrantyFragment(imageLoader, decimalFormat)
+            WarrantyDetailsFragment::class.java.name -> WarrantyDetailsFragment(
+                imageLoader, decimalFormat, dateFormat
+            )
             SettingsFragment::class.java.name -> SettingsFragment(null)
             ChangeEmailFragment::class.java.name -> ChangeEmailFragment(null)
             ChangePasswordFragment::class.java.name -> ChangePasswordFragment(null)

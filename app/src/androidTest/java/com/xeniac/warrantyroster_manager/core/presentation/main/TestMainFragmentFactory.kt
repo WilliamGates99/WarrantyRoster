@@ -22,12 +22,16 @@ import com.xeniac.warrantyroster_manager.warranty_management.data.repository.Fak
 import com.xeniac.warrantyroster_manager.warranty_management.data.repository.FakeWarrantyRepository
 import com.xeniac.warrantyroster_manager.warranty_management.presentation.add_warranty.AddWarrantyFragment
 import com.xeniac.warrantyroster_manager.warranty_management.presentation.add_warranty.AddWarrantyViewModel
+import com.xeniac.warrantyroster_manager.warranty_management.presentation.warranty_details.WarrantyDetailsFragment
+import com.xeniac.warrantyroster_manager.warranty_management.presentation.warranty_details.WarrantyDetailsViewModel
 import java.text.DecimalFormat
+import java.text.SimpleDateFormat
 import javax.inject.Inject
 
 class TestMainFragmentFactory @Inject constructor(
     private val imageLoader: ImageLoader,
     private val decimalFormat: DecimalFormat,
+    private val dateFormat: SimpleDateFormat,
     private val firebaseAuth: FirebaseAuth
 ) : FragmentFactory() {
 
@@ -52,6 +56,15 @@ class TestMainFragmentFactory @Inject constructor(
                     fakeCategoryRepository,
                     fakeWarrantyRepository,
                     FakePreferencesRepository()
+                )
+            )
+            WarrantyDetailsFragment::class.java.name -> WarrantyDetailsFragment(
+                imageLoader,
+                decimalFormat,
+                dateFormat,
+                WarrantyDetailsViewModel(
+                    fakeCategoryRepository,
+                    fakeWarrantyRepository
                 )
             )
             SettingsFragment::class.java.name -> SettingsFragment(
@@ -98,5 +111,9 @@ class TestMainFragmentFactory @Inject constructor(
                 icon = "$i.svg"
             )
         }
+    }
+
+    suspend fun deleteTestWarrantyFromWarrantyRepository(warrantyId: String) {
+        fakeWarrantyRepository.deleteWarrantyFromFirestore(warrantyId)
     }
 }
