@@ -107,7 +107,7 @@ class SettingsFragmentTest {
     }
 
     @Test
-    fun clickOnVerifyBtn_showsSelectLanguageDialog() {
+    fun clickOnVerifyBtn_showsEmailSuccessfullySentDialog() {
         onView(withId(testBinding.btnAccountVerification.id))
             .perform(scrollTo())
             .check(matches(isDisplayed()))
