@@ -9,6 +9,7 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -62,21 +63,15 @@ import java.util.Calendar
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
+class EditWarrantyFragment @Inject constructor(
+    private val imageLoader: ImageLoader,
+    private val decimalFormat: DecimalFormat,
+    private val dateFormat: SimpleDateFormat,
+    var viewModel: EditWarrantyViewModel? = null
+) : Fragment(R.layout.fragment_edit_warranty) {
 
     private var _binding: FragmentEditWarrantyBinding? = null
     val binding get() = _binding!!
-
-    lateinit var viewModel: EditWarrantyViewModel
-
-    @Inject
-    lateinit var imageLoader: ImageLoader
-
-    @Inject
-    lateinit var decimalFormat: DecimalFormat
-
-    @Inject
-    lateinit var dateFormat: SimpleDateFormat
 
     private lateinit var warranty: Warranty
     private var selectedCategory: Category? = null
@@ -97,12 +92,14 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentEditWarrantyBinding.bind(view)
-        viewModel = ViewModelProvider(requireActivity())[EditWarrantyViewModel::class.java]
+        viewModel = viewModel
+            ?: ViewModelProvider(requireActivity())[EditWarrantyViewModel::class.java]
         connectivityObserver = NetworkConnectivityObserver(requireContext())
 
         networkConnectivityObserver()
         textInputsBackgroundColor()
         textInputsStrokeColor()
+        navigateUpOnClick()
         subscribeToObservers()
         setupCategoryDropDown()
         categoryDropDownOnItemClick()
@@ -110,9 +107,9 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
         lifetimeWarrantyCheckBoxListener()
         startingDatePickerOnFocusListener()
         expiryDatePickerOnFocusListener()
-        returnToWarrantyDetailsFragment()
         getWarranty()
         editWarrantyOnClick()
+        requireActivity().onBackPressedDispatcher.addCallback(onBackPressedCallback)
     }
 
     override fun onDestroyView() {
@@ -124,6 +121,16 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
     override fun onResume() {
         super.onResume()
         setupCategoryDropDown()
+    }
+
+    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            navigateBack()
+        }
+    }
+
+    private fun navigateBack() {
+        findNavController().popBackStack()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -243,81 +250,113 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
     private fun textInputsBackgroundColor() = binding.apply {
         tiEditTitle.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                tiLayoutTitle.boxBackgroundColor =
-                    ContextCompat.getColor(requireContext(), R.color.background)
+                tiLayoutTitle.boxBackgroundColor = ContextCompat.getColor(
+                    requireContext(),
+                    R.color.background
+                )
             } else {
-                tiLayoutTitle.boxBackgroundColor =
-                    ContextCompat.getColor(requireContext(), R.color.grayLight)
+                tiLayoutTitle.boxBackgroundColor = ContextCompat.getColor(
+                    requireContext(),
+                    R.color.grayLight
+                )
             }
         }
 
         tiDdCategory.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                tiLayoutCategory.boxBackgroundColor =
-                    ContextCompat.getColor(requireContext(), R.color.background)
+                tiLayoutCategory.boxBackgroundColor = ContextCompat.getColor(
+                    requireContext(),
+                    R.color.background
+                )
             } else {
-                tiLayoutCategory.boxBackgroundColor =
-                    ContextCompat.getColor(requireContext(), R.color.grayLight)
+                tiLayoutCategory.boxBackgroundColor = ContextCompat.getColor(
+                    requireContext(),
+                    R.color.grayLight
+                )
             }
         }
 
         tiEditBrand.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                tiLayoutBrand.boxBackgroundColor =
-                    ContextCompat.getColor(requireContext(), R.color.background)
+                tiLayoutBrand.boxBackgroundColor = ContextCompat.getColor(
+                    requireContext(),
+                    R.color.background
+                )
             } else {
-                tiLayoutBrand.boxBackgroundColor =
-                    ContextCompat.getColor(requireContext(), R.color.grayLight)
+                tiLayoutBrand.boxBackgroundColor = ContextCompat.getColor(
+                    requireContext(),
+                    R.color.grayLight
+                )
             }
         }
 
         tiEditModel.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                tiLayoutModel.boxBackgroundColor =
-                    ContextCompat.getColor(requireContext(), R.color.background)
+                tiLayoutModel.boxBackgroundColor = ContextCompat.getColor(
+                    requireContext(),
+                    R.color.background
+                )
             } else {
-                tiLayoutModel.boxBackgroundColor =
-                    ContextCompat.getColor(requireContext(), R.color.grayLight)
+                tiLayoutModel.boxBackgroundColor = ContextCompat.getColor(
+                    requireContext(),
+                    R.color.grayLight
+                )
             }
         }
 
         tiEditSerial.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                tiLayoutSerial.boxBackgroundColor =
-                    ContextCompat.getColor(requireContext(), R.color.background)
+                tiLayoutSerial.boxBackgroundColor = ContextCompat.getColor(
+                    requireContext(),
+                    R.color.background
+                )
             } else {
-                tiLayoutSerial.boxBackgroundColor =
-                    ContextCompat.getColor(requireContext(), R.color.grayLight)
+                tiLayoutSerial.boxBackgroundColor = ContextCompat.getColor(
+                    requireContext(),
+                    R.color.grayLight
+                )
             }
         }
 
         tiEditDateStarting.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                tiLayoutDateStarting.boxBackgroundColor =
-                    ContextCompat.getColor(requireContext(), R.color.background)
+                tiLayoutDateStarting.boxBackgroundColor = ContextCompat.getColor(
+                    requireContext(),
+                    R.color.background
+                )
             } else {
-                tiLayoutDateStarting.boxBackgroundColor =
-                    ContextCompat.getColor(requireContext(), R.color.grayLight)
+                tiLayoutDateStarting.boxBackgroundColor = ContextCompat.getColor(
+                    requireContext(),
+                    R.color.grayLight
+                )
             }
         }
 
         tiEditDateExpiry.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                tiLayoutDateExpiry.boxBackgroundColor =
-                    ContextCompat.getColor(requireContext(), R.color.background)
+                tiLayoutDateExpiry.boxBackgroundColor = ContextCompat.getColor(
+                    requireContext(),
+                    R.color.background
+                )
             } else {
-                tiLayoutDateExpiry.boxBackgroundColor =
-                    ContextCompat.getColor(requireContext(), R.color.grayLight)
+                tiLayoutDateExpiry.boxBackgroundColor = ContextCompat.getColor(
+                    requireContext(),
+                    R.color.grayLight
+                )
             }
         }
 
         tiEditDescription.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                tiLayoutDescription.boxBackgroundColor =
-                    ContextCompat.getColor(requireContext(), R.color.background)
+                tiLayoutDescription.boxBackgroundColor = ContextCompat.getColor(
+                    requireContext(),
+                    R.color.background
+                )
             } else {
-                tiLayoutDescription.boxBackgroundColor =
-                    ContextCompat.getColor(requireContext(), R.color.grayLight)
+                tiLayoutDescription.boxBackgroundColor = ContextCompat.getColor(
+                    requireContext(),
+                    R.color.grayLight
+                )
             }
         }
     }
@@ -325,7 +364,10 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
     private fun textInputsStrokeColor() = binding.apply {
         tiEditTitle.addTextChangedListener {
             tiLayoutTitle.isErrorEnabled = false
-            tiLayoutTitle.boxStrokeColor = ContextCompat.getColor(requireContext(), R.color.blue)
+            tiLayoutTitle.boxStrokeColor = ContextCompat.getColor(
+                requireContext(),
+                R.color.blue
+            )
         }
 
         tiEditDateStarting.addTextChangedListener {
@@ -335,6 +377,10 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
         tiEditDateExpiry.addTextChangedListener {
             hideDateError()
         }
+    }
+
+    private fun navigateUpOnClick() = binding.toolbar.setNavigationOnClickListener {
+        navigateBack()
     }
 
     private fun subscribeToObservers() {
@@ -361,14 +407,14 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
         binding.tiDdCategory.clearFocus()
     }
 
-    private fun getAllCategoryTitles() = viewModel.getAllCategoryTitles(getCategoryTitleMapKey())
+    private fun getAllCategoryTitles() = viewModel!!.getAllCategoryTitles(getCategoryTitleMapKey())
 
-    private fun getCategoryTitleMapKey() = viewModel.getCategoryTitleMapKey()
+    private fun getCategoryTitleMapKey() = viewModel!!.getCategoryTitleMapKey()
 
     private fun getCategoryByTitle(categoryTitle: String) =
-        viewModel.getCategoryByTitle(categoryTitle)
+        viewModel!!.getCategoryByTitle(categoryTitle)
 
-    private fun getCategoryById(categoryId: String) = viewModel.getCategoryById(categoryId)
+    private fun getCategoryById(categoryId: String) = viewModel!!.getCategoryById(categoryId)
 
     private fun loadCategoryIcon(categoryIcon: String) = loadCategoryImage(
         requireContext(), categoryIcon, imageLoader, binding.ivIconCategory, binding.cpiIconCategory
@@ -501,10 +547,6 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
         }
     }
 
-    private fun returnToWarrantyDetailsFragment() = binding.toolbar.setNavigationOnClickListener {
-        findNavController().popBackStack()
-    }
-
     private fun getWarranty() {
         val args: EditWarrantyFragmentArgs by navArgs()
         warranty = args.warranty
@@ -609,7 +651,7 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
             val isLifetime = binding.cbLifetime.isChecked
             val categoryId = selectedCategory?.id ?: "10"
 
-            viewModel.validateEditWarrantyInputs(
+            viewModel!!.validateEditWarrantyInputs(
                 warranty.id, title, brand, model, serialNumber,
                 isLifetime, startingDateInput, expiryDateInput, description, categoryId,
                 selectedStartingDateInMillis, selectedExpiryDateInMillis
@@ -623,7 +665,7 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
     }
 
     private fun updateWarrantyObserver() =
-        viewModel.updateWarrantyLiveData.observe(viewLifecycleOwner) { responseEvent ->
+        viewModel!!.updateWarrantyLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
                     is Resource.Loading -> showLoadingAnimation()
@@ -667,10 +709,10 @@ class EditWarrantyFragment : Fragment(R.layout.fragment_edit_warranty) {
         }
 
     private fun getUpdatedWarrantyFromFirestore() =
-        viewModel.getUpdatedWarrantyFromFirestore(warranty.id)
+        viewModel!!.getUpdatedWarrantyFromFirestore(warranty.id)
 
     private fun getUpdatedWarrantyObserver() =
-        viewModel.updatedWarrantyLiveData.observe(viewLifecycleOwner) { responseEvent ->
+        viewModel!!.updatedWarrantyLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
                     is Resource.Loading -> showLoadingAnimation()

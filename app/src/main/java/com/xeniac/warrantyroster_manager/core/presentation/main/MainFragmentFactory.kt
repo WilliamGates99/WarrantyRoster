@@ -9,6 +9,7 @@ import com.xeniac.warrantyroster_manager.settings.presentation.change_password.C
 import com.xeniac.warrantyroster_manager.settings.presentation.linked_accounts.LinkedAccountsFragment
 import com.xeniac.warrantyroster_manager.settings.presentation.settings.SettingsFragment
 import com.xeniac.warrantyroster_manager.warranty_management.presentation.add_warranty.AddWarrantyFragment
+import com.xeniac.warrantyroster_manager.warranty_management.presentation.edit_warranty.EditWarrantyFragment
 import com.xeniac.warrantyroster_manager.warranty_management.presentation.warranty_details.WarrantyDetailsFragment
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
@@ -25,6 +26,9 @@ class MainFragmentFactory @Inject constructor(
         return when (className) {
             AddWarrantyFragment::class.java.name -> AddWarrantyFragment(imageLoader, decimalFormat)
             WarrantyDetailsFragment::class.java.name -> WarrantyDetailsFragment(
+                imageLoader, decimalFormat, dateFormat
+            )
+            EditWarrantyFragment::class.java.name -> EditWarrantyFragment(
                 imageLoader, decimalFormat, dateFormat
             )
             SettingsFragment::class.java.name -> SettingsFragment(null)

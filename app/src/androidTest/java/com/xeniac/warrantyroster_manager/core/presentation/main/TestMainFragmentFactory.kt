@@ -23,6 +23,8 @@ import com.xeniac.warrantyroster_manager.warranty_management.data.repository.Fak
 import com.xeniac.warrantyroster_manager.warranty_management.domain.model.WarrantyInput
 import com.xeniac.warrantyroster_manager.warranty_management.presentation.add_warranty.AddWarrantyFragment
 import com.xeniac.warrantyroster_manager.warranty_management.presentation.add_warranty.AddWarrantyViewModel
+import com.xeniac.warrantyroster_manager.warranty_management.presentation.edit_warranty.EditWarrantyFragment
+import com.xeniac.warrantyroster_manager.warranty_management.presentation.edit_warranty.EditWarrantyViewModel
 import com.xeniac.warrantyroster_manager.warranty_management.presentation.warranty_details.WarrantyDetailsFragment
 import com.xeniac.warrantyroster_manager.warranty_management.presentation.warranty_details.WarrantyDetailsViewModel
 import java.text.DecimalFormat
@@ -67,6 +69,17 @@ class TestMainFragmentFactory @Inject constructor(
                 WarrantyDetailsViewModel(
                     fakeCategoryRepository,
                     fakeWarrantyRepository
+                )
+            )
+            EditWarrantyFragment::class.java.name -> EditWarrantyFragment(
+                imageLoader,
+                decimalFormat,
+                dateFormat,
+                EditWarrantyViewModel(
+                    fakeUserRepository,
+                    fakeCategoryRepository,
+                    fakeWarrantyRepository,
+                    FakePreferencesRepository()
                 )
             )
             SettingsFragment::class.java.name -> SettingsFragment(
@@ -122,9 +135,8 @@ class TestMainFragmentFactory @Inject constructor(
             model = "Warranty Model",
             serialNumber = "WARRANTY_SERIAL",
             description = "This is warranty description.",
-            lifetime = true,
             startingDate = "2022-07-13",
-            expiryDate = null,
+            expiryDate = "2050-07-13",
             uuid = "1"
         )
 
