@@ -81,9 +81,6 @@ class LoginFragment @Inject constructor(
     private var _binding: FragmentLoginBinding? = null
     val binding get() = _binding!!
 
-//    @Inject
-//    lateinit var firebaseAuth: FirebaseAuth
-
     private lateinit var currentAppLanguage: String
 
     private lateinit var connectivityObserver: ConnectivityObserver
