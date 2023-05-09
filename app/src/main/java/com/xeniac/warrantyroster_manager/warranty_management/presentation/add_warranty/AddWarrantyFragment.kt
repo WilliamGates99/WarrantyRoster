@@ -90,6 +90,7 @@ class AddWarrantyFragment @Inject constructor(
             ?: ViewModelProvider(requireActivity())[AddWarrantyViewModel::class.java]
         connectivityObserver = NetworkConnectivityObserver(requireContext())
 
+        navigateUpOnClick()
         networkConnectivityObserver()
         textInputsBackgroundColor()
         textInputsStrokeColor()
@@ -100,7 +101,6 @@ class AddWarrantyFragment @Inject constructor(
         lifetimeWarrantyCheckBoxListener()
         startingDatePickerOnFocusListener()
         expiryDatePickerOnFocusListener()
-        returnToMainActivity()
         addWarrantyOnClick()
         requireActivity().onBackPressedDispatcher.addCallback(onBackPressedCallback)
     }
@@ -226,6 +226,10 @@ class AddWarrantyFragment @Inject constructor(
             }
         }
         super.onViewStateRestored(savedInstanceState)
+    }
+
+    private fun navigateUpOnClick() = binding.toolbar.setNavigationOnClickListener {
+        navigateBack()
     }
 
     private fun networkConnectivityObserver() {
@@ -524,10 +528,6 @@ class AddWarrantyFragment @Inject constructor(
             binding.tiEditDateExpiry.setText(expiryDateText)
             binding.tiEditDateExpiry.clearFocus()
         }
-    }
-
-    private fun returnToMainActivity() = binding.toolbar.setNavigationOnClickListener {
-        navigateBack()
     }
 
     private fun addWarrantyOnClick() = binding.toolbar.menu[0].setOnMenuItemClickListener {
