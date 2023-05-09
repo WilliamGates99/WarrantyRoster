@@ -32,6 +32,11 @@ class FakeWarrantyRepository : WarrantyRepository {
         warranties.add(warranty)
     }
 
+    fun deleteWarranty(warrantyId: String) {
+        val warranty = warranties.find { it.id == warrantyId }
+        warranties.remove(warranty)
+    }
+
     fun setShouldReturnNetworkError(value: Boolean) {
         shouldReturnNetworkError = value
     }
