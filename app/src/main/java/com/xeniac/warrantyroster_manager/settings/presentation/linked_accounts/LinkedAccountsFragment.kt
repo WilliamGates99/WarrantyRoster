@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -60,15 +61,13 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
+class LinkedAccountsFragment @Inject constructor(
+    private val firebaseAuth: FirebaseAuth,
+    var viewModel: LinkedAccountsViewModel? = null
+) : Fragment(R.layout.fragment_linked_accounts) {
 
     private var _binding: FragmentLinkedAccountsBinding? = null
-    private val binding get() = _binding!!
-
-    lateinit var viewModel: LinkedAccountsViewModel
-
-    @Inject
-    lateinit var firebaseAuth: FirebaseAuth
+    val binding get() = _binding!!
 
     private lateinit var currentAppLanguage: String
 
@@ -91,7 +90,8 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentLinkedAccountsBinding.bind(view)
-        viewModel = ViewModelProvider(requireActivity())[LinkedAccountsViewModel::class.java]
+        viewModel = viewModel
+            ?: ViewModelProvider(requireActivity())[LinkedAccountsViewModel::class.java]
         connectivityObserver = NetworkConnectivityObserver(requireContext())
 
         networkConnectivityObserver()
@@ -102,12 +102,19 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
         googleOnClick()
         twitterOnClick()
         facebookOnClick()
+        requireActivity().onBackPressedDispatcher.addCallback(onBackPressedCallback)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         snackbar?.dismiss()
         _binding = null
+    }
+
+    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            navigateBack()
+        }
     }
 
     private fun networkConnectivityObserver() {
@@ -140,10 +147,10 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
         unlinkFacebookAccountObserver()
     }
 
-    private fun getCurrentAppLanguage() = viewModel.getCurrentAppLanguage()
+    private fun getCurrentAppLanguage() = viewModel!!.getCurrentAppLanguage()
 
     private fun currentAppLanguageObserver() =
-        viewModel.currentAppLanguageLiveData.observe(viewLifecycleOwner) { responseEvent ->
+        viewModel!!.currentAppLanguageLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
                     is Resource.Loading -> Unit
@@ -159,10 +166,10 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
             }
         }
 
-    private fun getLinkedAccounts() = viewModel.getLinkedAccounts()
+    private fun getLinkedAccounts() = viewModel!!.getLinkedAccounts()
 
     private fun linkedAccountsObserver() =
-        viewModel.linkedAccountsLiveData.observe(viewLifecycleOwner) { responseEvent ->
+        viewModel!!.linkedAccountsLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
                     is Resource.Loading -> showAllLoadingAnimations()
@@ -199,7 +206,7 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
 
     private fun unlinkGoogleAccount() {
         if (networkStatus == ConnectivityObserver.Status.AVAILABLE) {
-            viewModel.unlinkGoogleAccount()
+            viewModel!!.unlinkGoogleAccount()
         } else {
             snackbar = showUnavailableNetworkConnectionError(
                 requireContext(), requireView()
@@ -209,7 +216,7 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
     }
 
     private fun unlinkGoogleAccountObserver() =
-        viewModel.unlinkGoogleAccountLiveData.observe(viewLifecycleOwner) { responseEvent ->
+        viewModel!!.unlinkGoogleAccountLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
                     is Resource.Loading -> showGoogleLoadingAnimation()
@@ -284,7 +291,7 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
     ) { result ->
         try {
             val account = GoogleSignIn.getSignedInAccountFromIntent(result.data).result
-            account?.let { viewModel.linkGoogleAccount(account) }
+            account?.let { viewModel!!.linkGoogleAccount(account) }
         } catch (e: Exception) {
             hideGoogleLoadingAnimation()
             e.message?.let {
@@ -307,7 +314,7 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
     }
 
     private fun linkGoogleAccountObserver() =
-        viewModel.linkGoogleAccountLiveData.observe(viewLifecycleOwner) { responseEvent ->
+        viewModel!!.linkGoogleAccountLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
                     is Resource.Loading -> showGoogleLoadingAnimation()
@@ -347,7 +354,7 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
 
     private fun unlinkTwitterAccount() {
         if (networkStatus == ConnectivityObserver.Status.AVAILABLE) {
-            viewModel.unlinkTwitterAccount()
+            viewModel!!.unlinkTwitterAccount()
         } else {
             snackbar = showUnavailableNetworkConnectionError(
                 requireContext(), requireView()
@@ -357,7 +364,7 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
     }
 
     private fun unlinkTwitterAccountObserver() =
-        viewModel.unlinkTwitterAccountLiveData.observe(viewLifecycleOwner) { responseEvent ->
+        viewModel!!.unlinkTwitterAccountLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
                     is Resource.Loading -> showTwitterLoadingAnimation()
@@ -429,7 +436,7 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
         if (task.isSuccessful) {
             val authCredential = task.result.credential
             authCredential?.let { credential ->
-                viewModel.linkTwitterAccount(credential)
+                viewModel!!.linkTwitterAccount(credential)
             }
         } else {
             hideTwitterLoadingAnimation()
@@ -468,7 +475,7 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
     }
 
     private fun linkTwitterAccountObserver() =
-        viewModel.linkTwitterAccountLiveData.observe(viewLifecycleOwner) { responseEvent ->
+        viewModel!!.linkTwitterAccountLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
                     is Resource.Loading -> showTwitterLoadingAnimation()
@@ -521,7 +528,7 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
 
     private fun unlinkFacebookAccount() {
         if (networkStatus == ConnectivityObserver.Status.AVAILABLE) {
-            viewModel.unlinkFacebookAccount()
+            viewModel!!.unlinkFacebookAccount()
         } else {
             snackbar = showUnavailableNetworkConnectionError(
                 requireContext(), requireView()
@@ -531,7 +538,7 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
     }
 
     private fun unlinkFacebookAccountObserver() =
-        viewModel.unlinkFacebookAccountLiveData.observe(viewLifecycleOwner) { responseEvent ->
+        viewModel!!.unlinkFacebookAccountLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
                     is Resource.Loading -> showFacebookLoadingAnimation()
@@ -584,7 +591,7 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
 
         loginManager.registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
             override fun onSuccess(result: LoginResult) {
-                viewModel.linkFacebookAccount(result.accessToken)
+                viewModel!!.linkFacebookAccount(result.accessToken)
             }
 
             override fun onCancel() {
@@ -601,7 +608,7 @@ class LinkedAccountsFragment : Fragment(R.layout.fragment_linked_accounts) {
     }
 
     private fun linkFacebookAccountObserver() =
-        viewModel.linkFacebookAccountLiveData.observe(viewLifecycleOwner) { responseEvent ->
+        viewModel!!.linkFacebookAccountLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
                     is Resource.Loading -> showFacebookLoadingAnimation()

@@ -26,13 +26,14 @@ import com.xeniac.warrantyroster_manager.util.Constants.ONBOARDING_3RD_INDEX
 import com.xeniac.warrantyroster_manager.util.Constants.ONBOARDING_4TH_INDEX
 import com.xeniac.warrantyroster_manager.util.Resource
 import com.xeniac.warrantyroster_manager.util.SnackBarHelper.showSomethingWentWrongError
+import javax.inject.Inject
 
-class OnBoardingFragment : Fragment(R.layout.fragment_onboarding) {
+class OnBoardingFragment @Inject constructor(
+    var viewModel: OnBoardingViewModel?
+) : Fragment(R.layout.fragment_onboarding) {
 
     private var _binding: FragmentOnboardingBinding? = null
-    private val binding get() = _binding!!
-
-    lateinit var viewModel: OnBoardingViewModel
+    val binding get() = _binding!!
 
     private var currentAppLocaleIndex = 0
 
@@ -41,7 +42,8 @@ class OnBoardingFragment : Fragment(R.layout.fragment_onboarding) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentOnboardingBinding.bind(view)
-        viewModel = ViewModelProvider(requireActivity())[OnBoardingViewModel::class.java]
+        viewModel = viewModel
+            ?: ViewModelProvider(requireActivity())[OnBoardingViewModel::class.java]
 
         setupViewPager()
         subscribeToObservers()
@@ -103,10 +105,10 @@ class OnBoardingFragment : Fragment(R.layout.fragment_onboarding) {
         changeCurrentAppLocaleObserver()
     }
 
-    private fun getCurrentAppLocaleIndex() = viewModel.getCurrentAppLocaleIndex()
+    private fun getCurrentAppLocaleIndex() = viewModel!!.getCurrentAppLocaleIndex()
 
     private fun currentAppLocaleIndexObserver() =
-        viewModel.currentAppLocaleIndexLiveData.observe(viewLifecycleOwner) { responseEvent ->
+        viewModel!!.currentAppLocaleIndexLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
                     is Resource.Loading -> Unit
@@ -128,13 +130,13 @@ class OnBoardingFragment : Fragment(R.layout.fragment_onboarding) {
     private fun setCurrentAppLocaleFlag(localeIndex: Int) {
         binding.apply {
             when (localeIndex) {
-                LOCALE_INDEX_ENGLISH_UNITED_STATES -> ivLanguageFlag.setImageDrawable(
+                LOCALE_INDEX_ENGLISH_UNITED_STATES -> ivLocaleFlag.setImageDrawable(
                     AppCompatResources.getDrawable(requireContext(), R.drawable.ic_flag_usa)
                 )
-                LOCALE_INDEX_ENGLISH_GREAT_BRITAIN -> ivLanguageFlag.setImageDrawable(
+                LOCALE_INDEX_ENGLISH_GREAT_BRITAIN -> ivLocaleFlag.setImageDrawable(
                     AppCompatResources.getDrawable(requireContext(), R.drawable.ic_flag_gb)
                 )
-                LOCALE_INDEX_PERSIAN_IRAN -> ivLanguageFlag.setImageDrawable(
+                LOCALE_INDEX_PERSIAN_IRAN -> ivLocaleFlag.setImageDrawable(
                     AppCompatResources.getDrawable(requireContext(), R.drawable.ic_flag_iran)
                 )
             }
@@ -158,10 +160,10 @@ class OnBoardingFragment : Fragment(R.layout.fragment_onboarding) {
         }
     }
 
-    private fun changeCurrentAppLocale(index: Int) = viewModel.changeCurrentAppLocale(index)
+    private fun changeCurrentAppLocale(index: Int) = viewModel!!.changeCurrentAppLocale(index)
 
     private fun changeCurrentAppLocaleObserver() =
-        viewModel.changeCurrentAppLocaleLiveData.observe(viewLifecycleOwner) { responseEvent ->
+        viewModel!!.changeCurrentAppLocaleLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
                     is Resource.Loading -> Unit

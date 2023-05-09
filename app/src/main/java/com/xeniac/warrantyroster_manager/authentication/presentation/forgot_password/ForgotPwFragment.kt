@@ -41,14 +41,15 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import java.util.Locale
+import javax.inject.Inject
 
 @AndroidEntryPoint
-class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
+class ForgotPwFragment @Inject constructor(
+    var viewModel: ForgotPwViewModel?
+) : Fragment(R.layout.fragment_forgot_pw) {
 
     private var _binding: FragmentForgotPwBinding? = null
     val binding get() = _binding!!
-
-    lateinit var viewModel: ForgotPwViewModel
 
     private var timerMillisUntilFinished = 0L
 
@@ -60,7 +61,7 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentForgotPwBinding.bind(view)
-        viewModel = ViewModelProvider(requireActivity())[ForgotPwViewModel::class.java]
+        viewModel = viewModel ?: ViewModelProvider(requireActivity())[ForgotPwViewModel::class.java]
         connectivityObserver = NetworkConnectivityObserver(requireContext())
 
         networkConnectivityObserver()
@@ -124,11 +125,15 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
     private fun textInputsBackgroundColor() = binding.apply {
         tiEditEmail.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                tiLayoutEmail.boxBackgroundColor =
-                    ContextCompat.getColor(requireContext(), R.color.background)
+                tiLayoutEmail.boxBackgroundColor = ContextCompat.getColor(
+                    requireContext(),
+                    R.color.background
+                )
             } else {
-                tiLayoutEmail.boxBackgroundColor =
-                    ContextCompat.getColor(requireContext(), R.color.grayLight)
+                tiLayoutEmail.boxBackgroundColor = ContextCompat.getColor(
+                    requireContext(),
+                    R.color.grayLight
+                )
             }
         }
     }
@@ -136,7 +141,10 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
     private fun textInputsStrokeColor() = binding.apply {
         tiEditEmail.addTextChangedListener {
             tiLayoutEmail.isErrorEnabled = false
-            tiLayoutEmail.boxStrokeColor = ContextCompat.getColor(requireContext(), R.color.blue)
+            tiLayoutEmail.boxStrokeColor = ContextCompat.getColor(
+                requireContext(),
+                R.color.blue
+            )
         }
     }
 
@@ -169,7 +177,7 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
         if (networkStatus == ConnectivityObserver.Status.AVAILABLE) {
             val email = binding.tiEditEmail.text.toString().trim().lowercase(Locale.US)
 
-            viewModel.validateSendResetPasswordEmailInputs(email)
+            viewModel!!.validateSendResetPasswordEmailInputs(email)
         } else {
             snackbar = showUnavailableNetworkConnectionError(
                 requireContext(), requireView()
@@ -179,7 +187,7 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
     }
 
     private fun sendResetPasswordEmailObserver() =
-        viewModel.sendResetPasswordEmailLiveData.observe(viewLifecycleOwner) { responseEvent ->
+        viewModel!!.sendResetPasswordEmailLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
                     is Resource.Loading -> showLoadingAnimation()
@@ -245,7 +253,7 @@ class ForgotPwFragment : Fragment(R.layout.fragment_forgot_pw) {
         }
 
     private fun timerMillisUntilFinishedObserver() =
-        viewModel.timerMillisUntilFinishedLiveData.observe(viewLifecycleOwner) { responseEvent ->
+        viewModel!!.timerMillisUntilFinishedLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { millisUntilFinished ->
                 timerMillisUntilFinished = millisUntilFinished
             }

@@ -8,6 +8,9 @@ import com.xeniac.warrantyroster_manager.core.data.mapper.toTestUser
 import com.xeniac.warrantyroster_manager.core.domain.model.TestUser
 import com.xeniac.warrantyroster_manager.core.domain.model.UserInfo
 import com.xeniac.warrantyroster_manager.core.domain.repository.UserRepository
+import com.xeniac.warrantyroster_manager.util.Constants.ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS
+import com.xeniac.warrantyroster_manager.util.Constants.ERROR_FIREBASE_AUTH_ACCOUNT_NOT_FOUND
+import com.xeniac.warrantyroster_manager.util.Constants.ERROR_FIREBASE_AUTH_CREDENTIALS
 import com.xeniac.warrantyroster_manager.util.Constants.FIREBASE_AUTH_PROVIDER_ID_FACEBOOK
 import com.xeniac.warrantyroster_manager.util.Constants.FIREBASE_AUTH_PROVIDER_ID_GOOGLE
 import com.xeniac.warrantyroster_manager.util.Constants.FIREBASE_AUTH_PROVIDER_ID_TWITTER
@@ -21,13 +24,15 @@ class FakeUserRepository : UserRepository {
     fun addUser(
         email: String,
         password: String? = null,
-        providerIds: MutableList<String> = mutableListOf()
+        providerIds: MutableList<String> = mutableListOf(),
+        isEmailVerified: Boolean = false
     ) {
         users.add(
             TestUserDto(
                 email = email,
                 password = password,
-                providerIds = providerIds
+                providerIds = providerIds,
+                isEmailVerified = isEmailVerified
             ).toTestUser()
         )
     }
@@ -44,7 +49,7 @@ class FakeUserRepository : UserRepository {
             val userWithSameEmailExist = user != null
 
             if (userWithSameEmailExist) {
-                throw Exception()
+                throw Exception(ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS)
             } else {
                 addUser(email, password)
             }
@@ -55,7 +60,9 @@ class FakeUserRepository : UserRepository {
         if (shouldReturnNetworkError) {
             throw Exception()
         } else {
-            users.find { it.email == email && it.password == password } ?: throw Exception()
+            users.find {
+                it.email == email && it.password == password
+            } ?: throw Exception(ERROR_FIREBASE_AUTH_CREDENTIALS)
         }
     }
 
@@ -69,7 +76,8 @@ class FakeUserRepository : UserRepository {
             if (userDoesNotExist) {
                 addUser(
                     email = account.email.toString(),
-                    providerIds = mutableListOf(FIREBASE_AUTH_PROVIDER_ID_GOOGLE)
+                    providerIds = mutableListOf(FIREBASE_AUTH_PROVIDER_ID_GOOGLE),
+                    isEmailVerified = true
                 )
             } else {
                 val isUserNotLinkedToGoogle = !user!!.providerIds.contains(
@@ -117,7 +125,9 @@ class FakeUserRepository : UserRepository {
         if (shouldReturnNetworkError) {
             throw Exception()
         } else {
-            users.find { it.email == email } ?: throw Exception("email not found")
+            users.find {
+                it.email == email
+            } ?: throw Exception(ERROR_FIREBASE_AUTH_ACCOUNT_NOT_FOUND)
         }
     }
 
@@ -163,7 +173,7 @@ class FakeUserRepository : UserRepository {
         } else {
             val isPasswordNotCorrect = users[0].password != password
             if (isPasswordNotCorrect) {
-                throw Exception()
+                throw Exception(ERROR_FIREBASE_AUTH_CREDENTIALS)
             }
         }
     }
@@ -179,7 +189,10 @@ class FakeUserRepository : UserRepository {
             )
 
             if (isUserNotLinkedToGoogle) {
-                users[0].providerIds.add(FIREBASE_AUTH_PROVIDER_ID_GOOGLE)
+                users[0].apply {
+                    providerIds.add(FIREBASE_AUTH_PROVIDER_ID_GOOGLE)
+                    isEmailVerified = true
+                }
             }
         }
     }
@@ -194,6 +207,8 @@ class FakeUserRepository : UserRepository {
 
             if (isUserLinkedToGoogle) {
                 users[0].providerIds.remove(FIREBASE_AUTH_PROVIDER_ID_GOOGLE)
+            } else {
+                throw Exception()
             }
         }
     }
@@ -207,7 +222,10 @@ class FakeUserRepository : UserRepository {
             )
 
             if (isUserNotLinkedToTwitter) {
-                users[0].providerIds.add(FIREBASE_AUTH_PROVIDER_ID_TWITTER)
+                users[0].apply {
+                    providerIds.add(FIREBASE_AUTH_PROVIDER_ID_TWITTER)
+                    isEmailVerified = true
+                }
             }
         }
     }
@@ -222,6 +240,8 @@ class FakeUserRepository : UserRepository {
 
             if (isUserLinkedToTwitter) {
                 users[0].providerIds.remove(FIREBASE_AUTH_PROVIDER_ID_TWITTER)
+            } else {
+                throw Exception()
             }
         }
     }
@@ -235,7 +255,10 @@ class FakeUserRepository : UserRepository {
             )
 
             if (isUserNotLinkedToFacebook) {
-                users[0].providerIds.add(FIREBASE_AUTH_PROVIDER_ID_FACEBOOK)
+                users[0].apply {
+                    providerIds.add(FIREBASE_AUTH_PROVIDER_ID_FACEBOOK)
+                    isEmailVerified = true
+                }
             }
         }
     }
@@ -250,6 +273,8 @@ class FakeUserRepository : UserRepository {
 
             if (isUserLinkedToFacebook) {
                 users[0].providerIds.remove(FIREBASE_AUTH_PROVIDER_ID_FACEBOOK)
+            } else {
+                throw Exception()
             }
         }
     }

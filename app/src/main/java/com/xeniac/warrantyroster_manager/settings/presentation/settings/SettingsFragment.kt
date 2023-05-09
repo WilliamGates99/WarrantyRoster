@@ -59,15 +59,16 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 
 @AndroidEntryPoint
-class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListener {
+class SettingsFragment @Inject constructor(
+    var viewModel: SettingsViewModel?
+) : Fragment(R.layout.fragment_settings), MaxAdRevenueListener {
 
     private var _binding: FragmentSettingsBinding? = null
     val binding get() = _binding!!
-
-    lateinit var viewModel: SettingsViewModel
 
     private var currentAppLocaleIndex = 0
     private var currentAppThemeIndex = 0
@@ -86,7 +87,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentSettingsBinding.bind(view)
-        viewModel = ViewModelProvider(requireActivity())[SettingsViewModel::class.java]
+        viewModel = viewModel ?: ViewModelProvider(requireActivity())[SettingsViewModel::class.java]
         connectivityObserver = NetworkConnectivityObserver(requireContext())
 
         networkConnectivityObserver()
@@ -143,21 +144,25 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
     private fun getUserInfo() = CoroutineScope(Dispatchers.IO).launch {
         getCachedUserInfo()
 
+        /*
+        Delay solved the issue that even though networkStatus was Available,
+        the getReloadedAccountInfo() wouldn't be called.
+         */
         delay(1.seconds)
         if (networkStatus == ConnectivityObserver.Status.AVAILABLE) {
-            Timber.i("net is available")
+            Timber.i("Network Status is $networkStatus")
             getReloadedAccountInfo()
         } else {
-            Timber.e("net is $networkStatus")
+            Timber.e("Network Status is $networkStatus")
         }
     }
 
-    private fun getCachedUserInfo() = viewModel.getCachedUserInfo()
+    private fun getCachedUserInfo() = viewModel!!.getCachedUserInfo()
 
-    private fun getReloadedAccountInfo() = viewModel.getReloadedUserInfo()
+    private fun getReloadedAccountInfo() = viewModel!!.getReloadedUserInfo()
 
     private fun userInfoObserver() =
-        viewModel.userInfoLiveData.observe(viewLifecycleOwner) { responseEvent ->
+        viewModel!!.userInfoLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
                     is Resource.Loading -> {
@@ -199,10 +204,10 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
         }
     }
 
-    private fun getCurrentAppLocaleIndex() = viewModel.getCurrentAppLocaleIndex()
+    private fun getCurrentAppLocaleIndex() = viewModel!!.getCurrentAppLocaleIndex()
 
     private fun currentAppLocaleIndexObserver() =
-        viewModel.currentAppLocaleIndexLiveData.observe(viewLifecycleOwner) { responseEvent ->
+        viewModel!!.currentAppLocaleIndexLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
                     is Resource.Loading -> Unit
@@ -220,10 +225,10 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
             }
         }
 
-    private fun getCurrentAppLocaleUiText() = viewModel.getCurrentAppLocaleUiText()
+    private fun getCurrentAppLocaleUiText() = viewModel!!.getCurrentAppLocaleUiText()
 
     private fun currentAppLocaleUiTextObserver() =
-        viewModel.currentAppLocaleUiTextLiveData.observe(viewLifecycleOwner) { responseEvent ->
+        viewModel!!.currentAppLocaleUiTextLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
                     is Resource.Loading -> Unit
@@ -241,10 +246,10 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
             }
         }
 
-    private fun getCurrentAppThemeIndex() = viewModel.getCurrentAppThemeIndex()
+    private fun getCurrentAppThemeIndex() = viewModel!!.getCurrentAppThemeIndex()
 
     private fun currentAppThemeIndexObserver() =
-        viewModel.currentAppThemeIndexLiveData.observe(viewLifecycleOwner) { responseEvent ->
+        viewModel!!.currentAppThemeIndexLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
                     is Resource.Loading -> Unit
@@ -262,10 +267,10 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
             }
         }
 
-    private fun getCurrentAppThemeUiText() = viewModel.getCurrentAppThemeUiText()
+    private fun getCurrentAppThemeUiText() = viewModel!!.getCurrentAppThemeUiText()
 
     private fun currentAppThemeUiTextObserver() =
-        viewModel.currentAppThemeUiTextLiveData.observe(viewLifecycleOwner) { responseEvent ->
+        viewModel!!.currentAppThemeUiTextLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
                     is Resource.Loading -> Unit
@@ -289,7 +294,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
 
     private fun sendVerificationEmail() {
         if (networkStatus == ConnectivityObserver.Status.AVAILABLE) {
-            viewModel.sendVerificationEmail()
+            viewModel!!.sendVerificationEmail()
         } else {
             snackbar = showUnavailableNetworkConnectionError(
                 requireContext(), requireView()
@@ -299,16 +304,16 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
     }
 
     private fun sendVerificationEmailObserver() =
-        viewModel.sendVerificationEmailLiveData.observe(viewLifecycleOwner) { responseEvent ->
+        viewModel!!.sendVerificationEmailLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
                     is Resource.Loading -> showLoadingAnimation()
                     is Resource.Success -> {
                         hideLoadingAnimation()
                         showOneBtnAlertDialog(
-                            requireContext(),
-                            R.string.settings_dialog_message,
-                            R.string.settings_dialog_positive
+                            context = requireContext(),
+                            message = R.string.settings_dialog_message_verification_email_sent,
+                            positiveBtn = R.string.settings_dialog_btn_positive_verification_email_sent
                         )
                     }
                     is Resource.Error -> {
@@ -341,16 +346,28 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
         }
 
     private fun linkedAccountsOnClick() = binding.clAccountLinkedAccounts.setOnClickListener {
-        findNavController().navigate(SettingsFragmentDirections.actionSettingsFragmentToLinkedAccountsFragment())
+        navigateToLinkedAccountsFragment()
     }
+
+    private fun navigateToLinkedAccountsFragment() = findNavController().navigate(
+        SettingsFragmentDirections.actionSettingsFragmentToLinkedAccountsFragment()
+    )
 
     private fun changeEmailOnClick() = binding.clAccountChangeEmail.setOnClickListener {
-        findNavController().navigate(SettingsFragmentDirections.actionSettingsFragmentToChangeEmailFragment())
+        navigateToChangeEmailFragment()
     }
 
+    private fun navigateToChangeEmailFragment() = findNavController().navigate(
+        SettingsFragmentDirections.actionSettingsFragmentToChangeEmailFragment()
+    )
+
     private fun changePasswordOnClick() = binding.clAccountChangePassword.setOnClickListener {
-        findNavController().navigate(SettingsFragmentDirections.actionSettingsFragmentToChangePasswordFragment())
+        navigateToChangePasswordFragment()
     }
+
+    private fun navigateToChangePasswordFragment() = findNavController().navigate(
+        SettingsFragmentDirections.actionSettingsFragmentToChangePasswordFragment()
+    )
 
     private fun languageOnClick() = binding.clSettingsLanguage.setOnClickListener {
         val localeTextItems = arrayOf(
@@ -369,10 +386,10 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
         }
     }
 
-    private fun changeCurrentAppLocale(index: Int) = viewModel.changeCurrentAppLocale(index)
+    private fun changeCurrentAppLocale(index: Int) = viewModel!!.changeCurrentAppLocale(index)
 
     private fun changeCurrentAppLocaleObserver() =
-        viewModel.changeCurrentAppLocaleLiveData.observe(viewLifecycleOwner) { responseEvent ->
+        viewModel!!.changeCurrentAppLocaleLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
                     is Resource.Loading -> Unit
@@ -415,10 +432,10 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
         }
     }
 
-    private fun changeCurrentAppTheme(index: Int) = viewModel.changeCurrentAppTheme(index)
+    private fun changeCurrentAppTheme(index: Int) = viewModel!!.changeCurrentAppTheme(index)
 
     private fun changeCurrentAppThemeObserver() =
-        viewModel.changeCurrentAppThemeLiveData.observe(viewLifecycleOwner) { responseEvent ->
+        viewModel!!.changeCurrentAppThemeLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
                     is Resource.Loading -> Unit
@@ -456,10 +473,10 @@ class SettingsFragment : Fragment(R.layout.fragment_settings), MaxAdRevenueListe
         logoutUser()
     }
 
-    private fun logoutUser() = viewModel.logoutUser()
+    private fun logoutUser() = viewModel!!.logoutUser()
 
     private fun logoutObserver() =
-        viewModel.logoutLiveData.observe(viewLifecycleOwner) { responseEvent ->
+        viewModel!!.logoutLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
                     is Resource.Loading -> {

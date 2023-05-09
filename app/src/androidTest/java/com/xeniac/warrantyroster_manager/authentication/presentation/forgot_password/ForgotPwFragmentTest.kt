@@ -1,0 +1,215 @@
+package com.xeniac.warrantyroster_manager.authentication.presentation.forgot_password
+
+import android.content.Context
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.navigation.Navigation
+import androidx.navigation.testing.TestNavHostController
+import androidx.test.core.app.ApplicationProvider
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.Espresso.pressBackUnconditionally
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.pressImeActionButton
+import androidx.test.espresso.action.ViewActions.replaceText
+import androidx.test.espresso.action.ViewActions.scrollTo
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
+import com.google.common.truth.Truth.assertThat
+import com.xeniac.warrantyroster_manager.R
+import com.xeniac.warrantyroster_manager.authentication.presentation.login.LoginFragmentDirections
+import com.xeniac.warrantyroster_manager.core.presentation.landing.TestLandingFragmentFactory
+import com.xeniac.warrantyroster_manager.databinding.FragmentForgotPwBinding
+import com.xeniac.warrantyroster_manager.launchFragmentInHiltContainer
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
+import javax.inject.Inject
+
+@ExperimentalCoroutinesApi
+@HiltAndroidTest
+class ForgotPwFragmentTest {
+
+    @get:Rule
+    var hiltRule = HiltAndroidRule(this)
+
+    @get:Rule
+    var instantTaskExecutorRule = InstantTaskExecutorRule()
+
+    @Inject
+    lateinit var testFragmentFactory: TestLandingFragmentFactory
+
+    private lateinit var context: Context
+    private lateinit var navController: TestNavHostController
+    private lateinit var testBinding: FragmentForgotPwBinding
+
+    private val email = "email@test.com"
+    private val notExistingEmail = "another_email@test.com"
+
+    @Before
+    fun setUp() {
+        hiltRule.inject()
+
+        context = ApplicationProvider.getApplicationContext()
+
+        navController = TestNavHostController(context)
+        navController.setGraph(R.navigation.nav_graph_auth)
+        navController.navigate(LoginFragmentDirections.actionLoginFragmentToForgotPasswordFragment())
+
+        launchFragmentInHiltContainer<ForgotPwFragment>(fragmentFactory = testFragmentFactory) {
+            Navigation.setViewNavController(requireView(), navController)
+
+            testBinding = binding
+        }
+    }
+
+    @Test
+    fun clickOnEmailEditText_changesBoxBackgroundColor() {
+        val backgroundColor = context.getColor(R.color.background)
+
+        testBinding.apply {
+            onView(withId(tiEditEmail.id))
+                .perform(scrollTo())
+                .check(matches(isDisplayed()))
+                .perform(click())
+
+            assertThat(tiLayoutEmail.boxBackgroundColor).isEqualTo(backgroundColor)
+        }
+    }
+
+    @Test
+    fun clickOnEmailEditText_changesBoxStrokeColor() {
+        val blueColor = context.getColor(R.color.blue)
+
+        onView(withId(testBinding.tiEditEmail.id))
+            .perform(scrollTo())
+            .check(matches(isDisplayed()))
+            .perform(click())
+
+        assertThat(testBinding.tiLayoutEmail.boxStrokeColor).isEqualTo(blueColor)
+    }
+
+    @Test
+    fun pressBack_popsBackStack() {
+        pressBackUnconditionally()
+
+        assertThat(navController.currentDestination?.id).isEqualTo(R.id.loginFragment)
+    }
+
+    @Test
+    fun clickOnReturnBtn_popsBackStack() {
+        onView(withId(testBinding.btnReturn.id))
+            .perform(scrollTo())
+            .check(matches(isDisplayed()))
+            .perform(click())
+
+        assertThat(navController.currentDestination?.id).isEqualTo(R.id.loginFragment)
+    }
+
+    @Test
+    fun pressImeActionOnEmailEditTextWithBlankEmail_showsEmailError() {
+        onView(withId(testBinding.tiEditEmail.id)).perform(
+            scrollTo(),
+            replaceText(""),
+            pressImeActionButton()
+        )
+
+        assertThat(testBinding.tiLayoutEmail.error).isNotNull()
+    }
+
+    @Test
+    fun pressImeActionOnEmailEditTextWithInvalidEmail_showsEmailError() {
+        onView(withId(testBinding.tiEditEmail.id)).perform(
+            scrollTo(),
+            replaceText("invalid_email"),
+            pressImeActionButton()
+        )
+
+        assertThat(testBinding.tiLayoutEmail.error).isNotNull()
+    }
+
+    @Test
+    fun pressImeActionOnEmailEditTextWithNotExistingEmail_showsAccountNotFoundErrorSnackbar() {
+        onView(withId(testBinding.tiEditEmail.id)).perform(
+            scrollTo(),
+            replaceText(notExistingEmail),
+            pressImeActionButton()
+        )
+
+        onView(withText(context.getString(R.string.forgot_pw_error_not_found)))
+            .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
+    }
+
+    @Test
+    fun pressImeActionOnEmailEditTextWithSuccessStatus_navigatesToForgotPwSentFragment() {
+        onView(withId(testBinding.tiEditEmail.id)).perform(
+            scrollTo(),
+            replaceText(email),
+            pressImeActionButton()
+        )
+
+        assertThat(navController.currentDestination?.id).isEqualTo(R.id.forgotPwSentFragment)
+    }
+
+    @Test
+    fun clickOnSendBtnWithBlankEmail_showsEmailError() {
+        onView(withId(testBinding.tiEditEmail.id)).perform(
+            scrollTo(),
+            replaceText("")
+        )
+        onView(withId(testBinding.btnSend.id)).perform(
+            scrollTo(),
+            click()
+        )
+
+        assertThat(testBinding.tiLayoutEmail.error).isNotNull()
+    }
+
+    @Test
+    fun clickOnSendBtnWithInvalidEmail_showsEmailError() {
+        onView(withId(testBinding.tiEditEmail.id)).perform(
+            scrollTo(),
+            replaceText("invalid_email")
+        )
+        onView(withId(testBinding.btnSend.id)).perform(
+            scrollTo(),
+            click()
+        )
+
+        assertThat(testBinding.tiLayoutEmail.error).isNotNull()
+    }
+
+    @Test
+    fun clickOnSendBtnWithNotExistingEmail_showsAccountNotFoundErrorSnackbar() {
+        onView(withId(testBinding.tiEditEmail.id)).perform(
+            scrollTo(),
+            replaceText(notExistingEmail)
+        )
+        onView(withId(testBinding.btnSend.id)).perform(
+            scrollTo(),
+            click()
+        )
+
+        onView(withText(context.getString(R.string.forgot_pw_error_not_found)))
+            .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
+    }
+
+    @Test
+    fun clickOnSendBtnWithSuccessStatus_navigatesToForgotPwSentFragment() {
+        onView(withId(testBinding.tiEditEmail.id)).perform(
+            scrollTo(),
+            replaceText(email)
+        )
+        onView(withId(testBinding.btnSend.id)).perform(
+            scrollTo(),
+            click()
+        )
+
+        assertThat(navController.currentDestination?.id).isEqualTo(R.id.forgotPwSentFragment)
+    }
+}

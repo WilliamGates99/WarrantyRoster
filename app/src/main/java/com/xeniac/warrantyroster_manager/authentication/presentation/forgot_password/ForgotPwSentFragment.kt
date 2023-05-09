@@ -38,19 +38,17 @@ import java.text.DecimalFormat
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
+class ForgotPwSentFragment @Inject constructor(
+    private val decimalFormat: DecimalFormat,
+    var viewModel: ForgotPwViewModel? = null
+) : Fragment(R.layout.fragment_forgot_pw_sent) {
 
     private var _binding: FragmentForgotPwSentBinding? = null
     val binding get() = _binding!!
 
-    lateinit var viewModel: ForgotPwViewModel
-
     private lateinit var email: String
     private var isFirstTimeSendingEmail = true
-    private var timerMillisUntilFinished = 0L
-
-    @Inject
-    lateinit var decimalFormat: DecimalFormat
+    var timerMillisUntilFinished = 0L
 
     private lateinit var connectivityObserver: ConnectivityObserver
     private var networkStatus: ConnectivityObserver.Status = ConnectivityObserver.Status.UNAVAILABLE
@@ -60,7 +58,7 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentForgotPwSentBinding.bind(view)
-        viewModel = ViewModelProvider(requireActivity())[ForgotPwViewModel::class.java]
+        viewModel = viewModel ?: ViewModelProvider(requireActivity())[ForgotPwViewModel::class.java]
         connectivityObserver = NetworkConnectivityObserver(requireContext())
 
         networkConnectivityObserver()
@@ -119,7 +117,7 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
 
     private fun resendResetPasswordEmail() {
         if (networkStatus == ConnectivityObserver.Status.AVAILABLE) {
-            viewModel.sendResetPasswordEmail(email)
+            viewModel!!.sendResetPasswordEmail(email)
         } else {
             snackbar = showUnavailableNetworkConnectionError(
                 requireContext(), requireView()
@@ -129,7 +127,7 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
     }
 
     private fun resendResetPasswordEmailObserver() =
-        viewModel.sendResetPasswordEmailLiveData.observe(viewLifecycleOwner) { responseEvent ->
+        viewModel!!.sendResetPasswordEmailLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
                     is Resource.Loading -> showLoadingAnimation()
@@ -168,12 +166,12 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
         }
 
     private fun isNotFirstTimeSendingEmailObserver() =
-        viewModel.isNotFirstTimeSendingEmailLiveData.observe(viewLifecycleOwner) { isNotFirstTime ->
+        viewModel!!.isNotFirstTimeSendingEmailLiveData.observe(viewLifecycleOwner) { isNotFirstTime ->
             isFirstTimeSendingEmail = !isNotFirstTime
         }
 
     private fun timerMillisUntilFinishedObserver() =
-        viewModel.timerMillisUntilFinishedLiveData.observe(viewLifecycleOwner) { responseEvent ->
+        viewModel!!.timerMillisUntilFinishedLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { millisUntilFinished ->
                 timerMillisUntilFinished = millisUntilFinished
                 binding.apply {
@@ -197,7 +195,11 @@ class ForgotPwSentFragment : Fragment(R.layout.fragment_forgot_pw_sent) {
         val minutes = decimalFormat.format(millisUntilFinished / 60000)
         val seconds = decimalFormat.format((millisUntilFinished / 1000) % 60)
 
-        time = "($minutes:$seconds)"
+        time = requireContext().getString(
+            R.string.forgot_pw_sent_text_timer,
+            minutes,
+            seconds
+        )
         isTimerTicking = true
     }
 

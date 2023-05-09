@@ -7,6 +7,7 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
@@ -48,21 +49,15 @@ import java.util.Calendar
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
+class WarrantyDetailsFragment @Inject constructor(
+    private val imageLoader: ImageLoader,
+    private val decimalFormat: DecimalFormat,
+    private val dateFormat: SimpleDateFormat,
+    var viewModel: WarrantyDetailsViewModel? = null
+) : Fragment(R.layout.fragment_warranty_details) {
 
     private var _binding: FragmentWarrantyDetailsBinding? = null
     val binding get() = _binding!!
-
-    lateinit var viewModel: WarrantyDetailsViewModel
-
-    @Inject
-    lateinit var imageLoader: ImageLoader
-
-    @Inject
-    lateinit var decimalFormat: DecimalFormat
-
-    @Inject
-    lateinit var dateFormat: SimpleDateFormat
 
     private lateinit var warranty: Warranty
 
@@ -74,7 +69,8 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentWarrantyDetailsBinding.bind(view)
-        viewModel = ViewModelProvider(requireActivity())[WarrantyDetailsViewModel::class.java]
+        viewModel = viewModel
+            ?: ViewModelProvider(requireActivity())[WarrantyDetailsViewModel::class.java]
         connectivityObserver = NetworkConnectivityObserver(requireContext())
 
         networkConnectivityObserver()
@@ -84,6 +80,7 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
         getWarranty()
         editWarrantyOnClick()
         deleteWarrantyOnClick()
+        requireActivity().onBackPressedDispatcher.addCallback(onBackPressedCallback)
     }
 
     override fun onDestroyView() {
@@ -91,6 +88,14 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
         snackbar?.dismiss()
         _binding = null
     }
+
+    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            navigateBack()
+        }
+    }
+
+    private fun navigateBack() = findNavController().popBackStack()
 
     private fun networkConnectivityObserver() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -108,7 +113,7 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
     }
 
     private fun toolbarNavigationBackOnClick() = binding.toolbar.setNavigationOnClickListener {
-        returnToMainActivity()
+        navigateBack()
     }
 
     private fun handleExtendedFAB() = binding.nsv.setOnScrollChangeListener(
@@ -232,7 +237,7 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
         }
     }
 
-    private fun getCategoryById(categoryId: String) = viewModel.getCategoryById(categoryId)
+    private fun getCategoryById(categoryId: String) = viewModel!!.getCategoryById(categoryId)
 
     private fun editWarrantyOnClick() = binding.fab.setOnClickListener {
         findNavController().navigate(
@@ -262,7 +267,7 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
 
     private fun deleteWarrantyFromFirestore() {
         if (networkStatus == ConnectivityObserver.Status.AVAILABLE) {
-            viewModel.deleteWarrantyFromFirestore(warranty.id)
+            viewModel!!.deleteWarrantyFromFirestore(warranty.id)
         } else {
             snackbar = showUnavailableNetworkConnectionError(
                 requireContext(), requireView()
@@ -272,7 +277,7 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
     }
 
     private fun deleteWarrantyObserver() =
-        viewModel.deleteWarrantyLiveData.observe(viewLifecycleOwner) { responseEvent ->
+        viewModel!!.deleteWarrantyLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
                     is Resource.Loading -> showLoadingAnimation()
@@ -289,7 +294,7 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
                         ).show()
 
                         showInterstitialAd()
-                        returnToMainActivity()
+                        navigateBack()
                     }
                     is Resource.Error -> {
                         hideLoadingAnimation()
@@ -312,8 +317,6 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
             }
         }
 
-    private fun returnToMainActivity() = findNavController().popBackStack()
-
     private fun showLoadingAnimation() = binding.apply {
         toolbar.menu.getItem(0).isVisible = false
         fab.isClickable = false
@@ -326,14 +329,20 @@ class WarrantyDetailsFragment : Fragment(R.layout.fragment_warranty_details) {
         fab.isClickable = true
     }
 
-    private fun showInterstitialAd() = (requireActivity() as MainActivity).apply {
-        if (appLovinAd.isReady) {
-            appLovinAd.showAd()
-        } else if (tapsellResponseId != null) {
-            showTapsellInterstitialAd(tapsellResponseId!!)
-        }
+    private fun showInterstitialAd() {
+        try {
+            (requireActivity() as MainActivity).apply {
+                if (appLovinAd.isReady) {
+                    appLovinAd.showAd()
+                } else if (tapsellResponseId != null) {
+                    showTapsellInterstitialAd(tapsellResponseId!!)
+                }
 
-        requestAppLovinInterstitial()
+                requestAppLovinInterstitial()
+            }
+        } catch (e: Exception) {
+            Timber.e("showInterstitialAd Exception: ${e.message}")
+        }
     }
 
     private fun showTapsellInterstitialAd(responseId: String) = TapsellPlus.showInterstitialAd(

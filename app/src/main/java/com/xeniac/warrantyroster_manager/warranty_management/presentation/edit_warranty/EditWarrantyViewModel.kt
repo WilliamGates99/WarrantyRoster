@@ -97,19 +97,19 @@ class EditWarrantyViewModel @Inject constructor(
             return
         }
 
-        if (!isLifetime && expiryDateInput.isNullOrBlank()) {
+        val isExpiryDateInputBlank = !isLifetime && expiryDateInput.isNullOrBlank()
+        if (isExpiryDateInputBlank) {
             _updateWarrantyLiveData.postValue(
                 Event(Resource.Error(UiText.DynamicString(ERROR_INPUT_BLANK_EXPIRY_DATE)))
             )
             return
         }
 
-        if (!isLifetime &&
-            !DateHelper.isStartingDateValid(
-                selectedStartingDateInMillis,
-                selectedExpiryDateInMillis
-            )
-        ) {
+        val isStartingDateInvalid = !isLifetime && !DateHelper.isStartingDateValid(
+            selectedStartingDateInMillis,
+            selectedExpiryDateInMillis
+        )
+        if (isStartingDateInvalid) {
             _updateWarrantyLiveData.postValue(
                 Event(Resource.Error(UiText.DynamicString(ERROR_INPUT_INVALID_STARTING_DATE)))
             )

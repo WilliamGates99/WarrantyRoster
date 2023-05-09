@@ -350,8 +350,8 @@
     <string name="settings_dialog_item_theme_default">پیش‌فرض سیستم</string>
     <string name="settings_dialog_item_theme_light">روشن</string>
     <string name="settings_dialog_item_theme_dark">تیره</string>
-    <string name="settings_dialog_message">ایمیل تأیید با موفقیت به صندوق ایمیلتان ارسال شد.</string>
-    <string name="settings_dialog_positive">تایید</string>
+    <string name="settings_dialog_message_verification_email_sent">ایمیل تأیید با موفقیت به صندوق ایمیلتان ارسال شد.</string>
+    <string name="settings_dialog_btn_positive_verification_email_sent">تایید</string>
     <string name="settings_error_email_verification_email_not_provided">ایمیلی به حساب متصل نیست.</string>
 
 

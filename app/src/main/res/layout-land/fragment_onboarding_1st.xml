@@ -38,7 +38,7 @@
         android:textAlignment="gravity"
         android:textColor="@color/skyBlueStatic"
         android:textSize="@dimen/text_size_24sp"
-        app:layout_constraintBottom_toTopOf="@id/btn_next"
+        app:layout_constraintBottom_toTopOf="@id/btn_onboarding_1st_next"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/guideline"
         app:layout_constraintTop_toTopOf="parent"
@@ -46,20 +46,20 @@
         tools:targetApi="p" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_skip"
+        android:id="@+id/btn_onboarding_1st_skip"
         style="@style/Theme.WarrantyRoster.TextButton.OnBoarding"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_12dp"
         android:layout_marginEnd="@dimen/margin_2dp"
         android:text="@string/onboarding_btn_skip"
-        app:layout_constraintBaseline_toBaselineOf="@+id/btn_next"
-        app:layout_constraintEnd_toStartOf="@+id/btn_next"
+        app:layout_constraintBaseline_toBaselineOf="@+id/btn_onboarding_1st_next"
+        app:layout_constraintEnd_toStartOf="@+id/btn_onboarding_1st_next"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="@id/guideline" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_next"
+        android:id="@+id/btn_onboarding_1st_next"
         style="@style/Theme.WarrantyRoster.Button"
         android:layout_width="@dimen/width_114dp"
         android:layout_height="wrap_content"
@@ -70,6 +70,6 @@
         android:text="@string/onboarding_btn_next"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/btn_skip" />
+        app:layout_constraintStart_toEndOf="@+id/btn_onboarding_1st_skip" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -8,6 +8,7 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
@@ -44,14 +45,15 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import java.util.Locale
+import javax.inject.Inject
 
 @AndroidEntryPoint
-class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
+class ChangeEmailFragment @Inject constructor(
+    var viewModel: ChangeEmailViewModel?
+) : Fragment(R.layout.fragment_change_email) {
 
     private var _binding: FragmentChangeEmailBinding? = null
     val binding get() = _binding!!
-
-    lateinit var viewModel: ChangeEmailViewModel
 
     private lateinit var newEmail: String
 
@@ -63,7 +65,8 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentChangeEmailBinding.bind(view)
-        viewModel = ViewModelProvider(requireActivity())[ChangeEmailViewModel::class.java]
+        viewModel = viewModel
+            ?: ViewModelProvider(requireActivity())[ChangeEmailViewModel::class.java]
         connectivityObserver = NetworkConnectivityObserver(requireContext())
 
         networkConnectivityObserver()
@@ -73,12 +76,19 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
         subscribeToObservers()
         changeEmailOnClick()
         changeEmailActionDone()
+        requireActivity().onBackPressedDispatcher.addCallback(onBackPressedCallback)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         snackbar?.dismiss()
         _binding = null
+    }
+
+    private val onBackPressedCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            navigateBack()
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -125,21 +135,29 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
     private fun textInputsBackgroundColor() = binding.apply {
         tiEditPassword.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                tiLayoutPassword.boxBackgroundColor =
-                    ContextCompat.getColor(requireContext(), R.color.background)
+                tiLayoutPassword.boxBackgroundColor = ContextCompat.getColor(
+                    requireContext(),
+                    R.color.background
+                )
             } else {
-                tiLayoutPassword.boxBackgroundColor =
-                    ContextCompat.getColor(requireContext(), R.color.grayLight)
+                tiLayoutPassword.boxBackgroundColor = ContextCompat.getColor(
+                    requireContext(),
+                    R.color.grayLight
+                )
             }
         }
 
         tiEditNewEmail.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                tiLayoutNewEmail.boxBackgroundColor =
-                    ContextCompat.getColor(requireContext(), R.color.background)
+                tiLayoutNewEmail.boxBackgroundColor = ContextCompat.getColor(
+                    requireContext(),
+                    R.color.background
+                )
             } else {
-                tiLayoutNewEmail.boxBackgroundColor =
-                    ContextCompat.getColor(requireContext(), R.color.grayLight)
+                tiLayoutNewEmail.boxBackgroundColor = ContextCompat.getColor(
+                    requireContext(),
+                    R.color.grayLight
+                )
             }
         }
     }
@@ -147,12 +165,18 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
     private fun textInputsStrokeColor() = binding.apply {
         tiEditPassword.addTextChangedListener {
             tiLayoutPassword.isErrorEnabled = false
-            tiLayoutPassword.boxStrokeColor = ContextCompat.getColor(requireContext(), R.color.blue)
+            tiLayoutPassword.boxStrokeColor = ContextCompat.getColor(
+                requireContext(),
+                R.color.blue
+            )
         }
 
         tiEditNewEmail.addTextChangedListener {
             tiLayoutNewEmail.isErrorEnabled = false
-            tiLayoutNewEmail.boxStrokeColor = ContextCompat.getColor(requireContext(), R.color.blue)
+            tiLayoutNewEmail.boxStrokeColor = ContextCompat.getColor(
+                requireContext(),
+                R.color.blue
+            )
         }
     }
 
@@ -191,7 +215,7 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
             val password = binding.tiEditPassword.text.toString().trim()
             newEmail = binding.tiEditNewEmail.text.toString().trim().lowercase(Locale.US)
 
-            viewModel.validateChangeEmailInputs(password, newEmail)
+            viewModel!!.validateChangeEmailInputs(password, newEmail)
         } else {
             snackbar = showUnavailableNetworkConnectionError(
                 requireContext(), requireView()
@@ -201,7 +225,7 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
     }
 
     private fun validateInputsObserver() =
-        viewModel.validateInputsLiveData.observe(viewLifecycleOwner) { responseEvent ->
+        viewModel!!.validateInputsLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
                     is Resource.Loading -> {
@@ -243,10 +267,10 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
             }
         }
 
-    private fun reAuthenticateUser(password: String) = viewModel.reAuthenticateUser(password)
+    private fun reAuthenticateUser(password: String) = viewModel!!.reAuthenticateUser(password)
 
     private fun reAuthenticateUserObserver() =
-        viewModel.reAuthenticateUserLiveData.observe(viewLifecycleOwner) { responseEvent ->
+        viewModel!!.reAuthenticateUserLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
                     is Resource.Loading -> showLoadingAnimation()
@@ -286,10 +310,10 @@ class ChangeEmailFragment : Fragment(R.layout.fragment_change_email) {
             }
         }
 
-    private fun changeUserEmail() = viewModel.changeUserEmail(newEmail)
+    private fun changeUserEmail() = viewModel!!.changeUserEmail(newEmail)
 
     private fun changeUserEmailObserver() =
-        viewModel.changeUserEmailLiveData.observe(viewLifecycleOwner) { responseEvent ->
+        viewModel!!.changeUserEmailLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
                     is Resource.Loading -> showLoadingAnimation()

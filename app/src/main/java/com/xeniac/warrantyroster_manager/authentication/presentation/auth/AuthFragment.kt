@@ -20,13 +20,14 @@ import com.xeniac.warrantyroster_manager.util.Constants.LOCALE_INDEX_ENGLISH_UNI
 import com.xeniac.warrantyroster_manager.util.Constants.LOCALE_INDEX_PERSIAN_IRAN
 import com.xeniac.warrantyroster_manager.util.Resource
 import com.xeniac.warrantyroster_manager.util.SnackBarHelper.showSomethingWentWrongError
+import javax.inject.Inject
 
-class AuthFragment : Fragment(R.layout.fragment_auth) {
+class AuthFragment @Inject constructor(
+    var viewModel: AuthViewModel?
+) : Fragment(R.layout.fragment_auth) {
 
     private var _binding: FragmentAuthBinding? = null
-    private val binding get() = _binding!!
-
-    lateinit var viewModel: AuthViewModel
+    val binding get() = _binding!!
 
     private var currentAppLocaleIndex = 0
 
@@ -35,7 +36,7 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentAuthBinding.bind(view)
-        viewModel = ViewModelProvider(requireActivity())[AuthViewModel::class.java]
+        viewModel = viewModel ?: ViewModelProvider(requireActivity())[AuthViewModel::class.java]
 
         subscribeToObservers()
         headerSetup()
@@ -83,10 +84,10 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
         }
     }
 
-    private fun getCurrentAppLocaleIndex() = viewModel.getCurrentAppLocaleIndex()
+    private fun getCurrentAppLocaleIndex() = viewModel!!.getCurrentAppLocaleIndex()
 
     private fun currentAppLocaleIndexObserver() =
-        viewModel.currentAppLocaleIndexLiveData.observe(viewLifecycleOwner) { responseEvent ->
+        viewModel!!.currentAppLocaleIndexLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
                     is Resource.Loading -> Unit
@@ -108,13 +109,13 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
     private fun setCurrentAppLocaleFlag(localeIndex: Int) {
         binding.apply {
             when (localeIndex) {
-                LOCALE_INDEX_ENGLISH_UNITED_STATES -> ivLanguageFlag.setImageDrawable(
+                LOCALE_INDEX_ENGLISH_UNITED_STATES -> ivLocaleFlag.setImageDrawable(
                     AppCompatResources.getDrawable(requireContext(), R.drawable.ic_flag_usa)
                 )
-                LOCALE_INDEX_ENGLISH_GREAT_BRITAIN -> ivLanguageFlag.setImageDrawable(
+                LOCALE_INDEX_ENGLISH_GREAT_BRITAIN -> ivLocaleFlag.setImageDrawable(
                     AppCompatResources.getDrawable(requireContext(), R.drawable.ic_flag_gb)
                 )
-                LOCALE_INDEX_PERSIAN_IRAN -> ivLanguageFlag.setImageDrawable(
+                LOCALE_INDEX_PERSIAN_IRAN -> ivLocaleFlag.setImageDrawable(
                     AppCompatResources.getDrawable(requireContext(), R.drawable.ic_flag_iran)
                 )
             }
@@ -138,10 +139,10 @@ class AuthFragment : Fragment(R.layout.fragment_auth) {
         }
     }
 
-    private fun changeCurrentAppLocale(index: Int) = viewModel.changeCurrentAppLocale(index)
+    private fun changeCurrentAppLocale(index: Int) = viewModel!!.changeCurrentAppLocale(index)
 
     private fun changeCurrentAppLocaleObserver() =
-        viewModel.changeCurrentAppLocaleLiveData.observe(viewLifecycleOwner) { responseEvent ->
+        viewModel!!.changeCurrentAppLocaleLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
                     is Resource.Loading -> Unit

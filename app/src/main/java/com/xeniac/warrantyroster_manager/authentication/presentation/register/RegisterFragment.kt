@@ -78,15 +78,13 @@ import java.util.Locale
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class RegisterFragment : Fragment(R.layout.fragment_register) {
+class RegisterFragment @Inject constructor(
+    private val firebaseAuth: FirebaseAuth,
+    var viewModel: RegisterViewModel? = null
+) : Fragment(R.layout.fragment_register) {
 
     private var _binding: FragmentRegisterBinding? = null
     val binding get() = _binding!!
-
-    lateinit var viewModel: RegisterViewModel
-
-    @Inject
-    lateinit var firebaseAuth: FirebaseAuth
 
     private lateinit var currentAppLanguage: String
 
@@ -98,7 +96,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentRegisterBinding.bind(view)
-        viewModel = ViewModelProvider(requireActivity())[RegisterViewModel::class.java]
+        viewModel = viewModel ?: ViewModelProvider(requireActivity())[RegisterViewModel::class.java]
         connectivityObserver = NetworkConnectivityObserver(requireContext())
 
         networkConnectivityObserver()
@@ -185,32 +183,44 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     private fun textInputsBackgroundColor() = binding.apply {
         tiEditEmail.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                tiLayoutEmail.boxBackgroundColor =
-                    ContextCompat.getColor(requireContext(), R.color.background)
+                tiLayoutEmail.boxBackgroundColor = ContextCompat.getColor(
+                    requireContext(),
+                    R.color.background
+                )
             } else {
-                tiLayoutEmail.boxBackgroundColor =
-                    ContextCompat.getColor(requireContext(), R.color.grayLight)
+                tiLayoutEmail.boxBackgroundColor = ContextCompat.getColor(
+                    requireContext(),
+                    R.color.grayLight
+                )
             }
         }
 
         tiEditPassword.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                tiLayoutPassword.boxBackgroundColor =
-                    ContextCompat.getColor(requireContext(), R.color.background)
+                tiLayoutPassword.boxBackgroundColor = ContextCompat.getColor(
+                    requireContext(),
+                    R.color.background
+                )
             } else {
-                tiLayoutPassword.boxBackgroundColor =
-                    ContextCompat.getColor(requireContext(), R.color.grayLight)
+                tiLayoutPassword.boxBackgroundColor = ContextCompat.getColor(
+                    requireContext(),
+                    R.color.grayLight
+                )
                 tiLayoutPassword.isHelperTextEnabled = false
             }
         }
 
         tiEditConfirmPassword.setOnFocusChangeListener { _, isFocused ->
             if (isFocused) {
-                tiLayoutConfirmPassword.boxBackgroundColor =
-                    ContextCompat.getColor(requireContext(), R.color.background)
+                tiLayoutConfirmPassword.boxBackgroundColor = ContextCompat.getColor(
+                    requireContext(),
+                    R.color.background
+                )
             } else {
-                tiLayoutConfirmPassword.boxBackgroundColor =
-                    ContextCompat.getColor(requireContext(), R.color.grayLight)
+                tiLayoutConfirmPassword.boxBackgroundColor = ContextCompat.getColor(
+                    requireContext(),
+                    R.color.grayLight
+                )
             }
         }
     }
@@ -218,8 +228,10 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     private fun textInputsStrokeColor() = binding.apply {
         tiEditEmail.addTextChangedListener {
             tiLayoutEmail.isErrorEnabled = false
-            tiLayoutEmail.boxStrokeColor =
-                ContextCompat.getColor(requireContext(), R.color.blue)
+            tiLayoutEmail.boxStrokeColor = ContextCompat.getColor(
+                requireContext(),
+                R.color.blue
+            )
         }
 
         tiEditPassword.addTextChangedListener { inputPassword ->
@@ -228,28 +240,37 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
             if (tiLayoutPassword.hasFocus()) {
                 when (passwordStrength(inputPassword.toString())) {
                     (-1).toByte() -> {
-                        tiLayoutPassword.boxStrokeColor =
-                            ContextCompat.getColor(requireContext(), R.color.red)
-                        tiLayoutPassword.helperText =
-                            getString(R.string.register_helper_password_weak)
+                        tiLayoutPassword.boxStrokeColor = ContextCompat.getColor(
+                            requireContext(),
+                            R.color.red
+                        )
+                        tiLayoutPassword.helperText = getString(
+                            R.string.register_helper_password_weak
+                        )
                         tiLayoutPassword.setHelperTextColor(
                             ContextCompat.getColorStateList(requireContext(), R.color.red)
                         )
                     }
                     (0).toByte() -> {
-                        tiLayoutPassword.boxStrokeColor =
-                            ContextCompat.getColor(requireContext(), R.color.orange)
-                        tiLayoutPassword.helperText =
-                            getString(R.string.register_helper_password_mediocre)
+                        tiLayoutPassword.boxStrokeColor = ContextCompat.getColor(
+                            requireContext(),
+                            R.color.orange
+                        )
+                        tiLayoutPassword.helperText = getString(
+                            R.string.register_helper_password_mediocre
+                        )
                         tiLayoutPassword.setHelperTextColor(
                             ContextCompat.getColorStateList(requireContext(), R.color.orange)
                         )
                     }
                     (1).toByte() -> {
-                        tiLayoutPassword.boxStrokeColor =
-                            ContextCompat.getColor(requireContext(), R.color.green)
-                        tiLayoutPassword.helperText =
-                            getString(R.string.register_helper_password_strong)
+                        tiLayoutPassword.boxStrokeColor = ContextCompat.getColor(
+                            requireContext(),
+                            R.color.green
+                        )
+                        tiLayoutPassword.helperText = getString(
+                            R.string.register_helper_password_strong
+                        )
                         tiLayoutPassword.setHelperTextColor(
                             ContextCompat.getColorStateList(requireContext(), R.color.green)
                         )
@@ -260,8 +281,10 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
 
         tiEditConfirmPassword.addTextChangedListener {
             tiLayoutConfirmPassword.isErrorEnabled = false
-            tiLayoutConfirmPassword.boxStrokeColor =
-                ContextCompat.getColor(requireContext(), R.color.blue)
+            tiLayoutConfirmPassword.boxStrokeColor = ContextCompat.getColor(
+                requireContext(),
+                R.color.blue
+            )
         }
     }
 
@@ -273,10 +296,10 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         registerWithFacebookAccountObserver()
     }
 
-    private fun getCurrentAppLanguage() = viewModel.getCurrentAppLanguage()
+    private fun getCurrentAppLanguage() = viewModel!!.getCurrentAppLanguage()
 
     private fun currentAppLanguageObserver() =
-        viewModel.currentAppLanguageLiveData.observe(viewLifecycleOwner) { responseEvent ->
+        viewModel!!.currentAppLanguageLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
                     is Resource.Loading -> Unit
@@ -322,7 +345,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
             val password = binding.tiEditPassword.text.toString().trim()
             val retypePassword = binding.tiEditConfirmPassword.text.toString().trim()
 
-            viewModel.validateRegisterWithEmailInputs(email, password, retypePassword)
+            viewModel!!.validateRegisterWithEmailInputs(email, password, retypePassword)
         } else {
             snackbar = showUnavailableNetworkConnectionError(
                 requireContext(), requireView()
@@ -332,7 +355,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     }
 
     private fun registerWithEmailObserver() =
-        viewModel.registerWithEmailLiveData.observe(viewLifecycleOwner) { responseEvent ->
+        viewModel!!.registerWithEmailLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
                     is Resource.Loading -> showRegisterWithEmailLoadingAnimation()
@@ -344,17 +367,17 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                         hideRegisterWithEmailLoadingAnimation()
                         response.message?.asString(requireContext())?.let {
                             when {
-                                it.contains(ERROR_INPUT_BLANK_EMAIL) -> {
+                                it == ERROR_INPUT_BLANK_EMAIL -> {
                                     binding.tiLayoutEmail.error =
                                         requireContext().getString(R.string.register_error_blank_email)
                                     binding.tiLayoutEmail.requestFocus()
                                 }
-                                it.contains(ERROR_INPUT_BLANK_PASSWORD) -> {
+                                it == ERROR_INPUT_BLANK_PASSWORD -> {
                                     binding.tiLayoutPassword.error =
                                         requireContext().getString(R.string.register_error_blank_password)
                                     binding.tiLayoutPassword.requestFocus()
                                 }
-                                it.contains(ERROR_INPUT_BLANK_RETYPE_PASSWORD) -> {
+                                it == ERROR_INPUT_BLANK_RETYPE_PASSWORD -> {
                                     binding.tiLayoutConfirmPassword.error =
                                         requireContext().getString(R.string.register_error_blank_confirm_password)
                                     binding.tiLayoutConfirmPassword.requestFocus()
@@ -468,7 +491,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     ) { result ->
         try {
             val account = GoogleSignIn.getSignedInAccountFromIntent(result.data).result
-            account?.let { viewModel.registerWithGoogleAccount(account) }
+            account?.let { viewModel!!.registerWithGoogleAccount(account) }
         } catch (e: Exception) {
             hideGoogleLoadingAnimation()
             e.message?.let {
@@ -491,7 +514,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     }
 
     private fun registerWithGoogleAccountObserver() =
-        viewModel.registerWithGoogleAccountLiveData.observe(viewLifecycleOwner) { responseEvent ->
+        viewModel!!.registerWithGoogleAccountLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
                     is Resource.Loading -> showGoogleLoadingAnimation()
@@ -574,7 +597,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
         if (task.isSuccessful) {
             val authCredential = task.result.credential
             authCredential?.let { credential ->
-                viewModel.registerWithTwitterAccount(credential)
+                viewModel!!.registerWithTwitterAccount(credential)
             }
         } else {
             hideTwitterLoadingAnimation()
@@ -606,7 +629,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     }
 
     private fun registerWithTwitterAccountObserver() =
-        viewModel.registerWithTwitterAccountLiveData.observe(viewLifecycleOwner) { responseEvent ->
+        viewModel!!.registerWithTwitterAccountLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
                     is Resource.Loading -> showTwitterLoadingAnimation()
@@ -671,7 +694,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
 
         loginManager.registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
             override fun onSuccess(result: LoginResult) {
-                viewModel.registerWithFacebookAccount(result.accessToken)
+                viewModel!!.registerWithFacebookAccount(result.accessToken)
             }
 
             override fun onCancel() {
@@ -688,7 +711,7 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     }
 
     private fun registerWithFacebookAccountObserver() =
-        viewModel.registerWithFacebookAccountLiveData.observe(viewLifecycleOwner) { responseEvent ->
+        viewModel!!.registerWithFacebookAccountLiveData.observe(viewLifecycleOwner) { responseEvent ->
             responseEvent.getContentIfNotHandled()?.let { response ->
                 when (response) {
                     is Resource.Loading -> showFacebookLoadingAnimation()
