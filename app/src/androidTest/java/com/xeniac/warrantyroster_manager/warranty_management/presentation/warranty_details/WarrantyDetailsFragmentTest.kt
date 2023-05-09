@@ -132,7 +132,7 @@ class WarrantyDetailsFragmentTest {
         testBinding.apply {
             // Warranty Title
             onView(withId(toolbar.id)).check(matches(isDisplayed()))
-            assertThat(toolbar.title).isEqualTo(warranty.title)
+            assertThat(toolbar.title).isEqualTo(warrantyTitle)
 
             // Warranty Status
             onView(withId(tvStatus.id)).check(matches(isDisplayed()))
