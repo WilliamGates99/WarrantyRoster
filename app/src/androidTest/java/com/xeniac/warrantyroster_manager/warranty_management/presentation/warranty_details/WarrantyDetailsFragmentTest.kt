@@ -62,6 +62,7 @@ class WarrantyDetailsFragmentTest {
     private val warrantySerialNumber = "WARRANTY_SERIAL"
     private val warrantyDescription = "This is warranty description."
     private val warrantyStartingDate = "2022-07-13"
+    private val warrantyExpiryDate = "2050-07-13"
 
     private val warranty = Warranty(
         id = warrantyId,
@@ -70,8 +71,8 @@ class WarrantyDetailsFragmentTest {
         model = warrantyModel,
         serialNumber = warrantySerialNumber,
         description = warrantyDescription,
-        isLifetime = true,
-        startingDate = warrantyStartingDate
+        startingDate = warrantyStartingDate,
+        expiryDate = warrantyExpiryDate
     )
 
     @Before
@@ -126,7 +127,7 @@ class WarrantyDetailsFragmentTest {
         val validStatusBackgroundTint = ContextCompat.getColorStateList(context, R.color.green20)
 
         val startingDateText = "07/13/2022"
-        val expiryDateText = context.getString(R.string.warranty_details_is_lifetime)
+        val expiryDateText = "07/13/2050"
 
         testBinding.apply {
             // Warranty Title
