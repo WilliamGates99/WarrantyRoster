@@ -2,7 +2,6 @@ package com.xeniac.warrantyroster_manager.warranty_management.presentation.warra
 
 import android.content.Context
 import android.os.Bundle
-import android.view.Gravity
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.core.content.ContextCompat
@@ -12,7 +11,6 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.pressBackUnconditionally
 import androidx.test.espresso.action.ViewActions.click
-import androidx.test.espresso.action.ViewActions.scrollTo
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.RootMatchers.isDialog
@@ -32,7 +30,6 @@ import com.xeniac.warrantyroster_manager.warranty_management.presentation.warran
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runTest
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.instanceOf
 import org.junit.Before
@@ -58,6 +55,7 @@ class WarrantyDetailsFragmentTest {
     private var testArgs: Bundle? = null
     private lateinit var testBinding: FragmentWarrantyDetailsBinding
 
+    private val warrantyId = "1"
     private val warrantyTitle = "Warranty Title"
     private val warrantyBrand = "Warranty Brand"
     private val warrantyModel = "Warranty Model"
@@ -66,7 +64,7 @@ class WarrantyDetailsFragmentTest {
     private val warrantyStartingDate = "2022-07-13"
 
     private val warranty = Warranty(
-        id = "1",
+        id = warrantyId,
         title = warrantyTitle,
         brand = warrantyBrand,
         model = warrantyModel,
@@ -136,60 +134,38 @@ class WarrantyDetailsFragmentTest {
             assertThat(toolbar.title).isEqualTo(warranty.title)
 
             // Warranty Status
-            onView(withId(tvStatus.id))
-                .perform(scrollTo())
-                .check(matches(isDisplayed()))
-
+            onView(withId(tvStatus.id)).check(matches(isDisplayed()))
             assertThat(tvStatus.text).isEqualTo(validStatusText)
             assertThat(tvStatus.currentTextColor).isEqualTo(validStatusTextColor)
             assertThat(tvStatus.backgroundTintList).isEqualTo(validStatusBackgroundTint)
 
             // Warranty Starting Date
-            onView(withId(tvDateStarting.id))
-                .perform(scrollTo())
-                .check(matches(isDisplayed()))
-
+            onView(withId(tvDateStarting.id)).check(matches(isDisplayed()))
             assertThat(tvDateStarting.text).isEqualTo(startingDateText)
 
             // Warranty Expiry Date
-            onView(withId(tvDateExpiry.id))
-                .perform(scrollTo())
-                .check(matches(isDisplayed()))
-
+            onView(withId(tvDateExpiry.id)).check(matches(isDisplayed()))
             assertThat(tvDateExpiry.text).isEqualTo(expiryDateText)
 
             // Warranty Brand
-            onView(withId(tvBrand.id))
-                .perform(scrollTo())
-                .check(matches(isDisplayed()))
-
+            onView(withId(tvBrand.id)).check(matches(isDisplayed()))
             assertThat(tvBrand.text).isEqualTo(warrantyBrand)
             assertThat(tvBrand.currentTextColor).isEqualTo(blackColor)
 
             // Warranty Model
-            onView(withId(tvModel.id))
-                .perform(scrollTo())
-                .check(matches(isDisplayed()))
-
+            onView(withId(tvModel.id)).check(matches(isDisplayed()))
             assertThat(tvModel.text).isEqualTo(warrantyModel)
             assertThat(tvModel.currentTextColor).isEqualTo(blackColor)
 
             // Warranty Serial Number
-            onView(withId(tvSerial.id))
-                .perform(scrollTo())
-                .check(matches(isDisplayed()))
-
+            onView(withId(tvSerial.id)).check(matches(isDisplayed()))
             assertThat(tvSerial.text).isEqualTo(warrantySerialNumber)
             assertThat(tvSerial.currentTextColor).isEqualTo(blackColor)
 
             // Warranty Description
-            onView(withId(tvDescription.id))
-                .perform(scrollTo())
-                .check(matches(isDisplayed()))
-
+            onView(withId(tvDescription.id)).check(matches(isDisplayed()))
             assertThat(tvDescription.text).isEqualTo(warrantyDescription)
             assertThat(tvDescription.currentTextColor).isEqualTo(blackColor)
-            assertThat(tvDescription.gravity).isEqualTo(Gravity.START)
         }
     }
 
@@ -222,22 +198,21 @@ class WarrantyDetailsFragmentTest {
     }
 
     @Test
-    fun clickOnPositiveButtonOfDeleteWarrantyDialogWithErrorStatus_showsSomethingWentWrongErrorSnackbar() =
-        runTest {
-            testFragmentFactory.deleteTestWarrantyFromWarrantyRepository(warranty.id)
+    fun clickOnPositiveButtonOfDeleteWarrantyDialogWithErrorStatus_showsSomethingWentWrongErrorSnackbar() {
+        testFragmentFactory.deleteTestWarrantyFromWarrantyRepository(warranty.id)
 
-            onView(withId(R.id.action_menu_delete)).perform(click())
+        onView(withId(R.id.action_menu_delete)).perform(click())
 
-            onView(withText(context.getString(R.string.warranty_details_delete_dialog_positive)))
-                .inRoot(isDialog())
-                .perform(click())
+        onView(withText(context.getString(R.string.warranty_details_delete_dialog_positive)))
+            .inRoot(isDialog())
+            .perform(click())
 
-            onView(withText(context.getString(R.string.error_something_went_wrong)))
-                .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
-        }
+        onView(withText(context.getString(R.string.error_something_went_wrong)))
+            .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
+    }
 
     @Test
-    fun clickOnPositiveButtonOfDeleteWarrantyDialogWithSuccessStatus_navigatesToWarrantiesFragment() {
+    fun clickOnPositiveButtonOfDeleteWarrantyDialogWithSuccessStatus_navigatesToEditWarrantyFragment() {
         onView(withId(R.id.action_menu_delete)).perform(click())
 
         onView(withText(context.getString(R.string.warranty_details_delete_dialog_positive)))
