@@ -85,6 +85,10 @@ class EditWarrantyFragmentTest {
         context = ApplicationProvider.getApplicationContext()
         navController = TestNavHostController(context)
 
+        backgroundColor = context.getColor(R.color.background)
+        grayLightColor = context.getColor(R.color.grayLight)
+        blueColor = context.getColor(R.color.blue)
+
         navController.setGraph(R.navigation.nav_graph_main)
         navController.navigate(
             WarrantiesFragmentDirections.actionWarrantiesFragmentToWarrantyDetailsFragment(warranty)
@@ -396,15 +400,15 @@ class EditWarrantyFragmentTest {
         testBinding.apply {
             // Warranty Title
             onView(withId(tiEditTitle.id)).perform(scrollTo()).check(matches(isDisplayed()))
-            assertThat(tiEditTitle.text).isEqualTo(warrantyTitle)
+            assertThat(tiEditTitle.text.toString()).isEqualTo(warrantyTitle)
 
             // Warranty Starting Date
             onView(withId(tiEditDateStarting.id)).perform(scrollTo()).check(matches(isDisplayed()))
-            assertThat(tiEditDateStarting.text).isEqualTo(startingDateText)
+            assertThat(tiEditDateStarting.text.toString()).isEqualTo(startingDateText)
 
             // Warranty Expiry Date
             onView(withId(tiEditDateExpiry.id)).perform(scrollTo()).check(matches(isDisplayed()))
-            assertThat(tiEditDateExpiry.text).isEqualTo(expiryDateText)
+            assertThat(tiEditDateExpiry.text.toString()).isEqualTo(expiryDateText)
 
             // Warranty isLifeTime
             onView(withId(cbLifetime.id)).perform(scrollTo()).check(matches(isDisplayed()))
@@ -412,23 +416,23 @@ class EditWarrantyFragmentTest {
 
             // Warranty Brand
             onView(withId(tiEditBrand.id)).perform(scrollTo()).check(matches(isDisplayed()))
-            assertThat(tiEditBrand.text).isEqualTo(warrantyBrand)
+            assertThat(tiEditBrand.text.toString()).isEqualTo(warrantyBrand)
 
             // Warranty Model
             onView(withId(tiEditModel.id)).perform(scrollTo()).check(matches(isDisplayed()))
-            assertThat(tiEditModel.text).isEqualTo(warrantyModel)
+            assertThat(tiEditModel.text.toString()).isEqualTo(warrantyModel)
 
             // Warranty Serial Number
             onView(withId(tiEditSerial.id)).perform(scrollTo()).check(matches(isDisplayed()))
-            assertThat(tiEditSerial.text).isEqualTo(warrantySerialNumber)
+            assertThat(tiEditSerial.text.toString()).isEqualTo(warrantySerialNumber)
 
             // Warranty Category
             onView(withId(tiDdCategory.id)).perform(scrollTo()).check(matches(isDisplayed()))
-            assertThat(tiEditSerial.text).isEqualTo(defaultCategory)
+            assertThat(tiDdCategory.text.toString()).isEqualTo(defaultCategory)
 
             // Warranty Description
             onView(withId(tiEditDescription.id)).perform(scrollTo()).check(matches(isDisplayed()))
-            assertThat(tiEditDescription.text).isEqualTo(warrantyDescription)
+            assertThat(tiEditDescription.text.toString()).isEqualTo(warrantyDescription)
         }
     }
 
