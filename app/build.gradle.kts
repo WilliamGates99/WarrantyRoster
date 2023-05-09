@@ -31,8 +31,8 @@ android {
         applicationId = "com.xeniac.warrantyroster_manager"
         minSdk = 21
         targetSdk = 33
-        versionCode = 19 // TODO UPGRADE AFTER EACH RELEASE
-        versionName = "2.0.1" // TODO UPGRADE AFTER EACH RELEASE
+        versionCode = 20 // TODO UPGRADE AFTER EACH RELEASE
+        versionName = "2.1.0" // TODO UPGRADE AFTER EACH RELEASE
 
         /**
          * Keeps language resources for only the locales specified below.
@@ -251,16 +251,16 @@ dependencies {
 
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.0")
 
     // Coroutines Support for Firebase
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.0")
 
     // Preferences DataStore
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
     // Firebase BoM and Analytics
-    implementation(platform("com.google.firebase:firebase-bom:31.5.0"))
+    implementation(platform("com.google.firebase:firebase-bom:32.0.0"))
     implementation("com.google.firebase:firebase-analytics-ktx")
 
     // Firebase App Check
@@ -311,7 +311,7 @@ dependencies {
     testImplementation("com.google.truth:truth:1.1.3")
     testImplementation("junit:junit:4.13.2")
     testImplementation("androidx.arch.core:core-testing:2.2.0")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.0")
 
     // Instrumentation Test Libraries
     androidTestImplementation("com.google.truth:truth:1.1.3")
@@ -319,7 +319,7 @@ dependencies {
     androidTestImplementation("androidx.test:core:1.4.0") // DO NOT UPGRADE
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.arch.core:core-testing:2.2.0")
-    androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
+    androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.0")
     androidTestImplementation("com.google.dagger:hilt-android-testing:2.46")
     kaptAndroidTest("com.google.dagger:hilt-compiler:2.46")
 
