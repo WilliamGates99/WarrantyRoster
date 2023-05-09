@@ -393,7 +393,7 @@
     <string name="change_email_hint_new_email">آدرس ایمیل جدیدی را وارد کنید</string>
     <string name="change_email_btn_change">تغییر ایمیل</string>
     <string name="change_email_error_blank_password">رمز‌عبور خود را وارد کنید!</string>
-    <string name="change_email_error_blank_new_email">Enter a new email address!</string>
+    <string name="change_email_error_blank_new_email">آدرس ایمیل جدیدی را وارد کنید!</string>
     <string name="change_email_error_new_email">آدرس ایمیل جدیدی را وارد کنید!</string>
     <string name="change_email_error_credentials">رمز‌عبور وارد شده نادرست است.</string>
     <string name="change_email_error_email_same">آدرس ایمیل جدید نمی‌تواند با ایمیل فعلیتان یکسان باشد!</string>
