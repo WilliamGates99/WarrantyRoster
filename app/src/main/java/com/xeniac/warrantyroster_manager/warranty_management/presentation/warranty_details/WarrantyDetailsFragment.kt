@@ -329,14 +329,20 @@ class WarrantyDetailsFragment @Inject constructor(
         fab.isClickable = true
     }
 
-    private fun showInterstitialAd() = (requireActivity() as MainActivity).apply {
-        if (appLovinAd.isReady) {
-            appLovinAd.showAd()
-        } else if (tapsellResponseId != null) {
-            showTapsellInterstitialAd(tapsellResponseId!!)
-        }
+    private fun showInterstitialAd() {
+        try {
+            (requireActivity() as MainActivity).apply {
+                if (appLovinAd.isReady) {
+                    appLovinAd.showAd()
+                } else if (tapsellResponseId != null) {
+                    showTapsellInterstitialAd(tapsellResponseId!!)
+                }
 
-        requestAppLovinInterstitial()
+                requestAppLovinInterstitial()
+            }
+        } catch (e: Exception) {
+            Timber.e("showInterstitialAd Exception: ${e.message}")
+        }
     }
 
     private fun showTapsellInterstitialAd(responseId: String) = TapsellPlus.showInterstitialAd(

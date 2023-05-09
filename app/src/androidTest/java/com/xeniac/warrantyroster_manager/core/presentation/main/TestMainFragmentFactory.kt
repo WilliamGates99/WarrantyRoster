@@ -20,6 +20,7 @@ import com.xeniac.warrantyroster_manager.util.Constants.FIREBASE_AUTH_PROVIDER_I
 import com.xeniac.warrantyroster_manager.util.Constants.LOCALE_TAG_ENGLISH_UNITED_STATES
 import com.xeniac.warrantyroster_manager.warranty_management.data.repository.FakeCategoryRepository
 import com.xeniac.warrantyroster_manager.warranty_management.data.repository.FakeWarrantyRepository
+import com.xeniac.warrantyroster_manager.warranty_management.domain.model.WarrantyInput
 import com.xeniac.warrantyroster_manager.warranty_management.presentation.add_warranty.AddWarrantyFragment
 import com.xeniac.warrantyroster_manager.warranty_management.presentation.add_warranty.AddWarrantyViewModel
 import com.xeniac.warrantyroster_manager.warranty_management.presentation.warranty_details.WarrantyDetailsFragment
@@ -46,6 +47,7 @@ class TestMainFragmentFactory @Inject constructor(
     override fun instantiate(classLoader: ClassLoader, className: String): Fragment {
         addTestUserToUserRepository()
         addTestCategoriesToCategoryRepository()
+        addTestWarrantyToWarrantyRepository()
 
         return when (className) {
             AddWarrantyFragment::class.java.name -> AddWarrantyFragment(
@@ -113,7 +115,26 @@ class TestMainFragmentFactory @Inject constructor(
         }
     }
 
-    suspend fun deleteTestWarrantyFromWarrantyRepository(warrantyId: String) {
-        fakeWarrantyRepository.deleteWarrantyFromFirestore(warrantyId)
+    private fun addTestWarrantyToWarrantyRepository() {
+        val warrantyInput = WarrantyInput(
+            title = "Warranty Title",
+            brand = "Warranty Brand",
+            model = "Warranty Model",
+            serialNumber = "WARRANTY_SERIAL",
+            description = "This is warranty description.",
+            lifetime = true,
+            startingDate = "2022-07-13",
+            expiryDate = null,
+            uuid = "1"
+        )
+
+        fakeWarrantyRepository.addWarranty(
+            warrantyInput = warrantyInput,
+            warrantyId = "1"
+        )
+    }
+
+    fun deleteTestWarrantyFromWarrantyRepository(warrantyId: String) {
+        fakeWarrantyRepository.deleteWarranty(warrantyId)
     }
 }
