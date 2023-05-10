@@ -22,7 +22,7 @@ import com.google.android.play.core.review.ReviewManagerFactory
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.core.presentation.landing.LandingActivity
 import com.xeniac.warrantyroster_manager.databinding.ActivityMainBinding
-import com.xeniac.warrantyroster_manager.di.MainFragmentFactoryEntryPoint
+import com.xeniac.warrantyroster_manager.di.FragmentFactoryEntryPoint
 import com.xeniac.warrantyroster_manager.util.AlertDialogHelper.showThreeBtnAlertDialog
 import com.xeniac.warrantyroster_manager.util.Constants.APPLOVIN_INTERSTITIAL_UNIT_ID
 import com.xeniac.warrantyroster_manager.util.Constants.IN_APP_REVIEWS_DAYS_FROM_FIRST_INSTALL_TIME
@@ -60,11 +60,11 @@ class MainActivity : AppCompatActivity(), MaxAdListener {
     }
 
     private fun setCustomFragmentFactory() {
-        val fragmentFactoryEntryPoint = EntryPointAccessors.fromActivity(
+        val entryPoint = EntryPointAccessors.fromActivity(
             activity = this,
-            entryPoint = MainFragmentFactoryEntryPoint::class.java
+            entryPoint = FragmentFactoryEntryPoint::class.java
         )
-        supportFragmentManager.fragmentFactory = fragmentFactoryEntryPoint.getFragmentFactory()
+        supportFragmentManager.fragmentFactory = entryPoint.getMainFragmentFactory()
     }
 
     private fun splashScreen() {

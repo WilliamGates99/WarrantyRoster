@@ -3,7 +3,7 @@ package com.xeniac.warrantyroster_manager.core.presentation.landing
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.xeniac.warrantyroster_manager.databinding.ActivityLandingBinding
-import com.xeniac.warrantyroster_manager.di.LandingFragmentFactoryEntryPoint
+import com.xeniac.warrantyroster_manager.di.FragmentFactoryEntryPoint
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.EntryPointAccessors
 
@@ -20,11 +20,10 @@ class LandingActivity : AppCompatActivity() {
     }
 
     private fun setCustomFragmentFactory() {
-        val fragmentFactoryEntryPoint = EntryPointAccessors.fromActivity(
+        val entryPoint = EntryPointAccessors.fromActivity(
             activity = this,
-            entryPoint = LandingFragmentFactoryEntryPoint::class.java
+            entryPoint = FragmentFactoryEntryPoint::class.java
         )
-
-        supportFragmentManager.fragmentFactory = fragmentFactoryEntryPoint.getFragmentFactory()
+        supportFragmentManager.fragmentFactory = entryPoint.getLandingFragmentFactory()
     }
 }
