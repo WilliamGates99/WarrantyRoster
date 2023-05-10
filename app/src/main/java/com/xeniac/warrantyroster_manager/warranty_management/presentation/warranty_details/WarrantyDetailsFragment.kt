@@ -80,7 +80,10 @@ class WarrantyDetailsFragment @Inject constructor(
         getWarranty()
         editWarrantyOnClick()
         deleteWarrantyOnClick()
-        requireActivity().onBackPressedDispatcher.addCallback(onBackPressedCallback)
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            onBackPressedCallback
+        )
     }
 
     override fun onDestroyView() {

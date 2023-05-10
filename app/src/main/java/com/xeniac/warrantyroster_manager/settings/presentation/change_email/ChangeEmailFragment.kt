@@ -76,7 +76,10 @@ class ChangeEmailFragment @Inject constructor(
         subscribeToObservers()
         changeEmailOnClick()
         changeEmailActionDone()
-        requireActivity().onBackPressedDispatcher.addCallback(onBackPressedCallback)
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            onBackPressedCallback
+        )
     }
 
     override fun onDestroyView() {
@@ -186,6 +189,7 @@ class ChangeEmailFragment @Inject constructor(
 
     private fun navigateBack() {
         findNavController().popBackStack()
+//        findNavController().popBackStack
     }
 
     private fun subscribeToObservers() {

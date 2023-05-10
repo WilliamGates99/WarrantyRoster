@@ -76,7 +76,10 @@ class ChangePasswordFragment @Inject constructor(
         subscribeToObservers()
         changePasswordOnClick()
         changePasswordActionDone()
-        requireActivity().onBackPressedDispatcher.addCallback(onBackPressedCallback)
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            onBackPressedCallback
+        )
     }
 
     override fun onDestroyView() {

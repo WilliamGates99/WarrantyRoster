@@ -49,7 +49,10 @@ class OnBoardingFragment @Inject constructor(
         subscribeToObservers()
         getCurrentAppLocaleIndex()
         languageOnClick()
-        requireActivity().onBackPressedDispatcher.addCallback(onBackPressedCallback)
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            onBackPressedCallback
+        )
     }
 
     override fun onDestroyView() {

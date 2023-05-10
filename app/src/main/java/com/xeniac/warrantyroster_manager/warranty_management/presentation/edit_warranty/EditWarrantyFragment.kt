@@ -109,7 +109,10 @@ class EditWarrantyFragment @Inject constructor(
         expiryDatePickerOnFocusListener()
         getWarranty()
         editWarrantyOnClick()
-        requireActivity().onBackPressedDispatcher.addCallback(onBackPressedCallback)
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            onBackPressedCallback
+        )
     }
 
     override fun onDestroyView() {

@@ -66,7 +66,10 @@ class ForgotPwSentFragment @Inject constructor(
         subscribeToObservers()
         returnOnClick()
         resendOnClick()
-        requireActivity().onBackPressedDispatcher.addCallback(onBackPressedCallback)
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            onBackPressedCallback
+        )
     }
 
     override fun onDestroyView() {

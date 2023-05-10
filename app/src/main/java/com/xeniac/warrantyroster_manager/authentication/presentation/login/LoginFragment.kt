@@ -106,7 +106,10 @@ class LoginFragment @Inject constructor(
         googleOnClick()
         twitterOnClick()
         facebookOnClick()
-        requireActivity().onBackPressedDispatcher.addCallback(onBackPressedCallback)
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            onBackPressedCallback
+        )
     }
 
     override fun onDestroyView() {
