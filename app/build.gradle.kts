@@ -31,8 +31,8 @@ android {
         applicationId = "com.xeniac.warrantyroster_manager"
         minSdk = 21
         targetSdk = 33
-        versionCode = 20 // TODO UPGRADE AFTER EACH RELEASE
-        versionName = "2.1.0" // TODO UPGRADE AFTER EACH RELEASE
+        versionCode = 21 // TODO UPGRADE AFTER EACH RELEASE
+        versionName = "2.1.1" // TODO UPGRADE AFTER EACH RELEASE
 
         /**
          * Keeps language resources for only the locales specified below.
