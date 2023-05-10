@@ -23,7 +23,7 @@
         tools:targetApi="tiramisu">
 
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".core.presentation.main.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.WarrantyRoster.Splash"
             android:windowSoftInputMode="adjustPan|stateHidden">
@@ -34,8 +34,25 @@
         </activity>
 
         <activity
-            android:name=".ui.LandingActivity"
+            android:name=".core.presentation.landing.LandingActivity"
             android:theme="@style/Theme.WarrantyRoster.Landing" />
+
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation" />
+
+        <activity
+            android:name="com.facebook.CustomTabActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="@string/fb_login_protocol_scheme" />
+            </intent-filter>
+        </activity>
 
         <service
             android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"

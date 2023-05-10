@@ -29,14 +29,14 @@
         android:textAlignment="gravity"
         android:textColor="@color/skyBlueStatic"
         android:textSize="@dimen/text_size_24sp"
-        app:layout_constraintBottom_toTopOf="@id/btn_start"
+        app:layout_constraintBottom_toTopOf="@id/btn_onboarding_4th_start"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/iv_header"
         tools:targetApi="p" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_start"
+        android:id="@+id/btn_onboarding_4th_start"
         style="@style/Theme.WarrantyRoster.Button"
         android:layout_width="@dimen/width_0dp"
         android:layout_height="wrap_content"

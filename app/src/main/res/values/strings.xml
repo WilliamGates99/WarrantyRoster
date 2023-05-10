@@ -108,6 +108,13 @@
     <string name="forgot_pw_sent_btn_resend">Resend</string>
     <string name="forgot_pw_sent_text_first_time">The email has been sent.</string>
     <string name="forgot_pw_sent_text_resent">A new email has been sent.</string>
+    <!--
+    Placeholders:
+    • %1$s: Minute
+    • %2$s: Seconds
+    Sample: 02:52
+    -->
+    <string name="forgot_pw_sent_text_timer" translatable="false">%1$s:%2$s</string>
     <string name="forgot_pw_sent_btn_return">Return To Login</string>
 
 
@@ -351,8 +358,8 @@
     <string name="settings_dialog_item_theme_default">System Default</string>
     <string name="settings_dialog_item_theme_light">Light</string>
     <string name="settings_dialog_item_theme_dark">Dark</string>
-    <string name="settings_dialog_message">The verification email has been successfully sent to your inbox.</string>
-    <string name="settings_dialog_positive">Confirm</string>
+    <string name="settings_dialog_message_verification_email_sent">The verification email has been successfully sent to your inbox.</string>
+    <string name="settings_dialog_btn_positive_verification_email_sent">Confirm</string>
     <string name="settings_error_email_verification_email_not_provided">An email address must be provided.</string>
     <string name="settings_ad_indicator" translatable="false">Ad</string>
 

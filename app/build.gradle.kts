@@ -12,42 +12,45 @@ plugins {
     id("dagger.hilt.android.plugin")
     id("com.google.firebase.crashlytics")
     id("com.google.firebase.firebase-perf")
-//    id("applovin-quality-service")
+    id("applovin-quality-service")
 }
 
 val properties = gradleLocalProperties(rootDir)
 
-//applovin {
-//    apiKey = properties.getProperty("APPLOVIN_API_KEY")
-//}
+applovin {
+    apiKey =
+        "wPNW70TAHp3xrcTl2HOeZEpvt5kn19fKosui1hEugVWrFDKCh_411hghugSX5ln5ewRrMMRB8W1Ce_S3hcPh4c"
+}
 
 android {
     namespace = "com.xeniac.warrantyroster_manager"
     compileSdk = 33
-    buildToolsVersion = "33.0.1"
+    buildToolsVersion = "34.0.0 rc3"
 
     defaultConfig {
         applicationId = "com.xeniac.warrantyroster_manager"
         minSdk = 21
         targetSdk = 33
-        versionCode = 19 // TODO UPGRADE AFTER EACH RELEASE
-        versionName = "2.0.1" // TODO UPGRADE AFTER EACH RELEASE
+        versionCode = 20 // TODO UPGRADE AFTER EACH RELEASE
+        versionName = "2.1.0" // TODO UPGRADE AFTER EACH RELEASE
 
         /**
          * Keeps language resources for only the locales specified below.
          */
-        resourceConfigurations += mutableSetOf("en-rUS", "en-rGB", "fa-rIR")
+        resourceConfigurations.addAll(listOf("en-rUS", "en-rGB", "fa-rIR"))
 
         resValue(
             "string",
             "fb_login_protocol_scheme",
             properties.getProperty("FACEBOOK_AUTH_LOGIN_PROTOCOL_SCHEME")
         )
+
         resValue(
             "string",
             "facebook_app_id",
             properties.getProperty("FACEBOOK_AUTH_APP_ID")
         )
+
         resValue(
             "string",
             "facebook_client_token",
@@ -59,40 +62,11 @@ android {
             "GOOGLE_AUTH_SERVER_CLIENT_ID",
             properties.getProperty("GOOGLE_AUTH_SERVER_CLIENT_ID")
         )
+
         buildConfigField(
             "String",
-            "APPLOVIN_INTERSTITIAL_UNIT_ID",
-            properties.getProperty("APPLOVIN_INTERSTITIAL_UNIT_ID")
-        )
-        buildConfigField(
-            "String",
-            "APPLOVIN_SETTINGS_NATIVE_UNIT_ID",
-            properties.getProperty("APPLOVIN_SETTINGS_NATIVE_UNIT_ID")
-        )
-        buildConfigField(
-            "String",
-            "APPLOVIN_WARRANTIES_NATIVE_UNIT_ID",
-            properties.getProperty("APPLOVIN_WARRANTIES_NATIVE_UNIT_ID")
-        )
-        buildConfigField(
-            "String",
-            "TAPSELL_KEY",
-            properties.getProperty("TAPSELL_KEY")
-        )
-        buildConfigField(
-            "String",
-            "TAPSELL_INTERSTITIAL_ZONE_ID",
-            properties.getProperty("TAPSELL_INTERSTITIAL_ZONE_ID")
-        )
-        buildConfigField(
-            "String",
-            "TAPSELL_WARRANTIES_NATIVE_ZONE_ID",
-            properties.getProperty("TAPSELL_WARRANTIES_NATIVE_ZONE_ID")
-        )
-        buildConfigField(
-            "String",
-            "TAPSELL_SETTINGS_NATIVE_ZONE_ID",
-            properties.getProperty("TAPSELL_SETTINGS_NATIVE_ZONE_ID")
+            "CATEGORY_MISCELLANEOUS_ICON",
+            properties.getProperty("CATEGORY_MISCELLANEOUS_ICON")
         )
 
         testInstrumentationRunner = "com.xeniac.warrantyroster_manager.HiltTestRunner"
@@ -102,11 +76,25 @@ android {
         getByName("debug") {
             versionNameSuffix = " - debug"
             applicationIdSuffix = ".debug"
+
+            resValue("color", "appIconBackground", "#FF9100") // Orange
         }
 
         getByName("release") {
+            /**
+             * Enables code shrinking, obfuscation, and optimization for only
+             * your project's release build type.
+             */
             isMinifyEnabled = true
+
+            /**
+             * Enables resource shrinking, which is performed by the Android Gradle plugin.
+             */
             isShrinkResources = true
+
+            /**
+             * Includes the default ProGuard rules files that are packaged with the Android Gradle plugin.
+             */
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -120,12 +108,12 @@ android {
             dimension = "build"
             versionNameSuffix = " - Developer Preview"
             applicationIdSuffix = ".dev"
-            resValue("color", "appIconBackground", "@color/appIconBackgroundDev")
+            resValue("color", "appIconBackground", "#FF0011") // Red
         }
 
         create("prod") {
             dimension = "build"
-            resValue("color", "appIconBackground", "@color/appIconBackgroundProd")
+            resValue("color", "appIconBackground", "#1C53F4") // Blue
         }
 
         create("playStore") {
@@ -133,12 +121,12 @@ android {
             buildConfigField(
                 "String",
                 "URL_APP_STORE",
-                properties.getProperty("URL_PLAY_STORE")
+                "\"https://play.google.com/store/apps/details?id=com.xeniac.warrantyroster_manager\""
             )
             buildConfigField(
                 "String",
                 "PACKAGE_NAME_APP_STORE",
-                properties.getProperty("PACKAGE_NAME_PLAY_STORE")
+                "\"com.android.vending\""
             )
         }
 
@@ -147,12 +135,12 @@ android {
             buildConfigField(
                 "String",
                 "URL_APP_STORE",
-                properties.getProperty("URL_AMAZON")
+                "\"https://www.amazon.com/gp/product/B09PSK6W9Z\""
             )
             buildConfigField(
                 "String",
                 "PACKAGE_NAME_APP_STORE",
-                properties.getProperty("PACKAGE_NAME_AMAZON")
+                "\"com.amazon.venezia\""
             )
         }
 
@@ -161,28 +149,35 @@ android {
             buildConfigField(
                 "String",
                 "URL_APP_STORE",
-                properties.getProperty("URL_CAFEBAZAAR")
+                "\"https://cafebazaar.ir/app/com.xeniac.warrantyroster_manager\""
             )
             buildConfigField(
                 "String",
                 "PACKAGE_NAME_APP_STORE",
-                properties.getProperty("PACKAGE_NAME_CAFEBAZAAR")
+                "\"com.farsitel.bazaar\""
             )
         }
     }
 
     buildFeatures {
+        buildConfig = true
         viewBinding = true
         dataBinding = true
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
+    }
+
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
     }
 
     bundle {
@@ -234,38 +229,38 @@ kapt {
 }
 
 dependencies {
-    implementation("androidx.core:core-ktx:1.9.0")
-    implementation("androidx.appcompat:appcompat:1.6.0")
-    implementation("com.google.android.material:material:1.8.0")
-    implementation("androidx.core:core-splashscreen:1.0.0")
+    implementation("androidx.core:core-ktx:1.10.0")
+    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("com.google.android.material:material:1.9.0")
+    implementation("androidx.core:core-splashscreen:1.0.1")
 
     // Navigation Component
     implementation("androidx.navigation:navigation-fragment-ktx:2.5.3")
     implementation("androidx.navigation:navigation-ui-ktx:2.5.3")
 
     // Dagger - Hilt
-    implementation("com.google.dagger:hilt-android:2.44.2")
-    kapt("com.google.dagger:hilt-compiler:2.44.2")
+    implementation("com.google.dagger:hilt-android:2.46")
+    kapt("com.google.dagger:hilt-compiler:2.46")
 
     // Activity KTX for Injecting ViewModels into Fragments
-    implementation("androidx.activity:activity-ktx:1.6.1")
+    implementation("androidx.activity:activity-ktx:1.7.1")
 
     // Architectural Components
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
 
     // Coroutines
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.0")
 
     // Coroutines Support for Firebase
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.0")
 
     // Preferences DataStore
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
     // Firebase BoM and Analytics
-    implementation(platform("com.google.firebase:firebase-bom:31.1.1"))
+    implementation(platform("com.google.firebase:firebase-bom:32.0.0"))
     implementation("com.google.firebase:firebase-analytics-ktx")
 
     // Firebase App Check
@@ -278,8 +273,8 @@ dependencies {
 
     // Firebase Auth
     implementation("com.google.firebase:firebase-auth-ktx")
-    implementation("com.google.android.gms:play-services-auth:20.4.1")
-    implementation("com.facebook.android:facebook-login:15.2.0")
+    implementation("com.google.android.gms:play-services-auth:20.5.0")
+    implementation("com.facebook.android:facebook-login:16.0.1")
 
     // Firebase Firestore, Storage
     implementation("com.google.firebase:firebase-firestore-ktx")
@@ -289,11 +284,11 @@ dependencies {
     implementation("com.jakewharton.timber:timber:5.0.1")
 
     // Lottie Library
-    implementation("com.airbnb.android:lottie:5.2.0")
+    implementation("com.airbnb.android:lottie:6.0.0")
 
     // Coil Library
-    implementation("io.coil-kt:coil:2.2.2")
-    implementation("io.coil-kt:coil-svg:2.2.2")
+    implementation("io.coil-kt:coil:2.3.0")
+    implementation("io.coil-kt:coil-svg:2.3.0")
 
     // Dots Indicator Library
     implementation("com.tbuonomo:dotsindicator:4.3")
@@ -302,12 +297,12 @@ dependencies {
     implementation("com.google.android.play:review-ktx:2.0.1")
 
     // AppLovin Libraries
-    implementation("com.applovin:applovin-sdk:11.7.0")
+    implementation("com.applovin:applovin-sdk:11.9.0")
     implementation("com.google.android.gms:play-services-ads-identifier:18.0.1")
-    implementation("com.applovin.mediation:google-adapter:21.5.0.0")
+    implementation("com.applovin.mediation:google-adapter:22.0.0.2")
 
     // Google AdMob Library
-    implementation("com.google.android.gms:play-services-ads:21.5.0")
+    implementation("com.google.android.gms:play-services-ads:22.0.0")
 
     // Tapsell Library
     implementation("ir.tapsell.plus:tapsell-plus-sdk-android:2.1.8")
@@ -315,48 +310,44 @@ dependencies {
     // Local Unit Test Libraries
     testImplementation("com.google.truth:truth:1.1.3")
     testImplementation("junit:junit:4.13.2")
-    testImplementation("androidx.arch.core:core-testing:2.1.0")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
+    testImplementation("androidx.arch.core:core-testing:2.2.0")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.0")
 
     // Instrumentation Test Libraries
     androidTestImplementation("com.google.truth:truth:1.1.3")
     androidTestImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test:core:1.5.0")
+    androidTestImplementation("androidx.test:core:1.4.0") // DO NOT UPGRADE
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.arch.core:core-testing:2.1.0")
-    androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
+    androidTestImplementation("androidx.arch.core:core-testing:2.2.0")
+    androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.0")
+    androidTestImplementation("com.google.dagger:hilt-android-testing:2.46")
+    kaptAndroidTest("com.google.dagger:hilt-compiler:2.46")
+
+    // UI Test Libraries
     androidTestImplementation("androidx.navigation:navigation-testing:2.5.3")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    androidTestImplementation("androidx.test.espresso:espresso-contrib:3.5.1")
-    androidTestImplementation("androidx.test.espresso:espresso-intents:3.5.1")
-    androidTestImplementation("com.google.dagger:hilt-android-testing:2.44.2")
-    kaptAndroidTest("com.google.dagger:hilt-compiler:2.44.2")
-    debugImplementation("androidx.fragment:fragment-testing:1.5.5")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.3.0") // DO NOT UPGRADE
+    androidTestImplementation("androidx.test.espresso:espresso-contrib:3.3.0") // DO NOT UPGRADE
+    androidTestImplementation("androidx.test.espresso:espresso-intents:3.3.0") // DO NOT UPGRADE
+    debugImplementation("androidx.fragment:fragment-testing:1.5.7")
 }
 
+val releaseRootDir = "${rootDir}/app"
+val destDir: String = properties.getProperty("DESTINATION_DIR")
+val obfuscationDestDir: String = properties.getProperty("OBFUSCATION_DESTINATION_DIR")
+
+val versionName = "${android.defaultConfig.versionName}"
+val renamedFileName = "Warranty Roster $versionName"
+
 tasks.register<Copy>("copyDevPreviewApk") {
-    val releaseRootDir = "${rootDir}/app"
-    val destinationDir = "D:\\01 My Files\\Projects\\Xeniac\\Warranty Roster\\APK"
-
-    val versionName = "${android.defaultConfig.versionName}"
-    val renamedFileName = "Warranty Roster $versionName (Developer Preview)"
-
     val apkFile = "app-dev-playStore-release.apk"
     val apkSourceDir = "${releaseRootDir}/devPlayStore/release/${apkFile}"
 
     from(apkSourceDir)
-    into(destinationDir)
-
-    rename(apkFile, "${renamedFileName}.apk")
+    into(destDir)
+    rename(apkFile, "$renamedFileName (Developer Preview).apk")
 }
 
 tasks.register<Copy>("copyReleaseApk") {
-    val releaseRootDir = "${rootDir}/app"
-    val destinationDir = "D:\\01 My Files\\Projects\\Xeniac\\Warranty Roster\\APK"
-
-    val versionName = "${android.defaultConfig.versionName}"
-    val renamedFileName = "Warranty Roster $versionName"
-
     val amazonApkFile = "app-prod-amazon-release.apk"
     val cafeBazaarApkFile = "app-prod-cafeBazaar-release.apk"
 
@@ -364,34 +355,26 @@ tasks.register<Copy>("copyReleaseApk") {
     val cafeBazaarApkSourceDir = "${releaseRootDir}/prodCafeBazaar/release/${cafeBazaarApkFile}"
 
     from(amazonApkSourceDir)
-    into(destinationDir)
+    into(destDir)
 
     from(cafeBazaarApkSourceDir)
-    into(destinationDir)
+    into(destDir)
 
     rename(amazonApkFile, "$renamedFileName - Amazon.apk")
     rename(cafeBazaarApkFile, "$renamedFileName - CafeBazaar.apk")
 }
 
 tasks.register<Copy>("copyReleaseBundle") {
-    val releaseRootDir = "${rootDir}/app"
-    val destinationDir = "D:\\01 My Files\\Projects\\Xeniac\\Warranty Roster\\APK"
-
-    val versionName = "${android.defaultConfig.versionName}"
-    val renamedFileName = "Warranty Roster $versionName"
-
     val playStoreBundleFile = "app-prod-playStore-release.aab"
     val playStoreBundleSourceDir = "${releaseRootDir}/prodPlayStore/release/${playStoreBundleFile}"
 
     from(playStoreBundleSourceDir)
-    into(destinationDir)
-
+    into(destDir)
     rename(playStoreBundleFile, "${renamedFileName}.aab")
 }
 
 tasks.register<Copy>("copyObfuscationFolder") {
     val obfuscationSourceDir = "${rootDir}/app/obfuscation"
-    val obfuscationDestDir = "D:\\01 My Files\\Projects\\Xeniac\\Warranty Roster\\APK\\obfuscation"
 
     from(obfuscationSourceDir)
     into(obfuscationDestDir)

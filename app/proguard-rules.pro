@@ -210,8 +210,6 @@
 #🍅---------------Begin: Missing Rules---------------🍅
 # Please add these rules to your existing keep rules in order to suppress warnings.
 # This is generated automatically by the Android Gradle plugin.
--dontwarn com.unity3d.ads.IUnityAdsLoadListener
--dontwarn com.unity3d.ads.IUnityAdsShowListener
 -dontwarn com.adcolony.sdk.AdColony
 -dontwarn com.adcolony.sdk.AdColonyAdSize
 -dontwarn com.adcolony.sdk.AdColonyAdView
@@ -225,11 +223,7 @@
 -dontwarn com.chartboost.sdk.Chartboost
 -dontwarn com.chartboost.sdk.ChartboostDelegate
 -dontwarn com.chartboost.sdk.Libraries.CBLogging$Level
--dontwarn com.chartboost.sdk.Privacy.model.DataUseConsent
--dontwarn com.chartboost.sdk.Privacy.model.GDPR$GDPR_CONSENT
--dontwarn com.chartboost.sdk.Privacy.model.GDPR
 -dontwarn com.chartboost.sdk.a
--dontwarn com.facebook.FacebookSdk
 -dontwarn com.facebook.ads.AudienceNetworkAds$InitListener
 -dontwarn com.facebook.ads.AudienceNetworkAds$InitSettingsBuilder
 -dontwarn com.facebook.ads.AudienceNetworkAds
@@ -241,10 +235,9 @@
 -dontwarn com.squareup.picasso.RequestCreator
 -dontwarn com.squareup.picasso.Target
 -dontwarn com.unity3d.ads.IUnityAdsInitializationListener
--dontwarn com.unity3d.ads.IUnityAdsListener
--dontwarn com.unity3d.ads.UnityAds$PlacementState
+-dontwarn com.unity3d.ads.IUnityAdsLoadListener
+-dontwarn com.unity3d.ads.IUnityAdsShowListener
 -dontwarn com.unity3d.ads.UnityAds
--dontwarn com.unity3d.ads.metadata.MetaData
 -dontwarn com.unity3d.services.banners.BannerView$IListener
 -dontwarn com.unity3d.services.banners.BannerView
 -dontwarn com.unity3d.services.banners.UnityBannerSize
@@ -252,8 +245,8 @@
 -dontwarn com.vungle.warren.InitCallback
 -dontwarn com.vungle.warren.LoadAdCallback
 -dontwarn com.vungle.warren.PlayAdCallback
--dontwarn com.vungle.warren.Vungle$Consent
 -dontwarn com.vungle.warren.Vungle
+-dontwarn okhttp3.internal.annotations.EverythingIsNonNull
 -dontwarn org.bouncycastle.jsse.BCSSLParameters
 -dontwarn org.bouncycastle.jsse.BCSSLSocket
 -dontwarn org.bouncycastle.jsse.provider.BouncyCastleJsseProvider

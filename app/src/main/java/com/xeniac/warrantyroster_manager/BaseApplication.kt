@@ -7,7 +7,8 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.appcheck.FirebaseAppCheck
 import com.google.firebase.appcheck.debug.DebugAppCheckProviderFactory
 import com.google.firebase.appcheck.playintegrity.PlayIntegrityAppCheckProviderFactory
-import com.xeniac.warrantyroster_manager.utils.SettingsHelper
+import com.xeniac.warrantyroster_manager.util.Constants.TAPSELL_KEY
+import com.xeniac.warrantyroster_manager.util.SettingsHelper
 import dagger.hilt.android.HiltAndroidApp
 import ir.tapsell.plus.TapsellPlus
 import ir.tapsell.plus.TapsellPlusInitListener
@@ -57,16 +58,15 @@ class BaseApplication : Application() {
     }
 
     private fun initTapsell() {
-        TapsellPlus.initialize(
-            this, BuildConfig.TAPSELL_KEY, object : TapsellPlusInitListener {
-                override fun onInitializeSuccess(adNetworks: AdNetworks?) {
-                    Timber.i("onInitializeSuccess: ${adNetworks?.name}")
-                }
+        TapsellPlus.initialize(this, TAPSELL_KEY, object : TapsellPlusInitListener {
+            override fun onInitializeSuccess(adNetworks: AdNetworks?) {
+                Timber.i("onInitializeSuccess: ${adNetworks?.name}")
+            }
 
-                override fun onInitializeFailed(adNetworks: AdNetworks?, error: AdNetworkError?) {
-                    Timber.e("onInitializeFailed: ${adNetworks?.name}, error: ${error?.errorMessage}")
-                }
-            })
+            override fun onInitializeFailed(adNetworks: AdNetworks?, error: AdNetworkError?) {
+                Timber.e("onInitializeFailed: ${adNetworks?.name}, error: ${error?.errorMessage}")
+            }
+        })
         TapsellPlus.setGDPRConsent(this, true)
     }
 }

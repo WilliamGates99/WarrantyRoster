@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/onBoardingFragment"
-        android:name="com.xeniac.warrantyroster_manager.ui.fragments.onboarding.OnBoardingFragment"
+        android:name="com.xeniac.warrantyroster_manager.onboarding.presentation.onboarding.OnBoardingFragment"
         android:label="OnBoardingFragment"
         tools:layout="@layout/fragment_onboarding">
         <action
@@ -23,7 +23,7 @@
 
     <fragment
         android:id="@+id/authFragment"
-        android:name="com.xeniac.warrantyroster_manager.ui.fragments.auth.AuthFragment"
+        android:name="com.xeniac.warrantyroster_manager.authentication.presentation.auth.AuthFragment"
         android:label="AuthFragment"
         tools:layout="@layout/fragment_auth" />
 

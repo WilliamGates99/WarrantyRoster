@@ -95,6 +95,12 @@
     <string name="forgot_pw_sent_btn_resend">ارسال مجدد</string>
     <string name="forgot_pw_sent_text_first_time">ایمیل ارسال شد.</string>
     <string name="forgot_pw_sent_text_resent">ایمیل مجددا ارسال شد.</string>
+    <!--
+    Placeholders:
+    • %1$s: Minute
+    • %2$s: Seconds
+    Sample: 02:52
+    -->
     <string name="forgot_pw_sent_btn_return">بازگشت به صفحه ورود</string>
     <string name="main_menu_title_warranties">فهرست گارانتی‌ها</string>
     <string name="main_menu_title_settings">تنظیمات</string>
@@ -324,8 +330,8 @@
     <string name="settings_dialog_item_theme_default">پیش‌فرض سیستم</string>
     <string name="settings_dialog_item_theme_light">روشن</string>
     <string name="settings_dialog_item_theme_dark">تیره</string>
-    <string name="settings_dialog_message">ایمیل تأیید با موفقیت به صندوق ایمیلتان ارسال شد.</string>
-    <string name="settings_dialog_positive">تایید</string>
+    <string name="settings_dialog_message_verification_email_sent">ایمیل تأیید با موفقیت به صندوق ایمیلتان ارسال شد.</string>
+    <string name="settings_dialog_btn_positive_verification_email_sent">تایید</string>
     <string name="settings_error_email_verification_email_not_provided">ایمیلی به حساب متصل نیست.</string>
     <string name="linked_accounts_text_title">حساب‌های متصل</string>
     <string name="linked_accounts_title_google">گوگل</string>
@@ -361,7 +367,7 @@
     <string name="change_email_hint_new_email">آدرس ایمیل جدیدی را وارد کنید</string>
     <string name="change_email_btn_change">تغییر ایمیل</string>
     <string name="change_email_error_blank_password">رمز‌عبور خود را وارد کنید!</string>
-    <string name="change_email_error_blank_new_email">Enter a new email address!</string>
+    <string name="change_email_error_blank_new_email">آدرس ایمیل جدیدی را وارد کنید!</string>
     <string name="change_email_error_new_email">آدرس ایمیل جدیدی را وارد کنید!</string>
     <string name="change_email_error_credentials">رمز‌عبور وارد شده نادرست است.</string>
     <string name="change_email_error_email_same">آدرس ایمیل جدید نمی‌تواند با ایمیل فعلیتان یکسان باشد!</string>

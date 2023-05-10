@@ -45,7 +45,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/iv_language_flag"
+                android:id="@+id/iv_locale_flag"
                 android:layout_width="@dimen/width_20dp"
                 android:layout_height="@dimen/height_20dp"
                 android:layout_margin="@dimen/margin_2dp"

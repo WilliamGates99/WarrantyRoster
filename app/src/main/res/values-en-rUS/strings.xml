@@ -350,8 +350,8 @@
     <string name="settings_dialog_item_theme_default">System Default</string>
     <string name="settings_dialog_item_theme_light">Light</string>
     <string name="settings_dialog_item_theme_dark">Dark</string>
-    <string name="settings_dialog_message">The verification email has been successfully sent to your inbox.</string>
-    <string name="settings_dialog_positive">Confirm</string>
+    <string name="settings_dialog_message_verification_email_sent">The verification email has been successfully sent to your inbox.</string>
+    <string name="settings_dialog_btn_positive_verification_email_sent">Confirm</string>
     <string name="settings_error_email_verification_email_not_provided">An email address must be provided.</string>
 
 
