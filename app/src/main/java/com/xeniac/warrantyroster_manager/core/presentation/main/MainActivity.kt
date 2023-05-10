@@ -22,6 +22,7 @@ import com.google.android.play.core.review.ReviewManagerFactory
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.core.presentation.landing.LandingActivity
 import com.xeniac.warrantyroster_manager.databinding.ActivityMainBinding
+import com.xeniac.warrantyroster_manager.di.MainFragmentFactoryEntryPoint
 import com.xeniac.warrantyroster_manager.util.AlertDialogHelper.showThreeBtnAlertDialog
 import com.xeniac.warrantyroster_manager.util.Constants.APPLOVIN_INTERSTITIAL_UNIT_ID
 import com.xeniac.warrantyroster_manager.util.Constants.IN_APP_REVIEWS_DAYS_FROM_FIRST_INSTALL_TIME
@@ -30,17 +31,14 @@ import com.xeniac.warrantyroster_manager.util.Constants.TAPSELL_INTERSTITIAL_ZON
 import com.xeniac.warrantyroster_manager.util.DateHelper.getDaysFromFirstInstallTime
 import com.xeniac.warrantyroster_manager.util.DateHelper.getDaysFromPreviousRequestTime
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.EntryPointAccessors
 import ir.tapsell.plus.AdRequestCallback
 import ir.tapsell.plus.TapsellPlus
 import ir.tapsell.plus.model.TapsellPlusAdModel
 import timber.log.Timber
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), MaxAdListener {
-
-    @Inject
-    lateinit var fragmentFactory: MainFragmentFactory
 
     private val viewModel by viewModels<MainActivityViewModel>()
     private var shouldShowSplashScreen = true
@@ -56,10 +54,17 @@ class MainActivity : AppCompatActivity(), MaxAdListener {
     var tapsellResponseId: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setCustomFragmentFactory()
         super.onCreate(savedInstanceState)
-        supportFragmentManager.fragmentFactory = fragmentFactory
-
         splashScreen()
+    }
+
+    private fun setCustomFragmentFactory() {
+        val fragmentFactoryEntryPoint = EntryPointAccessors.fromActivity(
+            activity = this,
+            entryPoint = MainFragmentFactoryEntryPoint::class.java
+        )
+        supportFragmentManager.fragmentFactory = fragmentFactoryEntryPoint.getFragmentFactory()
     }
 
     private fun splashScreen() {
