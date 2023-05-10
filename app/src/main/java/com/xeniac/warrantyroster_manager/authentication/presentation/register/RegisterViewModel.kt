@@ -15,6 +15,7 @@ import com.xeniac.warrantyroster_manager.util.Constants.ERROR_INPUT_BLANK_RETYPE
 import com.xeniac.warrantyroster_manager.util.Constants.ERROR_INPUT_EMAIL_INVALID
 import com.xeniac.warrantyroster_manager.util.Constants.ERROR_INPUT_PASSWORD_NOT_MATCH
 import com.xeniac.warrantyroster_manager.util.Constants.ERROR_INPUT_PASSWORD_SHORT
+import com.xeniac.warrantyroster_manager.util.Constants.PASSWORD_STRENGTH_WEAK
 import com.xeniac.warrantyroster_manager.util.Event
 import com.xeniac.warrantyroster_manager.util.Resource
 import com.xeniac.warrantyroster_manager.util.UiText
@@ -106,7 +107,7 @@ class RegisterViewModel @Inject constructor(
             return
         }
 
-        if (UserHelper.passwordStrength(password) == (-1).toByte()) {
+        if (UserHelper.passwordStrength(password) == PASSWORD_STRENGTH_WEAK) {
             _registerWithEmailLiveData.postValue(
                 Event(Resource.Error(UiText.DynamicString(ERROR_INPUT_PASSWORD_SHORT)))
             )

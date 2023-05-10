@@ -45,6 +45,11 @@ object Constants {
     const val ONBOARDING_3RD_INDEX = 2
     const val ONBOARDING_4TH_INDEX = 3
 
+    // Password Strength Constants
+    const val PASSWORD_STRENGTH_WEAK: Byte = -1
+    const val PASSWORD_STRENGTH_MEDIOCRE: Byte = 0
+    const val PASSWORD_STRENGTH_STRONG: Byte = 1
+
     // Forgot PW Timer Constants
     const val TIMER_START_TIME_IN_MILLIS = 120 * 1000L // 120 Seconds
     const val TIMER_COUNTDOWN_INTERVAL_IN_MILLIS = 1000L // 1 Second

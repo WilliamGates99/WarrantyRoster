@@ -10,6 +10,7 @@ import com.xeniac.warrantyroster_manager.util.Constants.ERROR_INPUT_BLANK_PASSWO
 import com.xeniac.warrantyroster_manager.util.Constants.ERROR_INPUT_BLANK_RETYPE_PASSWORD
 import com.xeniac.warrantyroster_manager.util.Constants.ERROR_INPUT_PASSWORD_NOT_MATCH
 import com.xeniac.warrantyroster_manager.util.Constants.ERROR_INPUT_PASSWORD_SHORT
+import com.xeniac.warrantyroster_manager.util.Constants.PASSWORD_STRENGTH_WEAK
 import com.xeniac.warrantyroster_manager.util.Event
 import com.xeniac.warrantyroster_manager.util.Resource
 import com.xeniac.warrantyroster_manager.util.UiText
@@ -66,7 +67,7 @@ class ChangePasswordViewModel @Inject constructor(
             return
         }
 
-        if (UserHelper.passwordStrength(newPassword) == (-1).toByte()) {
+        if (UserHelper.passwordStrength(newPassword) == PASSWORD_STRENGTH_WEAK) {
             _validateInputsLiveData.postValue(
                 Event(Resource.Error(UiText.DynamicString(ERROR_INPUT_PASSWORD_SHORT)))
             )

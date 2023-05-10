@@ -1,6 +1,9 @@
 package com.xeniac.warrantyroster_manager.util
 
 import androidx.core.util.PatternsCompat
+import com.xeniac.warrantyroster_manager.util.Constants.PASSWORD_STRENGTH_MEDIOCRE
+import com.xeniac.warrantyroster_manager.util.Constants.PASSWORD_STRENGTH_STRONG
+import com.xeniac.warrantyroster_manager.util.Constants.PASSWORD_STRENGTH_WEAK
 
 object UserHelper {
 
@@ -15,9 +18,9 @@ object UserHelper {
         val passwordMatcher = Regex(passwordPattern)
 
         return when {
-            password.length < 6 -> -1
-            password.length < 8 -> 0
-            else -> if (passwordMatcher.matches(password)) 1 else 0
+            password.length < 6 -> PASSWORD_STRENGTH_WEAK
+            password.length < 8 -> PASSWORD_STRENGTH_MEDIOCRE
+            else -> if (passwordMatcher.matches(password)) PASSWORD_STRENGTH_STRONG else PASSWORD_STRENGTH_MEDIOCRE
         }
     }
 }

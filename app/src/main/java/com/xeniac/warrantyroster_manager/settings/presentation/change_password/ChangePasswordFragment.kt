@@ -30,6 +30,9 @@ import com.xeniac.warrantyroster_manager.util.Constants.ERROR_INPUT_BLANK_RETYPE
 import com.xeniac.warrantyroster_manager.util.Constants.ERROR_INPUT_PASSWORD_NOT_MATCH
 import com.xeniac.warrantyroster_manager.util.Constants.ERROR_INPUT_PASSWORD_SHORT
 import com.xeniac.warrantyroster_manager.util.Constants.ERROR_NETWORK_CONNECTION
+import com.xeniac.warrantyroster_manager.util.Constants.PASSWORD_STRENGTH_MEDIOCRE
+import com.xeniac.warrantyroster_manager.util.Constants.PASSWORD_STRENGTH_STRONG
+import com.xeniac.warrantyroster_manager.util.Constants.PASSWORD_STRENGTH_WEAK
 import com.xeniac.warrantyroster_manager.util.Constants.SAVE_INSTANCE_CHANGE_PASSWORD_CONFIRM_NEW_PASSWORD
 import com.xeniac.warrantyroster_manager.util.Constants.SAVE_INSTANCE_CHANGE_PASSWORD_CURRENT_PASSWORD
 import com.xeniac.warrantyroster_manager.util.Constants.SAVE_INSTANCE_CHANGE_PASSWORD_NEW_PASSWORD
@@ -207,7 +210,7 @@ class ChangePasswordFragment @Inject constructor(
 
             if (tiLayoutNewPassword.hasFocus()) {
                 when (passwordStrength(inputPassword.toString())) {
-                    (-1).toByte() -> {
+                    PASSWORD_STRENGTH_WEAK -> {
                         tiLayoutNewPassword.boxStrokeColor = ContextCompat.getColor(
                             requireContext(),
                             R.color.red
@@ -219,7 +222,7 @@ class ChangePasswordFragment @Inject constructor(
                             ContextCompat.getColorStateList(requireContext(), R.color.red)
                         )
                     }
-                    (0).toByte() -> {
+                    PASSWORD_STRENGTH_MEDIOCRE -> {
                         tiLayoutNewPassword.boxStrokeColor = ContextCompat.getColor(
                             requireContext(),
                             R.color.orange
@@ -231,7 +234,7 @@ class ChangePasswordFragment @Inject constructor(
                             ContextCompat.getColorStateList(requireContext(), R.color.orange)
                         )
                     }
-                    (1).toByte() -> {
+                    PASSWORD_STRENGTH_STRONG -> {
                         tiLayoutNewPassword.boxStrokeColor = ContextCompat.getColor(
                             requireContext(),
                             R.color.green
