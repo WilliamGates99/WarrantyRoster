@@ -2,11 +2,11 @@
 ![platform](https://img.shields.io/badge/platform-android-success)&nbsp;![GitHub release (latest by date)](https://img.shields.io/github/v/release/WilliamGates99/WarrantyRoster)&nbsp;![GitHub](https://img.shields.io/github/license/WilliamGates99/WarrantyRoster)
 
 ## Download
-<a href='https://play.google.com/store/apps/details?id=com.xeniac.warrantyroster_manager&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="60" align="center" src='/resources/badges/google-play-badge.svg'/></a>
+<a href="https://play.google.com/store/apps/details?id=com.xeniac.warrantyroster_manager&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1" target="_blank"><img alt="Get it on Google Play" height="60" align="center" src="/resources/badges/google-play-badge.svg"/></a>
 &nbsp;
-<a href='https://www.amazon.com/gp/product/B09PSK6W9Z'><img alt='Get it on Amazon Appstore' height="60" align="center" src='/resources/badges/amazon-appstore-badge.svg'/></a>
+<a href="https://www.amazon.com/gp/product/B09PSK6W9Z" target="_blank"><img alt="Get it on Amazon Appstore" height="60" align="center" src="/resources/badges/amazon-appstore-badge.svg"/></a>
 &nbsp;
-<a href='https://cafebazaar.ir/app/com.xeniac.warrantyroster_manager'><img alt='Get it on Bazaar' height="60" align="center" src='/resources/badges/cafebazaar-badge.svg'/></a>
+<a href="https://cafebazaar.ir/app/com.xeniac.warrantyroster_manager" target="_blank"><img alt="Get it on Bazaar" height="60" align="center" src="/resources/badges/cafebazaar-badge.svg"/></a>
 
 ## Description
 ![Feature Cover](/resources/feature-graphic.jpg)
@@ -50,13 +50,13 @@ The **Warranty Roster** app can save you a lot of money. How? By reacting on tim
 </p>
 
 ## Attribution
-• Icons made by Freepik from Flaticon<br/>
-• OnBoarding Screens Vectors made by Vecteezy<br/>
-• Auth Pages Vectors made by Vecteezy<br/>
-• Mockup PSD created by Freepik<br/>
-• Animation by Micah Gross @LottieFiles<br/>
-• Animation by Rizwan Rasool19 @LottieFiles<br/>
-• Animation by Tanmoy Sau @LottieFiles<br/>
-• Animation by Dong-Hyun Jang @LottieFiles<br/>
-• Animation by Caique Gomes @LottieFiles<br/>
-• Animation by Tofael Pappu @LottieFiles<br/>
+• <a href="https://www.flaticon.com/authors/freepik" target="_blank">Icons made by Freepik from Flaticon</a><br/>
+• <a href="https://www.vecteezy.com/members/doodervector" target="_blank">OnBoarding Screens Vectors made by Vecteezy</a><br/>
+• <a href="https://www.vecteezy.com/members/doodervector" target="_blank">Auth Pages Vectors made by Vecteezy</a><br/>
+• <a href="https://www.freepik.com" target="_blank">Mockup PSD created by Freepik</a><br/>
+• <a href="https://lottiefiles.com/micah" target="_blank">Animation by Micah Gross @LottieFiles</a><br/>
+• <a href="https://lottiefiles.com/rizwanrasool" target="_blank">Animation by Rizwan Rasool19 @LottieFiles</a><br/>
+• <a href="https://lottiefiles.com/94vui9zw1d6qyf4f" target="_blank">Animation by Tanmoy Sau @LottieFiles</a><br/>
+• <a href="https://lottiefiles.com/oapfudbf0jjefiva" target="_blank">Animation by Dong-Hyun Jang @LottieFiles</a><br/>
+• <a href="https://lottiefiles.com/2n9lbecbiha1gb1m" target="_blank">Animation by Caique Gomes @LottieFiles</a><br/>
+• <a href="https://lottiefiles.com/jxggcnjgoi" target="_blank">Animation by Tofael Pappu @LottieFiles</a><br/>
