@@ -83,9 +83,9 @@ class ChangeEmailFragment @Inject constructor(
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
         snackbar?.dismiss()
         _binding = null
+        super.onDestroyView()
     }
 
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {

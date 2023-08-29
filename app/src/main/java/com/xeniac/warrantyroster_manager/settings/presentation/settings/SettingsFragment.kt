@@ -112,10 +112,10 @@ class SettingsFragment @Inject constructor(
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
         snackbar?.dismiss()
         destroyAd()
         _binding = null
+        super.onDestroyView()
     }
 
     private fun networkConnectivityObserver() {
