@@ -27,8 +27,8 @@ class OnBoarding2ndFragment : Fragment(R.layout.fragment_onboarding_2nd) {
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
         _binding = null
+        super.onDestroyView()
     }
 
     private fun backOnClick() = binding.btnOnboarding2ndBack.setOnClickListener {

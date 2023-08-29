@@ -27,8 +27,8 @@ class OnBoarding1stFragment : Fragment(R.layout.fragment_onboarding_1st) {
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
         _binding = null
+        super.onDestroyView()
     }
 
     private fun skipOnClick() = binding.btnOnboarding1stSkip.setOnClickListener {

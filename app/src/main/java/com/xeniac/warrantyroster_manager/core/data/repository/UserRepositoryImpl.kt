@@ -55,19 +55,23 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun getReloadedUserInfo(): UserInfo {
         val cachedUserInfo = getCachedUserInfo()
+        return try {
+            reloadCurrentUser()
+            val currentUser = firebaseAuth.currentUser!!
+            val reloadedUserInfo = currentUser.toUserInfo()
 
-        reloadCurrentUser()
-        val currentUser = firebaseAuth.currentUser!!
-        val reloadedUserInfo = currentUser.toUserInfo()
+            val isUserInfoChanged = reloadedUserInfo != cachedUserInfo
 
-        val isUserInfoChanged = reloadedUserInfo != cachedUserInfo
-
-        return if (isUserInfoChanged) {
-            Timber.i("Reloaded user info is $reloadedUserInfo")
-            reloadedUserInfo
-        } else {
-            Timber.i("Reloaded user info is not changed.")
-            Timber.i("Cached user info is $cachedUserInfo")
+            return if (isUserInfoChanged) {
+                Timber.i("Reloaded user info is $reloadedUserInfo")
+                reloadedUserInfo
+            } else {
+                Timber.i("Reloaded user info is not changed.")
+                Timber.i("Cached user info is $cachedUserInfo")
+                cachedUserInfo
+            }
+        } catch (e: Exception) {
+            Timber.e("getReloadedUserInfo Exception: ${e.message}")
             cachedUserInfo
         }
     }

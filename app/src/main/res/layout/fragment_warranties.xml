@@ -17,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|end"
-            android:maxWidth="@dimen/max_width_1000dp"
+            android:maxWidth="@dimen/max_width_4000dp"
             app:closeIcon="@drawable/ic_menu_close"
             app:iconifiedByDefault="true"
             app:queryHint="@string/warranties_menu_hint_search"

@@ -1,6 +1,7 @@
 package com.xeniac.warrantyroster_manager
 
 import android.app.Application
+import android.util.Log
 import com.applovin.sdk.AppLovinPrivacySettings
 import com.applovin.sdk.AppLovinSdk
 import com.google.firebase.FirebaseApp
@@ -58,6 +59,7 @@ class BaseApplication : Application() {
     }
 
     private fun initTapsell() {
+        TapsellPlus.setDebugMode(Log.DEBUG)
         TapsellPlus.initialize(this, TAPSELL_KEY, object : TapsellPlusInitListener {
             override fun onInitializeSuccess(adNetworks: AdNetworks?) {
                 Timber.i("onInitializeSuccess: ${adNetworks?.name}")

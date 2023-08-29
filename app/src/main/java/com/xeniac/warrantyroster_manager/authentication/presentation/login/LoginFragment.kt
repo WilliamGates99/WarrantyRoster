@@ -113,9 +113,9 @@ class LoginFragment @Inject constructor(
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
         snackbar?.dismiss()
         _binding = null
+        super.onDestroyView()
     }
 
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
@@ -604,24 +604,35 @@ class LoginFragment @Inject constructor(
         val callbackManager = CallbackManager.Factory.create()
 
         val loginManager = LoginManager.getInstance()
-        loginManager.logInWithReadPermissions(this, callbackManager, listOf("email"))
+        loginManager.apply {
+            logOut()
+            logInWithReadPermissions(
+                fragment = this@LoginFragment,
+                callbackManager = callbackManager,
+                permissions = listOf("email")
+            )
 
-        loginManager.registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
-            override fun onSuccess(result: LoginResult) {
-                viewModel!!.loginWithFacebookAccount(result.accessToken)
-            }
+            registerCallback(
+                callbackManager = callbackManager,
+                callback = object : FacebookCallback<LoginResult> {
+                    override fun onSuccess(result: LoginResult) {
+                        Timber.i("launchFacebookLoginManager was successful.")
+                        viewModel!!.loginWithFacebookAccount(result.accessToken)
+                    }
 
-            override fun onCancel() {
-                hideFacebookLoadingAnimation()
-                Timber.i("launchFacebookLoginManager canceled.")
-            }
+                    override fun onCancel() {
+                        hideFacebookLoadingAnimation()
+                        Timber.i("launchFacebookLoginManager canceled.")
+                    }
 
-            override fun onError(error: FacebookException) {
-                hideFacebookLoadingAnimation()
-                snackbar = showSomethingWentWrongError(requireContext(), requireView())
-                Timber.e("launchFacebookLoginManager Callback Exception: ${error.message}")
-            }
-        })
+                    override fun onError(error: FacebookException) {
+                        hideFacebookLoadingAnimation()
+                        snackbar = showSomethingWentWrongError(requireContext(), requireView())
+                        Timber.e("launchFacebookLoginManager Callback Exception: ${error.message}")
+                    }
+                }
+            )
+        }
     }
 
     private fun loginWithFacebookAccountObserver() =

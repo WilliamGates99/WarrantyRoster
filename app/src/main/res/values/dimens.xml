@@ -34,6 +34,7 @@
     <dimen name="height_40dp">40dp</dimen>
     <dimen name="height_48dp">48dp</dimen>
     <dimen name="height_52dp">52dp</dimen>
+    <dimen name="height_64dp">64dp</dimen>
     <dimen name="height_86dp">86dp</dimen>
     <dimen name="height_120dp">120dp</dimen>
     <dimen name="height_125dp">125dp</dimen>
@@ -95,7 +96,7 @@
     <!--Miscellaneous-->
     <dimen name="min_width_0dp">0dp</dimen>
     <dimen name="min_height_0dp">0dp</dimen>
-    <dimen name="max_width_1000dp">1000dp</dimen>
+    <dimen name="max_width_4000dp">4000dp</dimen>
     <dimen name="content_inset_0dp">0dp</dimen>
     <dimen name="content_inset_12dp">12dp</dimen>
     <dimen name="content_inset_16dp">16dp</dimen>

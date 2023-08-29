@@ -14,10 +14,11 @@
 
 # Uncomment this to preserve the line number information for
 # debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
+-keepattributes SourceFile,LineNumberTable
 
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
+-renamesourcefileattribute SourceFile
 
 
 #🍅---------------Begin: Proguard Configuration for Obfuscation Mapping---------------🍅
@@ -208,6 +209,38 @@
 -keepnames public class com.google.android.gms.ads.identifier.AdvertisingIdClient
 -keepnames public class com.chartboost.sdk.Chartboost
 -keepnames public class com.applovin.sdk.AppLovinSdkSettings
+
+# Vunvle Rules
+-keep class com.vungle.warren.AdConfig
+-keep class com.vungle.warren.InitCallback
+-keep class com.vungle.warren.LoadAdCallback
+-keep class com.vungle.warren.PlayAdCallback
+-keep class com.vungle.warren.Vungle$Consent
+-keep class com.vungle.warren.Vungle
+-dontwarn com.vungle.warren.AdConfig
+-dontwarn com.vungle.warren.InitCallback
+-dontwarn com.vungle.warren.LoadAdCallback
+-dontwarn com.vungle.warren.PlayAdCallback
+-dontwarn com.vungle.warren.Vungle$Consent
+-dontwarn com.vungle.warren.Vungle
+
+# FaceBook sdk Rules
+-keep class com.facebook.FacebookSdk
+-keep class com.facebook.ads.AudienceNetworkAds$InitListener
+-keep class com.facebook.ads.AudienceNetworkAds$InitSettingsBuilder
+-keep class com.facebook.ads.AudienceNetworkAds
+-keep class com.facebook.ads.InterstitialAd
+-keep class com.facebook.ads.InterstitialAdListener
+-keep class com.facebook.ads.RewardedVideoAd
+-keep class com.facebook.ads.RewardedVideoAdListener
+-dontwarn com.facebook.FacebookSdk
+-dontwarn com.facebook.ads.AudienceNetworkAds$InitListener
+-dontwarn com.facebook.ads.AudienceNetworkAds$InitSettingsBuilder
+-dontwarn com.facebook.ads.AudienceNetworkAds
+-dontwarn com.facebook.ads.InterstitialAd
+-dontwarn com.facebook.ads.InterstitialAdListener
+-dontwarn com.facebook.ads.RewardedVideoAd
+-dontwarn com.facebook.ads.RewardedVideoAdListener
 #🍅---------------End: Proguard Configuration for Tapsell Library---------------🍅
 
 
@@ -222,22 +255,41 @@
 -dontwarn com.adcolony.sdk.AdColonyInterstitial
 -dontwarn com.adcolony.sdk.AdColonyInterstitialListener
 -dontwarn com.adcolony.sdk.AdColonyRewardListener
--dontwarn com.android.vending.billing.IInAppBillingService$Stub
--dontwarn com.android.vending.billing.IInAppBillingService
 -dontwarn com.chartboost.sdk.Chartboost
 -dontwarn com.chartboost.sdk.ChartboostDelegate
 -dontwarn com.chartboost.sdk.Libraries.CBLogging$Level
 -dontwarn com.chartboost.sdk.a
--dontwarn com.facebook.ads.AudienceNetworkAds$InitListener
--dontwarn com.facebook.ads.AudienceNetworkAds$InitSettingsBuilder
--dontwarn com.facebook.ads.AudienceNetworkAds
--dontwarn com.facebook.ads.InterstitialAd
--dontwarn com.facebook.ads.InterstitialAdListener
--dontwarn com.facebook.ads.RewardedVideoAd
--dontwarn com.facebook.ads.RewardedVideoAdListener
--dontwarn com.squareup.picasso.Picasso
--dontwarn com.squareup.picasso.RequestCreator
--dontwarn com.squareup.picasso.Target
+-dontwarn com.google.ads.interactivemedia.v3.api.Ad
+-dontwarn com.google.ads.interactivemedia.v3.api.AdDisplayContainer
+-dontwarn com.google.ads.interactivemedia.v3.api.AdError
+-dontwarn com.google.ads.interactivemedia.v3.api.AdErrorEvent$AdErrorListener
+-dontwarn com.google.ads.interactivemedia.v3.api.AdErrorEvent
+-dontwarn com.google.ads.interactivemedia.v3.api.AdEvent$AdEventListener
+-dontwarn com.google.ads.interactivemedia.v3.api.AdEvent$AdEventType
+-dontwarn com.google.ads.interactivemedia.v3.api.AdEvent
+-dontwarn com.google.ads.interactivemedia.v3.api.AdsLoader$AdsLoadedListener
+-dontwarn com.google.ads.interactivemedia.v3.api.AdsLoader
+-dontwarn com.google.ads.interactivemedia.v3.api.AdsManager
+-dontwarn com.google.ads.interactivemedia.v3.api.AdsManagerLoadedEvent
+-dontwarn com.google.ads.interactivemedia.v3.api.AdsRenderingSettings
+-dontwarn com.google.ads.interactivemedia.v3.api.AdsRequest
+-dontwarn com.google.ads.interactivemedia.v3.api.CompanionAdSlot
+-dontwarn com.google.ads.interactivemedia.v3.api.ImaSdkFactory
+-dontwarn com.google.ads.interactivemedia.v3.api.ImaSdkSettings
+-dontwarn com.google.ads.interactivemedia.v3.api.player.ContentProgressProvider
+-dontwarn com.google.ads.interactivemedia.v3.api.player.VideoAdPlayer$VideoAdPlayerCallback
+-dontwarn com.google.ads.interactivemedia.v3.api.player.VideoAdPlayer
+-dontwarn com.google.ads.interactivemedia.v3.api.player.VideoProgressUpdate
+-dontwarn com.google.android.exoplayer2.ExoPlayerLibraryInfo
+-dontwarn com.google.android.exoplayer2.Player$Listener
+-dontwarn com.google.android.exoplayer2.Player
+-dontwarn com.google.android.exoplayer2.Timeline$Period
+-dontwarn com.google.android.exoplayer2.Timeline$Window
+-dontwarn com.google.android.exoplayer2.Timeline
+-dontwarn com.google.android.exoplayer2.source.ads.AdsLoader
+-dontwarn com.google.android.exoplayer2.ui.StyledPlayerView
+-dontwarn com.google.android.exoplayer2.util.Assertions
+-dontwarn com.google.android.exoplayer2.util.Util
 -dontwarn com.unity3d.ads.IUnityAdsInitializationListener
 -dontwarn com.unity3d.ads.IUnityAdsLoadListener
 -dontwarn com.unity3d.ads.IUnityAdsShowListener
@@ -245,19 +297,5 @@
 -dontwarn com.unity3d.services.banners.BannerView$IListener
 -dontwarn com.unity3d.services.banners.BannerView
 -dontwarn com.unity3d.services.banners.UnityBannerSize
--dontwarn com.vungle.warren.AdConfig
--dontwarn com.vungle.warren.InitCallback
--dontwarn com.vungle.warren.LoadAdCallback
--dontwarn com.vungle.warren.PlayAdCallback
--dontwarn com.vungle.warren.Vungle
 -dontwarn okhttp3.internal.annotations.EverythingIsNonNull
--dontwarn org.bouncycastle.jsse.BCSSLParameters
--dontwarn org.bouncycastle.jsse.BCSSLSocket
--dontwarn org.bouncycastle.jsse.provider.BouncyCastleJsseProvider
--dontwarn org.conscrypt.Conscrypt$Version
--dontwarn org.conscrypt.Conscrypt
--dontwarn org.conscrypt.ConscryptHostnameVerifier
--dontwarn org.openjsse.javax.net.ssl.SSLParameters
--dontwarn org.openjsse.javax.net.ssl.SSLSocket
--dontwarn org.openjsse.net.ssl.OpenJSSE
 #🍅---------------End: Missing Rules---------------🍅

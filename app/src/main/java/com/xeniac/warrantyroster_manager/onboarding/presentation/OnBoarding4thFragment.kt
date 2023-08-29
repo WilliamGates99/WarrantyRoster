@@ -20,8 +20,8 @@ class OnBoarding4thFragment : Fragment(R.layout.fragment_onboarding_4th) {
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
         _binding = null
+        super.onDestroyView()
     }
 
     private fun startOnClick() = binding.btnOnboarding4thStart.setOnClickListener {

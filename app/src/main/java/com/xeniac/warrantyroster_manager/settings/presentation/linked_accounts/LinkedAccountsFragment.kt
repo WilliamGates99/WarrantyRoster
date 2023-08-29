@@ -109,9 +109,9 @@ class LinkedAccountsFragment @Inject constructor(
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
         snackbar?.dismiss()
         _binding = null
+        super.onDestroyView()
     }
 
     private val onBackPressedCallback = object : OnBackPressedCallback(true) {
@@ -590,24 +590,34 @@ class LinkedAccountsFragment @Inject constructor(
         val callbackManager = CallbackManager.Factory.create()
 
         val loginManager = LoginManager.getInstance()
-        loginManager.logInWithReadPermissions(this, callbackManager, listOf())
+        loginManager.apply {
+            logOut()
+            loginManager.logInWithReadPermissions(
+                fragment = this@LinkedAccountsFragment,
+                callbackManager = callbackManager,
+                permissions = listOf()
+            )
 
-        loginManager.registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
-            override fun onSuccess(result: LoginResult) {
-                viewModel!!.linkFacebookAccount(result.accessToken)
-            }
+            loginManager.registerCallback(
+                callbackManager = callbackManager,
+                callback = object : FacebookCallback<LoginResult> {
+                    override fun onSuccess(result: LoginResult) {
+                        viewModel!!.linkFacebookAccount(result.accessToken)
+                    }
 
-            override fun onCancel() {
-                hideFacebookLoadingAnimation()
-                Timber.i("launchFacebookLoginManager canceled.")
-            }
+                    override fun onCancel() {
+                        hideFacebookLoadingAnimation()
+                        Timber.i("launchFacebookLoginManager canceled.")
+                    }
 
-            override fun onError(error: FacebookException) {
-                hideFacebookLoadingAnimation()
-                snackbar = showSomethingWentWrongError(requireContext(), requireView())
-                Timber.e("launchFacebookLoginManager Callback Exception: ${error.message}")
-            }
-        })
+                    override fun onError(error: FacebookException) {
+                        hideFacebookLoadingAnimation()
+                        snackbar = showSomethingWentWrongError(requireContext(), requireView())
+                        Timber.e("launchFacebookLoginManager Callback Exception: ${error.message}")
+                    }
+                }
+            )
+        }
     }
 
     private fun linkFacebookAccountObserver() =
