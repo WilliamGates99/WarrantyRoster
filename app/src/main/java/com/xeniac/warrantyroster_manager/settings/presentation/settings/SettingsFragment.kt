@@ -52,8 +52,6 @@ import ir.tapsell.plus.AdRequestCallback
 import ir.tapsell.plus.AdShowListener
 import ir.tapsell.plus.TapsellPlus
 import ir.tapsell.plus.model.TapsellPlusAdModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -141,7 +139,7 @@ class SettingsFragment @Inject constructor(
         logoutObserver()
     }
 
-    private fun getUserInfo() = CoroutineScope(Dispatchers.IO).launch {
+    private fun getUserInfo() = lifecycleScope.launch {
         getCachedUserInfo()
 
         /*
