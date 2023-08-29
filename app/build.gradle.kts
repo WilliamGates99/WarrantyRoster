@@ -338,13 +338,13 @@ val obfuscationDestDir: String = properties.getProperty("OBFUSCATION_DESTINATION
 val versionName = "${android.defaultConfig.versionName}"
 val renamedFileName = "Warranty Roster $versionName"
 
-tasks.register<Copy>("copyDevPreviewApk") {
-    val apkFile = "app-dev-playStore-release.apk"
-    val apkSourceDir = "${releaseRootDir}/devPlayStore/release/${apkFile}"
+tasks.register<Copy>("copyDevPreviewBundle") {
+    val bundleFile = "app-dev-playStore-release.aab"
+    val bundleSourceDir = "${releaseRootDir}/devPlayStore/release/${bundleFile}"
 
-    from(apkSourceDir)
+    from(bundleSourceDir)
     into(destDir)
-    rename(apkFile, "$renamedFileName (Developer Preview).apk")
+    rename(bundleFile, "$renamedFileName (Developer Preview).aab")
 }
 
 tasks.register<Copy>("copyReleaseApk") {
