@@ -8,8 +8,8 @@ plugins {
     id("kotlin-kapt")
     id("kotlin-parcelize")
     id("androidx.navigation.safeargs.kotlin")
-    id("com.google.gms.google-services") // Google Services plugin
     id("dagger.hilt.android.plugin")
+    id("com.google.gms.google-services") // Google Services plugin
     id("com.google.firebase.crashlytics")
     id("com.google.firebase.firebase-perf")
     id("applovin-quality-service")
@@ -24,13 +24,13 @@ applovin {
 
 android {
     namespace = "com.xeniac.warrantyroster_manager"
-    compileSdk = 33
-    buildToolsVersion = "34.0.0 rc3"
+    compileSdk = 34
+    buildToolsVersion = "34.0.0"
 
     defaultConfig {
         applicationId = "com.xeniac.warrantyroster_manager"
         minSdk = 21
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 21 // TODO UPGRADE AFTER EACH RELEASE
         versionName = "2.1.1" // TODO UPGRADE AFTER EACH RELEASE
 
@@ -229,38 +229,38 @@ kapt {
 }
 
 dependencies {
-    implementation("androidx.core:core-ktx:1.10.0")
+    implementation("androidx.core:core-ktx:1.10.1")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.9.0")
     implementation("androidx.core:core-splashscreen:1.0.1")
 
     // Navigation Component
-    implementation("androidx.navigation:navigation-fragment-ktx:2.5.3")
-    implementation("androidx.navigation:navigation-ui-ktx:2.5.3")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.7.1")
+    implementation("androidx.navigation:navigation-ui-ktx:2.7.1")
 
     // Dagger - Hilt
-    implementation("com.google.dagger:hilt-android:2.46")
-    kapt("com.google.dagger:hilt-compiler:2.46")
+    implementation("com.google.dagger:hilt-android:2.47")
+    kapt("com.google.dagger:hilt-compiler:2.47")
 
     // Activity KTX for Injecting ViewModels into Fragments
-    implementation("androidx.activity:activity-ktx:1.7.1")
+    implementation("androidx.activity:activity-ktx:1.7.2")
 
     // Architectural Components
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
 
     // Coroutines
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
     // Coroutines Support for Firebase
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3")
 
     // Preferences DataStore
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
     // Firebase BoM and Analytics
-    implementation(platform("com.google.firebase:firebase-bom:32.0.0"))
+    implementation(platform("com.google.firebase:firebase-bom:32.2.3"))
     implementation("com.google.firebase:firebase-analytics-ktx")
 
     // Firebase App Check
@@ -273,8 +273,8 @@ dependencies {
 
     // Firebase Auth
     implementation("com.google.firebase:firebase-auth-ktx")
-    implementation("com.google.android.gms:play-services-auth:20.5.0")
-    implementation("com.facebook.android:facebook-login:16.0.1")
+    implementation("com.google.android.gms:play-services-auth:20.6.0")
+    implementation("com.facebook.android:facebook-login:16.2.0")
 
     // Firebase Firestore, Storage
     implementation("com.google.firebase:firebase-firestore-ktx")
@@ -284,51 +284,51 @@ dependencies {
     implementation("com.jakewharton.timber:timber:5.0.1")
 
     // Lottie Library
-    implementation("com.airbnb.android:lottie:6.0.0")
+    implementation("com.airbnb.android:lottie:6.1.0")
 
     // Coil Library
-    implementation("io.coil-kt:coil:2.3.0")
-    implementation("io.coil-kt:coil-svg:2.3.0")
+    implementation("io.coil-kt:coil:2.4.0")
+    implementation("io.coil-kt:coil-svg:2.4.0")
 
     // Dots Indicator Library
-    implementation("com.tbuonomo:dotsindicator:4.3")
+    implementation("com.tbuonomo:dotsindicator:5.0")
 
     // Google Play In-App Reviews API
     implementation("com.google.android.play:review-ktx:2.0.1")
 
     // AppLovin Libraries
-    implementation("com.applovin:applovin-sdk:11.9.0")
+    implementation("com.applovin:applovin-sdk:11.11.3")
     implementation("com.google.android.gms:play-services-ads-identifier:18.0.1")
-    implementation("com.applovin.mediation:google-adapter:22.0.0.2")
+    implementation("com.applovin.mediation:google-adapter:22.3.0.0")
 
     // Google AdMob Library
-    implementation("com.google.android.gms:play-services-ads:22.0.0")
+    implementation("com.google.android.gms:play-services-ads:22.3.0")
 
     // Tapsell Library
-    implementation("ir.tapsell.plus:tapsell-plus-sdk-android:2.1.8")
+    implementation("ir.tapsell.plus:tapsell-plus-sdk-android:2.2.0")
 
     // Local Unit Test Libraries
-    testImplementation("com.google.truth:truth:1.1.3")
+    testImplementation("com.google.truth:truth:1.1.5")
     testImplementation("junit:junit:4.13.2")
     testImplementation("androidx.arch.core:core-testing:2.2.0")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.0")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
 
     // Instrumentation Test Libraries
-    androidTestImplementation("com.google.truth:truth:1.1.3")
+    androidTestImplementation("com.google.truth:truth:1.1.5")
     androidTestImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test:core:1.4.0") // DO NOT UPGRADE
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.arch.core:core-testing:2.2.0")
-    androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.0")
-    androidTestImplementation("com.google.dagger:hilt-android-testing:2.46")
-    kaptAndroidTest("com.google.dagger:hilt-compiler:2.46")
+    androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+    androidTestImplementation("com.google.dagger:hilt-android-testing:2.47")
+    kaptAndroidTest("com.google.dagger:hilt-compiler:2.47")
 
     // UI Test Libraries
-    androidTestImplementation("androidx.navigation:navigation-testing:2.5.3")
+    androidTestImplementation("androidx.navigation:navigation-testing:2.7.1")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.3.0") // DO NOT UPGRADE
     androidTestImplementation("androidx.test.espresso:espresso-contrib:3.3.0") // DO NOT UPGRADE
     androidTestImplementation("androidx.test.espresso:espresso-intents:3.3.0") // DO NOT UPGRADE
-    debugImplementation("androidx.fragment:fragment-testing:1.5.7")
+    debugImplementation("androidx.fragment:fragment-testing:1.6.1")
 }
 
 val releaseRootDir = "${rootDir}/app"
