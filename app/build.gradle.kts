@@ -31,7 +31,7 @@ android {
         applicationId = "com.xeniac.warrantyroster_manager"
         minSdk = 21
         targetSdk = 34
-        versionCode = 22 // TODO UPGRADE AFTER EACH RELEASE
+        versionCode = 23 // TODO UPGRADE AFTER EACH RELEASE
         versionName = "2.1.2" // TODO UPGRADE AFTER EACH RELEASE
 
         /**
@@ -339,20 +339,25 @@ val versionName = "${android.defaultConfig.versionName}"
 val renamedFileName = "Warranty Roster $versionName"
 
 tasks.register<Copy>("copyDevPreviewBundle") {
-    val bundleFile = "app-dev-playStore-release.aab"
-    val bundleSourceDir = "${releaseRootDir}/devPlayStore/release/${bundleFile}"
+    val playStoreBundleFile = "app-dev-playStore-release.aab"
+    val playStoreBundleSourceDir = "${releaseRootDir}/devPlayStore/release/${playStoreBundleFile}"
 
-    from(bundleSourceDir)
+    from(playStoreBundleSourceDir)
     into(destDir)
-    rename(bundleFile, "$renamedFileName (Developer Preview).aab")
+    rename(playStoreBundleFile, "$renamedFileName (Developer Preview).aab")
 }
 
 tasks.register<Copy>("copyReleaseApk") {
+    val playStoreApkFile = "app-prod-playStore-release.apk"
     val amazonApkFile = "app-prod-amazon-release.apk"
     val cafeBazaarApkFile = "app-prod-cafeBazaar-release.apk"
 
+    val playStoreApkSourceDir = "${releaseRootDir}/prodPlayStore/release/${playStoreApkFile}"
     val amazonApkSourceDir = "${releaseRootDir}/prodAmazon/release/${amazonApkFile}"
     val cafeBazaarApkSourceDir = "${releaseRootDir}/prodCafeBazaar/release/${cafeBazaarApkFile}"
+
+    from(playStoreApkSourceDir)
+    into(destDir)
 
     from(amazonApkSourceDir)
     into(destDir)
@@ -360,6 +365,7 @@ tasks.register<Copy>("copyReleaseApk") {
     from(cafeBazaarApkSourceDir)
     into(destDir)
 
+    rename(playStoreApkFile, "$renamedFileName - Play Store.apk")
     rename(amazonApkFile, "$renamedFileName - Amazon.apk")
     rename(cafeBazaarApkFile, "$renamedFileName - CafeBazaar.apk")
 }
