@@ -95,7 +95,7 @@
     <!--Miscellaneous-->
     <dimen name="min_width_0dp">0dp</dimen>
     <dimen name="min_height_0dp">0dp</dimen>
-    <dimen name="max_width_1000dp">1000dp</dimen>
+    <dimen name="max_width_4000dp">4000dp</dimen>
     <dimen name="content_inset_0dp">0dp</dimen>
     <dimen name="content_inset_12dp">12dp</dimen>
     <dimen name="content_inset_16dp">16dp</dimen>
