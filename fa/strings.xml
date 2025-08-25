@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">وارانتی راستر</string>
+    <string name="error_something_went_wrong">خطایی رخ داده. لطفا بعدا دوباره امتحان کنید.</string>
+    <string name="error_network_connection_unavailable">اتصال به اینترنت امکان‌پذیر نیست.</string>
+    <string name="error_network_failure">مشکلی برای شبکه رخ داده است. لطفا بعدا دوباره امتحان کنید.</string>
+    <string name="error_firebase_403">این سرویس در منطقه شما در دسترس نیست. لطفاً از نرم‌افزار تغییر آدرس IP استفاده کنید.</string>
+    <string name="error_firebase_device_blocked">ما تمام درخواست‌های این دستگاه را به دلیل فعالیت غیر‌عادی مسدود کرده‌ایم. لطفا بعدا دوباره تلاش کنید.</string>
+    <string name="error_intent_app_not_found">هیچ برنامه‌ای برای انجام این دستور در گوشی وجود ندارد.</string>
+    <string name="error_btn_retry">تلاش مجدد</string>
+    <string name="error_btn_confirm">تایید</string>
+    <string name="onboarding_dialog_title_language">زبان</string>
+    <string name="onboarding_dialog_item_language_english_us">انگلیسی (آمریکایی)</string>
+    <string name="onboarding_dialog_item_language_english_gb">انگلیسی (بریتانیایی)</string>
+    <string name="onboarding_dialog_item_language_persian_ir">فارسی</string>
+    <string name="onboarding_btn_skip">رد کردن</string>
+    <string name="onboarding_btn_back">قبلی</string>
+    <string name="onboarding_btn_next">بعدی</string>
+    <string name="onboarding_1st_title">دیگر تاریخ گارانتی محصولات‌تون را فراموش نخواهید کرد.</string>
+    <string name="onboarding_2nd_title">به راحتی تاریخ اتمام گارانتی رو پیگیری کنید.</string>
+    <string name="onboarding_3rd_title">با استفاده از گارانتی قبل از رسیدن به تاریخ انقضا، تو هزینه‌هاتون صرفه‌جویی کنید.</string>
+    <string name="onboarding_4th_title">تمامی داده‌ها به طور خودکار تو فضای ابری نگهداری و پشتیبان‌گیری می‌شوند.</string>
+    <string name="onboarding_4th_btn_start">شروع کنیم</string>
+    <string name="auth_dialog_title_language">زبان</string>
+    <string name="auth_dialog_item_language_english_us">انگلیسی (آمریکایی)</string>
+    <string name="auth_dialog_item_language_english_gb">انگلیسی (بریتانیایی)</string>
+    <string name="auth_dialog_item_language_persian_ir">فارسی</string>
+    <string name="login_text_title">ورود</string>
+    <string name="login_text_description">بیایید وارد برنامه شویم.</string>
+    <string name="login_title_email">آدرس ایمیل</string>
+    <string name="login_hint_email">آدرس ایمیل خود را وارد کنید</string>
+    <string name="login_title_password">رمز‌عبور</string>
+    <string name="login_hint_password">رمز‌عبور خود را وارد کنید</string>
+    <string name="login_btn_forgot_pw">رمز‌عبور‌تان را فراموش کرده‌اید؟</string>
+    <string name="login_btn_login">ورود</string>
+    <string name="login_text_other_methods">یا ورود با</string>
+    <string name="login_text_other_methods_landscape">یا</string>
+    <string name="login_text_register_title">حساب کاربری ندارید؟</string>
+    <string name="login_btn_register">ثبت‌نام کنید</string>
+    <string name="login_error_blank_email">آدرس ایمیل خود را وارد کنید!</string>
+    <string name="login_error_blank_password">رمز‌عبور خود را وارد کنید!</string>
+    <string name="login_error_email">آدرس ایمیل وارد شده، معتبر نیست!</string>
+    <string name="login_error_not_found">حسابی با ایمیل وارد شده وجود ندارد.</string>
+    <string name="login_error_credentials">ایمیل و یا رمز‌عبور وارد شده نادرست است.</string>
+    <string name="login_error_email_exists_with_different_credentials">حسابی با ایمیل وارد شده اما با روش‌های ورود متفاوت از قبل وجود دارد.</string>
+    <string name="register_text_title">ثبت‌نام</string>
+    <string name="register_text_description">اطلاعات خود را وارد کنید.</string>
+    <string name="register_text_agreement">با ثبت‌نام، شما <font fgcolor="#1C53F4"><b>سیاست حریم خصوصی</b></font> ما را می‌پذیرید.</string>
+    <string name="register_title_email">آدرس ایمیل</string>
+    <string name="register_hint_email">آدرس ایمیل خود را وارد کنید</string>
+    <string name="register_title_password">رمز‌عبور</string>
+    <string name="register_hint_password">رمز‌عبور را وارد کنید</string>
+    <string name="register_title_confirm_password">تکرار رمز‌عبور</string>
+    <string name="register_hint_confirm_password">رمز‌عبور را دوباره وارد کنید</string>
+    <string name="register_btn_register">ثبت‌نام</string>
+    <string name="register_text_other_methods">یا ورود با</string>
+    <string name="register_text_other_methods_landscape">یا</string>
+    <string name="register_text_login_title">در حال حاضر حساب کاربری دارید؟</string>
+    <string name="register_btn_login">وارد شوید</string>
+    <string name="register_helper_password_weak">ضعیف</string>
+    <string name="register_helper_password_mediocre">متوسط</string>
+    <string name="register_helper_password_strong">قوی</string>
+    <string name="register_error_blank_email">آدرس ایمیل خود را وارد کنید!</string>
+    <string name="register_error_blank_password">رمز‌عبور را وارد کنید!</string>
+    <string name="register_error_blank_confirm_password">رمز‌عبور را دوباره وارد کنید!</string>
+    <string name="register_error_email">آدرس ایمیل وارد شده، معتبر نیست!</string>
+    <string name="register_error_password_short">رمز‌عبور باید حداقل 6 کاراکتر باشد!</string>
+    <string name="register_error_password_not_match">رمز‌عبور و تکرار رمز‌عبور وارد شده با هم مطابقت ندارند!</string>
+    <string name="register_error_account_exists">حسابی با ایمیل وارد شده از قبل وجود دارد.</string>
+    <string name="register_error_email_exists_with_different_credentials">حسابی با ایمیل وارد شده اما با روش‌های ورود متفاوت از قبل وجود دارد.</string>
+    <string name="forgot_pw_text_title">بازیابی\nرمز‌عبور</string>
+    <string name="forgot_pw_text_description">برای دریافت دستورالعمل‌های بازیابی رمز‌عبور، ایمیل تایید‌شده خود را وارد کنید.</string>
+    <string name="forgot_pw_title_email">آدرس ایمیل</string>
+    <string name="forgot_pw_hint_email">آدرس ایمیل خود را وارد کنید</string>
+    <string name="forgot_pw_btn_send">ارسال ایمیل</string>
+    <string name="forgot_pw_btn_return">بازگشت به صفحه ورود</string>
+    <string name="forgot_pw_error_blank_email">آدرس ایمیل خود را وارد کنید!</string>
+    <!--Placeholder is for the remaining waiting time-->
+    <string name="forgot_pw_error_timer_is_not_zero_zero">لطفاً قبل از درخواست مجدد، %d ثانیه منتظر بمانید.</string>
+    <!--Placeholder is for the remaining waiting time-->
+    <string name="forgot_pw_error_timer_is_not_zero_one">لطفاً قبل از درخواست مجدد، %d ثانیه منتظر بمانید.</string>
+    <!--Placeholder is for the remaining waiting time-->
+    <string name="forgot_pw_error_timer_is_not_zero_two">لطفاً قبل از درخواست مجدد، %d ثانیه منتظر بمانید.</string>
+    <!--Placeholder is for the remaining waiting time-->
+    <string name="forgot_pw_error_timer_is_not_zero_few">لطفاً قبل از درخواست مجدد، %d ثانیه منتظر بمانید.</string>
+    <!--Placeholder is for the remaining waiting time-->
+    <string name="forgot_pw_error_timer_is_not_zero_many">لطفاً قبل از درخواست مجدد، %d ثانیه منتظر بمانید.</string>
+    <!--Placeholder is for the remaining waiting time-->
+    <string name="forgot_pw_error_timer_is_not_zero_other">لطفاً قبل از درخواست مجدد، %d ثانیه منتظر بمانید.</string>
+    <string name="forgot_pw_error_email">آدرس ایمیل وارد شده، معتبر نیست!</string>
+    <string name="forgot_pw_error_not_found">حسابی با ایمیل وارد شده وجود ندارد.</string>
+    <string name="forgot_pw_sent_text_title">بازیابی\nرمز‌عبور</string>
+    <string name="forgot_pw_sent_text_description">لطفا صندوق ایمیل خود را بررسی کنید و روی لینک دریافتی کلیک کنید تا رمز‌عبور خود را بازیابی کنید.</string>
+    <string name="forgot_pw_sent_text_resend">لینکی را دریافت نکردید؟</string>
+    <string name="forgot_pw_sent_btn_resend">ارسال مجدد</string>
+    <string name="forgot_pw_sent_text_first_time">ایمیل ارسال شد.</string>
+    <string name="forgot_pw_sent_text_resent">ایمیل مجددا ارسال شد.</string>
+    <!--
+    Placeholders:
+    • %1$s: Minute
+    • %2$s: Seconds
+    Sample: 02:52
+    -->
+    <string name="forgot_pw_sent_btn_return">بازگشت به صفحه ورود</string>
+    <string name="main_menu_title_warranties">فهرست گارانتی‌ها</string>
+    <string name="main_menu_title_settings">تنظیمات</string>
+    <string name="main_text_content_description">افزودن گارانتی</string>
+    <!--Placeholder is for the App Name-->
+    <string name="main_rate_app_dialog_title">امتیاز به %s؟</string>
+    <string name="main_rate_app_dialog_message">اگر از استفاده از این برنامه لذت می‌برید، در صورت امکان به آن امتیاز دهید. بیشتر از یک دقیقه طول نمی‌کشد. از حمایت شما متشکریم!</string>
+    <string name="main_rate_app_dialog_positive">الان امتیاز می‌دهم</string>
+    <string name="main_rate_app_dialog_negative">نه، ممنون</string>
+    <string name="main_rate_app_dialog_neutral">بعدا بهم یادآوری کن</string>
+    <string name="warranties_text_title">فهرست گارانتی‌ها</string>
+    <string name="warranties_menu_hint_search">جستجو بر اساس عنوان…</string>
+    <string name="warranties_text_empty_warranties_list">در حال حاضر هیچ گارانتی در لیست شما وجود ندارد. با کلیک بر روی <font fgcolor="#1C53F4">دکمه افزودن</font> می‌توانید یک گارانتی اضافه کنید.</string>
+    <string name="warranties_text_empty_search_result_list">هیچ گارانتی‌ای پیدا نکردیم که با جستجوی شما برای <font fgcolor="#1C53F4">%s</font> مطابقت داشته باشد.</string>
+    <string name="warranties_list_status_valid">معتبر</string>
+    <string name="warranties_list_status_soon">به‌زودی</string>
+    <string name="warranties_list_status_expired">منقضی‌شده</string>
+    <string name="warranties_list_is_lifetime">گارانتی مادام‌العمر</string>
+    <!--
+    Placeholders:
+    • %1$s: Month Name
+    • %2$s: Day with Suffix
+    • %3$d: Year (yyyy)
+
+    Samples:
+    • en-US: December 25th, 2022
+    • en-GB: 25th of December, 2022
+    • fa-IR: بیست و پنجم دسامبر، ۲۰۲۲
+    -->
+    <string name="warranties_list_format_date">%2$s %1$s، %3$d</string>
+    <string-array name="warranties_list_day_with_suffix">
+        <item>اول</item>
+        <item>دوم</item>
+        <item>سوم</item>
+        <item>چهارم</item>
+        <item>پنجم</item>
+        <item>ششم</item>
+        <item>هفتم</item>
+        <item>هشتم</item>
+        <item>نهم</item>
+        <item>دهم</item>
+        <item>یازدهم</item>
+        <item>دوازدهم</item>
+        <item>سیزدهم</item>
+        <item>چهاردهم</item>
+        <item>پانزدهم</item>
+        <item>شانزدهم</item>
+        <item>هفدهم</item>
+        <item>هجدهم</item>
+        <item>نوزدهم</item>
+        <item>بیستم</item>
+        <item>بیست و یکم</item>
+        <item>بیست و دوم</item>
+        <item>بیست و سوم</item>
+        <item>بیست و چهارم</item>
+        <item>بیست و پنجم</item>
+        <item>بیست و ششم</item>
+        <item>بیست و هفتم</item>
+        <item>بیست و هشتم</item>
+        <item>بیست و نهم</item>
+        <item>سی‌ام</item>
+        <item>سی و یکم</item>
+    </string-array>
+    <string-array name="warranties_list_month_name">
+        <item>ژانویه</item>
+        <item>فوریه</item>
+        <item>مارس</item>
+        <item>آوریل</item>
+        <item>مه</item>
+        <item>ژوئن</item>
+        <item>جولای</item>
+        <item>اوت</item>
+        <item>سپتامبر</item>
+        <item>اکتبر</item>
+        <item>نوامبر</item>
+        <item>دسامبر</item>
+    </string-array>
+    <string name="add_warranty_text_title">افزودن گارانتی</string>
+    <string name="add_warranty_menu_title_add">افزودن گارانتی</string>
+    <string name="add_warranty_title_title">عنوان</string>
+    <string name="add_warranty_hint_title">عنوان را وارد کنید</string>
+    <string name="add_warranty_title_category">دسته‌بندی</string>
+    <string name="add_warranty_hint_category">دسته‌بندی را انتخاب کنید</string>
+    <string name="add_warranty_title_brand">برند دستگاه</string>
+    <string name="add_warranty_hint_brand">برند دستگاه را وارد کنید</string>
+    <string name="add_warranty_title_model">مدل دستگاه</string>
+    <string name="add_warranty_hint_model">مدل دستگاه را وارد کنید</string>
+    <string name="add_warranty_title_serial">شماره سریال</string>
+    <string name="add_warranty_hint_serial">شماره سریال دستگاه را وارد کنید</string>
+    <string name="add_warranty_title_description">توضیحات</string>
+    <string name="add_warranty_hint_description">توضیحات را وارد کنید</string>
+    <string name="add_warranty_title_date_starting">تاریخ شروع</string>
+    <string name="add_warranty_title_date_expiry">تاریخ اتمام</string>
+    <!--
+    dd: Day
+    mm: Month
+    yyyy: Year
+
+    Samples:
+    • en-US: mm/dd/yyyy
+    • en-GB: dd/mm/yyyy
+    • fa-IR: روز/ماه/سال
+    -->
+    <string name="add_warranty_hint_date">روز/ماه/سال</string>
+    <string name="add_warranty_helper_optional">اختیاری</string>
+    <string name="add_warranty_title_date_picker_starting">تاریخ شروع را انتخاب کنید</string>
+    <string name="add_warranty_title_date_picker_expiry">تاریخ اتمام را انتخاب کنید</string>
+    <string name="add_warranty_error_blank_title">عنوان را وارد کنید!</string>
+    <string name="add_warranty_error_date">تاریخ شروع نمی‌تواند بعد از تاریخ اتمام باشد!</string>
+    <string name="add_warranty_checkbox_lifetime">گارانتی مادام‌العمر</string>
+    <!--
+    Placeholders:
+    • %1$s: Month (mm)
+    • %2$s: Day (dd)
+    • %3$d: Year (yyyy)
+
+    Samples:
+    • en-US: 12/25/2022
+    • en-GB: 25/12/2022
+    • fa-IR: 2022/12/25
+    -->
+    <string name="add_warranty_format_date">%3$d/%1$s/%2$s</string>
+    <string name="warranty_details_fab_edit">ویرایش</string>
+    <string name="warranty_details_menu_title_delete">حذف گارانتی</string>
+    <string name="warranty_details_title_date_starting">تاریخ شروع</string>
+    <string name="warranty_details_title_date_expiry">تاریخ اتمام</string>
+    <string name="warranty_details_title_device">اطلاعات دستگاه</string>
+    <string name="warranty_details_title_device_brand">برند</string>
+    <string name="warranty_details_title_device_model">مدل</string>
+    <string name="warranty_details_title_device_serial">شماره سریال</string>
+    <string name="warranty_details_title_description">توضیحات</string>
+    <string name="warranty_details_status_valid">گارانتی معتبر است</string>
+    <string name="warranty_details_status_soon">گارانتی به‌زودی منقضی می‌شود</string>
+    <string name="warranty_details_status_expired">گارانتی منقضی شده</string>
+    <string name="warranty_details_is_lifetime">مادام‌العمر</string>
+    <string name="warranty_details_empty_description">هیچ توضیحی وارد نشده.</string>
+    <string name="warranty_details_delete_dialog_title">گارانتی حذف شود؟</string>
+    <!--Placeholder is for the Warranty Title-->
+    <string name="warranty_details_delete_dialog_message">آیا مطمئنید که می‌خواهید %s را حذف کنید؟</string>
+    <string name="warranty_details_delete_dialog_positive">حذف</string>
+    <string name="warranty_details_delete_dialog_negative">لغو</string>
+    <!--Placeholder is for the Warranty Title-->
+    <string name="warranty_details_delete_success">%s با موفقیت حذف شد.</string>
+    <!--
+    Placeholders:
+    • %1$s: Month (mm)
+    • %2$s: Day (dd)
+    • %3$d: Year (yyyy)
+
+    Samples:
+    • en-US: 12/25/2022
+    • en-GB: 25/12/2022
+    • fa-IR: 2022/12/25
+    -->
+    <string name="warranty_details_format_date">%3$d/%1$s/%2$s</string>
+    <string name="edit_warranty_text_title">ویرایش گارانتی</string>
+    <string name="edit_warranty_menu_title_edit">ویرایش گارانتی</string>
+    <string name="edit_warranty_title_title">عنوان</string>
+    <string name="edit_warranty_hint_title">عنوان را وارد کنید</string>
+    <string name="edit_warranty_title_category">دسته‌بندی</string>
+    <string name="edit_warranty_hint_category">دسته‌بندی را انتخاب کنید</string>
+    <string name="edit_warranty_title_brand">برند دستگاه</string>
+    <string name="edit_warranty_hint_brand">برند دستگاه را وارد کنید</string>
+    <string name="edit_warranty_title_model">مدل دستگاه</string>
+    <string name="edit_warranty_hint_model">مدل دستگاه را وارد کنید</string>
+    <string name="edit_warranty_title_serial">شماره سریال</string>
+    <string name="edit_warranty_hint_serial">شماره سریال دستگاه را وارد کنید</string>
+    <string name="edit_warranty_title_description">توضیحات</string>
+    <string name="edit_warranty_hint_description">توضیحات را وارد کنید</string>
+    <string name="edit_warranty_title_date_starting">تاریخ شروع</string>
+    <string name="edit_warranty_title_date_expiry">تاریخ اتمام</string>
+    <!--
+    dd: Day
+    mm: Month
+    yyyy: Year
+
+    Samples:
+    • en-US: mm/dd/yyyy
+    • en-GB: dd/mm/yyyy
+    • fa-IR: روز/ماه/سال
+    -->
+    <string name="edit_warranty_hint_date">روز/ماه/سال</string>
+    <string name="edit_warranty_helper_optional">اختیاری</string>
+    <string name="edit_warranty_title_date_picker_starting">تاریخ شروع را انتخاب کنید</string>
+    <string name="edit_warranty_title_date_picker_expiry">تاریخ اتمام را انتخاب کنید</string>
+    <string name="edit_warranty_error_blank_title">عنوان را وارد کنید!</string>
+    <string name="edit_warranty_error_date">تاریخ شروع نمی‌تواند بعد از تاریخ اتمام باشد!</string>
+    <string name="edit_warranty_checkbox_lifetime">گارانتی مادام‌العمر</string>
+    <!--
+    Placeholders:
+    • %1$s: Month (mm)
+    • %2$s: Day (dd)
+    • %3$d: Year (yyyy)
+
+    Samples:
+    • en-US: 12/25/2022
+    • en-GB: 25/12/2022
+    • fa-IR: 2022/12/25
+    -->
+    <string name="edit_warranty_format_date">%3$d/%1$s/%2$s</string>
+    <string name="settings_text_title">تنظیمات</string>
+    <string name="settings_title_account">حساب کاربری</string>
+    <string name="settings_title_settings">تنظیمات</string>
+    <string name="settings_btn_account_verify">تایید ایمیل</string>
+    <string name="settings_btn_account_verified">تایید شده</string>
+    <string name="settings_text_account_linked_accounts">حساب‌های متصل</string>
+    <string name="settings_text_account_change_email">تغییر آدرس ایمیل</string>
+    <string name="settings_text_account_change_password">تغییر رمز‌عبور</string>
+    <string name="settings_text_settings_language">زبان</string>
+    <string name="settings_text_settings_language_english_us">انگلیسی (آمریکایی)</string>
+    <string name="settings_text_settings_language_english_gb">انگلیسی (بریتانیایی)</string>
+    <string name="settings_text_settings_language_persian_ir">فارسی</string>
+    <string name="settings_text_settings_theme">تم</string>
+    <string name="settings_text_settings_theme_default">پیش‌فرض سیستم</string>
+    <string name="settings_text_settings_theme_light">روشن</string>
+    <string name="settings_text_settings_theme_dark">تیره</string>
+    <string name="settings_text_settings_donate">حمایت</string>
+    <string name="settings_text_settings_improve_translations">بهبود ترجمه</string>
+    <string name="settings_text_settings_rate_us">امتیاز به برنامه</string>
+    <string name="settings_text_settings_privacy_policy">حریم خصوصی</string>
+    <string name="settings_btn_logout">خروج</string>
+    <string name="settings_dialog_title_language">زبان</string>
+    <string name="settings_dialog_item_language_english_us">انگلیسی (آمریکایی)</string>
+    <string name="settings_dialog_item_language_english_gb">انگلیسی (بریتانیایی)</string>
+    <string name="settings_dialog_item_language_persian_ir">فارسی</string>
+    <string name="settings_dialog_title_theme">تم</string>
+    <string name="settings_dialog_item_theme_default">پیش‌فرض سیستم</string>
+    <string name="settings_dialog_item_theme_light">روشن</string>
+    <string name="settings_dialog_item_theme_dark">تیره</string>
+    <string name="settings_dialog_message_verification_email_sent">ایمیل تأیید با موفقیت به صندوق ایمیلتان ارسال شد.</string>
+    <string name="settings_dialog_btn_positive_verification_email_sent">تایید</string>
+    <string name="settings_error_email_verification_email_not_provided">ایمیلی به حساب متصل نیست.</string>
+    <string name="linked_accounts_text_title">حساب‌های متصل</string>
+    <string name="linked_accounts_title_google">گوگل</string>
+    <string name="linked_accounts_title_twitter">توییتر</string>
+    <string name="linked_accounts_title_facebook">فیسبوک</string>
+    <string name="linked_accounts_status_connect">متصل کردن</string>
+    <string name="linked_accounts_status_disconnect">قطع اتصال</string>
+    <string name="linked_accounts_error_email_exists_with_different_credentials">حسابی با ایمیل وارد شده اما با روش‌های ورود متفاوت از قبل وجود دارد.</string>
+    <string name="linked_accounts_error_email_exists">حسابی با ایمیل وارد شده از قبل وجود دارد.</string>
+    <string name="change_password_text_title">تغییر رمز‌عبور</string>
+    <string name="change_password_title_current_password">رمز‌عبور فعلی</string>
+    <string name="change_password_hint_current_password">رمز‌عبور فعلی خود را وارد کنید</string>
+    <string name="change_password_title_new_password">رمز‌عبور جدید</string>
+    <string name="change_password_hint_new_password">رمز‌عبور جدیدی را وارد کنید</string>
+    <string name="change_password_title_confirm_new_password">تکرار رمز‌عبور جدید</string>
+    <string name="change_password_hint_confirm_new_password">رمز‌عبور جدید را مجددا وارد کنید</string>
+    <string name="change_password_btn_change">تغییر رمز‌عبور</string>
+    <string name="change_password_helper_password_weak">ضعیف</string>
+    <string name="change_password_helper_password_mediocre">متوسط</string>
+    <string name="change_password_helper_password_strong">قوی</string>
+    <string name="change_password_error_blank_current">رمز‌عبور فعلی خود را وارد کنید!</string>
+    <string name="change_password_error_blank_new">رمز‌عبور جدیدی را وارد کنید!</string>
+    <string name="change_password_error_blank_confirm">رمز‌عبور جدید را مجددا وارد کنید!</string>
+    <string name="change_password_error_password_short">رمز‌عبور باید حداقل 6 کاراکتر باشد!</string>
+    <string name="change_password_error_match">رمز‌عبور جدید و تکرار رمز‌عبور جدید وارد شده با هم مطابقت ندارند!</string>
+    <string name="change_password_error_credentials">رمز‌عبور فعلی وارد شده نادرست است.</string>
+    <string name="change_password_dialog_message">رمز‌عبور شما با موفقیت تغییر کرد.</string>
+    <string name="change_password_dialog_positive">تایید</string>
+    <string name="change_email_text_title">تغییر آدرس ایمیل</string>
+    <string name="change_email_title_password">رمز‌عبور</string>
+    <string name="change_email_hint_password">رمز‌عبور خود را وارد کنید</string>
+    <string name="change_email_title_new_email">آدرس ایمیل جدید</string>
+    <string name="change_email_hint_new_email">آدرس ایمیل جدیدی را وارد کنید</string>
+    <string name="change_email_btn_change">تغییر ایمیل</string>
+    <string name="change_email_error_blank_password">رمز‌عبور خود را وارد کنید!</string>
+    <string name="change_email_error_blank_new_email">آدرس ایمیل جدیدی را وارد کنید!</string>
+    <string name="change_email_error_new_email">آدرس ایمیل جدیدی را وارد کنید!</string>
+    <string name="change_email_error_credentials">رمز‌عبور وارد شده نادرست است.</string>
+    <string name="change_email_error_email_same">آدرس ایمیل جدید نمی‌تواند با ایمیل فعلیتان یکسان باشد!</string>
+    <string name="change_email_error_email_exists">حسابی با ایمیل وارد شده از قبل وجود دارد.</string>
+    <string name="change_email_dialog_message">آدرس ایمیل شما با موفقیت تغییر کرد.</string>
+    <string name="change_email_dialog_positive">تایید</string>
+</resources>
