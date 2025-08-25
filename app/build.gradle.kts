@@ -30,8 +30,8 @@ android {
         applicationId = "com.xeniac.warrantyroster_manager"
         minSdk = 23
         targetSdk = 36
-        versionCode = 23 // TODO UPGRADE AFTER EACH RELEASE
-        versionName = "2.1.2" // TODO UPGRADE AFTER EACH RELEASE
+        versionCode = 24
+        versionName = "2.2.0-Alpha1"
 
         testInstrumentationRunner = "com.xeniac.warrantyroster_manager.HiltTestRunner"
 
