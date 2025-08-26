@@ -263,7 +263,7 @@ androidComponents {
             if (buildType == "dev") {
                 productFlavors.let {
                     enable = when {
-                        it.containsAll(listOf("market" to "playStore")) -> false
+                        it.containsAll(listOf("market" to "gitHub")) -> false
                         it.containsAll(listOf("market" to "cafeBazaar")) -> false
                         it.containsAll(listOf("market" to "myket")) -> false
                         else -> true

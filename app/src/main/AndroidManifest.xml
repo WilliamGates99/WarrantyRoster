@@ -61,13 +61,13 @@
                 android:value="true" />
         </service>
 
-        <!--        <service-->
-        <!--            android:name=".feature_firebase_cloud_messaging.services.FirebaseCloudMessagingService"-->
-        <!--            android:exported="false">-->
-        <!--            <intent-filter>-->
-        <!--                <action android:name="com.google.firebase.MESSAGING_EVENT" />-->
-        <!--            </intent-filter>-->
-        <!--        </service>-->
+        <service
+            android:name=".feature_firebase_cloud_messaging.services.FirebaseCloudMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
 
         <meta-data
             android:name="firebase_performance_logcat_enabled"
