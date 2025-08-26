@@ -10,6 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.BaseScreen
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.OnboardingScreen
+import com.xeniac.warrantyroster_manager.feature_onboarding.presentation.OnboardingScreen
 
 @Composable
 fun SetupRootNavGraph(
@@ -21,25 +22,19 @@ fun SetupRootNavGraph(
         startDestination = startDestination
     ) {
         composable<OnboardingScreen> {
-            Text(
-                text = "Onboarding Screen",
-                modifier = Modifier
-                    .fillMaxSize()
-                    .wrapContentSize()
+            OnboardingScreen(
+                onNavigateToBaseScreen = {
+                    rootNavController.navigate(BaseScreen) {
+                        popUpTo(OnboardingScreen) {
+                            inclusive = true
+                        }
+                    }
+                }
             )
-//            OnboardingScreen(
-//                onNavigateToBaseScreen = {
-//                    rootNavController.navigate(BaseScreen) {
-//                        popUpTo(OnboardingScreen) {
-//                            inclusive = true
-//                        }
-//                    }
-//                }
-//            )
         }
 
         composable<BaseScreen> {
-//            HomeScreen()
+//            BaseScreen()
             Text(
                 text = "Base Screen",
                 modifier = Modifier
