@@ -3,8 +3,21 @@ package com.xeniac.warrantyroster_manager.core.di
 import android.app.NotificationManager
 import android.content.Context
 import android.net.ConnectivityManager
+import androidx.datastore.core.DataStore
+import androidx.datastore.core.DataStoreFactory
+import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
+import androidx.datastore.preferences.preferencesDataStoreFile
 import com.xeniac.warrantyroster_manager.BuildConfig
 import com.xeniac.warrantyroster_manager.core.domain.models.AppTheme
+import com.xeniac.warrantyroster_manager.core.domain.models.MiscellaneousPreferences
+import com.xeniac.warrantyroster_manager.core.domain.models.MiscellaneousPreferencesSerializer
+import com.xeniac.warrantyroster_manager.core.domain.models.PermissionsPreferences
+import com.xeniac.warrantyroster_manager.core.domain.models.PermissionsPreferencesSerializer
+import com.xeniac.warrantyroster_manager.core.domain.models.SettingsPreferences
+import com.xeniac.warrantyroster_manager.core.domain.models.SettingsPreferencesSerializer
+import com.xeniac.warrantyroster_manager.core.domain.models.WarrantyRosterPreferences
+import com.xeniac.warrantyroster_manager.core.domain.models.WarrantyRosterPreferencesSerializer
+import com.xeniac.warrantyroster_manager.core.domain.repositories.SettingsDataStoreRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,6 +39,11 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.internal.SynchronizedObject
 import kotlinx.serialization.json.Json
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
@@ -90,67 +108,66 @@ internal object AppModule {
         }
     }
 
-//    @OptIn(InternalCoroutinesApi::class)
-//    @Provides
-//    @Singleton
-//    fun providePermissionDataStore(
-//        @ApplicationContext context: Context
-//    ): DataStore<PermissionsPreferences> = synchronized(lock = SynchronizedObject()) {
-//        DataStoreFactory.create(
-//            serializer = PermissionsPreferencesSerializer,
-//            corruptionHandler = ReplaceFileCorruptionHandler { PermissionsPreferences() },
-//            scope = CoroutineScope(context = Dispatchers.IO + SupervisorJob()),
-//            produceFile = { context.preferencesDataStoreFile(name = "Permissions.pb") }
-//        )
-//    }
+    @OptIn(InternalCoroutinesApi::class)
+    @Provides
+    @Singleton
+    fun providePermissionDataStore(
+        @ApplicationContext context: Context
+    ): DataStore<PermissionsPreferences> = synchronized(lock = SynchronizedObject()) {
+        DataStoreFactory.create(
+            serializer = PermissionsPreferencesSerializer,
+            corruptionHandler = ReplaceFileCorruptionHandler { PermissionsPreferences() },
+            scope = CoroutineScope(context = Dispatchers.IO + SupervisorJob()),
+            produceFile = { context.preferencesDataStoreFile(name = "Permissions.pb") }
+        )
+    }
 
-//    @OptIn(InternalCoroutinesApi::class)
-//    @Provides
-//    @Singleton
-//    fun provideSettingsDataStore(
-//        @ApplicationContext context: Context
-//    ): DataStore<SettingsPreferences> = synchronized(lock = SynchronizedObject()) {
-//        DataStoreFactory.create(
-//            serializer = SettingsPreferencesSerializer,
-//            corruptionHandler = ReplaceFileCorruptionHandler { SettingsPreferences() },
-//            scope = CoroutineScope(context = Dispatchers.IO + SupervisorJob()),
-//            produceFile = { context.preferencesDataStoreFile(name = "Settings.pb") }
-//        )
-//    }
+    @OptIn(InternalCoroutinesApi::class)
+    @Provides
+    @Singleton
+    fun provideSettingsDataStore(
+        @ApplicationContext context: Context
+    ): DataStore<SettingsPreferences> = synchronized(lock = SynchronizedObject()) {
+        DataStoreFactory.create(
+            serializer = SettingsPreferencesSerializer,
+            corruptionHandler = ReplaceFileCorruptionHandler { SettingsPreferences() },
+            scope = CoroutineScope(context = Dispatchers.IO + SupervisorJob()),
+            produceFile = { context.preferencesDataStoreFile(name = "Settings.pb") }
+        )
+    }
 
-//    @OptIn(InternalCoroutinesApi::class)
-//    @Provides
-//    @Singleton
-//    fun provideMiscellaneousDataStore(
-//        @ApplicationContext context: Context
-//    ): DataStore<MiscellaneousPreferences> = synchronized(lock = SynchronizedObject()) {
-//        DataStoreFactory.create(
-//            serializer = MiscellaneousPreferencesSerializer,
-//            corruptionHandler = ReplaceFileCorruptionHandler { MiscellaneousPreferences() },
-//            scope = CoroutineScope(context = Dispatchers.IO + SupervisorJob()),
-//            produceFile = { context.preferencesDataStoreFile(name = "Miscellaneous.pb") }
-//        )
-//    }
+    @OptIn(InternalCoroutinesApi::class)
+    @Provides
+    @Singleton
+    fun provideMiscellaneousDataStore(
+        @ApplicationContext context: Context
+    ): DataStore<MiscellaneousPreferences> = synchronized(lock = SynchronizedObject()) {
+        DataStoreFactory.create(
+            serializer = MiscellaneousPreferencesSerializer,
+            corruptionHandler = ReplaceFileCorruptionHandler { MiscellaneousPreferences() },
+            scope = CoroutineScope(context = Dispatchers.IO + SupervisorJob()),
+            produceFile = { context.preferencesDataStoreFile(name = "Miscellaneous.pb") }
+        )
+    }
 
-//    @OptIn(InternalCoroutinesApi::class)
-//    @Provides
-//    @Singleton
-//    fun provideWarrantyRosterDataStore(
-//        @ApplicationContext context: Context
-//    ): DataStore<WarrantyRosterPreferences> = synchronized(lock = SynchronizedObject()) {
-//        DataStoreFactory.create(
-//            serializer = WarrantyRosterPreferencesSerializer,
-//            corruptionHandler = ReplaceFileCorruptionHandler { WarrantyRosterPreferences() },
-//            scope = CoroutineScope(context = Dispatchers.IO + SupervisorJob()),
-//            produceFile = { context.preferencesDataStoreFile(name = "WarrantyRoster.pb") }
-//        )
-//    }
+    @OptIn(InternalCoroutinesApi::class)
+    @Provides
+    @Singleton
+    fun provideWarrantyRosterDataStore(
+        @ApplicationContext context: Context
+    ): DataStore<WarrantyRosterPreferences> = synchronized(lock = SynchronizedObject()) {
+        DataStoreFactory.create(
+            serializer = WarrantyRosterPreferencesSerializer,
+            corruptionHandler = ReplaceFileCorruptionHandler { WarrantyRosterPreferences() },
+            scope = CoroutineScope(context = Dispatchers.IO + SupervisorJob()),
+            produceFile = { context.preferencesDataStoreFile(name = "WarrantyRoster.pb") }
+        )
+    }
 
     @Provides
     fun provideAppTheme(
-//        settingsDataStoreRepository: SettingsDataStoreRepository
-//    ): AppTheme = settingsDataStoreRepository.getCurrentAppThemeSynchronously()
-    ): AppTheme = AppTheme.DEFAULT
+        settingsDataStoreRepository: SettingsDataStoreRepository
+    ): AppTheme = settingsDataStoreRepository.getCurrentAppThemeSynchronously()
 
     @Provides
     @Singleton
