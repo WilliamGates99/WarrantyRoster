@@ -453,7 +453,7 @@ private val highContrastDarkColorScheme = darkColorScheme(
 @Composable
 fun getContrastAwareColorScheme(
     isDarkTheme: Boolean = isSystemInDarkTheme(),
-    isDynamicColorEnabled: Boolean = true // Dynamic color is available on Android 12+
+    isDynamicColorEnabled: Boolean = false // Dynamic color is available on Android 12+
 ): ColorScheme {
     val context = LocalContext.current
 
