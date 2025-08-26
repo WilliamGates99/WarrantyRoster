@@ -1,20 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <!--Dynamic Colors-->
-    <color name="background">#101010</color>
-    <color name="surface">#191919</color>
-    <color name="statusBar">#191919</color>
-    <color name="statusBarV21">#191919</color>
-    <color name="white">#000000</color>
-    <color name="black">#FFFFFF</color>
-    <color name="navyBlue">#DEF4FD</color>
-    <color name="skyBlue">#01040F</color>
-    <color name="dialogButton">#0095E3</color>
-    <color name="grayLight">#1F1F1F</color>
-    <color name="grayMedium">#2E2E2E</color>
-    <color name="grayDark">#808080</color>
-    <color name="navyBlue10">#1ADEF4FD</color>
-    <color name="navyBlue20">#33DEF4FD</color>
-
+    <color name="primary">#FF1C53F4</color>
 </resources>
+
+
+<!--<resources>-->
+
+<!--    &lt;!&ndash;Dynamic Colors&ndash;&gt;-->
+<!--    <color name="background">#101010</color>-->
+<!--    <color name="surface">#191919</color>-->
+<!--    <color name="statusBar">#191919</color>-->
+<!--    <color name="statusBarV21">#191919</color>-->
+<!--    <color name="white">#000000</color>-->
+<!--    <color name="black">#FFFFFF</color>-->
+<!--    <color name="navyBlue">#DEF4FD</color>-->
+<!--    <color name="skyBlue">#01040F</color>-->
+<!--    <color name="dialogButton">#0095E3</color>-->
+<!--    <color name="grayLight">#1F1F1F</color>-->
+<!--    <color name="grayMedium">#2E2E2E</color>-->
+<!--    <color name="grayDark">#808080</color>-->
+<!--    <color name="navyBlue10">#1ADEF4FD</color>-->
+<!--    <color name="navyBlue20">#33DEF4FD</color>-->
+
+<!--</resources>-->

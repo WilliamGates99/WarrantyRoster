@@ -3,14 +3,45 @@
     <string name="app_name">وارانتی راستر</string>
 
 
+    <string name="notification_fcm_channel_group_name">سایر</string>
+    <string name="notification_fcm_channel_name_miscellaneous">متفرقه</string>
+
+
+    <string name="permissions_error_notification_declined">این برنامه برای دریافت اعلانات، نیاز به مجوز اعلانات دارد.</string>
+    <string name="permissions_error_notification_declined_permanently">به نظر می‌رسد مجوز اعلانات را برای همیشه رد کرده‌اید. می‌توانید برای اعطای آن به تنظیمات برنامه بروید.</string>
+    <string name="permissions_error_btn_open_settings">تنظیمات برنامه</string>
+    <string name="permissions_error_btn_confirm">تایید</string>
+
+
     <string name="error_something_went_wrong">خطایی رخ داده. لطفا بعدا دوباره امتحان کنید.</string>
     <string name="error_network_connection_unavailable">اتصال به اینترنت امکان‌پذیر نیست.</string>
+    <string name="error_network_too_many_requests">در مدت زمان کوتاهی درخواست‌های زیادی ارسال کرده‌اید. لطفاً قبل از تلاش مجدد صبر کنید.</string>
     <string name="error_network_failure">مشکلی برای شبکه رخ داده است. لطفا بعدا دوباره امتحان کنید.</string>
+    <string name="error_network_serialization">مشکلی در هنگام پردازش داده‌ها پیش آمده.</string>
+    <string name="error_network_json_conversion">مشکلی در هنگام پردازش داده‌ها پیش آمده.</string>
+    <string name="error_network_ssl_handshake">برقراری ارتباط امن ممکن نیست. لطفاً مطمئن شوید که تاریخ و ساعت دستگاهتان به درستی تنظیم شده و دوباره امتحان کنید.</string>
+    <string name="error_network_cert_path_validator">به دلیل مشکل سرور، اتصال امن برقرار نشد.</string>
     <string name="error_firebase_403">این سرویس در منطقه شما در دسترس نیست. لطفاً از نرم‌افزار تغییر آدرس IP استفاده کنید.</string>
     <string name="error_firebase_device_blocked">ما تمام درخواست‌های این دستگاه را به دلیل فعالیت غیر‌عادی مسدود کرده‌ایم. لطفا بعدا دوباره تلاش کنید.</string>
     <string name="error_intent_app_not_found">هیچ برنامه‌ای برای انجام این دستور در گوشی وجود ندارد.</string>
     <string name="error_btn_retry">تلاش مجدد</string>
     <string name="error_btn_confirm">تایید</string>
+
+
+    <string name="core_content_description_back">بازگشت</string>
+    <string name="core_textfield_content_description_password_toggle_show">نمایش کلمه عبور</string>
+    <string name="core_textfield_content_description_password_toggle_hide">پنهان کردن کلمه عبور</string>
+    <string name="core_locale_title_default">پیش‌فرض سیستم</string>
+    <string name="core_locale_title_english_us">انگلیسی (آمریکایی)</string>
+    <string name="core_locale_title_english_gb">انگلیسی (بریتانیایی)</string>
+    <string name="core_locale_title_farsi_ir">فارسی</string>
+    <string name="core_locale_title_full_default">پیش‌فرض سیستم</string>
+    <string name="core_locale_title_full_english_us">انگلیسی (آمریکایی)</string>
+    <string name="core_locale_title_full_english_gb">انگلیسی (بریتانیایی)</string>
+    <string name="core_locale_title_full_farsi_ir">فارسی</string>
+    <string name="core_theme_title_default">پیش‌فرض سیستم</string>
+    <string name="core_theme_title_light">روشن</string>
+    <string name="core_theme_title_dark">تیره</string>
 
 
     <string name="onboarding_dialog_title_language">زبان</string>

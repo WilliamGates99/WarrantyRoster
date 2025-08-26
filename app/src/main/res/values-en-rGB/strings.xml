@@ -3,9 +3,24 @@
     <string name="app_name">Warranty Roster</string>
 
 
+    <string name="notification_fcm_channel_group_name">Other</string>
+    <string name="notification_fcm_channel_name_miscellaneous">Miscellaneous</string>
+
+
+    <string name="permissions_error_notification_declined">This app requires notifications permission to receive notifications.</string>
+    <string name="permissions_error_notification_declined_permanently">It looks like you\'ve permanently denied notifications permission. You can go to the app settings to grant it.</string>
+    <string name="permissions_error_btn_open_settings">App Settings</string>
+    <string name="permissions_error_btn_confirm">Confirm</string>
+
+
     <string name="error_something_went_wrong">Something went wrong. Please try again later.</string>
     <string name="error_network_connection_unavailable">Unable to connect to the internet.</string>
+    <string name="error_network_too_many_requests">You\'ve sent too many requests in a short time. Please wait before trying again.</string>
     <string name="error_network_failure">You\'re having network issues. Please try again later.</string>
+    <string name="error_network_serialization">Something went wrong while trying to process the data.</string>
+    <string name="error_network_json_conversion">Something went wrong while trying to process the data.</string>
+    <string name="error_network_ssl_handshake">Unable to establish a secure connection. Please ensure your device\'s date and time are set correctly and try again.</string>
+    <string name="error_network_cert_path_validator">Unable to establish a secure connection due to a server issue.</string>
     <string name="error_firebase_403">This service is not available in your region. Please consider changing your IP address by using a VPN.</string>
     <string name="error_firebase_device_blocked">We have blocked all requests from this device due to unusual activity. Please try again later.</string>
     <string name="error_intent_app_not_found">There is no app on the phone to handle this action.</string>
