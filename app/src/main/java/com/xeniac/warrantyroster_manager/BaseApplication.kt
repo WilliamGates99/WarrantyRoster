@@ -20,6 +20,11 @@ import coil3.request.CachePolicy
 import coil3.request.crossfade
 import coil3.svg.SvgDecoder
 import coil3.util.DebugLogger
+import com.google.firebase.Firebase
+import com.google.firebase.FirebaseApp
+import com.google.firebase.appcheck.appCheck
+import com.google.firebase.appcheck.debug.DebugAppCheckProviderFactory
+import com.google.firebase.appcheck.playintegrity.PlayIntegrityAppCheckProviderFactory
 import com.xeniac.warrantyroster_manager.core.domain.models.AppTheme
 import com.xeniac.warrantyroster_manager.core.domain.repositories.ConnectivityObserver
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.BlueNotificationLight
@@ -68,18 +73,13 @@ class BaseApplication : Application(), SingletonImageLoader.Factory {
     }
 
     private fun initFirebaseAppCheck() {
-//        FirebaseApp.initializeApp(this)
-//        val firebaseAppCheck = FirebaseAppCheck.getInstance()
-//
-//        if (BuildConfig.DEBUG) {
-//            firebaseAppCheck.installAppCheckProviderFactory(
-//                DebugAppCheckProviderFactory.getInstance()
-//            )
-//        } else {
-//            firebaseAppCheck.installAppCheckProviderFactory(
-//                PlayIntegrityAppCheckProviderFactory.getInstance()
-//            )
-//        }
+        FirebaseApp.initializeApp(this)
+        Firebase.appCheck.installAppCheckProviderFactory(
+            /* factory = */ when {
+                BuildConfig.DEBUG -> DebugAppCheckProviderFactory.getInstance()
+                else -> PlayIntegrityAppCheckProviderFactory.getInstance()
+            }
+        )
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
