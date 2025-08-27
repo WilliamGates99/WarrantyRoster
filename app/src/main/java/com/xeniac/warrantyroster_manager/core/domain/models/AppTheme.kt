@@ -6,7 +6,7 @@ import com.xeniac.warrantyroster_manager.R
 
 enum class AppTheme(
     val index: Int,
-    @StringRes val titleId: Int,
+    @param:StringRes val titleId: Int,
     val setAppTheme: () -> Unit
 ) {
     DEFAULT(

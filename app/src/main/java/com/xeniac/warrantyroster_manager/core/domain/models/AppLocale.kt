@@ -10,8 +10,8 @@ enum class AppLocale(
     val localeString: String?,
     val layoutDirectionCompose: LayoutDirection,
     val layoutDirection: Int,
-    @StringRes val titleId: Int,
-    @StringRes val fullTitleId: Int
+    @param:StringRes val titleId: Int,
+    @param:StringRes val fullTitleId: Int
 ) {
     DEFAULT(
         index = 0,

@@ -17,18 +17,18 @@ sealed class UiText : Parcelable {
     data class DynamicString(val value: String) : UiText()
 
     class StringResource(
-        @StringRes val resId: Int,
+        @param:StringRes val resId: Int,
         vararg val args: @RawValue Any
     ) : UiText()
 
     class PluralStringResource(
-        @PluralsRes val resId: Int,
+        @param:PluralsRes val resId: Int,
         val quantity: Int,
         vararg val args: @RawValue Any
     ) : UiText()
 
     class StringArrayResource(
-        @ArrayRes val resId: Int,
+        @param:ArrayRes val resId: Int,
         val index: Int
     ) : UiText()
 
