@@ -54,6 +54,8 @@ kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose-bom" }
 compose-ui = { group = "androidx.compose.ui", name = "ui" }
 compose-material3 = { group = "androidx.compose.material3", name = "material3" } # Material Design 3
+material3-window-size-classes = { group = "androidx.compose.material3", name = "material3-window-size-class" } # Material 3 Window Size Class
+material3-adaptive = { group = "androidx.compose.material3.adaptive", name = "adaptive" }
 compose-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata" } # Compose Integration with LiveData
 compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" } # Android Studio Compose Preview Support
 compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" } # Android Studio Compose Preview Support
@@ -142,7 +144,7 @@ compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-mani
 
 [bundles]
 essentials = ["core-ktx", "appcompat", "core-splashscreen", "kotlinx-serialization-json", "kotlinx-datetime"]
-compose = ["compose-ui", "compose-material3", "compose-runtime-livedata", "compose-ui-tooling-preview", "compose-ui-tooling", "activity-compose", "constraintlayout-compose", "navigation-compose", "hilt-navigation-compose"]
+compose = ["compose-ui", "compose-material3", "material3-window-size-classes", "material3-adaptive", "compose-runtime-livedata", "compose-ui-tooling-preview", "compose-ui-tooling", "activity-compose", "constraintlayout-compose", "navigation-compose", "hilt-navigation-compose"]
 architectural-components = ["lifecycle-viewmodel-ktx", "lifecycle-viewmodel-compose", "lifecycle-runtime-ktx", "lifecycle-runtime-compose"]
 coroutines = ["kotlinx-coroutines-android", "kotlinx-coroutines-play-services"]
 ktor = ["ktor-client-core", "ktor-client-okhttp", "ktor-client-content-negotiation", "ktor-serialization-kotlinx-json", "ktor-client-logging"]

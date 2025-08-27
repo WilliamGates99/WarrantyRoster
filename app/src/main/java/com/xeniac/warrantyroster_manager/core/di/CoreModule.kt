@@ -5,6 +5,7 @@ import com.xeniac.warrantyroster_manager.core.domain.repositories.WarrantyRoster
 import com.xeniac.warrantyroster_manager.core.domain.use_cases.GetCurrentAppLocaleUseCase
 import com.xeniac.warrantyroster_manager.core.domain.use_cases.GetIsUserLoggedInUseCase
 import com.xeniac.warrantyroster_manager.core.domain.use_cases.MainUseCases
+import com.xeniac.warrantyroster_manager.core.domain.use_cases.StoreCurrentAppLocaleUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,6 +21,12 @@ internal object CoreModule {
     fun provideGetCurrentAppLocaleUseCase(
         settingsDataStoreRepository: SettingsDataStoreRepository
     ): GetCurrentAppLocaleUseCase = GetCurrentAppLocaleUseCase(settingsDataStoreRepository)
+
+    @Provides
+    @ViewModelScoped
+    fun provideStoreCurrentAppLocaleUseCase(
+        settingsDataStoreRepository: SettingsDataStoreRepository
+    ): StoreCurrentAppLocaleUseCase = StoreCurrentAppLocaleUseCase(settingsDataStoreRepository)
 
     @Provides
     @ViewModelScoped
