@@ -1,6 +1,7 @@
 package com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.nav_graphs
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.unit.Dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -14,7 +15,8 @@ import com.xeniac.warrantyroster_manager.feature_auth.register.presentation.Regi
 @Composable
 fun SetupAuthNavGraph(
     rootNavController: NavHostController,
-    authNavController: NavHostController
+    authNavController: NavHostController,
+    bottomPadding: Dp
 ) {
     NavHost(
         navController = authNavController,
