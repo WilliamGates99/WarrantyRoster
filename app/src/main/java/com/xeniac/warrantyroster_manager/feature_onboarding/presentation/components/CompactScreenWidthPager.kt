@@ -43,7 +43,7 @@ import kotlinx.coroutines.launch
 fun CompactScreenWidthPager(
     pagerState: PagerState,
     modifier: Modifier = Modifier,
-    onNavigateToAuthScreens: () -> Unit
+    onNavigateToAuthScreen: () -> Unit
 ) {
     Column(
         modifier = modifier.fillMaxSize()
@@ -69,7 +69,7 @@ fun CompactScreenWidthPager(
                 horizontal = 24.dp,
                 vertical = 12.dp
             ),
-            onNavigateToAuthScreens = onNavigateToAuthScreens
+            onNavigateToAuthScreen = onNavigateToAuthScreen
         )
     }
 }
@@ -84,7 +84,7 @@ private fun PagerButtons(
         horizontal = 24.dp,
         vertical = 12.dp
     ),
-    onNavigateToAuthScreens: () -> Unit
+    onNavigateToAuthScreen: () -> Unit
 ) {
     val scope = rememberCoroutineScope()
 
@@ -101,7 +101,7 @@ private fun PagerButtons(
                 .padding(contentPadding)
         ) {
             when {
-                isLastPage -> StartButton(onClick = onNavigateToAuthScreens)
+                isLastPage -> StartButton(onClick = onNavigateToAuthScreen)
                 else -> {
                     when (val currentPage = pagerState.currentPage) {
                         0 -> SkipButton(

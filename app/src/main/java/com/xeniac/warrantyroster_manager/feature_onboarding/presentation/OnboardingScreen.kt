@@ -19,6 +19,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.window.core.layout.WindowWidthSizeClass
 import com.xeniac.warrantyroster_manager.core.domain.models.AppLocale
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.LocaleBottomSheet
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.SwipeableSnackbar
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.showShortSnackbar
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.Blue
@@ -27,7 +28,6 @@ import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiEvent
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.findActivity
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.restartActivity
 import com.xeniac.warrantyroster_manager.feature_onboarding.presentation.components.CompactScreenWidthPager
-import com.xeniac.warrantyroster_manager.feature_onboarding.presentation.components.LocaleBottomSheet
 import com.xeniac.warrantyroster_manager.feature_onboarding.presentation.components.MediumScreenWidthPager
 import com.xeniac.warrantyroster_manager.feature_onboarding.presentation.components.OnboardingTopBar
 import kotlinx.coroutines.launch
@@ -35,7 +35,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OnboardingScreen(
-    onNavigateToAuthScreens: () -> Unit,
+    onNavigateToAuthScreen: () -> Unit,
     viewModel: OnboardingViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
@@ -84,13 +84,13 @@ fun OnboardingScreen(
         when (windowSizeClass.windowWidthSizeClass) {
             WindowWidthSizeClass.COMPACT -> CompactScreenWidthPager(
                 pagerState = pagerState,
-                onNavigateToAuthScreens = onNavigateToAuthScreens,
+                onNavigateToAuthScreen = onNavigateToAuthScreen,
                 modifier = Modifier.padding(innerPadding)
             )
             else -> MediumScreenWidthPager(
                 pagerState = pagerState,
                 innerPadding = innerPadding,
-                onNavigateToAuthScreens = onNavigateToAuthScreens
+                onNavigateToAuthScreen = onNavigateToAuthScreen
             )
         }
     }
@@ -98,6 +98,9 @@ fun OnboardingScreen(
     LocaleBottomSheet(
         isVisible = state.isLocaleBottomSheetVisible,
         currentAppLocale = state.currentAppLocale ?: AppLocale.DEFAULT,
-        onAction = viewModel::onAction
+        onDismiss = { viewModel.onAction(OnboardingAction.DismissLocaleBottomSheet) },
+        onLocaleItemClick = { newAppLocale ->
+            viewModel.onAction(OnboardingAction.SetCurrentAppLocale(newAppLocale = newAppLocale))
+        }
     )
 }

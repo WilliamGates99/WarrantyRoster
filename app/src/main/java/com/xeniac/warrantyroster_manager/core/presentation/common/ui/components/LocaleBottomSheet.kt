@@ -1,4 +1,4 @@
-package com.xeniac.warrantyroster_manager.feature_onboarding.presentation.components
+package com.xeniac.warrantyroster_manager.core.presentation.common.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -31,7 +31,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.SecureFlagPolicy
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.core.domain.models.AppLocale
-import com.xeniac.warrantyroster_manager.feature_onboarding.presentation.OnboardingAction
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -44,7 +43,7 @@ fun LocaleBottomSheet(
         securePolicy = SecureFlagPolicy.Inherit
     ),
     headline: String = stringResource(
-        id = R.string.onboarding_bottom_sheet_title_locale
+        id = R.string.core_locale_bottom_sheet_title
     ).uppercase(),
     headlineStyle: TextStyle = LocalTextStyle.current.copy(
         fontSize = 24.sp,
@@ -60,7 +59,8 @@ fun LocaleBottomSheet(
         textAlign = TextAlign.Start,
         color = MaterialTheme.colorScheme.onSurface
     ),
-    onAction: (action: OnboardingAction) -> Unit
+    onDismiss: () -> Unit,
+    onLocaleItemClick: (newAppLocale: AppLocale) -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
 
@@ -68,7 +68,7 @@ fun LocaleBottomSheet(
         ModalBottomSheet(
             sheetState = sheetState,
             properties = sheetProperties,
-            onDismissRequest = { onAction(OnboardingAction.DismissLocaleBottomSheet) },
+            onDismissRequest = onDismiss,
             modifier = modifier
         ) {
             Column(
@@ -105,12 +105,8 @@ fun LocaleBottomSheet(
                                     selected = isSelected,
                                     role = Role.RadioButton,
                                     onClick = {
-                                        onAction(OnboardingAction.DismissLocaleBottomSheet)
-                                        onAction(
-                                            OnboardingAction.SetCurrentAppLocale(
-                                                newAppLocale = localeItem
-                                            )
-                                        )
+                                        onDismiss()
+                                        onLocaleItemClick(localeItem)
                                     }
                                 )
                                 .padding(

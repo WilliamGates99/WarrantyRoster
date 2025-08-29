@@ -30,6 +30,7 @@
     <string name="core_content_description_back">Return</string>
     <string name="core_textfield_content_description_password_toggle_show">Show Password</string>
     <string name="core_textfield_content_description_password_toggle_hide">Hide Password</string>
+    <string name="core_locale_bottom_sheet_title">Language</string>
     <string name="core_locale_title_default">System Default</string>
     <string name="core_locale_title_english_us">English (US)</string>
     <string name="core_locale_title_english_gb">English (UK)</string>
@@ -43,7 +44,6 @@
     <string name="core_theme_title_dark">Dark</string>
 
 
-    <string name="onboarding_bottom_sheet_title_locale">Language</string>
     <string name="onboarding_btn_skip">Skip</string>
     <string name="onboarding_btn_back">Back</string>
     <string name="onboarding_btn_next">Next</string>
@@ -52,12 +52,6 @@
     <string name="onboarding_2nd_description">Keep track if a warranty is about to expire.</string>
     <string name="onboarding_3rd_description">Save money by using warranties before their expiry date.</string>
     <string name="onboarding_4th_description">All data are automatically backed up to the cloud.</string>
-
-
-    <string name="auth_dialog_title_language">Language</string>
-    <string name="auth_dialog_item_language_english_us">English (United States)</string>
-    <string name="auth_dialog_item_language_english_gb">English (United Kingdom)</string>
-    <string name="auth_dialog_item_language_persian_ir">Persian</string>
 
 
     <string name="login_text_title">Login</string>

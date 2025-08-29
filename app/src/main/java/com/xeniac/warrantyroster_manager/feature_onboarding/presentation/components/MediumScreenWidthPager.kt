@@ -38,7 +38,7 @@ fun MediumScreenWidthPager(
     pagerState: PagerState,
     innerPadding: PaddingValues,
     modifier: Modifier = Modifier,
-    onNavigateToAuthScreens: () -> Unit
+    onNavigateToAuthScreen: () -> Unit
 ) {
     HorizontalPager(
         state = pagerState,
@@ -52,7 +52,7 @@ fun MediumScreenWidthPager(
             PagerItem(
                 pagerItem = pagerItem,
                 pagerState = pagerState,
-                onNavigateToAuthScreens = onNavigateToAuthScreens,
+                onNavigateToAuthScreen = onNavigateToAuthScreen,
                 modifier = Modifier.padding(innerPadding)
             )
         }
@@ -76,7 +76,7 @@ private fun PagerItem(
         textAlign = TextAlign.Center,
         color = SkyBlue
     ),
-    onNavigateToAuthScreens: () -> Unit
+    onNavigateToAuthScreen: () -> Unit
 ) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(space = 24.dp),
@@ -114,7 +114,7 @@ private fun PagerItem(
 
             PagerButtons(
                 pagerState = pagerState,
-                onNavigateToAuthScreens = onNavigateToAuthScreens
+                onNavigateToAuthScreen = onNavigateToAuthScreen
             )
         }
     }
@@ -124,7 +124,7 @@ private fun PagerItem(
 private fun PagerButtons(
     pagerState: PagerState,
     modifier: Modifier = Modifier,
-    onNavigateToAuthScreens: () -> Unit
+    onNavigateToAuthScreen: () -> Unit
 ) {
     val scope = rememberCoroutineScope()
 
@@ -136,7 +136,7 @@ private fun PagerButtons(
     ) {
         when (val currentPage = pagerState.currentPage) {
             pagerState.pageCount - 1 -> { // Last Page
-                StartButton(onClick = onNavigateToAuthScreens)
+                StartButton(onClick = onNavigateToAuthScreen)
             }
             0 -> { // First Page
                 SkipButton(
