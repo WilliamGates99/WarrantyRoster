@@ -49,10 +49,10 @@
     <string name="onboarding_btn_back">قبلی</string>
     <string name="onboarding_btn_next">بعدی</string>
     <string name="onboarding_btn_start">شروع کنیم</string>
-    <string name="onboarding_1st_title">دیگر تاریخ گارانتی محصولات‌تون را فراموش نخواهید کرد.</string>
-    <string name="onboarding_2nd_title">به راحتی تاریخ اتمام گارانتی رو پیگیری کنید.</string>
-    <string name="onboarding_3rd_title">با استفاده از گارانتی قبل از رسیدن به تاریخ انقضا، تو هزینه‌هاتون صرفه‌جویی کنید.</string>
-    <string name="onboarding_4th_title">تمامی داده‌ها به طور خودکار تو فضای ابری نگهداری و پشتیبان‌گیری می‌شوند.</string>
+    <string name="onboarding_1st_description">دیگر تاریخ گارانتی محصولات‌تون را فراموش نخواهید کرد.</string>
+    <string name="onboarding_2nd_description">به راحتی تاریخ اتمام گارانتی رو پیگیری کنید.</string>
+    <string name="onboarding_3rd_description">با استفاده از گارانتی قبل از رسیدن به تاریخ انقضا، تو هزینه‌هاتون صرفه‌جویی کنید.</string>
+    <string name="onboarding_4th_description">تمامی داده‌ها به طور خودکار تو فضای ابری نگهداری و پشتیبان‌گیری می‌شوند.</string>
 
 
     <string name="auth_dialog_title_language">زبان</string>
