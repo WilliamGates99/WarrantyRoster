@@ -1,9 +1,18 @@
 package com.xeniac.warrantyroster_manager.feature_onboarding.presentation.components
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -15,6 +24,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -27,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.SkyBlue
 import com.xeniac.warrantyroster_manager.feature_onboarding.presentation.states.OnboardingPagerItem
+import kotlinx.coroutines.launch
 
 @Composable
 fun CompactScreenWidthPager(
@@ -45,15 +56,80 @@ fun CompactScreenWidthPager(
                 .fillMaxWidth()
                 .weight(1f)
         ) { scrollPosition ->
-            OnboardingPagerItem.entries.getOrNull(index = scrollPosition)?.let { pagerItem ->
+            OnboardingPagerItem.entries.getOrNull(
+                index = scrollPosition
+            )?.let { pagerItem ->
                 PagerItem(pagerItem = pagerItem)
             }
         }
 
         PagerButtons(
             pagerState = pagerState,
+            contentPadding = PaddingValues(
+                horizontal = 24.dp,
+                vertical = 12.dp
+            ),
             onNavigateToAuthScreens = onNavigateToAuthScreens
         )
+    }
+}
+
+@Composable
+private fun PagerButtons(
+    pagerState: PagerState,
+    modifier: Modifier = Modifier,
+    enterTransition: EnterTransition = fadeIn() + scaleIn(),
+    exitTransition: ExitTransition = scaleOut() + fadeOut(),
+    contentPadding: PaddingValues = PaddingValues(
+        horizontal = 24.dp,
+        vertical = 12.dp
+    ),
+    onNavigateToAuthScreens: () -> Unit
+) {
+    val scope = rememberCoroutineScope()
+
+    AnimatedContent(
+        targetState = pagerState.currentPage == pagerState.pageCount - 1,
+        transitionSpec = { (enterTransition).togetherWith(exit = exitTransition) },
+        modifier = modifier.fillMaxWidth()
+    ) { isLastPage ->
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(contentPadding)
+        ) {
+            when {
+                isLastPage -> StartButton(onClick = onNavigateToAuthScreens)
+                else -> {
+                    when (val currentPage = pagerState.currentPage) {
+                        0 -> SkipButton(
+                            onClick = {
+                                scope.launch {
+                                    pagerState.animateScrollToPage(page = pagerState.pageCount - 1)
+                                }
+                            }
+                        )
+                        else -> BackButton(
+                            onClick = {
+                                scope.launch {
+                                    pagerState.animateScrollToPage(page = currentPage - 1)
+                                }
+                            }
+                        )
+                    }
+
+                    NextButton(
+                        onClick = {
+                            scope.launch {
+                                pagerState.animateScrollToPage(page = pagerState.currentPage + 1)
+                            }
+                        }
+                    )
+                }
+            }
+        }
     }
 }
 

@@ -53,8 +53,8 @@ fun OnboardingTopBar(
         modifier = modifier
             .windowInsetsPadding(insets = TopAppBarDefaults.windowInsets)
             .fillMaxWidth()
-            .padding(contentPadding)
             .displayCutoutPadding()
+            .padding(contentPadding)
     ) {
         Box(modifier = Modifier.size(32.dp))
 

@@ -4,12 +4,10 @@ import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -17,7 +15,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.window.core.layout.WindowWidthSizeClass
@@ -31,6 +28,7 @@ import com.xeniac.warrantyroster_manager.core.presentation.common.utils.findActi
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.restartActivity
 import com.xeniac.warrantyroster_manager.feature_onboarding.presentation.components.CompactScreenWidthPager
 import com.xeniac.warrantyroster_manager.feature_onboarding.presentation.components.LocaleBottomSheet
+import com.xeniac.warrantyroster_manager.feature_onboarding.presentation.components.MediumScreenWidthPager
 import com.xeniac.warrantyroster_manager.feature_onboarding.presentation.components.OnboardingTopBar
 import kotlinx.coroutines.launch
 
@@ -42,7 +40,6 @@ fun OnboardingScreen(
 ) {
     val context = LocalContext.current
     val activity = LocalActivity.current ?: context.findActivity()
-    val layoutDirection = LocalLayoutDirection.current
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -90,14 +87,11 @@ fun OnboardingScreen(
                 onNavigateToAuthScreens = onNavigateToAuthScreens,
                 modifier = Modifier.padding(innerPadding)
             )
-            else -> {
-                Text(
-                    text = "Onboarding Screen - Landscape",
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .wrapContentSize()
-                )
-            }
+            else -> MediumScreenWidthPager(
+                pagerState = pagerState,
+                innerPadding = innerPadding,
+                onNavigateToAuthScreens = onNavigateToAuthScreens
+            )
         }
     }
 
