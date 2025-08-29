@@ -96,7 +96,7 @@ firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashly
 firebase-perf = { group = "com.google.firebase", name = "firebase-perf" } # Performance Monitor
 firebase-appcheck-playintegrity = { group = "com.google.firebase", name = "firebase-appcheck-playintegrity" } # App Check
 firebase-appcheck-debug = { group = "com.google.firebase", name = "firebase-appcheck-debug" } # App Check - Debug
-# TODO ADD FIREBASE AUTH
+firebase-auth = { group = "com.google.firebase", name = "firebase-auth" } # Authentication
 
 # In-App Browser
 browser = { module = "androidx.browser:browser", version.ref = "inAppBrowser" }
@@ -148,7 +148,7 @@ compose = ["compose-ui", "compose-material3", "material3-window-size-classes", "
 architectural-components = ["lifecycle-viewmodel-ktx", "lifecycle-viewmodel-compose", "lifecycle-runtime-ktx", "lifecycle-runtime-compose"]
 coroutines = ["kotlinx-coroutines-android", "kotlinx-coroutines-play-services"]
 ktor = ["ktor-client-core", "ktor-client-okhttp", "ktor-client-content-negotiation", "ktor-serialization-kotlinx-json", "ktor-client-logging"]
-firebase = ["firebase-analytics", "firebase-messaging", "firebase-crashlytics", "firebase-perf", "firebase-appcheck-playintegrity", "firebase-appcheck-debug"]
+firebase = ["firebase-analytics", "firebase-messaging", "firebase-crashlytics", "firebase-perf", "firebase-appcheck-playintegrity", "firebase-appcheck-debug", "firebase-auth"]
 coil = ["coil-compose", "coil-svg", "coil-gif", "coil-network-ktor", "coil-network-cache-control"]
 google-play-inapp-apis = ["play-review-ktx", "play-app-update-ktx"]
 

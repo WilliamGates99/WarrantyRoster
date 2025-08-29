@@ -31,6 +31,7 @@
     <string name="core_content_description_back">بازگشت</string>
     <string name="core_textfield_content_description_password_toggle_show">نمایش کلمه عبور</string>
     <string name="core_textfield_content_description_password_toggle_hide">پنهان کردن کلمه عبور</string>
+    <string name="core_locale_bottom_sheet_title">زبان</string>
     <string name="core_locale_title_default">پیش‌فرض سیستم</string>
     <string name="core_locale_title_english_us">انگلیسی (آمریکایی)</string>
     <string name="core_locale_title_english_gb">انگلیسی (بریتانیایی)</string>
@@ -44,7 +45,6 @@
     <string name="core_theme_title_dark">تیره</string>
 
 
-    <string name="onboarding_bottom_sheet_title_locale">زبان</string>
     <string name="onboarding_btn_skip">رد کردن</string>
     <string name="onboarding_btn_back">قبلی</string>
     <string name="onboarding_btn_next">بعدی</string>
@@ -53,12 +53,6 @@
     <string name="onboarding_2nd_description">به راحتی تاریخ اتمام گارانتی رو پیگیری کنید.</string>
     <string name="onboarding_3rd_description">با استفاده از گارانتی قبل از رسیدن به تاریخ انقضا، تو هزینه‌هاتون صرفه‌جویی کنید.</string>
     <string name="onboarding_4th_description">تمامی داده‌ها به طور خودکار تو فضای ابری نگهداری و پشتیبان‌گیری می‌شوند.</string>
-
-
-    <string name="auth_dialog_title_language">زبان</string>
-    <string name="auth_dialog_item_language_english_us">انگلیسی (آمریکایی)</string>
-    <string name="auth_dialog_item_language_english_gb">انگلیسی (بریتانیایی)</string>
-    <string name="auth_dialog_item_language_persian_ir">فارسی</string>
 
 
     <string name="login_text_title">ورود</string>

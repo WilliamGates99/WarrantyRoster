@@ -6,4 +6,7 @@ import kotlinx.serialization.Serializable
 data object OnboardingScreen
 
 @Serializable
+data object AuthScreen
+
+@Serializable
 data object BaseScreen

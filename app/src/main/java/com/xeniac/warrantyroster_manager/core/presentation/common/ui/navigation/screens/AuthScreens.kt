@@ -3,7 +3,10 @@ package com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object AuthNavGraph
+data object LoginScreen
 
 @Serializable
-data object LoginScreen
+data object RegisterScreen
+
+@Serializable
+data object ForgotPwScreen

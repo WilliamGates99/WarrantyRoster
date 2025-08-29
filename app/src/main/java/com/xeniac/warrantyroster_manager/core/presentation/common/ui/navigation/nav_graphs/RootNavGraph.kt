@@ -8,10 +8,10 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.authNavGraph
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.AuthNavGraph
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.AuthScreen
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.BaseScreen
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.OnboardingScreen
+import com.xeniac.warrantyroster_manager.feature_auth.common.presentation.AuthScreen
 import com.xeniac.warrantyroster_manager.feature_onboarding.presentation.OnboardingScreen
 
 @Composable
@@ -25,8 +25,8 @@ fun SetupRootNavGraph(
     ) {
         composable<OnboardingScreen> {
             OnboardingScreen(
-                onNavigateToAuthScreens = {
-                    rootNavController.navigate(AuthNavGraph) {
+                onNavigateToAuthScreen = {
+                    rootNavController.navigate(AuthScreen) {
                         popUpTo(OnboardingScreen) {
                             inclusive = true
                         }
@@ -35,9 +35,9 @@ fun SetupRootNavGraph(
             )
         }
 
-        authNavGraph(
-            rootNavController = rootNavController
-        )
+        composable<AuthScreen> {
+            AuthScreen(rootNavController = rootNavController)
+        }
 
         composable<BaseScreen> {
 //            BaseScreen()
