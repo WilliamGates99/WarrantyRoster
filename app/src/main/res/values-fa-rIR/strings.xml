@@ -44,10 +44,7 @@
     <string name="core_theme_title_dark">تیره</string>
 
 
-    <string name="onboarding_dialog_title_language">زبان</string>
-    <string name="onboarding_dialog_item_language_english_us">انگلیسی (آمریکایی)</string>
-    <string name="onboarding_dialog_item_language_english_gb">انگلیسی (بریتانیایی)</string>
-    <string name="onboarding_dialog_item_language_persian_ir">فارسی</string>
+    <string name="onboarding_bottom_sheet_title_locale">زبان</string>
     <string name="onboarding_btn_skip">رد کردن</string>
     <string name="onboarding_btn_back">قبلی</string>
     <string name="onboarding_btn_next">بعدی</string>

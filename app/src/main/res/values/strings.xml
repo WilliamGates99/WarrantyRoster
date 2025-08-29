@@ -43,10 +43,7 @@
     <string name="core_theme_title_dark">Dark</string>
 
 
-    <string name="onboarding_dialog_title_language">Language</string>
-    <string name="onboarding_dialog_item_language_english_us">English (United States)</string>
-    <string name="onboarding_dialog_item_language_english_gb">English (United Kingdom)</string>
-    <string name="onboarding_dialog_item_language_persian_ir">Persian</string>
+    <string name="onboarding_bottom_sheet_title_locale">Language</string>
     <string name="onboarding_btn_skip">Skip</string>
     <string name="onboarding_btn_back">Back</string>
     <string name="onboarding_btn_next">Next</string>

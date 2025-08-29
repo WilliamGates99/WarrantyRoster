@@ -13,9 +13,9 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.WhileSubscribed
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -29,14 +29,8 @@ class OnboardingViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(OnboardingState())
-    val state = combine(
-        flow = _state,
-        flow2 = onboardingUseCases.getCurrentAppLocaleUseCase.get()()
-    ) { state, currentAppLocale ->
-        _state.update {
-            state.copy(currentAppLocale = currentAppLocale)
-        }
-        _state.value
+    val state = _state.onStart {
+        getCurrentAppLocaleUseCase()
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(stopTimeout = 30.seconds),
@@ -52,6 +46,14 @@ class OnboardingViewModel @Inject constructor(
             OnboardingAction.DismissLocaleBottomSheet -> dismissLocaleBottomSheet()
             is OnboardingAction.SetCurrentAppLocale -> setCurrentAppLocale(action.newAppLocale)
         }
+    }
+
+    private fun getCurrentAppLocaleUseCase() {
+        onboardingUseCases.getCurrentAppLocaleUseCase.get()().onEach { currentAppLocale ->
+            _state.update {
+                it.copy(currentAppLocale = currentAppLocale)
+            }
+        }.launchIn(scope = viewModelScope)
     }
 
     private fun showLocaleBottomSheet() = viewModelScope.launch {
@@ -73,14 +75,13 @@ class OnboardingViewModel @Inject constructor(
         if (shouldUpdateAppLocale) {
             onboardingUseCases.storeCurrentAppLocaleUseCase.get()(
                 newAppLocale = newAppLocale
-            ).onEach { result ->
+            ).onStart {
+                _state.update {
+                    it.copy(currentAppLocale = newAppLocale)
+                }
+            }.onEach { result ->
                 when (result) {
-                    is Result.Success -> {
-                        _state.update {
-                            it.copy(currentAppLocale = newAppLocale)
-                        }
-
-                        val isActivityRestartNeeded = result.data
+                    is Result.Success -> result.data.let { isActivityRestartNeeded ->
                         if (isActivityRestartNeeded) {
                             _setAppLocaleEventChannel.send(UiEvent.RestartActivity)
                         }

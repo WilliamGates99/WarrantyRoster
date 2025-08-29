@@ -1,8 +1,10 @@
 package com.xeniac.warrantyroster_manager.feature_onboarding.presentation
 
 import androidx.activity.compose.LocalActivity
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -27,7 +29,10 @@ import com.xeniac.warrantyroster_manager.core.presentation.common.utils.Observer
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiEvent
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.findActivity
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.restartActivity
+import com.xeniac.warrantyroster_manager.feature_onboarding.presentation.components.LocaleBottomSheet
+import timber.log.Timber
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OnboardingScreen(
     onNavigateToBaseScreen: () -> Unit,
@@ -66,12 +71,15 @@ fun OnboardingScreen(
     ) { innerPadding ->
         when (windowSizeClass.windowWidthSizeClass) {
             WindowWidthSizeClass.COMPACT -> {
+                Timber.i("locale = ${state.currentAppLocale}")
                 Text(
-//                    text = "Onboarding Screen - Portrait",
-                    text = stringResource(id = AppLocale.DEFAULT.titleId),
+                    text = state.currentAppLocale?.titleId?.let { stringResource(id = it) }.orEmpty(),
                     modifier = Modifier
                         .fillMaxSize()
                         .wrapContentSize()
+                        .clickable {
+                            viewModel.onAction(OnboardingAction.ShowLocaleBottomSheet)
+                        }
                 )
             }
             else -> {
@@ -84,4 +92,10 @@ fun OnboardingScreen(
             }
         }
     }
+
+    LocaleBottomSheet(
+        isVisible = state.isLocaleBottomSheetVisible,
+        currentAppLocale = state.currentAppLocale ?: AppLocale.DEFAULT,
+        onAction = viewModel::onAction
+    )
 }
