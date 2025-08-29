@@ -27,7 +27,7 @@ fun Modifier.addTestTag(
 fun Modifier.addBorder(
     border: BorderStroke?,
     shape: Shape
-): Any = border?.let {
+): Modifier = border?.let {
     border(
         border = border,
         shape = shape

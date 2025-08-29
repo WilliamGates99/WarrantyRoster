@@ -1,41 +1,43 @@
 package com.xeniac.warrantyroster_manager.feature_onboarding.presentation
 
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalActivity
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.window.core.layout.WindowWidthSizeClass
 import com.xeniac.warrantyroster_manager.core.domain.models.AppLocale
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.SwipeableSnackbar
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.showShortSnackbar
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.Blue
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.ObserverAsEvent
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiEvent
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.findActivity
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.restartActivity
+import com.xeniac.warrantyroster_manager.feature_onboarding.presentation.components.CompactScreenWidthPager
 import com.xeniac.warrantyroster_manager.feature_onboarding.presentation.components.LocaleBottomSheet
-import timber.log.Timber
+import com.xeniac.warrantyroster_manager.feature_onboarding.presentation.components.OnboardingTopBar
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OnboardingScreen(
-    onNavigateToBaseScreen: () -> Unit,
+    onNavigateToAuthScreens: () -> Unit,
     viewModel: OnboardingViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
@@ -47,8 +49,7 @@ fun OnboardingScreen(
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
-    val horizontalPadding by remember { derivedStateOf { 16.dp } }
-    val verticalPadding by remember { derivedStateOf { 16.dp } }
+    val pagerState = rememberPagerState(pageCount = { 4 })
 
     ObserverAsEvent(flow = viewModel.setAppLocaleEventChannel) { event ->
         when (event) {
@@ -62,26 +63,33 @@ fun OnboardingScreen(
         }
     }
 
+    BackHandler(
+        enabled = pagerState.settledPage != 0,
+        onBack = {
+            scope.launch {
+                pagerState.animateScrollToPage(page = pagerState.settledPage - 1)
+            }
+        }
+    )
+
     Scaffold(
         snackbarHost = { SwipeableSnackbar(hostState = snackbarHostState) },
         topBar = {
-            // TODO: LOCALE AND PAGER INDICATOR
+            OnboardingTopBar(
+                currentAppLocale = state.currentAppLocale,
+                pagerState = pagerState,
+                onAction = viewModel::onAction
+            )
         },
+        containerColor = Blue,
         modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
         when (windowSizeClass.windowWidthSizeClass) {
-            WindowWidthSizeClass.COMPACT -> {
-                Timber.i("locale = ${state.currentAppLocale}")
-                Text(
-                    text = state.currentAppLocale?.titleId?.let { stringResource(id = it) }.orEmpty(),
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .wrapContentSize()
-                        .clickable {
-                            viewModel.onAction(OnboardingAction.ShowLocaleBottomSheet)
-                        }
-                )
-            }
+            WindowWidthSizeClass.COMPACT -> CompactScreenWidthPager(
+                pagerState = pagerState,
+                onNavigateToAuthScreens = onNavigateToAuthScreens,
+                modifier = Modifier.padding(innerPadding)
+            )
             else -> {
                 Text(
                     text = "Onboarding Screen - Landscape",

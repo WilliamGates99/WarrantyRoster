@@ -47,11 +47,11 @@
     <string name="onboarding_btn_skip">Skip</string>
     <string name="onboarding_btn_back">Back</string>
     <string name="onboarding_btn_next">Next</string>
+    <string name="onboarding_btn_start">Get Started</string>
     <string name="onboarding_1st_title">Never lose track of your product warranties anymore.</string>
     <string name="onboarding_2nd_title">Keep track if a warranty is about to expire.</string>
     <string name="onboarding_3rd_title">Save money by using warranties before their expiry date.</string>
     <string name="onboarding_4th_title">All data are automatically backed up to the cloud.</string>
-    <string name="onboarding_4th_btn_start">Get Started</string>
 
 
     <string name="auth_dialog_title_language">Language</string>
