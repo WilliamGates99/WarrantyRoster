@@ -42,10 +42,10 @@ fun OnboardingScreen(
     val activity = LocalActivity.current ?: context.findActivity()
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
+    val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
 
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
     val pagerState = rememberPagerState(pageCount = { 4 })
 
     ObserverAsEvent(flow = viewModel.setAppLocaleEventChannel) { event ->
