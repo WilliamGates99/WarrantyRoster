@@ -89,6 +89,7 @@ private fun Header(
         Row(
             modifier = Modifier.fillMaxWidth()
         ) {
+            // TODO: ANIMATED IMAGE AND TITLE
 //            Image(
 //                painter =,
 //                contentDescription =,

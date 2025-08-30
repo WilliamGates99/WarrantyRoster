@@ -18,6 +18,7 @@ fun SetupAuthNavGraph(
     authNavController: NavHostController,
     bottomPadding: Dp
 ) {
+    // TODO: ANIMATED TRANSITION
     NavHost(
         navController = authNavController,
         startDestination = LoginScreen

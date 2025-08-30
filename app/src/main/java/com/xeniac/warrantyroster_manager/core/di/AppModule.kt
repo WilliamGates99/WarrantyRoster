@@ -7,6 +7,9 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
 import androidx.datastore.preferences.preferencesDataStoreFile
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
 import com.xeniac.warrantyroster_manager.BuildConfig
 import com.xeniac.warrantyroster_manager.core.domain.models.AppTheme
 import com.xeniac.warrantyroster_manager.core.domain.models.MiscellaneousPreferences
@@ -163,6 +166,10 @@ internal object AppModule {
             produceFile = { context.preferencesDataStoreFile(name = "WarrantyRoster.pb") }
         )
     }
+
+    @Provides
+    @Singleton
+    fun provideFirebaseAuth(): FirebaseAuth = Firebase.auth
 
     @Provides
     fun provideAppTheme(
