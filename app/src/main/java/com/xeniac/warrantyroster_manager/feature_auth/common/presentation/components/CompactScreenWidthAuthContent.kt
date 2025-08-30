@@ -89,11 +89,11 @@ private fun Header(
         Row(
             modifier = Modifier.fillMaxWidth()
         ) {
-            Image(
-                painter =,
-                contentDescription =,
-                modifier = Modifier.height(120.dp)
-            )
+//            Image(
+//                painter =,
+//                contentDescription =,
+//                modifier = Modifier.height(120.dp)
+//            )
         }
 
         // todo: locale icon
