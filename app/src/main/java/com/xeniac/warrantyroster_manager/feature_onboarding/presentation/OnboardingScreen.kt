@@ -2,7 +2,6 @@ package com.xeniac.warrantyroster_manager.feature_onboarding.presentation
 
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalActivity
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.rememberPagerState
@@ -48,7 +47,6 @@ fun OnboardingScreen(
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
     val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
-    val isSystemInDarkTheme = isSystemInDarkTheme()
 
     val state by viewModel.state.collectAsStateWithLifecycle()
 
