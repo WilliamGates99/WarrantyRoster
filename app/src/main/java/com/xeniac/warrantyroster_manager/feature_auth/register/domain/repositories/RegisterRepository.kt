@@ -10,7 +10,7 @@ interface RegisterRepository {
     suspend fun registerWithEmail(
         email: String,
         password: String
-    ): Result<FirebaseUser, RegisterWithEmailError>
+    ): Result<Unit, RegisterWithEmailError>
 
     suspend fun sendVerificationEmail(
         user: FirebaseUser

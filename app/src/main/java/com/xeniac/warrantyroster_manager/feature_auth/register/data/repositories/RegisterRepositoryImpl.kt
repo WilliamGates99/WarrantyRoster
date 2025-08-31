@@ -24,17 +24,19 @@ class RegisterRepositoryImpl @Inject constructor(
     override suspend fun registerWithEmail(
         email: String,
         password: String
-    ): Result<FirebaseUser, RegisterWithEmailError> {
+    ): Result<Unit, RegisterWithEmailError> {
         return try {
             withContext(context = Dispatchers.IO) {
                 val result = firebaseAuth.get().createUserWithEmailAndPassword(
                     email, password
                 ).await()
 
-                when (val registeredUser = result.user) {
-                    null -> Result.Error(RegisterWithEmailError.Network.SomethingWentWrong)
-                    else -> Result.Success(registeredUser)
+                val isSuccess = result.user != null
+                if (isSuccess) {
+                    return@withContext Result.Success(Unit)
                 }
+
+                Result.Error(RegisterWithEmailError.Network.SomethingWentWrong)
             }
         } catch (e: SSLHandshakeException) {
             Timber.e("Register with email SSLHandshakeException:")
@@ -55,6 +57,24 @@ class RegisterRepositoryImpl @Inject constructor(
     override suspend fun sendVerificationEmail(
         user: FirebaseUser
     ): Result<Unit, SendVerificationEmailError> {
-        TODO("Not yet implemented")
+        return try {
+            withContext(context = Dispatchers.IO) {
+                firebaseAuth.get().currentUser?.sendEmailVerification()?.await()
+                Result.Success(Unit)
+            }
+        } catch (e: SSLHandshakeException) {
+            Timber.e("Send verification email SSLHandshakeException:")
+            e.printStackTrace()
+            Result.Error(SendVerificationEmailError.Network.SSLHandshakeException)
+        } catch (e: CertPathValidatorException) {
+            Timber.e("Send verification email CertPathValidatorException:")
+            e.printStackTrace()
+            Result.Error(SendVerificationEmailError.Network.CertPathValidatorException)
+        } catch (e: Exception) {
+            coroutineContext.ensureActive()
+            Timber.e("Send verification email Exception:")
+            e.printStackTrace()
+            Result.Error(SendVerificationEmailError.Network.SomethingWentWrong)
+        }
     }
 }
