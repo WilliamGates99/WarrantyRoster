@@ -1,17 +1,21 @@
 package com.xeniac.warrantyroster_manager.feature_auth.common.presentation
 
 import androidx.activity.compose.LocalActivity
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
+import androidx.core.view.WindowCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
@@ -37,15 +41,29 @@ fun AuthScreen(
 ) {
     val context = LocalContext.current
     val activity = LocalActivity.current ?: context.findActivity()
+    val view = LocalView.current
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
     val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
+    val isSystemInDarkTheme = isSystemInDarkTheme()
 
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     val authNavController = rememberNavController()
 
-    // TODO: SET NAVIGATION BAR TO DARK MODE
+    DisposableEffect(key1 = Unit) {
+        // Set "windowLightStatusBar" to false
+        val windowInsetsController = WindowCompat.getInsetsController(
+            /* window = */ activity.window,
+            /* view = */ view
+        )
+        windowInsetsController.isAppearanceLightStatusBars = false
+
+        onDispose {
+            // Restore "windowLightStatusBar"
+            windowInsetsController.isAppearanceLightStatusBars = !isSystemInDarkTheme
+        }
+    }
 
     ObserverAsEvent(flow = viewModel.setAppLocaleEventChannel) { event ->
         when (event) {
