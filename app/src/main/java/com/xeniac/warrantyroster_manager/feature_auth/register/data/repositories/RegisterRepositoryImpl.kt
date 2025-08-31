@@ -2,6 +2,7 @@ package com.xeniac.warrantyroster_manager.feature_auth.register.data.repositorie
 
 import com.google.firebase.auth.FirebaseAuth
 import com.xeniac.warrantyroster_manager.core.domain.models.Result
+import com.xeniac.warrantyroster_manager.core.domain.repositories.WarrantyRosterDataStoreRepository
 import com.xeniac.warrantyroster_manager.feature_auth.register.domain.errors.RegisterWithEmailError
 import com.xeniac.warrantyroster_manager.feature_auth.register.domain.repositories.RegisterRepository
 import dagger.Lazy
@@ -16,7 +17,8 @@ import javax.net.ssl.SSLHandshakeException
 import kotlin.coroutines.coroutineContext
 
 class RegisterRepositoryImpl @Inject constructor(
-    private val firebaseAuth: Lazy<FirebaseAuth>
+    private val firebaseAuth: Lazy<FirebaseAuth>,
+    private val warrantyRosterDataStoreRepository: Lazy<WarrantyRosterDataStoreRepository>
 ) : RegisterRepository {
 
     override suspend fun registerWithEmail(
@@ -31,6 +33,7 @@ class RegisterRepositoryImpl @Inject constructor(
                 ).await()
 
                 result.user?.let { registeredUser ->
+                    warrantyRosterDataStoreRepository.get().isUserLoggedIn(isLoggedIn = true)
                     registeredUser.sendEmailVerification().await()
                     return@withContext Result.Success(Unit)
                 }

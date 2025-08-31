@@ -71,8 +71,8 @@
     <string name="login_text_register_title">Don’t have an account?</string>
     <string name="login_btn_register">Register</string>
     <string name="login_error_blank_email">Enter your email address!</string>
+    <string name="login_error_invalid_email">The entered email address is not valid!</string>
     <string name="login_error_blank_password">Enter your password!</string>
-    <string name="login_error_email">The entered email address is not valid!</string>
     <string name="login_error_not_found">The account with the provided email does not exist.</string>
     <string name="login_error_credentials">The provided credentials are incorrect.</string>
     <string name="login_error_email_exists_with_different_credentials">An account already exists with the same email address but different sign-in credentials.</string>
