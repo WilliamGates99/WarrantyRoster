@@ -65,7 +65,7 @@
     <string name="auth_title_forgot_pw_instruction">بازیابی\nرمز‌عبور</string>
 
 
-    <string name="login_text_description">بیایید وارد برنامه شویم.</string>
+    <string name="login_description">بیایید وارد برنامه شویم.</string>
     <string name="login_title_email">آدرس ایمیل</string>
     <string name="login_hint_email">آدرس ایمیل خود را وارد کنید</string>
     <string name="login_title_password">رمز‌عبور</string>

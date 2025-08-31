@@ -64,7 +64,7 @@
     <string name="auth_title_forgot_pw_instruction">Reset\nPassword</string>
 
 
-    <string name="login_text_description">Let\'s log you in.</string>
+    <string name="login_description">Let\'s log you in.</string>
     <string name="login_title_email">Email Address</string>
     <string name="login_hint_email">Enter your email address</string>
     <string name="login_title_password">Password</string>
