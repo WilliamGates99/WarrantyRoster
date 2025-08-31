@@ -48,6 +48,8 @@ fun OnboardingScreen(
 
     val pagerState = rememberPagerState(pageCount = { 4 })
 
+    // TODO: SET NAVIGATION BAR TO DARK MODE
+
     ObserverAsEvent(flow = viewModel.setAppLocaleEventChannel) { event ->
         when (event) {
             is UiEvent.RestartActivity -> activity.restartActivity()

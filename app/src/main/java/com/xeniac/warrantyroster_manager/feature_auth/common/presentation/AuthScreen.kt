@@ -20,8 +20,12 @@ import androidx.window.core.layout.WindowWidthSizeClass
 import com.xeniac.warrantyroster_manager.core.domain.models.AppLocale
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.LocaleBottomSheet
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.SwipeableSnackbar
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.showShortSnackbar
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.Blue
+import com.xeniac.warrantyroster_manager.core.presentation.common.utils.ObserverAsEvent
+import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiEvent
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.findActivity
+import com.xeniac.warrantyroster_manager.core.presentation.common.utils.restartActivity
 import com.xeniac.warrantyroster_manager.feature_auth.common.presentation.components.CompactScreenWidthAuthContent
 import com.xeniac.warrantyroster_manager.feature_auth.common.presentation.components.MediumScreenWidthAuthContent
 
@@ -41,6 +45,20 @@ fun AuthScreen(
 
     val authNavController = rememberNavController()
 
+    // TODO: SET NAVIGATION BAR TO DARK MODE
+
+    ObserverAsEvent(flow = viewModel.setAppLocaleEventChannel) { event ->
+        when (event) {
+            is UiEvent.RestartActivity -> activity.restartActivity()
+            is UiEvent.ShowShortSnackbar -> context.showShortSnackbar(
+                message = event.message,
+                scope = scope,
+                snackbarHostState = snackbarHostState
+            )
+            else -> Unit
+        }
+    }
+
     Scaffold(
         snackbarHost = { SwipeableSnackbar(hostState = snackbarHostState) },
         containerColor = Blue,
@@ -48,14 +66,18 @@ fun AuthScreen(
     ) { innerPadding ->
         when (windowSizeClass.windowWidthSizeClass) {
             WindowWidthSizeClass.COMPACT -> CompactScreenWidthAuthContent(
+                currentAppLocale = state.currentAppLocale,
                 rootNavController = rootNavController,
                 authNavController = authNavController,
-                innerPadding = innerPadding
+                innerPadding = innerPadding,
+                onAction = viewModel::onAction
             )
             else -> MediumScreenWidthAuthContent(
+                currentAppLocale = state.currentAppLocale,
                 rootNavController = rootNavController,
                 authNavController = authNavController,
-                innerPadding = innerPadding
+                innerPadding = innerPadding,
+                onAction = viewModel::onAction
             )
         }
     }

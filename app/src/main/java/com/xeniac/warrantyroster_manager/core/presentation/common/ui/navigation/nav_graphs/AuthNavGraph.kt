@@ -25,25 +25,21 @@ fun SetupAuthNavGraph(
     ) {
         composable<LoginScreen> {
             LoginScreen(
-                onNavigateUp = {
-
+                onNavigateToRegisterScreen = {
+                    authNavController.navigate(RegisterScreen)
                 }
             )
         }
 
         composable<RegisterScreen> {
             RegisterScreen(
-                onNavigateUp = {
-
-                }
+                onNavigateUp = authNavController::navigateUp
             )
         }
 
         composable<ForgotPwScreen> {
             ForgotPwScreen(
-                onNavigateUp = {
-
-                }
+                onNavigateUp = authNavController::navigateUp
             )
         }
     }
