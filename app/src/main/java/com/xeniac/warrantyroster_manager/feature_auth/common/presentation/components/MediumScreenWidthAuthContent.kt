@@ -54,6 +54,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.core.domain.models.AppLocale
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.nav_graphs.SetupAuthNavGraph
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.ForgotPwInstructionScreen
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.ForgotPwScreen
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.LoginScreen
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.RegisterScreen
@@ -126,16 +127,20 @@ private fun Header(
                 headerImageId = null
             }
             currentDestination.hasRoute(LoginScreen::class) -> {
-                headerTitleId = R.string.login_text_title
+                headerTitleId = R.string.auth_title_login
                 headerImageId = R.drawable.ic_auth_login
             }
             currentDestination.hasRoute(RegisterScreen::class) -> {
-                headerTitleId = R.string.register_text_title
+                headerTitleId = R.string.auth_title_register
                 headerImageId = R.drawable.ic_auth_register
             }
             currentDestination.hasRoute(ForgotPwScreen::class) -> {
-                headerTitleId = R.string.forgot_pw_text_title
+                headerTitleId = R.string.auth_title_forgot_pw
                 headerImageId = R.drawable.ic_auth_forgot_pw
+            }
+            currentDestination.hasRoute(ForgotPwInstructionScreen::class) -> {
+                headerTitleId = R.string.auth_title_forgot_pw_instruction
+                headerImageId = R.drawable.ic_auth_forgot_pw_instruction
             }
             else -> {
                 headerTitleId = null

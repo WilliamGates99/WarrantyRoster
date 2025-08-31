@@ -5,10 +5,12 @@ import androidx.compose.ui.unit.Dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.ForgotPwInstructionScreen
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.ForgotPwScreen
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.LoginScreen
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.RegisterScreen
-import com.xeniac.warrantyroster_manager.feature_auth.forgot_pw.presentation.ForgotPwScreen
+import com.xeniac.warrantyroster_manager.feature_auth.forgot_pw.presentation.forgot_pw.ForgotPwScreen
+import com.xeniac.warrantyroster_manager.feature_auth.forgot_pw.presentation.forgot_pw_instruction.ForgotPwInstructionScreen
 import com.xeniac.warrantyroster_manager.feature_auth.login.presentation.LoginScreen
 import com.xeniac.warrantyroster_manager.feature_auth.register.presentation.RegisterScreen
 
@@ -39,6 +41,12 @@ fun SetupAuthNavGraph(
 
         composable<ForgotPwScreen> {
             ForgotPwScreen(
+                onNavigateUp = authNavController::navigateUp
+            )
+        }
+
+        composable<ForgotPwInstructionScreen> {
+            ForgotPwInstructionScreen(
                 onNavigateUp = authNavController::navigateUp
             )
         }

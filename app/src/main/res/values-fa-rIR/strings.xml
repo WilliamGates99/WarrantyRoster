@@ -59,7 +59,12 @@
     <string name="onboarding_4th_description">تمامی داده‌ها به طور خودکار تو فضای ابری نگهداری و پشتیبان‌گیری می‌شوند.</string>
 
 
-    <string name="login_text_title">ورود</string>
+    <string name="auth_title_login">ورود</string>
+    <string name="auth_title_register">ثبت‌نام</string>
+    <string name="auth_title_forgot_pw">بازیابی\nرمز‌عبور</string>
+    <string name="auth_title_forgot_pw_instruction">بازیابی\nرمز‌عبور</string>
+
+
     <string name="login_text_description">بیایید وارد برنامه شویم.</string>
     <string name="login_title_email">آدرس ایمیل</string>
     <string name="login_hint_email">آدرس ایمیل خود را وارد کنید</string>
@@ -79,7 +84,6 @@
     <string name="login_error_email_exists_with_different_credentials">حسابی با ایمیل وارد شده اما با روش‌های ورود متفاوت از قبل وجود دارد.</string>
 
 
-    <string name="register_text_title">ثبت‌نام</string>
     <string name="register_text_description">اطلاعات خود را وارد کنید.</string>
     <string name="register_text_agreement">با ثبت‌نام، شما <font fgcolor="#1C53F4"><b>سیاست حریم خصوصی</b></font> ما را می‌پذیرید.</string>
     <string name="register_title_email">آدرس ایمیل</string>
@@ -103,7 +107,6 @@
     <string name="register_error_email_exists_with_different_credentials">حسابی با ایمیل وارد شده اما با روش‌های ورود متفاوت از قبل وجود دارد.</string>
 
 
-    <string name="forgot_pw_text_title">بازیابی\nرمز‌عبور</string>
     <string name="forgot_pw_text_description">برای دریافت دستورالعمل‌های بازیابی رمز‌عبور، ایمیل تایید‌شده خود را وارد کنید.</string>
     <string name="forgot_pw_title_email">آدرس ایمیل</string>
     <string name="forgot_pw_hint_email">آدرس ایمیل خود را وارد کنید</string>
@@ -126,7 +129,6 @@
     <string name="forgot_pw_error_not_found">حسابی با ایمیل وارد شده وجود ندارد.</string>
 
 
-    <string name="forgot_pw_sent_text_title">بازیابی\nرمز‌عبور</string>
     <string name="forgot_pw_sent_text_description">لطفا صندوق ایمیل خود را بررسی کنید و روی لینک دریافتی کلیک کنید تا رمز‌عبور خود را بازیابی کنید.</string>
     <string name="forgot_pw_sent_text_resend">لینکی را دریافت نکردید؟</string>
     <string name="forgot_pw_sent_btn_resend">ارسال مجدد</string>

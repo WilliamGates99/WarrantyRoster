@@ -10,3 +10,6 @@ data object RegisterScreen
 
 @Serializable
 data object ForgotPwScreen
+
+@Serializable
+data object ForgotPwInstructionScreen
