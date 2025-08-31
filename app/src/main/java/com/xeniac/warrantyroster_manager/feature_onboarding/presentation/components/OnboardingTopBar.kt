@@ -88,7 +88,7 @@ private fun LocaleButton(
                 shape = shape,
                 shadow = Shadow(
                     radius = 8.dp,
-                    color = Black.copy(alpha = 0.25f)
+                    color = Black.copy(alpha = 0.24f)
                 )
             )
             .clip(shape)
@@ -98,9 +98,7 @@ private fun LocaleButton(
             )
             .clickable(
                 role = Role.Button,
-                onClick = {
-                    onAction(OnboardingAction.ShowLocaleBottomSheet)
-                }
+                onClick = { onAction(OnboardingAction.ShowLocaleBottomSheet) }
             )
     ) {
         Image(
