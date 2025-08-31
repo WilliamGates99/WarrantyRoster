@@ -93,10 +93,11 @@
     <string name="register_text_login_title">Already have an account?</string>
     <string name="register_btn_login">Login</string>
     <string name="register_error_blank_email">Enter your email address!</string>
+    <string name="register_error_invalid_email">The entered email address is not valid!</string>
     <string name="register_error_blank_password">Enter your password!</string>
+    <string name="register_error_short_password">Password should be at least %d characters!</string>
     <string name="register_error_blank_confirm_password">Re-enter your password!</string>
-    <string name="register_error_email">The entered email address is not valid!</string>
-    <string name="register_error_password_not_match">Your password and confirm password do not match!</string>
+    <string name="register_error_not_matching_passwords">Your password and confirm password do not match!</string>
     <string name="register_error_account_exists">An account with the provided email already exists.</string>
     <string name="register_error_email_exists_with_different_credentials">An account already exists with the same email address but different sign-in credentials.</string>
 

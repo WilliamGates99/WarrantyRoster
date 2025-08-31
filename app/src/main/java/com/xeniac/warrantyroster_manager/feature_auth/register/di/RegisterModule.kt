@@ -1,6 +1,7 @@
 package com.xeniac.warrantyroster_manager.feature_auth.register.di
 
 import com.xeniac.warrantyroster_manager.feature_auth.register.domain.repositories.RegisterRepository
+import com.xeniac.warrantyroster_manager.feature_auth.register.domain.use_cases.RegisterUseCases
 import com.xeniac.warrantyroster_manager.feature_auth.register.domain.use_cases.RegisterWithEmailUseCase
 import com.xeniac.warrantyroster_manager.feature_auth.register.domain.validation.ValidateConfirmPassword
 import com.xeniac.warrantyroster_manager.feature_auth.register.domain.validation.ValidateEmail
@@ -39,5 +40,13 @@ internal object RegisterModule {
         validateEmail,
         validatePassword,
         validateConfirmPassword
+    )
+
+    @Provides
+    @ViewModelScoped
+    fun provideRegisterUseCases(
+        registerWithEmailUseCase: RegisterWithEmailUseCase
+    ): RegisterUseCases = RegisterUseCases(
+        { registerWithEmailUseCase }
     )
 }
