@@ -7,7 +7,8 @@ import com.xeniac.warrantyroster_manager.core.domain.use_cases.GetCurrentAppLoca
 import com.xeniac.warrantyroster_manager.core.domain.use_cases.GetIsUserLoggedInUseCase
 import com.xeniac.warrantyroster_manager.core.domain.use_cases.MainUseCases
 import com.xeniac.warrantyroster_manager.core.domain.use_cases.StoreCurrentAppLocaleUseCase
-import com.xeniac.warrantyroster_manager.core.presentation.common.utils.PasswordStrengthHelper
+import com.xeniac.warrantyroster_manager.core.presentation.common.utils.ConfirmPasswordChecker
+import com.xeniac.warrantyroster_manager.core.presentation.common.utils.PasswordStrengthCalculator
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,7 +21,12 @@ internal object CoreModule {
 
     @Provides
     @ViewModelScoped
-    fun providePasswordStrengthHelper(): PasswordStrengthHelper = PasswordStrengthHelper()
+    fun providePasswordStrengthCalculator(): PasswordStrengthCalculator =
+        PasswordStrengthCalculator()
+
+    @Provides
+    @ViewModelScoped
+    fun provideConfirmPasswordChecker(): ConfirmPasswordChecker = ConfirmPasswordChecker()
 
     @Provides
     @ViewModelScoped

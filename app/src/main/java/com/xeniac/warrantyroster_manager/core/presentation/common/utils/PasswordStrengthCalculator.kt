@@ -3,7 +3,7 @@ package com.xeniac.warrantyroster_manager.core.presentation.common.utils
 import com.xeniac.warrantyroster_manager.core.domain.utils.Constants
 import com.xeniac.warrantyroster_manager.core.presentation.common.states.PasswordStrength
 
-class PasswordStrengthHelper {
+class PasswordStrengthCalculator {
     operator fun invoke(
         password: String?
     ): PasswordStrength {

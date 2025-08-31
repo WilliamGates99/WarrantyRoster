@@ -11,8 +11,8 @@ class ValidateConfirmPassword {
             return RegisterWithEmailError.BlankConfirmPassword
         }
 
-        val doesPasswordMatchConfirmPassword = password != confirmPassword
-        if (doesPasswordMatchConfirmPassword) {
+        val doesPasswordNotMatchConfirmPassword = password != confirmPassword
+        if (doesPasswordNotMatchConfirmPassword) {
             return RegisterWithEmailError.NotMatchingPasswords
         }
 

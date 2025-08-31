@@ -26,7 +26,8 @@ class RegisterRepositoryImpl @Inject constructor(
         return try {
             withContext(context = Dispatchers.IO) {
                 val result = firebaseAuth.get().createUserWithEmailAndPassword(
-                    email, password
+                    email.trim(),
+                    password.trim()
                 ).await()
 
                 result.user?.let { registeredUser ->

@@ -6,18 +6,24 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.xeniac.warrantyroster_manager.core.domain.models.Result
 import com.xeniac.warrantyroster_manager.core.domain.utils.convertDigitsToEnglish
+import com.xeniac.warrantyroster_manager.core.presentation.common.utils.ConfirmPasswordChecker
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.Event
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.NetworkObserverHelper.hasNetworkConnection
+import com.xeniac.warrantyroster_manager.core.presentation.common.utils.PasswordStrengthCalculator
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiEvent
 import com.xeniac.warrantyroster_manager.feature_auth.common.presentation.AuthUiEvent
 import com.xeniac.warrantyroster_manager.feature_auth.register.domain.use_cases.RegisterUseCases
 import com.xeniac.warrantyroster_manager.feature_auth.register.presentation.states.RegisterState
 import com.xeniac.warrantyroster_manager.feature_auth.register.presentation.utils.asUiText
+import dagger.Lazy
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.WhileSubscribed
+import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
@@ -28,9 +34,12 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
     private val registerUseCases: RegisterUseCases,
+    private val passwordStrengthCalculator: Lazy<PasswordStrengthCalculator>,
+    private val confirmPasswordChecker: Lazy<ConfirmPasswordChecker>,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -60,11 +69,40 @@ class RegisterViewModel @Inject constructor(
     }
 
     private fun observePasswordState() {
-
+        _state.distinctUntilChangedBy {
+            it.passwordState
+        }.mapLatest {
+            passwordStrengthCalculator.get()(
+                password = it.passwordState.value.text
+            )
+        }.onEach { passwordStrength ->
+            _state.update {
+                it.copy(
+                    passwordState = it.passwordState.copy(
+                        strength = passwordStrength
+                    )
+                )
+            }
+        }.launchIn(scope = viewModelScope)
     }
 
     private fun observeConfirmPasswordState() {
-
+        _state.distinctUntilChangedBy {
+            it.confirmPasswordState
+        }.mapLatest {
+            confirmPasswordChecker.get()(
+                password = it.passwordState.value.text,
+                confirmPassword = it.confirmPasswordState.value.text
+            )
+        }.onEach { passwordMatchingState ->
+            _state.update {
+                it.copy(
+                    confirmPasswordState = it.confirmPasswordState.copy(
+                        passwordMatchingState = passwordMatchingState
+                    )
+                )
+            }
+        }.launchIn(scope = viewModelScope)
     }
 
     private fun emailChanged(

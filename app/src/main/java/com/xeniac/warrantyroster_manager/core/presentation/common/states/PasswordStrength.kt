@@ -10,11 +10,9 @@ import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiText
 
 enum class PasswordStrength(
     val label: UiText? = null,
-    val color: Color
+    val color: Color = Color.Transparent
 ) {
-    BLANK(
-        color = Color.Transparent
-    ),
+    BLANK,
     SHORT(
         label = UiText.StringResource(
             R.string.core_password_strength_short,
