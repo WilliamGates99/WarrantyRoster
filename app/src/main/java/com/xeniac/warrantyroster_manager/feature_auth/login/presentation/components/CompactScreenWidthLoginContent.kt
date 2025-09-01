@@ -2,9 +2,7 @@ package com.xeniac.warrantyroster_manager.feature_auth.login.presentation.compon
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -34,16 +32,24 @@ fun CompactScreenWidthLoginContent(
         modifier = modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(bottomPadding)
+            .padding(bottom = bottomPadding)
             .padding(contentPadding)
     ) {
-        LoginDescription()
+        LoginDescription(
+            modifier = Modifier.padding(bottom = 44.dp)
+        )
 
-        Spacer(modifier = Modifier.height(44.dp))
+//        Spacer(modifier = Modifier.height(44.dp))
 
-        // TODO: EMAIL
-
-        // TODO: PASSWORD
+        LoginTextFields(
+            isLoginLoading = with(state) {
+                isLoginWithEmailLoading || isLoginWithGoogleLoading
+                        || isLoginWithXLoading || isLoginWithFacebookLoading
+            },
+            emailState = state.emailState,
+            passwordState = state.passwordState,
+            onAction = onAction
+        )
 
         // TODO: FORGOT PASSWORD
 

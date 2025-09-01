@@ -66,15 +66,15 @@
 
 
     <string name="login_description">بیایید وارد برنامه شویم.</string>
-    <string name="login_title_email">آدرس ایمیل</string>
-    <string name="login_hint_email">آدرس ایمیل خود را وارد کنید</string>
-    <string name="login_title_password">رمز‌عبور</string>
-    <string name="login_hint_password">رمز‌عبور خود را وارد کنید</string>
+    <string name="login_textfield_email_title">آدرس ایمیل</string>
+    <string name="login_textfield_email_hint">آدرس ایمیل خود را وارد کنید</string>
+    <string name="login_textfield_password_title">رمز‌عبور</string>
+    <string name="login_textfield_password_hint">رمز‌عبور خود را وارد کنید</string>
     <string name="login_btn_forgot_pw">رمز‌عبور‌تان را فراموش کرده‌اید؟</string>
     <string name="login_btn_login">ورود</string>
-    <string name="login_text_other_methods">یا ورود با</string>
-    <string name="login_text_other_methods_landscape">یا</string>
-    <string name="login_text_register_title">حساب کاربری ندارید؟</string>
+    <string name="login_other_methods_title">یا ورود با</string>
+    <string name="login_other_methods_title_landscape">یا</string>
+    <string name="login_btn_register_title">حساب کاربری ندارید؟</string>
     <string name="login_btn_register">ثبت‌نام کنید</string>
     <string name="login_error_blank_email">آدرس ایمیل خود را وارد کنید!</string>
     <string name="login_error_invalid_email">آدرس ایمیل وارد شده، معتبر نیست!</string>

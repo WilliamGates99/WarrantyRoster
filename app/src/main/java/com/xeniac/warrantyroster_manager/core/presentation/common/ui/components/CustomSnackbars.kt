@@ -1,7 +1,10 @@
 package com.xeniac.warrantyroster_manager.core.presentation.common.ui.components
 
 import android.content.Context
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -17,6 +20,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 import com.xeniac.warrantyroster_manager.R
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.GrayLightDark
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.GrayLightLight
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiText
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -50,7 +55,18 @@ fun SwipeableSnackbar(
             modifier = modifier.fillMaxWidth()
         ) {
             CompositionLocalProvider(value = LocalLayoutDirection provides layoutDirection) {
-                SnackbarHost(hostState = hostState)
+                SnackbarHost(
+                    hostState = hostState,
+                    snackbar = { snackbarData ->
+                        Snackbar(
+                            snackbarData = snackbarData,
+                            containerColor = MaterialTheme.colorScheme.error,
+                            contentColor = MaterialTheme.colorScheme.onError,
+                            actionColor = if (isSystemInDarkTheme()) GrayLightDark else GrayLightLight,
+                            actionContentColor = if (isSystemInDarkTheme()) GrayLightDark else GrayLightLight
+                        )
+                    }
+                )
             }
         }
     }

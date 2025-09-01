@@ -4,35 +4,10 @@ import androidx.compose.ui.graphics.Color
 
 val BlueNotificationLight = Color(0xFF1C53F4)
 
-
-/* Dynamic Colors = Light
-<color name="surface">#FFFFFF</color>
-<color name="white">#FFFFFF</color>
-<color name="black">#000000</color>
-<color name="navyBlue">#00144F</color>
-<color name="skyBlue">#DEF4FD</color>
-<color name="dialogButton">#1C53F4</color>
-<color name="grayLight">#F3F3F3</color>
-<color name="grayMedium">#E9E9E9</color>
-<color name="grayDark">#959595</color>
-<color name="navyBlue10">#1A00144F</color>
-<color name="navyBlue20">#3300144F</color>
-*/
-
-
-/* Dynamic Colors = Dark
-<color name="surface">#191919</color>
-<color name="white">#000000</color>
-<color name="black">#FFFFFF</color>
-<color name="navyBlue">#DEF4FD</color>
-<color name="skyBlue">#01040F</color>
-<color name="dialogButton">#0095E3</color>
-<color name="grayLight">#1F1F1F</color>
-<color name="grayMedium">#2E2E2E</color>
-<color name="grayDark">#808080</color>
-<color name="navyBlue10">#1ADEF4FD</color>
-<color name="navyBlue20">#33DEF4FD</color>
-*/
+// TODO: UPDATE SHIMMER COLORS
+val ShimmerEffectFirstColor = Color(0xFF273446)
+val ShimmerEffectSecondColor = Color(0xFF161E28)
+val ShimmerEffectThirdColor = Color(0xFF191D22)
 
 val White = Color(0xFFFFFFFF)
 val Black = Color(0xFF000000)
@@ -54,6 +29,24 @@ val RedAlpha20 = Color(0x33FF3442)
 val Orange = Color(0xFFFF9100)
 val OrangeAlpha20 = Color(0x33FF9100)
 
+val NavyBlueLight = Color(0xFF00144F)
+val SkyBlueLight = Color(0xFFDEF4FD)
+val DialogButtonLight = Color(0xFF1C53F4)
+val GrayLightLight = Color(0xFFF3F3F3)
+val GrayMediumLight = Color(0xFFE9E9E9)
+val GrayDarkLight = Color(0xFF959595)
+val NavyBlueAlpha10Light = Color(0x1A00144F)
+val NavyBlueAlpha20Light = Color(0x3300144F)
+
+val NavyBlueDark = Color(0xFFDEF4FD)
+val SkyBlueDark = Color(0xFF01040F)
+val DialogButtonDark = Color(0xFF0095E3)
+val GrayLightDark = Color(0xFF1F1F1F)
+val GrayMediumDark = Color(0xFF2E2E2E)
+val GrayDarkDark = Color(0xFF808080)
+val NavyBlueAlpha10Dark = Color(0x1ADEF4FD)
+val NavyBlueAlpha20Dark = Color(0x33DEF4FD)
+
 val primaryLight = Color(0xFF003CC8)
 val onPrimaryLight = Color(0xFFFFFFFF)
 val primaryContainerLight = Color(0xFF1C53F4)
@@ -72,7 +65,7 @@ val errorContainerLight = Color(0xFFFFDAD6)
 val onErrorContainerLight = Color(0xFF93000A)
 val backgroundLight = Color(0xFFFFFFFF)
 val onBackgroundLight = Color(0xFF191B24)
-val surfaceLight = Color(0xFFFBF8FF)
+val surfaceLight = Color(0xFFFFFFFF)
 val onSurfaceLight = Color(0xFF191B24)
 val surfaceVariantLight = Color(0xFFE0E1F5)
 val onSurfaceVariantLight = Color(0xFF434656)
@@ -162,7 +155,7 @@ val surfaceContainerLightHighContrast = Color(0xFFE2E1EE)
 val surfaceContainerHighLightHighContrast = Color(0xFFD3D3E0)
 val surfaceContainerHighestLightHighContrast = Color(0xFFC5C5D2)
 
-val primaryDark = Color(0xFFB8C4FF)
+val primaryDark = Color(0xFF003CC8)
 val onPrimaryDark = Color(0xFF002584)
 val primaryContainerDark = Color(0xFF1C53F4)
 val onPrimaryContainerDark = Color(0xFFDDE1FF)
@@ -180,7 +173,7 @@ val errorContainerDark = Color(0xFF93000A)
 val onErrorContainerDark = Color(0xFFFFDAD6)
 val backgroundDark = Color(0xFF101010)
 val onBackgroundDark = Color(0xFFE2E1EE)
-val surfaceDark = Color(0xFF11131C)
+val surfaceDark = Color(0xFF191919)
 val onSurfaceDark = Color(0xFFE2E1EE)
 val surfaceVariantDark = Color(0xFF434656)
 val onSurfaceVariantDark = Color(0xFFC4C5D9)
