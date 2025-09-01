@@ -8,7 +8,6 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
@@ -20,12 +19,12 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.window.core.layout.WindowWidthSizeClass
 import com.xeniac.warrantyroster_manager.core.domain.models.AppLocale
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.LocaleBottomSheet
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.SwipeableSnackbar
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.showShortSnackbar
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.Blue
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.utils.isWindowWidthSizeCompact
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.ObserverAsEvent
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiEvent
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.findActivity
@@ -46,7 +45,6 @@ fun OnboardingScreen(
     val view = LocalView.current
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
-    val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
 
     val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -96,13 +94,13 @@ fun OnboardingScreen(
         containerColor = Blue,
         modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
-        when (windowSizeClass.windowWidthSizeClass) {
-            WindowWidthSizeClass.COMPACT -> CompactScreenWidthPager(
+        when (isWindowWidthSizeCompact()) {
+            true -> CompactScreenWidthPager(
                 pagerState = pagerState,
                 onNavigateToAuthScreen = onNavigateToAuthScreen,
                 modifier = Modifier.padding(innerPadding)
             )
-            else -> MediumScreenWidthPager(
+            false -> MediumScreenWidthPager(
                 pagerState = pagerState,
                 innerPadding = innerPadding,
                 onNavigateToAuthScreen = onNavigateToAuthScreen

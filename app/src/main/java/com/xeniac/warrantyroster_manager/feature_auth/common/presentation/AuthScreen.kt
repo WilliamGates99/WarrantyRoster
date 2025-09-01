@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
@@ -20,12 +19,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import androidx.window.core.layout.WindowWidthSizeClass
 import com.xeniac.warrantyroster_manager.core.domain.models.AppLocale
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.LocaleBottomSheet
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.SwipeableSnackbar
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.showShortSnackbar
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.Blue
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.utils.isWindowWidthSizeCompact
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.ObserverAsEvent
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiEvent
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.findActivity
@@ -44,7 +43,6 @@ fun AuthScreen(
     val view = LocalView.current
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
-    val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
     val isSystemInDarkTheme = isSystemInDarkTheme()
 
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -82,15 +80,15 @@ fun AuthScreen(
         containerColor = Blue,
         modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
-        when (windowSizeClass.windowWidthSizeClass) {
-            WindowWidthSizeClass.COMPACT -> CompactScreenWidthAuthContent(
+        when (isWindowWidthSizeCompact()) {
+            true -> CompactScreenWidthAuthContent(
                 currentAppLocale = state.currentAppLocale,
                 rootNavController = rootNavController,
                 authNavController = authNavController,
                 innerPadding = innerPadding,
                 onAction = viewModel::onAction
             )
-            else -> MediumScreenWidthAuthContent(
+            false -> MediumScreenWidthAuthContent(
                 currentAppLocale = state.currentAppLocale,
                 rootNavController = rootNavController,
                 authNavController = authNavController,
