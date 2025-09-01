@@ -29,6 +29,12 @@ fun SetupAuthNavGraph(
             LoginScreen(
                 onNavigateToRegisterScreen = {
                     authNavController.navigate(RegisterScreen)
+                },
+                onNavigateToForgotPwScreen = {
+                    authNavController.navigate(ForgotPwScreen)
+                },
+                onNavigateToBaseScreen = {
+                    // TODO: IMPLEMENT NAVIGATION
                 }
             )
         }
