@@ -49,6 +49,8 @@ import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.Black
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.GrayDarkDark
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.GrayDarkLight
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.GrayDarkestDark
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.GrayDarkestLight
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.GrayLightDark
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.GrayLightLight
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.GrayMediumDark
@@ -71,6 +73,8 @@ internal fun outlinedTextFieldColors(
     unfocusedIndicatorColor = if (isDarkTheme) GrayMediumDark else GrayMediumLight,
     disabledIndicatorColor = if (isDarkTheme) GrayMediumDark else GrayMediumLight.copy(alpha = 0.12f),
     errorIndicatorColor = Red,
+    focusedTrailingIconColor = if (isDarkTheme) GrayDarkestDark else GrayDarkestLight,
+    unfocusedTrailingIconColor = if (isDarkTheme) GrayDarkestDark else GrayDarkestLight,
     errorTrailingIconColor = MaterialTheme.colorScheme.error,
     focusedPlaceholderColor = if (isDarkTheme) GrayDarkDark else GrayDarkLight,
     unfocusedPlaceholderColor = if (isDarkTheme) GrayDarkDark else GrayDarkLight,
