@@ -13,5 +13,12 @@ fun LoginWithEmailError.asUiText(): UiText = when (this) {
     LoginWithEmailError.Network.SSLHandshakeException -> UiText.StringResource(R.string.error_network_ssl_handshake)
     LoginWithEmailError.Network.CertPathValidatorException -> UiText.StringResource(R.string.error_network_cert_path_validator)
 
+    LoginWithEmailError.Network.FirebaseNetworkException -> UiText.StringResource(R.string.error_network_failure)
+    LoginWithEmailError.Network.FirebaseTooManyRequestsException -> UiText.StringResource(R.string.error_firebase_device_blocked)
+    LoginWithEmailError.Network.Firebase403 -> UiText.StringResource(R.string.error_firebase_403)
+
+    LoginWithEmailError.Network.FirebaseAuthInvalidUserException -> UiText.StringResource(R.string.login_error_account_not_exist)
+    LoginWithEmailError.Network.FirebaseAuthInvalidCredentialsException -> UiText.StringResource(R.string.login_error_invalid_credentials)
+
     LoginWithEmailError.Network.SomethingWentWrong -> UiText.StringResource(R.string.error_something_went_wrong)
 }

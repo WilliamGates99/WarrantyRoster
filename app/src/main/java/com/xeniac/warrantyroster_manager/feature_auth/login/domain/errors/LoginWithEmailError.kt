@@ -12,6 +12,13 @@ sealed class LoginWithEmailError : Error() {
         data object SSLHandshakeException : Network()
         data object CertPathValidatorException : Network()
 
+        data object FirebaseNetworkException : Network()
+        data object FirebaseTooManyRequestsException : Network()
+        data object Firebase403 : Network()
+
+        data object FirebaseAuthInvalidUserException : Network()
+        data object FirebaseAuthInvalidCredentialsException : Network()
+
         data object SomethingWentWrong : Network()
     }
 }

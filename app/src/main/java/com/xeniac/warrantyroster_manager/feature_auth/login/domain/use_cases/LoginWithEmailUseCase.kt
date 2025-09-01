@@ -34,11 +34,9 @@ class LoginWithEmailUseCase(
         }
 
         return@flow emit(
-            LoginWithEmailResult(
-                result = loginWithEmailRepository.loginWithEmail(
-                    email = email,
-                    password = password
-                )
+            loginWithEmailRepository.loginWithEmail(
+                email = email,
+                password = password
             )
         )
     }

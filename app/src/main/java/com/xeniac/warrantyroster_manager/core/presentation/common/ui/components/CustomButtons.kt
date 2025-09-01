@@ -46,8 +46,8 @@ import com.xeniac.warrantyroster_manager.core.presentation.common.ui.utils.toDp
 fun bigButtonColors(): ButtonColors = ButtonDefaults.buttonColors().copy(
     containerColor = Blue,
     contentColor = White,
-    disabledContainerColor = Blue.copy(alpha = 0.38f),
-    disabledContentColor = White.copy(alpha = 0.38f)
+    disabledContainerColor = Blue,
+    disabledContentColor = White
 )
 
 @Composable
@@ -80,7 +80,7 @@ fun BigButton(
     iconSize: Dp = 28.dp,
     iconColor: Color = colors.contentColor,
     progressIndicatorColor: Color = colors.contentColor,
-    progressIndicatorStrokeWidth: Dp = 4.dp,
+    progressIndicatorStrokeWidth: Dp = 3.dp,
     onClick: () -> Unit
 ) {
     var textWidthPx by rememberSaveable { mutableIntStateOf(0) }
@@ -176,7 +176,7 @@ fun BigButton(
         textAlign = textAlign
     ),
     progressIndicatorColor: Color = colors.contentColor,
-    progressIndicatorStrokeWidth: Dp = 4.dp,
+    progressIndicatorStrokeWidth: Dp = 3.dp,
     iconRow: @Composable (RowScope.() -> Unit)? = null,
     onClick: () -> Unit
 ) {
