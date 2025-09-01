@@ -63,6 +63,11 @@
     <string name="auth_title_register">ثبت‌نام</string>
     <string name="auth_title_forgot_pw">بازیابی\nرمز‌عبور</string>
     <string name="auth_title_forgot_pw_instruction">بازیابی\nرمز‌عبور</string>
+    <string name="login_btn_login">ورود</string>
+    <string name="auth_other_login_methods_title_compact_width">یا ورود با</string>
+    <string name="auth_other_login_methods_google">ورود با گوگل</string>
+    <string name="auth_other_login_methods_x">ورود با X</string>
+    <string name="auth_other_login_methods_facebook">ورود با فیسبوک</string>
 
 
     <string name="login_description">بیایید وارد برنامه شویم.</string>
@@ -71,9 +76,7 @@
     <string name="login_textfield_password_title">رمز‌عبور</string>
     <string name="login_textfield_password_hint">رمز‌عبور خود را وارد کنید</string>
     <string name="login_btn_forgot_pw">رمز‌عبور‌تان را فراموش کرده‌اید؟</string>
-    <string name="login_btn_login">ورود</string>
-    <string name="login_other_methods_title">یا ورود با</string>
-    <string name="login_other_methods_title_landscape">یا</string>
+    <string name="auth_other_login_methods_title_medium_width">یا</string>
     <string name="login_btn_register_title">حساب کاربری ندارید؟</string>
     <string name="login_btn_register">ثبت‌نام کنید</string>
     <string name="login_error_blank_email">آدرس ایمیل خود را وارد کنید!</string>
@@ -93,8 +96,6 @@
     <string name="register_title_confirm_password">تکرار رمز‌عبور</string>
     <string name="register_hint_confirm_password">رمز‌عبور را دوباره وارد کنید</string>
     <string name="register_btn_register">ثبت‌نام</string>
-    <string name="register_text_other_methods">یا ورود با</string>
-    <string name="register_text_other_methods_landscape">یا</string>
     <string name="register_text_login_title">در حال حاضر حساب کاربری دارید؟</string>
     <string name="register_btn_login">وارد شوید</string>
     <string name="register_error_blank_email">آدرس ایمیل خود را وارد کنید!</string>

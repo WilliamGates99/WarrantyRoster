@@ -10,6 +10,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
@@ -18,6 +21,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.BigButton
+import com.xeniac.warrantyroster_manager.feature_auth.common.presentation.components.OtherLoginMethodsCompactWidth
+import com.xeniac.warrantyroster_manager.feature_auth.common.presentation.components.OtherLoginMethodsDividerCompactWidth
 import com.xeniac.warrantyroster_manager.feature_auth.login.presentation.LoginAction
 import com.xeniac.warrantyroster_manager.feature_auth.login.presentation.states.LoginState
 
@@ -27,10 +32,8 @@ fun CompactScreenWidthLoginContent(
     bottomPadding: Dp,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(
-        start = 24.dp,
-        end = 24.dp,
         top = 44.dp,
-        bottom = 24.dp
+        bottom = 16.dp
     ),
     onAction: (action: LoginAction) -> Unit,
     onNavigateToRegisterScreen: () -> Unit,
@@ -38,14 +41,19 @@ fun CompactScreenWidthLoginContent(
 ) {
     val focusManager = LocalFocusManager.current
 
+    val horizontalPadding by remember { derivedStateOf { 24.dp } }
+
     Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .padding(bottom = bottomPadding)
             .padding(contentPadding)
     ) {
-        LoginDescription()
+        LoginDescription(
+            modifier = Modifier.padding(horizontal = horizontalPadding)
+        )
 
         Spacer(modifier = Modifier.height(44.dp))
 
@@ -56,12 +64,15 @@ fun CompactScreenWidthLoginContent(
             },
             emailState = state.emailState,
             passwordState = state.passwordState,
-            onAction = onAction
+            onAction = onAction,
+            modifier = Modifier.padding(horizontal = horizontalPadding)
         )
 
         ForgotPwButton(
             onClick = onNavigateToForgotPwScreen,
-            modifier = Modifier.align(Alignment.End)
+            modifier = Modifier
+                .align(Alignment.End)
+                .padding(horizontal = horizontalPadding)
         )
 
         Spacer(modifier = Modifier.height(40.dp))
@@ -72,13 +83,35 @@ fun CompactScreenWidthLoginContent(
                 focusManager.clearFocus()
                 onAction(LoginAction.LoginWithEmail)
             },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .padding(horizontal = horizontalPadding)
+                .fillMaxWidth()
         )
 
-        // TODO: OTHER METHODS DIVIDER
+        OtherLoginMethodsDividerCompactWidth()
 
-        // TODO: OTHER METHODS
+        OtherLoginMethodsCompactWidth(
+            isLoginWithGoogleLoading = state.isLoginWithGoogleLoading,
+            isLoginWithXLoading = state.isLoginWithXLoading,
+            isLoginWithFacebookLoading = state.isLoginWithFacebookLoading,
+            onLoginWithGoogleClick = {
+                // TODO: IMPLEMENT
+            },
+            onLoginWithXClick = {
+                // TODO: IMPLEMENT
+            },
+            onLoginWithFacebookClick = {
+                // TODO: IMPLEMENT
+            },
+            modifier = Modifier.padding(horizontal = horizontalPadding)
+        )
 
-        // TODO: REGISTER BTN
+        Spacer(modifier = Modifier.height(44.dp))
+        Spacer(modifier = Modifier.weight(1f))
+
+        RegisterButton(
+            onClick = onNavigateToRegisterScreen,
+            modifier = Modifier.padding(horizontal = horizontalPadding)
+        )
     }
 }

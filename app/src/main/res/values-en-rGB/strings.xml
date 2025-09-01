@@ -63,6 +63,11 @@
     <string name="auth_title_register">Register</string>
     <string name="auth_title_forgot_pw">Reset\nPassword</string>
     <string name="auth_title_forgot_pw_instruction">Reset\nPassword</string>
+    <string name="auth_other_login_methods_title_compact_width">Or continue with</string>
+    <string name="auth_other_login_methods_title_medium_width">Or</string>
+    <string name="auth_other_login_methods_google">Login with Google</string>
+    <string name="auth_other_login_methods_x">Login with X</string>
+    <string name="auth_other_login_methods_facebook">Login with Facebook</string>
 
 
     <string name="login_description">Let\'s log you in.</string>
@@ -72,8 +77,6 @@
     <string name="login_textfield_password_hint">Enter your password</string>
     <string name="login_btn_forgot_pw">Forgot Password?</string>
     <string name="login_btn_login">Login</string>
-    <string name="login_other_methods_title">Or continue with</string>
-    <string name="login_other_methods_title_landscape">Or</string>
     <string name="login_btn_register_title">Don’t have an account?</string>
     <string name="login_btn_register">Register</string>
     <string name="login_error_blank_email">Enter your email address!</string>
@@ -93,8 +96,6 @@
     <string name="register_title_confirm_password">Confirm Password</string>
     <string name="register_hint_confirm_password">Re-enter your password</string>
     <string name="register_btn_register">Register</string>
-    <string name="register_text_other_methods">Or continue with</string>
-    <string name="register_text_other_methods_landscape">Or</string>
     <string name="register_text_login_title">Already have an account?</string>
     <string name="register_btn_login">Login</string>
     <string name="register_error_blank_email">Enter your email address!</string>

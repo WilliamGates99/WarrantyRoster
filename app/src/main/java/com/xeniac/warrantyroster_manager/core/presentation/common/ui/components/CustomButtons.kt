@@ -176,7 +176,7 @@ fun BigButton(
         textAlign = textAlign
     ),
     progressIndicatorColor: Color = colors.contentColor,
-    progressIndicatorStrokeWidth: Dp = 3.dp,
+    progressIndicatorStrokeWidth: Dp = 4.dp,
     iconRow: @Composable (RowScope.() -> Unit)? = null,
     onClick: () -> Unit
 ) {

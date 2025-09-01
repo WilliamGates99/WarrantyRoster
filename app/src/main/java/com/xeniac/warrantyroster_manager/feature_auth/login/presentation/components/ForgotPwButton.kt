@@ -47,7 +47,7 @@ fun ForgotPwButton(
                 role = Role.Button,
                 onClick = onClick,
                 interactionSource = remember { MutableInteractionSource() },
-                indication = ripple(color = Red)
+                indication = ripple(color = textStyle.color)
             )
             .padding(contentPadding)
     )
