@@ -2,14 +2,21 @@ package com.xeniac.warrantyroster_manager.feature_auth.login.presentation.compon
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.xeniac.warrantyroster_manager.R
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.BigButton
 import com.xeniac.warrantyroster_manager.feature_auth.login.presentation.LoginAction
 import com.xeniac.warrantyroster_manager.feature_auth.login.presentation.states.LoginState
 
@@ -28,6 +35,8 @@ fun CompactScreenWidthLoginContent(
     onNavigateToRegisterScreen: () -> Unit,
     onNavigateToForgotPwScreen: () -> Unit
 ) {
+    val focusManager = LocalFocusManager.current
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -35,11 +44,9 @@ fun CompactScreenWidthLoginContent(
             .padding(bottom = bottomPadding)
             .padding(contentPadding)
     ) {
-        LoginDescription(
-            modifier = Modifier.padding(bottom = 44.dp)
-        )
+        LoginDescription()
 
-//        Spacer(modifier = Modifier.height(44.dp))
+        Spacer(modifier = Modifier.height(44.dp))
 
         LoginTextFields(
             isLoginLoading = with(state) {
@@ -53,7 +60,16 @@ fun CompactScreenWidthLoginContent(
 
         // TODO: FORGOT PASSWORD
 
-        // TODO: LOGIN BTN
+        Spacer(modifier = Modifier.height(40.dp))
+
+        BigButton(
+            text = stringResource(R.string.login_btn_login),
+            onClick = {
+                focusManager.clearFocus()
+                onAction(LoginAction.LoginWithEmail)
+            },
+            modifier = Modifier.fillMaxWidth()
+        )
 
         // TODO: OTHER METHODS DIVIDER
 

@@ -82,20 +82,6 @@ internal fun outlinedTextFieldColors(
     errorSupportingTextColor = Red
 )
 
-/**
- *     <!--    <style name="Theme.WarrantyRoster.TextInputLayout.Dropdown" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">-->
- *     <!--        <item name="hintEnabled">false</item>-->
- *     <!--        <item name="boxBackgroundColor">@color/grayLight</item>-->
- *     <!--        <item name="boxCornerRadiusBottomEnd">@dimen/radius_12dp</item>-->
- *     <!--        <item name="boxCornerRadiusBottomStart">@dimen/radius_12dp</item>-->
- *     <!--        <item name="boxCornerRadiusTopEnd">@dimen/radius_12dp</item>-->
- *     <!--        <item name="boxCornerRadiusTopStart">@dimen/radius_12dp</item>-->
- *     <!--        <item name="boxStrokeWidth">@dimen/width_2dp</item>-->
- *     <!--        <item name="boxStrokeColor">@color/color_stroke_input</item>-->
- *     <!--        <item name="boxStrokeErrorColor">@color/red</item>-->
- *     <!--    </style>-->
- */
-
 @Composable
 fun CustomOutlinedTextField(
     isLoading: Boolean,
