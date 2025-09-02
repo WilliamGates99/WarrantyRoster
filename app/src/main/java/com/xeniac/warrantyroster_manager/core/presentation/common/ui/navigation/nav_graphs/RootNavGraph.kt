@@ -4,10 +4,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.AuthScreen
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.BaseScreen
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.OnboardingScreen
@@ -41,8 +46,14 @@ fun SetupRootNavGraph(
 
         composable<BaseScreen> {
 //            BaseScreen()
+            val firebaseAuth by remember { mutableStateOf(Firebase.auth) }
+
             Text(
-                text = "Base Screen",
+                text = """
+                    Base Screen
+                    Signed in user:
+                    ${firebaseAuth.currentUser ?: "null user"}
+                """.trimIndent(),
                 modifier = Modifier
                     .fillMaxSize()
                     .wrapContentSize()

@@ -1,10 +1,11 @@
 package com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.nav_graphs
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.unit.Dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.AuthScreen
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.BaseScreen
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.ForgotPwInstructionScreen
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.ForgotPwScreen
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.LoginScreen
@@ -17,8 +18,7 @@ import com.xeniac.warrantyroster_manager.feature_auth.register.presentation.Regi
 @Composable
 fun SetupAuthNavGraph(
     rootNavController: NavHostController,
-    authNavController: NavHostController,
-    bottomPadding: Dp
+    authNavController: NavHostController
 ) {
     // TODO: ANIMATED TRANSITION
     NavHost(
@@ -34,7 +34,11 @@ fun SetupAuthNavGraph(
                     authNavController.navigate(ForgotPwScreen)
                 },
                 onNavigateToBaseScreen = {
-                    // TODO: IMPLEMENT NAVIGATION
+                    rootNavController.navigate(BaseScreen) {
+                        popUpTo(AuthScreen) {
+                            inclusive = true
+                        }
+                    }
                 }
             )
         }

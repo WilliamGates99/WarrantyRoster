@@ -98,8 +98,7 @@ fun CompactScreenWidthAuthContent(
         ) {
             SetupAuthNavGraph(
                 rootNavController = rootNavController,
-                authNavController = authNavController,
-                bottomPadding = innerPadding.calculateBottomPadding()
+                authNavController = authNavController
             )
         }
     }
