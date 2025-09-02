@@ -50,6 +50,54 @@ fun LoginScreen(
         }
     }
 
+    ObserverAsEvent(flow = viewModel.loginWithGoogleEventChannel) { event ->
+        when (event) {
+            AuthUiEvent.NavigateToBaseScreen -> onNavigateToBaseScreen()
+            UiEvent.ShowOfflineSnackbar -> context.showOfflineSnackbar(
+                scope = scope,
+                snackbarHostState = snackbarHostState,
+                onAction = { viewModel.onAction(LoginAction.LoginWithGoogle) }
+            )
+            is UiEvent.ShowLongSnackbar -> context.showLongSnackbar(
+                message = event.message,
+                scope = scope,
+                snackbarHostState = snackbarHostState
+            )
+        }
+    }
+
+    ObserverAsEvent(flow = viewModel.loginWithXEventChannel) { event ->
+        when (event) {
+            AuthUiEvent.NavigateToBaseScreen -> onNavigateToBaseScreen()
+            UiEvent.ShowOfflineSnackbar -> context.showOfflineSnackbar(
+                scope = scope,
+                snackbarHostState = snackbarHostState,
+                onAction = { viewModel.onAction(LoginAction.LoginWithX) }
+            )
+            is UiEvent.ShowLongSnackbar -> context.showLongSnackbar(
+                message = event.message,
+                scope = scope,
+                snackbarHostState = snackbarHostState
+            )
+        }
+    }
+
+    ObserverAsEvent(flow = viewModel.loginWithFacebookEventChannel) { event ->
+        when (event) {
+            AuthUiEvent.NavigateToBaseScreen -> onNavigateToBaseScreen()
+            UiEvent.ShowOfflineSnackbar -> context.showOfflineSnackbar(
+                scope = scope,
+                snackbarHostState = snackbarHostState,
+                onAction = { viewModel.onAction(LoginAction.LoginWithFacebook) }
+            )
+            is UiEvent.ShowLongSnackbar -> context.showLongSnackbar(
+                message = event.message,
+                scope = scope,
+                snackbarHostState = snackbarHostState
+            )
+        }
+    }
+
     Scaffold(
         snackbarHost = { SwipeableSnackbar(hostState = snackbarHostState) },
         modifier = Modifier.fillMaxSize()

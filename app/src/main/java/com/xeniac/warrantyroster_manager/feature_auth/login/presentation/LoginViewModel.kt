@@ -10,6 +10,7 @@ import com.xeniac.warrantyroster_manager.core.presentation.common.utils.Event
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.NetworkObserverHelper.hasNetworkConnection
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiEvent
 import com.xeniac.warrantyroster_manager.feature_auth.common.presentation.AuthUiEvent
+import com.xeniac.warrantyroster_manager.feature_auth.common.presentation.utils.asUiText
 import com.xeniac.warrantyroster_manager.feature_auth.login.domain.use_cases.LoginUseCases
 import com.xeniac.warrantyroster_manager.feature_auth.login.presentation.states.LoginState
 import com.xeniac.warrantyroster_manager.feature_auth.login.presentation.utils.asUiText
@@ -46,6 +47,15 @@ class LoginViewModel @Inject constructor(
 
     private val _loginWithEmailEventChannel = Channel<Event>()
     val loginWithEmailEventChannel = _loginWithEmailEventChannel.receiveAsFlow()
+
+    private val _loginWithGoogleEventChannel = Channel<Event>()
+    val loginWithGoogleEventChannel = _loginWithGoogleEventChannel.receiveAsFlow()
+
+    private val _loginWithXEventChannel = Channel<Event>()
+    val loginWithXEventChannel = _loginWithXEventChannel.receiveAsFlow()
+
+    private val _loginWithFacebookEventChannel = Channel<Event>()
+    val loginWithFacebookEventChannel = _loginWithFacebookEventChannel.receiveAsFlow()
 
     fun onAction(action: LoginAction) {
         when (action) {
@@ -141,14 +151,86 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun loginWithGoogle() {
+        if (!hasNetworkConnection()) {
+            _loginWithGoogleEventChannel.trySend(UiEvent.ShowOfflineSnackbar)
+            return
+        }
 
+        loginUseCases.loginWithGoogleUseCase.get()().onStart {
+            _state.update {
+                it.copy(isLoginWithGoogleLoading = true)
+            }
+        }.onEach { result ->
+            when (result) {
+                is Result.Success -> {
+                    // _loginWithGoogleEventChannel.send(AuthUiEvent.NavigateToBaseScreen)
+                }
+                is Result.Error -> {
+                    _loginWithGoogleEventChannel.send(
+                        UiEvent.ShowLongSnackbar(result.error.asUiText())
+                    )
+                }
+            }
+        }.onCompletion {
+            _state.update {
+                it.copy(isLoginWithGoogleLoading = false)
+            }
+        }.launchIn(scope = viewModelScope)
     }
 
     private fun loginWithX() {
+        if (!hasNetworkConnection()) {
+            _loginWithXEventChannel.trySend(UiEvent.ShowOfflineSnackbar)
+            return
+        }
 
+        loginUseCases.loginWithXUseCase.get()().onStart {
+            _state.update {
+                it.copy(isLoginWithXLoading = true)
+            }
+        }.onEach { result ->
+            when (result) {
+                is Result.Success -> {
+                    // _loginWithXEventChannel.send(AuthUiEvent.NavigateToBaseScreen)
+                }
+                is Result.Error -> {
+                    _loginWithXEventChannel.send(
+                        UiEvent.ShowLongSnackbar(result.error.asUiText())
+                    )
+                }
+            }
+        }.onCompletion {
+            _state.update {
+                it.copy(isLoginWithXLoading = false)
+            }
+        }.launchIn(scope = viewModelScope)
     }
 
     private fun loginWithFacebook() {
+        if (!hasNetworkConnection()) {
+            _loginWithFacebookEventChannel.trySend(UiEvent.ShowOfflineSnackbar)
+            return
+        }
 
+        loginUseCases.loginWithFacebookUseCase.get()().onStart {
+            _state.update {
+                it.copy(isLoginWithFacebookLoading = true)
+            }
+        }.onEach { result ->
+            when (result) {
+                is Result.Success -> {
+                    // _loginWithFacebookEventChannel.send(AuthUiEvent.NavigateToBaseScreen)
+                }
+                is Result.Error -> {
+                    _loginWithFacebookEventChannel.send(
+                        UiEvent.ShowLongSnackbar(result.error.asUiText())
+                    )
+                }
+            }
+        }.onCompletion {
+            _state.update {
+                it.copy(isLoginWithFacebookLoading = false)
+            }
+        }.launchIn(scope = viewModelScope)
     }
 }
