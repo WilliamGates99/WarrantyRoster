@@ -2,8 +2,8 @@ package com.xeniac.warrantyroster_manager.feature_auth.common.domain.errors
 
 import com.xeniac.warrantyroster_manager.core.domain.errors.Error
 
-sealed class RegisterWithXError : Error() {
-    sealed class Network : RegisterWithXError() {
+sealed class LoginWithFacebookError : Error() {
+    sealed class Network : LoginWithFacebookError() {
         data object Offline : Network()
         data object ConnectTimeoutException : Network()
         data object HttpRequestTimeoutException : Network()

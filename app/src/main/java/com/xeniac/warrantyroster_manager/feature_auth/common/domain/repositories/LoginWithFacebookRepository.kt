@@ -1,11 +1,11 @@
 package com.xeniac.warrantyroster_manager.feature_auth.common.domain.repositories
 
 import com.xeniac.warrantyroster_manager.core.domain.models.Result
-import com.xeniac.warrantyroster_manager.feature_auth.common.domain.errors.RegisterWithFacebookError
+import com.xeniac.warrantyroster_manager.feature_auth.common.domain.errors.LoginWithFacebookError
 
 interface LoginWithFacebookRepository {
 
-    suspend fun registerWithFacebook(
+    suspend fun loginWithFacebook(
 //        accessToken: AccessToken
-    ): Result<Unit, RegisterWithFacebookError>
+    ): Result<Unit, LoginWithFacebookError>
 }

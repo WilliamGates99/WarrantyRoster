@@ -2,8 +2,8 @@ package com.xeniac.warrantyroster_manager.feature_auth.common.domain.errors
 
 import com.xeniac.warrantyroster_manager.core.domain.errors.Error
 
-sealed class RegisterWithGoogleError : Error() {
-    sealed class Network : RegisterWithGoogleError() {
+sealed class LoginWithXError : Error() {
+    sealed class Network : LoginWithXError() {
         data object Offline : Network()
         data object ConnectTimeoutException : Network()
         data object HttpRequestTimeoutException : Network()
