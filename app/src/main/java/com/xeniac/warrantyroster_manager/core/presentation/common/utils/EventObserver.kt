@@ -27,7 +27,7 @@ fun <T> ObserverAsEvent(
         key3
     ) {
         lifecycleOwner.repeatOnLifecycle(state = Lifecycle.State.STARTED) {
-            withContext(Dispatchers.Main.immediate) {
+            withContext(context = Dispatchers.Main.immediate) {
                 flow.collect(onEvent)
             }
         }
