@@ -1,5 +1,6 @@
 package com.xeniac.warrantyroster_manager.feature_auth.login.presentation
 
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
@@ -17,6 +18,7 @@ import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.utils.isWindowWidthSizeCompact
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.ObserverAsEvent
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiEvent
+import com.xeniac.warrantyroster_manager.core.presentation.common.utils.findActivity
 import com.xeniac.warrantyroster_manager.feature_auth.common.presentation.AuthUiEvent
 import com.xeniac.warrantyroster_manager.feature_auth.login.presentation.components.CompactScreenWidthLoginContent
 import com.xeniac.warrantyroster_manager.feature_auth.login.presentation.components.MediumScreenWidthLoginContent
@@ -29,6 +31,7 @@ fun LoginScreen(
     viewModel: LoginViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
+    val activity = LocalActivity.current ?: context.findActivity()
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -69,10 +72,17 @@ fun LoginScreen(
     ObserverAsEvent(flow = viewModel.loginWithXEventChannel) { event ->
         when (event) {
             AuthUiEvent.NavigateToBaseScreen -> onNavigateToBaseScreen()
+            AuthUiEvent.StartActivityForLoginWithX -> {
+                val loginTask = viewModel.firebaseAuth.get().startActivityForSignInWithProvider(
+                    activity,
+                    viewModel.xOAuthProvider.get()
+                )
+                viewModel.onAction(LoginAction.LoginWithX(loginWithXTask = loginTask))
+            }
             UiEvent.ShowOfflineSnackbar -> context.showOfflineSnackbar(
                 scope = scope,
                 snackbarHostState = snackbarHostState,
-                onAction = { viewModel.onAction(LoginAction.LoginWithX) }
+                onAction = { viewModel.onAction(LoginAction.CheckPendingLoginWithX) }
             )
             is UiEvent.ShowLongSnackbar -> context.showLongSnackbar(
                 message = event.message,

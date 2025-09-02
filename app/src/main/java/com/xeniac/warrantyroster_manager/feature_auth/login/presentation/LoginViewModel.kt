@@ -5,17 +5,23 @@ import androidx.credentials.Credential
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.AuthResult
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.OAuthProvider
 import com.xeniac.warrantyroster_manager.core.domain.models.Result
 import com.xeniac.warrantyroster_manager.core.domain.utils.convertDigitsToEnglish
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.Event
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.NetworkObserverHelper.hasNetworkConnection
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiEvent
 import com.xeniac.warrantyroster_manager.feature_auth.common.domain.errors.GetGoogleCredentialError
+import com.xeniac.warrantyroster_manager.feature_auth.common.domain.errors.LoginWithXError
 import com.xeniac.warrantyroster_manager.feature_auth.common.presentation.AuthUiEvent
 import com.xeniac.warrantyroster_manager.feature_auth.common.presentation.utils.asUiText
 import com.xeniac.warrantyroster_manager.feature_auth.login.domain.use_cases.LoginUseCases
 import com.xeniac.warrantyroster_manager.feature_auth.login.presentation.states.LoginState
 import com.xeniac.warrantyroster_manager.feature_auth.login.presentation.utils.asUiText
+import dagger.Lazy
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.SharingStarted
@@ -34,6 +40,8 @@ import kotlin.time.Duration.Companion.seconds
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val loginUseCases: LoginUseCases,
+    val xOAuthProvider: Lazy<OAuthProvider>,
+    val firebaseAuth: Lazy<FirebaseAuth>,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -65,7 +73,8 @@ class LoginViewModel @Inject constructor(
             is LoginAction.PasswordChanged -> passwordChanged(action.newValue)
             LoginAction.LoginWithEmail -> loginWithEmail()
             LoginAction.LoginWithGoogle -> getGoogleCredential()
-            LoginAction.LoginWithX -> loginWithX()
+            LoginAction.CheckPendingLoginWithX -> checkPendingLoginWithX()
+            is LoginAction.LoginWithX -> loginWithX(action.loginWithXTask)
             LoginAction.LoginWithFacebook -> loginWithFacebook()
         }
     }
@@ -171,7 +180,7 @@ class LoginViewModel @Inject constructor(
                     }
 
                     when (val error = result.error) {
-                        GetGoogleCredentialError.Network.GetGoogleCredentialCancellationException -> Unit
+                        GetGoogleCredentialError.CancellationException -> Unit
                         else -> _loginWithGoogleEventChannel.send(UiEvent.ShowLongSnackbar(error.asUiText()))
                     }
                 }
@@ -199,7 +208,7 @@ class LoginViewModel @Inject constructor(
         }.onEach { result ->
             when (result) {
                 is Result.Success -> {
-                    // _loginWithGoogleEventChannel.send(AuthUiEvent.NavigateToBaseScreen)
+                    _loginWithGoogleEventChannel.send(AuthUiEvent.NavigateToBaseScreen)
                 }
                 is Result.Error -> {
                     _loginWithGoogleEventChannel.send(
@@ -214,25 +223,66 @@ class LoginViewModel @Inject constructor(
         }.launchIn(scope = viewModelScope)
     }
 
-    private fun loginWithX() {
+    private fun checkPendingLoginWithX() {
         if (!hasNetworkConnection()) {
             _loginWithXEventChannel.trySend(UiEvent.ShowOfflineSnackbar)
             return
         }
 
-        loginUseCases.loginWithXUseCase.get()().onStart {
+        loginUseCases.checkPendingLoginWithXUseCase.get()().onStart {
             _state.update {
                 it.copy(isLoginWithXLoading = true)
             }
         }.onEach { result ->
             when (result) {
                 is Result.Success -> {
-                    // _loginWithXEventChannel.send(AuthUiEvent.NavigateToBaseScreen)
+                    val pendingLoginWithXTask = result.data
+                    when {
+                        pendingLoginWithXTask != null -> { // Handle pending login
+                            loginWithX(loginWithXTask = pendingLoginWithXTask)
+                        }
+                        else -> { // Start new login activity
+                            _loginWithXEventChannel.send(AuthUiEvent.StartActivityForLoginWithX)
+                        }
+                    }
                 }
                 is Result.Error -> {
-                    _loginWithXEventChannel.send(
-                        UiEvent.ShowLongSnackbar(result.error.asUiText())
-                    )
+                    _state.update {
+                        it.copy(isLoginWithXLoading = false)
+                    }
+                    _loginWithXEventChannel.send(UiEvent.ShowLongSnackbar(result.error.asUiText()))
+                }
+            }
+        }.launchIn(scope = viewModelScope)
+    }
+
+    private fun loginWithX(
+        loginWithXTask: Task<AuthResult>
+    ) {
+        if (!hasNetworkConnection()) {
+            _loginWithXEventChannel.trySend(UiEvent.ShowOfflineSnackbar)
+            _state.update {
+                it.copy(isLoginWithXLoading = false)
+            }
+            return
+        }
+
+        loginUseCases.loginWithXUseCase.get()(
+            loginWithXTask = loginWithXTask
+        ).onStart {
+            _state.update {
+                it.copy(isLoginWithXLoading = true)
+            }
+        }.onEach { result ->
+            when (result) {
+                is Result.Success -> {
+                    _loginWithXEventChannel.send(AuthUiEvent.NavigateToBaseScreen)
+                }
+                is Result.Error -> {
+                    when (val error = result.error) {
+                        LoginWithXError.CancellationException -> Unit
+                        else -> _loginWithXEventChannel.send(UiEvent.ShowLongSnackbar(error.asUiText()))
+                    }
                 }
             }
         }.onCompletion {

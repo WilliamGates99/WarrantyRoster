@@ -3,13 +3,17 @@ package com.xeniac.warrantyroster_manager.feature_auth.common.di
 import android.content.Context
 import androidx.credentials.CredentialManager
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
+import com.google.firebase.auth.OAuthProvider
 import com.xeniac.warrantyroster_manager.BuildConfig
+import com.xeniac.warrantyroster_manager.core.domain.models.AppLocale
+import com.xeniac.warrantyroster_manager.core.domain.repositories.SettingsDataStoreRepository
 import com.xeniac.warrantyroster_manager.core.domain.use_cases.GetCurrentAppLocaleUseCase
 import com.xeniac.warrantyroster_manager.core.domain.use_cases.StoreCurrentAppLocaleUseCase
 import com.xeniac.warrantyroster_manager.feature_auth.common.domain.repositories.LoginWithFacebookRepository
 import com.xeniac.warrantyroster_manager.feature_auth.common.domain.repositories.LoginWithGoogleRepository
 import com.xeniac.warrantyroster_manager.feature_auth.common.domain.repositories.LoginWithXRepository
 import com.xeniac.warrantyroster_manager.feature_auth.common.domain.use_cases.AuthUseCases
+import com.xeniac.warrantyroster_manager.feature_auth.common.domain.use_cases.CheckPendingLoginWithXUseCase
 import com.xeniac.warrantyroster_manager.feature_auth.common.domain.use_cases.GetGoogleCredentialUseCase
 import com.xeniac.warrantyroster_manager.feature_auth.common.domain.use_cases.LoginWithFacebookUseCase
 import com.xeniac.warrantyroster_manager.feature_auth.common.domain.use_cases.LoginWithGoogleUseCase
@@ -42,6 +46,21 @@ internal object AuthModule {
 
     @Provides
     @ViewModelScoped
+    fun provideXOAuthProvider(
+        settingsDataStoreRepository: SettingsDataStoreRepository
+    ): OAuthProvider = OAuthProvider.newBuilder("twitter.com").apply {
+        val currentAppLocale = settingsDataStoreRepository.getCurrentAppLocale()
+        val xWebsiteLanguage = when (currentAppLocale) {
+            AppLocale.DEFAULT -> "en"
+            AppLocale.ENGLISH_US -> "en"
+            AppLocale.ENGLISH_GB -> "en"
+            AppLocale.FARSI_IR -> "fa"
+        }
+        addCustomParameter("lang", xWebsiteLanguage)
+    }.build()
+
+    @Provides
+    @ViewModelScoped
     fun provideGetGoogleCredentialUseCase(
         loginWithGoogleRepository: LoginWithGoogleRepository
     ): GetGoogleCredentialUseCase = GetGoogleCredentialUseCase(loginWithGoogleRepository)
@@ -51,6 +70,12 @@ internal object AuthModule {
     fun provideLoginWithGoogleUseCase(
         loginWithGoogleRepository: LoginWithGoogleRepository
     ): LoginWithGoogleUseCase = LoginWithGoogleUseCase(loginWithGoogleRepository)
+
+    @Provides
+    @ViewModelScoped
+    fun provideCheckPendingLoginWithXUseCase(
+        loginWithXRepository: LoginWithXRepository
+    ): CheckPendingLoginWithXUseCase = CheckPendingLoginWithXUseCase(loginWithXRepository)
 
     @Provides
     @ViewModelScoped

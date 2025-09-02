@@ -8,12 +8,10 @@ import com.xeniac.warrantyroster_manager.feature_auth.common.domain.repositories
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class LoginWithXUseCase(
+class CheckPendingLoginWithXUseCase(
     private val loginWithXRepository: LoginWithXRepository
 ) {
-    operator fun invoke(
-        loginWithXTask: Task<AuthResult>
-    ): Flow<Result<Unit, LoginWithXError>> = flow {
-        return@flow emit(loginWithXRepository.loginWithX(loginWithXTask = loginWithXTask))
+    operator fun invoke(): Flow<Result<Task<AuthResult>?, LoginWithXError>> = flow {
+        return@flow emit(loginWithXRepository.checkPendingLoginWithX())
     }
 }

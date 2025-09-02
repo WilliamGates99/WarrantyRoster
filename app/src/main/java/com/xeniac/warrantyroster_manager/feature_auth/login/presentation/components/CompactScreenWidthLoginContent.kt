@@ -96,7 +96,7 @@ fun CompactScreenWidthLoginContent(
             isLoginWithXLoading = state.isLoginWithXLoading,
             isLoginWithFacebookLoading = state.isLoginWithFacebookLoading,
             onLoginWithGoogleClick = { onAction(LoginAction.LoginWithGoogle) },
-            onLoginWithXClick = { onAction(LoginAction.LoginWithX) },
+            onLoginWithXClick = { onAction(LoginAction.CheckPendingLoginWithX) },
             onLoginWithFacebookClick = { onAction(LoginAction.LoginWithFacebook) },
             modifier = Modifier.padding(horizontal = horizontalPadding)
         )

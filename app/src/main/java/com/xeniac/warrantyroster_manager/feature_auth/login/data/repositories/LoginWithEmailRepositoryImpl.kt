@@ -98,9 +98,6 @@ class LoginWithEmailRepositoryImpl @Inject constructor(
 }
 
 /**
- * const val ERROR_TWITTER_O_AUTH_PROVIDER_CANCELED = "The web operation was canceled by the user"
- * const val ERROR_TWITTER_O_AUTH_PROVIDER_NETWORK_CONNECTION = "An internal error has occurred"
- *
  * // REGISTER ACCOUNT:
  * const val ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS = "The email address is already in use by another account"
  * const val ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIALS = "An account already exists with the same email address but different sign-in credentials"
