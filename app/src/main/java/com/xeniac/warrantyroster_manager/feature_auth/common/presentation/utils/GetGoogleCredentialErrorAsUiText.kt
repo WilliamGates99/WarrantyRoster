@@ -5,18 +5,10 @@ import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiText
 import com.xeniac.warrantyroster_manager.feature_auth.common.domain.errors.GetGoogleCredentialError
 
 fun GetGoogleCredentialError.asUiText(): UiText = when (this) {
-    GetGoogleCredentialError.Network.SSLHandshakeException -> UiText.StringResource(R.string.error_network_ssl_handshake)
-    GetGoogleCredentialError.Network.CertPathValidatorException -> UiText.StringResource(R.string.error_network_cert_path_validator)
-
-//    GetGoogleCredentialError.Network.FirebaseNetworkException -> UiText.StringResource(R.string.error_network_failure)
-//    GetGoogleCredentialError.Network.FirebaseTooManyRequestsException -> UiText.StringResource(R.string.error_firebase_device_blocked)
-//    GetGoogleCredentialError.Network.Firebase403 -> UiText.StringResource(R.string.error_firebase_403)
-//
-//    GetGoogleCredentialError.Network.FirebaseAuthInvalidUserException -> UiText.StringResource(R.string.login_error_account_not_exist)
-//    GetGoogleCredentialError.Network.FirebaseAuthInvalidCredentialsException -> UiText.StringResource(R.string.login_error_invalid_credentials)
-
+    GetGoogleCredentialError.Network.GetGoogleCredentialCancellationException -> UiText.DynamicString(
+        value = "User cancelled the credential selector."
+    )
+    GetGoogleCredentialError.Network.AccessCredentialManagerFailed -> UiText.StringResource(R.string.auth_method_google_error_access_credential_manager)
+    GetGoogleCredentialError.Network.CredentialCorruptedOrExpired -> UiText.StringResource(R.string.auth_method_google_error_corrupted_or_expired_credential)
     GetGoogleCredentialError.Network.SomethingWentWrong -> UiText.StringResource(R.string.error_something_went_wrong)
-
-    // TODO: TEMP - REMOVE
-    else -> UiText.StringResource(R.string.error_something_went_wrong)
 }

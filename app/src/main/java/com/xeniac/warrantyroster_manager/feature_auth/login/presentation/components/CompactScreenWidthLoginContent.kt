@@ -78,10 +78,7 @@ fun CompactScreenWidthLoginContent(
         Spacer(modifier = Modifier.height(40.dp))
 
         BigButton(
-            isLoading = with(state) {
-                isLoginWithEmailLoading || isLoginWithGoogleLoading
-                        || isLoginWithXLoading || isLoginWithFacebookLoading
-            },
+            isLoading = state.isLoginWithEmailLoading,
             text = stringResource(R.string.login_btn_login),
             onClick = {
                 focusManager.clearFocus()

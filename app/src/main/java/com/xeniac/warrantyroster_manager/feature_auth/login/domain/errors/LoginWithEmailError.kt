@@ -18,6 +18,7 @@ sealed class LoginWithEmailError : Error() {
 
         data object FirebaseAuthInvalidUserException : Network()
         data object FirebaseAuthInvalidCredentialsException : Network()
+        data object FirebaseAuthUserCollisionException : Network()
 
         data object SomethingWentWrong : Network()
     }

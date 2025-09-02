@@ -58,6 +58,25 @@ fun SetupRootNavGraph(
                     .fillMaxSize()
                     .wrapContentSize()
             )
+
+            /* TODO: IMPLEMENT LOGOUT IN BASE SCREEN
+            private suspend fun logoutUser() {
+                try {
+                    firebaseAuth.get().signOut()
+
+                    // Clear the current user credential state from all credential providers
+                    val clearRequest = ClearCredentialStateRequest()
+                    credentialManager.get().clearCredentialState(request = clearRequest)
+                } catch (e: ClearCredentialException) {
+
+                } catch (e: Exception) {
+                    coroutineContext.ensureActive()
+                    Timber.e("Logout user Exception:")
+                    e.printStackTrace()
+                    Result.Error(LogoutError.Network.SomethingWentWrong)
+                }
+            }
+            */
         }
     }
 }

@@ -4,26 +4,19 @@ import com.xeniac.warrantyroster_manager.core.domain.errors.Error
 
 sealed class LoginWithGoogleError : Error() {
     sealed class Network : LoginWithGoogleError() {
-        data object Offline : Network()
-        data object ConnectTimeoutException : Network()
-        data object HttpRequestTimeoutException : Network()
-        data object SocketTimeoutException : Network()
-        data object SerializationException : Network()
-        data object JsonConvertException : Network()
         data object SSLHandshakeException : Network()
         data object CertPathValidatorException : Network()
 
-        // 3xx errors
-        data object RedirectResponseException : Network()
-
-        // 4xx errors
-        data object TooManyRequests : Network()
-        data object ClientRequestException : Network()
-
-        // 5xx
-        data object ServerResponseException : Network()
-
         data object UnexpectedCredentialType : Network()
+        data object GoogleIdTokenParsingException : Network()
+
+        data object FirebaseNetworkException : Network()
+        data object FirebaseTooManyRequestsException : Network()
+        data object Firebase403 : Network()
+
+        data object FirebaseAuthInvalidUserException : Network()
+        data object FirebaseAuthInvalidCredentialsException : Network()
+        data object FirebaseAuthUserCollisionException : Network()
 
         data object SomethingWentWrong : Network()
     }

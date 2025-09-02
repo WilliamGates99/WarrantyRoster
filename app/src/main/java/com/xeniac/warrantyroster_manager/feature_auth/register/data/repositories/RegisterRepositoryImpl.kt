@@ -26,13 +26,14 @@ class RegisterRepositoryImpl @Inject constructor(
         password: String
     ): Result<Unit, RegisterWithEmailError> {
         return try {
+            // TODO: ERROR HANDLING
             withContext(context = Dispatchers.IO) {
-                val result = firebaseAuth.get().createUserWithEmailAndPassword(
+                val authResult = firebaseAuth.get().createUserWithEmailAndPassword(
                     email.trim(),
                     password.trim()
                 ).await()
 
-                result.user?.let { registeredUser ->
+                authResult.user?.let { registeredUser ->
                     warrantyRosterDataStoreRepository.get().isUserLoggedIn(isLoggedIn = true)
                     registeredUser.sendEmailVerification().await()
                     return@withContext Result.Success(Unit)

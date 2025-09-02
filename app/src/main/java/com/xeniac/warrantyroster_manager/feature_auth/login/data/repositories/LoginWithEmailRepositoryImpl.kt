@@ -6,6 +6,7 @@ import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.xeniac.warrantyroster_manager.core.data.utils.FirebaseErrorsHelper.isFirebase403Error
 import com.xeniac.warrantyroster_manager.core.domain.models.Result
 import com.xeniac.warrantyroster_manager.core.domain.repositories.WarrantyRosterDataStoreRepository
@@ -13,10 +14,8 @@ import com.xeniac.warrantyroster_manager.feature_auth.login.domain.errors.LoginW
 import com.xeniac.warrantyroster_manager.feature_auth.login.domain.models.LoginWithEmailResult
 import com.xeniac.warrantyroster_manager.feature_auth.login.domain.repositories.LoginWithEmailRepository
 import dagger.Lazy
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.security.cert.CertPathValidatorException
 import javax.inject.Inject
@@ -33,21 +32,18 @@ class LoginWithEmailRepositoryImpl @Inject constructor(
         password: String
     ): LoginWithEmailResult {
         return try {
-            withContext(context = Dispatchers.IO) {
-                val result = firebaseAuth.get().signInWithEmailAndPassword(
-                    email.trim(),
-                    password.trim()
-                ).await()
+            val authResult = firebaseAuth.get().signInWithEmailAndPassword(
+                email.trim(),
+                password.trim()
+            ).await()
 
-                val isSuccess = result.user != null
-                if (isSuccess) {
-                    warrantyRosterDataStoreRepository.get().isUserLoggedIn(isLoggedIn = true)
-                    return@withContext LoginWithEmailResult(result = Result.Success(Unit))
-                }
-
-                LoginWithEmailResult(result = Result.Error(LoginWithEmailError.Network.SomethingWentWrong))
-
+            val isSuccess = authResult.user != null
+            if (isSuccess) {
+                warrantyRosterDataStoreRepository.get().isUserLoggedIn(isLoggedIn = true)
+                return LoginWithEmailResult(result = Result.Success(Unit))
             }
+
+            LoginWithEmailResult(result = Result.Error(LoginWithEmailError.Network.SomethingWentWrong))
         } catch (e: IllegalArgumentException) {
             Timber.e("Login with email IllegalArgumentException:")
             e.printStackTrace()
@@ -74,7 +70,6 @@ class LoginWithEmailRepositoryImpl @Inject constructor(
         } catch (e: FirebaseException) {
             Timber.e("Login with email FirebaseException:")
             e.printStackTrace()
-
             when {
                 isFirebase403Error(e.message) -> LoginWithEmailResult(
                     result = Result.Error(LoginWithEmailError.Network.Firebase403)
@@ -89,6 +84,10 @@ class LoginWithEmailRepositoryImpl @Inject constructor(
             Timber.e("Login with email FirebaseAuthInvalidCredentialsException:")
             e.printStackTrace()
             LoginWithEmailResult(result = Result.Error(LoginWithEmailError.Network.FirebaseAuthInvalidCredentialsException))
+        } catch (e: FirebaseAuthUserCollisionException) {
+            Timber.e("Login with email FirebaseAuthUserCollisionException:")
+            e.printStackTrace()
+            LoginWithEmailResult(result = Result.Error(LoginWithEmailError.Network.FirebaseAuthUserCollisionException))
         } catch (e: Exception) {
             coroutineContext.ensureActive()
             Timber.e("Login with email Exception:")
@@ -99,10 +98,6 @@ class LoginWithEmailRepositoryImpl @Inject constructor(
 }
 
 /**
- * const val ERROR_GOOGLE_SIGN_IN_API_NOT_AVAILABLE = "Auth.GOOGLE_SIGN_IN_API is not available on this device"
- * const val ERROR_GOOGLE_SIGN_IN_CLIENT_CANCELED = "12501"
- * const val ERROR_GOOGLE_SIGN_IN_CLIENT_OFFLINE = "7"
- *
  * const val ERROR_TWITTER_O_AUTH_PROVIDER_CANCELED = "The web operation was canceled by the user"
  * const val ERROR_TWITTER_O_AUTH_PROVIDER_NETWORK_CONNECTION = "An internal error has occurred"
  *
@@ -111,11 +106,6 @@ class LoginWithEmailRepositoryImpl @Inject constructor(
  * const val ERROR_FIREBASE_AUTH_ALREADY_LINKED = "User has already been linked to the given provider"
  * const val ERROR_FIREBASE_AUTH_EMAIL_VERIFICATION_EMAIL_NOT_PROVIDED = "An email address must be provided"
  *
- *   catch (e: FirebaseAuthUserCollisionException) { for both ACCOUNT_EXISTS and DIFFERENT_CREDENTIALS
- *             Timber.e("Login with email FirebaseAuthInvalidCredentialsException:")
- *             e.printStackTrace()
- *             LoginWithEmailResult(result = Result.Error(LoginWithEmailError.Network.FirebaseAuthInvalidCredentialsException))
- *         }
  *
  *
  *

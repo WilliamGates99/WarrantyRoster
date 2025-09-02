@@ -10,6 +10,7 @@ import com.xeniac.warrantyroster_manager.core.domain.utils.convertDigitsToEnglis
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.Event
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.NetworkObserverHelper.hasNetworkConnection
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiEvent
+import com.xeniac.warrantyroster_manager.feature_auth.common.domain.errors.GetGoogleCredentialError
 import com.xeniac.warrantyroster_manager.feature_auth.common.presentation.AuthUiEvent
 import com.xeniac.warrantyroster_manager.feature_auth.common.presentation.utils.asUiText
 import com.xeniac.warrantyroster_manager.feature_auth.login.domain.use_cases.LoginUseCases
@@ -165,11 +166,13 @@ class LoginViewModel @Inject constructor(
             when (result) {
                 is Result.Success -> loginWithGoogle(credential = result.data)
                 is Result.Error -> {
-                    _loginWithGoogleEventChannel.send(
-                        UiEvent.ShowLongSnackbar(result.error.asUiText())
-                    )
                     _state.update {
                         it.copy(isLoginWithGoogleLoading = false)
+                    }
+
+                    when (val error = result.error) {
+                        GetGoogleCredentialError.Network.GetGoogleCredentialCancellationException -> Unit
+                        else -> _loginWithGoogleEventChannel.send(UiEvent.ShowLongSnackbar(error.asUiText()))
                     }
                 }
             }

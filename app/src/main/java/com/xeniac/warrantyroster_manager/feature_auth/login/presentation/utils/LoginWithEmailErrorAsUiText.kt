@@ -19,6 +19,7 @@ fun LoginWithEmailError.asUiText(): UiText = when (this) {
 
     LoginWithEmailError.Network.FirebaseAuthInvalidUserException -> UiText.StringResource(R.string.login_error_account_not_exist)
     LoginWithEmailError.Network.FirebaseAuthInvalidCredentialsException -> UiText.StringResource(R.string.login_error_invalid_credentials)
+    LoginWithEmailError.Network.FirebaseAuthUserCollisionException -> UiText.StringResource(R.string.login_error_email_exists_with_different_credentials)
 
     LoginWithEmailError.Network.SomethingWentWrong -> UiText.StringResource(R.string.error_something_went_wrong)
 }
