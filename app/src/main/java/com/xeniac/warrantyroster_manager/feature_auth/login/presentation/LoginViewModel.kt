@@ -1,6 +1,7 @@
 package com.xeniac.warrantyroster_manager.feature_auth.login.presentation
 
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.credentials.Credential
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -62,7 +63,7 @@ class LoginViewModel @Inject constructor(
             is LoginAction.EmailChanged -> emailChanged(action.newValue)
             is LoginAction.PasswordChanged -> passwordChanged(action.newValue)
             LoginAction.LoginWithEmail -> loginWithEmail()
-            LoginAction.LoginWithGoogle -> loginWithGoogle()
+            LoginAction.LoginWithGoogle -> getGoogleCredential()
             LoginAction.LoginWithX -> loginWithX()
             LoginAction.LoginWithFacebook -> loginWithFacebook()
         }
@@ -150,13 +151,45 @@ class LoginViewModel @Inject constructor(
         }.launchIn(scope = viewModelScope)
     }
 
-    private fun loginWithGoogle() {
+    private fun getGoogleCredential() {
         if (!hasNetworkConnection()) {
             _loginWithGoogleEventChannel.trySend(UiEvent.ShowOfflineSnackbar)
             return
         }
 
-        loginUseCases.loginWithGoogleUseCase.get()().onStart {
+        loginUseCases.getGoogleCredentialUseCase.get()().onStart {
+            _state.update {
+                it.copy(isLoginWithGoogleLoading = true)
+            }
+        }.onEach { result ->
+            when (result) {
+                is Result.Success -> loginWithGoogle(credential = result.data)
+                is Result.Error -> {
+                    _loginWithGoogleEventChannel.send(
+                        UiEvent.ShowLongSnackbar(result.error.asUiText())
+                    )
+                    _state.update {
+                        it.copy(isLoginWithGoogleLoading = false)
+                    }
+                }
+            }
+        }.launchIn(scope = viewModelScope)
+    }
+
+    private fun loginWithGoogle(
+        credential: Credential
+    ) {
+        if (!hasNetworkConnection()) {
+            _loginWithGoogleEventChannel.trySend(UiEvent.ShowOfflineSnackbar)
+            _state.update {
+                it.copy(isLoginWithGoogleLoading = false)
+            }
+            return
+        }
+
+        loginUseCases.loginWithGoogleUseCase.get()(
+            credential = credential
+        ).onStart {
             _state.update {
                 it.copy(isLoginWithGoogleLoading = true)
             }

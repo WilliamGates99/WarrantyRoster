@@ -16,6 +16,8 @@ coroutines = "1.10.2"
 ktor = "3.2.3"
 datastorePreferences = "1.1.7"
 firebase-bom = "34.2.0"
+credentialManager = "1.5.0"
+googleid = "1.1.1"
 inAppBrowser = "1.9.0"
 timber = "5.0.1"
 lottieCompose = "6.6.7"
@@ -98,6 +100,11 @@ firebase-appcheck-playintegrity = { group = "com.google.firebase", name = "fireb
 firebase-appcheck-debug = { group = "com.google.firebase", name = "firebase-appcheck-debug" } # App Check - Debug
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth" } # Authentication
 
+# Credential Manager Library for Login with Google
+credentials = { module = "androidx.credentials:credentials", version.ref = "credentialManager" }
+credentials-play-services-auth = { module = "androidx.credentials:credentials-play-services-auth", version.ref = "credentialManager" }
+googleid = { module = "com.google.android.libraries.identity.googleid:googleid", version.ref = "googleid" }
+
 # In-App Browser
 browser = { module = "androidx.browser:browser", version.ref = "inAppBrowser" }
 
@@ -149,6 +156,7 @@ architectural-components = ["lifecycle-viewmodel-ktx", "lifecycle-viewmodel-comp
 coroutines = ["kotlinx-coroutines-android", "kotlinx-coroutines-play-services"]
 ktor = ["ktor-client-core", "ktor-client-okhttp", "ktor-client-content-negotiation", "ktor-serialization-kotlinx-json", "ktor-client-logging"]
 firebase = ["firebase-analytics", "firebase-messaging", "firebase-crashlytics", "firebase-perf", "firebase-appcheck-playintegrity", "firebase-appcheck-debug", "firebase-auth"]
+credential-manager = ["credentials", "credentials-play-services-auth", "googleid"]
 coil = ["coil-compose", "coil-svg", "coil-gif", "coil-network-ktor", "coil-network-cache-control"]
 google-play-inapp-apis = ["play-review-ktx", "play-app-update-ktx"]
 

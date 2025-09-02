@@ -35,34 +35,34 @@ android {
 
         testInstrumentationRunner = "com.xeniac.warrantyroster_manager.HiltTestRunner"
 
-        resValue(
-            "string",
-            "fb_login_protocol_scheme",
-            properties.getProperty("FACEBOOK_AUTH_LOGIN_PROTOCOL_SCHEME")
-        )
-
-        resValue(
-            "string",
-            "facebook_app_id",
-            properties.getProperty("FACEBOOK_AUTH_APP_ID")
-        )
-
-        resValue(
-            "string",
-            "facebook_client_token",
-            properties.getProperty("FACEBOOK_AUTH_CLIENT_TOKEN")
+        buildConfigField(
+            type = "String",
+            name = "CATEGORY_MISCELLANEOUS_ICON",
+            value = properties.getProperty("CATEGORY_MISCELLANEOUS_ICON")
         )
 
         buildConfigField(
-            "String",
-            "GOOGLE_AUTH_SERVER_CLIENT_ID",
-            properties.getProperty("GOOGLE_AUTH_SERVER_CLIENT_ID")
+            type = "String",
+            name = "AUTH_GOOGLE_SERVER_CLIENT_ID",
+            value = properties.getProperty("AUTH_GOOGLE_SERVER_CLIENT_ID")
         )
 
-        buildConfigField(
-            "String",
-            "CATEGORY_MISCELLANEOUS_ICON",
-            properties.getProperty("CATEGORY_MISCELLANEOUS_ICON")
+        resValue(
+            type = "string",
+            name = "fb_login_protocol_scheme",
+            value = properties.getProperty("AUTH_FACEBOOK_LOGIN_PROTOCOL_SCHEME")
+        )
+
+        resValue(
+            type = "string",
+            name = "facebook_app_id",
+            value = properties.getProperty("AUTH_FACEBOOK_APP_ID")
+        )
+
+        resValue(
+            type = "string",
+            name = "facebook_client_token",
+            value = properties.getProperty("AUTH_FACEBOOK_CLIENT_TOKEN")
         )
     }
 
@@ -307,6 +307,9 @@ dependencies {
     // Firebase
     implementation(platform(libs.firebase.bom))
     implementation(libs.bundles.firebase)
+
+    // Credential Manager Library for Login with Google
+    implementation(libs.bundles.credential.manager)
 
     // In-App Browser
     implementation(libs.browser)

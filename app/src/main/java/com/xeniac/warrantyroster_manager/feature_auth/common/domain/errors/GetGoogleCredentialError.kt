@@ -2,8 +2,8 @@ package com.xeniac.warrantyroster_manager.feature_auth.common.domain.errors
 
 import com.xeniac.warrantyroster_manager.core.domain.errors.Error
 
-sealed class LoginWithGoogleError : Error() {
-    sealed class Network : LoginWithGoogleError() {
+sealed class GetGoogleCredentialError : Error() {
+    sealed class Network : GetGoogleCredentialError() {
         data object Offline : Network()
         data object ConnectTimeoutException : Network()
         data object HttpRequestTimeoutException : Network()
@@ -22,8 +22,6 @@ sealed class LoginWithGoogleError : Error() {
 
         // 5xx
         data object ServerResponseException : Network()
-
-        data object UnexpectedCredentialType : Network()
 
         data object SomethingWentWrong : Network()
     }
