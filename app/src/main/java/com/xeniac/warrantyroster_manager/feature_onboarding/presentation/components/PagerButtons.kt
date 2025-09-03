@@ -104,7 +104,7 @@ fun NextButton(
     ),
     contentPadding: PaddingValues = PaddingValues(
         horizontal = 40.dp,
-        vertical = 12.dp
+        vertical = 16.dp
     ),
     text: String = stringResource(id = R.string.onboarding_btn_next),
     textStyle: TextStyle = LocalTextStyle.current.copy(
@@ -140,8 +140,8 @@ fun StartButton(
         disabledContentColor = White
     ),
     contentPadding: PaddingValues = PaddingValues(
-        horizontal = 40.dp,
-        vertical = 12.dp
+        horizontal = 16.dp,
+        vertical = 16.dp
     ),
     text: String = stringResource(id = R.string.onboarding_btn_start),
     textStyle: TextStyle = LocalTextStyle.current.copy(
