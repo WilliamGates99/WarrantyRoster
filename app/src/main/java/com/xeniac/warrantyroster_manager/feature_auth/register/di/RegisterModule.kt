@@ -1,5 +1,10 @@
 package com.xeniac.warrantyroster_manager.feature_auth.register.di
 
+import com.xeniac.warrantyroster_manager.feature_auth.common.domain.use_cases.CheckPendingLoginWithXUseCase
+import com.xeniac.warrantyroster_manager.feature_auth.common.domain.use_cases.GetGoogleCredentialUseCase
+import com.xeniac.warrantyroster_manager.feature_auth.common.domain.use_cases.LoginWithFacebookUseCase
+import com.xeniac.warrantyroster_manager.feature_auth.common.domain.use_cases.LoginWithGoogleUseCase
+import com.xeniac.warrantyroster_manager.feature_auth.common.domain.use_cases.LoginWithXUseCase
 import com.xeniac.warrantyroster_manager.feature_auth.register.domain.repositories.RegisterRepository
 import com.xeniac.warrantyroster_manager.feature_auth.register.domain.use_cases.RegisterUseCases
 import com.xeniac.warrantyroster_manager.feature_auth.register.domain.use_cases.RegisterWithEmailUseCase
@@ -45,8 +50,18 @@ internal object RegisterModule {
     @Provides
     @ViewModelScoped
     fun provideRegisterUseCases(
-        registerWithEmailUseCase: RegisterWithEmailUseCase
+        registerWithEmailUseCase: RegisterWithEmailUseCase,
+        getGoogleCredentialUseCase: GetGoogleCredentialUseCase,
+        loginWithGoogleUseCase: LoginWithGoogleUseCase,
+        checkPendingLoginWithXUseCase: CheckPendingLoginWithXUseCase,
+        loginWithXUseCase: LoginWithXUseCase,
+        loginWithFacebookUseCase: LoginWithFacebookUseCase
     ): RegisterUseCases = RegisterUseCases(
-        { registerWithEmailUseCase }
+        { registerWithEmailUseCase },
+        { getGoogleCredentialUseCase },
+        { loginWithGoogleUseCase },
+        { checkPendingLoginWithXUseCase },
+        { loginWithXUseCase },
+        { loginWithFacebookUseCase }
     )
 }
