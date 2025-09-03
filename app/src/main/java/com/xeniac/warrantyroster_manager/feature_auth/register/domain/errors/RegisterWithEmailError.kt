@@ -16,6 +16,12 @@ sealed class RegisterWithEmailError : Error() {
         data object SSLHandshakeException : Network()
         data object CertPathValidatorException : Network()
 
+        data object FirebaseNetworkException : Network()
+        data object FirebaseTooManyRequestsException : Network()
+        data object Firebase403 : Network()
+
+        data object FirebaseAuthUserCollisionException : Network()
+
         data object SomethingWentWrong : Network()
     }
 }

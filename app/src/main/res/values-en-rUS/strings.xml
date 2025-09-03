@@ -110,8 +110,7 @@
     <string name="register_error_short_password">Password should be at least %d characters!</string>
     <string name="register_error_blank_confirm_password">Re-enter your password!</string>
     <string name="register_error_not_matching_passwords">Your password and confirm password do not match!</string>
-    <string name="register_error_account_exists">An account with the provided email already exists.</string>
-    <string name="register_error_email_exists_with_different_credentials">An account already exists with the same email address but different sign-in credentials.</string>
+    <string name="register_error_account_with_same_email_exists">An account with the provided email already exists.</string>
 
 
     <string name="forgot_pw_text_description">Enter your verified email to receive password reset instructions.</string>

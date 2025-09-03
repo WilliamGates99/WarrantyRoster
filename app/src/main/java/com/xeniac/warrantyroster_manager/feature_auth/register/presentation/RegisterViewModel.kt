@@ -1,9 +1,12 @@
 package com.xeniac.warrantyroster_manager.feature_auth.register.presentation
 
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.credentials.Credential
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.AuthResult
 import com.xeniac.warrantyroster_manager.core.domain.models.Result
 import com.xeniac.warrantyroster_manager.core.domain.utils.convertDigitsToEnglish
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.ConfirmPasswordChecker
@@ -11,7 +14,10 @@ import com.xeniac.warrantyroster_manager.core.presentation.common.utils.Event
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.NetworkObserverHelper.hasNetworkConnection
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.PasswordStrengthCalculator
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiEvent
+import com.xeniac.warrantyroster_manager.feature_auth.common.domain.errors.GetGoogleCredentialError
+import com.xeniac.warrantyroster_manager.feature_auth.common.domain.errors.LoginWithXError
 import com.xeniac.warrantyroster_manager.feature_auth.common.presentation.AuthUiEvent
+import com.xeniac.warrantyroster_manager.feature_auth.common.presentation.utils.asUiText
 import com.xeniac.warrantyroster_manager.feature_auth.register.domain.use_cases.RegisterUseCases
 import com.xeniac.warrantyroster_manager.feature_auth.register.presentation.states.RegisterState
 import com.xeniac.warrantyroster_manager.feature_auth.register.presentation.utils.asUiText
@@ -59,12 +65,25 @@ class RegisterViewModel @Inject constructor(
     private val _registerWithEmailEventChannel = Channel<Event>()
     val registerWithEmailEventChannel = _registerWithEmailEventChannel.receiveAsFlow()
 
+    private val _loginWithGoogleEventChannel = Channel<Event>()
+    val loginWithGoogleEventChannel = _loginWithGoogleEventChannel.receiveAsFlow()
+
+    private val _loginWithXEventChannel = Channel<Event>()
+    val loginWithXEventChannel = _loginWithXEventChannel.receiveAsFlow()
+
+    private val _loginWithFacebookEventChannel = Channel<Event>()
+    val loginWithFacebookEventChannel = _loginWithFacebookEventChannel.receiveAsFlow()
+
     fun onAction(action: RegisterAction) {
         when (action) {
             is RegisterAction.EmailChanged -> emailChanged(action.newValue)
             is RegisterAction.PasswordChanged -> passwordChanged(action.newValue)
             is RegisterAction.ConfirmPasswordChanged -> confirmPasswordChanged(action.newValue)
             RegisterAction.RegisterWithEmail -> registerWithEmail()
+            RegisterAction.LoginWithGoogle -> getGoogleCredential()
+            RegisterAction.CheckPendingLoginWithX -> checkPendingLoginWithX()
+            is RegisterAction.LoginWithX -> loginWithX(action.loginWithXTask)
+            RegisterAction.LoginWithFacebook -> loginWithFacebook()
         }
     }
 
@@ -209,6 +228,165 @@ class RegisterViewModel @Inject constructor(
         }.onCompletion {
             _state.update {
                 it.copy(isRegisterWithEmailLoading = false)
+            }
+        }.launchIn(scope = viewModelScope)
+    }
+
+    private fun getGoogleCredential() {
+        if (!hasNetworkConnection()) {
+            _loginWithGoogleEventChannel.trySend(UiEvent.ShowOfflineSnackbar)
+            return
+        }
+
+        registerUseCases.getGoogleCredentialUseCase.get()().onStart {
+            _state.update {
+                it.copy(isLoginWithGoogleLoading = true)
+            }
+        }.onEach { result ->
+            when (result) {
+                is Result.Success -> loginWithGoogle(credential = result.data)
+                is Result.Error -> {
+                    _state.update {
+                        it.copy(isLoginWithGoogleLoading = false)
+                    }
+
+                    when (val error = result.error) {
+                        GetGoogleCredentialError.CancellationException -> Unit
+                        else -> _loginWithGoogleEventChannel.send(UiEvent.ShowLongSnackbar(error.asUiText()))
+                    }
+                }
+            }
+        }.launchIn(scope = viewModelScope)
+    }
+
+    private fun loginWithGoogle(
+        credential: Credential
+    ) {
+        if (!hasNetworkConnection()) {
+            _loginWithGoogleEventChannel.trySend(UiEvent.ShowOfflineSnackbar)
+            _state.update {
+                it.copy(isLoginWithGoogleLoading = false)
+            }
+            return
+        }
+
+        registerUseCases.loginWithGoogleUseCase.get()(
+            credential = credential
+        ).onStart {
+            _state.update {
+                it.copy(isLoginWithGoogleLoading = true)
+            }
+        }.onEach { result ->
+            when (result) {
+                is Result.Success -> {
+                    _loginWithGoogleEventChannel.send(AuthUiEvent.NavigateToBaseScreen)
+                }
+                is Result.Error -> {
+                    _loginWithGoogleEventChannel.send(
+                        UiEvent.ShowLongSnackbar(result.error.asUiText())
+                    )
+                }
+            }
+        }.onCompletion {
+            _state.update {
+                it.copy(isLoginWithGoogleLoading = false)
+            }
+        }.launchIn(scope = viewModelScope)
+    }
+
+    private fun checkPendingLoginWithX() {
+        if (!hasNetworkConnection()) {
+            _loginWithXEventChannel.trySend(UiEvent.ShowOfflineSnackbar)
+            return
+        }
+
+        registerUseCases.checkPendingLoginWithXUseCase.get()().onStart {
+            _state.update {
+                it.copy(isLoginWithXLoading = true)
+            }
+        }.onEach { result ->
+            when (result) {
+                is Result.Success -> {
+                    val pendingLoginWithXTask = result.data
+                    when {
+                        pendingLoginWithXTask != null -> { // Handle pending login
+                            loginWithX(loginWithXTask = pendingLoginWithXTask)
+                        }
+                        else -> { // Start new login activity
+                            _loginWithXEventChannel.send(AuthUiEvent.StartActivityForLoginWithX)
+                        }
+                    }
+                }
+                is Result.Error -> {
+                    _state.update {
+                        it.copy(isLoginWithXLoading = false)
+                    }
+                    _loginWithXEventChannel.send(UiEvent.ShowLongSnackbar(result.error.asUiText()))
+                }
+            }
+        }.launchIn(scope = viewModelScope)
+    }
+
+    private fun loginWithX(
+        loginWithXTask: Task<AuthResult>
+    ) {
+        if (!hasNetworkConnection()) {
+            _loginWithXEventChannel.trySend(UiEvent.ShowOfflineSnackbar)
+            _state.update {
+                it.copy(isLoginWithXLoading = false)
+            }
+            return
+        }
+
+        registerUseCases.loginWithXUseCase.get()(
+            loginWithXTask = loginWithXTask
+        ).onStart {
+            _state.update {
+                it.copy(isLoginWithXLoading = true)
+            }
+        }.onEach { result ->
+            when (result) {
+                is Result.Success -> {
+                    _loginWithXEventChannel.send(AuthUiEvent.NavigateToBaseScreen)
+                }
+                is Result.Error -> {
+                    when (val error = result.error) {
+                        LoginWithXError.CancellationException -> Unit
+                        else -> _loginWithXEventChannel.send(UiEvent.ShowLongSnackbar(error.asUiText()))
+                    }
+                }
+            }
+        }.onCompletion {
+            _state.update {
+                it.copy(isLoginWithXLoading = false)
+            }
+        }.launchIn(scope = viewModelScope)
+    }
+
+    private fun loginWithFacebook() {
+        if (!hasNetworkConnection()) {
+            _loginWithFacebookEventChannel.trySend(UiEvent.ShowOfflineSnackbar)
+            return
+        }
+
+        registerUseCases.loginWithFacebookUseCase.get()().onStart {
+            _state.update {
+                it.copy(isLoginWithFacebookLoading = true)
+            }
+        }.onEach { result ->
+            when (result) {
+                is Result.Success -> {
+                    _loginWithFacebookEventChannel.send(AuthUiEvent.NavigateToBaseScreen)
+                }
+                is Result.Error -> {
+                    _loginWithFacebookEventChannel.send(
+                        UiEvent.ShowLongSnackbar(result.error.asUiText())
+                    )
+                }
+            }
+        }.onCompletion {
+            _state.update {
+                it.copy(isLoginWithFacebookLoading = false)
             }
         }.launchIn(scope = viewModelScope)
     }

@@ -110,8 +110,7 @@
     <string name="register_error_short_password">رمز‌عبور باید حداقل %d کاراکتر باشد!</string>
     <string name="register_error_blank_confirm_password">رمز‌عبور را دوباره وارد کنید!</string>
     <string name="register_error_not_matching_passwords">رمز‌عبور و تکرار رمز‌عبور وارد شده با هم مطابقت ندارند!</string>
-    <string name="register_error_account_exists">حسابی با ایمیل وارد شده از قبل وجود دارد.</string>
-    <string name="register_error_email_exists_with_different_credentials">حسابی با ایمیل وارد شده اما با روش‌های ورود متفاوت از قبل وجود دارد.</string>
+    <string name="register_error_account_with_same_email_exists">حسابی با ایمیل وارد شده از قبل وجود دارد.</string>
 
 
     <string name="forgot_pw_text_description">برای دریافت دستورالعمل‌های بازیابی رمز‌عبور، ایمیل تایید‌شده خود را وارد کنید.</string>

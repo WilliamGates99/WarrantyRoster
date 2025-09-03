@@ -43,11 +43,9 @@ class RegisterWithEmailUseCase(
         }
 
         return@flow emit(
-            RegisterWithEmailResult(
-                result = registerRepository.registerWithEmail(
-                    email = email,
-                    password = password
-                )
+            registerRepository.registerWithEmail(
+                email = email,
+                password = password
             )
         )
     }

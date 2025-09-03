@@ -21,5 +21,11 @@ fun RegisterWithEmailError.asUiText(): UiText = when (this) {
     RegisterWithEmailError.Network.SSLHandshakeException -> UiText.StringResource(R.string.error_network_ssl_handshake)
     RegisterWithEmailError.Network.CertPathValidatorException -> UiText.StringResource(R.string.error_network_cert_path_validator)
 
+    RegisterWithEmailError.Network.FirebaseNetworkException -> UiText.StringResource(R.string.error_network_failure)
+    RegisterWithEmailError.Network.FirebaseTooManyRequestsException -> UiText.StringResource(R.string.error_firebase_device_blocked)
+    RegisterWithEmailError.Network.Firebase403 -> UiText.StringResource(R.string.error_firebase_403)
+
+    RegisterWithEmailError.Network.FirebaseAuthUserCollisionException -> UiText.StringResource(R.string.register_error_account_with_same_email_exists)
+
     RegisterWithEmailError.Network.SomethingWentWrong -> UiText.StringResource(R.string.error_something_went_wrong)
 }
