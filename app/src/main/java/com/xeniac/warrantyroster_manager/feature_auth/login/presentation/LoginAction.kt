@@ -9,6 +9,7 @@ sealed interface LoginAction {
     data class PasswordChanged(val newValue: TextFieldValue) : LoginAction
 
     data object LoginWithEmail : LoginAction
+
     data object LoginWithGoogle : LoginAction
     data object CheckPendingLoginWithX : LoginAction
     data class LoginWithX(val loginWithXTask: Task<AuthResult>) : LoginAction
