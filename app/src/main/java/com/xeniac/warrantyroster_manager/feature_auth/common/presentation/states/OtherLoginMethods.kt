@@ -9,15 +9,15 @@ enum class OtherLoginMethods(
     @param:StringRes val contentDescriptionId: Int
 ) {
     GOOGLE(
-        iconId = R.drawable.ic_auth_method_google,
+        iconId = R.drawable.ic_core_social_google,
         contentDescriptionId = R.string.auth_other_login_methods_google
     ),
     X(
-        iconId = R.drawable.ic_auth_method_x,
+        iconId = R.drawable.ic_core_social_x,
         contentDescriptionId = R.string.auth_other_login_methods_x
     ),
-    FACEBOOK(
-        iconId = R.drawable.ic_auth_method_facebook,
-        contentDescriptionId = R.string.auth_other_login_methods_facebook
+    GITHUB(
+        iconId = R.drawable.ic_core_social_github,
+        contentDescriptionId = R.string.auth_other_login_methods_github
     )
 }

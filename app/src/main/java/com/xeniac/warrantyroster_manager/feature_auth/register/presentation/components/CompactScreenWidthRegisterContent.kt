@@ -61,7 +61,7 @@ fun CompactScreenWidthRegisterContent(
         RegisterTextFields(
             isRegisterLoading = with(state) {
                 isRegisterWithEmailLoading || isLoginWithGoogleLoading
-                        || isLoginWithXLoading || isLoginWithFacebookLoading
+                        || isLoginWithXLoading || isLoginWithGithubLoading
             },
             emailState = state.emailState,
             passwordState = state.passwordState,
@@ -95,10 +95,10 @@ fun CompactScreenWidthRegisterContent(
         OtherLoginMethodsCompactWidth(
             isLoginWithGoogleLoading = state.isLoginWithGoogleLoading,
             isLoginWithXLoading = state.isLoginWithXLoading,
-            isLoginWithFacebookLoading = state.isLoginWithFacebookLoading,
+            isLoginWithGithubLoading = state.isLoginWithGithubLoading,
             onLoginWithGoogleClick = { onAction(RegisterAction.LoginWithGoogle) },
             onLoginWithXClick = { onAction(RegisterAction.CheckPendingLoginWithX) },
-            onLoginWithFacebookClick = { onAction(RegisterAction.LoginWithFacebook) },
+            onLoginWithGithubClick = { onAction(RegisterAction.LoginWithGithub) },
             modifier = Modifier.padding(horizontal = horizontalPadding)
         )
 

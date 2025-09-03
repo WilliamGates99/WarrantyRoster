@@ -104,11 +104,11 @@ fun OtherLoginMethodsDividerCompactWidth(
 fun OtherLoginMethodsCompactWidth(
     isLoginWithGoogleLoading: Boolean,
     isLoginWithXLoading: Boolean,
-    isLoginWithFacebookLoading: Boolean,
+    isLoginWithGithubLoading: Boolean,
     modifier: Modifier = Modifier,
     onLoginWithGoogleClick: () -> Unit,
     onLoginWithXClick: () -> Unit,
-    onLoginWithFacebookClick: () -> Unit
+    onLoginWithGithubClick: () -> Unit
 ) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(space = 16.dp),
@@ -121,12 +121,12 @@ fun OtherLoginMethodsCompactWidth(
                 isLoading = when (loginMethod) {
                     OtherLoginMethods.GOOGLE -> isLoginWithGoogleLoading
                     OtherLoginMethods.X -> isLoginWithXLoading
-                    OtherLoginMethods.FACEBOOK -> isLoginWithFacebookLoading
+                    OtherLoginMethods.GITHUB -> isLoginWithGithubLoading
                 },
                 onClick = when (loginMethod) {
                     OtherLoginMethods.GOOGLE -> onLoginWithGoogleClick
                     OtherLoginMethods.X -> onLoginWithXClick
-                    OtherLoginMethods.FACEBOOK -> onLoginWithFacebookClick
+                    OtherLoginMethods.GITHUB -> onLoginWithGithubClick
                 },
                 modifier = Modifier.weight(1f)
             )
@@ -184,7 +184,7 @@ private fun OtherLoginMethodButton(
                     )
                 }
                 else -> when (loginMethod) {
-                    OtherLoginMethods.X -> Icon(
+                    OtherLoginMethods.X, OtherLoginMethods.GITHUB -> Icon(
                         painter = painterResource(id = loginMethod.iconId),
                         contentDescription = stringResource(id = loginMethod.contentDescriptionId),
                         tint = if (isDarkTheme) White else Black,

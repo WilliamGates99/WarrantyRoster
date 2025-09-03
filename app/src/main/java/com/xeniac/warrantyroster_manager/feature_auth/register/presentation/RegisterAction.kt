@@ -14,5 +14,5 @@ sealed interface RegisterAction {
     data object LoginWithGoogle : RegisterAction
     data object CheckPendingLoginWithX : RegisterAction
     data class LoginWithX(val loginWithXTask: Task<AuthResult>) : RegisterAction
-    data object LoginWithFacebook : RegisterAction
+    data object LoginWithGithub : RegisterAction
 }

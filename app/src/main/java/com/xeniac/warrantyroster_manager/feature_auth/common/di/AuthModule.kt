@@ -9,13 +9,13 @@ import com.xeniac.warrantyroster_manager.core.domain.models.AppLocale
 import com.xeniac.warrantyroster_manager.core.domain.repositories.SettingsDataStoreRepository
 import com.xeniac.warrantyroster_manager.core.domain.use_cases.GetCurrentAppLocaleUseCase
 import com.xeniac.warrantyroster_manager.core.domain.use_cases.StoreCurrentAppLocaleUseCase
-import com.xeniac.warrantyroster_manager.feature_auth.common.domain.repositories.LoginWithFacebookRepository
+import com.xeniac.warrantyroster_manager.feature_auth.common.domain.repositories.LoginWithGithubRepository
 import com.xeniac.warrantyroster_manager.feature_auth.common.domain.repositories.LoginWithGoogleRepository
 import com.xeniac.warrantyroster_manager.feature_auth.common.domain.repositories.LoginWithXRepository
 import com.xeniac.warrantyroster_manager.feature_auth.common.domain.use_cases.AuthUseCases
 import com.xeniac.warrantyroster_manager.feature_auth.common.domain.use_cases.CheckPendingLoginWithXUseCase
 import com.xeniac.warrantyroster_manager.feature_auth.common.domain.use_cases.GetGoogleCredentialUseCase
-import com.xeniac.warrantyroster_manager.feature_auth.common.domain.use_cases.LoginWithFacebookUseCase
+import com.xeniac.warrantyroster_manager.feature_auth.common.domain.use_cases.LoginWithGithubUseCase
 import com.xeniac.warrantyroster_manager.feature_auth.common.domain.use_cases.LoginWithGoogleUseCase
 import com.xeniac.warrantyroster_manager.feature_auth.common.domain.use_cases.LoginWithXUseCase
 import dagger.Module
@@ -85,9 +85,9 @@ internal object AuthModule {
 
     @Provides
     @ViewModelScoped
-    fun provideLoginWithFacebookUseCase(
-        loginWithFacebookRepository: LoginWithFacebookRepository
-    ): LoginWithFacebookUseCase = LoginWithFacebookUseCase(loginWithFacebookRepository)
+    fun provideLoginWithGithubUseCase(
+        loginWithGithubRepository: LoginWithGithubRepository
+    ): LoginWithGithubUseCase = LoginWithGithubUseCase(loginWithGithubRepository)
 
     @Provides
     @ViewModelScoped

@@ -106,7 +106,7 @@ fun OtherLoginMethodsDividerMediumWidth(
 fun OtherLoginMethodsMediumWidth(
     isLoginWithGoogleLoading: Boolean,
     isLoginWithXLoading: Boolean,
-    isLoginWithFacebookLoading: Boolean,
+    isLoginWithGithubLoading: Boolean,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(
         end = 18.dp,
@@ -115,7 +115,7 @@ fun OtherLoginMethodsMediumWidth(
     ),
     onLoginWithGoogleClick: () -> Unit,
     onLoginWithXClick: () -> Unit,
-    onLoginWithFacebookClick: () -> Unit
+    onLoginWithGithubClick: () -> Unit
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -130,12 +130,12 @@ fun OtherLoginMethodsMediumWidth(
                 isLoading = when (loginMethod) {
                     OtherLoginMethods.GOOGLE -> isLoginWithGoogleLoading
                     OtherLoginMethods.X -> isLoginWithXLoading
-                    OtherLoginMethods.FACEBOOK -> isLoginWithFacebookLoading
+                    OtherLoginMethods.GITHUB -> isLoginWithGithubLoading
                 },
                 onClick = when (loginMethod) {
                     OtherLoginMethods.GOOGLE -> onLoginWithGoogleClick
                     OtherLoginMethods.X -> onLoginWithXClick
-                    OtherLoginMethods.FACEBOOK -> onLoginWithFacebookClick
+                    OtherLoginMethods.GITHUB -> onLoginWithGithubClick
                 },
                 modifier = Modifier.weight(1f)
             )
@@ -193,7 +193,7 @@ private fun OtherLoginMethodButton(
                     )
                 }
                 else -> when (loginMethod) {
-                    OtherLoginMethods.X -> Icon(
+                    OtherLoginMethods.X, OtherLoginMethods.GITHUB -> Icon(
                         painter = painterResource(id = loginMethod.iconId),
                         contentDescription = stringResource(id = loginMethod.contentDescriptionId),
                         tint = if (isDarkTheme) White else Black,

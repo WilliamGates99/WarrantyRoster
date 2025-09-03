@@ -91,13 +91,13 @@ fun RegisterScreen(
         }
     }
 
-    ObserverAsEvent(flow = viewModel.loginWithFacebookEventChannel) { event ->
+    ObserverAsEvent(flow = viewModel.loginWithGithubEventChannel) { event ->
         when (event) {
             AuthUiEvent.NavigateToBaseScreen -> onNavigateToBaseScreen()
             UiEvent.ShowOfflineSnackbar -> context.showOfflineSnackbar(
                 scope = scope,
                 snackbarHostState = snackbarHostState,
-                onAction = { viewModel.onAction(RegisterAction.LoginWithFacebook) }
+                onAction = { viewModel.onAction(RegisterAction.LoginWithGithub) }
             )
             is UiEvent.ShowLongSnackbar -> context.showLongSnackbar(
                 message = event.message,

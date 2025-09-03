@@ -12,5 +12,5 @@ data class LoginState(
     val isLoginWithEmailLoading: Boolean = false,
     val isLoginWithGoogleLoading: Boolean = false,
     val isLoginWithXLoading: Boolean = false,
-    val isLoginWithFacebookLoading: Boolean = false
+    val isLoginWithGithubLoading: Boolean = false
 ) : Parcelable

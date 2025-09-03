@@ -62,7 +62,7 @@ fun CompactScreenWidthLoginContent(
         LoginTextFields(
             isLoginLoading = with(state) {
                 isLoginWithEmailLoading || isLoginWithGoogleLoading
-                        || isLoginWithXLoading || isLoginWithFacebookLoading
+                        || isLoginWithXLoading || isLoginWithGithubLoading
             },
             emailState = state.emailState,
             passwordState = state.passwordState,
@@ -96,10 +96,10 @@ fun CompactScreenWidthLoginContent(
         OtherLoginMethodsCompactWidth(
             isLoginWithGoogleLoading = state.isLoginWithGoogleLoading,
             isLoginWithXLoading = state.isLoginWithXLoading,
-            isLoginWithFacebookLoading = state.isLoginWithFacebookLoading,
+            isLoginWithGithubLoading = state.isLoginWithGithubLoading,
             onLoginWithGoogleClick = { onAction(LoginAction.LoginWithGoogle) },
             onLoginWithXClick = { onAction(LoginAction.CheckPendingLoginWithX) },
-            onLoginWithFacebookClick = { onAction(LoginAction.LoginWithFacebook) },
+            onLoginWithGithubClick = { onAction(LoginAction.LoginWithGithub) },
             modifier = Modifier.padding(horizontal = horizontalPadding)
         )
 

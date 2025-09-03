@@ -14,5 +14,5 @@ data class RegisterState(
     val isRegisterWithEmailLoading: Boolean = false,
     val isLoginWithGoogleLoading: Boolean = false,
     val isLoginWithXLoading: Boolean = false,
-    val isLoginWithFacebookLoading: Boolean = false
+    val isLoginWithGithubLoading: Boolean = false
 ) : Parcelable

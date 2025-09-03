@@ -66,7 +66,7 @@
     <string name="auth_other_login_methods_title_medium_width">Or</string>
     <string name="auth_other_login_methods_google">Login with Google</string>
     <string name="auth_other_login_methods_x">Login with X</string>
-    <string name="auth_other_login_methods_facebook">Login with Facebook</string>
+    <string name="auth_other_login_methods_github">Login with GitHub</string>
     <string name="auth_method_google_error_access_credential_manager">Unable to access the Credential Manager.</string>
     <string name="auth_method_google_error_corrupted_or_expired_credential">The provided credential is corrupted or has expired.</string>
     <string name="auth_method_google_error_unexpected_credential_type">Credential is not of type Google ID!</string>

@@ -55,10 +55,10 @@ fun MediumScreenWidthRegisterContent(
         OtherLoginMethodsMediumWidth(
             isLoginWithGoogleLoading = state.isLoginWithGoogleLoading,
             isLoginWithXLoading = state.isLoginWithXLoading,
-            isLoginWithFacebookLoading = state.isLoginWithFacebookLoading,
+            isLoginWithGithubLoading = state.isLoginWithGithubLoading,
             onLoginWithGoogleClick = { onAction(RegisterAction.LoginWithGoogle) },
             onLoginWithXClick = { onAction(RegisterAction.CheckPendingLoginWithX) },
-            onLoginWithFacebookClick = { onAction(RegisterAction.LoginWithFacebook) }
+            onLoginWithGithubClick = { onAction(RegisterAction.LoginWithGithub) }
         )
     }
 }
@@ -94,7 +94,7 @@ private fun RegisterWithEmailSection(
         RegisterTextFields(
             isRegisterLoading = with(state) {
                 isRegisterWithEmailLoading || isLoginWithGoogleLoading
-                        || isLoginWithXLoading || isLoginWithFacebookLoading
+                        || isLoginWithXLoading || isLoginWithGithubLoading
             },
             emailState = state.emailState,
             passwordState = state.passwordState,

@@ -64,8 +64,8 @@ class LoginViewModel @Inject constructor(
     private val _loginWithXEventChannel = Channel<Event>()
     val loginWithXEventChannel = _loginWithXEventChannel.receiveAsFlow()
 
-    private val _loginWithFacebookEventChannel = Channel<Event>()
-    val loginWithFacebookEventChannel = _loginWithFacebookEventChannel.receiveAsFlow()
+    private val _loginWithGithubEventChannel = Channel<Event>()
+    val loginWithGithubEventChannel = _loginWithGithubEventChannel.receiveAsFlow()
 
     fun onAction(action: LoginAction) {
         when (action) {
@@ -75,7 +75,7 @@ class LoginViewModel @Inject constructor(
             LoginAction.LoginWithGoogle -> getGoogleCredential()
             LoginAction.CheckPendingLoginWithX -> checkPendingLoginWithX()
             is LoginAction.LoginWithX -> loginWithX(action.loginWithXTask)
-            LoginAction.LoginWithFacebook -> loginWithFacebook()
+            LoginAction.LoginWithGithub -> loginWithGithub()
         }
     }
 
@@ -292,30 +292,30 @@ class LoginViewModel @Inject constructor(
         }.launchIn(scope = viewModelScope)
     }
 
-    private fun loginWithFacebook() {
+    private fun loginWithGithub() {
         if (!hasNetworkConnection()) {
-            _loginWithFacebookEventChannel.trySend(UiEvent.ShowOfflineSnackbar)
+            _loginWithGithubEventChannel.trySend(UiEvent.ShowOfflineSnackbar)
             return
         }
 
-        loginUseCases.loginWithFacebookUseCase.get()().onStart {
+        loginUseCases.loginWithGithubUseCase.get()().onStart {
             _state.update {
-                it.copy(isLoginWithFacebookLoading = true)
+                it.copy(isLoginWithGithubLoading = true)
             }
         }.onEach { result ->
             when (result) {
                 is Result.Success -> {
-                    _loginWithFacebookEventChannel.send(AuthUiEvent.NavigateToBaseScreen)
+                    _loginWithGithubEventChannel.send(AuthUiEvent.NavigateToBaseScreen)
                 }
                 is Result.Error -> {
-                    _loginWithFacebookEventChannel.send(
+                    _loginWithGithubEventChannel.send(
                         UiEvent.ShowLongSnackbar(result.error.asUiText())
                     )
                 }
             }
         }.onCompletion {
             _state.update {
-                it.copy(isLoginWithFacebookLoading = false)
+                it.copy(isLoginWithGithubLoading = false)
             }
         }.launchIn(scope = viewModelScope)
     }
