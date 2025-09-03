@@ -18,7 +18,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,14 +36,12 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.xeniac.warrantyroster_manager.R
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.Black
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.GrayDarkDark
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.GrayDarkLight
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.GrayMediumDark
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.GrayMediumLight
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.NavyBlueDark
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.NavyBlueLight
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.White
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.utils.addBorder
 import com.xeniac.warrantyroster_manager.feature_auth.common.presentation.states.OtherLoginMethods
 
@@ -183,14 +180,8 @@ private fun OtherLoginMethodButton(
                             )
                     )
                 }
-                else -> when (loginMethod) {
-                    OtherLoginMethods.X, OtherLoginMethods.GITHUB -> Icon(
-                        painter = painterResource(id = loginMethod.iconId),
-                        contentDescription = stringResource(id = loginMethod.contentDescriptionId),
-                        tint = if (isDarkTheme) White else Black,
-                        modifier = Modifier.fillMaxSize()
-                    )
-                    else -> Image(
+                else -> {
+                    Image(
                         painter = painterResource(id = loginMethod.iconId),
                         contentDescription = stringResource(id = loginMethod.contentDescriptionId),
                         modifier = Modifier.fillMaxSize()
