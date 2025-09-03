@@ -12,7 +12,6 @@ enum class PasswordStrength(
     val label: UiText? = null,
     val color: Color = Color.Transparent
 ) {
-    BLANK,
     SHORT(
         label = UiText.StringResource(
             R.string.core_password_strength_short,

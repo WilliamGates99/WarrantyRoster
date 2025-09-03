@@ -10,6 +10,6 @@ import kotlinx.parcelize.TypeParceler
 @TypeParceler<TextFieldValue, TextFieldValueParceler>
 data class ConfirmPasswordTextFieldState(
     val value: TextFieldValue = TextFieldValue(),
-    val passwordMatchingState: ConfirmPasswordMatchingState = ConfirmPasswordMatchingState.BLANK_CONFIRM_PASSWORD,
+    val passwordMatchingState: ConfirmPasswordMatchingState? = null,
     val errorText: UiText? = null
 ) : Parcelable

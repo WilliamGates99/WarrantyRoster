@@ -93,16 +93,17 @@
     <string name="login_error_email_exists_with_different_credentials">حسابی با ایمیل وارد شده اما با روش‌های ورود متفاوت از قبل وجود دارد.</string>
 
 
-    <string name="register_text_description">اطلاعات خود را وارد کنید.</string>
-    <string name="register_text_agreement">با ثبت‌نام، شما <font fgcolor="#1C53F4"><b>سیاست حریم خصوصی</b></font> ما را می‌پذیرید.</string>
-    <string name="register_title_email">آدرس ایمیل</string>
-    <string name="register_hint_email">آدرس ایمیل خود را وارد کنید</string>
-    <string name="register_title_password">رمز‌عبور</string>
-    <string name="register_hint_password">رمز‌عبور را وارد کنید</string>
-    <string name="register_title_confirm_password">تکرار رمز‌عبور</string>
-    <string name="register_hint_confirm_password">رمز‌عبور را دوباره وارد کنید</string>
+    <string name="register_description">اطلاعات خود را وارد کنید.</string>
+    <string name="register_textfield_email_title">آدرس ایمیل</string>
+    <string name="register_textfield_email_hint">آدرس ایمیل خود را وارد کنید</string>
+    <string name="register_textfield_password_title">رمز‌عبور</string>
+    <string name="register_textfield_password_hint">رمز‌عبور را وارد کنید</string>
+    <string name="register_textfield_confirm_password_title">تکرار رمز‌عبور</string>
+    <string name="register_textfield_confirm_password_hint">رمز‌عبور را دوباره وارد کنید</string>
+    <!--Placeholder is for the color value-->
+    <string name="register_btn_privacy_policy"><![CDATA[با ثبت‌نام، شما <font color="#%s"><b>سیاست حریم خصوصی</b></font> ما را می‌پذیرید.]]></string>
     <string name="register_btn_register">ثبت‌نام</string>
-    <string name="register_text_login_title">در حال حاضر حساب کاربری دارید؟</string>
+    <string name="register_btn_login_title">در حال حاضر حساب کاربری دارید؟</string>
     <string name="register_btn_login">وارد شوید</string>
     <string name="register_error_blank_email">آدرس ایمیل خود را وارد کنید!</string>
     <string name="register_error_invalid_email">آدرس ایمیل وارد شده، معتبر نیست!</string>

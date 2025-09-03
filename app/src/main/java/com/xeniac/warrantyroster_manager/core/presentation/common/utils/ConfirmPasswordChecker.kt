@@ -6,9 +6,9 @@ class ConfirmPasswordChecker {
     operator fun invoke(
         password: String?,
         confirmPassword: String?
-    ): ConfirmPasswordMatchingState {
+    ): ConfirmPasswordMatchingState? {
         if (password.isNullOrBlank() && confirmPassword.isNullOrBlank()) {
-            return ConfirmPasswordMatchingState.BLANK_CONFIRM_PASSWORD
+            return null
         }
 
         val doesPasswordMatchConfirmPassword = password == confirmPassword

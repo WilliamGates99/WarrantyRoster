@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.OAuthProvider
 import com.xeniac.warrantyroster_manager.core.domain.models.Result
 import com.xeniac.warrantyroster_manager.core.domain.utils.convertDigitsToEnglish
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.ConfirmPasswordChecker
@@ -46,6 +48,8 @@ class RegisterViewModel @Inject constructor(
     private val registerUseCases: RegisterUseCases,
     private val passwordStrengthCalculator: Lazy<PasswordStrengthCalculator>,
     private val confirmPasswordChecker: Lazy<ConfirmPasswordChecker>,
+    val xOAuthProvider: Lazy<OAuthProvider>,
+    val firebaseAuth: Lazy<FirebaseAuth>,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 

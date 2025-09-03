@@ -92,16 +92,17 @@
     <string name="login_error_email_exists_with_different_credentials">An account already exists with the same email address but different sign-in credentials.</string>
 
 
-    <string name="register_text_description">Enter your information below.</string>
-    <string name="register_text_agreement">By registering, you agree to our <font fgcolor="#1C53F4"><b>Privacy Policy</b></font>.</string>
-    <string name="register_title_email">Email Address</string>
-    <string name="register_hint_email">Enter your email address</string>
-    <string name="register_title_password">Password</string>
-    <string name="register_hint_password">Enter your password</string>
-    <string name="register_title_confirm_password">Confirm Password</string>
-    <string name="register_hint_confirm_password">Re-enter your password</string>
+    <string name="register_description">Enter your information below.</string>
+    <string name="register_textfield_email_title">Email Address</string>
+    <string name="register_textfield_email_hint">Enter your email address</string>
+    <string name="register_textfield_password_title">Password</string>
+    <string name="register_textfield_password_hint">Enter your password</string>
+    <string name="register_textfield_confirm_password_title">Confirm Password</string>
+    <string name="register_textfield_confirm_password_hint">Re-enter your password</string>
+    <!--Placeholder is for the color value-->
+    <string name="register_btn_privacy_policy"><![CDATA[By registering, you agree to our <font color="#%s"><b>Privacy Policy</b></font>.]]></string>
     <string name="register_btn_register">Register</string>
-    <string name="register_text_login_title">Already have an account?</string>
+    <string name="register_btn_login_title">Already have an account?</string>
     <string name="register_btn_login">Login</string>
     <string name="register_error_blank_email">Enter your email address!</string>
     <string name="register_error_invalid_email">The entered email address is not valid!</string>

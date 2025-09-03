@@ -45,7 +45,14 @@ fun SetupAuthNavGraph(
 
         composable<RegisterScreen> {
             RegisterScreen(
-                onNavigateUp = authNavController::navigateUp
+                onNavigateUp = authNavController::navigateUp,
+                onNavigateToBaseScreen = {
+                    rootNavController.navigate(BaseScreen) {
+                        popUpTo(AuthScreen) {
+                            inclusive = true
+                        }
+                    }
+                }
             )
         }
 
