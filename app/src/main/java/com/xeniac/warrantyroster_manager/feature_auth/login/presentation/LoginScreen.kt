@@ -115,17 +115,17 @@ fun LoginScreen(
         when (isWindowWidthSizeCompact()) {
             true -> CompactScreenWidthLoginContent(
                 state = state,
-                onNavigateToRegisterScreen = onNavigateToRegisterScreen,
-                onNavigateToForgotPwScreen = onNavigateToForgotPwScreen,
                 bottomPadding = innerPadding.calculateBottomPadding(),
-                onAction = viewModel::onAction
+                onAction = viewModel::onAction,
+                onNavigateToRegisterScreen = onNavigateToRegisterScreen,
+                onNavigateToForgotPwScreen = onNavigateToForgotPwScreen
             )
             false -> MediumScreenWidthLoginContent(
                 state = state,
-                onNavigateToRegisterScreen = onNavigateToRegisterScreen,
-                onNavigateToForgotPwScreen = onNavigateToForgotPwScreen,
                 bottomPadding = innerPadding.calculateBottomPadding(),
-                onAction = viewModel::onAction
+                onAction = viewModel::onAction,
+                onNavigateToRegisterScreen = onNavigateToRegisterScreen,
+                onNavigateToForgotPwScreen = onNavigateToForgotPwScreen
             )
         }
     }
