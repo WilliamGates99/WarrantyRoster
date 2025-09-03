@@ -5,6 +5,7 @@ import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
@@ -172,8 +173,16 @@ private fun Header(
 private fun HeaderTitle(
     @StringRes headerTitleId: Int?,
     modifier: Modifier = Modifier,
-    enterTransition: EnterTransition = fadeIn() + scaleIn(),
-    exiTransition: ExitTransition = scaleOut() + fadeOut(),
+    enterTransition: EnterTransition = fadeIn(
+        animationSpec = tween(durationMillis = 400)
+    ) + scaleIn(
+        animationSpec = tween(durationMillis = 400)
+    ),
+    exiTransition: ExitTransition = scaleOut(
+        animationSpec = tween(durationMillis = 400)
+    ) + fadeOut(
+        animationSpec = tween(durationMillis = 400)
+    ),
     contentPadding: PaddingValues = PaddingValues(horizontal = 8.dp),
     textStyle: TextStyle = LocalTextStyle.current.copy(
         fontSize = 34.sp,
@@ -202,8 +211,8 @@ private fun HeaderTitle(
 private fun HeaderImage(
     @DrawableRes headerImageId: Int?,
     modifier: Modifier = Modifier,
-    enterTransition: EnterTransition = fadeIn() + scaleIn(),
-    exiTransition: ExitTransition = scaleOut() + fadeOut(),
+    enterTransition: EnterTransition = fadeIn(animationSpec = tween(durationMillis = 400)),
+    exiTransition: ExitTransition = fadeOut(animationSpec = tween(durationMillis = 400)),
     contentPadding: PaddingValues = PaddingValues(horizontal = 4.dp)
 ) {
     AnimatedContent(

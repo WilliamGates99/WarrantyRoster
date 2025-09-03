@@ -1,5 +1,8 @@
 package com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.nav_graphs
 
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -20,10 +23,33 @@ fun SetupAuthNavGraph(
     rootNavController: NavHostController,
     authNavController: NavHostController
 ) {
-    // TODO: ANIMATED TRANSITION
     NavHost(
         navController = authNavController,
-        startDestination = LoginScreen
+        startDestination = LoginScreen,
+        enterTransition = {
+            slideInVertically(
+                initialOffsetY = { it },
+                animationSpec = tween(durationMillis = 400)
+            )
+        },
+        exitTransition = {
+            slideOutVertically(
+                targetOffsetY = { -it },
+                animationSpec = tween(durationMillis = 400)
+            )
+        },
+        popEnterTransition = {
+            slideInVertically(
+                initialOffsetY = { -it },
+                animationSpec = tween(durationMillis = 400)
+            )
+        },
+        popExitTransition = {
+            slideOutVertically(
+                targetOffsetY = { it },
+                animationSpec = tween(durationMillis = 400)
+            )
+        }
     ) {
         composable<LoginScreen> {
             LoginScreen(
