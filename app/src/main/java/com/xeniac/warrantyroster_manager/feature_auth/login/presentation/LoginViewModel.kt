@@ -305,7 +305,7 @@ class LoginViewModel @Inject constructor(
         }.onEach { result ->
             when (result) {
                 is Result.Success -> {
-                    // _loginWithFacebookEventChannel.send(AuthUiEvent.NavigateToBaseScreen)
+                    _loginWithFacebookEventChannel.send(AuthUiEvent.NavigateToBaseScreen)
                 }
                 is Result.Error -> {
                     _loginWithFacebookEventChannel.send(
