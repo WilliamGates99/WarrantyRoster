@@ -131,8 +131,7 @@ private fun PagerButtons(
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier
-            .fillMaxWidth()
+        modifier = modifier.fillMaxWidth()
     ) {
         when (val currentPage = pagerState.currentPage) {
             pagerState.pageCount - 1 -> { // Last Page
