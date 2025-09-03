@@ -59,6 +59,18 @@ class LoginWithEmailRepositoryImpl @Inject constructor(
             Timber.e("Login with email CertPathValidatorException:")
             e.printStackTrace()
             LoginWithEmailResult(result = Result.Error(LoginWithEmailError.Network.CertPathValidatorException))
+        } catch (e: FirebaseAuthInvalidUserException) {
+            Timber.e("Login with email FirebaseAuthInvalidUserException:")
+            e.printStackTrace()
+            LoginWithEmailResult(result = Result.Error(LoginWithEmailError.Network.FirebaseAuthInvalidUserException))
+        } catch (e: FirebaseAuthInvalidCredentialsException) {
+            Timber.e("Login with email FirebaseAuthInvalidCredentialsException:")
+            e.printStackTrace()
+            LoginWithEmailResult(result = Result.Error(LoginWithEmailError.Network.FirebaseAuthInvalidCredentialsException))
+        } catch (e: FirebaseAuthUserCollisionException) {
+            Timber.e("Login with email FirebaseAuthUserCollisionException:")
+            e.printStackTrace()
+            LoginWithEmailResult(result = Result.Error(LoginWithEmailError.Network.FirebaseAuthUserCollisionException))
         } catch (e: FirebaseNetworkException) {
             Timber.e("Login with email FirebaseNetworkException:")
             e.printStackTrace()
@@ -76,18 +88,6 @@ class LoginWithEmailRepositoryImpl @Inject constructor(
                 )
                 else -> LoginWithEmailResult(result = Result.Error(LoginWithEmailError.Network.SomethingWentWrong))
             }
-        } catch (e: FirebaseAuthInvalidUserException) {
-            Timber.e("Login with email FirebaseAuthInvalidUserException:")
-            e.printStackTrace()
-            LoginWithEmailResult(result = Result.Error(LoginWithEmailError.Network.FirebaseAuthInvalidUserException))
-        } catch (e: FirebaseAuthInvalidCredentialsException) {
-            Timber.e("Login with email FirebaseAuthInvalidCredentialsException:")
-            e.printStackTrace()
-            LoginWithEmailResult(result = Result.Error(LoginWithEmailError.Network.FirebaseAuthInvalidCredentialsException))
-        } catch (e: FirebaseAuthUserCollisionException) {
-            Timber.e("Login with email FirebaseAuthUserCollisionException:")
-            e.printStackTrace()
-            LoginWithEmailResult(result = Result.Error(LoginWithEmailError.Network.FirebaseAuthUserCollisionException))
         } catch (e: Exception) {
             coroutineContext.ensureActive()
             Timber.e("Login with email Exception:")
@@ -98,12 +98,11 @@ class LoginWithEmailRepositoryImpl @Inject constructor(
 }
 
 /**
- * // REGISTER ACCOUNT:
- * const val ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS = "The email address is already in use by another account"
- * const val ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIALS = "An account already exists with the same email address but different sign-in credentials"
- *
  * // LINK ACCOUNT:
  * const val ERROR_FIREBASE_AUTH_ALREADY_LINKED = "User has already been linked to the given provider"
+ *
+ * // CHANGE EMAIL:
+ * const val ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS = "The email address is already in use by another account"
  *
  * // SEND EMAIL VERIFICATION:
  * const val ERROR_FIREBASE_AUTH_EMAIL_VERIFICATION_EMAIL_NOT_PROVIDED = "An email address must be provided"
