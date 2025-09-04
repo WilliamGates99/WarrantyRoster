@@ -58,7 +58,9 @@ class ForgotPasswordViewModel @Inject constructor(
             decimalFormat.format(0)
         )
     )
-    val timerText = _timerText.stateIn(
+    val timerText = _timerText.onStart {
+        startCountDownTimer()
+    }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(stopTimeout = 2.minutes),
         initialValue = _timerText.value

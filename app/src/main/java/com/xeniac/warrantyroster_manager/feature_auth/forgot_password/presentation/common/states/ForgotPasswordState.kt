@@ -7,7 +7,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class ForgotPasswordState(
     val emailState: CustomTextFieldState = CustomTextFieldState(),
-    val sentResetPasswordEmailsCount: Int = 0,
-    val isTimerTicking: Boolean = false,
+    val sentResetPasswordEmailsCount: Int = 1,
+    val isTimerTicking: Boolean = true,
     val isSendResetPasswordEmailLoading: Boolean = false
 ) : Parcelable
