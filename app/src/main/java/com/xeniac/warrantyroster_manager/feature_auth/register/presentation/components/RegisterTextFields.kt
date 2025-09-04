@@ -40,7 +40,7 @@ fun RegisterTextFields(
             title = stringResource(id = R.string.register_textfield_email_title),
             placeholder = stringResource(id = R.string.register_textfield_email_hint),
             errorText = emailState.errorText,
-            contentType = ContentType.Username,
+            contentType = ContentType.NewUsername,
             keyboardType = KeyboardType.Email,
             imeAction = ImeAction.Next,
             onValueChange = { newValue ->
@@ -67,7 +67,7 @@ fun RegisterTextFields(
                 )
             } ?: outlinedTextFieldColors(),
             isPasswordTextField = true,
-            contentType = ContentType.Password,
+            contentType = ContentType.NewPassword,
             keyboardType = KeyboardType.Password,
             imeAction = ImeAction.Next,
             onValueChange = { newValue ->
