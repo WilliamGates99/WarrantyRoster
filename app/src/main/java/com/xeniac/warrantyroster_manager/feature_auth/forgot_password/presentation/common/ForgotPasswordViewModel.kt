@@ -53,7 +53,7 @@ class ForgotPasswordViewModel @Inject constructor(
 
     private val _timerText = MutableStateFlow(
         UiText.StringResource(
-            resId = R.string.forgot_pw_sent_text_timer,
+            resId = R.string.forgot_pw_timer,
             decimalFormat.format(0),
             decimalFormat.format(0)
         )
@@ -164,7 +164,7 @@ class ForgotPasswordViewModel @Inject constructor(
                 val seconds = decimalFormat.format(timerValueInSeconds % 60)
 
                 UiText.StringResource(
-                    resId = R.string.forgot_pw_sent_text_timer,
+                    resId = R.string.forgot_pw_timer,
                     minutes,
                     seconds
                 )

@@ -119,6 +119,13 @@
     <string name="forgot_pw_textfield_email_hint">آدرس ایمیل خود را وارد کنید</string>
     <string name="forgot_pw_btn_send_email">ارسال ایمیل</string>
     <string name="forgot_pw_btn_return">بازگشت به صفحه ورود</string>
+    <!--
+    Placeholders:
+    • %1$s: Minute
+    • %2$s: Seconds
+    Sample: 02:52
+    -->
+    <string name="forgot_pw_timer">%1$s:%2$s</string>
     <string name="forgot_pw_error_blank_email">آدرس ایمیل خود را وارد کنید!</string>
     <string name="forgot_pw_error_invalid_email">آدرس ایمیل وارد شده، معتبر نیست!</string>
     <!--Placeholder is for the remaining timer time-->
@@ -133,8 +140,6 @@
     <string name="forgot_pw_error_timer_is_not_zero_many">لطفاً قبل از درخواست مجدد، %d ثانیه منتظر بمانید.</string>
     <!--Placeholder is for the remaining timer time-->
     <string name="forgot_pw_error_timer_is_not_zero_other">لطفاً قبل از درخواست مجدد، %d ثانیه منتظر بمانید.</string>
-    <string name="forgot_pw_error_email">آدرس ایمیل وارد شده، معتبر نیست!</string>
-    <string name="forgot_pw_error_not_found">حسابی با ایمیل وارد شده وجود ندارد.</string>
 
 
     <string name="forgot_pw_sent_text_description">لطفا صندوق ایمیل خود را بررسی کنید و روی لینک دریافتی کلیک کنید تا رمز‌عبور خود را بازیابی کنید.</string>

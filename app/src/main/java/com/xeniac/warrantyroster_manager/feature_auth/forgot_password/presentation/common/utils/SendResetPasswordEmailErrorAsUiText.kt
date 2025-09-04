@@ -21,13 +21,5 @@ fun SendResetPasswordEmailError.asUiText(): UiText = when (this) {
     SendResetPasswordEmailError.Network.FirebaseTooManyRequestsException -> UiText.StringResource(R.string.error_firebase_device_blocked)
     SendResetPasswordEmailError.Network.Firebase403 -> UiText.StringResource(R.string.error_firebase_403)
 
-    SendResetPasswordEmailError.Network.FirebaseAuthInvalidUserException -> UiText.StringResource(R.string.login_error_account_not_exist)
-    SendResetPasswordEmailError.Network.FirebaseAuthInvalidCredentialsException -> UiText.StringResource(
-        R.string.login_error_invalid_credentials
-    )
-    SendResetPasswordEmailError.Network.FirebaseAuthUserCollisionException -> UiText.StringResource(
-        R.string.login_error_email_exists_with_different_credentials
-    )
-
     SendResetPasswordEmailError.Network.SomethingWentWrong -> UiText.StringResource(R.string.error_something_went_wrong)
 }

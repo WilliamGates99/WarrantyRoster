@@ -119,6 +119,13 @@
     <string name="forgot_pw_textfield_email_hint">Enter your email address</string>
     <string name="forgot_pw_btn_send_email">Send Email</string>
     <string name="forgot_pw_btn_return">Return To Login</string>
+    <!--
+    Placeholders:
+    • %1$s: Minute
+    • %2$s: Seconds
+    Sample: 02:52
+    -->
+    <string name="forgot_pw_timer">%1$s:%2$s</string>
     <string name="forgot_pw_error_blank_email">Enter your email address!</string>
     <string name="forgot_pw_error_invalid_email">The entered email address is not valid!</string>
     <!--Placeholder is for the remaining timer time-->
@@ -133,8 +140,6 @@
     <string name="forgot_pw_error_timer_is_not_zero_many">Please wait for %d seconds before requesting again.</string>
     <!--Placeholder is for the remaining timer time-->
     <string name="forgot_pw_error_timer_is_not_zero_other">Please wait for %d seconds before requesting again.</string>
-    <string name="forgot_pw_error_email">The entered email address is not valid!</string>
-    <string name="forgot_pw_error_not_found">The account with the provided email does not exist.</string>
 
 
     <string name="forgot_pw_sent_text_description">Please check your inbox and click on the received link to reset your password.</string>

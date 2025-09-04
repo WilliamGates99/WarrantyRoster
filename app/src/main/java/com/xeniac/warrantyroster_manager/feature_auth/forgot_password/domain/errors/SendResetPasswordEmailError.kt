@@ -16,10 +16,6 @@ sealed class SendResetPasswordEmailError : Error() {
         data object FirebaseTooManyRequestsException : Network()
         data object Firebase403 : Network()
 
-        data object FirebaseAuthInvalidUserException : Network()
-        data object FirebaseAuthInvalidCredentialsException : Network()
-        data object FirebaseAuthUserCollisionException : Network()
-
         data object SomethingWentWrong : Network()
     }
 }
