@@ -7,14 +7,15 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.navigation
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.AuthScreen
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.BaseScreen
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.ForgotPwInstructionScreen
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.ForgotPwScreen
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.ForgotPasswordGraph
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.LoginScreen
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.RegisterScreen
-import com.xeniac.warrantyroster_manager.feature_auth.forgot_pw.presentation.forgot_pw.ForgotPwScreen
-import com.xeniac.warrantyroster_manager.feature_auth.forgot_pw.presentation.forgot_pw_instruction.ForgotPwInstructionScreen
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.utils.sharedHiltViewModel
+import com.xeniac.warrantyroster_manager.feature_auth.forgot_password.presentation.forgot_pw.ForgotPwScreen
+import com.xeniac.warrantyroster_manager.feature_auth.forgot_password.presentation.reset_pw_instruction.ResetPwInstructionScreen
 import com.xeniac.warrantyroster_manager.feature_auth.login.presentation.LoginScreen
 import com.xeniac.warrantyroster_manager.feature_auth.register.presentation.RegisterScreen
 
@@ -57,7 +58,7 @@ fun SetupAuthNavGraph(
                     authNavController.navigate(RegisterScreen)
                 },
                 onNavigateToForgotPwScreen = {
-                    authNavController.navigate(ForgotPwScreen)
+                    authNavController.navigate(ForgotPasswordGraph)
                 },
                 onNavigateToBaseScreen = {
                     rootNavController.navigate(BaseScreen) {
@@ -82,16 +83,35 @@ fun SetupAuthNavGraph(
             )
         }
 
-        composable<ForgotPwScreen> {
-            ForgotPwScreen(
-                onNavigateUp = authNavController::navigateUp
-            )
-        }
+        navigation<ForgotPasswordGraph>(
+            startDestination = ForgotPasswordGraph.ForgotPwScreen
+        ) {
+            composable<ForgotPasswordGraph.ForgotPwScreen> { backStackEntry ->
+                ForgotPwScreen(
+                    viewModel = backStackEntry.sharedHiltViewModel(
+                        navController = authNavController,
+                        route = ForgotPasswordGraph
+                    ),
+                    onNavigateUp = authNavController::navigateUp,
+                    onNavigateToResetPwInstructionScreen = {
+                        authNavController.navigate(ForgotPasswordGraph.ResetPwInstructionScreen) {
+                            popUpTo<ForgotPasswordGraph> {
+                                inclusive = true
+                            }
+                        }
+                    }
+                )
+            }
 
-        composable<ForgotPwInstructionScreen> {
-            ForgotPwInstructionScreen(
-                onNavigateUp = authNavController::navigateUp
-            )
+            composable<ForgotPasswordGraph.ResetPwInstructionScreen> { backStackEntry ->
+                ResetPwInstructionScreen(
+                    viewModel = backStackEntry.sharedHiltViewModel(
+                        navController = authNavController,
+                        route = ForgotPasswordGraph
+                    ),
+                    onNavigateUp = authNavController::navigateUp
+                )
+            }
         }
     }
 }

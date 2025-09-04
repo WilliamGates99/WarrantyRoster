@@ -9,7 +9,11 @@ data object LoginScreen
 data object RegisterScreen
 
 @Serializable
-data object ForgotPwScreen
+data object ForgotPasswordGraph {
 
-@Serializable
-data object ForgotPwInstructionScreen
+    @Serializable
+    data object ForgotPwScreen
+
+    @Serializable
+    data object ResetPwInstructionScreen
+}

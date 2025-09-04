@@ -55,8 +55,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.core.domain.models.AppLocale
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.nav_graphs.SetupAuthNavGraph
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.ForgotPwInstructionScreen
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.ForgotPwScreen
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.ForgotPasswordGraph
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.LoginScreen
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.RegisterScreen
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.Blue
@@ -134,11 +133,11 @@ private fun Header(
                 headerTitleId = R.string.auth_title_register
                 headerImageId = R.drawable.ic_auth_register
             }
-            currentDestination.hasRoute(ForgotPwScreen::class) -> {
+            currentDestination.hasRoute(ForgotPasswordGraph.ForgotPwScreen::class) -> {
                 headerTitleId = R.string.auth_title_forgot_pw
                 headerImageId = R.drawable.ic_auth_forgot_pw
             }
-            currentDestination.hasRoute(ForgotPwInstructionScreen::class) -> {
+            currentDestination.hasRoute(ForgotPasswordGraph.ResetPwInstructionScreen::class) -> {
                 headerTitleId = R.string.auth_title_forgot_pw_instruction
                 headerImageId = R.drawable.ic_auth_forgot_pw_instruction
             }
