@@ -121,8 +121,8 @@ class LoginViewModel @Inject constructor(
         }
 
         loginUseCases.loginWithEmailUseCase.get()(
-            email = state.value.emailState.value.text,
-            password = state.value.passwordState.value.text
+            email = _state.value.emailState.value.text,
+            password = _state.value.passwordState.value.text
         ).onStart {
             _state.update {
                 it.copy(isLoginWithEmailLoading = true)

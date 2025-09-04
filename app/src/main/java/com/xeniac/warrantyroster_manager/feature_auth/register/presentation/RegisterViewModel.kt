@@ -185,9 +185,9 @@ class RegisterViewModel @Inject constructor(
         }
 
         registerUseCases.registerWithEmailUseCase.get()(
-            email = state.value.emailState.value.text,
-            password = state.value.passwordState.value.text,
-            confirmPassword = state.value.confirmPasswordState.value.text
+            email = _state.value.emailState.value.text,
+            password = _state.value.passwordState.value.text,
+            confirmPassword = _state.value.confirmPasswordState.value.text
         ).onStart {
             _state.update {
                 it.copy(isRegisterWithEmailLoading = true)
