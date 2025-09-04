@@ -1,15 +1,28 @@
 package com.xeniac.warrantyroster_manager.feature_auth.forgot_password.presentation.forgot_pw
 
-import androidx.compose.foundation.clickable
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.material3.Text
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.Blue
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.SwipeableSnackbar
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.showLongSnackbar
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.showOfflineSnackbar
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.utils.isWindowWidthSizeCompact
+import com.xeniac.warrantyroster_manager.core.presentation.common.utils.ObserverAsEvent
+import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiEvent
+import com.xeniac.warrantyroster_manager.core.presentation.common.utils.findActivity
+import com.xeniac.warrantyroster_manager.feature_auth.forgot_password.presentation.common.ForgotPasswordAction
+import com.xeniac.warrantyroster_manager.feature_auth.forgot_password.presentation.common.ForgotPasswordUiEvent
 import com.xeniac.warrantyroster_manager.feature_auth.forgot_password.presentation.common.ForgotPasswordViewModel
+import com.xeniac.warrantyroster_manager.feature_auth.forgot_password.presentation.forgot_pw.components.CompactScreenWidthForgotPwContent
+import com.xeniac.warrantyroster_manager.feature_auth.forgot_password.presentation.forgot_pw.components.MediumScreenWidthForgotPwContent
 
 @Composable
 fun ForgotPwScreen(
@@ -17,14 +30,46 @@ fun ForgotPwScreen(
     onNavigateUp: () -> Unit,
     onNavigateToResetPwInstructionScreen: () -> Unit
 ) {
+    val context = LocalContext.current
+    val activity = LocalActivity.current ?: context.findActivity()
+    val scope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
+
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    Text(
-        text = "Forgot pw screen",
-        color = Blue,
-        modifier = Modifier
-            .fillMaxSize()
-            .wrapContentSize()
-            .clickable { onNavigateToResetPwInstructionScreen() }
-    )
+    ObserverAsEvent(flow = viewModel.sendResetPasswordEmailEventChannel) { event ->
+        when (event) {
+            ForgotPasswordUiEvent.NavigateToResetPwInstructionScreen -> onNavigateToResetPwInstructionScreen()
+            UiEvent.ShowOfflineSnackbar -> context.showOfflineSnackbar(
+                scope = scope,
+                snackbarHostState = snackbarHostState,
+                onAction = { viewModel.onAction(ForgotPasswordAction.SendResetPasswordEmail) }
+            )
+            is UiEvent.ShowLongSnackbar -> context.showLongSnackbar(
+                message = event.message,
+                scope = scope,
+                snackbarHostState = snackbarHostState
+            )
+        }
+    }
+
+    Scaffold(
+        snackbarHost = { SwipeableSnackbar(hostState = snackbarHostState) },
+        modifier = Modifier.fillMaxSize()
+    ) { innerPadding ->
+        when (isWindowWidthSizeCompact()) {
+            true -> CompactScreenWidthForgotPwContent(
+                state = state,
+                bottomPadding = innerPadding.calculateBottomPadding(),
+                onAction = viewModel::onAction,
+                onNavigateUp = onNavigateUp
+            )
+            false -> MediumScreenWidthForgotPwContent(
+                state = state,
+                bottomPadding = innerPadding.calculateBottomPadding(),
+                onAction = viewModel::onAction,
+                onNavigateUp = onNavigateUp
+            )
+        }
+    }
 }
