@@ -18,6 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.xeniac.warrantyroster_manager.R
@@ -32,6 +33,7 @@ fun ReturnToLoginButton(
         fontSize = 14.sp,
         lineHeight = 14.sp,
         fontWeight = FontWeight.Bold,
+        textAlign = TextAlign.Center,
         color = MaterialTheme.colorScheme.primary
     ),
     onClick: () -> Unit

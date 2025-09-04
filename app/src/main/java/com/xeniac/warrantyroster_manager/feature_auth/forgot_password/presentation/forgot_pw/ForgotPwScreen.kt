@@ -1,6 +1,5 @@
 package com.xeniac.warrantyroster_manager.feature_auth.forgot_password.presentation.forgot_pw
 
-import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
@@ -17,7 +16,6 @@ import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.utils.isWindowWidthSizeCompact
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.ObserverAsEvent
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiEvent
-import com.xeniac.warrantyroster_manager.core.presentation.common.utils.findActivity
 import com.xeniac.warrantyroster_manager.feature_auth.forgot_password.presentation.common.ForgotPasswordAction
 import com.xeniac.warrantyroster_manager.feature_auth.forgot_password.presentation.common.ForgotPasswordUiEvent
 import com.xeniac.warrantyroster_manager.feature_auth.forgot_password.presentation.common.ForgotPasswordViewModel
@@ -31,7 +29,6 @@ fun ForgotPwScreen(
     onNavigateToResetPwInstructionScreen: () -> Unit
 ) {
     val context = LocalContext.current
-    val activity = LocalActivity.current ?: context.findActivity()
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 

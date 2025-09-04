@@ -125,7 +125,7 @@
     • %2$s: Seconds
     Sample: 02:52
     -->
-    <string name="forgot_pw_timer">%1$s:%2$s</string>
+    <string name="forgot_pw_timer">(%1$s:%2$s)</string>
     <string name="forgot_pw_error_blank_email">Enter your email address!</string>
     <string name="forgot_pw_error_invalid_email">The entered email address is not valid!</string>
     <!--Placeholder is for the remaining timer time-->
@@ -142,12 +142,12 @@
     <string name="forgot_pw_error_timer_is_not_zero_other">Please wait for %d seconds before requesting again.</string>
 
 
-    <string name="forgot_pw_sent_text_description">Please check your inbox and click on the received link to reset your password.</string>
-    <string name="forgot_pw_sent_text_resend">Didn\'t receive the link?</string>
-    <string name="forgot_pw_sent_btn_resend">Resend</string>
-    <string name="forgot_pw_sent_text_first_time">The email has been sent.</string>
-    <string name="forgot_pw_sent_text_resent">A new email has been sent.</string>
-    <string name="forgot_pw_sent_btn_return">Return To Login</string>
+    <string name="reset_pw_instruction_description">Please check your inbox and click on the received link to reset your password.</string>
+    <string name="reset_pw_instruction_resend_title">Didn\'t receive the link?</string>
+    <string name="reset_pw_instruction_email_sent_first_time">The email has been sent.</string>
+    <string name="reset_pw_instruction_email_sent">A new email has been sent.</string>
+    <string name="reset_pw_instruction_btn_resend">Resend</string>
+    <string name="reset_pw_instruction_btn_return">Return To Login</string>
 
 
     <string name="main_menu_title_warranties">Warranty List</string>

@@ -125,7 +125,7 @@
     • %2$s: Seconds
     Sample: 02:52
     -->
-    <string name="forgot_pw_timer">%1$s:%2$s</string>
+    <string name="forgot_pw_timer">(%1$s:%2$s)</string>
     <string name="forgot_pw_error_blank_email">آدرس ایمیل خود را وارد کنید!</string>
     <string name="forgot_pw_error_invalid_email">آدرس ایمیل وارد شده، معتبر نیست!</string>
     <!--Placeholder is for the remaining timer time-->
@@ -142,12 +142,12 @@
     <string name="forgot_pw_error_timer_is_not_zero_other">لطفاً قبل از درخواست مجدد، %d ثانیه منتظر بمانید.</string>
 
 
-    <string name="forgot_pw_sent_text_description">لطفا صندوق ایمیل خود را بررسی کنید و روی لینک دریافتی کلیک کنید تا رمز‌عبور خود را بازیابی کنید.</string>
-    <string name="forgot_pw_sent_text_resend">لینکی را دریافت نکردید؟</string>
-    <string name="forgot_pw_sent_btn_resend">ارسال مجدد</string>
-    <string name="forgot_pw_sent_text_first_time">ایمیل ارسال شد.</string>
-    <string name="forgot_pw_sent_text_resent">ایمیل مجددا ارسال شد.</string>
-    <string name="forgot_pw_sent_btn_return">بازگشت به صفحه ورود</string>
+    <string name="reset_pw_instruction_description">لطفا صندوق ایمیل خود را بررسی کنید و روی لینک دریافتی کلیک کنید تا رمز‌عبور خود را بازیابی کنید.</string>
+    <string name="reset_pw_instruction_resend_title">لینکی را دریافت نکردید؟</string>
+    <string name="reset_pw_instruction_email_sent_first_time">ایمیل ارسال شد.</string>
+    <string name="reset_pw_instruction_email_sent">ایمیل مجددا ارسال شد.</string>
+    <string name="reset_pw_instruction_btn_resend">ارسال مجدد</string>
+    <string name="reset_pw_instruction_btn_return">بازگشت به صفحه ورود</string>
 
 
     <string name="main_menu_title_warranties">فهرست گارانتی‌ها</string>
