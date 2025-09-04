@@ -117,6 +117,12 @@ class ForgotPasswordViewModel @Inject constructor(
                 }
             }
 
+            sendResetPasswordEmailResult.timerValueError?.let { timerValueError ->
+                _sendResetPasswordEmailEventChannel.send(
+                    UiEvent.ShowLongSnackbar(timerValueError.asUiText())
+                )
+            }
+
             when (val result = sendResetPasswordEmailResult.result) {
                 is Result.Success -> {
                     startCountDownTimer()
