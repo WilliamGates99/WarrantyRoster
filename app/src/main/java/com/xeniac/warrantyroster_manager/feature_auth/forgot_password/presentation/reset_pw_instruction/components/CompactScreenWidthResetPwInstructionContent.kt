@@ -17,12 +17,11 @@ import androidx.compose.ui.unit.dp
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiText
 import com.xeniac.warrantyroster_manager.feature_auth.forgot_password.presentation.common.ForgotPasswordAction
 import com.xeniac.warrantyroster_manager.feature_auth.forgot_password.presentation.common.components.ReturnToLoginButton
+import com.xeniac.warrantyroster_manager.feature_auth.forgot_password.presentation.common.states.ForgotPasswordState
 
 @Composable
 fun CompactScreenWidthResetPwInstructionContent(
-    sentResetPasswordEmailsCount: Int,
-    isTimerTicking: Boolean,
-    isSendResetPasswordEmailLoading: Boolean,
+    state: ForgotPasswordState,
     timerText: UiText,
     bottomPadding: Dp,
     modifier: Modifier = Modifier,
@@ -48,14 +47,14 @@ fun CompactScreenWidthResetPwInstructionContent(
         Spacer(modifier = Modifier.height(44.dp))
 
         EmailSentAnimation(
-            sentResetPasswordEmailsCount = sentResetPasswordEmailsCount,
+            sentResetPasswordEmailsCount = state.sentResetPasswordEmailsCount,
             modifier = Modifier.size(250.dp)
         )
 
         ResendEmailSection(
-            sentResetPasswordEmailsCount = sentResetPasswordEmailsCount,
-            isTimerTicking = isTimerTicking,
-            isSendResetPasswordEmailLoading = isSendResetPasswordEmailLoading,
+            sentResetPasswordEmailsCount = state.sentResetPasswordEmailsCount,
+            isTimerTicking = state.isTimerTicking,
+            isSendResetPasswordEmailLoading = state.isSendResetPasswordEmailLoading,
             timerText = timerText,
             onAction = onAction
         )

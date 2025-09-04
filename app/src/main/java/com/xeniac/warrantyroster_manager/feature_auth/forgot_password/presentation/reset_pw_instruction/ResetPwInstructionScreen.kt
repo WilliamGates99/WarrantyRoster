@@ -54,9 +54,7 @@ fun ResetPwInstructionScreen(
     ) { innerPadding ->
         when (isWindowWidthSizeCompact()) {
             true -> CompactScreenWidthResetPwInstructionContent(
-                sentResetPasswordEmailsCount = state.sentResetPasswordEmailsCount,
-                isTimerTicking = state.isTimerTicking,
-                isSendResetPasswordEmailLoading = state.isSendResetPasswordEmailLoading,
+                state = state,
                 timerText = timerText,
                 bottomPadding = innerPadding.calculateBottomPadding(),
                 onAction = viewModel::onAction,
