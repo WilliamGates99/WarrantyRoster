@@ -1,5 +1,13 @@
 package com.xeniac.warrantyroster_manager.feature_auth.forgot_password.presentation.common.states
 
+import android.os.Parcelable
+import com.xeniac.warrantyroster_manager.core.presentation.common.states.CustomTextFieldState
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class ForgotPasswordState(
-    val isLoading: Boolean = false,
-)
+    val emailState: CustomTextFieldState = CustomTextFieldState(),
+    val sentResetPasswordEmailsCount: Int = 0,
+    val isTimerTicking: Boolean = false,
+    val isSendResetPasswordEmailLoading: Boolean = false
+) : Parcelable
