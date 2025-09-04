@@ -8,6 +8,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
+import androidx.navigation.toRoute
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.AuthScreen
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.BaseScreen
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.ForgotPasswordGraph
@@ -93,8 +94,12 @@ fun SetupAuthNavGraph(
                         route = ForgotPasswordGraph
                     ),
                     onNavigateUp = authNavController::navigateUp,
-                    onNavigateToResetPwInstructionScreen = {
-                        authNavController.navigate(ForgotPasswordGraph.ResetPwInstructionScreen) {
+                    onNavigateToResetPwInstructionScreen = { email ->
+                        authNavController.navigate(
+                            ForgotPasswordGraph.ResetPwInstructionScreen(
+                                email = email
+                            )
+                        ) {
                             popUpTo<ForgotPasswordGraph> {
                                 inclusive = true
                             }
@@ -104,7 +109,10 @@ fun SetupAuthNavGraph(
             }
 
             composable<ForgotPasswordGraph.ResetPwInstructionScreen> { backStackEntry ->
+                val args = backStackEntry.toRoute<ForgotPasswordGraph.ResetPwInstructionScreen>()
+
                 ResetPwInstructionScreen(
+                    email = args.email,
                     viewModel = backStackEntry.sharedHiltViewModel(
                         navController = authNavController,
                         route = ForgotPasswordGraph

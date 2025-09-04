@@ -15,5 +15,5 @@ data object ForgotPasswordGraph {
     data object ForgotPwScreen
 
     @Serializable
-    data object ResetPwInstructionScreen
+    data class ResetPwInstructionScreen(val email: String)
 }

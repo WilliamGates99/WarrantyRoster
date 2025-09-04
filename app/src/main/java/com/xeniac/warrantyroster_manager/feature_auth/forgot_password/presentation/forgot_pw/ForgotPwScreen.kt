@@ -26,7 +26,7 @@ import com.xeniac.warrantyroster_manager.feature_auth.forgot_password.presentati
 fun ForgotPwScreen(
     viewModel: ForgotPasswordViewModel,
     onNavigateUp: () -> Unit,
-    onNavigateToResetPwInstructionScreen: () -> Unit
+    onNavigateToResetPwInstructionScreen: (email: String) -> Unit
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -36,7 +36,9 @@ fun ForgotPwScreen(
 
     ObserverAsEvent(flow = viewModel.sendResetPasswordEmailEventChannel) { event ->
         when (event) {
-            ForgotPasswordUiEvent.NavigateToResetPwInstructionScreen -> onNavigateToResetPwInstructionScreen()
+            ForgotPasswordUiEvent.NavigateToResetPwInstructionScreen -> onNavigateToResetPwInstructionScreen(
+                state.emailState.value.text
+            )
             UiEvent.ShowOfflineSnackbar -> context.showOfflineSnackbar(
                 scope = scope,
                 snackbarHostState = snackbarHostState,

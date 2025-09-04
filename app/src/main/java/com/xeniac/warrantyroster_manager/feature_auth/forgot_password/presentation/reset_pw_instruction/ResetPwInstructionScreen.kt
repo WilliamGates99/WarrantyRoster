@@ -4,11 +4,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.SwipeableSnackbar
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.showLongSnackbar
@@ -23,6 +25,7 @@ import com.xeniac.warrantyroster_manager.feature_auth.forgot_password.presentati
 
 @Composable
 fun ResetPwInstructionScreen(
+    email: String,
     viewModel: ForgotPasswordViewModel,
     onNavigateUp: () -> Unit
 ) {
@@ -32,6 +35,14 @@ fun ResetPwInstructionScreen(
 
     val state by viewModel.state.collectAsStateWithLifecycle()
     val timerText by viewModel.timerText.collectAsStateWithLifecycle()
+
+    LaunchedEffect(key1 = email) {
+        viewModel.onAction(
+            ForgotPasswordAction.EmailChanged(
+                newValue = TextFieldValue(text = email)
+            )
+        )
+    }
 
     ObserverAsEvent(flow = viewModel.sendResetPasswordEmailEventChannel) { event ->
         when (event) {
