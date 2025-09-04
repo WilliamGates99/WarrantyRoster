@@ -11,7 +11,10 @@ sealed interface LoginAction {
     data object LoginWithEmail : LoginAction
 
     data object LoginWithGoogle : LoginAction
+
     data object CheckPendingLoginWithX : LoginAction
     data class LoginWithX(val loginWithXTask: Task<AuthResult>) : LoginAction
-    data object LoginWithGithub : LoginAction
+
+    data object CheckPendingLoginWithGithub : LoginAction
+    data class LoginWithGithub(val loginWithGithubTask: Task<AuthResult>) : LoginAction
 }

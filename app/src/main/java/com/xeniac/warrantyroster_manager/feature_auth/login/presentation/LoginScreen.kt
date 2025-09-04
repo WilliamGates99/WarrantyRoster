@@ -95,10 +95,17 @@ fun LoginScreen(
     ObserverAsEvent(flow = viewModel.loginWithGithubEventChannel) { event ->
         when (event) {
             AuthUiEvent.NavigateToBaseScreen -> onNavigateToBaseScreen()
+            AuthUiEvent.StartActivityForLoginWithGithub -> {
+                val loginTask = viewModel.firebaseAuth.get().startActivityForSignInWithProvider(
+                    activity,
+                    viewModel.githubOAuthProvider.get()
+                )
+                viewModel.onAction(LoginAction.LoginWithGithub(loginWithGithubTask = loginTask))
+            }
             UiEvent.ShowOfflineSnackbar -> context.showOfflineSnackbar(
                 scope = scope,
                 snackbarHostState = snackbarHostState,
-                onAction = { viewModel.onAction(LoginAction.LoginWithGithub) }
+                onAction = { viewModel.onAction(LoginAction.CheckPendingLoginWithGithub) }
             )
             is UiEvent.ShowLongSnackbar -> context.showLongSnackbar(
                 message = event.message,

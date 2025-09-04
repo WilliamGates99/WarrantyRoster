@@ -8,16 +8,10 @@ import com.xeniac.warrantyroster_manager.feature_auth.common.domain.repositories
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class LoginWithGithubUseCase(
+class CheckPendingLoginWithGithubUseCase(
     private val loginWithGithubRepository: LoginWithGithubRepository
 ) {
-    operator fun invoke(
-        loginWithGithubTask: Task<AuthResult>
-    ): Flow<Result<Unit, LoginWithGithubError>> = flow {
-        return@flow emit(
-            loginWithGithubRepository.loginWithGithub(
-                loginWithGithubTask = loginWithGithubTask
-            )
-        )
+    operator fun invoke(): Flow<Result<Task<AuthResult>?, LoginWithGithubError>> = flow {
+        return@flow emit(loginWithGithubRepository.checkPendingLoginWithGithub())
     }
 }

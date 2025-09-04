@@ -60,7 +60,7 @@ fun MediumScreenWidthLoginContent(
             isLoginWithGithubLoading = state.isLoginWithGithubLoading,
             onLoginWithGoogleClick = { onAction(LoginAction.LoginWithGoogle) },
             onLoginWithXClick = { onAction(LoginAction.CheckPendingLoginWithX) },
-            onLoginWithGithubClick = { onAction(LoginAction.LoginWithGithub) }
+            onLoginWithGithubClick = { onAction(LoginAction.CheckPendingLoginWithGithub) }
         )
     }
 }

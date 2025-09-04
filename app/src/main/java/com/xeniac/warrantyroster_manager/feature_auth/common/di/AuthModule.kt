@@ -13,6 +13,7 @@ import com.xeniac.warrantyroster_manager.feature_auth.common.domain.repositories
 import com.xeniac.warrantyroster_manager.feature_auth.common.domain.repositories.LoginWithGoogleRepository
 import com.xeniac.warrantyroster_manager.feature_auth.common.domain.repositories.LoginWithXRepository
 import com.xeniac.warrantyroster_manager.feature_auth.common.domain.use_cases.AuthUseCases
+import com.xeniac.warrantyroster_manager.feature_auth.common.domain.use_cases.CheckPendingLoginWithGithubUseCase
 import com.xeniac.warrantyroster_manager.feature_auth.common.domain.use_cases.CheckPendingLoginWithXUseCase
 import com.xeniac.warrantyroster_manager.feature_auth.common.domain.use_cases.GetGoogleCredentialUseCase
 import com.xeniac.warrantyroster_manager.feature_auth.common.domain.use_cases.LoginWithGithubUseCase
@@ -24,6 +25,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.scopes.ViewModelScoped
+import javax.inject.Qualifier
 
 @Module
 @InstallIn(ViewModelComponent::class)
@@ -46,6 +48,7 @@ internal object AuthModule {
 
     @Provides
     @ViewModelScoped
+    @XQualifier
     fun provideXOAuthProvider(
         settingsDataStoreRepository: SettingsDataStoreRepository
     ): OAuthProvider = OAuthProvider.newBuilder("twitter.com").apply {
@@ -57,6 +60,18 @@ internal object AuthModule {
             AppLocale.FARSI_IR -> "fa"
         }
         addCustomParameter("lang", xWebsiteLanguage)
+    }.build()
+
+    @Provides
+    @ViewModelScoped
+    @GithubQualifier
+    fun provideGitHubOAuthProvider(
+    ): OAuthProvider = OAuthProvider.newBuilder("github.com").apply {
+        addCustomParameter("allow_signup", "true") // Default = True
+        scopes = scopes + listOf(
+            "read:user",
+            "user:email"
+        )
     }.build()
 
     @Provides
@@ -85,6 +100,14 @@ internal object AuthModule {
 
     @Provides
     @ViewModelScoped
+    fun provideCheckPendingLoginWithGithubUseCase(
+        loginWithGithubRepository: LoginWithGithubRepository
+    ): CheckPendingLoginWithGithubUseCase = CheckPendingLoginWithGithubUseCase(
+        loginWithGithubRepository
+    )
+
+    @Provides
+    @ViewModelScoped
     fun provideLoginWithGithubUseCase(
         loginWithGithubRepository: LoginWithGithubRepository
     ): LoginWithGithubUseCase = LoginWithGithubUseCase(loginWithGithubRepository)
@@ -99,3 +122,11 @@ internal object AuthModule {
         { storeCurrentAppLocaleUseCase }
     )
 }
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class XQualifier
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class GithubQualifier

@@ -14,7 +14,10 @@ import com.xeniac.warrantyroster_manager.core.domain.utils.convertDigitsToEnglis
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.Event
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.NetworkObserverHelper.hasNetworkConnection
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiEvent
+import com.xeniac.warrantyroster_manager.feature_auth.common.di.GithubQualifier
+import com.xeniac.warrantyroster_manager.feature_auth.common.di.XQualifier
 import com.xeniac.warrantyroster_manager.feature_auth.common.domain.errors.GetGoogleCredentialError
+import com.xeniac.warrantyroster_manager.feature_auth.common.domain.errors.LoginWithGithubError
 import com.xeniac.warrantyroster_manager.feature_auth.common.domain.errors.LoginWithXError
 import com.xeniac.warrantyroster_manager.feature_auth.common.presentation.AuthUiEvent
 import com.xeniac.warrantyroster_manager.feature_auth.common.presentation.utils.asUiText
@@ -40,7 +43,8 @@ import kotlin.time.Duration.Companion.seconds
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val loginUseCases: LoginUseCases,
-    val xOAuthProvider: Lazy<OAuthProvider>,
+    @XQualifier val xOAuthProvider: Lazy<OAuthProvider>,
+    @GithubQualifier val githubOAuthProvider: Lazy<OAuthProvider>,
     val firebaseAuth: Lazy<FirebaseAuth>,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
@@ -75,7 +79,8 @@ class LoginViewModel @Inject constructor(
             LoginAction.LoginWithGoogle -> getGoogleCredential()
             LoginAction.CheckPendingLoginWithX -> checkPendingLoginWithX()
             is LoginAction.LoginWithX -> loginWithX(action.loginWithXTask)
-            LoginAction.LoginWithGithub -> loginWithGithub()
+            LoginAction.CheckPendingLoginWithGithub -> checkPendingLoginWithGithub()
+            is LoginAction.LoginWithGithub -> loginWithGithub(action.loginWithGithubTask)
         }
     }
 
@@ -292,13 +297,53 @@ class LoginViewModel @Inject constructor(
         }.launchIn(scope = viewModelScope)
     }
 
-    private fun loginWithGithub() {
+    private fun checkPendingLoginWithGithub() {
         if (!hasNetworkConnection()) {
             _loginWithGithubEventChannel.trySend(UiEvent.ShowOfflineSnackbar)
             return
         }
 
-        loginUseCases.loginWithGithubUseCase.get()().onStart {
+        loginUseCases.checkPendingLoginWithGithubUseCase.get()().onStart {
+            _state.update {
+                it.copy(isLoginWithGithubLoading = true)
+            }
+        }.onEach { result ->
+            when (result) {
+                is Result.Success -> {
+                    val pendingLoginWithGithubTask = result.data
+                    when {
+                        pendingLoginWithGithubTask != null -> { // Handle pending login
+                            loginWithGithub(loginWithGithubTask = pendingLoginWithGithubTask)
+                        }
+                        else -> { // Start new login activity
+                            _loginWithGithubEventChannel.send(AuthUiEvent.StartActivityForLoginWithGithub)
+                        }
+                    }
+                }
+                is Result.Error -> {
+                    _state.update {
+                        it.copy(isLoginWithGithubLoading = false)
+                    }
+                    _loginWithGithubEventChannel.send(UiEvent.ShowLongSnackbar(result.error.asUiText()))
+                }
+            }
+        }.launchIn(scope = viewModelScope)
+    }
+
+    private fun loginWithGithub(
+        loginWithGithubTask: Task<AuthResult>
+    ) {
+        if (!hasNetworkConnection()) {
+            _loginWithGithubEventChannel.trySend(UiEvent.ShowOfflineSnackbar)
+            _state.update {
+                it.copy(isLoginWithGithubLoading = false)
+            }
+            return
+        }
+
+        loginUseCases.loginWithGithubUseCase.get()(
+            loginWithGithubTask = loginWithGithubTask
+        ).onStart {
             _state.update {
                 it.copy(isLoginWithGithubLoading = true)
             }
@@ -308,9 +353,10 @@ class LoginViewModel @Inject constructor(
                     _loginWithGithubEventChannel.send(AuthUiEvent.NavigateToBaseScreen)
                 }
                 is Result.Error -> {
-                    _loginWithGithubEventChannel.send(
-                        UiEvent.ShowLongSnackbar(result.error.asUiText())
-                    )
+                    when (val error = result.error) {
+                        LoginWithGithubError.CancellationException -> Unit
+                        else -> _loginWithGithubEventChannel.send(UiEvent.ShowLongSnackbar(error.asUiText()))
+                    }
                 }
             }
         }.onCompletion {
