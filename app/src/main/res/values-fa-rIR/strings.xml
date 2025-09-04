@@ -114,23 +114,24 @@
     <string name="register_error_account_with_same_email_exists">حسابی با ایمیل وارد شده از قبل وجود دارد.</string>
 
 
-    <string name="forgot_pw_text_description">برای دریافت دستورالعمل‌های بازیابی رمز‌عبور، ایمیل تایید‌شده خود را وارد کنید.</string>
-    <string name="forgot_pw_title_email">آدرس ایمیل</string>
-    <string name="forgot_pw_hint_email">آدرس ایمیل خود را وارد کنید</string>
-    <string name="forgot_pw_btn_send">ارسال ایمیل</string>
+    <string name="forgot_pw_description">برای دریافت دستورالعمل‌های بازیابی رمز‌عبور، ایمیل تایید‌شده خود را وارد کنید.</string>
+    <string name="forgot_pw_textfield_email_title">آدرس ایمیل</string>
+    <string name="forgot_pw_textfield_email_hint">آدرس ایمیل خود را وارد کنید</string>
+    <string name="forgot_pw_btn_send_email">ارسال ایمیل</string>
     <string name="forgot_pw_btn_return">بازگشت به صفحه ورود</string>
     <string name="forgot_pw_error_blank_email">آدرس ایمیل خود را وارد کنید!</string>
-    <!--Placeholder is for the remaining waiting time-->
+    <string name="forgot_pw_error_invalid_email">آدرس ایمیل وارد شده، معتبر نیست!</string>
+    <!--Placeholder is for the remaining timer time-->
     <string name="forgot_pw_error_timer_is_not_zero_one">لطفاً قبل از درخواست مجدد، %d ثانیه منتظر بمانید.</string>
-    <!--Placeholder is for the remaining waiting time-->
+    <!--Placeholder is for the remaining timer time-->
     <string name="forgot_pw_error_timer_is_not_zero_zero">لطفاً قبل از درخواست مجدد، %d ثانیه منتظر بمانید.</string>
-    <!--Placeholder is for the remaining waiting time-->
+    <!--Placeholder is for the remaining timer time-->
     <string name="forgot_pw_error_timer_is_not_zero_two">لطفاً قبل از درخواست مجدد، %d ثانیه منتظر بمانید.</string>
-    <!--Placeholder is for the remaining waiting time-->
+    <!--Placeholder is for the remaining timer time-->
     <string name="forgot_pw_error_timer_is_not_zero_few">لطفاً قبل از درخواست مجدد، %d ثانیه منتظر بمانید.</string>
-    <!--Placeholder is for the remaining waiting time-->
+    <!--Placeholder is for the remaining timer time-->
     <string name="forgot_pw_error_timer_is_not_zero_many">لطفاً قبل از درخواست مجدد، %d ثانیه منتظر بمانید.</string>
-    <!--Placeholder is for the remaining waiting time-->
+    <!--Placeholder is for the remaining timer time-->
     <string name="forgot_pw_error_timer_is_not_zero_other">لطفاً قبل از درخواست مجدد، %d ثانیه منتظر بمانید.</string>
     <string name="forgot_pw_error_email">آدرس ایمیل وارد شده، معتبر نیست!</string>
     <string name="forgot_pw_error_not_found">حسابی با ایمیل وارد شده وجود ندارد.</string>

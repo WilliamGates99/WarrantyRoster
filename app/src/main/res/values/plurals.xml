@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <plurals name="forgot_pw_error_timer_is_not_zero" translatable="false">
         <item quantity="zero">@string/forgot_pw_error_timer_is_not_zero_zero</item>
         <item quantity="one">@string/forgot_pw_error_timer_is_not_zero_one</item>
@@ -8,4 +9,5 @@
         <item quantity="many">@string/forgot_pw_error_timer_is_not_zero_many</item>
         <item quantity="other">@string/forgot_pw_error_timer_is_not_zero_other</item>
     </plurals>
+
 </resources>
