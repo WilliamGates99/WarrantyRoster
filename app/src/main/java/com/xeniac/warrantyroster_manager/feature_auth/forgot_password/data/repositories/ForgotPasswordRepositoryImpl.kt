@@ -22,9 +22,10 @@ class ForgotPasswordRepositoryImpl @Inject constructor(
         email: String
     ): SendResetPasswordEmailResult {
         return try {
-            firebaseAuth.get().sendPasswordResetEmail(
-                email.trim()
-            ).await()
+            with(firebaseAuth.get()) {
+                useAppLanguage()
+                sendPasswordResetEmail(email.trim()).await()
+            }
 
             SendResetPasswordEmailResult(result = Result.Success(Unit))
         } catch (e: IllegalArgumentException) {

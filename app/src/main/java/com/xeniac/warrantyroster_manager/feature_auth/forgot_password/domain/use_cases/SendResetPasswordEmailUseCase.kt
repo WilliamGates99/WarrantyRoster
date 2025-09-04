@@ -27,7 +27,7 @@ class SendResetPasswordEmailUseCase(
         if (hasError) {
             return@flow emit(
                 SendResetPasswordEmailResult(
-                    emailError = timerValueError,
+                    emailError = emailError,
                     timerValueError = timerValueError
                 )
             )
