@@ -73,7 +73,7 @@ private fun LoginWithEmailSection(
     contentPadding: PaddingValues = PaddingValues(
         start = 24.dp,
         top = 32.dp,
-        bottom = 16.dp
+        bottom = 12.dp
     ),
     onAction: (action: LoginAction) -> Unit,
     onNavigateToRegisterScreen: () -> Unit,

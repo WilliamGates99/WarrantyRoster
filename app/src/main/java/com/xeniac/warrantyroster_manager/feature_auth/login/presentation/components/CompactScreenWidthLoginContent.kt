@@ -34,7 +34,7 @@ fun CompactScreenWidthLoginContent(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(
         top = 44.dp,
-        bottom = 16.dp
+        bottom = 12.dp
     ),
     onAction: (action: LoginAction) -> Unit,
     onNavigateToRegisterScreen: () -> Unit,

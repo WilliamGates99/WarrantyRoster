@@ -34,7 +34,7 @@ fun CompactScreenWidthRegisterContent(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(
         top = 44.dp,
-        bottom = 16.dp
+        bottom = 12.dp
     ),
     onAction: (action: RegisterAction) -> Unit,
     onNavigateUp: () -> Unit

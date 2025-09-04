@@ -71,7 +71,7 @@ private fun RegisterWithEmailSection(
     contentPadding: PaddingValues = PaddingValues(
         start = 24.dp,
         top = 32.dp,
-        bottom = 16.dp
+        bottom = 12.dp
     ),
     onAction: (action: RegisterAction) -> Unit,
     onNavigateUp: () -> Unit
