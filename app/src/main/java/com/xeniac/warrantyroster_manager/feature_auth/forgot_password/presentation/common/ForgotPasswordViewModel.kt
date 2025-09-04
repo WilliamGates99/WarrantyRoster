@@ -104,8 +104,8 @@ class ForgotPasswordViewModel @Inject constructor(
             _state.update {
                 it.copy(isSendResetPasswordEmailLoading = true)
             }
-        }.onEach { loginWithEmailResult ->
-            loginWithEmailResult.emailError?.let { emailError ->
+        }.onEach { sendResetPasswordEmailResult ->
+            sendResetPasswordEmailResult.emailError?.let { emailError ->
                 _state.update {
                     it.copy(
                         emailState = it.emailState.copy(
@@ -115,7 +115,7 @@ class ForgotPasswordViewModel @Inject constructor(
                 }
             }
 
-            when (val result = loginWithEmailResult.result) {
+            when (val result = sendResetPasswordEmailResult.result) {
                 is Result.Success -> {
                     startCountDownTimer()
                     _state.update {
