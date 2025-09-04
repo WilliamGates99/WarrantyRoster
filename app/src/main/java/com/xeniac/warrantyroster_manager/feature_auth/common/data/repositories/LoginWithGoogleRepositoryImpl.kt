@@ -61,14 +61,14 @@ class LoginWithGoogleRepositoryImpl @Inject constructor(
             Timber.e("Get Google credential GetCredentialCancellationException:")
             e.printStackTrace()
             Result.Error(GetGoogleCredentialError.CancellationException)
-        } catch (e: GetCredentialException) {
-            Timber.e("Get Google credential GetCredentialException:")
-            e.printStackTrace()
-            Result.Error(GetGoogleCredentialError.Network.AccessCredentialManagerFailed)
         } catch (e: GetCredentialCustomException) {
             Timber.e("Get Google credential GetCredentialCustomException:")
             e.printStackTrace()
             Result.Error(GetGoogleCredentialError.Network.CredentialCorruptedOrExpired)
+        } catch (e: GetCredentialException) {
+            Timber.e("Get Google credential GetCredentialException:")
+            e.printStackTrace()
+            Result.Error(GetGoogleCredentialError.Network.AccessCredentialManagerFailed)
         } catch (e: Exception) {
             coroutineContext.ensureActive()
             Timber.e("Get Google credential Exception:")
@@ -129,6 +129,18 @@ class LoginWithGoogleRepositoryImpl @Inject constructor(
             Timber.e("Login with Google CertPathValidatorException:")
             e.printStackTrace()
             Result.Error(LoginWithGoogleError.Network.CertPathValidatorException)
+        } catch (e: FirebaseAuthInvalidUserException) {
+            Timber.e("Login with Google FirebaseAuthInvalidUserException:")
+            e.printStackTrace()
+            Result.Error(LoginWithGoogleError.Network.FirebaseAuthInvalidUserException)
+        } catch (e: FirebaseAuthInvalidCredentialsException) {
+            Timber.e("Login with Google FirebaseAuthInvalidCredentialsException:")
+            e.printStackTrace()
+            Result.Error(LoginWithGoogleError.Network.FirebaseAuthInvalidCredentialsException)
+        } catch (e: FirebaseAuthUserCollisionException) {
+            Timber.e("Login with Google FirebaseAuthUserCollisionException:")
+            e.printStackTrace()
+            Result.Error(LoginWithGoogleError.Network.FirebaseAuthUserCollisionException)
         } catch (e: FirebaseNetworkException) {
             Timber.e("Login with Google FirebaseNetworkException:")
             e.printStackTrace()
@@ -144,18 +156,6 @@ class LoginWithGoogleRepositoryImpl @Inject constructor(
                 isFirebase403Error(e.message) -> Result.Error(LoginWithGoogleError.Network.Firebase403)
                 else -> Result.Error(LoginWithGoogleError.Network.SomethingWentWrong)
             }
-        } catch (e: FirebaseAuthInvalidUserException) {
-            Timber.e("Login with Google FirebaseAuthInvalidUserException:")
-            e.printStackTrace()
-            Result.Error(LoginWithGoogleError.Network.FirebaseAuthInvalidUserException)
-        } catch (e: FirebaseAuthInvalidCredentialsException) {
-            Timber.e("Login with Google FirebaseAuthInvalidCredentialsException:")
-            e.printStackTrace()
-            Result.Error(LoginWithGoogleError.Network.FirebaseAuthInvalidCredentialsException)
-        } catch (e: FirebaseAuthUserCollisionException) {
-            Timber.e("Login with Google FirebaseAuthUserCollisionException:")
-            e.printStackTrace()
-            Result.Error(LoginWithGoogleError.Network.FirebaseAuthUserCollisionException)
         } catch (e: Exception) {
             coroutineContext.ensureActive()
             Timber.e("Login with Google Exception:")

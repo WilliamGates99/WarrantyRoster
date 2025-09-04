@@ -61,6 +61,18 @@ class LoginWithXRepositoryImpl @Inject constructor(
             }
 
             Result.Error(LoginWithXError.Network.SomethingWentWrong)
+        } catch (e: FirebaseAuthInvalidUserException) {
+            Timber.e("Login with X FirebaseAuthInvalidUserException:")
+            e.printStackTrace()
+            Result.Error(LoginWithXError.Network.FirebaseAuthInvalidUserException)
+        } catch (e: FirebaseAuthInvalidCredentialsException) {
+            Timber.e("Login with X FirebaseAuthInvalidCredentialsException:")
+            e.printStackTrace()
+            Result.Error(LoginWithXError.Network.FirebaseAuthInvalidCredentialsException)
+        } catch (e: FirebaseAuthUserCollisionException) {
+            Timber.e("Login with X FirebaseAuthUserCollisionException:")
+            e.printStackTrace()
+            Result.Error(LoginWithXError.Network.FirebaseAuthUserCollisionException)
         } catch (e: FirebaseAuthWebException) {
             Timber.e("Login with X FirebaseAuthWebException:")
             e.printStackTrace()
@@ -90,18 +102,6 @@ class LoginWithXRepositoryImpl @Inject constructor(
                 ) == true -> Result.Error(LoginWithXError.Network.FirebaseNetworkException)
                 else -> Result.Error(LoginWithXError.Network.SomethingWentWrong)
             }
-        } catch (e: FirebaseAuthInvalidUserException) {
-            Timber.e("Login with X FirebaseAuthInvalidUserException:")
-            e.printStackTrace()
-            Result.Error(LoginWithXError.Network.FirebaseAuthInvalidUserException)
-        } catch (e: FirebaseAuthInvalidCredentialsException) {
-            Timber.e("Login with X FirebaseAuthInvalidCredentialsException:")
-            e.printStackTrace()
-            Result.Error(LoginWithXError.Network.FirebaseAuthInvalidCredentialsException)
-        } catch (e: FirebaseAuthUserCollisionException) {
-            Timber.e("Login with X FirebaseAuthUserCollisionException:")
-            e.printStackTrace()
-            Result.Error(LoginWithXError.Network.FirebaseAuthUserCollisionException)
         } catch (e: Exception) {
             coroutineContext.ensureActive()
             Timber.e("Login with X Exception:")
