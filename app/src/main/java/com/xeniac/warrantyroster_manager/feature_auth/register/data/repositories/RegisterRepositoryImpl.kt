@@ -30,10 +30,13 @@ class RegisterRepositoryImpl @Inject constructor(
         password: String
     ): RegisterWithEmailResult {
         return try {
-            val authResult = firebaseAuth.get().createUserWithEmailAndPassword(
-                email.trim(),
-                password.trim()
-            ).await()
+            val authResult = with(firebaseAuth.get()) {
+                useAppLanguage()
+                createUserWithEmailAndPassword(
+                    email.trim(),
+                    password.trim()
+                ).await()
+            }
 
             authResult.user?.let { registeredUser ->
                 warrantyRosterDataStoreRepository.get().isUserLoggedIn(isLoggedIn = true)
