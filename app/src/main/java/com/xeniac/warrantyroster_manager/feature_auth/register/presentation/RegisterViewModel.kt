@@ -16,7 +16,10 @@ import com.xeniac.warrantyroster_manager.core.presentation.common.utils.Event
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.NetworkObserverHelper.hasNetworkConnection
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.PasswordStrengthCalculator
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiEvent
+import com.xeniac.warrantyroster_manager.feature_auth.common.di.GithubQualifier
+import com.xeniac.warrantyroster_manager.feature_auth.common.di.XQualifier
 import com.xeniac.warrantyroster_manager.feature_auth.common.domain.errors.GetGoogleCredentialError
+import com.xeniac.warrantyroster_manager.feature_auth.common.domain.errors.LoginWithGithubError
 import com.xeniac.warrantyroster_manager.feature_auth.common.domain.errors.LoginWithXError
 import com.xeniac.warrantyroster_manager.feature_auth.common.presentation.AuthUiEvent
 import com.xeniac.warrantyroster_manager.feature_auth.common.presentation.utils.asUiText
@@ -48,7 +51,8 @@ class RegisterViewModel @Inject constructor(
     private val registerUseCases: RegisterUseCases,
     private val passwordStrengthCalculator: Lazy<PasswordStrengthCalculator>,
     private val confirmPasswordChecker: Lazy<ConfirmPasswordChecker>,
-    val xOAuthProvider: Lazy<OAuthProvider>,
+    @XQualifier val xOAuthProvider: Lazy<OAuthProvider>,
+    @GithubQualifier val githubOAuthProvider: Lazy<OAuthProvider>,
     val firebaseAuth: Lazy<FirebaseAuth>,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
@@ -87,7 +91,8 @@ class RegisterViewModel @Inject constructor(
             RegisterAction.LoginWithGoogle -> getGoogleCredential()
             RegisterAction.CheckPendingLoginWithX -> checkPendingLoginWithX()
             is RegisterAction.LoginWithX -> loginWithX(action.loginWithXTask)
-            RegisterAction.LoginWithGithub -> loginWithGithub()
+            RegisterAction.CheckPendingLoginWithGithub -> checkPendingLoginWithGithub()
+            is RegisterAction.LoginWithGithub -> loginWithGithub(action.loginWithGithubTask)
         }
     }
 
@@ -367,13 +372,53 @@ class RegisterViewModel @Inject constructor(
         }.launchIn(scope = viewModelScope)
     }
 
-    private fun loginWithGithub() {
+    private fun checkPendingLoginWithGithub() {
         if (!hasNetworkConnection()) {
             _loginWithGithubEventChannel.trySend(UiEvent.ShowOfflineSnackbar)
             return
         }
 
-        registerUseCases.loginWithGithubUseCase.get()().onStart {
+        registerUseCases.checkPendingLoginWithGithubUseCase.get()().onStart {
+            _state.update {
+                it.copy(isLoginWithGithubLoading = true)
+            }
+        }.onEach { result ->
+            when (result) {
+                is Result.Success -> {
+                    val pendingLoginWithGithubTask = result.data
+                    when {
+                        pendingLoginWithGithubTask != null -> { // Handle pending login
+                            loginWithGithub(loginWithGithubTask = pendingLoginWithGithubTask)
+                        }
+                        else -> { // Start new login activity
+                            _loginWithGithubEventChannel.send(AuthUiEvent.StartActivityForLoginWithGithub)
+                        }
+                    }
+                }
+                is Result.Error -> {
+                    _state.update {
+                        it.copy(isLoginWithGithubLoading = false)
+                    }
+                    _loginWithGithubEventChannel.send(UiEvent.ShowLongSnackbar(result.error.asUiText()))
+                }
+            }
+        }.launchIn(scope = viewModelScope)
+    }
+
+    private fun loginWithGithub(
+        loginWithGithubTask: Task<AuthResult>
+    ) {
+        if (!hasNetworkConnection()) {
+            _loginWithGithubEventChannel.trySend(UiEvent.ShowOfflineSnackbar)
+            _state.update {
+                it.copy(isLoginWithGithubLoading = false)
+            }
+            return
+        }
+
+        registerUseCases.loginWithGithubUseCase.get()(
+            loginWithGithubTask = loginWithGithubTask
+        ).onStart {
             _state.update {
                 it.copy(isLoginWithGithubLoading = true)
             }
@@ -383,9 +428,10 @@ class RegisterViewModel @Inject constructor(
                     _loginWithGithubEventChannel.send(AuthUiEvent.NavigateToBaseScreen)
                 }
                 is Result.Error -> {
-                    _loginWithGithubEventChannel.send(
-                        UiEvent.ShowLongSnackbar(result.error.asUiText())
-                    )
+                    when (val error = result.error) {
+                        LoginWithGithubError.CancellationException -> Unit
+                        else -> _loginWithGithubEventChannel.send(UiEvent.ShowLongSnackbar(error.asUiText()))
+                    }
                 }
             }
         }.onCompletion {

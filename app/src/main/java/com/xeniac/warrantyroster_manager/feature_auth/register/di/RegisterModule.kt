@@ -1,5 +1,6 @@
 package com.xeniac.warrantyroster_manager.feature_auth.register.di
 
+import com.xeniac.warrantyroster_manager.feature_auth.common.domain.use_cases.CheckPendingLoginWithGithubUseCase
 import com.xeniac.warrantyroster_manager.feature_auth.common.domain.use_cases.CheckPendingLoginWithXUseCase
 import com.xeniac.warrantyroster_manager.feature_auth.common.domain.use_cases.GetGoogleCredentialUseCase
 import com.xeniac.warrantyroster_manager.feature_auth.common.domain.use_cases.LoginWithGithubUseCase
@@ -55,6 +56,7 @@ internal object RegisterModule {
         loginWithGoogleUseCase: LoginWithGoogleUseCase,
         checkPendingLoginWithXUseCase: CheckPendingLoginWithXUseCase,
         loginWithXUseCase: LoginWithXUseCase,
+        checkPendingLoginWithGithubUseCase: CheckPendingLoginWithGithubUseCase,
         loginWithGithubUseCase: LoginWithGithubUseCase
     ): RegisterUseCases = RegisterUseCases(
         { registerWithEmailUseCase },
@@ -62,6 +64,7 @@ internal object RegisterModule {
         { loginWithGoogleUseCase },
         { checkPendingLoginWithXUseCase },
         { loginWithXUseCase },
+        { checkPendingLoginWithGithubUseCase },
         { loginWithGithubUseCase }
     )
 }

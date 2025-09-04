@@ -98,7 +98,7 @@ fun CompactScreenWidthRegisterContent(
             isLoginWithGithubLoading = state.isLoginWithGithubLoading,
             onLoginWithGoogleClick = { onAction(RegisterAction.LoginWithGoogle) },
             onLoginWithXClick = { onAction(RegisterAction.CheckPendingLoginWithX) },
-            onLoginWithGithubClick = { onAction(RegisterAction.LoginWithGithub) },
+            onLoginWithGithubClick = { onAction(RegisterAction.CheckPendingLoginWithGithub) },
             modifier = Modifier.padding(horizontal = horizontalPadding)
         )
 
