@@ -21,15 +21,16 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.xeniac.warrantyroster_manager.R
+import com.xeniac.warrantyroster_manager.core.presentation.common.states.CustomTextFieldState
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.BigButton
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.CustomOutlinedTextField
 import com.xeniac.warrantyroster_manager.feature_auth.forgot_password.presentation.common.ForgotPasswordAction
 import com.xeniac.warrantyroster_manager.feature_auth.forgot_password.presentation.common.components.ReturnToLoginButton
-import com.xeniac.warrantyroster_manager.feature_auth.forgot_password.presentation.common.states.ForgotPasswordState
 
 @Composable
 fun CompactScreenWidthForgotPwContent(
-    state: ForgotPasswordState,
+    emailState: CustomTextFieldState,
+    isSendResetPasswordEmailLoading: Boolean,
     bottomPadding: Dp,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(
@@ -57,11 +58,11 @@ fun CompactScreenWidthForgotPwContent(
         Spacer(modifier = Modifier.height(44.dp))
 
         CustomOutlinedTextField(
-            isLoading = state.isSendResetPasswordEmailLoading,
-            value = state.emailState.value,
+            isLoading = isSendResetPasswordEmailLoading,
+            value = emailState.value,
             title = stringResource(id = R.string.forgot_pw_textfield_email_title),
             placeholder = stringResource(id = R.string.forgot_pw_textfield_email_hint),
-            errorText = state.emailState.errorText,
+            errorText = emailState.errorText,
             contentType = ContentType.Username,
             keyboardType = KeyboardType.Email,
             imeAction = ImeAction.Done,
@@ -78,7 +79,7 @@ fun CompactScreenWidthForgotPwContent(
         Spacer(modifier = Modifier.height(40.dp))
 
         BigButton(
-            isLoading = state.isSendResetPasswordEmailLoading,
+            isLoading = isSendResetPasswordEmailLoading,
             text = stringResource(R.string.forgot_pw_btn_send_email),
             onClick = {
                 focusManager.clearFocus()

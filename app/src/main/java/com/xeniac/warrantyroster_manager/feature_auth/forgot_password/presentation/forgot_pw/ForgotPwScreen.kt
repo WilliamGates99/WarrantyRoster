@@ -59,13 +59,15 @@ fun ForgotPwScreen(
     ) { innerPadding ->
         when (isWindowWidthSizeCompact()) {
             true -> CompactScreenWidthForgotPwContent(
-                state = state,
+                emailState = state.emailState,
+                isSendResetPasswordEmailLoading = state.isSendResetPasswordEmailLoading,
                 bottomPadding = innerPadding.calculateBottomPadding(),
                 onAction = viewModel::onAction,
                 onNavigateUp = onNavigateUp
             )
             false -> MediumScreenWidthForgotPwContent(
-                state = state,
+                emailState = state.emailState,
+                isSendResetPasswordEmailLoading = state.isSendResetPasswordEmailLoading,
                 bottomPadding = innerPadding.calculateBottomPadding(),
                 onAction = viewModel::onAction,
                 onNavigateUp = onNavigateUp
