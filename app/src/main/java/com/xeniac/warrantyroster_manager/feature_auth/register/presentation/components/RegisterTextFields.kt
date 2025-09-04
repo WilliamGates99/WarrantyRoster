@@ -90,7 +90,7 @@ fun RegisterTextFields(
                 )
             } ?: outlinedTextFieldColors(),
             isPasswordTextField = true,
-            contentType = ContentType.Password,
+            contentType = ContentType.NewPassword,
             keyboardType = KeyboardType.Password,
             imeAction = ImeAction.Done,
             onValueChange = { newValue ->
