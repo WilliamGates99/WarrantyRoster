@@ -1,7 +1,5 @@
 package com.xeniac.warrantyroster_manager.feature_auth.common.di
 
-import android.content.Context
-import androidx.credentials.CredentialManager
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.firebase.auth.OAuthProvider
 import com.xeniac.warrantyroster_manager.BuildConfig
@@ -23,19 +21,12 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.scopes.ViewModelScoped
 import javax.inject.Qualifier
 
 @Module
 @InstallIn(ViewModelComponent::class)
 internal object AuthModule {
-
-    @Provides
-    @ViewModelScoped
-    fun provideCredentialManager(
-        @ApplicationContext context: Context
-    ): CredentialManager = CredentialManager.create(context)
 
     @Provides
     @ViewModelScoped

@@ -1,6 +1,8 @@
 package com.xeniac.warrantyroster_manager.core.presentation.common.utils
 
 sealed class UiEvent : Event() {
+    data object RestartActivity : UiEvent()
+
     data object ShowOfflineSnackbar : UiEvent()
     data object ShowOfflineLongSnackbar : UiEvent()
 
@@ -14,5 +16,8 @@ sealed class UiEvent : Event() {
     data class Navigate(val destination: Any) : UiEvent()
     data object NavigateUp : UiEvent()
 
-    data object RestartActivity : UiEvent()
+    data object ForceLogoutUnauthorizedUser : UiEvent()
+
+    data object ClearCoilCache : UiEvent()
+    data object NavigateToAuthScreen : UiEvent()
 }

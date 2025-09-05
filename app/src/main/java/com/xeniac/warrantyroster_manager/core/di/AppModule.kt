@@ -3,6 +3,7 @@ package com.xeniac.warrantyroster_manager.core.di
 import android.app.NotificationManager
 import android.content.Context
 import android.net.ConnectivityManager
+import androidx.credentials.CredentialManager
 import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
@@ -170,6 +171,12 @@ internal object AppModule {
     @Provides
     @Singleton
     fun provideFirebaseAuth(): FirebaseAuth = Firebase.auth
+
+    @Provides
+    @Singleton
+    fun provideCredentialManager(
+        @ApplicationContext context: Context
+    ): CredentialManager = CredentialManager.create(context)
 
     @Provides
     fun provideAppTheme(

@@ -2,11 +2,15 @@ package com.xeniac.warrantyroster_manager.core.di
 
 import com.google.firebase.auth.FirebaseAuth
 import com.xeniac.warrantyroster_manager.core.domain.repositories.SettingsDataStoreRepository
+import com.xeniac.warrantyroster_manager.core.domain.repositories.UserRepository
 import com.xeniac.warrantyroster_manager.core.domain.repositories.WarrantyRosterDataStoreRepository
+import com.xeniac.warrantyroster_manager.core.domain.use_cases.ForceLogoutUnauthorizedUserUseCase
 import com.xeniac.warrantyroster_manager.core.domain.use_cases.GetCurrentAppLocaleUseCase
 import com.xeniac.warrantyroster_manager.core.domain.use_cases.GetIsUserLoggedInUseCase
+import com.xeniac.warrantyroster_manager.core.domain.use_cases.LogoutUserUseCase
 import com.xeniac.warrantyroster_manager.core.domain.use_cases.MainUseCases
 import com.xeniac.warrantyroster_manager.core.domain.use_cases.StoreCurrentAppLocaleUseCase
+import com.xeniac.warrantyroster_manager.core.domain.use_cases.UserUseCases
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.ConfirmPasswordChecker
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.PasswordStrengthCalculator
 import dagger.Module
@@ -52,11 +56,33 @@ internal object CoreModule {
 
     @Provides
     @ViewModelScoped
+    fun provideLogoutUserUseCase(
+        userRepository: UserRepository
+    ): LogoutUserUseCase = LogoutUserUseCase(userRepository)
+
+    @Provides
+    @ViewModelScoped
+    fun provideForceLogoutUnauthorizedUserUseCase(
+        userRepository: UserRepository
+    ): ForceLogoutUnauthorizedUserUseCase = ForceLogoutUnauthorizedUserUseCase(userRepository)
+
+    @Provides
+    @ViewModelScoped
     fun provideMainUseCases(
         getCurrentAppLocaleUseCase: GetCurrentAppLocaleUseCase,
         getIsUserLoggedInUseCase: GetIsUserLoggedInUseCase
     ): MainUseCases = MainUseCases(
         { getCurrentAppLocaleUseCase },
         { getIsUserLoggedInUseCase }
+    )
+
+    @Provides
+    @ViewModelScoped
+    fun provideUserUseCases(
+        logoutUserUseCase: LogoutUserUseCase,
+        forceLogoutUnauthorizedUserUseCase: ForceLogoutUnauthorizedUserUseCase
+    ): UserUseCases = UserUseCases(
+        { logoutUserUseCase },
+        { forceLogoutUnauthorizedUserUseCase }
     )
 }

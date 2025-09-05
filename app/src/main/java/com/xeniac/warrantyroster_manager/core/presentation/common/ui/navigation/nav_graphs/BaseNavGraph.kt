@@ -9,16 +9,18 @@ import androidx.compose.ui.unit.Dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.xeniac.warrantyroster_manager.core.presentation.common.UserViewModel
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.SettingsScreen
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.WarrantiesScreen
 
 @Composable
 fun SetupBaseNavGraph(
-    homeNavController: NavHostController,
-    bottomPadding: Dp
+    baseNavController: NavHostController,
+    bottomPadding: Dp,
+    userViewModel: UserViewModel
 ) {
     NavHost(
-        navController = homeNavController,
+        navController = baseNavController,
         startDestination = WarrantiesScreen
     ) {
         composable<WarrantiesScreen> {

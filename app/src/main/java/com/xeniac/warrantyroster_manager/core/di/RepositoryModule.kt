@@ -4,11 +4,13 @@ import com.xeniac.warrantyroster_manager.core.data.repositories.ConnectivityObse
 import com.xeniac.warrantyroster_manager.core.data.repositories.MiscellaneousDataStoreRepositoryImpl
 import com.xeniac.warrantyroster_manager.core.data.repositories.PermissionsDataStoreRepositoryImpl
 import com.xeniac.warrantyroster_manager.core.data.repositories.SettingsDataStoreRepositoryImpl
+import com.xeniac.warrantyroster_manager.core.data.repositories.UserRepositoryImpl
 import com.xeniac.warrantyroster_manager.core.data.repositories.WarrantyRosterDataStoreRepositoryImpl
 import com.xeniac.warrantyroster_manager.core.domain.repositories.ConnectivityObserver
 import com.xeniac.warrantyroster_manager.core.domain.repositories.MiscellaneousDataStoreRepository
 import com.xeniac.warrantyroster_manager.core.domain.repositories.PermissionsDataStoreRepository
 import com.xeniac.warrantyroster_manager.core.domain.repositories.SettingsDataStoreRepository
+import com.xeniac.warrantyroster_manager.core.domain.repositories.UserRepository
 import com.xeniac.warrantyroster_manager.core.domain.repositories.WarrantyRosterDataStoreRepository
 import dagger.Binds
 import dagger.Module
@@ -49,4 +51,10 @@ abstract class RepositoryModule {
     abstract fun bindWarrantyRosterDataStoreRepository(
         dsfutDataStoreRepositoryImpl: WarrantyRosterDataStoreRepositoryImpl
     ): WarrantyRosterDataStoreRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindUserRepository(
+        userRepositoryImpl: UserRepositoryImpl
+    ): UserRepository
 }
