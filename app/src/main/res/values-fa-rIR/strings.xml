@@ -41,6 +41,7 @@
     <string name="core_locale_title_full_english_gb">انگلیسی (بریتانیایی)</string>
     <string name="core_locale_title_full_farsi_ir">فارسی</string>
     <string name="core_theme_title_default">پیش‌فرض سیستم</string>
+    <string name="core_theme_bottom_sheet_title">تم</string>
     <string name="core_theme_title_light">روشن</string>
     <string name="core_theme_title_dark">تیره</string>
     <string name="core_password_strength_short">رمز‌عبور باید حداقل %d کاراکتر باشد!</string>
@@ -366,38 +367,23 @@
     <string name="edit_warranty_format_date">%3$d/%1$s/%2$s</string>
 
 
-    <string name="settings_text_title">تنظیمات</string>
-    <string name="settings_title_account">حساب کاربری</string>
+    <string name="settings_title">تنظیمات</string>
+    <string name="settings_account_title">حساب کاربری</string>
+    <string name="settings_account_status_verified">تایید ایمیل</string>
+    <string name="settings_account_status_verify">تایید شده</string>
+    <string name="settings_account_linked_accounts_title">حساب‌های متصل</string>
+    <string name="settings_account_change_email_title">تغییر آدرس ایمیل</string>
+    <string name="settings_account_change_password_title">تغییر رمز‌عبور</string>
     <string name="settings_title_settings">تنظیمات</string>
-    <string name="settings_btn_account_verify">تایید ایمیل</string>
-    <string name="settings_btn_account_verified">تایید شده</string>
-    <string name="settings_text_account_linked_accounts">حساب‌های متصل</string>
-    <string name="settings_text_account_change_email">تغییر آدرس ایمیل</string>
-    <string name="settings_text_account_change_password">تغییر رمز‌عبور</string>
-    <string name="settings_text_settings_language">زبان</string>
-    <string name="settings_text_settings_language_english_us">انگلیسی (آمریکایی)</string>
-    <string name="settings_text_settings_language_english_gb">انگلیسی (بریتانیایی)</string>
-    <string name="settings_text_settings_language_persian_ir">فارسی</string>
-    <string name="settings_text_settings_theme">تم</string>
-    <string name="settings_text_settings_theme_default">پیش‌فرض سیستم</string>
-    <string name="settings_text_settings_theme_light">روشن</string>
-    <string name="settings_text_settings_theme_dark">تیره</string>
-    <string name="settings_text_settings_donate">حمایت</string>
-    <string name="settings_text_settings_improve_translations">بهبود ترجمه</string>
-    <string name="settings_text_settings_rate_us">امتیاز به برنامه</string>
-    <string name="settings_text_settings_privacy_policy">حریم خصوصی</string>
+    <string name="settings_settings_locale_title">زبان</string>
+    <string name="settings_settings_theme_title">تم</string>
+    <string name="settings_settings_donate_title">حمایت</string>
+    <string name="settings_settings_improve_translations_title">بهبود ترجمه</string>
+    <string name="settings_settings_rate_us_title">امتیاز به برنامه</string>
+    <string name="settings_settings_privacy_policy_title">حریم خصوصی</string>
     <string name="settings_btn_logout">خروج</string>
-    <string name="settings_dialog_title_language">زبان</string>
-    <string name="settings_dialog_item_language_english_us">انگلیسی (آمریکایی)</string>
-    <string name="settings_dialog_item_language_english_gb">انگلیسی (بریتانیایی)</string>
-    <string name="settings_dialog_item_language_persian_ir">فارسی</string>
-    <string name="settings_dialog_title_theme">تم</string>
-    <string name="settings_dialog_item_theme_default">پیش‌فرض سیستم</string>
-    <string name="settings_dialog_item_theme_light">روشن</string>
-    <string name="settings_dialog_item_theme_dark">تیره</string>
-    <string name="settings_dialog_message_verification_email_sent">ایمیل تأیید با موفقیت به صندوق ایمیلتان ارسال شد.</string>
-    <string name="settings_dialog_btn_positive_verification_email_sent">تایید</string>
-    <string name="settings_error_email_verification_email_not_provided">ایمیلی به حساب متصل نیست.</string>
+    <string name="settings_verify_email_message_success">ایمیل تأیید با موفقیت به صندوق ایمیلتان ارسال شد.</string>
+    <string name="settings_verify_email_error_email_not_provided">ایمیلی به حساب متصل نیست.</string>
 
 
     <string name="linked_accounts_text_title">حساب‌های متصل</string>

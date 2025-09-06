@@ -41,6 +41,7 @@
     <string name="core_locale_title_full_english_gb">English (United Kingdom)</string>
     <string name="core_locale_title_full_farsi_ir">Persian</string>
     <string name="core_theme_title_default">System Default</string>
+    <string name="core_theme_bottom_sheet_title">Theme</string>
     <string name="core_theme_title_light">Light</string>
     <string name="core_theme_title_dark">Dark</string>
     <string name="core_password_strength_short">Password should be at least %d characters!</string>
@@ -366,38 +367,23 @@
     <string name="edit_warranty_format_date">%2$s/%1$s/%3$d</string>
 
 
-    <string name="settings_text_title">Settings</string>
-    <string name="settings_title_account">Account</string>
+    <string name="settings_title">Settings</string>
+    <string name="settings_account_title">Account</string>
+    <string name="settings_account_status_verified">Verify Email</string>
+    <string name="settings_account_status_verify">Verified</string>
+    <string name="settings_account_linked_accounts_title">Linked Accounts</string>
+    <string name="settings_account_change_email_title">Change Email Address</string>
+    <string name="settings_account_change_password_title">Change Password</string>
     <string name="settings_title_settings">Settings</string>
-    <string name="settings_btn_account_verify">Verify Email</string>
-    <string name="settings_btn_account_verified">Verified</string>
-    <string name="settings_text_account_linked_accounts">Linked Accounts</string>
-    <string name="settings_text_account_change_email">Change Email Address</string>
-    <string name="settings_text_account_change_password">Change Password</string>
-    <string name="settings_text_settings_language">Language</string>
-    <string name="settings_text_settings_language_english_us">English (US)</string>
-    <string name="settings_text_settings_language_english_gb">English (UK)</string>
-    <string name="settings_text_settings_language_persian_ir">Persian</string>
-    <string name="settings_text_settings_theme">Theme</string>
-    <string name="settings_text_settings_theme_default">System Default</string>
-    <string name="settings_text_settings_theme_light">Light</string>
-    <string name="settings_text_settings_theme_dark">Dark</string>
-    <string name="settings_text_settings_donate">Donate</string>
-    <string name="settings_text_settings_improve_translations">Improve Translations</string>
-    <string name="settings_text_settings_rate_us">Rate Us</string>
-    <string name="settings_text_settings_privacy_policy">Privacy Policy</string>
+    <string name="settings_settings_locale_title">Language</string>
+    <string name="settings_settings_theme_title">Theme</string>
+    <string name="settings_settings_donate_title">Donate</string>
+    <string name="settings_settings_improve_translations_title">Improve Translations</string>
+    <string name="settings_settings_rate_us_title">Rate Us</string>
+    <string name="settings_settings_privacy_policy_title">Privacy Policy</string>
     <string name="settings_btn_logout">Logout</string>
-    <string name="settings_dialog_title_language">Language</string>
-    <string name="settings_dialog_item_language_english_us">English (United States)</string>
-    <string name="settings_dialog_item_language_english_gb">English (United Kingdom)</string>
-    <string name="settings_dialog_item_language_persian_ir">Persian</string>
-    <string name="settings_dialog_title_theme">Theme</string>
-    <string name="settings_dialog_item_theme_default">System Default</string>
-    <string name="settings_dialog_item_theme_light">Light</string>
-    <string name="settings_dialog_item_theme_dark">Dark</string>
-    <string name="settings_dialog_message_verification_email_sent">The verification email has been successfully sent to your inbox.</string>
-    <string name="settings_dialog_btn_positive_verification_email_sent">Confirm</string>
-    <string name="settings_error_email_verification_email_not_provided">An email address must be provided.</string>
+    <string name="settings_verify_email_message_success">The verification email has been successfully sent to your inbox.</string>
+    <string name="settings_verify_email_error_email_not_provided">An email address must be provided.</string>
 
 
     <string name="linked_accounts_text_title">Linked Accounts</string>
