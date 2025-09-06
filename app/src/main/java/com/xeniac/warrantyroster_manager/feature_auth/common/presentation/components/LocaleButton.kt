@@ -49,7 +49,8 @@ fun LocaleButton(
                 shape = shape,
                 shadow = Shadow(
                     radius = 8.dp,
-                    color = Black.copy(alpha = 0.24f)
+                    color = Black,
+                    alpha = 0.24f
                 )
             )
             .clip(shape)
