@@ -1,4 +1,4 @@
-package com.xeniac.warrantyroster_manager.core.presentation.base_screen
+package com.xeniac.warrantyroster_manager.feature_base.presentation
 
 import com.xeniac.warrantyroster_manager.core.domain.models.RateAppOption
 

@@ -1,4 +1,4 @@
-package com.xeniac.warrantyroster_manager.core.presentation.base_screen.components
+package com.xeniac.warrantyroster_manager.feature_base.presentation.components
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -17,11 +17,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
 import com.xeniac.warrantyroster_manager.R
-import com.xeniac.warrantyroster_manager.core.presentation.base_screen.BaseAction
-import com.xeniac.warrantyroster_manager.core.presentation.base_screen.utils.PostNotificationPermissionHelper
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.PermissionDialog
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.findActivity
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.openAppSettings
+import com.xeniac.warrantyroster_manager.feature_base.presentation.BaseAction
+import com.xeniac.warrantyroster_manager.feature_base.presentation.utils.PostNotificationPermissionHelper
 
 @Composable
 fun PostNotificationPermissionHandler(

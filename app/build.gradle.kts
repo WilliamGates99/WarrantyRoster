@@ -47,22 +47,10 @@ android {
             value = properties.getProperty("AUTH_GOOGLE_SERVER_CLIENT_ID")
         )
 
-        resValue(
-            type = "string",
-            name = "fb_login_protocol_scheme",
-            value = properties.getProperty("AUTH_FACEBOOK_LOGIN_PROTOCOL_SCHEME")
-        )
-
-        resValue(
-            type = "string",
-            name = "facebook_app_id",
-            value = properties.getProperty("AUTH_FACEBOOK_APP_ID")
-        )
-
-        resValue(
-            type = "string",
-            name = "facebook_client_token",
-            value = properties.getProperty("AUTH_FACEBOOK_CLIENT_TOKEN")
+        buildConfigField(
+            type = "String",
+            name = "HTTP_BASE_URL",
+            value = properties.getProperty("HTTP_BASE_URL")
         )
     }
 

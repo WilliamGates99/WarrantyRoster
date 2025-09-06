@@ -29,6 +29,7 @@ val RedAlpha20 = Color(0x33FF3442)
 val Orange = Color(0xFFFF9100)
 val OrangeAlpha20 = Color(0x33FF9100)
 
+// TODO: RENAME GRAY COLORS
 val BgLight = Color(0xFFFFFFFF)
 val NavyBlueLight = Color(0xFF00144F)
 val SkyBlueLight = Color(0xFFDEF4FD)
@@ -37,6 +38,7 @@ val GrayLightLight = Color(0xFFF3F3F3)
 val GrayMediumLight = Color(0xFFE9E9E9)
 val GrayDarkLight = Color(0xFF959595)
 val GrayDarkestLight = Color(0xFF666666)
+val GrayDarkest2Light = Color(0xFF404040)
 val NavyBlueAlpha10Light = Color(0x1A00144F)
 val NavyBlueAlpha20Light = Color(0x3300144F)
 
@@ -48,6 +50,7 @@ val GrayLightDark = Color(0xFF1F1F1F)
 val GrayMediumDark = Color(0xFF2E2E2E)
 val GrayDarkDark = Color(0xFF808080)
 val GrayDarkestDark = Color(0xFFA6A6A6)
+val GrayDarkest2Dark = Color(0xFFCCCCCC)
 val NavyBlueAlpha10Dark = Color(0x1ADEF4FD)
 val NavyBlueAlpha20Dark = Color(0x33DEF4FD)
 

@@ -1,6 +1,11 @@
-package com.xeniac.warrantyroster_manager.core.presentation.base_screen
+package com.xeniac.warrantyroster_manager.feature_base.presentation
 
+import android.app.Activity.RESULT_OK
+import androidx.activity.compose.LocalActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
@@ -20,18 +25,28 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import coil3.imageLoader
-import com.xeniac.warrantyroster_manager.core.presentation.base_screen.components.CustomNavigationBar
-import com.xeniac.warrantyroster_manager.core.presentation.base_screen.components.NavigationBarItems
-import com.xeniac.warrantyroster_manager.core.presentation.base_screen.components.PostNotificationPermissionHandler
+import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.core.presentation.common.UserViewModel
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.SwipeableSnackbar
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.showActionSnackbar
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.showLongSnackbar
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.nav_graphs.SetupBaseNavGraph
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.UpsertWarrantyScreen
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.utils.getNavigationBarHeightDp
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.ObserverAsEvent
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiEvent
+import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiText
+import com.xeniac.warrantyroster_manager.core.presentation.common.utils.findActivity
+import com.xeniac.warrantyroster_manager.core.presentation.common.utils.openAppPageInStore
+import com.xeniac.warrantyroster_manager.core.presentation.common.utils.openAppUpdatePageInStore
+import com.xeniac.warrantyroster_manager.feature_base.presentation.components.AppReviewDialog
+import com.xeniac.warrantyroster_manager.feature_base.presentation.components.AppUpdateBottomSheet
+import com.xeniac.warrantyroster_manager.feature_base.presentation.components.CustomNavigationBar
+import com.xeniac.warrantyroster_manager.feature_base.presentation.components.NavigationBarItems
+import com.xeniac.warrantyroster_manager.feature_base.presentation.components.PostNotificationPermissionHandler
+import timber.log.Timber
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BaseScreen(
     onLogoutNavigate: () -> Unit,
@@ -39,6 +54,7 @@ fun BaseScreen(
     userViewModel: UserViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
+    val activity = LocalActivity.current ?: context.findActivity()
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -48,7 +64,6 @@ fun BaseScreen(
     var isBottomAppBarVisible by remember { mutableStateOf(false) }
 
     val state by viewModel.state.collectAsStateWithLifecycle()
-    val userState by userViewModel.userState.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = currentDestination) {
         isBottomAppBarVisible = NavigationBarItems.entries.find { navItem ->
@@ -56,6 +71,63 @@ fun BaseScreen(
                 it.hasRoute(route = navItem.destinationScreen::class)
             } ?: false
         } != null
+    }
+
+    val appUpdateResultLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartIntentSenderForResult(),
+        onResult = { result ->
+            if (result.resultCode != RESULT_OK) {
+                Timber.e("Something went wrong with the in-app update flow.")
+            }
+        }
+    )
+
+    ObserverAsEvent(flow = viewModel.inAppUpdatesEventChannel) { event ->
+        when (event) {
+            is BaseUiEvent.StartAppUpdateFlow -> {
+                viewModel.appUpdateManager.get().startUpdateFlowForResult(
+                    event.appUpdateInfo,
+                    appUpdateResultLauncher,
+                    viewModel.appUpdateOptions.get()
+                )
+            }
+            BaseUiEvent.ShowCompleteAppUpdateSnackbar -> context.showActionSnackbar(
+                message = UiText.StringResource(R.string.base_app_update_message),
+                actionLabel = UiText.StringResource(R.string.base_app_update_action),
+                scope = scope,
+                snackbarHostState = snackbarHostState,
+                onAction = { viewModel.appUpdateManager.get().completeUpdate() }
+            )
+            BaseUiEvent.CompleteFlexibleAppUpdate -> {
+                viewModel.appUpdateManager.get().completeUpdate()
+            }
+        }
+    }
+
+    ObserverAsEvent(flow = viewModel.inAppReviewEventChannel) { event ->
+        when (event) {
+            BaseUiEvent.LaunchInAppReview -> {
+                state.inAppReviewInfo?.let { reviewInfo ->
+                    viewModel.reviewManager.get().launchReviewFlow(
+                        activity,
+                        reviewInfo
+                    ).addOnCompleteListener {
+                        /*
+                        The flow has finished.
+                        The API does not indicate whether the user reviewed or not,
+                        or even whether the review dialog was shown.
+                        Thus, no matter the result, we continue our app flow.
+                         */
+                        if (it.isSuccessful) {
+                            Timber.i("App review flow was completed successfully.")
+                        } else {
+                            Timber.e("Something went wrong with showing the app review flow:")
+                            it.exception?.printStackTrace()
+                        }
+                    }
+                }
+            }
+        }
     }
 
     ObserverAsEvent(userViewModel.logoutEventChannel) { event ->
@@ -114,5 +186,17 @@ fun BaseScreen(
         isPermissionDialogVisible = true,
         permissionDialogQueue = listOf(""),
         onAction = viewModel::onAction
+    )
+
+    AppUpdateBottomSheet(
+        isVisible = state.latestAppUpdateInfo != null,
+        onAction = viewModel::onAction,
+        openAppUpdatePageInStore = { context.openAppUpdatePageInStore() }
+    )
+
+    AppReviewDialog(
+        isVisible = state.isAppReviewDialogVisible,
+        onAction = viewModel::onAction,
+        openAppPageInStore = { context.openAppPageInStore() }
     )
 }

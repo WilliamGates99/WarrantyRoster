@@ -4,11 +4,11 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.xeniac.warrantyroster_manager.core.presentation.base_screen.BaseScreen
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.AuthScreen
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.BaseScreen
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.OnboardingScreen
 import com.xeniac.warrantyroster_manager.feature_auth.common.presentation.AuthScreen
+import com.xeniac.warrantyroster_manager.feature_base.presentation.BaseScreen
 import com.xeniac.warrantyroster_manager.feature_onboarding.presentation.OnboardingScreen
 
 @Composable

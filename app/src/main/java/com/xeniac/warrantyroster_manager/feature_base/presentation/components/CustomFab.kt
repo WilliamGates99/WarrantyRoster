@@ -1,4 +1,4 @@
-package com.xeniac.warrantyroster_manager.core.presentation.base_screen.components
+package com.xeniac.warrantyroster_manager.feature_base.presentation.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
