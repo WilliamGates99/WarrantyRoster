@@ -150,15 +150,22 @@
     <string name="reset_pw_instruction_btn_return">بازگشت به صفحه ورود</string>
 
 
-    <string name="main_menu_title_warranties">فهرست گارانتی‌ها</string>
-    <string name="main_menu_title_settings">تنظیمات</string>
-    <string name="main_text_content_description">افزودن گارانتی</string>
+    <string name="base_nav_warranties">فهرست گارانتی‌ها</string>
+    <string name="base_nav_settings">تنظیمات</string>
+    <string name="base_fab_add_warranty">افزودن گارانتی</string>
+    <string name="base_app_update_sheet_title">نسخه جدید برنامه منتشر شد</string>
     <!--Placeholder is for the App Name-->
-    <string name="main_rate_app_dialog_title">امتیاز به %s؟</string>
-    <string name="main_rate_app_dialog_message">اگر از استفاده از این برنامه لذت می‌برید، در صورت امکان به آن امتیاز دهید. بیشتر از یک دقیقه طول نمی‌کشد. از حمایت شما متشکریم!</string>
-    <string name="main_rate_app_dialog_positive">الان امتیاز می‌دهم</string>
-    <string name="main_rate_app_dialog_negative">نه، ممنون</string>
-    <string name="main_rate_app_dialog_neutral">بعدا بهم یادآوری کن</string>
+    <string name="base_app_update_sheet_message">توصیه می‌کنیم برای داشتن تجربه‌‌ای لذت‌بخش‌تر، %s را به آخرین نسخه بروز‌رسانی کنید.</string>
+    <string name="base_app_update_sheet_btn_update">بروز‌رسانی</string>
+    <string name="base_app_update_sheet_btn_dismiss">الان نه</string>
+    <string name="base_app_update_message">به‌روز‌رسانی با موفقیت دانلود شد! برای تکمیل نصب، لطفاً برنامه را مجدداً راه‌اندازی کنید.</string>
+    <string name="base_app_update_action">راه‌اندازی مجدد</string>
+    <!--Placeholder is for the App Name-->
+    <string name="base_app_review_dialog_title">امتیاز به %s؟</string>
+    <string name="base_app_review_dialog_message">اگر از استفاده از این برنامه لذت می‌برید، در صورت امکان به آن امتیاز دهید. بیشتر از یک دقیقه طول نمی‌کشد. از حمایت شما متشکریم!</string>
+    <string name="base_app_review_dialog_btn_rate_now">الان امتیاز می‌دهم</string>
+    <string name="base_app_review_dialog_btn_remind_later">بعدا بهم یادآوری کن</string>
+    <string name="base_app_review_dialog_btn_never">نه، ممنون</string>
 
 
     <string name="warranties_text_title">فهرست گارانتی‌ها</string>

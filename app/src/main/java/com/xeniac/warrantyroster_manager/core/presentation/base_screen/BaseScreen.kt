@@ -15,14 +15,19 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavDestination.Companion.hasRoute
+import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import coil3.imageLoader
+import com.xeniac.warrantyroster_manager.core.presentation.base_screen.components.CustomNavigationBar
+import com.xeniac.warrantyroster_manager.core.presentation.base_screen.components.NavigationBarItems
 import com.xeniac.warrantyroster_manager.core.presentation.base_screen.components.PostNotificationPermissionHandler
 import com.xeniac.warrantyroster_manager.core.presentation.common.UserViewModel
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.SwipeableSnackbar
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.showLongSnackbar
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.nav_graphs.SetupBaseNavGraph
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.UpsertWarrantyScreen
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.utils.getNavigationBarHeightDp
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.ObserverAsEvent
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiEvent
@@ -46,13 +51,11 @@ fun BaseScreen(
     val userState by userViewModel.userState.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = currentDestination) {
-//        isBottomAppBarVisible = NavigationBarItems.entries.find { navItem ->
-//            currentDestination?.hierarchy?.any {
-//                navItem.destinationScreen?.let { destinationScreen ->
-//                    it.hasRoute(route = destinationScreen::class)
-//                } ?: false
-//            } ?: false
-//        } != null
+        isBottomAppBarVisible = NavigationBarItems.entries.find { navItem ->
+            currentDestination?.hierarchy?.any {
+                it.hasRoute(route = navItem.destinationScreen::class)
+            } ?: false
+        } != null
     }
 
     ObserverAsEvent(userViewModel.logoutEventChannel) { event ->
@@ -74,42 +77,34 @@ fun BaseScreen(
     Scaffold(
         snackbarHost = { SwipeableSnackbar(hostState = snackbarHostState) },
         bottomBar = {
-//            CustomNavigationBar(
-//                isBottomAppBarVisible = isBottomAppBarVisible,
-//                currentDestination = currentDestination,
-//                onItemClick = { screen ->
-//                    when (screen) {
-//                        // If the destination screen is the nav graph start destination, pop up to it
-//                        HomeScreen -> baseNavController.popBackStack(
-//                            route = screen,
-//                            inclusive = false
-//                        )
-//                        else -> baseNavController.navigate(screen) {
-//                            // Avoid multiple copies of the same destination when re-selecting the same item
-//                            launchSingleTop = true
-//
-//                            /*
-//                            Pop up to the start destination of the graph to
-//                            avoid building up a large stack of destinations
-//                            on the back stack as user selects items
-//                            */
-//                            popUpTo(id = baseNavController.graph.startDestinationId)
-//                        }
-//                    }
-//                },
-//                onAddWarrantyFabClick = {
-//                    baseNavController.navigate(AddWarrantyScreen) {
-//                        launchSingleTop = true
-//                        popUpTo(id = baseNavController.graph.startDestinationId)
-//                    }
-//                }
-//            )
+            CustomNavigationBar(
+                isBottomAppBarVisible = isBottomAppBarVisible,
+                currentDestination = currentDestination,
+                onItemClick = { screen ->
+                    baseNavController.navigate(route = screen) {
+                        // Avoid multiple copies of the same destination when re-selecting the same item
+                        launchSingleTop = true
+
+                        /*
+                        Pop up to the start destination of the graph to
+                        avoid building up a large stack of destinations
+                        on the back stack as user selects items
+                        */
+                        popUpTo(id = baseNavController.graph.startDestinationId)
+                    }
+                },
+                onAddWarrantyFabClick = {
+                    baseNavController.navigate(route = UpsertWarrantyScreen()) {
+                        launchSingleTop = true
+                        popUpTo(id = baseNavController.graph.startDestinationId)
+                    }
+                }
+            )
         },
         modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
         SetupBaseNavGraph(
             baseNavController = baseNavController,
-            // TODO: CHANGE FAB SIZE
             bottomPadding = innerPadding.calculateBottomPadding() - getNavigationBarHeightDp() + 28.dp, // Half of FAB Height = 28.dp
             userViewModel = userViewModel
         )

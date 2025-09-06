@@ -9,8 +9,10 @@ import androidx.compose.ui.unit.Dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.toRoute
 import com.xeniac.warrantyroster_manager.core.presentation.common.UserViewModel
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.SettingsScreen
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.UpsertWarrantyScreen
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.WarrantiesScreen
 
 @Composable
@@ -26,6 +28,23 @@ fun SetupBaseNavGraph(
         composable<WarrantiesScreen> {
             Text(
                 text = "WarrantiesScreen",
+                modifier = Modifier
+                    .fillMaxSize()
+                    .wrapContentSize()
+            )
+        }
+
+        composable<UpsertWarrantyScreen>(
+            // ADD CUSTOM TYPE MAP FOR WARRANTY
+            // typeMap =
+        ) {
+            val updatingWarrantyId = it.toRoute<UpsertWarrantyScreen>().updatingWarrantyId
+
+            Text(
+                text = """
+                    UpsertWarrantyScreen
+                    updatingWarrantyId = $updatingWarrantyId
+                """.trimIndent(),
                 modifier = Modifier
                     .fillMaxSize()
                     .wrapContentSize()
