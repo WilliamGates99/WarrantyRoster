@@ -16,18 +16,9 @@ val NavyBlue = Color(0xFF00144F)
 val SkyBlue = Color(0xFFDEF4FD)
 
 val Blue = Color(0xFF1C53F4)
-val BlueAlpha20 = Color(0x331C53F4)
-
 val Green = Color(0xFF00BD62)
-val GreenAlpha10 = Color(0x1A00BD62)
-val GreenAlpha20 = Color(0x3300BD62)
-
 val Red = Color(0xFFFF3442)
-val RedAlpha10 = Color(0x1AFF3442)
-val RedAlpha20 = Color(0x33FF3442)
-
 val Orange = Color(0xFFFF9100)
-val OrangeAlpha20 = Color(0x33FF9100)
 
 // TODO: RENAME GRAY COLORS
 val BgLight = Color(0xFFFFFFFF)

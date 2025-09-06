@@ -7,15 +7,14 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
@@ -26,14 +25,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.xeniac.warrantyroster_manager.R
+import com.xeniac.warrantyroster_manager.core.presentation.common.UserAction
 import com.xeniac.warrantyroster_manager.core.presentation.common.UserViewModel
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.BigButton
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.LocaleBottomSheet
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.SwipeableSnackbar
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.bigButtonColors
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.showShortSnackbar
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.Red
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.ObserverAsEvent
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiEvent
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.findActivity
@@ -54,8 +59,8 @@ fun SettingsScreen(
     val snackbarHostState = remember { SnackbarHostState() }
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-    val horizontalPadding by remember { derivedStateOf { 16.dp } }
-    val verticalPadding by remember { derivedStateOf { 16.dp } }
+    val horizontalPadding by remember { derivedStateOf { 8.dp } }
+    val verticalPadding by remember { derivedStateOf { 24.dp } }
 
     val state by viewModel.state.collectAsStateWithLifecycle()
     val userState by userViewModel.userState.collectAsStateWithLifecycle()
@@ -100,7 +105,7 @@ fun SettingsScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection)
     ) { innerPadding ->
         Column(
-            verticalArrangement = Arrangement.spacedBy(space = 28.dp),
+            verticalArrangement = Arrangement.spacedBy(space = 24.dp),
             modifier = Modifier
                 .fillMaxSize()
                 .padding(
@@ -117,11 +122,21 @@ fun SettingsScreen(
                     vertical = verticalPadding
                 )
         ) {
-            Text(
-                text = "Settings Screen",
-                modifier = Modifier
-                    .fillMaxSize()
-                    .wrapContentSize()
+            // TODO: ACCOUNT SECTION
+
+            // TODO: SETTINGS SECTION
+
+            BigButton(
+                isLoading = userState.isLogoutLoading,
+                text = stringResource(id = R.string.settings_btn_logout).uppercase(),
+                onClick = { userViewModel.onAction(UserAction.Logout) },
+                colors = bigButtonColors().copy(
+                    containerColor = Red.copy(alpha = 0.10f),
+                    contentColor = Red,
+                    disabledContainerColor = Red.copy(alpha = 0.10f),
+                    disabledContentColor = Red
+                ),
+                modifier = Modifier.fillMaxWidth()
             )
         }
     }
