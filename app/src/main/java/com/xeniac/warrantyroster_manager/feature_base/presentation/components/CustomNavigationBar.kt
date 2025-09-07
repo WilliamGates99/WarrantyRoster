@@ -10,7 +10,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -60,11 +59,8 @@ import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.CradleCutoutShape
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.SettingsScreen
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.WarrantiesScreen
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.Black
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.GrayDarkDark
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.GrayDarkLight
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.GrayLightDark
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.White
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicBlack
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGrayDark
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.utils.toDp
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.utils.toPx
 
@@ -131,7 +127,6 @@ private fun CradledNavigationBar(
     fabSizePx: Float,
     currentDestination: NavDestination?,
     modifier: Modifier = Modifier,
-    isDarkTheme: Boolean = isSystemInDarkTheme(),
     enterTransition: EnterTransition = fadeIn() + slideInVertically(
         initialOffsetY = { it / 2 }
     ),
@@ -172,7 +167,7 @@ private fun CradledNavigationBar(
                         shape = shape,
                         shadow = Shadow(
                             radius = 4.dp,
-                            color = if (isDarkTheme) GrayLightDark else Black,
+                            color = MaterialTheme.colorScheme.dynamicBlack,
                             alpha = 0.04f
                         )
                     )
@@ -180,7 +175,7 @@ private fun CradledNavigationBar(
                         shape = shape,
                         shadow = Shadow(
                             radius = 4.dp,
-                            color = if (isDarkTheme) GrayLightDark else Black,
+                            color = MaterialTheme.colorScheme.dynamicBlack,
                             alpha = 0.20f
                         )
                     )
@@ -203,21 +198,15 @@ private fun CradledNavigationBar(
 private fun RowScope.NavigationBarItemsRow(
     currentDestination: NavDestination?,
     modifier: Modifier = Modifier,
-    isDarkTheme: Boolean = isSystemInDarkTheme(),
     colors: NavigationBarItemColors = NavigationBarItemDefaults.colors().copy(
         selectedIndicatorColor = Color.Transparent,
-        selectedIconColor = if (isDarkTheme) White else Black,
-        selectedTextColor = if (isDarkTheme) White else Black,
-        unselectedIconColor = if (isDarkTheme) GrayDarkDark else GrayDarkLight,
-        unselectedTextColor = if (isDarkTheme) GrayDarkDark else GrayDarkLight,
-        disabledIconColor = when {
-            isDarkTheme -> GrayDarkDark.copy(alpha = 0.38f)
-            else -> GrayDarkLight.copy(alpha = 0.38f)
-        },
-        disabledTextColor = when {
-            isDarkTheme -> GrayDarkDark.copy(alpha = 0.38f)
-            else -> GrayDarkLight.copy(alpha = 0.38f)
-        }
+        selectedIconColor = MaterialTheme.colorScheme.dynamicBlack,
+        selectedTextColor = MaterialTheme.colorScheme.dynamicBlack,
+        unselectedIconColor = MaterialTheme.colorScheme.dynamicGrayDark,
+        unselectedTextColor = MaterialTheme.colorScheme.dynamicGrayDark,
+        disabledIconColor = MaterialTheme.colorScheme.dynamicGrayDark.copy(alpha = 0.38f),
+        disabledTextColor = MaterialTheme.colorScheme.dynamicGrayDark.copy(alpha = 0.38f)
+
     ),
     onItemClick: (destinationScreen: Any) -> Unit
 ) {

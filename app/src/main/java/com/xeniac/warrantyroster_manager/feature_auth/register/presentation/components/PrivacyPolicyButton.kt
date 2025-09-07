@@ -2,7 +2,6 @@ package com.xeniac.warrantyroster_manager.feature_auth.register.presentation.com
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -26,8 +25,7 @@ import androidx.compose.ui.text.fromHtml
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.xeniac.warrantyroster_manager.R
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.GrayDarkDark
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.GrayDarkLight
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGrayDark
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.Constants
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.openLinkInInAppBrowser
 
@@ -41,7 +39,7 @@ fun PrivacyPolicyButton(
         fontSize = 12.sp,
         lineHeight = 16.sp,
         fontWeight = FontWeight.Light,
-        color = if (isSystemInDarkTheme()) GrayDarkDark else GrayDarkLight
+        color = MaterialTheme.colorScheme.dynamicGrayDark
     ),
     primaryColorHex: String = MaterialTheme.colorScheme.primary.toArgb()
         .toHexString(HexFormat.UpperCase)

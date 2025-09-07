@@ -1,6 +1,5 @@
 package com.xeniac.warrantyroster_manager.core.presentation.common.ui.components
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -46,43 +45,36 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.xeniac.warrantyroster_manager.R
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.Black
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.GrayDarkDark
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.GrayDarkLight
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.GrayDarkestDark
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.GrayDarkestLight
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.GrayLightDark
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.GrayLightLight
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.GrayMediumDark
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.GrayMediumLight
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.Red
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.White
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicBlack
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGrayDark
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGrayDarkest
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGrayLight
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGrayMedium
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.utils.addTestTag
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.utils.addTextFieldContentType
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiText
 
 @Composable
-internal fun outlinedTextFieldColors(
-    isDarkTheme: Boolean = isSystemInDarkTheme()
-): TextFieldColors = OutlinedTextFieldDefaults.colors().copy(
+internal fun outlinedTextFieldColors(): TextFieldColors = OutlinedTextFieldDefaults.colors().copy(
     focusedContainerColor = Color.Transparent,
-    unfocusedContainerColor = if (isDarkTheme) GrayLightDark else GrayLightLight,
-    disabledContainerColor = if (isDarkTheme) GrayLightDark else GrayLightLight,
-    errorContainerColor = if (isDarkTheme) GrayLightDark else GrayLightLight,
+    unfocusedContainerColor = MaterialTheme.colorScheme.dynamicGrayLight,
+    disabledContainerColor = MaterialTheme.colorScheme.dynamicGrayLight,
+    errorContainerColor = MaterialTheme.colorScheme.dynamicGrayLight,
     focusedIndicatorColor = MaterialTheme.colorScheme.primary,
-    unfocusedIndicatorColor = if (isDarkTheme) GrayMediumDark else GrayMediumLight,
-    disabledIndicatorColor = if (isDarkTheme) GrayMediumDark else GrayMediumLight.copy(alpha = 0.12f),
+    unfocusedIndicatorColor = MaterialTheme.colorScheme.dynamicGrayMedium,
+    disabledIndicatorColor = MaterialTheme.colorScheme.dynamicGrayMedium.copy(alpha = 0.12f),
     errorIndicatorColor = Red,
-    focusedTrailingIconColor = if (isDarkTheme) GrayDarkestDark else GrayDarkestLight,
-    unfocusedTrailingIconColor = if (isDarkTheme) GrayDarkestDark else GrayDarkestLight,
+    focusedTrailingIconColor = MaterialTheme.colorScheme.dynamicGrayDarkest,
+    unfocusedTrailingIconColor = MaterialTheme.colorScheme.dynamicGrayDarkest,
     errorTrailingIconColor = MaterialTheme.colorScheme.error,
-    focusedPlaceholderColor = if (isDarkTheme) GrayDarkDark else GrayDarkLight,
-    unfocusedPlaceholderColor = if (isDarkTheme) GrayDarkDark else GrayDarkLight,
-    disabledPlaceholderColor = if (isDarkTheme) GrayDarkDark else GrayDarkLight,
-    errorPlaceholderColor = if (isDarkTheme) GrayDarkDark else GrayDarkLight,
-    focusedSupportingTextColor = if (isDarkTheme) GrayDarkDark else GrayDarkLight,
-    unfocusedSupportingTextColor = if (isDarkTheme) GrayDarkDark else GrayDarkLight,
-    disabledSupportingTextColor = (if (isDarkTheme) GrayDarkDark else GrayDarkLight).copy(alpha = 0.38f),
+    focusedPlaceholderColor = MaterialTheme.colorScheme.dynamicGrayDark,
+    unfocusedPlaceholderColor = MaterialTheme.colorScheme.dynamicGrayDark,
+    disabledPlaceholderColor = MaterialTheme.colorScheme.dynamicGrayDark,
+    errorPlaceholderColor = MaterialTheme.colorScheme.dynamicGrayDark,
+    focusedSupportingTextColor = MaterialTheme.colorScheme.dynamicGrayDark,
+    unfocusedSupportingTextColor = MaterialTheme.colorScheme.dynamicGrayDark,
+    disabledSupportingTextColor = (MaterialTheme.colorScheme.dynamicGrayDark).copy(alpha = 0.38f),
     errorSupportingTextColor = Red
 )
 
@@ -92,7 +84,6 @@ fun CustomOutlinedTextField(
     value: TextFieldValue,
     imeAction: ImeAction,
     modifier: Modifier = Modifier,
-    isDarkTheme: Boolean = isSystemInDarkTheme(),
     testTag: String? = null,
     enabled: Boolean = true,
     readOnly: Boolean = false,
@@ -107,7 +98,7 @@ fun CustomOutlinedTextField(
     titleFontSize: TextUnit = 14.sp,
     titleLineHeight: TextUnit = 18.sp,
     titleFontWeight: FontWeight = FontWeight.Bold,
-    titleColor: Color = if (isDarkTheme) White else Black,
+    titleColor: Color = MaterialTheme.colorScheme.dynamicBlack,
     titleMaxLines: Int = Int.MAX_VALUE,
     titleStyle: TextStyle = LocalTextStyle.current.copy(
         fontSize = titleFontSize,

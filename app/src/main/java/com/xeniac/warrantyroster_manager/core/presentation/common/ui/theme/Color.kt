@@ -1,6 +1,9 @@
 package com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme
 
+import androidx.compose.material3.ColorScheme
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.utils.dynamicColor
 
 val BlueNotificationLight = Color(0xFF1C53F4)
 
@@ -14,36 +17,77 @@ val Black = Color(0xFF000000)
 
 val NavyBlue = Color(0xFF00144F)
 val SkyBlue = Color(0xFFDEF4FD)
-
 val Blue = Color(0xFF1C53F4)
 val Green = Color(0xFF00BD62)
 val Red = Color(0xFFFF3442)
 val Orange = Color(0xFFFF9100)
 
 // TODO: RENAME GRAY COLORS
-val BgLight = Color(0xFFFFFFFF)
-val NavyBlueLight = Color(0xFF00144F)
-val SkyBlueLight = Color(0xFFDEF4FD)
-val DialogButtonLight = Color(0xFF1C53F4)
-val GrayLightLight = Color(0xFFF3F3F3)
-val GrayMediumLight = Color(0xFFE9E9E9)
-val GrayDarkLight = Color(0xFF959595)
-val GrayDarkestLight = Color(0xFF666666)
-val GrayDarkest2Light = Color(0xFF404040)
-val NavyBlueAlpha10Light = Color(0x1A00144F)
-val NavyBlueAlpha20Light = Color(0x3300144F)
+val GrayLight = Color(0xFFF3F3F3)
+val GrayMedium = Color(0xFFE9E9E9)
+val GrayDark = Color(0xFF959595)
+val GrayDarkest = Color(0xFF666666)
+val GrayDarkest2 = Color(0xFF404040)
+//val NavyBlueAlpha10 = Color(0x1A00144F)
+//val NavyBlueAlpha20 = Color(0x3300144F)
 
-val BgDark = Color(0xFF101010)
 val NavyBlueDark = Color(0xFFDEF4FD)
 val SkyBlueDark = Color(0xFF01040F)
-val DialogButtonDark = Color(0xFF0095E3)
 val GrayLightDark = Color(0xFF1F1F1F)
 val GrayMediumDark = Color(0xFF2E2E2E)
 val GrayDarkDark = Color(0xFF808080)
 val GrayDarkestDark = Color(0xFFA6A6A6)
 val GrayDarkest2Dark = Color(0xFFCCCCCC)
-val NavyBlueAlpha10Dark = Color(0x1ADEF4FD)
-val NavyBlueAlpha20Dark = Color(0x33DEF4FD)
+//val NavyBlueAlpha10Dark = Color(0x1ADEF4FD)
+//val NavyBlueAlpha20Dark = Color(0x33DEF4FD)
+
+val ColorScheme.dynamicBlack: Color
+    @Composable get() = dynamicColor(
+        lightColor = Black,
+        darkColor = White
+    )
+
+val ColorScheme.dynamicNavyBlue: Color
+    @Composable get() = dynamicColor(
+        lightColor = NavyBlue,
+        darkColor = NavyBlueDark
+    )
+
+val ColorScheme.dynamicSkyBlue: Color
+    @Composable get() = dynamicColor(
+        lightColor = SkyBlue,
+        darkColor = SkyBlueDark
+    )
+
+val ColorScheme.dynamicGrayLight: Color
+    @Composable get() = dynamicColor(
+        lightColor = GrayLight,
+        darkColor = GrayLightDark
+    )
+
+val ColorScheme.dynamicGrayMedium: Color
+    @Composable get() = dynamicColor(
+        lightColor = GrayMedium,
+        darkColor = GrayMediumDark
+    )
+
+val ColorScheme.dynamicGrayDark: Color
+    @Composable get() = dynamicColor(
+        lightColor = GrayDark,
+        darkColor = GrayDarkDark
+    )
+
+val ColorScheme.dynamicGrayDarkest: Color
+    @Composable get() = dynamicColor(
+        lightColor = GrayDarkest,
+        darkColor = GrayDarkestDark
+    )
+
+val ColorScheme.dynamicGrayDarkest2: Color
+    @Composable get() = dynamicColor(
+        lightColor = GrayDarkest2,
+        darkColor = GrayDarkest2Dark
+    )
 
 val primaryLight = Blue
 val onPrimaryLight = White
@@ -61,7 +105,7 @@ val errorLight = Color(0xFFBA1A1A)
 val onErrorLight = Color(0xFFFFFFFF)
 val errorContainerLight = Color(0xFFFFDAD6)
 val onErrorContainerLight = Color(0xFF93000A)
-val backgroundLight = BgLight
+val backgroundLight = Color(0xFFFFFFFF)
 val onBackgroundLight = Color(0xFF191B24)
 val surfaceLight = Color(0xFFFFFFFF)
 val onSurfaceLight = Color(0xFF191B24)
@@ -97,7 +141,7 @@ val errorLightMediumContrast = Color(0xFF740006)
 val onErrorLightMediumContrast = Color(0xFFFFFFFF)
 val errorContainerLightMediumContrast = Color(0xFFCF2C27)
 val onErrorContainerLightMediumContrast = Color(0xFFFFFFFF)
-val backgroundLightMediumContrast = BgLight
+val backgroundLightMediumContrast = Color(0xFFFFFFFF)
 val onBackgroundLightMediumContrast = Color(0xFF191B24)
 val surfaceLightMediumContrast = Color(0xFFFBF8FF)
 val onSurfaceLightMediumContrast = Color(0xFF0F1119)
@@ -133,7 +177,7 @@ val errorLightHighContrast = Color(0xFF600004)
 val onErrorLightHighContrast = Color(0xFFFFFFFF)
 val errorContainerLightHighContrast = Color(0xFF98000A)
 val onErrorContainerLightHighContrast = Color(0xFFFFFFFF)
-val backgroundLightHighContrast = BgLight
+val backgroundLightHighContrast = Color(0xFFFFFFFF)
 val onBackgroundLightHighContrast = Color(0xFF191B24)
 val surfaceLightHighContrast = Color(0xFFFBF8FF)
 val onSurfaceLightHighContrast = Color(0xFF000000)
@@ -169,7 +213,7 @@ val errorDark = Color(0xFFFFB4AB)
 val onErrorDark = Color(0xFF690005)
 val errorContainerDark = Color(0xFF93000A)
 val onErrorContainerDark = Color(0xFFFFDAD6)
-val backgroundDark = BgDark
+val backgroundDark = Color(0xFF101010)
 val onBackgroundDark = Color(0xFFE2E1EE)
 val surfaceDark = Color(0xFF191919)
 val onSurfaceDark = Color(0xFFE2E1EE)
@@ -205,7 +249,7 @@ val errorDarkMediumContrast = Color(0xFFFFD2CC)
 val onErrorDarkMediumContrast = Color(0xFF540003)
 val errorContainerDarkMediumContrast = Color(0xFFFF5449)
 val onErrorContainerDarkMediumContrast = Color(0xFF000000)
-val backgroundDarkMediumContrast = BgDark
+val backgroundDarkMediumContrast = Color(0xFF101010)
 val onBackgroundDarkMediumContrast = Color(0xFFE2E1EE)
 val surfaceDarkMediumContrast = Color(0xFF11131C)
 val onSurfaceDarkMediumContrast = Color(0xFFFFFFFF)
@@ -241,7 +285,7 @@ val errorDarkHighContrast = Color(0xFFFFECE9)
 val onErrorDarkHighContrast = Color(0xFF000000)
 val errorContainerDarkHighContrast = Color(0xFFFFAEA4)
 val onErrorContainerDarkHighContrast = Color(0xFF220001)
-val backgroundDarkHighContrast = BgDark
+val backgroundDarkHighContrast = Color(0xFF101010)
 val onBackgroundDarkHighContrast = Color(0xFFE2E1EE)
 val surfaceDarkHighContrast = Color(0xFF11131C)
 val onSurfaceDarkHighContrast = Color(0xFFFFFFFF)

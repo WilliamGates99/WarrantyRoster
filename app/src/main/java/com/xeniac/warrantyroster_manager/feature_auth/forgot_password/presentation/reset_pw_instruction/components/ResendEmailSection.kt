@@ -9,7 +9,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -17,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
@@ -33,11 +33,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.xeniac.warrantyroster_manager.R
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.Black
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.GrayDarkDark
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.GrayDarkLight
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.Green
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.White
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicBlack
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGrayDark
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiText
 import com.xeniac.warrantyroster_manager.feature_auth.forgot_password.presentation.common.ForgotPasswordAction
 
@@ -94,7 +92,7 @@ private fun EmailSentText(
         lineHeight = 16.sp,
         fontWeight = FontWeight.SemiBold,
         textAlign = TextAlign.Center,
-        color = if (isSystemInDarkTheme()) White else Black
+        color = MaterialTheme.colorScheme.dynamicBlack
     )
 ) {
     Text(
@@ -132,7 +130,7 @@ private fun ResendEmailTitle(
         lineHeight = 16.sp,
         fontWeight = FontWeight.SemiBold,
         textAlign = TextAlign.Center,
-        color = if (isSystemInDarkTheme()) GrayDarkDark else GrayDarkLight
+        color = MaterialTheme.colorScheme.dynamicGrayDark
     )
 ) {
     Text(
@@ -154,9 +152,7 @@ private fun ResendEmailButton(
         lineHeight = 16.sp,
         fontWeight = FontWeight.Bold,
         textAlign = TextAlign.Center,
-        color = if (isSystemInDarkTheme()) {
-            White.copy(alpha = if (isLoading) 0.60f else 1f)
-        } else Black.copy(alpha = if (isLoading) 0.60f else 1f)
+        color = MaterialTheme.colorScheme.dynamicBlack.copy(alpha = if (isLoading) 0.60f else 1f)
     ),
     onAction: (action: ForgotPasswordAction) -> Unit
 ) {

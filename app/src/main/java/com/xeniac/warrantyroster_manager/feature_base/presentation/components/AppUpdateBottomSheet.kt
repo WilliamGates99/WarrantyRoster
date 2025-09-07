@@ -1,6 +1,5 @@
 package com.xeniac.warrantyroster_manager.feature_base.presentation.components
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -38,10 +37,8 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.xeniac.warrantyroster_manager.R
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.GrayDarkest2Dark
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.GrayDarkest2Light
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.NavyBlueDark
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.NavyBlueLight
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGrayDarkest2
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicNavyBlue
 import com.xeniac.warrantyroster_manager.feature_base.presentation.BaseAction
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -184,14 +181,10 @@ private fun UpdateButton(
 @Composable
 private fun DismissButton(
     modifier: Modifier = Modifier,
-    isDarkTheme: Boolean = isSystemInDarkTheme(),
     contentPadding: PaddingValues = PaddingValues(vertical = 12.dp),
     colors: ButtonColors = ButtonDefaults.outlinedButtonColors().copy(
-        contentColor = if (isDarkTheme) GrayDarkest2Dark else GrayDarkest2Light,
-        disabledContentColor = when {
-            isDarkTheme -> NavyBlueDark.copy(alpha = 0.38f)
-            else -> NavyBlueLight.copy(alpha = 0.38f)
-        }
+        contentColor = MaterialTheme.colorScheme.dynamicGrayDarkest2,
+        disabledContentColor = MaterialTheme.colorScheme.dynamicNavyBlue.copy(alpha = 0.38f)
     ),
     text: String = stringResource(id = R.string.base_app_update_sheet_btn_dismiss),
     textFontSize: TextUnit = 14.sp,

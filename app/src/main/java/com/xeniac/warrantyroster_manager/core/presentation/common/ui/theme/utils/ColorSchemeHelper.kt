@@ -9,6 +9,7 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.backgroundDark
@@ -221,6 +222,12 @@ import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.terti
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.tertiaryLight
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.tertiaryLightHighContrast
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.tertiaryLightMediumContrast
+
+@Composable
+fun dynamicColor(
+    lightColor: Color,
+    darkColor: Color
+): Color = if (isSystemInDarkTheme()) darkColor else lightColor
 
 private val lightScheme = lightColorScheme(
     primary = primaryLight,

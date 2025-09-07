@@ -3,7 +3,6 @@ package com.xeniac.warrantyroster_manager.feature_auth.common.presentation.compo
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,6 +16,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
@@ -36,19 +36,15 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.xeniac.warrantyroster_manager.R
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.GrayDarkDark
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.GrayDarkLight
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.GrayMediumDark
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.GrayMediumLight
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.NavyBlueDark
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.NavyBlueLight
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGrayDark
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGrayMedium
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicNavyBlue
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.utils.addBorder
 import com.xeniac.warrantyroster_manager.feature_auth.common.presentation.states.OtherLoginMethods
 
 @Composable
 fun OtherLoginMethodsDividerMediumWidth(
     modifier: Modifier = Modifier,
-    isDarkTheme: Boolean = isSystemInDarkTheme(),
     contentPadding: PaddingValues = PaddingValues(vertical = 16.dp),
     title: String = stringResource(id = R.string.auth_other_login_methods_title_medium_width),
     titleStyle: TextStyle = LocalTextStyle.current.copy(
@@ -56,12 +52,12 @@ fun OtherLoginMethodsDividerMediumWidth(
         lineHeight = 12.sp,
         fontWeight = FontWeight.Light,
         textAlign = TextAlign.Center,
-        color = if (isDarkTheme) GrayDarkDark else GrayDarkLight
+        color = MaterialTheme.colorScheme.dynamicGrayDark
     ),
     titleMaxLines: Int = 1,
     dividerThickness: Dp = 1.dp,
     dividerShape: Shape = CircleShape,
-    dividerColor: Color = if (isDarkTheme) GrayMediumDark else GrayMediumLight
+    dividerColor: Color = MaterialTheme.colorScheme.dynamicGrayMedium
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -145,15 +141,14 @@ private fun OtherLoginMethodButton(
     loginMethod: OtherLoginMethods,
     isLoading: Boolean,
     modifier: Modifier = Modifier,
-    isDarkTheme: Boolean = isSystemInDarkTheme(),
     shape: Shape = RoundedCornerShape(12.dp),
     border: BorderStroke = BorderStroke(
         width = 1.dp,
-        color = if (isDarkTheme) GrayMediumDark else GrayMediumLight
+        color = MaterialTheme.colorScheme.dynamicGrayMedium
     ),
     contentPadding: PaddingValues = PaddingValues(all = 12.dp),
     contentSize: Dp = 32.dp,
-    progressIndicatorColor: Color = if (isDarkTheme) NavyBlueDark else NavyBlueLight,
+    progressIndicatorColor: Color = MaterialTheme.colorScheme.dynamicNavyBlue,
     progressIndicatorStrokeWidth: Dp = 4.dp,
     onClick: () -> Unit
 ) {
