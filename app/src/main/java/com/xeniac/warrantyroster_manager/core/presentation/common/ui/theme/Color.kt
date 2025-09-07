@@ -28,8 +28,6 @@ val GrayMedium = Color(0xFFE9E9E9)
 val GrayDark = Color(0xFF959595)
 val GrayDarkest = Color(0xFF666666)
 val GrayDarkest2 = Color(0xFF404040)
-//val NavyBlueAlpha10 = Color(0x1A00144F)
-//val NavyBlueAlpha20 = Color(0x3300144F)
 
 val NavyBlueDark = Color(0xFFDEF4FD)
 val SkyBlueDark = Color(0xFF01040F)
@@ -38,8 +36,6 @@ val GrayMediumDark = Color(0xFF2E2E2E)
 val GrayDarkDark = Color(0xFF808080)
 val GrayDarkestDark = Color(0xFFA6A6A6)
 val GrayDarkest2Dark = Color(0xFFCCCCCC)
-//val NavyBlueAlpha10Dark = Color(0x1ADEF4FD)
-//val NavyBlueAlpha20Dark = Color(0x33DEF4FD)
 
 val ColorScheme.dynamicBlack: Color
     @Composable get() = dynamicColor(
