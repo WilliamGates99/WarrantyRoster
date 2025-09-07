@@ -65,7 +65,9 @@ fun CustomCenterAlignedTopAppBar(
                 NavigateUpIcon(onClick = it)
             }
         },
-        actions = {},
+        actions = {
+            // TODO: ADD ACTION BUTTONS
+        },
         modifier = modifier
             .fillMaxWidth()
             .dropShadow(
