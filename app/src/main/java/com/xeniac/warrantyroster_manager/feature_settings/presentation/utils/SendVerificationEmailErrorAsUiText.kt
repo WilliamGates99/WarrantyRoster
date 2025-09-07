@@ -14,7 +14,7 @@ fun SendVerificationEmailError.asUiText(): UiText = when (this) {
     SendVerificationEmailError.Network.FirebaseTooManyRequestsException -> UiText.StringResource(R.string.error_firebase_device_blocked)
     SendVerificationEmailError.Network.Firebase403 -> UiText.StringResource(R.string.error_firebase_403)
 
-    SendVerificationEmailError.Network.FirebaseAuthUnauthorizedUser -> UiText.StringResource(R.string.error_firebase_unauthorized_account)
+    SendVerificationEmailError.Network.FirebaseAuthUnauthorizedUser -> UiText.StringResource(R.string.error_firebase_unauthorized_user)
 
     SendVerificationEmailError.Network.SomethingWentWrong -> UiText.StringResource(R.string.error_something_went_wrong)
 }

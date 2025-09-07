@@ -29,7 +29,7 @@
     <string name="error_btn_confirm">Confirm</string>
 
 
-    <string name="core_content_description_back">Return</string>
+    <string name="core_content_description_navigate_up">Return</string>
     <string name="core_textfield_content_description_password_toggle_show">Show Password</string>
     <string name="core_textfield_content_description_password_toggle_hide">Hide Password</string>
     <string name="core_locale_bottom_sheet_title">Language</string>

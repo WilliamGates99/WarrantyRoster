@@ -179,6 +179,9 @@ class SettingsViewModel @Inject constructor(
                 is Result.Error -> {
                     when (val error = result.error) {
                         SendVerificationEmailError.Network.FirebaseAuthUnauthorizedUser -> {
+                            _sendVerificationEmailEventChannel.send(
+                                UiEvent.ShowLongSnackbar(error.asUiText())
+                            )
                             _sendVerificationEmailEventChannel.send(UiEvent.ForceLogoutUnauthorizedUser)
                         }
                         else -> {

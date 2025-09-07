@@ -34,6 +34,7 @@ import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.core.presentation.common.UserAction
 import com.xeniac.warrantyroster_manager.core.presentation.common.UserViewModel
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.BigButton
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.CustomCenterAlignedTopAppBar
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.LocaleBottomSheet
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.SwipeableSnackbar
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.bigButtonColors
@@ -115,12 +116,10 @@ fun SettingsScreen(
     Scaffold(
         snackbarHost = { SwipeableSnackbar(hostState = snackbarHostState) },
         topBar = {
-//            CenterAlignedTopAppBar(
-//                scrollBehavior = scrollBehavior,
-//                title = {
-//                    Text(text = stringResource(id = R.string.settings_app_bar_title))
-//                }
-//            )
+            CustomCenterAlignedTopAppBar(
+                title = stringResource(id = R.string.settings_app_bar_title),
+                scrollBehavior = scrollBehavior
+            )
         },
         modifier = Modifier
             .fillMaxSize()

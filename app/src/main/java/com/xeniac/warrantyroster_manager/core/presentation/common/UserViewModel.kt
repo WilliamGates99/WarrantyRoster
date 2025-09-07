@@ -65,12 +65,11 @@ class UserViewModel @Inject constructor(
                 is Result.Error -> {
                     when (val error = result.error) {
                         GetUserProfileError.Network.FirebaseAuthUnauthorizedUser -> {
+                            _getUserProfileEventChannel.send(UiEvent.ShowLongSnackbar(error.asUiText()))
                             _getUserProfileEventChannel.send(UiEvent.ForceLogoutUnauthorizedUser)
                         }
                         else -> {
-                            _getUserProfileEventChannel.send(
-                                UiEvent.ShowLongSnackbar(error.asUiText())
-                            )
+                            _getUserProfileEventChannel.send(UiEvent.ShowLongSnackbar(error.asUiText()))
                         }
                     }
                 }
