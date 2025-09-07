@@ -3,13 +3,11 @@ package com.xeniac.warrantyroster_manager.feature_settings.presentation
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -51,6 +49,7 @@ import com.xeniac.warrantyroster_manager.feature_settings.presentation.component
 import com.xeniac.warrantyroster_manager.feature_settings.presentation.components.MiscellaneousSection
 import com.xeniac.warrantyroster_manager.feature_settings.presentation.components.SettingsSection
 import com.xeniac.warrantyroster_manager.feature_settings.presentation.components.ThemeBottomSheet
+import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -127,9 +126,12 @@ fun SettingsScreen(
         },
         modifier = Modifier
             .fillMaxSize()
-            .windowInsetsPadding(WindowInsets(bottom = bottomPadding))
+//            .windowInsetsPadding(WindowInsets(bottom = bottomPadding))
             .nestedScroll(scrollBehavior.nestedScrollConnection)
     ) { innerPadding ->
+        Timber.i("inner bottom = ${innerPadding.calculateBottomPadding()}")
+        Timber.e("bottomPAdding = $bottomPadding")
+
         Column(
             verticalArrangement = Arrangement.spacedBy(space = 24.dp),
             modifier = Modifier
@@ -141,7 +143,8 @@ fun SettingsScreen(
                 .verticalScroll(rememberScrollState())
                 .padding(
                     start = innerPadding.calculateStartPadding(layoutDirection),
-                    end = innerPadding.calculateEndPadding(layoutDirection)
+                    end = innerPadding.calculateEndPadding(layoutDirection),
+                    bottom = bottomPadding
                 )
                 .padding(
                     horizontal = horizontalPadding,
