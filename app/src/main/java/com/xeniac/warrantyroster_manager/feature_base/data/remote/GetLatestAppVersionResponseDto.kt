@@ -1,4 +1,4 @@
-package com.xeniac.warrantyroster_manager.feature_base.data.remote.dto
+package com.xeniac.warrantyroster_manager.feature_base.data.remote
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

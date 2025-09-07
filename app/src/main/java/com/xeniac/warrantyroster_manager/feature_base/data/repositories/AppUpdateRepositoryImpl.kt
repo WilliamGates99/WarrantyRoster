@@ -15,7 +15,7 @@ import com.google.android.play.core.ktx.totalBytesToDownload
 import com.xeniac.warrantyroster_manager.BuildConfig
 import com.xeniac.warrantyroster_manager.core.domain.models.Result
 import com.xeniac.warrantyroster_manager.core.domain.repositories.MiscellaneousDataStoreRepository
-import com.xeniac.warrantyroster_manager.feature_base.data.remote.dto.LatestAppVersionDto
+import com.xeniac.warrantyroster_manager.feature_base.data.remote.LatestAppVersionDto
 import com.xeniac.warrantyroster_manager.feature_base.data.utils.Constants
 import com.xeniac.warrantyroster_manager.feature_base.domain.errors.GetLatestAppVersionError
 import com.xeniac.warrantyroster_manager.feature_base.domain.models.LatestAppUpdateInfo
