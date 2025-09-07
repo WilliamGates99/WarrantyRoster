@@ -1,7 +1,5 @@
 package com.xeniac.warrantyroster_manager.feature_settings.presentation.components
 
-import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -28,7 +26,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.shadow.Shadow
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
@@ -39,54 +36,28 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.xeniac.warrantyroster_manager.R
+import com.xeniac.warrantyroster_manager.core.domain.models.AppLocale
+import com.xeniac.warrantyroster_manager.core.domain.models.AppTheme
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.Black
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicBlack
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGrayDark
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGrayLight
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicNavyBlue
-import com.xeniac.warrantyroster_manager.core.presentation.common.utils.Constants.URL_PRIVACY_POLICY
-import com.xeniac.warrantyroster_manager.core.presentation.common.utils.isAppInstalledFromMyket
-import com.xeniac.warrantyroster_manager.core.presentation.common.utils.openAppPageInStore
-import com.xeniac.warrantyroster_manager.core.presentation.common.utils.openLinkInExternalBrowser
-import com.xeniac.warrantyroster_manager.core.presentation.common.utils.openLinkInInAppBrowser
-import com.xeniac.warrantyroster_manager.feature_settings.presentation.utils.Constants
-
-enum class MiscellaneousRowItems(
-    @param:DrawableRes val iconId: Int,
-    @param:StringRes val titleId: Int,
-    val url: String?
-) {
-    Donate(
-        iconId = R.drawable.ic_settings_donate,
-        titleId = R.string.settings_miscellaneous_donate_title,
-        url = Constants.URL_DONATE
-    ),
-    ImproveTranslations(
-        iconId = R.drawable.ic_settings_improve_translations,
-        titleId = R.string.settings_miscellaneous_improve_translations_title,
-        url = Constants.URL_CROWDIN
-    ),
-    RateUs(
-        iconId = R.drawable.ic_settings_rate_us,
-        titleId = R.string.settings_miscellaneous_rate_us_title,
-        url = null
-    ),
-    PrivacyPolicy(
-        iconId = R.drawable.ic_settings_privacy_policy,
-        titleId = R.string.settings_miscellaneous_privacy_policy_title,
-        url = URL_PRIVACY_POLICY
-    )
-}
+import com.xeniac.warrantyroster_manager.feature_settings.presentation.SettingsAction
 
 @Composable
-fun MiscellaneousSection(
+fun SettingsSection(
+    currentAppLocale: AppLocale?,
+    currentAppTheme: AppTheme?,
     modifier: Modifier = Modifier,
-    title: String = stringResource(id = R.string.settings_miscellaneous_title),
+    title: String = stringResource(id = R.string.settings_settings_title),
     titleStyle: TextStyle = LocalTextStyle.current.copy(
         fontSize = 16.sp,
         lineHeight = 20.sp,
         fontWeight = FontWeight.ExtraBold,
         color = MaterialTheme.colorScheme.dynamicNavyBlue
-    )
+    ),
+    onAction: (action: SettingsAction) -> Unit
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(space = 8.dp),
@@ -100,20 +71,25 @@ fun MiscellaneousSection(
                 .fillMaxWidth()
         )
 
-        MiscellaneousCard()
+        SettingsCard(
+            currentAppLocale = currentAppLocale,
+            currentAppTheme = currentAppTheme,
+            onAction = onAction
+        )
     }
 }
 
 @Composable
-private fun MiscellaneousCard(
+private fun SettingsCard(
+    currentAppLocale: AppLocale?,
+    currentAppTheme: AppTheme?,
     modifier: Modifier = Modifier,
     shape: Shape = RoundedCornerShape(12.dp),
     background: Color = MaterialTheme.colorScheme.surface,
     dividerThickness: Dp = 1.dp,
-    dividerColor: Color = MaterialTheme.colorScheme.dynamicGrayLight
+    dividerColor: Color = MaterialTheme.colorScheme.dynamicGrayLight,
+    onAction: (action: SettingsAction) -> Unit
 ) {
-    val context = LocalContext.current
-
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -128,48 +104,36 @@ private fun MiscellaneousCard(
             .clip(shape)
             .background(background)
     ) {
-        MiscellaneousRowItems.entries.forEachIndexed { index, miscellaneousItem ->
-            val shouldShowItem = if (isAppInstalledFromMyket()) {
-                miscellaneousItem != MiscellaneousRowItems.Donate
-            } else true
+        SettingsItem(
+            icon = painterResource(id = R.drawable.ic_settings_locale),
+            title = stringResource(id = R.string.settings_settings_locale_title),
+            currentValue = currentAppLocale?.titleId?.let { titleId ->
+                stringResource(id = titleId)
+            },
+            onClick = { onAction(SettingsAction.ShowLocaleBottomSheet) }
+        )
 
-            if (shouldShowItem) {
-                MiscellaneousItem(
-                    icon = painterResource(id = miscellaneousItem.iconId),
-                    title = stringResource(id = miscellaneousItem.titleId),
-                    onClick = {
-                        when (miscellaneousItem) {
-                            MiscellaneousRowItems.RateUs -> context.openAppPageInStore()
-                            MiscellaneousRowItems.PrivacyPolicy -> {
-                                miscellaneousItem.url?.let { url ->
-                                    context.openLinkInInAppBrowser(urlString = url)
-                                }
-                            }
-                            else -> {
-                                miscellaneousItem.url?.let { url ->
-                                    context.openLinkInExternalBrowser(urlString = url)
-                                }
-                            }
-                        }
-                    }
-                )
-            }
+        HorizontalDivider(
+            thickness = dividerThickness,
+            color = dividerColor
+        )
 
-            val isNotLastItem = index != MiscellaneousRowItems.entries.lastIndex
-            if (isNotLastItem) {
-                HorizontalDivider(
-                    thickness = dividerThickness,
-                    color = dividerColor
-                )
-            }
-        }
+        SettingsItem(
+            icon = painterResource(id = R.drawable.ic_settings_theme),
+            title = stringResource(id = R.string.settings_settings_theme_title),
+            currentValue = currentAppTheme?.titleId?.let { titleId ->
+                stringResource(id = titleId)
+            },
+            onClick = { onAction(SettingsAction.ShowThemeBottomSheet) }
+        )
     }
 }
 
 @Composable
-private fun MiscellaneousItem(
+private fun SettingsItem(
     icon: Painter,
     title: String,
+    currentValue: String?,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(
         horizontal = 12.dp,
@@ -183,6 +147,13 @@ private fun MiscellaneousItem(
     ),
     titleMaxLines: Int = 1,
     titleOverflow: TextOverflow = TextOverflow.Ellipsis,
+    currentValueStyle: TextStyle = LocalTextStyle.current.copy(
+        fontSize = 12.sp,
+        lineHeight = 16.sp,
+        fontWeight = FontWeight.Bold,
+        color = MaterialTheme.colorScheme.dynamicGrayDark
+    ),
+    currentValueMaxLines: Int = 1,
     onClick: () -> Unit
 ) {
     Row(
@@ -196,7 +167,7 @@ private fun MiscellaneousItem(
             )
             .padding(contentPadding)
     ) {
-        MiscellaneousItemIcon(
+        SettingsItemIcon(
             icon = icon,
             contentDescription = title
         )
@@ -209,12 +180,16 @@ private fun MiscellaneousItem(
             modifier = Modifier.weight(1f)
         )
 
-        ExternalLinkIcon()
+        Text(
+            text = currentValue?.uppercase().orEmpty(),
+            style = currentValueStyle,
+            maxLines = currentValueMaxLines
+        )
     }
 }
 
 @Composable
-private fun MiscellaneousItemIcon(
+private fun SettingsItemIcon(
     icon: Painter,
     contentDescription: String,
     modifier: Modifier = Modifier,
@@ -235,26 +210,6 @@ private fun MiscellaneousItemIcon(
             painter = icon,
             contentDescription = contentDescription,
             tint = iconColor,
-            modifier = Modifier.fillMaxSize()
-        )
-    }
-}
-
-@Composable
-private fun ExternalLinkIcon(
-    modifier: Modifier = Modifier,
-    icon: Painter = painterResource(id = R.drawable.ic_settings_external_link),
-    size: Dp = 16.dp,
-    color: Color = MaterialTheme.colorScheme.onSurface,
-) {
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = modifier.size(size)
-    ) {
-        Icon(
-            painter = icon,
-            contentDescription = null,
-            tint = color,
             modifier = Modifier.fillMaxSize()
         )
     }

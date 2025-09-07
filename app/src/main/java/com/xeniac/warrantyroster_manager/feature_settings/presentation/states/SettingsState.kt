@@ -7,8 +7,8 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class SettingsState(
-    val currentAppLocale: AppLocale = AppLocale.DEFAULT,
-    val currentAppTheme: AppTheme = AppTheme.DEFAULT,
+    val currentAppLocale: AppLocale? = null,
+    val currentAppTheme: AppTheme? = null,
     val isLocaleBottomSheetVisible: Boolean = false,
     val isThemeBottomSheetVisible: Boolean = false,
     val isSendVerificationEmailLoading: Boolean = false

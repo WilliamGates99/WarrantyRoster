@@ -48,6 +48,7 @@ import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiEvent
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.findActivity
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.restartActivity
 import com.xeniac.warrantyroster_manager.feature_settings.presentation.components.MiscellaneousSection
+import com.xeniac.warrantyroster_manager.feature_settings.presentation.components.SettingsSection
 import com.xeniac.warrantyroster_manager.feature_settings.presentation.components.ThemeBottomSheet
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -147,7 +148,11 @@ fun SettingsScreen(
         ) {
             // TODO: ACCOUNT SECTION
 
-            // TODO: SETTINGS SECTION
+            SettingsSection(
+                currentAppLocale = state.currentAppLocale,
+                currentAppTheme = state.currentAppTheme,
+                onAction = viewModel::onAction
+            )
 
             MiscellaneousSection()
 

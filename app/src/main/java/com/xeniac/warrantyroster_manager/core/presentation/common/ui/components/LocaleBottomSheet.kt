@@ -36,7 +36,7 @@ import com.xeniac.warrantyroster_manager.core.domain.models.AppLocale
 @Composable
 fun LocaleBottomSheet(
     isVisible: Boolean,
-    currentAppLocale: AppLocale,
+    currentAppLocale: AppLocale?,
     modifier: Modifier = Modifier,
     sheetProperties: ModalBottomSheetProperties = ModalBottomSheetProperties(
         shouldDismissOnBackPress = true,

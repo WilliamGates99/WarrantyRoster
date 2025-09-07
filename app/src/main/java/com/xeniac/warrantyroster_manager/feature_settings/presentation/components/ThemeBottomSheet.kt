@@ -37,7 +37,7 @@ import com.xeniac.warrantyroster_manager.feature_settings.presentation.SettingsA
 @Composable
 fun ThemeBottomSheet(
     isVisible: Boolean,
-    currentAppTheme: AppTheme,
+    currentAppTheme: AppTheme?,
     modifier: Modifier = Modifier,
     sheetProperties: ModalBottomSheetProperties = ModalBottomSheetProperties(
         shouldDismissOnBackPress = true,
