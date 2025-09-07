@@ -10,7 +10,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -61,7 +60,6 @@ import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.SettingsScreen
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.WarrantiesScreen
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.Black
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.GrayLightDark
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicBlack
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGrayDark
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.utils.toDp
@@ -130,7 +128,6 @@ private fun CradledNavigationBar(
     fabSizePx: Float,
     currentDestination: NavDestination?,
     modifier: Modifier = Modifier,
-    isDarkTheme: Boolean = isSystemInDarkTheme(),
     enterTransition: EnterTransition = fadeIn() + slideInVertically(
         initialOffsetY = { it / 2 }
     ),
@@ -171,7 +168,7 @@ private fun CradledNavigationBar(
                         shape = shape,
                         shadow = Shadow(
                             radius = 4.dp,
-                            color = if (isDarkTheme) GrayLightDark else Black,
+                            color = Black,
                             alpha = 0.04f
                         )
                     )
@@ -179,7 +176,7 @@ private fun CradledNavigationBar(
                         shape = shape,
                         shadow = Shadow(
                             radius = 4.dp,
-                            color = if (isDarkTheme) GrayLightDark else Black,
+                            color = Black,
                             alpha = 0.20f
                         )
                     )

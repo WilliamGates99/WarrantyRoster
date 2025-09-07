@@ -5,7 +5,6 @@ import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.FloatingActionButton
@@ -25,14 +24,12 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.Black
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.GrayLightDark
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.White
 
 @Composable
 fun GoalFab(
     isVisible: Boolean,
     modifier: Modifier = Modifier,
-    isDarkTheme: Boolean = isSystemInDarkTheme(),
     enterTransition: EnterTransition = scaleIn(),
     exitTransition: ExitTransition = scaleOut(),
     size: Dp = 64.dp,
@@ -60,7 +57,7 @@ fun GoalFab(
                     shape = shape,
                     shadow = Shadow(
                         radius = 4.dp,
-                        color = if (isDarkTheme) GrayLightDark else Black,
+                        color = Black,
                         alpha = 0.04f,
                         offset = DpOffset(
                             x = 0.dp,
@@ -72,7 +69,7 @@ fun GoalFab(
                     shape = shape,
                     shadow = Shadow(
                         radius = 4.dp,
-                        color = if (isDarkTheme) GrayLightDark else Black,
+                        color = Black,
                         alpha = 0.20f,
                         offset = DpOffset(
                             x = 0.dp,
