@@ -26,6 +26,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import coil3.imageLoader
 import com.xeniac.warrantyroster_manager.R
+import com.xeniac.warrantyroster_manager.core.presentation.common.UserAction
 import com.xeniac.warrantyroster_manager.core.presentation.common.UserViewModel
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.SwipeableSnackbar
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.showActionSnackbar
@@ -127,6 +128,20 @@ fun BaseScreen(
                     }
                 }
             }
+        }
+    }
+
+    ObserverAsEvent(userViewModel.getUserProfileEventChannel) { event ->
+        when (event) {
+            UiEvent.ForceLogoutUnauthorizedUser -> {
+                userViewModel.onAction(UserAction.Logout)
+            }
+            is UiEvent.ShowLongSnackbar -> context.showLongSnackbar(
+                message = event.message,
+                scope = scope,
+                snackbarHostState = snackbarHostState
+            )
+            else -> Unit
         }
     }
 

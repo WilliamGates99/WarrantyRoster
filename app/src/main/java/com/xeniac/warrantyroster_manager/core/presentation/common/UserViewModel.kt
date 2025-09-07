@@ -2,6 +2,7 @@ package com.xeniac.warrantyroster_manager.core.presentation.common
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.xeniac.warrantyroster_manager.core.domain.errors.GetUserProfileError
 import com.xeniac.warrantyroster_manager.core.domain.models.Result
 import com.xeniac.warrantyroster_manager.core.domain.use_cases.UserUseCases
 import com.xeniac.warrantyroster_manager.core.presentation.common.states.UserProfileState
@@ -34,14 +35,55 @@ class UserViewModel @Inject constructor(
         initialValue = _state.value
     )
 
+    private val _getUserProfileEventChannel = Channel<UiEvent>()
+    val getUserProfileEventChannel = _getUserProfileEventChannel.receiveAsFlow()
+
     private val _logoutEventChannel = Channel<UiEvent>()
     val logoutEventChannel = _logoutEventChannel.receiveAsFlow()
 
     fun onAction(action: UserAction) {
         when (action) {
+            UserAction.GetUserProfile -> getUserProfile()
+            UserAction.GetUpdatedUserProfile -> getUpdatedUserProfile()
             UserAction.Logout -> logout()
             UserAction.ForceLogoutUnauthorizedUser -> forceLogoutUnauthorizedUser()
         }
+    }
+
+    private fun getUserProfile() {
+        userUseCases.getUserProfileUseCase.get()().onStart {
+            _state.update {
+                it.copy(isUserProfileLoading = true)
+            }
+        }.onEach { result ->
+            when (result) {
+                is Result.Success -> {
+                    _state.update {
+                        it.copy(userProfile = result.data)
+                    }
+                }
+                is Result.Error -> {
+                    when (val error = result.error) {
+                        GetUserProfileError.Network.FirebaseAuthUnauthorizedUser -> {
+                            _getUserProfileEventChannel.send(UiEvent.ForceLogoutUnauthorizedUser)
+                        }
+                        else -> {
+                            _getUserProfileEventChannel.send(
+                                UiEvent.ShowLongSnackbar(error.asUiText())
+                            )
+                        }
+                    }
+                }
+            }
+        }.onCompletion {
+            _state.update {
+                it.copy(isUserProfileLoading = false)
+            }
+        }.launchIn(scope = viewModelScope)
+    }
+
+    private fun getUpdatedUserProfile() {
+
     }
 
     private fun logout() {

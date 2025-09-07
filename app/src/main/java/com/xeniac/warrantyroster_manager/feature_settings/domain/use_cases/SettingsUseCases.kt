@@ -8,5 +8,6 @@ data class SettingsUseCases(
     val getCurrentAppLocaleUseCase: Lazy<GetCurrentAppLocaleUseCase>,
     val getCurrentAppThemeUseCase: Lazy<GetCurrentAppThemeUseCase>,
     val storeCurrentAppLocaleUseCase: Lazy<StoreCurrentAppLocaleUseCase>,
-    val storeCurrentAppThemeUseCase: Lazy<StoreCurrentAppThemeUseCase>
+    val storeCurrentAppThemeUseCase: Lazy<StoreCurrentAppThemeUseCase>,
+    val sendVerificationEmailUseCase: Lazy<SendVerificationEmailUseCase>
 )

@@ -10,5 +10,6 @@ data class SettingsState(
     val currentAppLocale: AppLocale = AppLocale.DEFAULT,
     val currentAppTheme: AppTheme = AppTheme.DEFAULT,
     val isLocaleBottomSheetVisible: Boolean = false,
-    val isThemeBottomSheetVisible: Boolean = false
+    val isThemeBottomSheetVisible: Boolean = false,
+    val isSendVerificationEmailLoading: Boolean = false
 ) : Parcelable

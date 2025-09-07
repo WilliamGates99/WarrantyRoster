@@ -104,9 +104,6 @@ class LoginWithEmailRepositoryImpl @Inject constructor(
  * // CHANGE EMAIL:
  * const val ERROR_FIREBASE_AUTH_ACCOUNT_EXISTS = "The email address is already in use by another account"
  *
- * // SEND EMAIL VERIFICATION:
- * const val ERROR_FIREBASE_AUTH_EMAIL_VERIFICATION_EMAIL_NOT_PROVIDED = "An email address must be provided"
- *
  *
  *
  * const val ERROR_EMPTY_CATEGORY_LIST = "Category list is empty"

@@ -11,4 +11,6 @@ sealed interface SettingsAction {
 
     data class SetCurrentAppLocale(val newAppLocale: AppLocale) : SettingsAction
     data class SetCurrentAppTheme(val newAppTheme: AppTheme) : SettingsAction
+
+    data object SendVerificationEmail : SettingsAction
 }

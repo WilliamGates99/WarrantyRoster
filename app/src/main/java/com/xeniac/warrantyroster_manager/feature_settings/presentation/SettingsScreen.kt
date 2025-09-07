@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBarDefaults
@@ -38,9 +37,11 @@ import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.LocaleBottomSheet
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.SwipeableSnackbar
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.bigButtonColors
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.showLongSnackbar
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.showLongToast
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.showOfflineSnackbar
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.showShortSnackbar
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.Red
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicSkyBlue
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.ObserverAsEvent
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiEvent
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.findActivity
@@ -87,6 +88,26 @@ fun SettingsScreen(
                 scope = scope,
                 snackbarHostState = snackbarHostState
             )
+            else -> Unit
+        }
+    }
+
+    ObserverAsEvent(flow = viewModel.sendVerificationEmailEventChannel) { event ->
+        when (event) {
+            UiEvent.ForceLogoutUnauthorizedUser -> {
+                userViewModel.onAction(UserAction.Logout)
+            }
+            UiEvent.ShowOfflineSnackbar -> context.showOfflineSnackbar(
+                scope = scope,
+                snackbarHostState = snackbarHostState,
+                onAction = { viewModel.onAction(SettingsAction.SendVerificationEmail) }
+            )
+            is UiEvent.ShowLongSnackbar -> context.showLongSnackbar(
+                message = event.message,
+                scope = scope,
+                snackbarHostState = snackbarHostState
+            )
+            is UiEvent.ShowLongToast -> context.showLongToast(message = event.message)
             else -> Unit
         }
     }

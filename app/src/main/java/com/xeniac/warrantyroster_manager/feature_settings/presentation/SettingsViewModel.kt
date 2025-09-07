@@ -2,12 +2,16 @@ package com.xeniac.warrantyroster_manager.feature_settings.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.core.domain.models.AppLocale
 import com.xeniac.warrantyroster_manager.core.domain.models.AppTheme
 import com.xeniac.warrantyroster_manager.core.domain.models.Result
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.Event
+import com.xeniac.warrantyroster_manager.core.presentation.common.utils.NetworkObserverHelper.hasNetworkConnection
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiEvent
+import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiText
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.asUiText
+import com.xeniac.warrantyroster_manager.feature_settings.domain.errors.SendVerificationEmailError
 import com.xeniac.warrantyroster_manager.feature_settings.domain.use_cases.SettingsUseCases
 import com.xeniac.warrantyroster_manager.feature_settings.presentation.states.SettingsState
 import com.xeniac.warrantyroster_manager.feature_settings.presentation.utils.asUiText
@@ -18,6 +22,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.WhileSubscribed
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -55,6 +60,9 @@ class SettingsViewModel @Inject constructor(
     private val _setAppThemeEventChannel = Channel<Event>()
     val setAppThemeEventChannel = _setAppThemeEventChannel.receiveAsFlow()
 
+    private val _sendVerificationEmailEventChannel = Channel<UiEvent>()
+    val sendVerificationEmailEventChannel = _sendVerificationEmailEventChannel.receiveAsFlow()
+
     fun onAction(action: SettingsAction) {
         when (action) {
             SettingsAction.ShowLocaleBottomSheet -> showLocaleBottomSheet()
@@ -63,6 +71,7 @@ class SettingsViewModel @Inject constructor(
             SettingsAction.DismissThemeBottomSheet -> dismissThemeBottomSheet()
             is SettingsAction.SetCurrentAppLocale -> setCurrentAppLocale(action.newAppLocale)
             is SettingsAction.SetCurrentAppTheme -> setCurrentAppTheme(action.newAppTheme)
+            SettingsAction.SendVerificationEmail -> sendVerificationEmail()
         }
     }
 
@@ -146,5 +155,44 @@ class SettingsViewModel @Inject constructor(
                 }
             }.launchIn(scope = viewModelScope)
         }
+    }
+
+    private fun sendVerificationEmail() {
+        if (!hasNetworkConnection()) {
+            _sendVerificationEmailEventChannel.trySend(UiEvent.ShowOfflineSnackbar)
+            return
+        }
+
+        settingsUseCases.sendVerificationEmailUseCase.get()().onStart {
+            _state.update {
+                it.copy(isSendVerificationEmailLoading = true)
+            }
+        }.onEach { result ->
+            when (result) {
+                is Result.Success -> {
+                    _sendVerificationEmailEventChannel.send(
+                        UiEvent.ShowLongToast(
+                            UiText.StringResource(R.string.settings_send_verification_message_success)
+                        )
+                    )
+                }
+                is Result.Error -> {
+                    when (val error = result.error) {
+                        SendVerificationEmailError.Network.FirebaseAuthUnauthorizedUser -> {
+                            _sendVerificationEmailEventChannel.send(UiEvent.ForceLogoutUnauthorizedUser)
+                        }
+                        else -> {
+                            _sendVerificationEmailEventChannel.send(
+                                UiEvent.ShowLongSnackbar(error.asUiText())
+                            )
+                        }
+                    }
+                }
+            }
+        }.onCompletion {
+            _state.update {
+                it.copy(isSendVerificationEmailLoading = false)
+            }
+        }.launchIn(scope = viewModelScope)
     }
 }

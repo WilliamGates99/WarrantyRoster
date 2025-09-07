@@ -7,6 +7,7 @@ import com.xeniac.warrantyroster_manager.core.domain.repositories.WarrantyRoster
 import com.xeniac.warrantyroster_manager.core.domain.use_cases.ForceLogoutUnauthorizedUserUseCase
 import com.xeniac.warrantyroster_manager.core.domain.use_cases.GetCurrentAppLocaleUseCase
 import com.xeniac.warrantyroster_manager.core.domain.use_cases.GetIsUserLoggedInUseCase
+import com.xeniac.warrantyroster_manager.core.domain.use_cases.GetUserProfileUseCase
 import com.xeniac.warrantyroster_manager.core.domain.use_cases.LogoutUserUseCase
 import com.xeniac.warrantyroster_manager.core.domain.use_cases.MainUseCases
 import com.xeniac.warrantyroster_manager.core.domain.use_cases.StoreCurrentAppLocaleUseCase
@@ -56,6 +57,12 @@ internal object CoreModule {
 
     @Provides
     @ViewModelScoped
+    fun provideGetUserProfileUseCase(
+        userRepository: UserRepository
+    ): GetUserProfileUseCase = GetUserProfileUseCase(userRepository)
+
+    @Provides
+    @ViewModelScoped
     fun provideLogoutUserUseCase(
         userRepository: UserRepository
     ): LogoutUserUseCase = LogoutUserUseCase(userRepository)
@@ -79,9 +86,11 @@ internal object CoreModule {
     @Provides
     @ViewModelScoped
     fun provideUserUseCases(
+        getUserProfileUseCase: GetUserProfileUseCase,
         logoutUserUseCase: LogoutUserUseCase,
         forceLogoutUnauthorizedUserUseCase: ForceLogoutUnauthorizedUserUseCase
     ): UserUseCases = UserUseCases(
+        { getUserProfileUseCase },
         { logoutUserUseCase },
         { forceLogoutUnauthorizedUserUseCase }
     )

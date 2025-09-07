@@ -23,6 +23,7 @@
     <string name="error_network_cert_path_validator">Unable to establish a secure connection due to a server issue.</string>
     <string name="error_firebase_403">This service is not available in your region. Please consider changing your IP address by using a VPN.</string>
     <string name="error_firebase_device_blocked">We have blocked all requests from this device due to unusual activity. Please try again later.</string>
+    <string name="error_firebase_unauthorized_user">You\'re not authorized to access this section of the app.</string>
     <string name="error_intent_app_not_found">There is no app on the phone to handle this action.</string>
     <string name="error_btn_retry">Retry</string>
     <string name="error_btn_confirm">Confirm</string>
@@ -367,7 +368,7 @@
     <string name="edit_warranty_format_date">%1$s/%2$s/%3$d</string>
 
 
-    <string name="settings_title">Settings</string>
+    <string name="settings_app_bar_title">Settings</string>
     <string name="settings_account_title">Account</string>
     <string name="settings_account_status_verified">Verified</string>
     <string name="settings_account_status_verify">Verify Email</string>
@@ -382,8 +383,8 @@
     <string name="settings_settings_rate_us_title">Rate Us</string>
     <string name="settings_settings_privacy_policy_title">Privacy Policy</string>
     <string name="settings_btn_logout">Logout</string>
-    <string name="settings_verify_email_message_success">The verification email has been successfully sent to your inbox.</string>
-    <string name="settings_verify_email_error_email_not_provided">An email address must be provided.</string>
+    <string name="settings_send_verification_message_success">The verification email has been successfully sent to your inbox.</string>
+    <string name="settings_send_verification_email_error_email_not_provided">An email address must be provided.</string>
     <string name="settings_ad_indicator" translatable="false">Ad</string>
 
 

@@ -23,6 +23,7 @@
     <string name="error_network_cert_path_validator">به دلیل مشکل سرور، اتصال امن برقرار نشد.</string>
     <string name="error_firebase_403">این سرویس در منطقه شما در دسترس نیست. لطفاً از نرم‌افزار تغییر آدرس IP استفاده کنید.</string>
     <string name="error_firebase_device_blocked">ما تمام درخواست‌های این دستگاه را به دلیل فعالیت غیر‌عادی مسدود کرده‌ایم. لطفا بعدا دوباره تلاش کنید.</string>
+    <string name="error_firebase_unauthorized_user">شما مجاز به دسترسی به این بخش از برنامه نیستید.</string>
     <string name="error_intent_app_not_found">هیچ برنامه‌ای برای انجام این دستور در گوشی وجود ندارد.</string>
     <string name="error_btn_retry">تلاش مجدد</string>
     <string name="error_btn_confirm">تایید</string>
@@ -367,7 +368,7 @@
     <string name="edit_warranty_format_date">%3$d/%1$s/%2$s</string>
 
 
-    <string name="settings_title">تنظیمات</string>
+    <string name="settings_app_bar_title">تنظیمات</string>
     <string name="settings_account_title">حساب کاربری</string>
     <string name="settings_account_status_verified">تایید ایمیل</string>
     <string name="settings_account_status_verify">تایید شده</string>
@@ -382,8 +383,8 @@
     <string name="settings_settings_rate_us_title">امتیاز به برنامه</string>
     <string name="settings_settings_privacy_policy_title">حریم خصوصی</string>
     <string name="settings_btn_logout">خروج</string>
-    <string name="settings_verify_email_message_success">ایمیل تأیید با موفقیت به صندوق ایمیلتان ارسال شد.</string>
-    <string name="settings_verify_email_error_email_not_provided">ایمیلی به حساب متصل نیست.</string>
+    <string name="settings_send_verification_message_success">ایمیل تأیید با موفقیت به صندوق ایمیلتان ارسال شد.</string>
+    <string name="settings_send_verification_email_error_email_not_provided">ایمیلی به حساب متصل نیست.</string>
 
 
     <string name="linked_accounts_text_title">حساب‌های متصل</string>
