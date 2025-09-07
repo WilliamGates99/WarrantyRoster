@@ -370,12 +370,12 @@
 
 
     <string name="settings_app_bar_title">Settings</string>
-    <string name="settings_account_title">Account</string>
-    <string name="settings_account_status_verified">Verified</string>
-    <string name="settings_account_status_verify">Verify Email</string>
-    <string name="settings_account_linked_accounts_title">Linked Accounts</string>
-    <string name="settings_account_change_email_title">Change Email Address</string>
-    <string name="settings_account_change_password_title">Change Password</string>
+    <string name="settings_account_settings_title">Account</string>
+    <string name="settings_account_settings_status_verified">Verified</string>
+    <string name="settings_account_settings_status_verify">Verify Email</string>
+    <string name="settings_account_settings_linked_accounts_title">Linked Accounts</string>
+    <string name="settings_account_settings_change_email_title">Change Email Address</string>
+    <string name="settings_account_settings_change_password_title">Change Password</string>
     <string name="settings_settings_title">Settings</string>
     <string name="settings_settings_locale_title">Language</string>
     <string name="settings_settings_theme_title">Theme</string>

@@ -28,7 +28,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.shadow.Shadow
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
@@ -39,54 +38,53 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.xeniac.warrantyroster_manager.R
+import com.xeniac.warrantyroster_manager.core.domain.models.UserProfile
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.ChangeEmailScreen
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.ChangePasswordScreen
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.LinkedAccountsScreen
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.Black
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicBlack
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGrayLight
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicNavyBlue
-import com.xeniac.warrantyroster_manager.core.presentation.common.utils.Constants.URL_PRIVACY_POLICY
-import com.xeniac.warrantyroster_manager.core.presentation.common.utils.isAppInstalledFromMyket
-import com.xeniac.warrantyroster_manager.core.presentation.common.utils.openAppPageInStore
-import com.xeniac.warrantyroster_manager.core.presentation.common.utils.openLinkInExternalBrowser
-import com.xeniac.warrantyroster_manager.core.presentation.common.utils.openLinkInInAppBrowser
-import com.xeniac.warrantyroster_manager.feature_settings.presentation.utils.Constants
+import com.xeniac.warrantyroster_manager.feature_settings.presentation.SettingsAction
 
-enum class MiscellaneousItems(
-    @param:DrawableRes val iconId: Int,
-    @param:StringRes val titleId: Int,
-    val url: String?
+enum class AccountSettingsItems(
+    val destinationScreen: Any,
+    @StringRes val titleId: Int,
+    @DrawableRes val iconId: Int
 ) {
-    Donate(
-        iconId = R.drawable.ic_settings_donate,
-        titleId = R.string.settings_miscellaneous_donate_title,
-        url = Constants.URL_DONATE
+    LINKED_ACCOUNTS(
+        destinationScreen = LinkedAccountsScreen,
+        titleId = R.string.settings_account_settings_linked_accounts_title,
+        iconId = R.drawable.ic_settings_linked_accounts
     ),
-    ImproveTranslations(
-        iconId = R.drawable.ic_settings_improve_translations,
-        titleId = R.string.settings_miscellaneous_improve_translations_title,
-        url = Constants.URL_CROWDIN
+    CHANGE_EMAIL(
+        destinationScreen = ChangeEmailScreen,
+        titleId = R.string.settings_account_settings_change_email_title,
+        iconId = R.drawable.ic_settings_change_email
     ),
-    RateUs(
-        iconId = R.drawable.ic_settings_rate_us,
-        titleId = R.string.settings_miscellaneous_rate_us_title,
-        url = null
-    ),
-    PrivacyPolicy(
-        iconId = R.drawable.ic_settings_privacy_policy,
-        titleId = R.string.settings_miscellaneous_privacy_policy_title,
-        url = URL_PRIVACY_POLICY
+    CHANGE_PASSWORD(
+        destinationScreen = ChangePasswordScreen,
+        titleId = R.string.settings_account_settings_change_password_title,
+        iconId = R.drawable.ic_settings_change_password
     )
 }
 
 @Composable
-fun MiscellaneousSection(
+fun AccountSettingsSection(
+    userProfile: UserProfile?,
+    isUserProfileLoading: Boolean,
+    isSendVerificationEmailLoading: Boolean,
     modifier: Modifier = Modifier,
-    title: String = stringResource(id = R.string.settings_miscellaneous_title),
+    title: String = stringResource(id = R.string.settings_account_settings_title),
     titleStyle: TextStyle = LocalTextStyle.current.copy(
         fontSize = 16.sp,
         lineHeight = 20.sp,
         fontWeight = FontWeight.ExtraBold,
         color = MaterialTheme.colorScheme.dynamicNavyBlue
-    )
+    ),
+    onAction: (action: SettingsAction) -> Unit,
+    onNavigateToScreen: (destinationScreen: Any) -> Unit
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(space = 8.dp),
@@ -100,20 +98,29 @@ fun MiscellaneousSection(
                 .fillMaxWidth()
         )
 
-        MiscellaneousCard()
+        AccountSettingsCard(
+            userProfile = userProfile,
+            isUserProfileLoading = isUserProfileLoading,
+            isSendVerificationEmailLoading = isSendVerificationEmailLoading,
+            onAction = onAction,
+            onNavigateToScreen = onNavigateToScreen
+        )
     }
 }
 
 @Composable
-private fun MiscellaneousCard(
+private fun AccountSettingsCard(
+    userProfile: UserProfile?,
+    isUserProfileLoading: Boolean,
+    isSendVerificationEmailLoading: Boolean,
     modifier: Modifier = Modifier,
     shape: Shape = RoundedCornerShape(12.dp),
     background: Color = MaterialTheme.colorScheme.surface,
     dividerThickness: Dp = 1.dp,
-    dividerColor: Color = MaterialTheme.colorScheme.dynamicGrayLight
+    dividerColor: Color = MaterialTheme.colorScheme.dynamicGrayLight,
+    onAction: (action: SettingsAction) -> Unit,
+    onNavigateToScreen: (destinationScreen: Any) -> Unit
 ) {
-    val context = LocalContext.current
-
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -128,32 +135,26 @@ private fun MiscellaneousCard(
             .clip(shape)
             .background(background)
     ) {
-        MiscellaneousItems.entries.forEachIndexed { index, miscellaneousItem ->
-            val shouldShowItem = if (isAppInstalledFromMyket()) {
-                miscellaneousItem != MiscellaneousItems.Donate
-            } else true
+        EmailSection(
+            userProfile = userProfile,
+            isUserProfileLoading = isUserProfileLoading,
+            isSendVerificationEmailLoading = isSendVerificationEmailLoading,
+            onAction = onAction
+        )
 
-            if (shouldShowItem) {
-                MiscellaneousItem(
-                    icon = painterResource(id = miscellaneousItem.iconId),
-                    title = stringResource(id = miscellaneousItem.titleId),
-                    onClick = {
-                        when (miscellaneousItem) {
-                            MiscellaneousItems.RateUs -> context.openAppPageInStore()
-                            MiscellaneousItems.PrivacyPolicy -> {
-                                miscellaneousItem.url?.let { url ->
-                                    context.openLinkInInAppBrowser(urlString = url)
-                                }
-                            }
-                            else -> {
-                                miscellaneousItem.url?.let { url ->
-                                    context.openLinkInExternalBrowser(urlString = url)
-                                }
-                            }
-                        }
-                    }
-                )
-            }
+        if (!isUserProfileLoading) {
+            HorizontalDivider(
+                thickness = dividerThickness,
+                color = dividerColor
+            )
+        }
+
+        AccountSettingsItems.entries.forEachIndexed { index, accountSettingsItem ->
+            AccountSettingsItem(
+                icon = painterResource(id = accountSettingsItem.iconId),
+                title = stringResource(id = accountSettingsItem.titleId),
+                onClick = { onNavigateToScreen(accountSettingsItem.destinationScreen) }
+            )
 
             val isNotLastItem = index != MiscellaneousItems.entries.lastIndex
             if (isNotLastItem) {
@@ -167,7 +168,7 @@ private fun MiscellaneousCard(
 }
 
 @Composable
-private fun MiscellaneousItem(
+private fun AccountSettingsItem(
     icon: Painter,
     title: String,
     modifier: Modifier = Modifier,
@@ -196,7 +197,7 @@ private fun MiscellaneousItem(
             )
             .padding(contentPadding)
     ) {
-        MiscellaneousItemIcon(
+        AccountSettingsItemIcon(
             icon = icon,
             contentDescription = title
         )
@@ -209,12 +210,12 @@ private fun MiscellaneousItem(
             modifier = Modifier.weight(1f)
         )
 
-        ExternalLinkIcon()
+        NavigationArrowIcon()
     }
 }
 
 @Composable
-private fun MiscellaneousItemIcon(
+private fun AccountSettingsItemIcon(
     icon: Painter,
     contentDescription: String,
     modifier: Modifier = Modifier,
@@ -241,9 +242,9 @@ private fun MiscellaneousItemIcon(
 }
 
 @Composable
-private fun ExternalLinkIcon(
+private fun NavigationArrowIcon(
     modifier: Modifier = Modifier,
-    icon: Painter = painterResource(id = R.drawable.ic_settings_external_link),
+    icon: Painter = painterResource(id = R.drawable.ic_settings_navigation_arrow),
     size: Dp = 16.dp,
     color: Color = MaterialTheme.colorScheme.onSurface
 ) {

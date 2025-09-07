@@ -3,10 +3,13 @@ package com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object WarrantiesScreen
+data object SettingsScreen
 
 @Serializable
-data class UpsertWarrantyScreen(
-    // TODO: REPLACE WITH WARRANTY
-    val updatingWarrantyId: String? = null
-)
+data object LinkedAccountsScreen
+
+@Serializable
+data object ChangeEmailScreen
+
+@Serializable
+data object ChangePasswordScreen

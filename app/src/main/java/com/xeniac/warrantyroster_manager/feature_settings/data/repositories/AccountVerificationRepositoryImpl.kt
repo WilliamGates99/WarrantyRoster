@@ -67,9 +67,3 @@ class AccountVerificationRepositoryImpl @Inject constructor(
         }
     }
 }
-
-/**
- *  * // SEND EMAIL VERIFICATION:
- *  * const val ERROR_FIREBASE_AUTH_EMAIL_VERIFICATION_EMAIL_NOT_PROVIDED = "An email address must be provided"
- *  *
- */

@@ -11,10 +11,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.xeniac.warrantyroster_manager.core.presentation.common.UserViewModel
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.SettingsScreen
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.UpsertWarrantyScreen
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.WarrantiesScreen
-import com.xeniac.warrantyroster_manager.feature_settings.presentation.SettingsScreen
 
 @Composable
 fun SetupBaseNavGraph(
@@ -52,11 +50,10 @@ fun SetupBaseNavGraph(
             )
         }
 
-        composable<SettingsScreen> {
-            SettingsScreen(
-                bottomPadding = bottomPadding,
-                userViewModel = userViewModel
-            )
-        }
+        settingsNavGraph(
+            baseNavController = baseNavController,
+            bottomPadding = bottomPadding,
+            userViewModel = userViewModel
+        )
     }
 }

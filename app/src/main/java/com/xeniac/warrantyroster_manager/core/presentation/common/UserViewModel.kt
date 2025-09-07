@@ -29,9 +29,11 @@ class UserViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(UserProfileState())
-    val userState = _state.stateIn(
+    val userState = _state.onStart {
+        getUserProfile()
+    }.stateIn(
         scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(stopTimeout = 30.seconds),
+        started = SharingStarted.WhileSubscribed(stopTimeout = 5.seconds),
         initialValue = _state.value
     )
 

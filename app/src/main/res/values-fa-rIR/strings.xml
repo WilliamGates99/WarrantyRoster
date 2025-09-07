@@ -369,12 +369,12 @@
 
 
     <string name="settings_app_bar_title">تنظیمات</string>
-    <string name="settings_account_title">حساب کاربری</string>
-    <string name="settings_account_status_verified">تایید ایمیل</string>
-    <string name="settings_account_status_verify">تایید شده</string>
-    <string name="settings_account_linked_accounts_title">حساب‌های متصل</string>
-    <string name="settings_account_change_email_title">تغییر آدرس ایمیل</string>
-    <string name="settings_account_change_password_title">تغییر رمز‌عبور</string>
+    <string name="settings_account_settings_title">حساب کاربری</string>
+    <string name="settings_account_settings_status_verified">تایید ایمیل</string>
+    <string name="settings_account_settings_status_verify">تایید شده</string>
+    <string name="settings_account_settings_linked_accounts_title">حساب‌های متصل</string>
+    <string name="settings_account_settings_change_email_title">تغییر آدرس ایمیل</string>
+    <string name="settings_account_settings_change_password_title">تغییر رمز‌عبور</string>
     <string name="settings_settings_title">تنظیمات</string>
     <string name="settings_settings_locale_title">زبان</string>
     <string name="settings_settings_theme_title">تم</string>

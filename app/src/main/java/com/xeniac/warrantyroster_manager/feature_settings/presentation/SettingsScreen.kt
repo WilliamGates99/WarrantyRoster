@@ -47,6 +47,7 @@ import com.xeniac.warrantyroster_manager.core.presentation.common.utils.Observer
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiEvent
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.findActivity
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.restartActivity
+import com.xeniac.warrantyroster_manager.feature_settings.presentation.components.AccountSettingsSection
 import com.xeniac.warrantyroster_manager.feature_settings.presentation.components.MiscellaneousSection
 import com.xeniac.warrantyroster_manager.feature_settings.presentation.components.SettingsSection
 import com.xeniac.warrantyroster_manager.feature_settings.presentation.components.ThemeBottomSheet
@@ -56,6 +57,7 @@ import com.xeniac.warrantyroster_manager.feature_settings.presentation.component
 fun SettingsScreen(
     bottomPadding: Dp,
     userViewModel: UserViewModel,
+    onNavigateToScreen: (destinationScreen: Any) -> Unit,
     viewModel: SettingsViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
@@ -146,7 +148,13 @@ fun SettingsScreen(
                     vertical = verticalPadding
                 )
         ) {
-            // TODO: ACCOUNT SECTION
+            AccountSettingsSection(
+                userProfile = userState.userProfile,
+                isUserProfileLoading = userState.isUserProfileLoading,
+                isSendVerificationEmailLoading = state.isSendVerificationEmailLoading,
+                onAction = viewModel::onAction,
+                onNavigateToScreen = onNavigateToScreen
+            )
 
             SettingsSection(
                 currentAppLocale = state.currentAppLocale,
