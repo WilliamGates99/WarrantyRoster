@@ -3,11 +3,10 @@ package com.xeniac.warrantyroster_manager.feature_settings.presentation
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.calculateEndPadding
-import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -22,7 +21,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -60,7 +58,6 @@ fun SettingsScreen(
 ) {
     val context = LocalContext.current
     val activity = LocalActivity.current ?: context.findActivity()
-    val layoutDirection = LocalLayoutDirection.current
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -115,7 +112,15 @@ fun SettingsScreen(
     }
 
     Scaffold(
-        snackbarHost = { SwipeableSnackbar(hostState = snackbarHostState) },
+        snackbarHost = {
+            SwipeableSnackbar(
+                hostState = snackbarHostState,
+                modifier = when {
+                    bottomPadding > 0.dp -> Modifier.padding(bottom = bottomPadding)
+                    else -> Modifier
+                }
+            )
+        },
         topBar = {
             CustomCenterAlignedTopAppBar(
                 title = stringResource(id = R.string.settings_app_bar_title),
@@ -124,21 +129,20 @@ fun SettingsScreen(
         },
         modifier = Modifier
             .fillMaxSize()
+            .safeDrawingPadding()
             .nestedScroll(scrollBehavior.nestedScrollConnection)
     ) { innerPadding ->
         Column(
             verticalArrangement = Arrangement.spacedBy(space = 24.dp),
             modifier = Modifier
                 .fillMaxSize()
-                .padding(
-                    top = innerPadding.calculateTopPadding(),
-                    bottom = innerPadding.calculateBottomPadding()
-                )
+                .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
                 .padding(
-                    start = innerPadding.calculateStartPadding(layoutDirection),
-                    end = innerPadding.calculateEndPadding(layoutDirection),
-                    bottom = bottomPadding
+                    bottom = when {
+                        bottomPadding > 0.dp -> bottomPadding
+                        else -> 0.dp
+                    }
                 )
                 .padding(
                     horizontal = horizontalPadding,
