@@ -399,6 +399,22 @@
     <string name="linked_accounts_error_email_exists">حسابی با ایمیل وارد شده از قبل وجود دارد.</string>
 
 
+    <string name="change_email_app_bar_title">تغییر آدرس ایمیل</string>
+    <string name="change_email_textfield_password_title">رمز‌عبور</string>
+    <string name="change_email_textfield_password_hint">رمز‌عبور خود را وارد کنید</string>
+    <string name="change_email_textfield_new_email_title">آدرس ایمیل جدید</string>
+    <string name="change_email_textfield_new_email_hint">آدرس ایمیل جدیدی را وارد کنید</string>
+    <string name="change_email_btn_change">تغییر ایمیل</string>
+    <string name="change_email_error_blank_password">رمز‌عبور خود را وارد کنید!</string>
+    <string name="change_email_error_blank_new_email">آدرس ایمیل جدیدی را وارد کنید!</string>
+    <string name="change_email_error_invalid_new_email">آدرس ایمیل جدیدی را وارد کنید!</string>
+    <string name="change_email_invalid_credentials">رمز‌عبور وارد شده نادرست است.</string>
+    <string name="change_email_error_same_email_as_current">آدرس ایمیل جدید نمی‌تواند با ایمیل فعلیتان یکسان باشد!</string>
+    <string name="change_email_error_account_with_same_email_exists">حسابی با ایمیل وارد شده از قبل وجود دارد.</string>
+    <string name="change_email_success_dialog_message">آدرس ایمیل شما با موفقیت تغییر کرد.</string>
+    <string name="change_email_success_dialog_btn_confirm">تایید</string>
+
+
     <string name="change_password_text_title">تغییر رمز‌عبور</string>
     <string name="change_password_title_current_password">رمز‌عبور فعلی</string>
     <string name="change_password_hint_current_password">رمز‌عبور فعلی خود را وارد کنید</string>
@@ -414,21 +430,5 @@
     <string name="change_password_error_credentials">رمز‌عبور فعلی وارد شده نادرست است.</string>
     <string name="change_password_dialog_message">رمز‌عبور شما با موفقیت تغییر کرد.</string>
     <string name="change_password_dialog_positive">تایید</string>
-
-
-    <string name="change_email_text_title">تغییر آدرس ایمیل</string>
-    <string name="change_email_title_password">رمز‌عبور</string>
-    <string name="change_email_hint_password">رمز‌عبور خود را وارد کنید</string>
-    <string name="change_email_title_new_email">آدرس ایمیل جدید</string>
-    <string name="change_email_hint_new_email">آدرس ایمیل جدیدی را وارد کنید</string>
-    <string name="change_email_btn_change">تغییر ایمیل</string>
-    <string name="change_email_error_blank_password">رمز‌عبور خود را وارد کنید!</string>
-    <string name="change_email_error_blank_new_email">آدرس ایمیل جدیدی را وارد کنید!</string>
-    <string name="change_email_error_new_email">آدرس ایمیل جدیدی را وارد کنید!</string>
-    <string name="change_email_error_credentials">رمز‌عبور وارد شده نادرست است.</string>
-    <string name="change_email_error_email_same">آدرس ایمیل جدید نمی‌تواند با ایمیل فعلیتان یکسان باشد!</string>
-    <string name="change_email_error_email_exists">حسابی با ایمیل وارد شده از قبل وجود دارد.</string>
-    <string name="change_email_dialog_message">آدرس ایمیل شما با موفقیت تغییر کرد.</string>
-    <string name="change_email_dialog_positive">تایید</string>
 
 </resources>

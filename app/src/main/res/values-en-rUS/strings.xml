@@ -384,10 +384,9 @@
     <string name="settings_miscellaneous_rate_us_title">Rate Us</string>
     <string name="settings_miscellaneous_privacy_policy_title">Privacy Policy</string>
     <string name="settings_btn_logout">Logout</string>
-    <string name="settings_verification_email_sent_dialog_btn_confirm">Confirm</string>
     <string name="settings_verification_email_sent_dialog_message">The verification email has been successfully sent to your inbox.</string>
+    <string name="settings_verification_email_sent_dialog_btn_confirm">Confirm</string>
     <string name="settings_send_verification_email_error_email_not_provided">An email address must be provided.</string>
-    <string name="settings_ad_indicator" translatable="false">Ad</string>
 
 
     <string name="linked_accounts_text_title">Linked Accounts</string>
@@ -398,6 +397,22 @@
     <string name="linked_accounts_status_disconnect">Disconnect</string>
     <string name="linked_accounts_error_email_exists_with_different_credentials">An account already exists with the same email address but different sign-in credentials.</string>
     <string name="linked_accounts_error_email_exists">An account with the provided email already exists.</string>
+
+
+    <string name="change_email_app_bar_title">Change Email Address</string>
+    <string name="change_email_textfield_password_title">Password</string>
+    <string name="change_email_textfield_password_hint">Enter your password</string>
+    <string name="change_email_textfield_new_email_title">New Email Address</string>
+    <string name="change_email_textfield_new_email_hint">Enter a new email address</string>
+    <string name="change_email_btn_change">Change Email</string>
+    <string name="change_email_error_blank_password">Enter your password!</string>
+    <string name="change_email_error_blank_new_email">Enter a new email address!</string>
+    <string name="change_email_error_invalid_new_email">The entered new email address is not valid!</string>
+    <string name="change_email_invalid_credentials">The provided credentials are incorrect.</string>
+    <string name="change_email_error_same_email_as_current">The new email address cannot be the same as your current email!</string>
+    <string name="change_email_error_account_with_same_email_exists">An account with the provided email already exists.</string>
+    <string name="change_email_success_dialog_message">Your email address has been successfully changed.</string>
+    <string name="change_email_success_dialog_btn_confirm">Confirm</string>
 
 
     <string name="change_password_text_title">Change Password</string>
@@ -415,21 +430,5 @@
     <string name="change_password_error_credentials">The provided credentials are incorrect.</string>
     <string name="change_password_dialog_message">Your password has been successfully changed.</string>
     <string name="change_password_dialog_positive">Confirm</string>
-
-
-    <string name="change_email_text_title">Change Email Address</string>
-    <string name="change_email_title_password">Password</string>
-    <string name="change_email_hint_password">Enter your password</string>
-    <string name="change_email_title_new_email">New Email Address</string>
-    <string name="change_email_hint_new_email">Enter a new email address</string>
-    <string name="change_email_btn_change">Change Email</string>
-    <string name="change_email_error_blank_password">Enter your password!</string>
-    <string name="change_email_error_blank_new_email">Enter a new email address!</string>
-    <string name="change_email_error_new_email">The entered new email address is not valid!</string>
-    <string name="change_email_error_credentials">The provided credentials are incorrect.</string>
-    <string name="change_email_error_email_same">The new email address cannot be the same as your current email!</string>
-    <string name="change_email_error_email_exists">An account with the provided email already exists.</string>
-    <string name="change_email_dialog_message">Your email address has been successfully changed.</string>
-    <string name="change_email_dialog_positive">Confirm</string>
 
 </resources>

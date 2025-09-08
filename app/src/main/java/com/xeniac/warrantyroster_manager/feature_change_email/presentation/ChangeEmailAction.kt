@@ -1,5 +1,10 @@
 package com.xeniac.warrantyroster_manager.feature_change_email.presentation
 
-sealed interface ChangeEmailAction {
+import androidx.compose.ui.text.input.TextFieldValue
 
+sealed interface ChangeEmailAction {
+    data class PasswordChanged(val newValue: TextFieldValue) : ChangeEmailAction
+    data class NewEmailChanged(val newValue: TextFieldValue) : ChangeEmailAction
+
+    data object SubmitNewEmail : ChangeEmailAction
 }
