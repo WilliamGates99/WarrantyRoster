@@ -3,10 +3,12 @@ package com.xeniac.warrantyroster_manager.feature_settings.presentation
 import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -129,14 +131,19 @@ fun SettingsScreen(
         },
         modifier = Modifier
             .fillMaxSize()
-            .safeDrawingPadding()
             .nestedScroll(scrollBehavior.nestedScrollConnection)
     ) { innerPadding ->
         Column(
             verticalArrangement = Arrangement.spacedBy(space = 24.dp),
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding)
+                .windowInsetsPadding(
+                    WindowInsets(
+                        top = innerPadding.calculateTopPadding(),
+                        bottom = innerPadding.calculateBottomPadding()
+                    )
+                )
+                .safeDrawingPadding()
                 .verticalScroll(rememberScrollState())
                 .padding(
                     bottom = when {
