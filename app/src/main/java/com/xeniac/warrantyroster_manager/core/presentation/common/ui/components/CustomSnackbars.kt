@@ -1,6 +1,7 @@
 package com.xeniac.warrantyroster_manager.core.presentation.common.ui.components
 
 import android.content.Context
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Snackbar
@@ -13,11 +14,9 @@ import androidx.compose.material3.SwipeToDismissBoxState
 import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.unit.LayoutDirection
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGrayLight
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiText
@@ -37,35 +36,35 @@ fun SwipeableSnackbar(
         }
     )
 ) {
-    val layoutDirection = LocalLayoutDirection.current
-
-    // Set the layout direction to LTR to solve the opposite swipe direction in RTL layouts
-    CompositionLocalProvider(value = LocalLayoutDirection provides LayoutDirection.Ltr) {
-        LaunchedEffect(dismissSnackbarState.currentValue) {
-            if (dismissSnackbarState.currentValue != SwipeToDismissBoxValue.Settled) {
-                dismissSnackbarState.reset()
-            }
+    LaunchedEffect(
+        key1 = dismissSnackbarState.currentValue
+    ) {
+        if (dismissSnackbarState.currentValue != SwipeToDismissBoxValue.Settled) {
+            dismissSnackbarState.reset()
         }
+    }
 
-        SwipeToDismissBox(
-            state = dismissSnackbarState,
-            backgroundContent = {},
-            modifier = modifier.fillMaxWidth()
+    SwipeToDismissBox(
+        state = dismissSnackbarState,
+        backgroundContent = {},
+        modifier = modifier.fillMaxWidth()
+    ) {
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier.fillMaxWidth()
         ) {
-            CompositionLocalProvider(value = LocalLayoutDirection provides layoutDirection) {
-                SnackbarHost(
-                    hostState = hostState,
-                    snackbar = { snackbarData ->
-                        Snackbar(
-                            snackbarData = snackbarData,
-                            containerColor = MaterialTheme.colorScheme.error,
-                            contentColor = MaterialTheme.colorScheme.onError,
-                            actionColor = MaterialTheme.colorScheme.dynamicGrayLight,
-                            actionContentColor = MaterialTheme.colorScheme.dynamicGrayLight
-                        )
-                    }
-                )
-            }
+            SnackbarHost(
+                hostState = hostState,
+                snackbar = { snackbarData ->
+                    Snackbar(
+                        snackbarData = snackbarData,
+                        containerColor = MaterialTheme.colorScheme.error,
+                        contentColor = MaterialTheme.colorScheme.onError,
+                        actionColor = MaterialTheme.colorScheme.dynamicGrayLight,
+                        actionContentColor = MaterialTheme.colorScheme.dynamicGrayLight
+                    )
+                }
+            )
         }
     }
 }
