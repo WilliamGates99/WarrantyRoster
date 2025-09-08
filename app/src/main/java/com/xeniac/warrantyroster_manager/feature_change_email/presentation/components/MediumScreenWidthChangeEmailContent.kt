@@ -1,28 +1,25 @@
 package com.xeniac.warrantyroster_manager.feature_change_email.presentation.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.calculateEndPadding
-import androidx.compose.foundation.layout.calculateStartPadding
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.BigButton
@@ -36,19 +33,17 @@ fun MediumScreenWidthChangeEmailContent(
     modifier: Modifier = Modifier,
     onAction: (action: ChangeEmailAction) -> Unit
 ) {
-    val layoutDirection = LocalLayoutDirection.current
-
     Row(
         horizontalArrangement = Arrangement.spacedBy(space = 44.dp),
         modifier = modifier
             .fillMaxSize()
-            .background(Color.Red)
-            .padding(
-                top = innerPadding.calculateTopPadding(),
-                start = innerPadding.calculateStartPadding(layoutDirection),
-                end = innerPadding.calculateEndPadding(layoutDirection),
+            .windowInsetsPadding(
+                WindowInsets(
+                    top = innerPadding.calculateTopPadding(),
+                    bottom = innerPadding.calculateBottomPadding()
+                )
             )
-            .background(Color.Blue)
+            .safeDrawingPadding()
             .padding(start = 44.dp)
     ) {
         ChangeEmailAnimation(
@@ -60,7 +55,6 @@ fun MediumScreenWidthChangeEmailContent(
 
         ScrollableContent(
             state = state,
-            bottomPadding = innerPadding.calculateBottomPadding(),
             onAction = onAction,
             modifier = Modifier
                 .weight(1f)
@@ -72,7 +66,6 @@ fun MediumScreenWidthChangeEmailContent(
 @Composable
 private fun ScrollableContent(
     state: ChangeEmailState,
-    bottomPadding: Dp,
     modifier: Modifier = Modifier,
     onAction: (action: ChangeEmailAction) -> Unit
 ) {
@@ -86,7 +79,7 @@ private fun ScrollableContent(
             .padding(
                 end = 44.dp,
                 top = 24.dp,
-                bottom = 24.dp + bottomPadding
+                bottom = 24.dp
             )
     ) {
         ChangeEmailTextFields(
@@ -96,7 +89,7 @@ private fun ScrollableContent(
             onAction = onAction
         )
 
-        Spacer(modifier = Modifier.height(40.dp))
+        Spacer(modifier = Modifier.height(28.dp))
 
         BigButton(
             isLoading = state.isSubmitLoading,

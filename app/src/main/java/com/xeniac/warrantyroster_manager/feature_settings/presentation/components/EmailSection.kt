@@ -32,9 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
@@ -42,7 +40,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.airbnb.lottie.compose.LottieAnimation
@@ -132,12 +129,6 @@ private fun EmailVerificationStatusAnimation(
         else -> 0.60f
     }
 ) {
-    val layoutDirection = LocalLayoutDirection.current
-    val rotationDegree = when (layoutDirection) {
-        LayoutDirection.Ltr -> 0f
-        LayoutDirection.Rtl -> 180f
-    }
-
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier
@@ -156,11 +147,7 @@ private fun EmailVerificationStatusAnimation(
             ).value,
             iterations = animationIteration,
             speed = animationSpeed,
-            modifier = Modifier
-                .fillMaxSize()
-                .graphicsLayer {
-                    rotationY = rotationDegree
-                }
+            modifier = Modifier.fillMaxSize()
         )
     }
 }
