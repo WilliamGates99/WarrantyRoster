@@ -384,7 +384,8 @@
     <string name="settings_miscellaneous_rate_us_title">امتیاز به برنامه</string>
     <string name="settings_miscellaneous_privacy_policy_title">حریم خصوصی</string>
     <string name="settings_btn_logout">خروج</string>
-    <string name="settings_send_verification_message_success">ایمیل تأیید با موفقیت به صندوق ایمیلتان ارسال شد.</string>
+    <string name="settings_verification_email_sent_dialog_btn_confirm">تایید</string>
+    <string name="settings_verification_email_sent_dialog_message">ایمیل تأیید با موفقیت به صندوق ایمیلتان ارسال شد.</string>
     <string name="settings_send_verification_email_error_email_not_provided">ایمیلی به حساب متصل نیست.</string>
 
 

@@ -37,7 +37,6 @@ import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.SwipeableSnackbar
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.bigButtonColors
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.showLongSnackbar
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.showLongToast
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.showOfflineSnackbar
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.showShortSnackbar
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.Red
@@ -49,7 +48,7 @@ import com.xeniac.warrantyroster_manager.feature_settings.presentation.component
 import com.xeniac.warrantyroster_manager.feature_settings.presentation.components.MiscellaneousSection
 import com.xeniac.warrantyroster_manager.feature_settings.presentation.components.SettingsSection
 import com.xeniac.warrantyroster_manager.feature_settings.presentation.components.ThemeBottomSheet
-import timber.log.Timber
+import com.xeniac.warrantyroster_manager.feature_settings.presentation.components.VerificationEmailSentDialog
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -111,7 +110,6 @@ fun SettingsScreen(
                 scope = scope,
                 snackbarHostState = snackbarHostState
             )
-            is UiEvent.ShowLongToast -> context.showLongToast(message = event.message)
             else -> Unit
         }
     }
@@ -126,12 +124,8 @@ fun SettingsScreen(
         },
         modifier = Modifier
             .fillMaxSize()
-//            .windowInsetsPadding(WindowInsets(bottom = bottomPadding))
             .nestedScroll(scrollBehavior.nestedScrollConnection)
     ) { innerPadding ->
-        Timber.i("inner bottom = ${innerPadding.calculateBottomPadding()}")
-        Timber.e("bottomPAdding = $bottomPadding")
-
         Column(
             verticalArrangement = Arrangement.spacedBy(space = 24.dp),
             modifier = Modifier
@@ -195,5 +189,10 @@ fun SettingsScreen(
         isVisible = state.isThemeBottomSheetVisible,
         currentAppTheme = state.currentAppTheme,
         onAction = viewModel::onAction
+    )
+
+    VerificationEmailSentDialog(
+        isVisible = state.isVerificationEmailSentDialogVisible,
+        onDismiss = { viewModel.onAction(SettingsAction.DismissVerificationEmailSentDialog) }
     )
 }

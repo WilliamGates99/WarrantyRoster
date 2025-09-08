@@ -11,5 +11,6 @@ data class SettingsState(
     val currentAppTheme: AppTheme? = null,
     val isLocaleBottomSheetVisible: Boolean = false,
     val isThemeBottomSheetVisible: Boolean = false,
+    val isVerificationEmailSentDialogVisible: Boolean = false,
     val isSendVerificationEmailLoading: Boolean = false
 ) : Parcelable

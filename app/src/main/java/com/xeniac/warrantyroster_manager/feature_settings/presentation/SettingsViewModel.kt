@@ -2,14 +2,12 @@ package com.xeniac.warrantyroster_manager.feature_settings.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.core.domain.models.AppLocale
 import com.xeniac.warrantyroster_manager.core.domain.models.AppTheme
 import com.xeniac.warrantyroster_manager.core.domain.models.Result
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.Event
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.NetworkObserverHelper.hasNetworkConnection
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiEvent
-import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiText
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.asUiText
 import com.xeniac.warrantyroster_manager.feature_settings.domain.errors.SendVerificationEmailError
 import com.xeniac.warrantyroster_manager.feature_settings.domain.use_cases.SettingsUseCases
@@ -69,6 +67,7 @@ class SettingsViewModel @Inject constructor(
             SettingsAction.DismissLocaleBottomSheet -> dismissLocaleBottomSheet()
             SettingsAction.ShowThemeBottomSheet -> showThemeBottomSheet()
             SettingsAction.DismissThemeBottomSheet -> dismissThemeBottomSheet()
+            SettingsAction.DismissVerificationEmailSentDialog -> dismissVerificationEmailSentDialog()
             is SettingsAction.SetCurrentAppLocale -> setCurrentAppLocale(action.newAppLocale)
             is SettingsAction.SetCurrentAppTheme -> setCurrentAppTheme(action.newAppTheme)
             SettingsAction.SendVerificationEmail -> sendVerificationEmail()
@@ -104,6 +103,12 @@ class SettingsViewModel @Inject constructor(
     private fun dismissThemeBottomSheet() = viewModelScope.launch {
         _state.update {
             it.copy(isThemeBottomSheetVisible = false)
+        }
+    }
+
+    private fun dismissVerificationEmailSentDialog() = viewModelScope.launch {
+        _state.update {
+            it.copy(isVerificationEmailSentDialogVisible = false)
         }
     }
 
@@ -170,11 +175,9 @@ class SettingsViewModel @Inject constructor(
         }.onEach { result ->
             when (result) {
                 is Result.Success -> {
-                    _sendVerificationEmailEventChannel.send(
-                        UiEvent.ShowLongToast(
-                            UiText.StringResource(R.string.settings_send_verification_message_success)
-                        )
-                    )
+                    _state.update {
+                        it.copy(isVerificationEmailSentDialogVisible = true)
+                    }
                 }
                 is Result.Error -> {
                     when (val error = result.error) {

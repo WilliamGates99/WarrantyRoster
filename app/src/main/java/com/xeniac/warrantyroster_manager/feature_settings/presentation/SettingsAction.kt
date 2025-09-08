@@ -9,6 +9,8 @@ sealed interface SettingsAction {
     data object ShowThemeBottomSheet : SettingsAction
     data object DismissThemeBottomSheet : SettingsAction
 
+    data object DismissVerificationEmailSentDialog : SettingsAction
+
     data class SetCurrentAppLocale(val newAppLocale: AppLocale) : SettingsAction
     data class SetCurrentAppTheme(val newAppTheme: AppTheme) : SettingsAction
 
