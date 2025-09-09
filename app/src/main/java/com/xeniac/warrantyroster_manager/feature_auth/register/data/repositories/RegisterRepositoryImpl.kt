@@ -33,7 +33,7 @@ class RegisterRepositoryImpl @Inject constructor(
             val authResult = with(firebaseAuth.get()) {
                 useAppLanguage()
                 createUserWithEmailAndPassword(
-                    email.trim(),
+                    email.lowercase().trim(),
                     password.trim()
                 ).await()
             }

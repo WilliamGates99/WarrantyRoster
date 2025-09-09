@@ -28,7 +28,7 @@ class ForgotPasswordRepositoryImpl @Inject constructor(
         return try {
             with(firebaseAuth.get()) {
                 useAppLanguage()
-                sendPasswordResetEmail(email.trim()).await()
+                sendPasswordResetEmail(email.lowercase().trim()).await()
             }
 
             SendResetPasswordEmailResult(result = Result.Success(Unit))

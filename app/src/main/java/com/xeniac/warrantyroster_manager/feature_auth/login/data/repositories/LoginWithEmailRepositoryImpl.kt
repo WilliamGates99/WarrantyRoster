@@ -33,7 +33,7 @@ class LoginWithEmailRepositoryImpl @Inject constructor(
     ): LoginWithEmailResult {
         return try {
             val authResult = firebaseAuth.get().signInWithEmailAndPassword(
-                email.trim(),
+                email.lowercase().trim(),
                 password.trim()
             ).await()
 
