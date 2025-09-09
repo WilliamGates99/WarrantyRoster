@@ -12,7 +12,7 @@ import dagger.hilt.android.scopes.ViewModelScoped
 
 @Module
 @InstallIn(ViewModelComponent::class)
-internal object SettingsModule {
+internal object ChangeEmailModule {
 
     @Provides
     @ViewModelScoped
