@@ -55,8 +55,16 @@ class LinkedAccountsViewModel @Inject constructor(
         }.onEach { result ->
             when (result) {
                 is Result.Success -> {
+                    val linkedAccountProviders = result.data
+
                     _state.update {
-                        it.copy(linkedAccountProviders = result.data)
+                        it.copy(
+                            accountProviders = it.accountProviders.map { accountProvider ->
+                                if (accountProvider.accountProvider in linkedAccountProviders) {
+                                    accountProvider.copy(isConnected = true)
+                                } else accountProvider
+                            }
+                        )
                     }
                 }
                 is Result.Error -> {

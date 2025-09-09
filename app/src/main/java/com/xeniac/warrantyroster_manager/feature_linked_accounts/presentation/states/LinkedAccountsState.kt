@@ -4,7 +4,9 @@ import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiText
 import com.xeniac.warrantyroster_manager.feature_linked_accounts.domain.models.AccountProviders
 
 data class LinkedAccountsState(
-    val linkedAccountProviders: Set<AccountProviders> = emptySet(),
+    val accountProviders: List<AccountProviderUi> = AccountProviders.entries.map { accountProvider ->
+        AccountProviderUi(accountProvider = accountProvider)
+    },
     val errorMessage: UiText? = null,
-    val isLinkedAccountProvidersLoading: Boolean = false,
+    val isLinkedAccountProvidersLoading: Boolean = false
 )

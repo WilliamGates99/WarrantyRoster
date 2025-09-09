@@ -32,6 +32,7 @@ import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.SwipeableSnackbar
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.ObserverAsEvent
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiEvent
+import com.xeniac.warrantyroster_manager.feature_linked_accounts.presentation.components.AccountProviderItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -97,7 +98,12 @@ fun LinkedAccountsScreen(
                 return@Scaffold
             }
 
-            // TODO: ACCOUNT PROVIDERS LIST
+            state.accountProviders.forEach { accountProvider ->
+                AccountProviderItem(
+                    accountProvider = accountProvider,
+                    onAction = viewModel::onAction
+                )
+            }
         }
     }
 }
