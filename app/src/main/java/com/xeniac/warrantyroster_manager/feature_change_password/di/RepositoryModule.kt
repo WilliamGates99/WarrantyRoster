@@ -1,7 +1,6 @@
 package com.xeniac.warrantyroster_manager.feature_change_password.di
 
-import com.xeniac.warrantyroster_manager.feature_change_email.data.repositories.ChangeUserEmailRepositoryImpl
-import com.xeniac.warrantyroster_manager.feature_change_email.domain.repositories.ChangeUserEmailRepository
+import com.xeniac.warrantyroster_manager.feature_change_password.data.repositories.ChangeUserPasswordRepositoryImpl
 import com.xeniac.warrantyroster_manager.feature_change_password.domain.repositories.ChangeUserPasswordRepository
 import dagger.Binds
 import dagger.Module
