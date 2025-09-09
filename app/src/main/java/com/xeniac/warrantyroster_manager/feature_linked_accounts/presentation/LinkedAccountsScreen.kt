@@ -14,6 +14,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -46,6 +47,8 @@ fun LinkedAccountsScreen(
     val snackbarHostState = remember { SnackbarHostState() }
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    val horizontalPadding by remember { derivedStateOf { 8.dp } }
+    val verticalPadding by remember { derivedStateOf { 16.dp } }
 
     val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -84,8 +87,8 @@ fun LinkedAccountsScreen(
                 .safeDrawingPadding()
                 .verticalScroll(rememberScrollState())
                 .padding(
-                    horizontal = 16.dp,
-                    vertical = 24.dp
+                    horizontal = horizontalPadding,
+                    vertical = verticalPadding
                 )
         ) {
             state.errorMessage?.let { errorMessage ->

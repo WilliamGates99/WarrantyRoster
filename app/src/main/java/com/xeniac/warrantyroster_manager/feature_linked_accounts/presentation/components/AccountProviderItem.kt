@@ -66,7 +66,7 @@ fun AccountProviderItem(
             .clip(shape)
             .background(background)
             .clickable(
-                enabled = accountProvider.isLoading,
+                enabled = !accountProvider.isLoading,
                 onClick = {
                     // TODO: UNCOMMENT
 //                    when (accountProvider.isConnected) {
@@ -115,7 +115,7 @@ private fun AccountProviderInfo(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(
         horizontal = 16.dp,
-        vertical = 16.dp
+        vertical = 20.dp
     ),
     titleStyle: TextStyle = LocalTextStyle.current.copy(
         fontSize = 16.sp,
@@ -148,10 +148,8 @@ private fun AccountProviderInfo(
 
         AnimatedContent(
             targetState = isConnected,
-            // TODO: CHANGE TRANSITION
             transitionSpec = { fadeIn().togetherWith(exit = fadeOut()) }
         ) { isConnected ->
-            // TODO: RENAME TO ACTION
             when (isConnected) {
                 true -> DisconnectButton(isLoading = isLoading)
                 false -> ConnectButton(isLoading = isLoading)
@@ -165,7 +163,7 @@ private fun AccountProviderLogo(
     logo: Painter,
     contentDescription: String,
     modifier: Modifier = Modifier,
-    size: Dp = 40.dp
+    size: Dp = 32.dp
 ) {
     Image(
         painter = logo,

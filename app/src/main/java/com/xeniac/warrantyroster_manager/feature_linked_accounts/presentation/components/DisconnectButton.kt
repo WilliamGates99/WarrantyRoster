@@ -1,7 +1,6 @@
 package com.xeniac.warrantyroster_manager.feature_linked_accounts.presentation.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
@@ -24,7 +23,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -32,11 +30,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.xeniac.warrantyroster_manager.R
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.Blue
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.Green
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.Red
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.utils.toDp
-import com.xeniac.warrantyroster_manager.feature_settings.presentation.SettingsAction
 
 @Composable
 fun DisconnectButton(
@@ -54,10 +49,7 @@ fun DisconnectButton(
         lineHeight = 10.sp,
         fontWeight = FontWeight.Black,
         textAlign = TextAlign.Center,
-        color = when (isEmailVerified) {
-            true -> Green
-            else -> Blue
-        }
+        color = Red
     ),
     maxLines: Int = 1,
     progressIndicatorColor: Color = textStyle.color,
@@ -71,11 +63,6 @@ fun DisconnectButton(
         modifier = modifier
             .clip(shape)
             .background(background)
-            .clickable(
-                enabled = !isLoading && isEmailVerified != true,
-                role = Role.Button,
-                onClick = { onAction(SettingsAction.SendVerificationEmail) }
-            )
             .padding(contentPadding)
     ) {
         when {
