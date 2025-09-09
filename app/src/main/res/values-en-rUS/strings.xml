@@ -411,7 +411,7 @@
     <string name="change_email_invalid_credentials">The provided credentials are incorrect.</string>
     <string name="change_email_error_same_email_as_current">The new email address cannot be the same as your current email!</string>
     <string name="change_email_error_account_with_same_email_exists">An account with the provided email already exists.</string>
-    <string name="change_email_success_dialog_message">Your email address has been successfully changed.</string>
+    <string name="change_email_success_dialog_message">A verification link has been sent to your new email address. Please click the link to update your email.</string>
     <string name="change_email_success_dialog_btn_confirm">Confirm</string>
 
 

@@ -1,6 +1,5 @@
 package com.xeniac.warrantyroster_manager.feature_change_email.presentation
 
-import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -17,12 +16,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.xeniac.warrantyroster_manager.R
+import com.xeniac.warrantyroster_manager.core.presentation.common.UserAction
 import com.xeniac.warrantyroster_manager.core.presentation.common.UserViewModel
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.CustomCenterAlignedTopAppBar
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.SwipeableSnackbar
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.showLongSnackbar
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.showOfflineSnackbar
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.utils.isWindowWidthSizeCompact
-import com.xeniac.warrantyroster_manager.core.presentation.common.utils.findActivity
+import com.xeniac.warrantyroster_manager.core.presentation.common.utils.ObserverAsEvent
+import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiEvent
 import com.xeniac.warrantyroster_manager.feature_change_email.presentation.components.CompactScreenWidthChangeEmailContent
+import com.xeniac.warrantyroster_manager.feature_change_email.presentation.components.EmailChangedSuccessfullyDialog
 import com.xeniac.warrantyroster_manager.feature_change_email.presentation.components.MediumScreenWidthChangeEmailContent
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -33,33 +37,31 @@ fun ChangeEmailScreen(
     viewModel: ChangeEmailViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
-    val activity = LocalActivity.current ?: context.findActivity()
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
     val state by viewModel.state.collectAsStateWithLifecycle()
-    val userState by userViewModel.userState.collectAsStateWithLifecycle()
 
-    // ObserverAsEvent(flow = viewModel.sendVerificationEmailEventChannel) { event ->
-    //     when (event) {
-    //         UiEvent.ForceLogoutUnauthorizedUser -> {
-    //             userViewModel.onAction(UserAction.Logout)
-    //         }
-    //         UiEvent.ShowOfflineSnackbar -> context.showOfflineSnackbar(
-    //             scope = scope,
-    //             snackbarHostState = snackbarHostState,
-    //             onAction = { viewModel.onAction(SettingsAction.SendVerificationEmail) }
-    //         )
-    //         is UiEvent.ShowLongSnackbar -> context.showLongSnackbar(
-    //             message = event.message,
-    //             scope = scope,
-    //             snackbarHostState = snackbarHostState
-    //         )
-    //         else -> Unit
-    //     }
-    // }
+    ObserverAsEvent(flow = viewModel.changeUserEmailEventChannel) { event ->
+        when (event) {
+            UiEvent.ForceLogoutUnauthorizedUser -> {
+                userViewModel.onAction(UserAction.Logout)
+            }
+            UiEvent.ShowOfflineSnackbar -> context.showOfflineSnackbar(
+                scope = scope,
+                snackbarHostState = snackbarHostState,
+                onAction = { viewModel.onAction(ChangeEmailAction.ChangeUserEmail) }
+            )
+            is UiEvent.ShowLongSnackbar -> context.showLongSnackbar(
+                message = event.message,
+                scope = scope,
+                snackbarHostState = snackbarHostState
+            )
+            else -> Unit
+        }
+    }
 
     Scaffold(
         snackbarHost = { SwipeableSnackbar(hostState = snackbarHostState) },
@@ -88,5 +90,8 @@ fun ChangeEmailScreen(
         }
     }
 
-    // TODO: SUCCESS DIALOG
+    EmailChangedSuccessfullyDialog(
+        isVisible = state.isEmailChangedSuccessfullyDialogVisible,
+        onDismiss = { viewModel.onAction(ChangeEmailAction.DismissEmailChangedSuccessfullyDialog) }
+    )
 }

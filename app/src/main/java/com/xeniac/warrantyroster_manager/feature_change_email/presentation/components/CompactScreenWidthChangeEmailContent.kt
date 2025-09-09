@@ -57,7 +57,7 @@ fun CompactScreenWidthChangeEmailContent(
         Spacer(modifier = Modifier.height(8.dp))
 
         ChangeEmailTextFields(
-            isSubmitLoading = state.isSubmitLoading,
+            isSubmitLoading = state.isChangeUserEmailLoading,
             passwordState = state.passwordState,
             newEmailState = state.newEmailState,
             onAction = onAction
@@ -66,11 +66,11 @@ fun CompactScreenWidthChangeEmailContent(
         Spacer(modifier = Modifier.height(40.dp))
 
         BigButton(
-            isLoading = state.isSubmitLoading,
+            isLoading = state.isChangeUserEmailLoading,
             text = stringResource(R.string.change_email_btn_change),
             onClick = {
                 focusManager.clearFocus()
-                onAction(ChangeEmailAction.SubmitNewEmail)
+                onAction(ChangeEmailAction.ChangeUserEmail)
             },
             modifier = Modifier.fillMaxWidth()
         )

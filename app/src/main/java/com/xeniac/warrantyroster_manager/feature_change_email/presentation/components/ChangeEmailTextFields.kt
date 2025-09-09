@@ -61,7 +61,7 @@ fun ChangeEmailTextFields(
             },
             keyboardAction = {
                 focusManager.clearFocus()
-                onAction(ChangeEmailAction.SubmitNewEmail)
+                onAction(ChangeEmailAction.ChangeUserEmail)
             },
             modifier = Modifier.fillMaxWidth()
         )

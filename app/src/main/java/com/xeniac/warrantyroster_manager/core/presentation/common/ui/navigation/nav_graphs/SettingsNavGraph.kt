@@ -32,6 +32,10 @@ fun NavGraphBuilder.settingsNavGraph(
     }
 
     composable<LinkedAccountsScreen> {
+        /**
+         * const val ERROR_FIREBASE_AUTH_ALREADY_LINKED = "User has already been linked to the given provider"
+         */
+
         Text(
             text = "LinkedAccountsScreen",
             modifier = Modifier

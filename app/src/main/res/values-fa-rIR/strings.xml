@@ -411,7 +411,7 @@
     <string name="change_email_invalid_credentials">رمز‌عبور وارد شده نادرست است.</string>
     <string name="change_email_error_same_email_as_current">آدرس ایمیل جدید نمی‌تواند با ایمیل فعلیتان یکسان باشد!</string>
     <string name="change_email_error_account_with_same_email_exists">حسابی با ایمیل وارد شده از قبل وجود دارد.</string>
-    <string name="change_email_success_dialog_message">آدرس ایمیل شما با موفقیت تغییر کرد.</string>
+    <string name="change_email_success_dialog_message">یک ایمیل حاوی لینک تأیید به آدرس ایمیل جدید شما ارسال شد. لطفاً برای تایید تغییر ایمیل خود، روی لینک کلیک کنید.</string>
     <string name="change_email_success_dialog_btn_confirm">تایید</string>
 
 

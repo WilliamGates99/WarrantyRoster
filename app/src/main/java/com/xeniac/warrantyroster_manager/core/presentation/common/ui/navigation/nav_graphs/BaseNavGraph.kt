@@ -48,6 +48,12 @@ fun SetupBaseNavGraph(
                     .fillMaxSize()
                     .wrapContentSize()
             )
+
+            /**
+             * const val ERROR_EMPTY_CATEGORY_LIST = "Category list is empty"
+             * const val ERROR_EMPTY_WARRANTY_LIST = "Warranty list is empty"
+             * const val ERROR_EMPTY_SEARCH_RESULT_LIST = "Search result list is empty"
+             */
         }
 
         settingsNavGraph(
