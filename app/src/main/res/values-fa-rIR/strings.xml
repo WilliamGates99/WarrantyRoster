@@ -415,20 +415,21 @@
     <string name="change_email_success_dialog_btn_confirm">تایید</string>
 
 
-    <string name="change_password_text_title">تغییر رمز‌عبور</string>
-    <string name="change_password_title_current_password">رمز‌عبور فعلی</string>
-    <string name="change_password_hint_current_password">رمز‌عبور فعلی خود را وارد کنید</string>
-    <string name="change_password_title_new_password">رمز‌عبور جدید</string>
-    <string name="change_password_hint_new_password">رمز‌عبور جدیدی را وارد کنید</string>
-    <string name="change_password_title_confirm_new_password">تکرار رمز‌عبور جدید</string>
-    <string name="change_password_hint_confirm_new_password">رمز‌عبور جدید را مجددا وارد کنید</string>
+    <string name="change_password_app_bar_title">تغییر رمز‌عبور</string>
+    <string name="change_email_textfield_current_password_title">رمز‌عبور فعلی</string>
+    <string name="change_email_textfield_current_password_hint">رمز‌عبور فعلی خود را وارد کنید</string>
+    <string name="change_email_textfield_new_password_title">رمز‌عبور جدید</string>
+    <string name="change_email_textfield_new_password_hint">رمز‌عبور جدیدی را وارد کنید</string>
+    <string name="change_email_textfield_confirm_new_password_title">تکرار رمز‌عبور جدید</string>
+    <string name="change_email_textfield_confirm_new_password_hint">رمز‌عبور جدید را مجددا وارد کنید</string>
     <string name="change_password_btn_change">تغییر رمز‌عبور</string>
-    <string name="change_password_error_blank_current">رمز‌عبور فعلی خود را وارد کنید!</string>
-    <string name="change_password_error_blank_new">رمز‌عبور جدیدی را وارد کنید!</string>
-    <string name="change_password_error_blank_confirm">رمز‌عبور جدید را مجددا وارد کنید!</string>
-    <string name="change_password_error_match">رمز‌عبور جدید و تکرار رمز‌عبور جدید وارد شده با هم مطابقت ندارند!</string>
-    <string name="change_password_error_credentials">رمز‌عبور فعلی وارد شده نادرست است.</string>
-    <string name="change_password_dialog_message">رمز‌عبور شما با موفقیت تغییر کرد.</string>
-    <string name="change_password_dialog_positive">تایید</string>
+    <string name="change_password_error_blank_current_password">رمز‌عبور فعلی خود را وارد کنید!</string>
+    <string name="change_password_error_blank_new_password">رمز‌عبور جدیدی را وارد کنید!</string>
+    <string name="change_password_error_short_new_password">رمز‌عبور جدید باید حداقل %d کاراکتر باشد!</string>
+    <string name="change_password_error_blank_confirm_new_password">رمز‌عبور جدید را مجددا وارد کنید!</string>
+    <string name="change_password_error_not_matching_new_passwords">رمز‌عبور جدید و تکرار رمز‌عبور جدید وارد شده با هم مطابقت ندارند!</string>
+    <string name="change_password_invalid_credentials">رمز‌عبور فعلی وارد شده نادرست است.</string>
+    <string name="change_password_success_dialog_message">رمز‌عبور شما با موفقیت تغییر کرد.</string>
+    <string name="change_password_success_dialog_positive">تایید</string>
 
 </resources>

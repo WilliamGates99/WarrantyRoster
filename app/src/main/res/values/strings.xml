@@ -417,20 +417,21 @@
     <string name="change_email_success_dialog_btn_confirm">Confirm</string>
 
 
-    <string name="change_password_text_title">Change Password</string>
-    <string name="change_password_title_current_password">Current Password</string>
-    <string name="change_password_hint_current_password">Enter your current password</string>
-    <string name="change_password_title_new_password">New Password</string>
-    <string name="change_password_hint_new_password">Enter a new password</string>
-    <string name="change_password_title_confirm_new_password">Confirm New Password</string>
-    <string name="change_password_hint_confirm_new_password">Re-enter the new password</string>
+    <string name="change_password_app_bar_title">Change Password</string>
+    <string name="change_email_textfield_current_password_title">Current Password</string>
+    <string name="change_email_textfield_current_password_hint">Enter your current password</string>
+    <string name="change_email_textfield_new_password_title">New Password</string>
+    <string name="change_email_textfield_new_password_hint">Enter a new password</string>
+    <string name="change_email_textfield_confirm_new_password_title">Confirm New Password</string>
+    <string name="change_email_textfield_confirm_new_password_hint">Re-enter the new password</string>
     <string name="change_password_btn_change">Change Password</string>
-    <string name="change_password_error_blank_current">Enter your current password!</string>
-    <string name="change_password_error_blank_new">Enter a new password!</string>
-    <string name="change_password_error_blank_confirm">Re-enter the new password!</string>
-    <string name="change_password_error_match">New password and confirm new password do not match!</string>
-    <string name="change_password_error_credentials">The provided credentials are incorrect.</string>
-    <string name="change_password_dialog_message">Your password has been successfully changed.</string>
-    <string name="change_password_dialog_positive">Confirm</string>
+    <string name="change_password_error_blank_current_password">Enter your current password!</string>
+    <string name="change_password_error_blank_new_password">Enter a new password!</string>
+    <string name="change_password_error_short_new_password">New password should be at least %d characters!</string>
+    <string name="change_password_error_blank_confirm_new_password">Re-enter the new password!</string>
+    <string name="change_password_error_not_matching_new_passwords">New password and confirm new password do not match!</string>
+    <string name="change_password_invalid_credentials">The provided credentials are incorrect.</string>
+    <string name="change_password_success_dialog_message">Your password has been successfully changed.</string>
+    <string name="change_password_success_dialog_positive">Confirm</string>
 
 </resources>
