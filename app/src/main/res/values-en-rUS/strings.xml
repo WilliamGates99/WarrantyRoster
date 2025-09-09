@@ -390,9 +390,9 @@
 
 
     <string name="linked_accounts_app_bar_title">Linked Accounts</string>
-    <string name="linked_accounts_title_google">Google</string>
-    <string name="linked_accounts_title_x">X</string>
-    <string name="linked_accounts_title_github">GitHub</string>
+    <string name="linked_accounts_providers_google_title">Google</string>
+    <string name="linked_accounts_providers_x_title">X</string>
+    <string name="linked_accounts_providers_github_title">GitHub</string>
     <string name="linked_accounts_status_connect">Connect</string>
     <string name="linked_accounts_status_disconnect">Disconnect</string>
     <string name="linked_accounts_error_email_exists_with_different_credentials">An account already exists with the same email address but different sign-in credentials.</string>

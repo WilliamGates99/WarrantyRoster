@@ -390,9 +390,9 @@
 
 
     <string name="linked_accounts_app_bar_title">حساب‌های متصل</string>
-    <string name="linked_accounts_title_google">گوگل</string>
-    <string name="linked_accounts_title_x">X</string>
-    <string name="linked_accounts_title_github">گیت‌هاب</string>
+    <string name="linked_accounts_providers_google_title">گوگل</string>
+    <string name="linked_accounts_providers_x_title">X</string>
+    <string name="linked_accounts_providers_github_title">گیت‌هاب</string>
     <string name="linked_accounts_status_connect">متصل کردن</string>
     <string name="linked_accounts_status_disconnect">قطع اتصال</string>
     <string name="linked_accounts_error_email_exists_with_different_credentials">حسابی با ایمیل وارد شده اما با روش‌های ورود متفاوت از قبل وجود دارد.</string>
