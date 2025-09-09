@@ -68,11 +68,18 @@ fun AccountProviderItem(
             .clickable(
                 enabled = !accountProvider.isLoading,
                 onClick = {
-                    // TODO: UNCOMMENT
-//                    when (accountProvider.isConnected) {
-//                        true -> onAction(LinkedAccountsAction.DisconnectAccount)
-//                        false -> onAction(LinkedAccountsAction.ConnectAccount)
-//                    }
+                    when (accountProvider.isConnected) {
+                        true -> onAction(
+                            LinkedAccountsAction.DisconnectAccount(
+                                accountProvider = accountProvider.accountProvider
+                            )
+                        )
+                        false -> onAction(
+                            LinkedAccountsAction.ConnectAccount(
+                                accountProvider = accountProvider.accountProvider
+                            )
+                        )
+                    }
                 }
             )
     ) {

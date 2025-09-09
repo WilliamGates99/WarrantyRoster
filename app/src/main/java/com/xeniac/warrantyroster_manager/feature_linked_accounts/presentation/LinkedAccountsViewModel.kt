@@ -44,6 +44,9 @@ class LinkedAccountsViewModel @Inject constructor(
     fun onAction(action: LinkedAccountsAction) {
         when (action) {
             LinkedAccountsAction.GetLinkedAccountProviders -> getLinkedAccountProviders()
+            // TODO: IMPLEMENT
+            is LinkedAccountsAction.ConnectAccount -> {}
+            is LinkedAccountsAction.DisconnectAccount -> {}
         }
     }
 
