@@ -122,7 +122,7 @@ private fun AccountProviderInfo(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(
         horizontal = 16.dp,
-        vertical = 20.dp
+        vertical = 16.dp
     ),
     titleStyle: TextStyle = LocalTextStyle.current.copy(
         fontSize = 16.sp,
@@ -170,7 +170,7 @@ private fun AccountProviderLogo(
     logo: Painter,
     contentDescription: String,
     modifier: Modifier = Modifier,
-    size: Dp = 32.dp
+    size: Dp = 40.dp
 ) {
     Image(
         painter = logo,
