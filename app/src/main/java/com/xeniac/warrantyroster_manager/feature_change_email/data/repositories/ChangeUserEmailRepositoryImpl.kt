@@ -46,7 +46,7 @@ class ChangeUserEmailRepositoryImpl @Inject constructor(
 
                 val authCredential = EmailAuthProvider.getCredential(
                     currentUser.email.orEmpty(),
-                    password
+                    password.trim()
                 )
                 currentUser.reauthenticate(authCredential).await()
 
