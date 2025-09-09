@@ -1,9 +1,5 @@
 package com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.nav_graphs
 
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.material3.Text
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -15,6 +11,7 @@ import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.SettingsScreen
 import com.xeniac.warrantyroster_manager.feature_change_email.presentation.ChangeEmailScreen
 import com.xeniac.warrantyroster_manager.feature_change_password.presentation.ChangePasswordScreen
+import com.xeniac.warrantyroster_manager.feature_linked_accounts.presentation.LinkedAccountsScreen
 import com.xeniac.warrantyroster_manager.feature_settings.presentation.SettingsScreen
 
 fun NavGraphBuilder.settingsNavGraph(
@@ -33,15 +30,9 @@ fun NavGraphBuilder.settingsNavGraph(
     }
 
     composable<LinkedAccountsScreen> {
-        /**
-         * const val ERROR_FIREBASE_AUTH_ALREADY_LINKED = "User has already been linked to the given provider"
-         */
-
-        Text(
-            text = "LinkedAccountsScreen",
-            modifier = Modifier
-                .fillMaxSize()
-                .wrapContentSize()
+        LinkedAccountsScreen(
+            userViewModel = userViewModel,
+            onNavigateUp = baseNavController::navigateUp
         )
     }
 

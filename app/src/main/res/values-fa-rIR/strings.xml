@@ -389,14 +389,14 @@
     <string name="settings_send_verification_email_error_email_not_provided">ایمیلی به حساب متصل نیست.</string>
 
 
-    <string name="linked_accounts_text_title">حساب‌های متصل</string>
+    <string name="linked_accounts_app_bar_title">حساب‌های متصل</string>
     <string name="linked_accounts_title_google">گوگل</string>
-    <string name="linked_accounts_title_twitter">توییتر</string>
-    <string name="linked_accounts_title_facebook">فیسبوک</string>
+    <string name="linked_accounts_title_x">X</string>
+    <string name="linked_accounts_title_github">گیت‌هاب</string>
     <string name="linked_accounts_status_connect">متصل کردن</string>
     <string name="linked_accounts_status_disconnect">قطع اتصال</string>
     <string name="linked_accounts_error_email_exists_with_different_credentials">حسابی با ایمیل وارد شده اما با روش‌های ورود متفاوت از قبل وجود دارد.</string>
-    <string name="linked_accounts_error_email_exists">حسابی با ایمیل وارد شده از قبل وجود دارد.</string>
+    <string name="linked_accounts_error_account_with_same_email_exists">حسابی با ایمیل وارد شده از قبل وجود دارد.</string>
 
 
     <string name="change_email_app_bar_title">تغییر آدرس ایمیل</string>
