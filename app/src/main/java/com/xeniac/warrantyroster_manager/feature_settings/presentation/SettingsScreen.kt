@@ -64,7 +64,7 @@ fun SettingsScreen(
     val snackbarHostState = remember { SnackbarHostState() }
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-    val horizontalPadding by remember { derivedStateOf { 16.dp } }
+    val horizontalPadding by remember { derivedStateOf { 8.dp } }
     val verticalPadding by remember { derivedStateOf { 24.dp } }
 
     val state by viewModel.state.collectAsStateWithLifecycle()
