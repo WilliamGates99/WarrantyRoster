@@ -9,6 +9,6 @@ import kotlinx.parcelize.Parcelize
 data class ChangeEmailState(
     val passwordState: PasswordTextFieldState = PasswordTextFieldState(),
     val newEmailState: CustomTextFieldState = CustomTextFieldState(),
-    val isEmailChangedSuccessfullyDialogVisible: Boolean = false,
+    val isVerificationEmailSentDialogVisible: Boolean? = null,
     val isChangeUserEmailLoading: Boolean = false
 ) : Parcelable

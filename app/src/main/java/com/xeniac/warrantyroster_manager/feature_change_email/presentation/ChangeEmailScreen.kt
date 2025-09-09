@@ -26,8 +26,8 @@ import com.xeniac.warrantyroster_manager.core.presentation.common.ui.utils.isWin
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.ObserverAsEvent
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiEvent
 import com.xeniac.warrantyroster_manager.feature_change_email.presentation.components.CompactScreenWidthChangeEmailContent
-import com.xeniac.warrantyroster_manager.feature_change_email.presentation.components.EmailChangedSuccessfullyDialog
 import com.xeniac.warrantyroster_manager.feature_change_email.presentation.components.MediumScreenWidthChangeEmailContent
+import com.xeniac.warrantyroster_manager.feature_change_email.presentation.components.VerificationEmailSentDialog
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -90,8 +90,9 @@ fun ChangeEmailScreen(
         }
     }
 
-    EmailChangedSuccessfullyDialog(
-        isVisible = state.isEmailChangedSuccessfullyDialogVisible,
-        onDismiss = { viewModel.onAction(ChangeEmailAction.DismissEmailChangedSuccessfullyDialog) }
+    VerificationEmailSentDialog(
+        isVisible = state.isVerificationEmailSentDialogVisible,
+        onNavigateUp = onNavigateUp,
+        onDismiss = { viewModel.onAction(ChangeEmailAction.DismissVerificationEmailSentDialog) }
     )
 }

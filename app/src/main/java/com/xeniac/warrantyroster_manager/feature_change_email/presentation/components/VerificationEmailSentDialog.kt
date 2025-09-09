@@ -18,6 +18,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,8 +38,8 @@ import com.xeniac.warrantyroster_manager.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EmailChangedSuccessfullyDialog(
-    isVisible: Boolean,
+fun VerificationEmailSentDialog(
+    isVisible: Boolean?,
     modifier: Modifier = Modifier,
     dialogProperties: DialogProperties = DialogProperties(
         dismissOnBackPress = true,
@@ -60,9 +61,17 @@ fun EmailChangedSuccessfullyDialog(
         fontWeight = FontWeight.Normal,
         color = AlertDialogDefaults.textContentColor
     ),
+    onNavigateUp: () -> Unit,
     onDismiss: () -> Unit
 ) {
-    if (isVisible) {
+    LaunchedEffect(isVisible) {
+        val shouldNavigateUp = isVisible == false
+        if (shouldNavigateUp) {
+            onNavigateUp()
+        }
+    }
+
+    if (isVisible == true) {
         BasicAlertDialog(
             onDismissRequest = onDismiss,
             properties = dialogProperties,

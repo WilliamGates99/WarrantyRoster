@@ -49,16 +49,16 @@ class ChangeEmailViewModel @Inject constructor(
 
     fun onAction(action: ChangeEmailAction) {
         when (action) {
-            ChangeEmailAction.DismissEmailChangedSuccessfullyDialog -> dismissEmailChangedSuccessfullyDialog()
+            ChangeEmailAction.DismissVerificationEmailSentDialog -> dismissVerificationEmailSentDialog()
             is ChangeEmailAction.PasswordChanged -> passwordChanged(action.newValue)
             is ChangeEmailAction.NewEmailChanged -> newEmailChanged(action.newValue)
             ChangeEmailAction.ChangeUserEmail -> changeUserEmail()
         }
     }
 
-    private fun dismissEmailChangedSuccessfullyDialog() = viewModelScope.launch {
+    private fun dismissVerificationEmailSentDialog() = viewModelScope.launch {
         _state.update {
-            it.copy(isEmailChangedSuccessfullyDialogVisible = false)
+            it.copy(isVerificationEmailSentDialogVisible = false)
         }
     }
 
@@ -128,7 +128,7 @@ class ChangeEmailViewModel @Inject constructor(
 
             when (val result = changeUserEmailResult.result) {
                 is Result.Success -> {
-                    _state.update { it.copy(isEmailChangedSuccessfullyDialogVisible = true) }
+                    _state.update { it.copy(isVerificationEmailSentDialogVisible = true) }
                 }
                 is Result.Error -> {
                     when (val error = result.error) {
