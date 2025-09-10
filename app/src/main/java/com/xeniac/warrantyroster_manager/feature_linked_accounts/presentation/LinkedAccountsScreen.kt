@@ -101,9 +101,9 @@ fun LinkedAccountsScreen(
                 return@Scaffold
             }
 
-            state.accountProviders.forEach { accountProvider ->
+            state.uiAccountProviders.forEach { uiAccountProvider ->
                 AccountProviderItem(
-                    accountProvider = accountProvider,
+                    uiAccountProvider = uiAccountProvider,
                     onAction = viewModel::onAction
                 )
             }

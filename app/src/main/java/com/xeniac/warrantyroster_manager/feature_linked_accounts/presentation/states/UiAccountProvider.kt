@@ -2,8 +2,8 @@ package com.xeniac.warrantyroster_manager.feature_linked_accounts.presentation.s
 
 import com.xeniac.warrantyroster_manager.feature_linked_accounts.domain.models.AccountProviders
 
-data class AccountProviderUi(
+data class UiAccountProvider(
     val accountProvider: AccountProviders,
-    val isConnected: Boolean = false,
+    val isLinked: Boolean = false,
     val isLoading: Boolean = false
 )

@@ -42,11 +42,11 @@ import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.Red
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicBlack
 import com.xeniac.warrantyroster_manager.feature_linked_accounts.domain.models.AccountProviders
 import com.xeniac.warrantyroster_manager.feature_linked_accounts.presentation.LinkedAccountsAction
-import com.xeniac.warrantyroster_manager.feature_linked_accounts.presentation.states.AccountProviderUi
+import com.xeniac.warrantyroster_manager.feature_linked_accounts.presentation.states.UiAccountProvider
 
 @Composable
 fun AccountProviderItem(
-    accountProvider: AccountProviderUi,
+    uiAccountProvider: UiAccountProvider,
     modifier: Modifier = Modifier,
     shape: Shape = RoundedCornerShape(12.dp),
     background: Color = MaterialTheme.colorScheme.surface,
@@ -66,31 +66,31 @@ fun AccountProviderItem(
             .clip(shape)
             .background(background)
             .clickable(
-                enabled = !accountProvider.isLoading,
+                enabled = !uiAccountProvider.isLoading,
                 onClick = {
-                    when (accountProvider.isConnected) {
-                        true -> when (accountProvider.accountProvider) {
-                            AccountProviders.GOOGLE -> onAction(LinkedAccountsAction.DisconnectGoogleAccount)
-                            AccountProviders.X -> onAction(LinkedAccountsAction.DisconnectXAccount)
-                            AccountProviders.GITHUB -> onAction(LinkedAccountsAction.DisconnectGithubAccount)
+                    when (uiAccountProvider.isLinked) {
+                        true -> when (uiAccountProvider.accountProvider) {
+                            AccountProviders.GOOGLE -> onAction(LinkedAccountsAction.UnlinkGoogleAccount)
+                            AccountProviders.X -> onAction(LinkedAccountsAction.UnlinkXAccount)
+                            AccountProviders.GITHUB -> onAction(LinkedAccountsAction.UnlinkGithubAccount)
                         }
-                        false -> when (accountProvider.accountProvider) {
-                            AccountProviders.GOOGLE -> onAction(LinkedAccountsAction.ConnectGoogleAccount)
-                            AccountProviders.X -> onAction(LinkedAccountsAction.ConnectXAccount)
-                            AccountProviders.GITHUB -> onAction(LinkedAccountsAction.ConnectGithubAccount)
+                        false -> when (uiAccountProvider.accountProvider) {
+                            AccountProviders.GOOGLE -> onAction(LinkedAccountsAction.LinkGoogleAccount)
+                            AccountProviders.X -> onAction(LinkedAccountsAction.LinkXAccount)
+                            AccountProviders.GITHUB -> onAction(LinkedAccountsAction.LinkGithubAccount)
                         }
                     }
                 }
             )
     ) {
         AccountProviderInfo(
-            isLoading = accountProvider.isLoading,
-            isConnected = accountProvider.isConnected,
-            accountProvider = accountProvider.accountProvider
+            isLoading = uiAccountProvider.isLoading,
+            isLinked = uiAccountProvider.isLinked,
+            accountProvider = uiAccountProvider.accountProvider
         )
 
         ConnectionIndicator(
-            isConnected = accountProvider.isConnected,
+            isLinked = uiAccountProvider.isLinked,
             modifier = Modifier.align(Alignment.TopStart)
         )
     }
@@ -98,12 +98,12 @@ fun AccountProviderItem(
 
 @Composable
 private fun ConnectionIndicator(
-    isConnected: Boolean,
+    isLinked: Boolean,
     modifier: Modifier = Modifier,
     padding: PaddingValues = PaddingValues(8.dp),
     size: Dp = 4.dp,
     shape: Shape = CircleShape,
-    color: Color = if (isConnected) Green else Red
+    color: Color = if (isLinked) Green else Red
 ) {
     Box(
         modifier = modifier
@@ -117,7 +117,7 @@ private fun ConnectionIndicator(
 @Composable
 private fun AccountProviderInfo(
     isLoading: Boolean,
-    isConnected: Boolean,
+    isLinked: Boolean,
     accountProvider: AccountProviders,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(
@@ -154,10 +154,10 @@ private fun AccountProviderInfo(
         )
 
         AnimatedContent(
-            targetState = isConnected,
+            targetState = isLinked,
             transitionSpec = { fadeIn().togetherWith(exit = fadeOut()) }
-        ) { isConnected ->
-            when (isConnected) {
+        ) { isLinked ->
+            when (isLinked) {
                 true -> DisconnectButton(isLoading = isLoading)
                 false -> ConnectButton(isLoading = isLoading)
             }

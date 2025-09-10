@@ -4,4 +4,7 @@ import dagger.Lazy
 
 data class LinkedAccountsUseCases(
     val getLinkedAccountProvidersUseCase: Lazy<GetLinkedAccountProvidersUseCase>,
+    val unlinkGoogleAccountUseCase: Lazy<UnlinkGoogleAccountUseCase>,
+    val unlinkXAccountUseCase: Lazy<UnlinkXAccountUseCase>,
+    val unlinkGithubAccountUseCase: Lazy<UnlinkGithubAccountUseCase>
 )
