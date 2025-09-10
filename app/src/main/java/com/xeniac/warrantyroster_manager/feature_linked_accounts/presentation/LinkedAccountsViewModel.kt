@@ -18,6 +18,7 @@ import com.xeniac.warrantyroster_manager.feature_linked_accounts.domain.errors.G
 import com.xeniac.warrantyroster_manager.feature_linked_accounts.domain.errors.LinkGithubAccountError
 import com.xeniac.warrantyroster_manager.feature_linked_accounts.domain.errors.LinkGoogleAccountError
 import com.xeniac.warrantyroster_manager.feature_linked_accounts.domain.errors.LinkXAccountError
+import com.xeniac.warrantyroster_manager.feature_linked_accounts.domain.errors.UnlinkGithubAccountError
 import com.xeniac.warrantyroster_manager.feature_linked_accounts.domain.errors.UnlinkGoogleAccountError
 import com.xeniac.warrantyroster_manager.feature_linked_accounts.domain.errors.UnlinkXAccountError
 import com.xeniac.warrantyroster_manager.feature_linked_accounts.domain.models.AccountProviders
@@ -574,7 +575,7 @@ class LinkedAccountsViewModel @Inject constructor(
             return
         }
 
-        linkedAccountsUseCases.unlinkGoogleAccountUseCase.get()().onStart {
+        linkedAccountsUseCases.unlinkGithubAccountUseCase.get()().onStart {
             _state.update {
                 it.copy(
                     uiAccountProviders = it.uiAccountProviders.map { uiAccountProvider ->
@@ -599,7 +600,7 @@ class LinkedAccountsViewModel @Inject constructor(
                 }
                 is Result.Error -> {
                     when (val error = result.error) {
-                        UnlinkGoogleAccountError.Network.FirebaseAuthUnauthorizedUser -> {
+                        UnlinkGithubAccountError.Network.FirebaseAuthUnauthorizedUser -> {
                             _unlinkGithubEventChannel.send(UiEvent.ForceLogoutUnauthorizedUser)
                         }
                         else -> {

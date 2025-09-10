@@ -20,7 +20,7 @@ enum class AccountProviders(
         titleId = R.string.linked_accounts_providers_x_title
     ),
     GITHUB(
-        id = "github.com", // TODO: CHANGE
+        id = "github.com",
         logoId = R.drawable.ic_core_social_github,
         titleId = R.string.linked_accounts_providers_github_title
     ),
