@@ -76,8 +76,8 @@ fun AccountProviderItem(
                         }
                         false -> when (uiAccountProvider.accountProvider) {
                             AccountProviders.GOOGLE -> onAction(LinkedAccountsAction.LinkGoogleAccount)
-                            AccountProviders.X -> onAction(LinkedAccountsAction.LinkXAccount)
-                            AccountProviders.GITHUB -> onAction(LinkedAccountsAction.LinkGithubAccount)
+                            AccountProviders.X -> onAction(LinkedAccountsAction.CheckPendingLinkXAccount)
+                            AccountProviders.GITHUB -> onAction(LinkedAccountsAction.CheckPendingLinkGithubAccount)
                         }
                     }
                 }

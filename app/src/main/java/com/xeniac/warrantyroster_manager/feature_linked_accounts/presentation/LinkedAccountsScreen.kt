@@ -1,5 +1,6 @@
 package com.xeniac.warrantyroster_manager.feature_linked_accounts.presentation
 
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
@@ -31,8 +32,11 @@ import com.xeniac.warrantyroster_manager.core.presentation.common.UserViewModel
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.CustomCenterAlignedTopAppBar
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.NetworkErrorMessage
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.SwipeableSnackbar
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.showLongSnackbar
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.showOfflineSnackbar
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.ObserverAsEvent
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiEvent
+import com.xeniac.warrantyroster_manager.core.presentation.common.utils.findActivity
 import com.xeniac.warrantyroster_manager.feature_linked_accounts.presentation.components.AccountProviderItem
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -43,6 +47,7 @@ fun LinkedAccountsScreen(
     viewModel: LinkedAccountsViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
+    val activity = LocalActivity.current ?: context.findActivity()
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -57,6 +62,144 @@ fun LinkedAccountsScreen(
             UiEvent.ForceLogoutUnauthorizedUser -> {
                 userViewModel.onAction(UserAction.Logout)
             }
+            else -> Unit
+        }
+    }
+
+    ObserverAsEvent(flow = viewModel.linkGoogleEventChannel) { event ->
+        when (event) {
+            UiEvent.ForceLogoutUnauthorizedUser -> {
+                userViewModel.onAction(UserAction.Logout)
+            }
+            UiEvent.ShowOfflineSnackbar -> context.showOfflineSnackbar(
+                scope = scope,
+                snackbarHostState = snackbarHostState,
+                onAction = { viewModel.onAction(LinkedAccountsAction.LinkGoogleAccount) }
+            )
+            is UiEvent.ShowLongSnackbar -> context.showLongSnackbar(
+                message = event.message,
+                scope = scope,
+                snackbarHostState = snackbarHostState
+            )
+            else -> Unit
+        }
+    }
+
+    ObserverAsEvent(flow = viewModel.linkXEventChannel) { event ->
+        when (event) {
+            LinkedAccountsUiEvent.StartActivityForLinkXAccount -> {
+                viewModel.firebaseAuth.get().currentUser?.let { currentUser ->
+                    val linkXAccountTask = currentUser.startActivityForLinkWithProvider(
+                        activity,
+                        viewModel.xOAuthProvider.get()
+                    )
+                    viewModel.onAction(
+                        LinkedAccountsAction.LinkXAccount(linkXAccountTask = linkXAccountTask)
+                    )
+                }
+            }
+            UiEvent.ForceLogoutUnauthorizedUser -> {
+                userViewModel.onAction(UserAction.Logout)
+            }
+            UiEvent.ShowOfflineSnackbar -> context.showOfflineSnackbar(
+                scope = scope,
+                snackbarHostState = snackbarHostState,
+                onAction = { viewModel.onAction(LinkedAccountsAction.CheckPendingLinkXAccount) }
+            )
+            is UiEvent.ShowLongSnackbar -> context.showLongSnackbar(
+                message = event.message,
+                scope = scope,
+                snackbarHostState = snackbarHostState
+            )
+            else -> Unit
+        }
+    }
+
+    ObserverAsEvent(flow = viewModel.linkGithubEventChannel) { event ->
+        when (event) {
+            LinkedAccountsUiEvent.StartActivityForLinkGithubAccount -> {
+                viewModel.firebaseAuth.get().currentUser?.let { currentUser ->
+                    val linkGithubAccountTask = currentUser.startActivityForLinkWithProvider(
+                        activity,
+                        viewModel.githubOAuthProvider.get()
+                    )
+                    viewModel.onAction(
+                        LinkedAccountsAction.LinkGithubAccount(
+                            linkGithubAccountTask = linkGithubAccountTask
+                        )
+                    )
+                }
+            }
+            UiEvent.ForceLogoutUnauthorizedUser -> {
+                userViewModel.onAction(UserAction.Logout)
+            }
+            UiEvent.ShowOfflineSnackbar -> context.showOfflineSnackbar(
+                scope = scope,
+                snackbarHostState = snackbarHostState,
+                onAction = { viewModel.onAction(LinkedAccountsAction.CheckPendingLinkGithubAccount) }
+            )
+            is UiEvent.ShowLongSnackbar -> context.showLongSnackbar(
+                message = event.message,
+                scope = scope,
+                snackbarHostState = snackbarHostState
+            )
+            else -> Unit
+        }
+    }
+
+    ObserverAsEvent(flow = viewModel.unlinkGoogleEventChannel) { event ->
+        when (event) {
+            UiEvent.ForceLogoutUnauthorizedUser -> {
+                userViewModel.onAction(UserAction.Logout)
+            }
+            UiEvent.ShowOfflineSnackbar -> context.showOfflineSnackbar(
+                scope = scope,
+                snackbarHostState = snackbarHostState,
+                onAction = { viewModel.onAction(LinkedAccountsAction.UnlinkGoogleAccount) }
+            )
+            is UiEvent.ShowLongSnackbar -> context.showLongSnackbar(
+                message = event.message,
+                scope = scope,
+                snackbarHostState = snackbarHostState
+            )
+            else -> Unit
+        }
+    }
+
+    ObserverAsEvent(flow = viewModel.unlinkXEventChannel) { event ->
+        when (event) {
+            UiEvent.ForceLogoutUnauthorizedUser -> {
+                userViewModel.onAction(UserAction.Logout)
+            }
+            UiEvent.ShowOfflineSnackbar -> context.showOfflineSnackbar(
+                scope = scope,
+                snackbarHostState = snackbarHostState,
+                onAction = { viewModel.onAction(LinkedAccountsAction.UnlinkXAccount) }
+            )
+            is UiEvent.ShowLongSnackbar -> context.showLongSnackbar(
+                message = event.message,
+                scope = scope,
+                snackbarHostState = snackbarHostState
+            )
+            else -> Unit
+        }
+    }
+
+    ObserverAsEvent(flow = viewModel.unlinkGithubEventChannel) { event ->
+        when (event) {
+            UiEvent.ForceLogoutUnauthorizedUser -> {
+                userViewModel.onAction(UserAction.Logout)
+            }
+            UiEvent.ShowOfflineSnackbar -> context.showOfflineSnackbar(
+                scope = scope,
+                snackbarHostState = snackbarHostState,
+                onAction = { viewModel.onAction(LinkedAccountsAction.UnlinkGithubAccount) }
+            )
+            is UiEvent.ShowLongSnackbar -> context.showLongSnackbar(
+                message = event.message,
+                scope = scope,
+                snackbarHostState = snackbarHostState
+            )
             else -> Unit
         }
     }
