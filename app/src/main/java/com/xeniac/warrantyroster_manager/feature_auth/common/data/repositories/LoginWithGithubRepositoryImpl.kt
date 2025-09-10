@@ -19,7 +19,9 @@ import dagger.Lazy
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
+import java.security.cert.CertPathValidatorException
 import javax.inject.Inject
+import javax.net.ssl.SSLHandshakeException
 import kotlin.coroutines.coroutineContext
 
 class LoginWithGithubRepositoryImpl @Inject constructor(
@@ -61,6 +63,14 @@ class LoginWithGithubRepositoryImpl @Inject constructor(
             }
 
             Result.Error(LoginWithGithubError.Network.SomethingWentWrong)
+        } catch (e: SSLHandshakeException) {
+            Timber.e("Login with Github SSLHandshakeException:")
+            e.printStackTrace()
+            Result.Error(LoginWithGithubError.Network.SSLHandshakeException)
+        } catch (e: CertPathValidatorException) {
+            Timber.e("Login with Github CertPathValidatorException:")
+            e.printStackTrace()
+            Result.Error(LoginWithGithubError.Network.CertPathValidatorException)
         } catch (e: FirebaseAuthInvalidUserException) {
             Timber.e("Login with Github FirebaseAuthInvalidUserException:")
             e.printStackTrace()

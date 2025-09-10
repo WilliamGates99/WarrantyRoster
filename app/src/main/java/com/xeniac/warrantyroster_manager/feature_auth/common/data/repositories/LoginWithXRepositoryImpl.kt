@@ -19,7 +19,9 @@ import dagger.Lazy
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
+import java.security.cert.CertPathValidatorException
 import javax.inject.Inject
+import javax.net.ssl.SSLHandshakeException
 import kotlin.coroutines.coroutineContext
 
 class LoginWithXRepositoryImpl @Inject constructor(
@@ -61,6 +63,14 @@ class LoginWithXRepositoryImpl @Inject constructor(
             }
 
             Result.Error(LoginWithXError.Network.SomethingWentWrong)
+        } catch (e: SSLHandshakeException) {
+            Timber.e("Login with X SSLHandshakeException:")
+            e.printStackTrace()
+            Result.Error(LoginWithXError.Network.SSLHandshakeException)
+        } catch (e: CertPathValidatorException) {
+            Timber.e("Login with X CertPathValidatorException:")
+            e.printStackTrace()
+            Result.Error(LoginWithXError.Network.CertPathValidatorException)
         } catch (e: FirebaseAuthInvalidUserException) {
             Timber.e("Login with X FirebaseAuthInvalidUserException:")
             e.printStackTrace()
