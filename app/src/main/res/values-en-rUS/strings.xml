@@ -74,8 +74,9 @@
     <string name="auth_method_google_error_corrupted_or_expired_credential">The provided credential is corrupted or has expired.</string>
     <string name="auth_method_google_error_unexpected_credential_type">Credential is not of type Google ID!</string>
     <string name="auth_method_google_error_invalid_google_id_token">Received an invalid Google ID token response.</string>
-    <string name="auth_method_google_error_account_not_exist">The account with the provided email does not exist.</string>
-    <string name="auth_method_google_error_email_exists_with_different_credentials">An account already exists with the same email address but different sign-in credentials.</string>
+    <string name="auth_other_methods_error_account_not_exist">The account with the provided email does not exist.</string>
+    <string name="auth_other_methods_error_corrupted_or_expired_credential">The provided credential is corrupted or has expired.</string>
+    <string name="auth_other_methods_error_email_exists_with_different_credentials">An account already exists with the same email address but different sign-in credentials.</string>
 
 
     <string name="login_description">Let\'s log you in.</string>
@@ -399,6 +400,7 @@
     <string name="linked_accounts_google_error_corrupted_or_expired_credential">The provided credential is corrupted or has expired.</string>
     <string name="linked_accounts_google_error_unexpected_credential_type">Credential is not of type Google ID!</string>
     <string name="linked_accounts_google_error_invalid_google_id_token">Received an invalid Google ID token response.</string>
+    <string name="linked_accounts_error_corrupted_or_expired_credential">The provided credential is corrupted or has expired.</string>
     <string name="linked_accounts_error_email_exists_with_different_credentials">An account already exists with the same email address but different sign-in credentials.</string>
 
 

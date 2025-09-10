@@ -1,9 +1,13 @@
 package com.xeniac.warrantyroster_manager.feature_linked_accounts.di
 
+import com.xeniac.warrantyroster_manager.feature_linked_accounts.data.repositories.LinkGithubAccountRepositoryImpl
 import com.xeniac.warrantyroster_manager.feature_linked_accounts.data.repositories.LinkGoogleAccountRepositoryImpl
+import com.xeniac.warrantyroster_manager.feature_linked_accounts.data.repositories.LinkXAccountRepositoryImpl
 import com.xeniac.warrantyroster_manager.feature_linked_accounts.data.repositories.LinkedAccountsRepositoryImpl
 import com.xeniac.warrantyroster_manager.feature_linked_accounts.data.repositories.UnlinkAccountsRepositoryImpl
+import com.xeniac.warrantyroster_manager.feature_linked_accounts.domain.repositories.LinkGithubAccountRepository
 import com.xeniac.warrantyroster_manager.feature_linked_accounts.domain.repositories.LinkGoogleAccountRepository
+import com.xeniac.warrantyroster_manager.feature_linked_accounts.domain.repositories.LinkXAccountRepository
 import com.xeniac.warrantyroster_manager.feature_linked_accounts.domain.repositories.LinkedAccountsRepository
 import com.xeniac.warrantyroster_manager.feature_linked_accounts.domain.repositories.UnlinkAccountsRepository
 import dagger.Binds
@@ -27,6 +31,18 @@ abstract class RepositoryModule {
     abstract fun bindLinkGoogleAccountRepository(
         linkGoogleAccountRepositoryImpl: LinkGoogleAccountRepositoryImpl
     ): LinkGoogleAccountRepository
+
+    @Binds
+    @ViewModelScoped
+    abstract fun bindLinkXAccountRepository(
+        linkXAccountRepositoryImpl: LinkXAccountRepositoryImpl
+    ): LinkXAccountRepository
+
+    @Binds
+    @ViewModelScoped
+    abstract fun bindLinkGithubAccountRepository(
+        linkGithubAccountRepositoryImpl: LinkGithubAccountRepositoryImpl
+    ): LinkGithubAccountRepository
 
     @Binds
     @ViewModelScoped

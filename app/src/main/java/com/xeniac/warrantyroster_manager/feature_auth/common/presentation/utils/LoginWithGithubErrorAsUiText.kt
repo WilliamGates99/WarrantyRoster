@@ -14,9 +14,9 @@ fun LoginWithGithubError.asUiText(): UiText = when (this) {
     LoginWithGithubError.Network.FirebaseTooManyRequestsException -> UiText.StringResource(R.string.error_firebase_device_blocked)
     LoginWithGithubError.Network.Firebase403 -> UiText.StringResource(R.string.error_firebase_403)
 
-    LoginWithGithubError.Network.FirebaseAuthInvalidUserException -> UiText.StringResource(R.string.auth_method_google_error_account_not_exist)
-    LoginWithGithubError.Network.FirebaseAuthInvalidCredentialsException -> UiText.StringResource(R.string.auth_method_google_error_corrupted_or_expired_credential)
-    LoginWithGithubError.Network.FirebaseAuthUserCollisionException -> UiText.StringResource(R.string.auth_method_google_error_email_exists_with_different_credentials)
+    LoginWithGithubError.Network.FirebaseAuthInvalidUserException -> UiText.StringResource(R.string.auth_other_methods_error_account_not_exist)
+    LoginWithGithubError.Network.FirebaseAuthInvalidCredentialsException -> UiText.StringResource(R.string.auth_other_methods_error_corrupted_or_expired_credential)
+    LoginWithGithubError.Network.FirebaseAuthUserCollisionException -> UiText.StringResource(R.string.auth_other_methods_error_email_exists_with_different_credentials)
 
     LoginWithGithubError.Network.SomethingWentWrong -> UiText.StringResource(R.string.error_something_went_wrong)
 }
