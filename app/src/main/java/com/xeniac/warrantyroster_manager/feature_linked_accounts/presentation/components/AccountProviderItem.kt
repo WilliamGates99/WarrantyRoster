@@ -69,16 +69,16 @@ fun AccountProviderItem(
                 enabled = !accountProvider.isLoading,
                 onClick = {
                     when (accountProvider.isConnected) {
-                        true -> onAction(
-                            LinkedAccountsAction.DisconnectAccount(
-                                accountProvider = accountProvider.accountProvider
-                            )
-                        )
-                        false -> onAction(
-                            LinkedAccountsAction.ConnectAccount(
-                                accountProvider = accountProvider.accountProvider
-                            )
-                        )
+                        true -> when (accountProvider.accountProvider) {
+                            AccountProviders.GOOGLE -> onAction(LinkedAccountsAction.DisconnectGoogleAccount)
+                            AccountProviders.X -> onAction(LinkedAccountsAction.DisconnectXAccount)
+                            AccountProviders.GITHUB -> onAction(LinkedAccountsAction.DisconnectGithubAccount)
+                        }
+                        false -> when (accountProvider.accountProvider) {
+                            AccountProviders.GOOGLE -> onAction(LinkedAccountsAction.ConnectGoogleAccount)
+                            AccountProviders.X -> onAction(LinkedAccountsAction.ConnectXAccount)
+                            AccountProviders.GITHUB -> onAction(LinkedAccountsAction.ConnectGithubAccount)
+                        }
                     }
                 }
             )

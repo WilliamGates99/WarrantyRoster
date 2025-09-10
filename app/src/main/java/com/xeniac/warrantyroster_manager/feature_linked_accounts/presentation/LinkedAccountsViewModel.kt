@@ -44,9 +44,12 @@ class LinkedAccountsViewModel @Inject constructor(
     fun onAction(action: LinkedAccountsAction) {
         when (action) {
             LinkedAccountsAction.GetLinkedAccountProviders -> getLinkedAccountProviders()
-            // TODO: IMPLEMENT
-            is LinkedAccountsAction.ConnectAccount -> {}
-            is LinkedAccountsAction.DisconnectAccount -> {}
+            LinkedAccountsAction.ConnectGoogleAccount -> connectGoogleAccount()
+            LinkedAccountsAction.ConnectXAccount -> connectXAccount()
+            LinkedAccountsAction.ConnectGithubAccount -> connectGithubAccount()
+            LinkedAccountsAction.DisconnectGoogleAccount -> disconnectGoogleAccount()
+            LinkedAccountsAction.DisconnectXAccount -> disconnectXAccount()
+            LinkedAccountsAction.DisconnectGithubAccount -> disconnectGithubAccount()
         }
     }
 
@@ -90,5 +93,29 @@ class LinkedAccountsViewModel @Inject constructor(
                 it.copy(isLinkedAccountProvidersLoading = false)
             }
         }.launchIn(scope = viewModelScope)
+    }
+
+    private fun connectGoogleAccount() {
+
+    }
+
+    private fun connectXAccount() {
+
+    }
+
+    private fun connectGithubAccount() {
+
+    }
+
+    private fun disconnectGoogleAccount() {
+
+    }
+
+    private fun disconnectXAccount() {
+
+    }
+
+    private fun disconnectGithubAccount() {
+
     }
 }
