@@ -9,6 +9,8 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.OAuthProvider
+import com.xeniac.warrantyroster_manager.core.di.GithubQualifier
+import com.xeniac.warrantyroster_manager.core.di.XQualifier
 import com.xeniac.warrantyroster_manager.core.domain.models.Result
 import com.xeniac.warrantyroster_manager.core.domain.utils.convertDigitsToEnglish
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.ConfirmPasswordChecker
@@ -16,8 +18,6 @@ import com.xeniac.warrantyroster_manager.core.presentation.common.utils.Event
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.NetworkObserverHelper.hasNetworkConnection
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.PasswordStrengthCalculator
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiEvent
-import com.xeniac.warrantyroster_manager.feature_auth.common.di.GithubQualifier
-import com.xeniac.warrantyroster_manager.feature_auth.common.di.XQualifier
 import com.xeniac.warrantyroster_manager.feature_auth.common.domain.errors.GetGoogleCredentialError
 import com.xeniac.warrantyroster_manager.feature_auth.common.domain.errors.LoginWithGithubError
 import com.xeniac.warrantyroster_manager.feature_auth.common.domain.errors.LoginWithXError
