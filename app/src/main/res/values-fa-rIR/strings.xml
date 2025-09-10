@@ -395,8 +395,11 @@
     <string name="linked_accounts_providers_github_title">گیت‌هاب</string>
     <string name="linked_accounts_provider_action_connect">متصل کردن</string>
     <string name="linked_accounts_provider_action_disconnect">قطع اتصال</string>
+    <string name="linked_accounts_google_error_access_credential_manager">دسترسی به Credential Manager امکان پذیر نیست.</string>
+    <string name="linked_accounts_google_error_corrupted_or_expired_credential">فرایند ورود به حساب کاربری منقضی یا دچار نقص شده است.</string>
+    <string name="linked_accounts_google_error_unexpected_credential_type">Credential is not of type Google ID!</string>
+    <string name="linked_accounts_google_error_invalid_google_id_token">Received an invalid Google ID token response.</string>
     <string name="linked_accounts_error_email_exists_with_different_credentials">حسابی با ایمیل وارد شده اما با روش‌های ورود متفاوت از قبل وجود دارد.</string>
-    <string name="linked_accounts_error_account_with_same_email_exists">حسابی با ایمیل وارد شده از قبل وجود دارد.</string>
 
 
     <string name="change_email_app_bar_title">تغییر آدرس ایمیل</string>

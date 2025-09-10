@@ -8,10 +8,13 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
 import androidx.datastore.preferences.preferencesDataStoreFile
+import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.OAuthProvider
 import com.google.firebase.auth.auth
 import com.xeniac.warrantyroster_manager.BuildConfig
+import com.xeniac.warrantyroster_manager.core.domain.models.AppLocale
 import com.xeniac.warrantyroster_manager.core.domain.models.AppTheme
 import com.xeniac.warrantyroster_manager.core.domain.models.MiscellaneousPreferences
 import com.xeniac.warrantyroster_manager.core.domain.models.MiscellaneousPreferencesSerializer
@@ -52,6 +55,7 @@ import kotlinx.serialization.json.Json
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.util.Locale
+import javax.inject.Qualifier
 import javax.inject.Singleton
 
 @Module
@@ -179,6 +183,43 @@ internal object AppModule {
     ): CredentialManager = CredentialManager.create(context)
 
     @Provides
+    @Singleton
+    fun provideGoogleIdOption(): GetGoogleIdOption = GetGoogleIdOption.Builder().apply {
+        setServerClientId(BuildConfig.AUTH_GOOGLE_SERVER_CLIENT_ID)
+        setFilterByAuthorizedAccounts(false) // Only show accounts previously used to sign in
+        setAutoSelectEnabled(false)
+        setRequestVerifiedPhoneNumber(false)
+    }.build()
+
+    @Provides
+    @Singleton
+    @XQualifier
+    fun provideXOAuthProvider(
+        settingsDataStoreRepository: SettingsDataStoreRepository
+    ): OAuthProvider = OAuthProvider.newBuilder("twitter.com").apply {
+        val currentAppLocale = settingsDataStoreRepository.getCurrentAppLocale()
+        val xWebsiteLanguage = when (currentAppLocale) {
+            AppLocale.DEFAULT -> "en"
+            AppLocale.ENGLISH_US -> "en"
+            AppLocale.ENGLISH_GB -> "en"
+            AppLocale.FARSI_IR -> "fa"
+        }
+        addCustomParameter("lang", xWebsiteLanguage)
+    }.build()
+
+    @Provides
+    @Singleton
+    @GithubQualifier
+    fun provideGitHubOAuthProvider(
+    ): OAuthProvider = OAuthProvider.newBuilder("github.com").apply {
+        addCustomParameter("allow_signup", "true") // Default = True
+        scopes = scopes + listOf(
+            "read:user",
+            "user:email"
+        )
+    }.build()
+
+    @Provides
     fun provideAppTheme(
         settingsDataStoreRepository: SettingsDataStoreRepository
     ): AppTheme = settingsDataStoreRepository.getCurrentAppThemeSynchronously()
@@ -190,3 +231,11 @@ internal object AppModule {
         /* symbols = */ DecimalFormatSymbols(Locale.US)
     )
 }
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class XQualifier
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class GithubQualifier

@@ -2,7 +2,9 @@ package com.xeniac.warrantyroster_manager.feature_linked_accounts.di
 
 import com.xeniac.warrantyroster_manager.feature_linked_accounts.domain.repositories.LinkedAccountsRepository
 import com.xeniac.warrantyroster_manager.feature_linked_accounts.domain.repositories.UnlinkAccountsRepository
+import com.xeniac.warrantyroster_manager.feature_linked_accounts.domain.use_cases.GetGoogleCredentialUseCase
 import com.xeniac.warrantyroster_manager.feature_linked_accounts.domain.use_cases.GetLinkedAccountProvidersUseCase
+import com.xeniac.warrantyroster_manager.feature_linked_accounts.domain.use_cases.LinkGoogleAccountUseCase
 import com.xeniac.warrantyroster_manager.feature_linked_accounts.domain.use_cases.LinkedAccountsUseCases
 import com.xeniac.warrantyroster_manager.feature_linked_accounts.domain.use_cases.UnlinkGithubAccountUseCase
 import com.xeniac.warrantyroster_manager.feature_linked_accounts.domain.use_cases.UnlinkGoogleAccountUseCase
@@ -45,11 +47,15 @@ internal object LinkedAccountsModule {
     @ViewModelScoped
     fun provideLinkedAccountsUseCases(
         getLinkedAccountProvidersUseCase: GetLinkedAccountProvidersUseCase,
+        getGoogleCredentialUseCase: GetGoogleCredentialUseCase,
+        linkGoogleAccountUseCase: LinkGoogleAccountUseCase,
         unlinkGoogleAccountUseCase: UnlinkGoogleAccountUseCase,
         unlinkXAccountUseCase: UnlinkXAccountUseCase,
         unlinkGithubAccountUseCase: UnlinkGithubAccountUseCase
     ): LinkedAccountsUseCases = LinkedAccountsUseCases(
         { getLinkedAccountProvidersUseCase },
+        { getGoogleCredentialUseCase },
+        { linkGoogleAccountUseCase },
         { unlinkGoogleAccountUseCase },
         { unlinkXAccountUseCase },
         { unlinkGithubAccountUseCase }
