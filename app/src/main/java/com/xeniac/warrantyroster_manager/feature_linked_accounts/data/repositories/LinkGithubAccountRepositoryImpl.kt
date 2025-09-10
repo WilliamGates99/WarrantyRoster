@@ -98,6 +98,13 @@ class LinkGithubAccountRepositoryImpl @Inject constructor(
             Timber.e("Link Github account FirebaseAuthWebException:")
             e.printStackTrace()
             when {
+                e.message?.contains(
+                    other = "User has already been linked to the given provider.",
+                    ignoreCase = true
+                ) == true -> {
+                    // Firebase Auth gives this exception, even though the account is linked successfully
+                    Result.Success(Unit)
+                }
                 isFirebase403Error(e.message) -> Result.Error(LinkGithubAccountError.Network.Firebase403)
                 e.message?.contains(
                     other = "An internal error has occurred",
