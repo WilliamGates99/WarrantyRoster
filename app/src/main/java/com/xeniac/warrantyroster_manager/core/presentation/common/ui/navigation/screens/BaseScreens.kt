@@ -6,7 +6,13 @@ import kotlinx.serialization.Serializable
 data object WarrantiesScreen
 
 @Serializable
+data class WarrantyDetailsScreen(
+    // TODO: REPLACE WITH WARRANTY
+    val warranty: String
+)
+
+@Serializable
 data class UpsertWarrantyScreen(
     // TODO: REPLACE WITH WARRANTY
-    val updatingWarrantyId: String? = null
+    val updatingWarranty: String? = null
 )
