@@ -99,6 +99,7 @@ firebase-perf = { group = "com.google.firebase", name = "firebase-perf" } # Perf
 firebase-appcheck-playintegrity = { group = "com.google.firebase", name = "firebase-appcheck-playintegrity" } # App Check
 firebase-appcheck-debug = { group = "com.google.firebase", name = "firebase-appcheck-debug" } # App Check - Debug
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth" } # Authentication
+firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore" } # Firestore Database
 
 # Credential Manager Library for Login with Google
 credentials = { module = "androidx.credentials:credentials", version.ref = "credentialManager" }
@@ -155,7 +156,7 @@ compose = ["compose-ui", "compose-material3", "material3-window-size-classes", "
 architectural-components = ["lifecycle-viewmodel-ktx", "lifecycle-viewmodel-compose", "lifecycle-runtime-ktx", "lifecycle-runtime-compose"]
 coroutines = ["kotlinx-coroutines-android", "kotlinx-coroutines-play-services"]
 ktor = ["ktor-client-core", "ktor-client-okhttp", "ktor-client-content-negotiation", "ktor-serialization-kotlinx-json", "ktor-client-logging"]
-firebase = ["firebase-analytics", "firebase-messaging", "firebase-crashlytics", "firebase-perf", "firebase-appcheck-playintegrity", "firebase-appcheck-debug", "firebase-auth"]
+firebase = ["firebase-analytics", "firebase-messaging", "firebase-crashlytics", "firebase-perf", "firebase-appcheck-playintegrity", "firebase-appcheck-debug", "firebase-auth", "firebase-firestore"]
 credential-manager = ["credentials", "credentials-play-services-auth", "googleid"]
 coil = ["coil-compose", "coil-svg", "coil-gif", "coil-network-ktor", "coil-network-cache-control"]
 google-play-inapp-apis = ["play-review-ktx", "play-app-update-ktx"]

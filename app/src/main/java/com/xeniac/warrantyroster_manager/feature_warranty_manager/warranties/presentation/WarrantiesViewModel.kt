@@ -27,8 +27,8 @@ class WarrantiesViewModel @Inject constructor(
     )
 
     fun onAction(action: WarrantiesAction) {
-        when (action) {
-            else -> TODO("Handle actions")
-        }
+//        when (action) {
+//            else -> TODO("Handle actions")
+//        }
     }
 }
