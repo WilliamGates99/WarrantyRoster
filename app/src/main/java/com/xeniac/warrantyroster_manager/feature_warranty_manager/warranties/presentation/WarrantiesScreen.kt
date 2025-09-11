@@ -85,7 +85,7 @@ fun WarrantiesScreen(
         },
         topBar = {
             CustomCenterAlignedTopAppBar(
-                title = stringResource(id = R.string.warranties_text_title),
+                title = stringResource(id = R.string.warranties_app_bar_title),
                 scrollBehavior = scrollBehavior
             )
         },

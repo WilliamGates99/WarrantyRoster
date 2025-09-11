@@ -13,6 +13,9 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.OAuthProvider
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.firestore
 import com.xeniac.warrantyroster_manager.BuildConfig
 import com.xeniac.warrantyroster_manager.core.domain.models.AppLocale
 import com.xeniac.warrantyroster_manager.core.domain.models.AppTheme
@@ -178,6 +181,24 @@ internal object AppModule {
 
     @Provides
     @Singleton
+    fun provideFirebaseFirestore(): FirebaseFirestore = Firebase.firestore
+
+    @Provides
+    @Singleton
+    @CategoriesCollection
+    fun provideFirestoreCategoriesCollectionRef(
+        firestore: FirebaseFirestore
+    ): CollectionReference = firestore.collection(/* collectionPath = */ "categories")
+
+    @Provides
+    @Singleton
+    @WarrantiesCollection
+    fun provideFirestoreWarrantiesCollectionRef(
+        firestore: FirebaseFirestore
+    ): CollectionReference = firestore.collection(/* collectionPath = */ "warranties")
+
+    @Provides
+    @Singleton
     fun provideCredentialManager(
         @ApplicationContext context: Context
     ): CredentialManager = CredentialManager.create(context)
@@ -239,3 +260,11 @@ annotation class XQualifier
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
 annotation class GithubQualifier
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class CategoriesCollection
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class WarrantiesCollection
