@@ -170,15 +170,23 @@
     <string name="base_app_review_dialog_btn_never">No, Thanks</string>
 
 
-    <string name="warranties_text_title">Warranty List</string>
-    <string name="warranties_menu_hint_search">Search by title…</string>
-    <string name="warranties_text_empty_warranties_list">There is currently no warranty on your list. You can add a warranty by clicking on the <font fgcolor="#1C53F4">Add Button</font>.</string>
-    <string name="warranties_text_empty_search_result_list">We couldn\'t find any warranty that matches your search for <font fgcolor="#1C53F4">%s</font>.</string>
-    <string name="warranties_list_ad_indicator" translatable="false">Ad</string>
-    <string name="warranties_list_status_valid">Valid</string>
-    <string name="warranties_list_status_soon">Soon</string>
-    <string name="warranties_list_status_expired">Expired</string>
-    <string name="warranties_list_is_lifetime">Lifetime Warranty</string>
+    <string name="warranties_app_bar_title">Warranty List</string>
+    <string name="warranties_search_content_description_">Search</string>
+    <string name="warranties_search_textfield_hint">Search by title…</string>
+    <!--Placeholder is for the color value-->
+    <string name="warranties_error_empty_list"><![CDATA[Your warranty list is empty right now. To get started, click <font color="#%s">Add Warranty</font> button.]]></string>
+    <!--
+    Placeholders:
+    • %1$s: Search Phrase Color
+    • %2$s: Search Phrase
+    • %3$s: Add Warranty Button Color
+    -->
+    <string name="warranties_search_error_empty_result"><![CDATA[No warranties match <font color="#%1$s"><b>%2$s</b></font> right now. Try adjusting your search or adding a new one with the <font color="#%3$s">Add Warranty</font> button.]]></string>
+    <string name="warranties_ad_indicator" translatable="false">Ad</string>
+    <string name="warranties_expiration_status_valid">Valid</string>
+    <string name="warranties_expiration_status_soon">Soon</string>
+    <string name="warranties_expiration_status_expired">Expired</string>
+    <string name="warranties_expiry_lifetime">Lifetime Warranty</string>
     <!--
     Placeholders:
     • %1$s: Month Name
@@ -190,8 +198,8 @@
     • en-GB: 25th of December, 2022
     • fa-IR: بیست و پنجم دسامبر، ۲۰۲۲
     -->
-    <string name="warranties_list_format_date">%1$s %2$s, %3$d</string>
-    <string-array name="warranties_list_day_with_suffix">
+    <string name="warranties_expiry_date">%1$s %2$s, %3$d</string>
+    <string-array name="warranties_day_with_suffix">
         <item>1st</item>
         <item>2nd</item>
         <item>3rd</item>
@@ -224,7 +232,7 @@
         <item>30th</item>
         <item>31st</item>
     </string-array>
-    <string-array name="warranties_list_month_name">
+    <string-array name="warranties_month_name">
         <item>January</item>
         <item>February</item>
         <item>March</item>
