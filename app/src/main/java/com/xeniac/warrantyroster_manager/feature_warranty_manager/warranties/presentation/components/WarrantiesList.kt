@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
@@ -49,20 +48,9 @@ fun WarrantiesList(
                 items = filteredWarranties,
                 key = { it.id }
             ) { warranty ->
-                Text(
-                    text = """
-                        Title: ${warranty.title}
-                        Category: ${warranty.category.title}
-                            """.trimIndent(),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable(
-                            role = Role.Button,
-                            onClick = {
-                                onNavigateToUpsertWarrantyScreen(warranty)
-                            }
-                        )
-                        .padding(horizontal = horizontalPadding)
+                WarrantyItem(
+                    warranty = warranty,
+                    onClick = { onNavigateToUpsertWarrantyScreen(warranty) }
                 )
             }
             return@LazyColumn
@@ -73,22 +61,32 @@ fun WarrantiesList(
                 items = warranties,
                 key = { it.id }
             ) { warranty ->
-                Text(
-                    text = """
-                        Title: ${warranty.title}
-                        Category: ${warranty.category.title}
-                            """.trimIndent(),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable(
-                            role = Role.Button,
-                            onClick = {
-                                onNavigateToUpsertWarrantyScreen(warranty)
-                            }
-                        )
-                        .padding(horizontal = horizontalPadding)
+                WarrantyItem(
+                    warranty = warranty,
+                    onClick = { onNavigateToUpsertWarrantyScreen(warranty) }
                 )
             }
         }
     }
+}
+
+@Composable
+private fun WarrantyItem(
+    warranty: Warranty,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
+) {
+    // TODO: IMPLEMENT
+    Text(
+        text = """
+            Title: ${warranty.title}
+            Category: ${warranty.category.title}
+        """.trimIndent(),
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable(
+                role = Role.Button,
+                onClick = onClick
+            )
+    )
 }
