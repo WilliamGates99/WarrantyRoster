@@ -40,7 +40,7 @@ class WarrantiesViewModel @Inject constructor(
         getCategories()
     }.stateIn(
         scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(stopTimeout = 30.seconds),
+        started = SharingStarted.WhileSubscribed(stopTimeout = 5.seconds),
         initialValue = _state.value
     )
 
