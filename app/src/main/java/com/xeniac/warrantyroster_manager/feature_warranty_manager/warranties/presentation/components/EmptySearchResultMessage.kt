@@ -30,10 +30,13 @@ import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.xeniac.warrantyroster_manager.R
+import com.xeniac.warrantyroster_manager.core.presentation.common.states.CustomTextFieldState
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGrayDark
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGrayDarkest
 
 @Composable
-fun EmptyWarrantiesMessage(
+fun EmptySearchResultMessage(
+    searchQueryState: CustomTextFieldState,
     modifier: Modifier = Modifier,
     paddingValues: PaddingValues = PaddingValues(all = 32.dp),
     messageStyle: TextStyle = LocalTextStyle.current.copy(
@@ -43,7 +46,10 @@ fun EmptyWarrantiesMessage(
         textAlign = TextAlign.Center,
         color = MaterialTheme.colorScheme.dynamicGrayDark
     ),
-    primaryColorHex: String = MaterialTheme.colorScheme.primary.toArgb()
+    queryColorHex: String = MaterialTheme.colorScheme.dynamicGrayDarkest.toArgb()
+        .toHexString(HexFormat.UpperCase)
+        .removeRange(0, 2),
+    addBtnColorHex: String = MaterialTheme.colorScheme.primary.toArgb()
         .toHexString(HexFormat.UpperCase)
         .removeRange(0, 2)
 ) {
@@ -62,10 +68,10 @@ fun EmptyWarrantiesMessage(
     ) {
         LottieAnimation(
             composition = rememberLottieComposition(
-                spec = LottieCompositionSpec.RawRes(resId = R.raw.anim_warranties_empty_list)
+                spec = LottieCompositionSpec.RawRes(resId = R.raw.anim_warranties_empty_search_result)
             ).value,
             iterations = 1,
-            speed = 1f,
+            speed = 2f,
             contentScale = ContentScale.Inside,
             modifier = modifier
                 .size(250.dp)
@@ -77,8 +83,10 @@ fun EmptyWarrantiesMessage(
         Text(
             text = AnnotatedString.fromHtml(
                 htmlString = stringResource(
-                    id = R.string.warranties_error_empty_list,
-                    primaryColorHex
+                    id = R.string.warranties_search_error_empty_result,
+                    queryColorHex,
+                    searchQueryState.value.text,
+                    addBtnColorHex
                 )
             ),
             style = messageStyle,

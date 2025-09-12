@@ -176,14 +176,14 @@
     <string name="warranties_search_content_description_">جستجو</string>
     <string name="warranties_search_textfield_hint">جستجو بر اساس عنوان…</string>
     <!--Placeholder is for the color value-->
-    <string name="warranties_error_empty_list"><![CDATA[در حال حاضر فهرست گارانتی‌های شما خالی است. برای شروع، روی دکمه <font color="#%s">افزودن گارانتی</font> کلیک کنید.]]></string>
+    <string name="warranties_error_empty_list"><![CDATA[در حال حاضر فهرست گارانتی‌های شما خالی است. برای شروع، روی دکمه <font color="#%s"><b>افزودن گارانتی</b></font> کلیک کنید.]]></string>
     <!--
     Placeholders:
     • %1$s: Search Phrase Color
     • %2$s: Search Phrase
     • %3$s: Add Warranty Button Color
     -->
-    <string name="warranties_search_error_empty_result"><![CDATA[هیچ گارانتی‌ای پیدا نکردیم که با جستجوی شما برای <font color="#%1$s"><b>%2$s</b></font> مطابقت داشته باشد. سعی کنید جستجوی خود را تعییر دهید یا با دکمه <font color="#%3$s">افزودن گارانتی</font>، مورد جدیدی اضافه کنید.]]></string>
+    <string name="warranties_search_error_empty_result"><![CDATA[هیچ گارانتی‌ای پیدا نکردیم که با جستجوی شما برای <font color="#%1$s"><b>%2$s</b></font> مطابقت داشته باشد.<br>سعی کنید جستجوی خود را تعییر دهید یا با دکمه <font color="#%3$s"><b>افزودن گارانتی</b></font>، مورد جدیدی اضافه کنید.]]></string>
     <string name="warranties_expiration_status_valid">معتبر</string>
     <string name="warranties_expiration_status_soon">به‌زودی</string>
     <string name="warranties_expiration_status_expired">منقضی‌شده</string>

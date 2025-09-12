@@ -176,14 +176,14 @@
     <string name="warranties_search_content_description_">Search</string>
     <string name="warranties_search_textfield_hint">Search by title…</string>
     <!--Placeholder is for the color value-->
-    <string name="warranties_error_empty_list"><![CDATA[Your warranty list is empty right now. To get started, click <font color="#%s">Add Warranty</font> button.]]></string>
+    <string name="warranties_error_empty_list"><![CDATA[Your warranty list is empty right now. To get started, click <font color="#%s"><b>Add Warranty</b></font> button.]]></string>
     <!--
     Placeholders:
     • %1$s: Search Phrase Color
     • %2$s: Search Phrase
     • %3$s: Add Warranty Button Color
     -->
-    <string name="warranties_search_error_empty_result"><![CDATA[No warranties match <font color="#%1$s"><b>%2$s</b></font> right now. Try adjusting your search or adding a new one with the <font color="#%3$s">Add Warranty</font> button.]]></string>
+    <string name="warranties_search_error_empty_result"><![CDATA[No warranties match <font color="#%1$s"><b>%2$s</b></font> right now.<br>Try adjusting your search or adding a new one with the <font color="#%3$s"><b>Add Warranty</b></font> button.]]></string>
     <string name="warranties_expiration_status_valid">Valid</string>
     <string name="warranties_expiration_status_soon">Soon</string>
     <string name="warranties_expiration_status_expired">Expired</string>

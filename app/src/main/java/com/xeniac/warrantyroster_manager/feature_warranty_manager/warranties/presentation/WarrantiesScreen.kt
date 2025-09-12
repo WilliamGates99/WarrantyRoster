@@ -26,6 +26,8 @@ import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.ObserverAsEvent
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiEvent
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.domain.models.Warranty
+import com.xeniac.warrantyroster_manager.feature_warranty_manager.warranties.presentation.components.EmptySearchResultMessage
+import com.xeniac.warrantyroster_manager.feature_warranty_manager.warranties.presentation.components.EmptyWarrantiesMessage
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.warranties.presentation.components.WarrantiesList
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -73,7 +75,7 @@ fun WarrantiesScreen(
                 .safeDrawingPadding()
         ) {
             if (with(state) { isCategoriesLoading || isWarrantiesLoading || isSearchWarrantiesLoading }) {
-                // TODO: ANIMATED CONTENT (SHIMMER EFFECT)
+                // TODO: ANIMATED CONTENT FOR LOADING (SHIMMER EFFECT)
                 Text(
                     text = "Loading",
                     modifier = Modifier
@@ -93,6 +95,16 @@ fun WarrantiesScreen(
                     message = errorMessage,
                     onRetryClick = { viewModel.onAction(WarrantiesAction.GetCategories) }
                 )
+                return@Scaffold
+            }
+
+            if (state.filteredWarranties?.isEmpty() == true) {
+                EmptySearchResultMessage(searchQueryState = state.searchQueryState)
+                return@Scaffold
+            }
+
+            if (state.warranties?.isEmpty() == true) {
+                EmptyWarrantiesMessage()
                 return@Scaffold
             }
 
