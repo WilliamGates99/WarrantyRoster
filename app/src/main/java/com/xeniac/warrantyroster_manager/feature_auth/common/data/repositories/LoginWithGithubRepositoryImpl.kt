@@ -10,7 +10,9 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseAuthWebException
+import com.xeniac.warrantyroster_manager.core.data.utils.FirebaseErrorsHelper.isAnotherAuthOperationInProgress
 import com.xeniac.warrantyroster_manager.core.data.utils.FirebaseErrorsHelper.isFirebase403Error
+import com.xeniac.warrantyroster_manager.core.data.utils.FirebaseErrorsHelper.isFirebaseCancellationException
 import com.xeniac.warrantyroster_manager.core.domain.models.Result
 import com.xeniac.warrantyroster_manager.core.domain.repositories.WarrantyRosterDataStoreRepository
 import com.xeniac.warrantyroster_manager.feature_auth.common.domain.errors.LoginWithGithubError
@@ -87,10 +89,8 @@ class LoginWithGithubRepositoryImpl @Inject constructor(
             Timber.e("Login with Github FirebaseAuthWebException:")
             e.printStackTrace()
             when {
-                e.message?.contains(
-                    other = "The web operation was canceled",
-                    ignoreCase = true
-                ) == true -> Result.Error(LoginWithGithubError.CancellationException)
+                isFirebaseCancellationException(e.message) -> Result.Error(LoginWithGithubError.CancellationException)
+                isAnotherAuthOperationInProgress(e.message) -> Result.Error(LoginWithGithubError.AnotherOperationIsInProgress)
                 else -> Result.Error(LoginWithGithubError.Network.SomethingWentWrong)
             }
         } catch (e: FirebaseNetworkException) {

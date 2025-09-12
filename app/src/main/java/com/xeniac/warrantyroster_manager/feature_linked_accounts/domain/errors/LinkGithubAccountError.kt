@@ -4,6 +4,7 @@ import com.xeniac.warrantyroster_manager.core.domain.errors.Error
 
 sealed class LinkGithubAccountError : Error() {
     data object CancellationException : LinkGithubAccountError()
+    data object AnotherOperationIsInProgress : LinkGithubAccountError()
 
     sealed class Network : LinkGithubAccountError() {
         data object SSLHandshakeException : Network()

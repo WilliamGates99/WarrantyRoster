@@ -6,6 +6,7 @@ import com.xeniac.warrantyroster_manager.feature_auth.common.domain.errors.Login
 
 fun LoginWithXError.asUiText(): UiText = when (this) {
     LoginWithXError.CancellationException -> UiText.DynamicString("The web operation was canceled by the user.")
+    LoginWithXError.AnotherOperationIsInProgress -> UiText.StringResource(R.string.auth_other_methods_error_another_operation_is_in_progress)
 
     LoginWithXError.Network.SSLHandshakeException -> UiText.StringResource(R.string.error_network_ssl_handshake)
     LoginWithXError.Network.CertPathValidatorException -> UiText.StringResource(R.string.error_network_cert_path_validator)

@@ -4,6 +4,7 @@ import com.xeniac.warrantyroster_manager.core.domain.errors.Error
 
 sealed class LinkXAccountError : Error() {
     data object CancellationException : LinkXAccountError()
+    data object AnotherOperationIsInProgress : LinkXAccountError()
 
     sealed class Network : LinkXAccountError() {
         data object SSLHandshakeException : Network()

@@ -4,6 +4,7 @@ import com.xeniac.warrantyroster_manager.core.domain.errors.Error
 
 sealed class LoginWithXError : Error() {
     data object CancellationException : LoginWithXError()
+    data object AnotherOperationIsInProgress : LoginWithXError()
 
     sealed class Network : LoginWithXError() {
         data object SSLHandshakeException : Network()
