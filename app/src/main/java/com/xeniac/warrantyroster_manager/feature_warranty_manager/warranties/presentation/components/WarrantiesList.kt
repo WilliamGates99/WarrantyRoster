@@ -45,6 +45,11 @@ fun WarrantiesList(
         modifier = modifier.fillMaxSize()
     ) {
         filteredWarranties?.let { filteredWarranties ->
+            if (filteredWarranties.isEmpty()) {
+                // TODO: EMPTY SEARCH RESULT
+                return@LazyColumn
+            }
+
             items(
                 items = filteredWarranties,
                 key = { it.id }
@@ -69,6 +74,11 @@ fun WarrantiesList(
         }
 
         warranties?.let { warranties ->
+            if (warranties.isEmpty()) {
+                item { EmptyWarrantiesMessage() }
+                return@LazyColumn
+            }
+
             items(
                 items = warranties,
                 key = { it.id }
