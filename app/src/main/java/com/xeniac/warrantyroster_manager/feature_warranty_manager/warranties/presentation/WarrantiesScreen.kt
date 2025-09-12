@@ -1,15 +1,18 @@
 package com.xeniac.warrantyroster_manager.feature_warranty_manager.warranties.presentation
 
 import androidx.activity.compose.LocalActivity
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
@@ -32,6 +35,7 @@ import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.core.presentation.common.UserViewModel
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.CustomCenterAlignedTopAppBar
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.SwipeableSnackbar
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.utils.addPaddingValues
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.findActivity
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -93,8 +97,7 @@ fun WarrantiesScreen(
             .fillMaxSize()
             .nestedScroll(scrollBehavior.nestedScrollConnection)
     ) { innerPadding ->
-        // TODO: ANIMATED CONTENT (SHIMMER EFFECT)
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .windowInsetsPadding(
@@ -104,24 +107,52 @@ fun WarrantiesScreen(
                     )
                 )
                 .safeDrawingPadding()
-                .verticalScroll(rememberScrollState())
-                .padding(
-                    bottom = when {
-                        bottomPadding > 0.dp -> bottomPadding
-                        else -> 0.dp
-                    }
-                )
-                .padding(
-                    horizontal = horizontalPadding,
-                    vertical = verticalPadding
-                )
         ) {
-            Text(
-                text = "Warranties",
-                modifier = Modifier
-                    .fillMaxSize()
-                    .wrapContentSize()
-            )
+            if (
+                with(state) {
+                    isCategoriesLoading || isWarrantiesLoading
+                }
+            ) {
+                // TODO: ANIMATED CONTENT (SHIMMER EFFECT)
+                Text(
+                    text = "Loading",
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .wrapContentSize()
+                )
+                return@Scaffold
+            }
+
+            state.warranties?.let { warranties ->
+                LazyColumn(
+                    verticalArrangement = Arrangement.spacedBy(space = 16.dp),
+                    contentPadding = PaddingValues(
+                        bottom = when {
+                            bottomPadding > 0.dp -> bottomPadding
+                            else -> 0.dp
+                        }
+                    ).addPaddingValues(
+                        horizontal = horizontalPadding,
+                        vertical = verticalPadding
+                    ),
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    items(
+                        items = warranties,
+                        key = { it.id }
+                    ) {
+                        Text(
+                            text = """
+                                Title: ${it.title}
+                                Category: ${it.category.title}
+                            """.trimIndent(),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = horizontalPadding)
+                        )
+                    }
+                }
+            }
         }
     }
 }

@@ -2,6 +2,7 @@ package com.xeniac.warrantyroster_manager.feature_warranty_manager.common.data.m
 
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.data.remote.WarrantyDto
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.domain.models.Warranty
+import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.domain.models.WarrantyCategory
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.format
@@ -14,6 +15,7 @@ import kotlin.uuid.Uuid
 
 @OptIn(ExperimentalTime::class, ExperimentalUuidApi::class)
 fun WarrantyDto.toWarranty(
+    category: WarrantyCategory,
     /**
      * DateTime Format: yyyy-mm-dd
      * Sample: 2025-09-24
@@ -28,7 +30,7 @@ fun WarrantyDto.toWarranty(
     serialNumber = serialNumber.orEmpty(),
     description = description.orEmpty(),
     isLifetime = isLifetime ?: false,
-    categoryId = categoryId ?: "10",
+    category = category,
     startingDate = startingDate?.let { startingDate ->
         LocalDate.parse(
             input = startingDate,
@@ -53,7 +55,7 @@ fun Warranty.toWarrantyDto(
     serialNumber = serialNumber,
     description = description,
     isLifetime = isLifetime,
-    categoryId = categoryId,
+    categoryId = category.id,
     startingDate = startingDate.format(format = dateFormat),
     expiryDate = expiryDate.format(format = dateFormat)
 )

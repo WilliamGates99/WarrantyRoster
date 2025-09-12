@@ -13,9 +13,11 @@ import com.xeniac.warrantyroster_manager.core.domain.models.Result
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiText
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.data.mappers.toWarranty
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.data.remote.WarrantyDto
+import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.data.utils.Constants.MISCELLANEOUS_CATEGORY
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.data.utils.Constants.WARRANTIES_TITLE
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.data.utils.Constants.WARRANTIES_UUID
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.domain.models.Warranty
+import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.domain.models.WarrantyCategory
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.warranties.domain.errors.ObserveWarrantiesError
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.warranties.domain.repositories.WarrantiesRepository
 import dagger.Lazy
@@ -33,6 +35,7 @@ class WarrantiesRepositoryImpl @Inject constructor(
 ) : WarrantiesRepository {
 
     override fun observeWarranties(
+        fetchedCategories: List<WarrantyCategory>?
     ): Flow<Result<List<Warranty>, ObserveWarrantiesError>> = callbackFlow {
         try {
             warrantiesCollectionRef.get().whereEqualTo(
@@ -61,21 +64,22 @@ class WarrantiesRepositoryImpl @Inject constructor(
 
                     querySnapshot?.let {
                         try {
-                            // TODO: MERGE WITH CATEGORIES
-                            if (querySnapshot.documents.isEmpty()) {
-                                send(Result.Success(emptyList()))
-                            }
-
                             val warranties = mutableListOf<Warranty>()
                             // var adIndex = 5
 
                             querySnapshot.documents.forEach { document ->
-                                val warrantyDto = document.toObject(WarrantyDto::class.java)?.copy(
-                                    id = document.id
-                                )
+                                val warrantyDto = document.toObject(
+                                    /* valueType = */ WarrantyDto::class.java
+                                )?.copy(id = document.id)
 
                                 warrantyDto?.let {
-                                    warranties.add(it.toWarranty())
+                                    warranties.add(
+                                        it.toWarranty(
+                                            category = fetchedCategories?.find { category ->
+                                                category.id == warrantyDto.categoryId
+                                            } ?: MISCELLANEOUS_CATEGORY
+                                        )
+                                    )
                                 }
 
                                 /* TODO: UNCOMMENT AFTER IMPLEMENTING ADS

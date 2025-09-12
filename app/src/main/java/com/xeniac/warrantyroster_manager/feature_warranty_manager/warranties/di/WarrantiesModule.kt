@@ -1,7 +1,9 @@
 package com.xeniac.warrantyroster_manager.feature_warranty_manager.warranties.di
 
-import com.xeniac.warrantyroster_manager.core.domain.repositories.SettingsDataStoreRepository
-import com.xeniac.warrantyroster_manager.feature_settings.domain.use_cases.GetCurrentAppThemeUseCase
+import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.domain.use_cases.ObserveCategoriesUseCase
+import com.xeniac.warrantyroster_manager.feature_warranty_manager.warranties.domain.repositories.WarrantiesRepository
+import com.xeniac.warrantyroster_manager.feature_warranty_manager.warranties.domain.use_cases.ObserveWarrantiesUseCase
+import com.xeniac.warrantyroster_manager.feature_warranty_manager.warranties.domain.use_cases.WarrantiesUseCases
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -12,9 +14,19 @@ import dagger.hilt.android.scopes.ViewModelScoped
 @InstallIn(ViewModelComponent::class)
 internal object WarrantiesModule {
 
-//    @Provides
-//    @ViewModelScoped
-//    fun provideGetCurrentAppThemeUseCase(
-//        settingsDataStoreRepository: SettingsDataStoreRepository
-//    ): GetCurrentAppThemeUseCase = GetCurrentAppThemeUseCase(settingsDataStoreRepository)
+    @Provides
+    @ViewModelScoped
+    fun provideObserveWarrantiesUseCase(
+        warrantiesRepository: WarrantiesRepository
+    ): ObserveWarrantiesUseCase = ObserveWarrantiesUseCase(warrantiesRepository)
+
+    @Provides
+    @ViewModelScoped
+    fun provideWarrantiesUseCases(
+        observeCategoriesUseCase: ObserveCategoriesUseCase,
+        observeWarrantiesUseCase: ObserveWarrantiesUseCase
+    ): WarrantiesUseCases = WarrantiesUseCases(
+        { observeCategoriesUseCase },
+        { observeWarrantiesUseCase }
+    )
 }

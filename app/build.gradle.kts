@@ -37,12 +37,6 @@ android {
 
         buildConfigField(
             type = "String",
-            name = "CATEGORY_MISCELLANEOUS_ICON",
-            value = properties.getProperty("CATEGORY_MISCELLANEOUS_ICON")
-        )
-
-        buildConfigField(
-            type = "String",
             name = "AUTH_GOOGLE_SERVER_CLIENT_ID",
             value = properties.getProperty("AUTH_GOOGLE_SERVER_CLIENT_ID")
         )

@@ -2,16 +2,17 @@ package com.xeniac.warrantyroster_manager.feature_warranty_manager.warranties.do
 
 import com.xeniac.warrantyroster_manager.core.domain.models.Result
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.domain.models.Warranty
+import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.domain.models.WarrantyCategory
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.warranties.domain.errors.ObserveWarrantiesError
 import kotlinx.coroutines.flow.Flow
 
 interface WarrantiesRepository {
 
-    fun observeWarranties(): Flow<Result<List<Warranty>, ObserveWarrantiesError>>
+    fun observeWarranties(
+        fetchedCategories: List<WarrantyCategory>?
+    ): Flow<Result<List<Warranty>, ObserveWarrantiesError>>
 
     /**
-     *     fun getWarrantiesFromFirestore(): Query
-     *
      *     suspend fun addWarrantyToFirestore(warrantyInput: WarrantyInput)
      *
      *     suspend fun deleteWarrantyFromFirestore(warrantyId: String)

@@ -14,7 +14,7 @@ data class Warranty(
     val model: String,
     val serialNumber: String,
     val description: String,
-    val categoryId: String,
+    val category: WarrantyCategory,
     val isLifetime: Boolean,
     val startingDate: LocalDate,
     val expiryDate: LocalDate,
