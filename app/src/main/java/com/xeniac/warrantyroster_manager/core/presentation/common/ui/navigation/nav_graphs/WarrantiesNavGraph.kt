@@ -13,7 +13,10 @@ import com.xeniac.warrantyroster_manager.core.presentation.common.UserViewModel
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.UpsertWarrantyScreen
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.WarrantiesScreen
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.WarrantyDetailsScreen
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.utils.WarrantyNavType
+import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.domain.models.Warranty
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.warranties.presentation.WarrantiesScreen
+import kotlin.reflect.typeOf
 
 fun NavGraphBuilder.warrantiesNavGraph(
     baseNavController: NavHostController,
@@ -31,8 +34,7 @@ fun NavGraphBuilder.warrantiesNavGraph(
     }
 
     composable<WarrantyDetailsScreen>(
-        // ADD CUSTOM TYPE MAP FOR WARRANTY
-        // typeMap =
+        typeMap = mapOf(typeOf<Warranty>() to WarrantyNavType)
     ) {
         Text(
             text = """
@@ -46,13 +48,12 @@ fun NavGraphBuilder.warrantiesNavGraph(
     }
 
     composable<UpsertWarrantyScreen>(
-        // ADD CUSTOM TYPE MAP FOR WARRANTY
-        // typeMap =
+        typeMap = mapOf(typeOf<Warranty?>() to WarrantyNavType)
     ) {
         Text(
             text = """
                     UpsertWarrantyScreen
-                    updatingWarrantyId = ${it.toRoute<UpsertWarrantyScreen>().updatingWarranty}
+                    updatingWarranty = ${it.toRoute<UpsertWarrantyScreen>().updatingWarranty}
                 """.trimIndent(),
             modifier = Modifier
                 .fillMaxSize()

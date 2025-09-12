@@ -1,6 +1,7 @@
 package com.xeniac.warrantyroster_manager.feature_warranty_manager.warranties.presentation
 
 import androidx.activity.compose.LocalActivity
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -27,9 +28,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.core.presentation.common.UserViewModel
@@ -37,13 +39,14 @@ import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.SwipeableSnackbar
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.utils.addPaddingValues
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.findActivity
+import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.domain.models.Warranty
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WarrantiesScreen(
     bottomPadding: Dp,
     userViewModel: UserViewModel,
-    onNavigateToUpsertWarrantyScreen: (warranty: String) -> Unit,
+    onNavigateToUpsertWarrantyScreen: (warranty: Warranty) -> Unit,
     viewModel: WarrantiesViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
@@ -140,14 +143,20 @@ fun WarrantiesScreen(
                     items(
                         items = warranties,
                         key = { it.id }
-                    ) {
+                    ) { warranty ->
                         Text(
                             text = """
-                                Title: ${it.title}
-                                Category: ${it.category.title}
+                                Title: ${warranty.title}
+                                Category: ${warranty.category.title}
                             """.trimIndent(),
                             modifier = Modifier
                                 .fillMaxWidth()
+                                .clickable(
+                                    role = Role.Button,
+                                    onClick = {
+                                        onNavigateToUpsertWarrantyScreen(warranty)
+                                    }
+                                )
                                 .padding(horizontal = horizontalPadding)
                         )
                     }
