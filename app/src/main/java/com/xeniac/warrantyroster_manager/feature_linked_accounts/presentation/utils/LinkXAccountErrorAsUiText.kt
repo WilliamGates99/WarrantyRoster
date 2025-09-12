@@ -6,6 +6,7 @@ import com.xeniac.warrantyroster_manager.feature_linked_accounts.domain.errors.L
 
 fun LinkXAccountError.asUiText(): UiText = when (this) {
     LinkXAccountError.CancellationException -> UiText.DynamicString("The web operation was canceled by the user.")
+    LinkXAccountError.AnotherOperationIsInProgress -> UiText.StringResource(R.string.linked_accounts_error_another_operation_is_in_progress)
 
     LinkXAccountError.Network.SSLHandshakeException -> UiText.StringResource(R.string.error_network_ssl_handshake)
     LinkXAccountError.Network.CertPathValidatorException -> UiText.StringResource(R.string.error_network_cert_path_validator)
