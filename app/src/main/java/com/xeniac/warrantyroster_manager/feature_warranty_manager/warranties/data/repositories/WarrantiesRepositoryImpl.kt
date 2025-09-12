@@ -6,7 +6,6 @@ import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.xeniac.warrantyroster_manager.core.data.utils.FirebaseErrorsHelper.isFirebase403Error
 import com.xeniac.warrantyroster_manager.core.di.WarrantiesCollection
@@ -14,14 +13,6 @@ import com.xeniac.warrantyroster_manager.core.domain.models.Result
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiText
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.data.mappers.toWarranty
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.data.remote.WarrantyDto
-import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.data.utils.Constants.WARRANTIES_BRAND
-import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.data.utils.Constants.WARRANTIES_CATEGORY_ID
-import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.data.utils.Constants.WARRANTIES_DESCRIPTION
-import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.data.utils.Constants.WARRANTIES_EXPIRY_DATE
-import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.data.utils.Constants.WARRANTIES_IS_LIFETIME
-import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.data.utils.Constants.WARRANTIES_MODEL
-import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.data.utils.Constants.WARRANTIES_SERIAL_NUMBER
-import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.data.utils.Constants.WARRANTIES_STARTING_DATE
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.data.utils.Constants.WARRANTIES_TITLE
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.data.utils.Constants.WARRANTIES_UUID
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.domain.models.Warranty
@@ -38,7 +29,6 @@ import javax.inject.Inject
 
 class WarrantiesRepositoryImpl @Inject constructor(
     private val firebaseAuth: Lazy<FirebaseAuth>,
-    private val firestore: Lazy<FirebaseFirestore>,
     @WarrantiesCollection private val warrantiesCollectionRef: Lazy<CollectionReference>
 ) : WarrantiesRepository {
 
@@ -70,44 +60,44 @@ class WarrantiesRepositoryImpl @Inject constructor(
                     }
 
                     querySnapshot?.let {
-                        // TODO: MERGE WITH CATEGORIES
-                        if (querySnapshot.documents.isEmpty()) {
-                            send(Result.Success(emptyList()))
-                        }
-
-                        val warranties = mutableListOf<Warranty>()
-                        // var adIndex = 5
-
-                        querySnapshot.documents.forEach { document ->
-                            val warrantyDto = WarrantyDto(
-                                id = document.id,
-                                title = document.get(WARRANTIES_TITLE) as String?,
-                                brand = document.get(WARRANTIES_BRAND) as String?,
-                                model = document.get(WARRANTIES_MODEL) as String?,
-                                serialNumber = document.get(WARRANTIES_SERIAL_NUMBER) as String?,
-                                description = document.get(WARRANTIES_DESCRIPTION) as String?,
-                                categoryId = document.get(WARRANTIES_CATEGORY_ID) as String?,
-                                isLifetime = document.get(WARRANTIES_IS_LIFETIME) as Boolean?,
-                                startingDate = document.get(WARRANTIES_STARTING_DATE) as String?,
-                                expiryDate = document.get(WARRANTIES_EXPIRY_DATE) as String?
-                            )
-
-                            warranties.add(warrantyDto.toWarranty())
-
-                            /* TODO: UNCOMMENT AFTER IMPLEMENTING ADS
-                            if (warranties.size == adIndex) {
-                                adIndex += 6
-
-                                val nativeAd = WarrantyDto(
-                                    id = "ad_$adIndex"
-                                ).toWarranty().copy(itemType = ListItemType.AD)
-
-                                warranties.add(nativeAd)
+                        try {
+                            // TODO: MERGE WITH CATEGORIES
+                            if (querySnapshot.documents.isEmpty()) {
+                                send(Result.Success(emptyList()))
                             }
-                             */
-                        }
 
-                        send(Result.Success(warranties))
+                            val warranties = mutableListOf<Warranty>()
+                            // var adIndex = 5
+
+                            querySnapshot.documents.forEach { document ->
+                                val warrantyDto = document.toObject(WarrantyDto::class.java)?.copy(
+                                    id = document.id
+                                )
+
+                                warrantyDto?.let {
+                                    warranties.add(it.toWarranty())
+                                }
+
+                                /* TODO: UNCOMMENT AFTER IMPLEMENTING ADS
+                                if (warranties.size == adIndex) {
+                                    adIndex += 6
+
+                                    val nativeAd = WarrantyDto(
+                                        id = "ad_$adIndex"
+                                    ).toWarranty().copy(itemType = ListItemType.AD)
+
+                                    warranties.add(nativeAd)
+                                }
+                                 */
+                            }
+
+                            send(Result.Success(warranties))
+                        } catch (e: Exception) {
+                            coroutineContext.ensureActive()
+                            Timber.e("Observe warranties query snapshot Exception:")
+                            e.printStackTrace()
+                            trySend(Result.Error(ObserveWarrantiesError.Network.SomethingWentWrong))
+                        }
                     }
                 }
             }
@@ -131,7 +121,7 @@ class WarrantiesRepositoryImpl @Inject constructor(
                 else -> trySend(Result.Error(ObserveWarrantiesError.Network.SomethingWentWrong))
             }
         } catch (e: Exception) {
-            kotlin.coroutines.coroutineContext.ensureActive()
+            coroutineContext.ensureActive()
             Timber.e("Observe warranties Exception:")
             e.printStackTrace()
             trySend(Result.Error(ObserveWarrantiesError.Network.SomethingWentWrong))

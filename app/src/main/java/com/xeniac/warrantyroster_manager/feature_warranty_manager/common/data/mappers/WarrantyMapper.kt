@@ -9,8 +9,10 @@ import kotlinx.datetime.format.DateTimeFormat
 import kotlinx.datetime.toLocalDateTime
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
-@OptIn(ExperimentalTime::class)
+@OptIn(ExperimentalTime::class, ExperimentalUuidApi::class)
 fun WarrantyDto.toWarranty(
     /**
      * DateTime Format: yyyy-mm-dd
@@ -19,7 +21,7 @@ fun WarrantyDto.toWarranty(
     dateFormat: DateTimeFormat<LocalDate> = LocalDate.Formats.ISO,
     timeZone: TimeZone = TimeZone.currentSystemDefault()
 ): Warranty = Warranty(
-    id = id,
+    id = id ?: Uuid.random().toHexString(),
     title = title.orEmpty(),
     brand = brand.orEmpty(),
     model = model.orEmpty(),
@@ -27,13 +29,13 @@ fun WarrantyDto.toWarranty(
     description = description.orEmpty(),
     isLifetime = isLifetime ?: false,
     categoryId = categoryId ?: "10",
-    startingDate = startingDate?.let {
+    startingDate = startingDate?.let { startingDate ->
         LocalDate.parse(
             input = startingDate,
             format = dateFormat
         )
     } ?: Clock.System.now().toLocalDateTime(timeZone = timeZone).date,
-    expiryDate = expiryDate?.let {
+    expiryDate = expiryDate?.let { expiryDate ->
         LocalDate.parse(
             input = expiryDate,
             format = dateFormat
