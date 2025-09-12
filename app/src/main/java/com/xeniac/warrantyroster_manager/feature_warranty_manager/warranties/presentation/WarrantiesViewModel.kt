@@ -27,7 +27,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.time.Duration.Companion.seconds
+import kotlin.time.Duration.Companion.minutes
 
 @HiltViewModel
 class WarrantiesViewModel @Inject constructor(
@@ -43,7 +43,7 @@ class WarrantiesViewModel @Inject constructor(
         getCategories()
     }.stateIn(
         scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(stopTimeout = 5.seconds),
+        started = SharingStarted.WhileSubscribed(stopTimeout = 2.minutes),
         initialValue = _state.value
     )
 
