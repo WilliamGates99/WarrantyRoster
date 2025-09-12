@@ -19,15 +19,18 @@ import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.data.ut
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.domain.models.Warranty
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.domain.models.WarrantyCategory
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.warranties.domain.errors.ObserveWarrantiesError
+import com.xeniac.warrantyroster_manager.feature_warranty_manager.warranties.domain.errors.SearchWarrantiesError
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.warranties.domain.repositories.WarrantiesRepository
 import dagger.Lazy
 import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
+import kotlin.coroutines.coroutineContext
 
 class WarrantiesRepositoryImpl @Inject constructor(
     private val firebaseAuth: Lazy<FirebaseAuth>,
@@ -132,5 +135,29 @@ class WarrantiesRepositoryImpl @Inject constructor(
         }
 
         awaitClose { }
+    }
+
+    override suspend fun searchWarranties(
+        warranties: List<Warranty>?,
+        query: String,
+        delayInMillis: Long
+    ): Result<List<Warranty>, SearchWarrantiesError> {
+        return try {
+            delay(timeMillis = delayInMillis)
+
+            val filteredWarranties = warranties?.filter { warranty ->
+                warranty.title.contains(
+                    other = query,
+                    ignoreCase = true
+                )
+            } ?: emptyList()
+
+            Result.Success(filteredWarranties)
+        } catch (e: Exception) {
+            coroutineContext.ensureActive()
+            Timber.e("Search warranties Exception:")
+            e.printStackTrace()
+            Result.Error(SearchWarrantiesError.SomethingWentWrong)
+        }
     }
 }

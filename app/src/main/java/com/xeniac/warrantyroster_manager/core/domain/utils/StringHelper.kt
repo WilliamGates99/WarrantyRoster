@@ -89,19 +89,25 @@ fun Float.formatWithDecimalPlaces(
  *
  * Non-digit characters, other than the decimal point (if included), will be omitted.
  *
+ * @param shouldTrim Whether to trim the input or not. Defaults to true.
  * @param shouldIncludeDecimalPoint Whether to include the first decimal point in the output. Defaults to false.
  *
  * @return A new string with Persian digits converted to English digits.
  */
 fun String.toEnglishDigits(
+    shouldTrim: Boolean = true,
     shouldIncludeDecimalPoint: Boolean = false
 ): String {
     var isDecimalPointFound = false
 
-    val input = this.filter {
-        val isDecimalPoint = shouldIncludeDecimalPoint && it == '.'
-        it.isDigit() || isDecimalPoint
-    }.trim()
+    val input = with(
+        receiver = this.filter {
+            val isDecimalPoint = shouldIncludeDecimalPoint && it == '.'
+            it.isDigit() || isDecimalPoint
+        }
+    ) {
+        if (shouldTrim) this.trim() else this
+    }
 
     var output = ""
     input.forEach { char ->
@@ -135,10 +141,14 @@ fun String.toEnglishDigits(
  * with their equivalent English digits (0-9).
  * * **Other characters in the string remain unchanged.**
  *
+ * @param shouldTrim Whether to trim the input or not. Defaults to true.
+ *
  * @return A new string with Persian digits converted to English digits.
  */
-fun String.convertDigitsToEnglish(): String {
-    val input = this.trim()
+fun String.convertDigitsToEnglish(
+    shouldTrim: Boolean = true
+): String {
+    val input = if (shouldTrim) this.trim() else this
 
     var output = ""
     input.forEach { char ->

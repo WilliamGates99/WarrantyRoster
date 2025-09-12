@@ -5,5 +5,6 @@ import dagger.Lazy
 
 data class WarrantiesUseCases(
     val observeCategoriesUseCase: Lazy<ObserveCategoriesUseCase>,
-    val observeWarrantiesUseCase: Lazy<ObserveWarrantiesUseCase>
+    val observeWarrantiesUseCase: Lazy<ObserveWarrantiesUseCase>,
+    val searchWarrantiesUseCase: Lazy<SearchWarrantiesUseCase>
 )
