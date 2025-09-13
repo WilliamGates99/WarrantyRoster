@@ -17,8 +17,8 @@ enum class AppLocale(
 ) {
     DEFAULT(
         index = 0,
-        languageTag = null,
-        localeString = null,
+        languageTag = "en-US",
+        localeString = "en_US",
         layoutDirectionCompose = LayoutDirection.Ltr,
         layoutDirection = -1, // LayoutDirection.UNDEFINED
         titleId = R.string.core_locale_title_default,

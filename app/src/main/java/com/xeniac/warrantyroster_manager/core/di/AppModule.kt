@@ -241,6 +241,11 @@ internal object AppModule {
     }.build()
 
     @Provides
+    fun provideAppLocale(
+        settingsDataStoreRepository: SettingsDataStoreRepository
+    ): AppLocale = settingsDataStoreRepository.getCurrentAppLocale()
+
+    @Provides
     fun provideAppTheme(
         settingsDataStoreRepository: SettingsDataStoreRepository
     ): AppTheme = settingsDataStoreRepository.getCurrentAppThemeSynchronously()
