@@ -143,9 +143,7 @@ private fun CategoryIcon(
     placeholderColor: Color = Red
 ) {
     SubcomposeAsyncImage(
-        // TODO: TEMP - UNCOMMENT
-        // model = category.iconUrl,
-        model = "",
+        model = category.iconUrl,
         contentDescription = category.title[currentAppLocale.languageTag],
         contentScale = ContentScale.Crop,
         success = {
@@ -162,22 +160,21 @@ private fun CategoryIcon(
             Box(modifier = Modifier.shimmerEffect())
         },
         error = {
-//            Icon(
-//                painter = placeholder,
-//                contentDescription = contentDescription,
-//                tint = placeholderColor,
-//                modifier = Modifier
-//                    .fillMaxSize()
-//                    .padding(contentPadding)
-//            )
-            Box(modifier = Modifier.shimmerEffect())
+            Icon(
+                painter = placeholder,
+                contentDescription = contentDescription,
+                tint = placeholderColor,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(contentPadding)
+            )
         },
         modifier = modifier
             .size(size)
             .dropShadow(
                 shape = shape,
                 shadow = Shadow(
-                    radius = 2.dp,
+                    radius = 4.dp,
                     color = Black,
                     alpha = 0.16f
                 )

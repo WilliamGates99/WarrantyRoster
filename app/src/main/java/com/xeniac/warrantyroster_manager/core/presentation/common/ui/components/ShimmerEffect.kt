@@ -1,11 +1,14 @@
 package com.xeniac.warrantyroster_manager.core.presentation.common.ui.components
 
+import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -20,17 +23,12 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.LayoutDirection
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.ShimmerEffectFirstColor
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.ShimmerEffectSecondColor
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.ShimmerEffectThirdColor
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.shimmerEffectColors
 
+@Composable
 fun Modifier.shimmerEffect(
-    colors: List<Color> = listOf(
-        ShimmerEffectFirstColor,
-        ShimmerEffectSecondColor,
-        ShimmerEffectThirdColor
-    ),
-    duration: Int = 3000,
+    colors: List<Color> = MaterialTheme.colorScheme.shimmerEffectColors,
+    duration: Int = 2000,
     repeatMode: RepeatMode = RepeatMode.Reverse,
     isEnabled: Boolean = true
 ): Modifier = composed {
@@ -43,19 +41,25 @@ fun Modifier.shimmerEffect(
     var gradientStartOffset by remember { mutableStateOf(Offset.Zero) }
     var gradientEndOffset by remember { mutableStateOf(Offset.Zero) }
 
-    if (layoutDirection == LayoutDirection.Ltr) {
-        initialValue = -size.width.toFloat()
-        targetValue = size.width.toFloat()
-    } else {
-        initialValue = size.width.toFloat() * 2
-        targetValue = -size.width.toFloat()
+    when (layoutDirection) {
+        LayoutDirection.Ltr -> {
+            initialValue = -size.width.toFloat()
+            targetValue = size.width.toFloat()
+        }
+        LayoutDirection.Rtl -> {
+            initialValue = size.width.toFloat()
+            targetValue = -size.width.toFloat()
+        }
     }
 
     val startOffsetX by transition.animateFloat(
         initialValue = initialValue,
         targetValue = targetValue,
         animationSpec = infiniteRepeatable(
-            animation = tween(duration),
+            animation = tween(
+                durationMillis = duration,
+                easing = LinearEasing
+            ),
             repeatMode = repeatMode
         ),
         label = "startOffsetX"

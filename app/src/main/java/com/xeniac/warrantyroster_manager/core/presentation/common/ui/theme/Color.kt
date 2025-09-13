@@ -7,11 +7,6 @@ import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.utils
 
 val BlueNotificationLight = Color(0xFF1C53F4)
 
-// TODO: UPDATE SHIMMER COLORS
-val ShimmerEffectFirstColor = Color(0xFF273446)
-val ShimmerEffectSecondColor = Color(0xFF161E28)
-val ShimmerEffectThirdColor = Color(0xFF191D22)
-
 val White = Color(0xFFFFFFFF)
 val Black = Color(0xFF000000)
 
@@ -36,6 +31,22 @@ val GrayMediumDark = Color(0xFF2E2E2E)
 val GrayDarkDark = Color(0xFF808080)
 val GrayDarkestDark = Color(0xFFA6A6A6)
 val GrayDarkest2Dark = Color(0xFFCCCCCC)
+
+val ColorScheme.shimmerEffectColors: List<Color>
+    @Composable get() = listOf(
+        dynamicColor(
+            lightColor = GrayDark,
+            darkColor = GrayDarkDark
+        ),
+        dynamicColor(
+            lightColor = GrayMedium,
+            darkColor = GrayMediumDark
+        ),
+        dynamicColor(
+            lightColor = GrayLight,
+            darkColor = GrayLightDark
+        )
+    )
 
 val ColorScheme.dynamicBlack: Color
     @Composable get() = dynamicColor(
