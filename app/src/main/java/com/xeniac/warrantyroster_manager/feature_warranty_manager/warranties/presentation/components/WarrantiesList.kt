@@ -67,7 +67,7 @@ fun WarrantiesList(
     filteredWarranties: List<Warranty>?,
     bottomPadding: Dp,
     modifier: Modifier = Modifier,
-    onNavigateToUpsertWarrantyScreen: (warranty: Warranty) -> Unit,
+    onNavigateToWarrantyDetailsScreen: (warranty: Warranty) -> Unit,
 ) {
     val horizontalPadding by remember { derivedStateOf { 8.dp } }
     val verticalPadding by remember { derivedStateOf { 8.dp } }
@@ -92,7 +92,7 @@ fun WarrantiesList(
             ) { warranty ->
                 WarrantyItem(
                     warranty = warranty,
-                    onClick = { onNavigateToUpsertWarrantyScreen(warranty) }
+                    onClick = { onNavigateToWarrantyDetailsScreen(warranty) }
                 )
             }
             return@LazyColumn
@@ -105,7 +105,7 @@ fun WarrantiesList(
             ) { warranty ->
                 WarrantyItem(
                     warranty = warranty,
-                    onClick = { onNavigateToUpsertWarrantyScreen(warranty) }
+                    onClick = { onNavigateToWarrantyDetailsScreen(warranty) }
                 )
             }
         }

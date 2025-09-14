@@ -16,6 +16,7 @@ import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.utils.WarrantyNavType
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.domain.models.Warranty
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.warranties.presentation.WarrantiesScreen
+import com.xeniac.warrantyroster_manager.feature_warranty_manager.warranty_details.presentation.WarrantyDetailsScreen
 import kotlin.reflect.typeOf
 
 fun NavGraphBuilder.warrantiesNavGraph(
@@ -27,7 +28,7 @@ fun NavGraphBuilder.warrantiesNavGraph(
         WarrantiesScreen(
             bottomPadding = bottomPadding,
             userViewModel = userViewModel,
-            onNavigateToUpsertWarrantyScreen = { warranty ->
+            onNavigateToWarrantyDetailsScreen = { warranty ->
                 baseNavController.navigate(WarrantyDetailsScreen(warranty = warranty))
             }
         )
@@ -36,14 +37,12 @@ fun NavGraphBuilder.warrantiesNavGraph(
     composable<WarrantyDetailsScreen>(
         typeMap = mapOf(typeOf<Warranty>() to WarrantyNavType)
     ) {
-        Text(
-            text = """
-                    WarrantyDetailsScreen
-                    warranty = ${it.toRoute<WarrantyDetailsScreen>().warranty}
-                """.trimIndent(),
-            modifier = Modifier
-                .fillMaxSize()
-                .wrapContentSize()
+        WarrantyDetailsScreen(
+            userViewModel = userViewModel,
+            onNavigateUp = baseNavController::navigateUp,
+            onNavigateToUpsertWarrantyScreen = { warranty ->
+                baseNavController.navigate(UpsertWarrantyScreen(updatingWarranty = warranty))
+            }
         )
     }
 

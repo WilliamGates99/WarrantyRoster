@@ -34,7 +34,7 @@ import com.xeniac.warrantyroster_manager.feature_warranty_manager.warranties.pre
 fun WarrantiesScreen(
     bottomPadding: Dp,
     userViewModel: UserViewModel,
-    onNavigateToUpsertWarrantyScreen: (warranty: Warranty) -> Unit,
+    onNavigateToWarrantyDetailsScreen: (warranty: Warranty) -> Unit,
     viewModel: WarrantiesViewModel = hiltViewModel()
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
@@ -104,7 +104,7 @@ fun WarrantiesScreen(
                     warranties = state.warranties,
                     filteredWarranties = state.filteredWarranties,
                     bottomPadding = bottomPadding,
-                    onNavigateToUpsertWarrantyScreen = onNavigateToUpsertWarrantyScreen
+                    onNavigateToWarrantyDetailsScreen = onNavigateToWarrantyDetailsScreen
                 )
             },
             modifier = Modifier
