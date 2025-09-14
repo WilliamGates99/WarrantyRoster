@@ -35,6 +35,8 @@ class WarrantyDetailsViewModel @Inject constructor(
         initialValue = _state.value
     )
 
+    // TODO: IMPLEMENT DELETE WARRANTY
+
     fun onAction(action: WarrantyDetailsAction) {
 //        when (action) {
 //            else -> TODO("Handle actions")
