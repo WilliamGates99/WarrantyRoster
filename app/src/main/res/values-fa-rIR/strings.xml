@@ -32,6 +32,8 @@
     <string name="core_content_description_navigate_up">بازگشت</string>
     <string name="core_textfield_content_description_password_toggle_show">نمایش کلمه عبور</string>
     <string name="core_textfield_content_description_password_toggle_hide">پنهان کردن کلمه عبور</string>
+    <string name="core_search_content_description_show">نمایش نوار جستجو</string>
+    <string name="core_search_content_description_hide">پنهان کردن نوار جستجو</string>
     <string name="core_locale_bottom_sheet_title">زبان</string>
     <string name="core_locale_title_default">پیش‌فرض سیستم</string>
     <string name="core_locale_title_english_us">انگلیسی (آمریکایی)</string>
@@ -173,7 +175,6 @@
 
 
     <string name="warranties_app_bar_title">فهرست گارانتی‌ها</string>
-    <string name="warranties_search_content_description_">جستجو</string>
     <string name="warranties_search_textfield_hint">جستجو بر اساس عنوان…</string>
     <!--Placeholder is for the color value-->
     <string name="warranties_error_empty_list"><![CDATA[در حال حاضر فهرست گارانتی‌های شما خالی است. برای شروع، روی دکمه <font color="#%s"><b>افزودن گارانتی</b></font> کلیک کنید.]]></string>

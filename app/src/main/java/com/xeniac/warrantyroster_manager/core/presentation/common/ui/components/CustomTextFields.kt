@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -17,14 +18,19 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldColors
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.autofill.ContentType
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.painter.Painter
@@ -76,6 +82,29 @@ internal fun outlinedTextFieldColors(): TextFieldColors = OutlinedTextFieldDefau
     unfocusedSupportingTextColor = MaterialTheme.colorScheme.dynamicGrayDark,
     disabledSupportingTextColor = (MaterialTheme.colorScheme.dynamicGrayDark).copy(alpha = 0.38f),
     errorSupportingTextColor = Red
+)
+
+@Composable
+internal fun searchTextFieldColors(): TextFieldColors = TextFieldDefaults.colors().copy(
+    focusedContainerColor = MaterialTheme.colorScheme.surface,
+    unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+    disabledContainerColor = MaterialTheme.colorScheme.surface,
+    errorContainerColor = MaterialTheme.colorScheme.surface,
+    focusedIndicatorColor = Color.Transparent,
+    unfocusedIndicatorColor = Color.Transparent,
+    disabledIndicatorColor = Color.Transparent,
+    errorIndicatorColor = Color.Transparent,
+    focusedLeadingIconColor = MaterialTheme.colorScheme.dynamicGrayDark,
+    unfocusedLeadingIconColor = MaterialTheme.colorScheme.dynamicGrayDark,
+    disabledLeadingIconColor = MaterialTheme.colorScheme.dynamicGrayDark,
+    errorLeadingIconColor = MaterialTheme.colorScheme.dynamicGrayDark,
+    focusedTrailingIconColor = MaterialTheme.colorScheme.dynamicGrayDarkest,
+    unfocusedTrailingIconColor = MaterialTheme.colorScheme.dynamicGrayDarkest,
+    errorTrailingIconColor = MaterialTheme.colorScheme.error,
+    focusedPlaceholderColor = MaterialTheme.colorScheme.dynamicGrayDark,
+    unfocusedPlaceholderColor = MaterialTheme.colorScheme.dynamicGrayDark,
+    disabledPlaceholderColor = MaterialTheme.colorScheme.dynamicGrayDark,
+    errorPlaceholderColor = MaterialTheme.colorScheme.dynamicGrayDark
 )
 
 @Composable
@@ -295,4 +324,139 @@ fun CustomOutlinedTextField(
                 .addTestTag(tag = testTag)
         )
     }
+}
+
+@Composable
+fun CustomSearchBarTextField(
+    value: TextFieldValue,
+    modifier: Modifier = Modifier,
+    testTag: String? = null,
+    isLoading: Boolean = false,
+    enabled: Boolean = true,
+    readOnly: Boolean = false,
+    singleLine: Boolean = true,
+    minLines: Int = 1,
+    maxLines: Int = if (singleLine) 1 else Int.MAX_VALUE,
+    shape: Shape = CircleShape,
+    colors: TextFieldColors = searchTextFieldColors(),
+    textFontSize: TextUnit = 16.sp,
+    textLineHeight: TextUnit = TextUnit.Unspecified,
+    textFontWeight: FontWeight = FontWeight.Normal,
+    textAlign: TextAlign = TextAlign.Unspecified,
+    textDirection: TextDirection = TextDirection.Unspecified,
+    textStyle: TextStyle = LocalTextStyle.current.copy(
+        fontSize = textFontSize,
+        lineHeight = textLineHeight,
+        fontWeight = textFontWeight,
+        textAlign = textAlign,
+        textDirection = textDirection
+    ),
+    placeholder: String? = null,
+    placeholderFontSize: TextUnit = 16.sp,
+    placeholderLineHeight: TextUnit = TextUnit.Unspecified,
+    placeholderFontWeight: FontWeight = FontWeight.Normal,
+    placeholderTextAlign: TextAlign = TextAlign.Unspecified,
+    placeholderTextDirection: TextDirection = TextDirection.Unspecified,
+    placeholderMaxLines: Int = 1,
+    placeholderStyle: TextStyle = LocalTextStyle.current.copy(
+        fontSize = placeholderFontSize,
+        lineHeight = placeholderLineHeight,
+        fontWeight = placeholderFontWeight,
+        textAlign = placeholderTextAlign,
+        textDirection = placeholderTextDirection
+    ),
+    leadingIcon: Painter? = painterResource(id = R.drawable.ic_core_search),
+    leadingIconContentDescription: String? = null,
+    leadingIconSize: Dp = 18.dp,
+    trailingIcon: @Composable (() -> Unit)? = null,
+    trailingIconPainter: Painter? = null,
+    trailingIconContentDescription: String? = null,
+    trailingIconSize: Dp = 24.dp,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    imeAction: ImeAction = ImeAction.Search,
+    keyboardType: KeyboardType = KeyboardType.Text,
+    keyboardCapitalization: KeyboardCapitalization = KeyboardCapitalization.Words,
+    autoCorrectEnabled: Boolean = true,
+    keyboardOptions: KeyboardOptions = KeyboardOptions(
+        imeAction = imeAction,
+        keyboardType = keyboardType,
+        capitalization = keyboardCapitalization,
+        autoCorrectEnabled = autoCorrectEnabled
+    ),
+    contentType: ContentType? = null,
+    onValueChange: (newValue: TextFieldValue) -> Unit,
+    keyboardAction: () -> Unit = {}
+) {
+    val focusRequester = remember { FocusRequester() }
+
+    LaunchedEffect(key1 = Unit) {
+        focusRequester.requestFocus()
+    }
+
+    OutlinedTextField(
+        value = value,
+        onValueChange = onValueChange,
+        enabled = enabled,
+        readOnly = readOnly && !isLoading,
+        singleLine = singleLine,
+        minLines = minLines,
+        maxLines = maxLines,
+        shape = shape,
+        colors = colors,
+        textStyle = textStyle,
+        placeholder = when {
+            placeholder != null -> {
+                {
+                    Text(
+                        text = placeholder,
+                        style = placeholderStyle,
+                        maxLines = placeholderMaxLines,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+            }
+            else -> null
+        },
+        leadingIcon = if (leadingIcon != null) {
+            {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier.size(leadingIconSize)
+                ) {
+                    Icon(
+                        painter = leadingIcon,
+                        contentDescription = leadingIconContentDescription,
+                        modifier = Modifier.size(leadingIconSize)
+                    )
+                }
+            }
+        } else null,
+        trailingIcon = when {
+            trailingIconPainter != null -> {
+                {
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier.size(trailingIconSize)
+                    ) {
+                        Icon(
+                            painter = trailingIconPainter,
+                            contentDescription = trailingIconContentDescription,
+                            modifier = Modifier.size(trailingIconSize)
+                        )
+                    }
+                }
+            }
+            else -> trailingIcon
+        },
+        visualTransformation = visualTransformation,
+        keyboardOptions = keyboardOptions,
+        keyboardActions = KeyboardActions {
+            defaultKeyboardAction(imeAction)
+            keyboardAction()
+        },
+        modifier = modifier
+            .focusRequester(focusRequester)
+            .addTextFieldContentType(contentType = contentType)
+            .addTestTag(tag = testTag)
+    )
 }

@@ -63,9 +63,23 @@ class WarrantiesViewModel @Inject constructor(
 
     fun onAction(action: WarrantiesAction) {
         when (action) {
+            WarrantiesAction.ShowSearchBar -> showSearchBar()
+            WarrantiesAction.HideSearchBar -> hideSearchBar()
             is WarrantiesAction.SearchQueryChanged -> searchQueryChanged(action.newValue)
             WarrantiesAction.GetCategories -> getCategories()
             WarrantiesAction.GetWarranties -> getWarranties()
+        }
+    }
+
+    private fun showSearchBar() = viewModelScope.launch {
+        _state.update {
+            it.copy(isSearchBarVisible = true)
+        }
+    }
+
+    private fun hideSearchBar() = viewModelScope.launch {
+        _state.update {
+            it.copy(isSearchBarVisible = false)
         }
     }
 

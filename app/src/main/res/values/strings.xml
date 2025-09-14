@@ -31,6 +31,8 @@
     <string name="core_content_description_navigate_up">Return</string>
     <string name="core_textfield_content_description_password_toggle_show">Show Password</string>
     <string name="core_textfield_content_description_password_toggle_hide">Hide Password</string>
+    <string name="core_search_content_description_show">Show search bar</string>
+    <string name="core_search_content_description_hide">Hide search bar</string>
     <string name="core_locale_bottom_sheet_title">Language</string>
     <string name="core_locale_title_default">System Default</string>
     <string name="core_locale_title_english_us">English (US)</string>
@@ -172,7 +174,6 @@
 
 
     <string name="warranties_app_bar_title">Warranty List</string>
-    <string name="warranties_search_content_description_">Search</string>
     <string name="warranties_search_textfield_hint">Search by title…</string>
     <!--Placeholder is for the color value-->
     <string name="warranties_error_empty_list"><![CDATA[Your warranty list is empty right now. To get started, click <font color="#%s"><b>Add Warranty</b></font> button.]]></string>

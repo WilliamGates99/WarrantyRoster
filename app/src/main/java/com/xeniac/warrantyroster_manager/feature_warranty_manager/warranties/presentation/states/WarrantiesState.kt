@@ -15,6 +15,7 @@ data class WarrantiesState(
     val searchQueryState: CustomTextFieldState = CustomTextFieldState(),
     val errorMessage: UiText? = null,
     val searchErrorMessage: UiText? = null,
+    val isSearchBarVisible: Boolean = false,
     val isCategoriesLoading: Boolean = true,
     val isWarrantiesLoading: Boolean = true,
     val isSearchWarrantiesLoading: Boolean = false

@@ -19,7 +19,7 @@ import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.core.presentation.common.UserAction
 import com.xeniac.warrantyroster_manager.core.presentation.common.UserViewModel
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.ContentLoadingAnimation
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.CustomCenterAlignedTopAppBar
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.CustomCenterAlignedTopAppBarWithSearchBar
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.NetworkErrorMessage
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.ObserverAsEvent
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiEvent
@@ -52,10 +52,17 @@ fun WarrantiesScreen(
 
     Scaffold(
         topBar = {
-            CustomCenterAlignedTopAppBar(
+            CustomCenterAlignedTopAppBarWithSearchBar(
                 title = stringResource(id = R.string.warranties_app_bar_title),
                 scrollBehavior = scrollBehavior,
-                // TODO: ADD SEARCH ICON + SEARCH BAR
+                isSearchBarVisible = state.isSearchBarVisible,
+                searchQueryState = state.searchQueryState,
+                searchBarPlaceholder = stringResource(id = R.string.warranties_search_textfield_hint),
+                onSearchClick = { viewModel.onAction(WarrantiesAction.ShowSearchBar) },
+                onCloseSearchClick = { viewModel.onAction(WarrantiesAction.HideSearchBar) },
+                onSearchValueChange = { newValue ->
+                    viewModel.onAction(WarrantiesAction.SearchQueryChanged(newValue))
+                }
             )
         },
         modifier = Modifier
@@ -63,9 +70,7 @@ fun WarrantiesScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection)
     ) { innerPadding ->
         ContentLoadingAnimation(
-            isContentLoading = with(state) {
-                isCategoriesLoading || isWarrantiesLoading || isSearchWarrantiesLoading
-            },
+            isContentLoading = with(state) { isCategoriesLoading || isWarrantiesLoading },
             loadingContent = {
                 WarrantiesListLoading(
                     bottomPadding = bottomPadding
