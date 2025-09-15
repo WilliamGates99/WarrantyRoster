@@ -33,6 +33,7 @@ import com.xeniac.warrantyroster_manager.core.presentation.common.UserViewModel
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.CustomCenterAlignedTopAppBar
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.SwipeableSnackbar
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.domain.models.Warranty
+import com.xeniac.warrantyroster_manager.feature_warranty_manager.upsert_warranty.presentation.components.UpsertWarrantyButton
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -91,10 +92,11 @@ fun UpsertWarrantyScreen(
                 scrollBehavior = scrollBehavior,
                 onNavigateUpClick = onNavigateUp,
                 actions = {
-                    // UpsertWarrantyButton(
-                    //     isLoading = state.isUpsertLoading,
-                    //     onAction = viewModel::onAction
-                    // )
+                    UpsertWarrantyButton(
+                        isLoading = state.isUpsertLoading,
+                        isUpdatingWarranty = state.updatingWarranty != null,
+                        onAction = viewModel::onAction
+                    )
                 }
             )
         },
