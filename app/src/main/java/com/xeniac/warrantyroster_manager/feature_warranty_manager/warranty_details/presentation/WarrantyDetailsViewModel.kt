@@ -93,7 +93,10 @@ class WarrantyDetailsViewModel @Inject constructor(
                 is Result.Success -> {
                     _deleteWarrantyEventChannel.send(
                         UiEvent.ShowLongToast(
-                            UiText.StringResource(R.string.warranty_details_delete_message_success)
+                            UiText.StringResource(
+                                resId = R.string.warranty_details_delete_message_success,
+                                _state.value.warranty.title
+                            )
                         )
                     )
                     _deleteWarrantyEventChannel.send(UiEvent.NavigateUp)

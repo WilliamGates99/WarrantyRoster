@@ -36,6 +36,7 @@ import com.xeniac.warrantyroster_manager.core.presentation.common.utils.Observer
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiEvent
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.domain.models.Warranty
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.warranty_details.presentation.components.DeleteWarrantyButton
+import com.xeniac.warrantyroster_manager.feature_warranty_manager.warranty_details.presentation.components.DeleteWarrantyDialog
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -92,7 +93,7 @@ fun WarrantyDetailsScreen(
             )
         },
         floatingActionButton = {
-
+            // TODO: EDIT FAB
         },
         floatingActionButtonPosition = FabPosition.End,
         modifier = Modifier
@@ -116,9 +117,13 @@ fun WarrantyDetailsScreen(
                     vertical = verticalPadding
                 )
         ) {
-
+            // TODO: WARRANTY DETAILS
         }
     }
 
-    // TODO: DELETE DIALOG
+    DeleteWarrantyDialog(
+        isVisible = state.isDeleteWarrantyDialogVisible,
+        warrantyTitle = state.warranty.title,
+        onAction = viewModel::onAction
+    )
 }
