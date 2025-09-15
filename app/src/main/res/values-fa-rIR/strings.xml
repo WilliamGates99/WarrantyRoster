@@ -253,53 +253,6 @@
     </string-array>
 
 
-    <string name="add_warranty_text_title">افزودن گارانتی</string>
-    <string name="add_warranty_menu_title_add">افزودن گارانتی</string>
-    <string name="add_warranty_title_title">عنوان</string>
-    <string name="add_warranty_hint_title">عنوان را وارد کنید</string>
-    <string name="add_warranty_title_category">دسته‌بندی</string>
-    <string name="add_warranty_hint_category">دسته‌بندی را انتخاب کنید</string>
-    <string name="add_warranty_title_brand">برند دستگاه</string>
-    <string name="add_warranty_hint_brand">برند دستگاه را وارد کنید</string>
-    <string name="add_warranty_title_model">مدل دستگاه</string>
-    <string name="add_warranty_hint_model">مدل دستگاه را وارد کنید</string>
-    <string name="add_warranty_title_serial">شماره سریال</string>
-    <string name="add_warranty_hint_serial">شماره سریال دستگاه را وارد کنید</string>
-    <string name="add_warranty_title_description">توضیحات</string>
-    <string name="add_warranty_hint_description">توضیحات را وارد کنید</string>
-    <string name="add_warranty_title_date_starting">تاریخ شروع</string>
-    <string name="add_warranty_title_date_expiry">تاریخ اتمام</string>
-    <!--
-    dd: Day
-    mm: Month
-    yyyy: Year
-
-    Samples:
-    • en-US: mm/dd/yyyy
-    • en-GB: dd/mm/yyyy
-    • fa-IR: روز/ماه/سال
-    -->
-    <string name="add_warranty_hint_date">روز/ماه/سال</string>
-    <string name="add_warranty_helper_optional">اختیاری</string>
-    <string name="add_warranty_title_date_picker_starting">تاریخ شروع را انتخاب کنید</string>
-    <string name="add_warranty_title_date_picker_expiry">تاریخ اتمام را انتخاب کنید</string>
-    <string name="add_warranty_error_blank_title">عنوان را وارد کنید!</string>
-    <string name="add_warranty_error_date">تاریخ شروع نمی‌تواند بعد از تاریخ اتمام باشد!</string>
-    <string name="add_warranty_checkbox_lifetime">گارانتی مادام‌العمر</string>
-    <!--
-    Placeholders:
-    • %1$s: Month (mm)
-    • %2$s: Day (dd)
-    • %3$d: Year (yyyy)
-
-    Samples:
-    • en-US: 12/25/2022
-    • en-GB: 25/12/2022
-    • fa-IR: 2022/12/25
-    -->
-    <string name="add_warranty_format_date">%3$d/%1$s/%2$s</string>
-
-
     <string name="warranty_details_fab_edit">ویرایش</string>
     <string name="warranty_details_content_description_delete">حذف گارانتی</string>
     <string name="warranty_details_starting_date_title">تاریخ شروع:</string>
@@ -344,22 +297,24 @@
     <string name="warranty_details_delete_message_success">%s با موفقیت حذف شد.</string>
 
 
-    <string name="edit_warranty_text_title">ویرایش گارانتی</string>
-    <string name="edit_warranty_menu_title_edit">ویرایش گارانتی</string>
-    <string name="edit_warranty_title_title">عنوان</string>
-    <string name="edit_warranty_hint_title">عنوان را وارد کنید</string>
-    <string name="edit_warranty_title_category">دسته‌بندی</string>
-    <string name="edit_warranty_hint_category">دسته‌بندی را انتخاب کنید</string>
-    <string name="edit_warranty_title_brand">برند دستگاه</string>
-    <string name="edit_warranty_hint_brand">برند دستگاه را وارد کنید</string>
-    <string name="edit_warranty_title_model">مدل دستگاه</string>
-    <string name="edit_warranty_hint_model">مدل دستگاه را وارد کنید</string>
-    <string name="edit_warranty_title_serial">شماره سریال</string>
-    <string name="edit_warranty_hint_serial">شماره سریال دستگاه را وارد کنید</string>
-    <string name="edit_warranty_title_description">توضیحات</string>
-    <string name="edit_warranty_hint_description">توضیحات را وارد کنید</string>
-    <string name="edit_warranty_title_date_starting">تاریخ شروع</string>
-    <string name="edit_warranty_title_date_expiry">تاریخ اتمام</string>
+    <string name="upsert_warranty_app_bar_title_add">افزودن گارانتی</string>
+    <string name="upsert_warranty_content_description_add">افزودن گارانتی</string>
+    <string name="upsert_warranty_app_bar_title_edit">ویرایش گارانتی</string>
+    <string name="upsert_warranty_content_description_edit">ویرایش گارانتی</string>
+    <string name="add_warranty_title_title">عنوان</string>
+    <string name="add_warranty_hint_title">عنوان را وارد کنید</string>
+    <string name="add_warranty_title_category">دسته‌بندی</string>
+    <string name="add_warranty_hint_category">دسته‌بندی را انتخاب کنید</string>
+    <string name="add_warranty_title_brand">برند دستگاه</string>
+    <string name="add_warranty_hint_brand">برند دستگاه را وارد کنید</string>
+    <string name="add_warranty_title_model">مدل دستگاه</string>
+    <string name="add_warranty_hint_model">مدل دستگاه را وارد کنید</string>
+    <string name="add_warranty_title_serial">شماره سریال</string>
+    <string name="add_warranty_hint_serial">شماره سریال دستگاه را وارد کنید</string>
+    <string name="add_warranty_title_description">توضیحات</string>
+    <string name="add_warranty_hint_description">توضیحات را وارد کنید</string>
+    <string name="add_warranty_title_date_starting">تاریخ شروع</string>
+    <string name="add_warranty_title_date_expiry">تاریخ اتمام</string>
     <!--
     dd: Day
     mm: Month
@@ -370,13 +325,13 @@
     • en-GB: dd/mm/yyyy
     • fa-IR: روز/ماه/سال
     -->
-    <string name="edit_warranty_hint_date">روز/ماه/سال</string>
-    <string name="edit_warranty_helper_optional">اختیاری</string>
-    <string name="edit_warranty_title_date_picker_starting">تاریخ شروع را انتخاب کنید</string>
-    <string name="edit_warranty_title_date_picker_expiry">تاریخ اتمام را انتخاب کنید</string>
-    <string name="edit_warranty_error_blank_title">عنوان را وارد کنید!</string>
-    <string name="edit_warranty_error_date">تاریخ شروع نمی‌تواند بعد از تاریخ اتمام باشد!</string>
-    <string name="edit_warranty_checkbox_lifetime">گارانتی مادام‌العمر</string>
+    <string name="add_warranty_hint_date">روز/ماه/سال</string>
+    <string name="add_warranty_helper_optional">اختیاری</string>
+    <string name="add_warranty_title_date_picker_starting">تاریخ شروع را انتخاب کنید</string>
+    <string name="add_warranty_title_date_picker_expiry">تاریخ اتمام را انتخاب کنید</string>
+    <string name="add_warranty_error_blank_title">عنوان را وارد کنید!</string>
+    <string name="add_warranty_error_date">تاریخ شروع نمی‌تواند بعد از تاریخ اتمام باشد!</string>
+    <string name="add_warranty_checkbox_lifetime">گارانتی مادام‌العمر</string>
     <!--
     Placeholders:
     • %1$s: Month (mm)
@@ -388,7 +343,7 @@
     • en-GB: 25/12/2022
     • fa-IR: 2022/12/25
     -->
-    <string name="edit_warranty_format_date">%3$d/%1$s/%2$s</string>
+    <string name="add_warranty_format_date">%3$d/%1$s/%2$s</string>
 
 
     <string name="settings_app_bar_title">تنظیمات</string>
