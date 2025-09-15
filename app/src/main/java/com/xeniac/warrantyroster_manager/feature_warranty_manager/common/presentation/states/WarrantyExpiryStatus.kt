@@ -9,18 +9,22 @@ import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.Red
 
 enum class WarrantyExpiryStatus(
     @param:StringRes val titleId: Int,
+    @param:StringRes val descriptionId: Int,
     val color: Color
 ) {
     VALID(
-        titleId = R.string.warranties_expiration_status_valid,
+        titleId = R.string.warranties_expiration_status_valid_title,
+        descriptionId = R.string.warranties_expiration_status_valid_description,
         color = Green
     ),
     SOON(
-        titleId = R.string.warranties_expiration_status_soon,
+        titleId = R.string.warranties_expiration_status_soon_title,
+        descriptionId = R.string.warranties_expiration_status_soon_description,
         color = Orange
     ),
     EXPIRED(
-        titleId = R.string.warranties_expiration_status_expired,
+        titleId = R.string.warranties_expiration_status_expired_title,
+        descriptionId = R.string.warranties_expiration_status_expired_description,
         color = Red
     )
 }

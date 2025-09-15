@@ -185,9 +185,12 @@
     • %3$s: Add Warranty Button Color
     -->
     <string name="warranties_search_error_empty_result"><![CDATA[هیچ گارانتی‌ای پیدا نکردیم که با جستجوی شما برای <font color="#%1$s"><b>%2$s</b></font> مطابقت داشته باشد.<br>سعی کنید جستجوی خود را تعییر دهید یا با دکمه <font color="#%3$s"><b>افزودن گارانتی</b></font>، مورد جدیدی اضافه کنید.]]></string>
-    <string name="warranties_expiration_status_valid">معتبر</string>
-    <string name="warranties_expiration_status_soon">به‌زودی</string>
-    <string name="warranties_expiration_status_expired">منقضی‌شده</string>
+    <string name="warranties_expiration_status_valid_title">معتبر</string>
+    <string name="warranties_expiration_status_soon_title">به‌زودی</string>
+    <string name="warranties_expiration_status_expired_title">منقضی‌شده</string>
+    <string name="warranties_expiration_status_valid_description">گارانتی معتبر است</string>
+    <string name="warranties_expiration_status_soon_description">گارانتی به‌زودی منقضی می‌شود</string>
+    <string name="warranties_expiration_status_expired_description">گارانتی منقضی شده</string>
     <string name="warranties_expiry_lifetime">گارانتی مادام‌العمر</string>
     <!--
     Placeholders:
@@ -298,26 +301,8 @@
 
 
     <string name="warranty_details_fab_edit">ویرایش</string>
-    <string name="warranty_details_menu_title_delete">حذف گارانتی</string>
-    <string name="warranty_details_title_date_starting">تاریخ شروع</string>
-    <string name="warranty_details_title_date_expiry">تاریخ اتمام</string>
-    <string name="warranty_details_title_device">اطلاعات دستگاه</string>
-    <string name="warranty_details_title_device_brand">برند</string>
-    <string name="warranty_details_title_device_model">مدل</string>
-    <string name="warranty_details_title_device_serial">شماره سریال</string>
-    <string name="warranty_details_title_description">توضیحات</string>
-    <string name="warranty_details_status_valid">گارانتی معتبر است</string>
-    <string name="warranty_details_status_soon">گارانتی به‌زودی منقضی می‌شود</string>
-    <string name="warranty_details_status_expired">گارانتی منقضی شده</string>
-    <string name="warranty_details_is_lifetime">مادام‌العمر</string>
-    <string name="warranty_details_empty_description">هیچ توضیحی وارد نشده.</string>
-    <string name="warranty_details_delete_dialog_title">گارانتی حذف شود؟</string>
-    <!--Placeholder is for the Warranty Title-->
-    <string name="warranty_details_delete_dialog_message">آیا مطمئنید که می‌خواهید %s را حذف کنید؟</string>
-    <string name="warranty_details_delete_dialog_positive">حذف</string>
-    <string name="warranty_details_delete_dialog_negative">لغو</string>
-    <!--Placeholder is for the Warranty Title-->
-    <string name="warranty_details_delete_success">%s با موفقیت حذف شد.</string>
+    <string name="warranty_details_content_description_delete">حذف گارانتی</string>
+    <string name="warranty_details_starting_date_title">تاریخ شروع:</string>
     <!--
     Placeholders:
     • %1$s: Month (mm)
@@ -329,7 +314,34 @@
     • en-GB: 25/12/2022
     • fa-IR: 2022/12/25
     -->
-    <string name="warranty_details_format_date">%3$d/%1$s/%2$s</string>
+    <string name="warranty_details_starting_date_value">%3$d/%1$s/%2$s</string>
+    <string name="warranty_details_expiry_date_title">تاریخ اتمام:</string>
+    <string name="warranty_details_expiry_date_lifetime">مادام‌العمر</string>
+    <!--
+    Placeholders:
+    • %1$s: Month (mm)
+    • %2$s: Day (dd)
+    • %3$d: Year (yyyy)
+
+    Samples:
+    • en-US: 12/25/2022
+    • en-GB: 25/12/2022
+    • fa-IR: 2022/12/25
+    -->
+    <string name="warranty_details_expiry_date_value">%3$d/%1$s/%2$s</string>
+    <string name="warranty_details_device_info_title">اطلاعات دستگاه</string>
+    <string name="warranty_details_device_info_brand_title">برند:</string>
+    <string name="warranty_details_device_info_model_title">مدل:</string>
+    <string name="warranty_details_device_info_serial_number_title">شماره سریال:</string>
+    <string name="warranty_details_description_title">توضیحات</string>
+    <string name="warranty_details_description_empty">هیچ توضیحی وارد نشده.</string>
+    <string name="warranty_details_delete_dialog_title">گارانتی حذف شود؟</string>
+    <!--Placeholder is for the Warranty Title-->
+    <string name="warranty_details_delete_dialog_message">آیا مطمئنید که می‌خواهید %s را حذف کنید؟</string>
+    <string name="warranty_details_delete_dialog_btn_delete">حذف</string>
+    <string name="warranty_details_delete_dialog_btn_cancel">لغو</string>
+    <!--Placeholder is for the Warranty Title-->
+    <string name="warranty_details_delete_message_success">%s با موفقیت حذف شد.</string>
 
 
     <string name="edit_warranty_text_title">ویرایش گارانتی</string>

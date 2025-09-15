@@ -185,9 +185,12 @@
     -->
     <string name="warranties_search_error_empty_result"><![CDATA[No warranties match <font color="#%1$s"><b>%2$s</b></font> right now.<br>Try adjusting your search or adding a new one with the <font color="#%3$s"><b>Add Warranty</b></font> button.]]></string>
     <string name="warranties_ad_indicator" translatable="false">Ad</string>
-    <string name="warranties_expiration_status_valid">Valid</string>
-    <string name="warranties_expiration_status_soon">Soon</string>
-    <string name="warranties_expiration_status_expired">Expired</string>
+    <string name="warranties_expiration_status_valid_title">Valid</string>
+    <string name="warranties_expiration_status_soon_title">Soon</string>
+    <string name="warranties_expiration_status_expired_title">Expired</string>
+    <string name="warranties_expiration_status_valid_description">Warranty is valid</string>
+    <string name="warranties_expiration_status_soon_description">Warranty will expire soon</string>
+    <string name="warranties_expiration_status_expired_description">Warranty is expired</string>
     <string name="warranties_expiry_lifetime">Lifetime Warranty</string>
     <!--
     Placeholders:
@@ -298,27 +301,8 @@
 
 
     <string name="warranty_details_fab_edit">Edit</string>
-    <string name="warranty_details_menu_title_delete">Delete Warranty</string>
-    <string name="warranty_details_title_date_starting">Starting Date</string>
-    <string name="warranty_details_title_date_expiry">Expiry Date</string>
-    <string name="warranty_details_title_device">Device Info</string>
-    <string name="warranty_details_title_device_brand">Brand</string>
-    <string name="warranty_details_title_device_model">Model</string>
-    <string name="warranty_details_title_device_serial">Serial Number</string>
-    <string name="warranty_details_title_description">Description</string>
-    <string name="warranty_details_status_valid">Warranty is valid</string>
-    <string name="warranty_details_status_soon">Warranty will expire soon</string>
-    <string name="warranty_details_status_expired">Warranty is expired</string>
-    <string name="warranty_details_is_lifetime">Lifetime</string>
-    <string name="warranty_details_empty_device" translatable="false">•</string>
-    <string name="warranty_details_empty_description">No description is provided.</string>
-    <string name="warranty_details_delete_dialog_title">Delete Warranty?</string>
-    <!--Placeholder is for the Warranty Title-->
-    <string name="warranty_details_delete_dialog_message">Are you sure you want to delete %s?</string>
-    <string name="warranty_details_delete_dialog_positive">Delete</string>
-    <string name="warranty_details_delete_dialog_negative">Cancel</string>
-    <!--Placeholder is for the Warranty Title-->
-    <string name="warranty_details_delete_success">%s has been successfully deleted.</string>
+    <string name="warranty_details_content_description_delete">Delete Warranty</string>
+    <string name="warranty_details_starting_date_title">Starting Date:</string>
     <!--
     Placeholders:
     • %1$s: Month (mm)
@@ -330,7 +314,35 @@
     • en-GB: 25/12/2022
     • fa-IR: 2022/12/25
     -->
-    <string name="warranty_details_format_date">%1$s/%2$s/%3$d</string>
+    <string name="warranty_details_starting_date_value">%1$s/%2$s/%3$d</string>
+    <string name="warranty_details_expiry_date_title">Expiry Date:</string>
+    <string name="warranty_details_expiry_date_lifetime">Lifetime</string>
+    <!--
+    Placeholders:
+    • %1$s: Month (mm)
+    • %2$s: Day (dd)
+    • %3$d: Year (yyyy)
+
+    Samples:
+    • en-US: 12/25/2022
+    • en-GB: 25/12/2022
+    • fa-IR: 2022/12/25
+    -->
+    <string name="warranty_details_expiry_date_value">%1$s/%2$s/%3$d</string>
+    <string name="warranty_details_device_info_title">Device Info</string>
+    <string name="warranty_details_device_info_brand_title">Brand:</string>
+    <string name="warranty_details_device_info_model_title">Model:</string>
+    <string name="warranty_details_device_info_serial_number_title">Serial Number:</string>
+    <string name="warranty_details_device_info_empty" translatable="false">•</string>
+    <string name="warranty_details_description_title">Description</string>
+    <string name="warranty_details_description_empty">No description is provided.</string>
+    <string name="warranty_details_delete_dialog_title">Delete Warranty?</string>
+    <!--Placeholder is for the Warranty Title-->
+    <string name="warranty_details_delete_dialog_message">Are you sure you want to delete %s?</string>
+    <string name="warranty_details_delete_dialog_btn_delete">Delete</string>
+    <string name="warranty_details_delete_dialog_btn_cancel">Cancel</string>
+    <!--Placeholder is for the Warranty Title-->
+    <string name="warranty_details_delete_message_success">%s has been successfully deleted.</string>
 
 
     <string name="edit_warranty_text_title">Edit Warranty</string>

@@ -9,6 +9,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -25,12 +26,8 @@ import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.dropShadow
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.shadow.Shadow
@@ -61,7 +58,8 @@ fun CustomCenterAlignedTopAppBar(
         navigationIconContentColor = MaterialTheme.colorScheme.dynamicBlack,
         actionIconContentColor = MaterialTheme.colorScheme.dynamicBlack
     ),
-    onNavigateUpClick: (() -> Unit)? = null
+    onNavigateUpClick: (() -> Unit)? = null,
+    actions: @Composable RowScope.() -> Unit = {}
 ) {
     CenterAlignedTopAppBar(
         scrollBehavior = scrollBehavior,
@@ -82,9 +80,7 @@ fun CustomCenterAlignedTopAppBar(
                 NavigateUpIcon(onClick = it)
             }
         },
-        actions = {
-            // TODO: ADD ACTION BUTTONS
-        },
+        actions = actions,
         modifier = modifier
             .fillMaxWidth()
             .dropShadow(
