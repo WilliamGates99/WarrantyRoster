@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicBlack
+import com.xeniac.warrantyroster_manager.feature_warranty_manager.warranty_details.presentation.WarrantyDetailsAction
 
 @Composable
 fun DeleteWarrantyButton(
@@ -31,12 +32,12 @@ fun DeleteWarrantyButton(
     iconSize: Dp = 18.dp,
     progressIndicatorColor: Color = colors.contentColor,
     progressIndicatorStrokeWidth: Dp = 2.dp,
-    onClick: () -> Unit
+    onAction: (action: WarrantyDetailsAction) -> Unit
 ) {
     IconButton(
         enabled = !isLoading,
-        onClick = onClick,
         colors = colors,
+        onClick = { onAction(WarrantyDetailsAction.ShowDeleteWarrantyDialog) },
         modifier = modifier
     ) {
         when {

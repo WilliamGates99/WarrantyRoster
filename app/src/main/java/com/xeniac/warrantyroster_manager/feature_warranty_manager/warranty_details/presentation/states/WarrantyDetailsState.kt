@@ -4,5 +4,6 @@ import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.domain.
 
 data class WarrantyDetailsState(
     val warranty: Warranty,
+    val isDeleteWarrantyDialogVisible: Boolean = false,
     val isDeleteLoading: Boolean = false
 )

@@ -1,6 +1,5 @@
 package com.xeniac.warrantyroster_manager.feature_warranty_manager.warranty_details.presentation
 
-import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
@@ -11,6 +10,7 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBarDefaults
@@ -25,10 +25,15 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.xeniac.warrantyroster_manager.core.presentation.common.UserAction
 import com.xeniac.warrantyroster_manager.core.presentation.common.UserViewModel
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.CustomCenterAlignedTopAppBar
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.SwipeableSnackbar
-import com.xeniac.warrantyroster_manager.core.presentation.common.utils.findActivity
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.showLongSnackbar
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.showLongToast
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.showOfflineSnackbar
+import com.xeniac.warrantyroster_manager.core.presentation.common.utils.ObserverAsEvent
+import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiEvent
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.domain.models.Warranty
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.warranty_details.presentation.components.DeleteWarrantyButton
 
@@ -41,7 +46,6 @@ fun WarrantyDetailsScreen(
     viewModel: WarrantyDetailsViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
-    val activity = LocalActivity.current ?: context.findActivity()
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -51,24 +55,26 @@ fun WarrantyDetailsScreen(
 
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-//    ObserverAsEvent(flow = viewModel.linkGoogleEventChannel) { event ->
-//        when (event) {
-//            UiEvent.ForceLogoutUnauthorizedUser -> {
-//                userViewModel.onAction(UserAction.Logout)
-//            }
-//            UiEvent.ShowOfflineSnackbar -> context.showOfflineSnackbar(
-//                scope = scope,
-//                snackbarHostState = snackbarHostState,
-//                onAction = { viewModel.onAction(LinkedAccountsAction.LinkGoogleAccount) }
-//            )
-//            is UiEvent.ShowLongSnackbar -> context.showLongSnackbar(
-//                message = event.message,
-//                scope = scope,
-//                snackbarHostState = snackbarHostState
-//            )
-//            else -> Unit
-//        }
-//    }
+    ObserverAsEvent(flow = viewModel.deleteWarrantyEventChannel) { event ->
+        when (event) {
+            UiEvent.NavigateUp -> onNavigateUp()
+            UiEvent.ForceLogoutUnauthorizedUser -> {
+                userViewModel.onAction(UserAction.Logout)
+            }
+            UiEvent.ShowOfflineSnackbar -> context.showOfflineSnackbar(
+                scope = scope,
+                snackbarHostState = snackbarHostState,
+                onAction = { viewModel.onAction(WarrantyDetailsAction.DeleteWarranty) }
+            )
+            is UiEvent.ShowLongSnackbar -> context.showLongSnackbar(
+                message = event.message,
+                scope = scope,
+                snackbarHostState = snackbarHostState
+            )
+            is UiEvent.ShowLongToast -> context.showLongToast(message = event.message)
+            else -> Unit
+        }
+    }
 
     Scaffold(
         snackbarHost = { SwipeableSnackbar(hostState = snackbarHostState) },
@@ -80,13 +86,15 @@ fun WarrantyDetailsScreen(
                 actions = {
                     DeleteWarrantyButton(
                         isLoading = state.isDeleteLoading,
-                        onClick = {
-                            // TODO: SHOW DELETE DIALOG
-                        }
+                        onAction = viewModel::onAction
                     )
                 }
             )
         },
+        floatingActionButton = {
+
+        },
+        floatingActionButtonPosition = FabPosition.End,
         modifier = Modifier
             .fillMaxSize()
             .nestedScroll(scrollBehavior.nestedScrollConnection)
@@ -111,4 +119,6 @@ fun WarrantyDetailsScreen(
 
         }
     }
+
+    // TODO: DELETE DIALOG
 }
