@@ -75,12 +75,11 @@ private fun DateInfoSection(
     startingDate: LocalDate,
     expiryDate: LocalDate,
     modifier: Modifier = Modifier,
-    decimalFormat: DecimalFormat = requireDecimalFormat(),
-    contentPadding: PaddingValues = PaddingValues(vertical = 8.dp)
+    decimalFormat: DecimalFormat = requireDecimalFormat()
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(space = 12.dp),
-        modifier = modifier.padding(contentPadding)
+        modifier = modifier
     ) {
         ExpiryStatus(
             expiryStatus = calculateWarrantyExpiryStatus(
