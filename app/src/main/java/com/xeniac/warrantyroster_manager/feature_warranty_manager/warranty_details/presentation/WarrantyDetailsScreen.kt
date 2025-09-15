@@ -91,7 +91,7 @@ fun WarrantyDetailsScreen(
         }
     }
 
-    LaunchedEffect(scrollState.value) {
+    LaunchedEffect(key1 = scrollState.value) {
         isFabExpanded = scrollState.value <= 0
     }
 
