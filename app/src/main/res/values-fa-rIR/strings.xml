@@ -334,7 +334,7 @@
     <string name="warranty_details_device_info_model_title">مدل:</string>
     <string name="warranty_details_device_info_serial_number_title">شماره سریال:</string>
     <string name="warranty_details_description_title">توضیحات</string>
-    <string name="warranty_details_description_empty">هیچ توضیحی وارد نشده.</string>
+    <string name="warranty_details_description_placeholder">هیچ توضیحی وارد نشده.</string>
     <string name="warranty_details_delete_dialog_title">گارانتی حذف شود؟</string>
     <!--Placeholder is for the Warranty Title-->
     <string name="warranty_details_delete_dialog_message">آیا مطمئنید که می‌خواهید %s را حذف کنید؟</string>

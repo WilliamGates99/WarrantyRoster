@@ -8,9 +8,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBarDefaults
@@ -20,6 +23,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -32,11 +36,15 @@ import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.showLongSnackbar
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.showLongToast
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.showOfflineSnackbar
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGrayMedium
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.ObserverAsEvent
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiEvent
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.domain.models.Warranty
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.warranty_details.presentation.components.DeleteWarrantyButton
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.warranty_details.presentation.components.DeleteWarrantyDialog
+import com.xeniac.warrantyroster_manager.feature_warranty_manager.warranty_details.presentation.components.DescriptionSection
+import com.xeniac.warrantyroster_manager.feature_warranty_manager.warranty_details.presentation.components.DeviceInfoSection
+import com.xeniac.warrantyroster_manager.feature_warranty_manager.warranty_details.presentation.components.HeaderSection
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -51,7 +59,7 @@ fun WarrantyDetailsScreen(
     val snackbarHostState = remember { SnackbarHostState() }
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-    val horizontalPadding by remember { derivedStateOf { 8.dp } }
+    val horizontalPadding by remember { derivedStateOf { 16.dp } }
     val verticalPadding by remember { derivedStateOf { 16.dp } }
 
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -101,7 +109,7 @@ fun WarrantyDetailsScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection)
     ) { innerPadding ->
         Column(
-            verticalArrangement = Arrangement.spacedBy(space = 12.dp),
+            verticalArrangement = Arrangement.spacedBy(space = 16.dp),
             modifier = Modifier
                 .fillMaxSize()
                 .windowInsetsPadding(
@@ -117,7 +125,34 @@ fun WarrantyDetailsScreen(
                     vertical = verticalPadding
                 )
         ) {
-            // TODO: WARRANTY DETAILS
+            HeaderSection(
+                category = state.warranty.category,
+                isLifetime = state.warranty.isLifetime,
+                startingDate = state.warranty.startingDate,
+                expiryDate = state.warranty.expiryDate
+            )
+
+            HorizontalDivider(
+                thickness = 1.dp,
+                color = MaterialTheme.colorScheme.dynamicGrayMedium,
+                modifier = Modifier.clip(CircleShape)
+            )
+
+            DeviceInfoSection(
+                brand = state.warranty.brand,
+                model = state.warranty.model,
+                serialNumber = state.warranty.serialNumber
+            )
+
+            HorizontalDivider(
+                thickness = 1.dp,
+                color = MaterialTheme.colorScheme.dynamicGrayMedium,
+                modifier = Modifier.clip(CircleShape)
+            )
+
+            DescriptionSection(
+                description = state.warranty.description
+            )
         }
     }
 

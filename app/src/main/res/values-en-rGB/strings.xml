@@ -334,7 +334,7 @@
     <string name="warranty_details_device_info_model_title">Model:</string>
     <string name="warranty_details_device_info_serial_number_title">Serial Number:</string>
     <string name="warranty_details_description_title">Description</string>
-    <string name="warranty_details_description_empty">No description is provided.</string>
+    <string name="warranty_details_description_placeholder">No description is provided.</string>
     <string name="warranty_details_delete_dialog_title">Delete Warranty?</string>
     <!--Placeholder is for the Warranty Title-->
     <string name="warranty_details_delete_dialog_message">Are you sure you want to delete %s?</string>
