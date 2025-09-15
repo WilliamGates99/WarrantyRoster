@@ -37,14 +37,10 @@ fun CompactScreenWidthChangePasswordContent(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .fillMaxSize()
-            .windowInsetsPadding(
-                WindowInsets(
-                    top = innerPadding.calculateTopPadding(),
-                    bottom = innerPadding.calculateBottomPadding()
-                )
-            )
-            .safeDrawingPadding()
+            .windowInsetsPadding(WindowInsets(top = innerPadding.calculateTopPadding()))
             .verticalScroll(rememberScrollState())
+            .windowInsetsPadding(WindowInsets(bottom = innerPadding.calculateBottomPadding()))
+            .safeDrawingPadding()
             .padding(
                 start = 24.dp,
                 end = 24.dp,
