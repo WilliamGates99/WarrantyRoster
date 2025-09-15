@@ -18,10 +18,13 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -44,6 +47,7 @@ import com.xeniac.warrantyroster_manager.feature_warranty_manager.warranty_detai
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.warranty_details.presentation.components.DeleteWarrantyDialog
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.warranty_details.presentation.components.DescriptionSection
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.warranty_details.presentation.components.DeviceInfoSection
+import com.xeniac.warrantyroster_manager.feature_warranty_manager.warranty_details.presentation.components.EditWarrantyFab
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.warranty_details.presentation.components.HeaderSection
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -58,7 +62,9 @@ fun WarrantyDetailsScreen(
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
+    val scrollState = rememberScrollState()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    var isFabExpanded by remember { mutableStateOf(true) }
     val horizontalPadding by remember { derivedStateOf { 16.dp } }
     val verticalPadding by remember { derivedStateOf { 16.dp } }
 
@@ -85,6 +91,10 @@ fun WarrantyDetailsScreen(
         }
     }
 
+    LaunchedEffect(scrollState.value) {
+        isFabExpanded = scrollState.value <= 0
+    }
+
     Scaffold(
         snackbarHost = { SwipeableSnackbar(hostState = snackbarHostState) },
         topBar = {
@@ -101,7 +111,10 @@ fun WarrantyDetailsScreen(
             )
         },
         floatingActionButton = {
-            // TODO: EDIT FAB
+            EditWarrantyFab(
+                isExpanded = isFabExpanded,
+                onClick = { onNavigateToUpsertWarrantyScreen(state.warranty) }
+            )
         },
         floatingActionButtonPosition = FabPosition.End,
         modifier = Modifier
@@ -113,7 +126,7 @@ fun WarrantyDetailsScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .windowInsetsPadding(WindowInsets(top = innerPadding.calculateTopPadding()))
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(scrollState)
                 .windowInsetsPadding(WindowInsets(bottom = innerPadding.calculateBottomPadding()))
                 .safeDrawingPadding()
                 .padding(
