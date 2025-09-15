@@ -221,14 +221,10 @@ fun LinkedAccountsScreen(
             verticalArrangement = Arrangement.spacedBy(space = 12.dp),
             modifier = Modifier
                 .fillMaxSize()
-                .windowInsetsPadding(
-                    WindowInsets(
-                        top = innerPadding.calculateTopPadding(),
-                        bottom = innerPadding.calculateBottomPadding()
-                    )
-                )
-                .safeDrawingPadding()
+                .windowInsetsPadding(WindowInsets(top = innerPadding.calculateTopPadding()))
                 .verticalScroll(rememberScrollState())
+                .windowInsetsPadding(WindowInsets(bottom = innerPadding.calculateBottomPadding()))
+                .safeDrawingPadding()
                 .padding(
                     horizontal = horizontalPadding,
                     vertical = verticalPadding
