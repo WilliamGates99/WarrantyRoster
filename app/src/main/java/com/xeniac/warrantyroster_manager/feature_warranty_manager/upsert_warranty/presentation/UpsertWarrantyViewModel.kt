@@ -125,7 +125,8 @@ class UpsertWarrantyViewModel @Inject constructor(
                     selectedCategory = it.category,
                     isLifetimeWarranty = it.isLifetime,
                     selectedStartingDate = it.startingDate.atStartOfDayIn(timeZone = timeZone),
-                    selectedExpiryDate = it.expiryDate.atStartOfDayIn(timeZone = timeZone)
+                    selectedExpiryDate = it.expiryDate.atStartOfDayIn(timeZone = timeZone),
+                    isUpdatingWarrantyDataSet = true
                 )
             } ?: state
         }
