@@ -17,10 +17,10 @@ fun UpsertingWarranty.toUpsertingWarrantyDto(
 ): UpsertingWarrantyDto = UpsertingWarrantyDto(
     uuid = uuid,
     title = title.trim(),
-    brand = brand.ifBlank { null }?.trim(),
-    model = model.ifBlank { null }?.trim(),
-    serialNumber = serialNumber.ifBlank { null }?.trim(),
-    description = description.ifBlank { null }?.trim(),
+    brand = brand.trim(),
+    model = model.trim(),
+    serialNumber = serialNumber.trim(),
+    description = description.trim(),
     categoryId = selectedCategory?.id ?: "10",
     isLifetime = isLifetime,
     startingDate = selectedStartingDate.toLocalDateTime(

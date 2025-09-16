@@ -39,8 +39,9 @@ import com.xeniac.warrantyroster_manager.core.presentation.common.utils.Observer
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiEvent
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.domain.models.Warranty
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.upsert_warranty.presentation.components.UpsertWarrantyButton
+import kotlin.time.ExperimentalTime
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalTime::class)
 @Composable
 fun UpsertWarrantyScreen(
     userViewModel: UserViewModel,
