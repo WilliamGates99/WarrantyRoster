@@ -37,6 +37,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -221,7 +222,7 @@ fun CustomOutlinedTextField(
             value = value,
             onValueChange = onValueChange,
             enabled = enabled,
-            readOnly = readOnly && !isLoading,
+            readOnly = readOnly || isLoading,
             isError = errorText != null,
             singleLine = singleLine,
             minLines = minLines,
@@ -405,6 +406,8 @@ fun CustomClickableOutlinedTextField(
     onTextFieldSizeChanged: (size: IntSize) -> Unit = {},
     onTextFieldFocused: () -> Unit
 ) {
+    val focusManager = LocalFocusManager.current
+
     Column(
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.spacedBy(
@@ -426,7 +429,7 @@ fun CustomClickableOutlinedTextField(
             value = value.orEmpty(),
             onValueChange = {},
             enabled = enabled,
-            readOnly = readOnly && !isLoading,
+            readOnly = readOnly || isLoading,
             isError = errorText != null,
             singleLine = singleLine,
             minLines = minLines,
@@ -506,8 +509,11 @@ fun CustomClickableOutlinedTextField(
                 .addTestTag(tag = testTag)
                 .focusable()
                 .onFocusChanged {
-                    if (it.isFocused) {
-                        onTextFieldFocused()
+                    when {
+                        readOnly || isLoading -> focusManager.clearFocus()
+                        else -> if (it.isFocused) {
+                            onTextFieldFocused()
+                        }
                     }
                 }
                 .onSizeChanged { onTextFieldSizeChanged(it) }
@@ -586,7 +592,7 @@ fun CustomSearchBarTextField(
         value = value,
         onValueChange = onValueChange,
         enabled = enabled,
-        readOnly = readOnly && !isLoading,
+        readOnly = readOnly || isLoading,
         singleLine = singleLine,
         minLines = minLines,
         maxLines = maxLines,

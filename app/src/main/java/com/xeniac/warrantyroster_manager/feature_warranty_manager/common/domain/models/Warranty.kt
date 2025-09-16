@@ -17,7 +17,7 @@ data class Warranty(
     val category: WarrantyCategory,
     val isLifetime: Boolean,
     val startingDate: LocalDate,
-    val expiryDate: LocalDate,
+    val expiryDate: LocalDate?,
     val itemType: ListItemType = ListItemType.WARRANTY
 ) : Parcelable
 

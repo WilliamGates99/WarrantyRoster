@@ -38,9 +38,11 @@ import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.domain.
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.upsert_warranty.presentation.components.CategoriesBottomSheet
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.upsert_warranty.presentation.components.CategoryAndDescriptionSection
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.upsert_warranty.presentation.components.DeviceSection
+import com.xeniac.warrantyroster_manager.feature_warranty_manager.upsert_warranty.presentation.components.TitleAndDatesSection
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.upsert_warranty.presentation.components.UpsertWarrantyButton
+import kotlin.time.ExperimentalTime
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalTime::class)
 @Composable
 fun UpsertWarrantyScreen(
     userViewModel: UserViewModel,
@@ -149,7 +151,15 @@ fun UpsertWarrantyScreen(
                     vertical = verticalPadding
                 )
         ) {
-            // TODO: TOP
+            TitleAndDatesSection(
+                isLoading = state.isUpsertLoading,
+                titleState = state.titleState,
+                isLifetimeWarranty = state.isLifetimeWarranty,
+                selectedStartingDate = state.selectedStartingDate,
+                selectedExpiryDate = state.selectedExpiryDate,
+                selectedStartingAndExpiryDatesError = state.selectedStartingAndExpiryDatesError,
+                onAction = viewModel::onAction
+            )
 
             DeviceSection(
                 isLoading = state.isUpsertLoading,

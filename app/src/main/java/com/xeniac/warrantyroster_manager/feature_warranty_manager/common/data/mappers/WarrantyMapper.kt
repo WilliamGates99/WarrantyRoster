@@ -41,5 +41,5 @@ fun WarrantyDto.toWarranty(
             input = expiryDate,
             format = dateFormat
         )
-    } ?: Clock.System.now().toLocalDateTime(timeZone = timeZone).date
+    }
 )

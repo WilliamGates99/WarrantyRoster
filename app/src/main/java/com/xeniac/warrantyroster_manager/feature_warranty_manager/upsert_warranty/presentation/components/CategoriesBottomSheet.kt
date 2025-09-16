@@ -60,6 +60,7 @@ fun CategoriesBottomSheet(
     ),
     onAction: (action: UpsertWarrantyAction) -> Unit
 ) {
+    // TODO: IMPLEMENT
     if (isVisible) {
         val focusManager = LocalFocusManager.current
         val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
