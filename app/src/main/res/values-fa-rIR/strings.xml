@@ -32,6 +32,7 @@
     <string name="core_content_description_navigate_up">بازگشت</string>
     <string name="core_textfield_content_description_password_toggle_show">نمایش کلمه عبور</string>
     <string name="core_textfield_content_description_password_toggle_hide">پنهان کردن کلمه عبور</string>
+    <string name="core_textfield_helper_optional">اختیاری</string>
     <string name="core_search_content_description_show">نمایش نوار جستجو</string>
     <string name="core_search_content_description_hide">پنهان کردن نوار جستجو</string>
     <string name="core_locale_bottom_sheet_title">زبان</string>
@@ -298,23 +299,22 @@
 
 
     <string name="upsert_warranty_app_bar_title_add">افزودن گارانتی</string>
-    <string name="upsert_warranty_content_description_add">افزودن گارانتی</string>
-    <string name="upsert_warranty_app_bar_title_edit">ویرایش گارانتی</string>
+    <string name="upsert_warranty_app_bar_title_edit">افزودن گارانتی</string>
+    <string name="upsert_warranty_content_description_add">ویرایش گارانتی</string>
     <string name="upsert_warranty_content_description_edit">ویرایش گارانتی</string>
-    <string name="add_warranty_title_title">عنوان</string>
-    <string name="add_warranty_hint_title">عنوان را وارد کنید</string>
-    <string name="add_warranty_title_category">دسته‌بندی</string>
-    <string name="add_warranty_hint_category">دسته‌بندی را انتخاب کنید</string>
-    <string name="add_warranty_title_brand">برند دستگاه</string>
-    <string name="add_warranty_hint_brand">برند دستگاه را وارد کنید</string>
-    <string name="add_warranty_title_model">مدل دستگاه</string>
-    <string name="add_warranty_hint_model">مدل دستگاه را وارد کنید</string>
-    <string name="add_warranty_title_serial">شماره سریال</string>
-    <string name="add_warranty_hint_serial">شماره سریال دستگاه را وارد کنید</string>
-    <string name="add_warranty_title_description">توضیحات</string>
-    <string name="add_warranty_hint_description">توضیحات را وارد کنید</string>
-    <string name="add_warranty_title_date_starting">تاریخ شروع</string>
-    <string name="add_warranty_title_date_expiry">تاریخ اتمام</string>
+    <string name="upsert_warranty_textfield_title_title">عنوان</string>
+    <string name="upsert_warranty_textfield_title_hint">عنوان را وارد کنید</string>
+    <string name="upsert_warranty_textfield_brand_title">برند دستگاه</string>
+    <string name="upsert_warranty_textfield_brand_hint">برند دستگاه را وارد کنید</string>
+    <string name="upsert_warranty_textfield_model_title">مدل دستگاه</string>
+    <string name="upsert_warranty_textfield_model_hint">مدل دستگاه را وارد کنید</string>
+    <string name="upsert_warranty_textfield_serial_number_title">شماره سریال</string>
+    <string name="upsert_warranty_textfield_serial_number_hint">شماره سریال دستگاه را وارد کنید</string>
+    <string name="upsert_warranty_textfield_description_title">توضیحات</string>
+    <string name="upsert_warranty_textfield_description_hint">توضیحات را وارد کنید</string>
+    <string name="upsert_warranty_textfield_category_title">دسته‌بندی</string>
+    <string name="upsert_warranty_textfield_category_hint">دسته‌بندی را انتخاب کنید</string>
+    <string name="upsert_warranty_textfield_starting_date_title">تاریخ شروع</string>
     <!--
     dd: Day
     mm: Month
@@ -325,13 +325,7 @@
     • en-GB: dd/mm/yyyy
     • fa-IR: روز/ماه/سال
     -->
-    <string name="add_warranty_hint_date">روز/ماه/سال</string>
-    <string name="add_warranty_helper_optional">اختیاری</string>
-    <string name="add_warranty_title_date_picker_starting">تاریخ شروع را انتخاب کنید</string>
-    <string name="add_warranty_title_date_picker_expiry">تاریخ اتمام را انتخاب کنید</string>
-    <string name="add_warranty_error_blank_title">عنوان را وارد کنید!</string>
-    <string name="add_warranty_error_date">تاریخ شروع نمی‌تواند بعد از تاریخ اتمام باشد!</string>
-    <string name="add_warranty_checkbox_lifetime">گارانتی مادام‌العمر</string>
+    <string name="upsert_warranty_textfield_starting_date_hint">روز/ماه/سال</string>
     <!--
     Placeholders:
     • %1$s: Month (mm)
@@ -343,7 +337,39 @@
     • en-GB: 25/12/2022
     • fa-IR: 2022/12/25
     -->
-    <string name="add_warranty_format_date">%3$d/%1$s/%2$s</string>
+    <string name="upsert_warranty_textfield_starting_date_value">%3$d/%1$s/%2$s</string>
+    <string name="upsert_warranty_textfield_expiry_date_title">تاریخ اتمام</string>
+    <!--
+    dd: Day
+    mm: Month
+    yyyy: Year
+
+    Samples:
+    • en-US: mm/dd/yyyy
+    • en-GB: dd/mm/yyyy
+    • fa-IR: روز/ماه/سال
+    -->
+    <string name="upsert_warranty_textfield_expiry_date_hint">روز/ماه/سال</string>
+    <!--
+    Placeholders:
+    • %1$s: Month (mm)
+    • %2$s: Day (dd)
+    • %3$d: Year (yyyy)
+
+    Samples:
+    • en-US: 12/25/2022
+    • en-GB: 25/12/2022
+    • fa-IR: 2022/12/25
+    -->
+    <string name="upsert_warranty_textfield_expiry_date_value">%3$d/%1$s/%2$s</string>
+    <string name="upsert_warranty_checkbox_lifetime">گارانتی مادام‌العمر</string>
+    <string name="upsert_warranty_starting_date_picker_title">تاریخ شروع را انتخاب کنید</string>
+    <string name="upsert_warranty_expiry_date_picker_title">تاریخ اتمام را انتخاب کنید</string>
+    <string name="upsert_warranty_error_blank_title">عنوان را وارد کنید!</string>
+    <string name="upsert_warranty_error_blank_starting_date">تاریخ شروع را انتخاب کنید!</string>
+    <string name="upsert_warranty_error_blank_expiry_date">تاریخ اتمام را انتخاب کنید!</string>
+    <string name="upsert_warranty_error_blank_starting_and_expiry_date">تاریخ شروع و اتمام را انتخاب کنید!</string>
+    <string name="upsert_warranty_error_invalid_expiry_date">تاریخ اتمام نمی‌تواند قبل از تاریخ شروع باشد!</string>
 
 
     <string name="settings_app_bar_title">تنظیمات</string>

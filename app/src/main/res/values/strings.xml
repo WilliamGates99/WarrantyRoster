@@ -31,6 +31,7 @@
     <string name="core_content_description_navigate_up">Return</string>
     <string name="core_textfield_content_description_password_toggle_show">Show Password</string>
     <string name="core_textfield_content_description_password_toggle_hide">Hide Password</string>
+    <string name="core_textfield_helper_optional">Optional</string>
     <string name="core_search_content_description_show">Show search bar</string>
     <string name="core_search_content_description_hide">Hide search bar</string>
     <string name="core_locale_bottom_sheet_title">Language</string>
@@ -302,20 +303,19 @@
     <string name="upsert_warranty_app_bar_title_edit">Edit Warranty</string>
     <string name="upsert_warranty_content_description_add">Add Warranty</string>
     <string name="upsert_warranty_content_description_edit">Edit Warranty</string>
-    <string name="add_warranty_title_title">Title</string>
-    <string name="add_warranty_hint_title">Enter the title</string>
-    <string name="add_warranty_title_category">Category</string>
-    <string name="add_warranty_hint_category">Select category</string>
-    <string name="add_warranty_title_brand">Device Brand</string>
-    <string name="add_warranty_hint_brand">Enter the device brand</string>
-    <string name="add_warranty_title_model">Device Model</string>
-    <string name="add_warranty_hint_model">Enter the device model</string>
-    <string name="add_warranty_title_serial">Serial Number</string>
-    <string name="add_warranty_hint_serial">Enter the device serial number</string>
-    <string name="add_warranty_title_description">Description</string>
-    <string name="add_warranty_hint_description">Enter description</string>
-    <string name="add_warranty_title_date_starting">Starting Date</string>
-    <string name="add_warranty_title_date_expiry">Expiry Date</string>
+    <string name="upsert_warranty_textfield_title_title">Title</string>
+    <string name="upsert_warranty_textfield_title_hint">Enter the title</string>
+    <string name="upsert_warranty_textfield_brand_title">Device Brand</string>
+    <string name="upsert_warranty_textfield_brand_hint">Enter the device brand</string>
+    <string name="upsert_warranty_textfield_model_title">Device Model</string>
+    <string name="upsert_warranty_textfield_model_hint">Enter the device model</string>
+    <string name="upsert_warranty_textfield_serial_number_title">Serial Number</string>
+    <string name="upsert_warranty_textfield_serial_number_hint">Enter the device serial number</string>
+    <string name="upsert_warranty_textfield_description_title">Description</string>
+    <string name="upsert_warranty_textfield_description_hint">Enter description</string>
+    <string name="upsert_warranty_textfield_category_title">Category</string>
+    <string name="upsert_warranty_textfield_category_hint">Select category</string>
+    <string name="upsert_warranty_textfield_starting_date_title">Starting Date</string>
     <!--
     dd: Day
     mm: Month
@@ -326,13 +326,7 @@
     • en-GB: dd/mm/yyyy
     • fa-IR: روز/ماه/سال
     -->
-    <string name="add_warranty_hint_date">mm/dd/yyyy</string>
-    <string name="add_warranty_helper_optional">Optional</string>
-    <string name="add_warranty_title_date_picker_starting">Select Starting Date</string>
-    <string name="add_warranty_title_date_picker_expiry">Select Expiry Date</string>
-    <string name="add_warranty_error_blank_title">Enter the title!</string>
-    <string name="add_warranty_error_date">Starting Date can\'t be after the Expiry Date!</string>
-    <string name="add_warranty_checkbox_lifetime">Lifetime Warranty</string>
+    <string name="upsert_warranty_textfield_starting_date_hint">mm/dd/yyyy</string>
     <!--
     Placeholders:
     • %1$s: Month (mm)
@@ -344,7 +338,39 @@
     • en-GB: 25/12/2022
     • fa-IR: 2022/12/25
     -->
-    <string name="add_warranty_format_date">%1$s/%2$s/%3$d</string>
+    <string name="upsert_warranty_textfield_starting_date_value">%1$s/%2$s/%3$d</string>
+    <string name="upsert_warranty_textfield_expiry_date_title">Expiry Date</string>
+    <!--
+    dd: Day
+    mm: Month
+    yyyy: Year
+
+    Samples:
+    • en-US: mm/dd/yyyy
+    • en-GB: dd/mm/yyyy
+    • fa-IR: روز/ماه/سال
+    -->
+    <string name="upsert_warranty_textfield_expiry_date_hint">mm/dd/yyyy</string>
+    <!--
+    Placeholders:
+    • %1$s: Month (mm)
+    • %2$s: Day (dd)
+    • %3$d: Year (yyyy)
+
+    Samples:
+    • en-US: 12/25/2022
+    • en-GB: 25/12/2022
+    • fa-IR: 2022/12/25
+    -->
+    <string name="upsert_warranty_textfield_expiry_date_value">%1$s/%2$s/%3$d</string>
+    <string name="upsert_warranty_checkbox_lifetime">Lifetime Warranty</string>
+    <string name="upsert_warranty_starting_date_picker_title">Select Starting Date</string>
+    <string name="upsert_warranty_expiry_date_picker_title">Select Expiry Date</string>
+    <string name="upsert_warranty_error_blank_title">Enter the title!</string>
+    <string name="upsert_warranty_error_blank_starting_date">Select the starting date!</string>
+    <string name="upsert_warranty_error_blank_expiry_date">Select the expiry date!</string>
+    <string name="upsert_warranty_error_blank_starting_and_expiry_date">Select the starting and expiry dates!</string>
+    <string name="upsert_warranty_error_invalid_expiry_date">Expiry date can\'t be before the starting date!</string>
 
 
     <string name="settings_app_bar_title">Settings</string>
