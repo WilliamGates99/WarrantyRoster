@@ -26,5 +26,7 @@ sealed interface UpsertWarrantyAction {
     data class ExpiryDateChanged(val expiryDateInMs: Long?) : UpsertWarrantyAction
 
     data object GetCategories : UpsertWarrantyAction
-    data object UpsertWarranty : UpsertWarrantyAction
+
+    data object AddWarranty : UpsertWarrantyAction
+    data object EditWarranty : UpsertWarrantyAction
 }

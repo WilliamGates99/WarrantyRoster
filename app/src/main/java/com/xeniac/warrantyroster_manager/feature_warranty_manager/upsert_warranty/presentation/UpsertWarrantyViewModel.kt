@@ -10,14 +10,17 @@ import com.xeniac.warrantyroster_manager.core.domain.utils.convertDigitsToEnglis
 import com.xeniac.warrantyroster_manager.core.presentation.common.states.CustomTextFieldState
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.UpsertWarrantyScreen
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.utils.WarrantyNavType
+import com.xeniac.warrantyroster_manager.core.presentation.common.utils.Event
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.NetworkObserverHelper.hasNetworkConnection
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiEvent
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.domain.errors.ObserveCategoriesError
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.domain.models.Warranty
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.domain.models.WarrantyCategory
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.presentation.utils.asUiText
+import com.xeniac.warrantyroster_manager.feature_warranty_manager.upsert_warranty.domain.errors.UpsertWarrantyError
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.upsert_warranty.domain.use_cases.UpsertWarrantyUseCases
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.upsert_warranty.presentation.states.UpsertWarrantyState
+import com.xeniac.warrantyroster_manager.feature_warranty_manager.upsert_warranty.presentation.utils.asUiText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
@@ -33,6 +36,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atStartOfDayIn
+import kotlinx.datetime.toLocalDateTime
 import javax.inject.Inject
 import kotlin.reflect.typeOf
 import kotlin.time.Duration.Companion.minutes
@@ -71,8 +75,11 @@ class UpsertWarrantyViewModel @Inject constructor(
     private val _getCategoriesEventChannel = Channel<UiEvent>()
     val getCategoriesEventChannel = _getCategoriesEventChannel.receiveAsFlow()
 
-    private val _upsertWarrantyEventChannel = Channel<UiEvent>()
-    val upsertWarrantyEventChannel = _upsertWarrantyEventChannel.receiveAsFlow()
+    private val _addWarrantyEventChannel = Channel<UiEvent>()
+    val addWarrantyEventChannel = _addWarrantyEventChannel.receiveAsFlow()
+
+    private val _editWarrantyEventChannel = Channel<Event>()
+    val editWarrantyEventChannel = _editWarrantyEventChannel.receiveAsFlow()
 
     private var getCategoriesJob: Job? = null
 
@@ -99,7 +106,8 @@ class UpsertWarrantyViewModel @Inject constructor(
             is UpsertWarrantyAction.StartingDateChanged -> startingDateChanged(action.startingDateInMs)
             is UpsertWarrantyAction.ExpiryDateChanged -> expiryDateChanged(action.expiryDateInMs)
             UpsertWarrantyAction.GetCategories -> getCategories()
-            UpsertWarrantyAction.UpsertWarranty -> upsertWarranty()
+            UpsertWarrantyAction.AddWarranty -> addWarranty()
+            UpsertWarrantyAction.EditWarranty -> editWarranty()
         }
     }
 
@@ -252,7 +260,7 @@ class UpsertWarrantyViewModel @Inject constructor(
             it.copy(
                 isLifetimeWarranty = isChecked,
                 selectedExpiryDate = null,
-                selectedExpiryDateError = null
+                selectedStartingAndExpiryDatesError = null
             )
         }
     }
@@ -265,7 +273,7 @@ class UpsertWarrantyViewModel @Inject constructor(
                 selectedStartingDate = startingDateInMs?.let { dateInMs ->
                     Instant.fromEpochMilliseconds(epochMilliseconds = dateInMs)
                 },
-                selectedStartingDateError = null
+                selectedStartingAndExpiryDatesError = null
             )
         }
     }
@@ -278,7 +286,7 @@ class UpsertWarrantyViewModel @Inject constructor(
                 selectedExpiryDate = expiryDateInMs?.let { dateInMs ->
                     Instant.fromEpochMilliseconds(epochMilliseconds = dateInMs)
                 },
-                selectedExpiryDateError = null
+                selectedStartingAndExpiryDatesError = null
             )
         }
     }
@@ -321,49 +329,252 @@ class UpsertWarrantyViewModel @Inject constructor(
         }.launchIn(scope = viewModelScope)
     }
 
-    private fun upsertWarranty() {
+    private fun addWarranty() {
         if (!hasNetworkConnection()) {
-            _upsertWarrantyEventChannel.trySend(UiEvent.ShowOfflineSnackbar)
+            _addWarrantyEventChannel.trySend(UiEvent.ShowOfflineSnackbar)
             return
         }
 
-//        upsertWarrantyUseCases.upsert.get()(
-//            warrantyId = _state.value.warranty.id
-//        ).onStart {
-//            _state.update {
-//                it.copy(isDeleteLoading = true)
-//            }
-//        }.onEach { result ->
-//            when (result) {
-//                is Result.Success -> {
-//                    // TODO: UPDATE UPDATING_WARRANTY BEFORE NAVIGATING BACK TO WARRANTY DETAILS SCREEN
-//                    _deleteWarrantyEventChannel.send(
-//                        UiEvent.ShowLongToast(
-//                            UiText.StringResource(
-//                                resId = R.string.warranty_details_delete_message_success,
-//                                _state.value.warranty.title
-//                            )
-//                        )
-//                    )
-//                    _deleteWarrantyEventChannel.send(UiEvent.NavigateUp)
-//                }
-//                is Result.Error -> {
-//                    when (val error = result.error) {
-//                        DeleteWarrantyError.Network.FirebaseAuthUnauthorizedUser -> {
-//                            _deleteWarrantyEventChannel.send(UiEvent.ForceLogoutUnauthorizedUser)
-//                        }
-//                        else -> {
-//                            _deleteWarrantyEventChannel.send(
-//                                UiEvent.ShowLongSnackbar(error.asUiText())
-//                            )
-//                        }
-//                    }
-//                }
-//            }
-//        }.onCompletion {
-//            _state.update {
-//                it.copy(isDeleteLoading = false)
-//            }
-//        }.launchIn(scope = viewModelScope)
+        upsertWarrantyUseCases.addWarrantyUseCase.get()(
+            title = _state.value.titleState.value.text,
+            brand = _state.value.brandState.value.text,
+            model = _state.value.modelState.value.text,
+            serialNumber = _state.value.serialNumberState.value.text,
+            description = _state.value.descriptionState.value.text,
+            selectedCategory = _state.value.selectedCategory,
+            isLifetime = _state.value.isLifetimeWarranty,
+            selectedStartingDate = _state.value.selectedStartingDate,
+            selectedExpiryDate = _state.value.selectedExpiryDate
+        ).onStart {
+            _state.update {
+                it.copy(isUpsertLoading = true)
+            }
+        }.onEach { upsertWarrantyResult ->
+            upsertWarrantyResult.warrantyIdError?.let { warrantyIdError ->
+                _addWarrantyEventChannel.send(UiEvent.ShowLongSnackbar(warrantyIdError.asUiText()))
+            }
+
+            upsertWarrantyResult.titleError?.let { titleError ->
+                _state.update {
+                    it.copy(
+                        titleState = it.titleState.copy(
+                            errorText = titleError.asUiText()
+                        )
+                    )
+                }
+            }
+
+            upsertWarrantyResult.brandError?.let { brandError ->
+                _state.update {
+                    it.copy(
+                        brandState = it.brandState.copy(
+                            errorText = brandError.asUiText()
+                        )
+                    )
+                }
+            }
+
+            upsertWarrantyResult.modelError?.let { modelError ->
+                _state.update {
+                    it.copy(
+                        modelState = it.modelState.copy(
+                            errorText = modelError.asUiText()
+                        )
+                    )
+                }
+            }
+
+            upsertWarrantyResult.serialNumberError?.let { serialNumberError ->
+                _state.update {
+                    it.copy(
+                        serialNumberState = it.serialNumberState.copy(
+                            errorText = serialNumberError.asUiText()
+                        )
+                    )
+                }
+            }
+
+            upsertWarrantyResult.descriptionError?.let { descriptionError ->
+                _state.update {
+                    it.copy(
+                        descriptionState = it.descriptionState.copy(
+                            errorText = descriptionError.asUiText()
+                        )
+                    )
+                }
+            }
+
+            upsertWarrantyResult.selectedCategoryError?.let { selectedCategoryError ->
+                _state.update {
+                    it.copy(categoriesErrorMessage = selectedCategoryError.asUiText())
+                }
+            }
+
+            upsertWarrantyResult.startingAndExpiryDatesError?.let { startingAndExpiryDatesError ->
+                _state.update {
+                    it.copy(selectedStartingAndExpiryDatesError = startingAndExpiryDatesError.asUiText())
+                }
+            }
+
+            when (val result = upsertWarrantyResult.result) {
+                is Result.Success -> {
+                    _addWarrantyEventChannel.send(UiEvent.NavigateUp)
+                }
+                is Result.Error -> {
+                    when (val error = result.error) {
+                        UpsertWarrantyError.Network.FirebaseAuthUnauthorizedUser -> {
+                            _addWarrantyEventChannel.send(UiEvent.ForceLogoutUnauthorizedUser)
+                        }
+                        else -> {
+                            _addWarrantyEventChannel.send(
+                                UiEvent.ShowLongSnackbar(error.asUiText())
+                            )
+                        }
+                    }
+                }
+                null -> Unit
+            }
+        }.onCompletion {
+            _state.update {
+                it.copy(isUpsertLoading = false)
+            }
+        }.launchIn(scope = viewModelScope)
+    }
+
+    private fun editWarranty() {
+        if (!hasNetworkConnection()) {
+            _editWarrantyEventChannel.trySend(UiEvent.ShowOfflineSnackbar)
+            return
+        }
+
+        upsertWarrantyUseCases.editWarrantyUseCase.get()(
+            warrantyId = _state.value.updatingWarranty?.id,
+            title = _state.value.titleState.value.text,
+            brand = _state.value.brandState.value.text,
+            model = _state.value.modelState.value.text,
+            serialNumber = _state.value.serialNumberState.value.text,
+            description = _state.value.descriptionState.value.text,
+            selectedCategory = _state.value.selectedCategory,
+            isLifetime = _state.value.isLifetimeWarranty,
+            selectedStartingDate = _state.value.selectedStartingDate,
+            selectedExpiryDate = _state.value.selectedExpiryDate
+        ).onStart {
+            _state.update {
+                it.copy(isUpsertLoading = true)
+            }
+        }.onEach { upsertWarrantyResult ->
+            upsertWarrantyResult.warrantyIdError?.let { warrantyIdError ->
+                _editWarrantyEventChannel.send(UiEvent.ShowLongSnackbar(warrantyIdError.asUiText()))
+            }
+
+            upsertWarrantyResult.titleError?.let { titleError ->
+                _state.update {
+                    it.copy(
+                        titleState = it.titleState.copy(
+                            errorText = titleError.asUiText()
+                        )
+                    )
+                }
+            }
+
+            upsertWarrantyResult.brandError?.let { brandError ->
+                _state.update {
+                    it.copy(
+                        brandState = it.brandState.copy(
+                            errorText = brandError.asUiText()
+                        )
+                    )
+                }
+            }
+
+            upsertWarrantyResult.modelError?.let { modelError ->
+                _state.update {
+                    it.copy(
+                        modelState = it.modelState.copy(
+                            errorText = modelError.asUiText()
+                        )
+                    )
+                }
+            }
+
+            upsertWarrantyResult.serialNumberError?.let { serialNumberError ->
+                _state.update {
+                    it.copy(
+                        serialNumberState = it.serialNumberState.copy(
+                            errorText = serialNumberError.asUiText()
+                        )
+                    )
+                }
+            }
+
+            upsertWarrantyResult.descriptionError?.let { descriptionError ->
+                _state.update {
+                    it.copy(
+                        descriptionState = it.descriptionState.copy(
+                            errorText = descriptionError.asUiText()
+                        )
+                    )
+                }
+            }
+
+            upsertWarrantyResult.selectedCategoryError?.let { selectedCategoryError ->
+                _state.update {
+                    it.copy(categoriesErrorMessage = selectedCategoryError.asUiText())
+                }
+            }
+
+            upsertWarrantyResult.startingAndExpiryDatesError?.let { startingAndExpiryDatesError ->
+                _state.update {
+                    it.copy(selectedStartingAndExpiryDatesError = startingAndExpiryDatesError.asUiText())
+                }
+            }
+
+            when (val result = upsertWarrantyResult.result) {
+                is Result.Success -> {
+                    _state.value.updatingWarranty?.let {
+                        val timeZone = TimeZone.currentSystemDefault()
+
+                        val updatedWarranty = it.copy(
+                            title = _state.value.titleState.value.text.trim(),
+                            brand = _state.value.brandState.value.text.trim(),
+                            model = _state.value.modelState.value.text.trim(),
+                            serialNumber = _state.value.serialNumberState.value.text.trim(),
+                            description = _state.value.descriptionState.value.text.trim(),
+                            category = _state.value.selectedCategory ?: it.category,
+                            isLifetime = _state.value.isLifetimeWarranty,
+                            startingDate = _state.value.selectedStartingDate?.toLocalDateTime(
+                                timeZone = timeZone
+                            )?.date ?: it.startingDate,
+                            expiryDate = _state.value.selectedExpiryDate?.toLocalDateTime(
+                                timeZone = timeZone
+                            )?.date ?: it.expiryDate
+                        )
+
+                        _editWarrantyEventChannel.send(
+                            UpsertWarrantyUiEvent.NavigateToWarrantyDetailsScreen(
+                                updatedWarranty = updatedWarranty
+                            )
+                        )
+                    }
+                }
+                is Result.Error -> {
+                    when (val error = result.error) {
+                        UpsertWarrantyError.Network.FirebaseAuthUnauthorizedUser -> {
+                            _editWarrantyEventChannel.send(UiEvent.ForceLogoutUnauthorizedUser)
+                        }
+                        else -> {
+                            _editWarrantyEventChannel.send(
+                                UiEvent.ShowLongSnackbar(error.asUiText())
+                            )
+                        }
+                    }
+                }
+                null -> Unit
+            }
+        }.onCompletion {
+            _state.update {
+                it.copy(isUpsertLoading = false)
+            }
+        }.launchIn(scope = viewModelScope)
     }
 }

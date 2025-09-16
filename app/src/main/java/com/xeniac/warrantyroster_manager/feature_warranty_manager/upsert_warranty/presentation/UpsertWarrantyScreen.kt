@@ -34,6 +34,7 @@ import com.xeniac.warrantyroster_manager.core.presentation.common.UserViewModel
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.CustomCenterAlignedTopAppBar
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.SwipeableSnackbar
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.showLongSnackbar
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.showOfflineSnackbar
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.ObserverAsEvent
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiEvent
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.domain.models.Warranty
@@ -71,14 +72,30 @@ fun UpsertWarrantyScreen(
         }
     }
 
-    /*
-    ObserverAsEvent(flow = viewModel.deleteWarrantyEventChannel) { event ->
+    ObserverAsEvent(flow = viewModel.addWarrantyEventChannel) { event ->
         when (event) {
-            UiEvent.NavigateUp -> {
-                when (state.updatingWarranty) {
-                    null -> onNavigateUp()
-                    else -> onNavigateToWarrantyDetailsScreen(state.updatingWarranty!!)
-                }
+            UiEvent.NavigateUp -> onNavigateUp()
+            UiEvent.ForceLogoutUnauthorizedUser -> {
+                userViewModel.onAction(UserAction.Logout)
+            }
+            UiEvent.ShowOfflineSnackbar -> context.showOfflineSnackbar(
+                scope = scope,
+                snackbarHostState = snackbarHostState,
+                onAction = { viewModel.onAction(UpsertWarrantyAction.AddWarranty) }
+            )
+            is UiEvent.ShowLongSnackbar -> context.showLongSnackbar(
+                message = event.message,
+                scope = scope,
+                snackbarHostState = snackbarHostState
+            )
+            else -> Unit
+        }
+    }
+
+    ObserverAsEvent(flow = viewModel.editWarrantyEventChannel) { event ->
+        when (event) {
+            is UpsertWarrantyUiEvent.NavigateToWarrantyDetailsScreen -> {
+                onNavigateToWarrantyDetailsScreen(event.updatedWarranty)
             }
             UiEvent.ForceLogoutUnauthorizedUser -> {
                 userViewModel.onAction(UserAction.Logout)
@@ -86,18 +103,15 @@ fun UpsertWarrantyScreen(
             UiEvent.ShowOfflineSnackbar -> context.showOfflineSnackbar(
                 scope = scope,
                 snackbarHostState = snackbarHostState,
-                onAction = { viewModel.onAction(WarrantyDetailsAction.DeleteWarranty) }
+                onAction = { viewModel.onAction(UpsertWarrantyAction.AddWarranty) }
             )
             is UiEvent.ShowLongSnackbar -> context.showLongSnackbar(
                 message = event.message,
                 scope = scope,
                 snackbarHostState = snackbarHostState
             )
-            is UiEvent.ShowLongToast -> context.showLongToast(message = event.message)
-            else -> Unit
         }
     }
-    */
 
     Scaffold(
         snackbarHost = { SwipeableSnackbar(hostState = snackbarHostState) },

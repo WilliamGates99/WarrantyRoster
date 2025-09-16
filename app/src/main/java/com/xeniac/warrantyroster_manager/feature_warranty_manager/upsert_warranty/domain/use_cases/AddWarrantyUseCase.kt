@@ -79,10 +79,10 @@ class AddWarrantyUseCase(
                 result = addWarrantyRepository.addWarranty(
                     addingWarranty = UpsertingWarranty(
                         title = title,
-                        brand = brand.ifBlank { null },
-                        model = model.ifBlank { null },
-                        serialNumber = serialNumber.ifBlank { null },
-                        description = description.ifBlank { null },
+                        brand = brand,
+                        model = model,
+                        serialNumber = serialNumber,
+                        description = description,
                         selectedCategory = selectedCategory,
                         isLifetime = isLifetime,
                         selectedStartingDate = selectedStartingDate!!,

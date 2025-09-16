@@ -16,11 +16,11 @@ fun UpsertingWarranty.toUpsertingWarrantyDto(
     dateFormat: DateTimeFormat<LocalDate> = LocalDate.Formats.ISO
 ): UpsertingWarrantyDto = UpsertingWarrantyDto(
     uuid = uuid,
-    title = title,
-    brand = brand,
-    model = model,
-    serialNumber = serialNumber,
-    description = description,
+    title = title.trim(),
+    brand = brand.ifBlank { null }?.trim(),
+    model = model.ifBlank { null }?.trim(),
+    serialNumber = serialNumber.ifBlank { null }?.trim(),
+    description = description.ifBlank { null }?.trim(),
     categoryId = selectedCategory?.id ?: "10",
     isLifetime = isLifetime,
     startingDate = selectedStartingDate.toLocalDateTime(
