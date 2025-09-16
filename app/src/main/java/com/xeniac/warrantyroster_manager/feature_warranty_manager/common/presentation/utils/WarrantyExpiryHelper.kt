@@ -11,10 +11,10 @@ import kotlin.time.ExperimentalTime
 @OptIn(ExperimentalTime::class)
 fun calculateWarrantyExpiryStatus(
     isLifetime: Boolean,
-    expiryDate: LocalDate,
+    expiryDate: LocalDate?,
     timeZone: TimeZone = TimeZone.currentSystemDefault()
 ): WarrantyExpiryStatus {
-    if (isLifetime) {
+    if (isLifetime || expiryDate == null) {
         return WarrantyExpiryStatus.VALID
     }
 

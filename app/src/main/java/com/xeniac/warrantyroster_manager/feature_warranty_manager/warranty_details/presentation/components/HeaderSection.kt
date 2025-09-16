@@ -47,7 +47,7 @@ fun HeaderSection(
     category: WarrantyCategory,
     isLifetime: Boolean,
     startingDate: LocalDate,
-    expiryDate: LocalDate,
+    expiryDate: LocalDate?,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(horizontal = 4.dp)
 ) {
@@ -73,7 +73,7 @@ fun HeaderSection(
 private fun DateInfoSection(
     isLifetime: Boolean,
     startingDate: LocalDate,
-    expiryDate: LocalDate,
+    expiryDate: LocalDate?,
     modifier: Modifier = Modifier,
     decimalFormat: DecimalFormat = requireDecimalFormat()
 ) {
@@ -104,7 +104,7 @@ private fun DateInfoSection(
             title = stringResource(id = R.string.warranty_details_expiry_date_title),
             value = when {
                 isLifetime -> stringResource(id = R.string.warranty_details_expiry_date_lifetime)
-                else -> with(expiryDate) {
+                else -> with(expiryDate!!) {
                     stringResource(
                         id = R.string.warranty_details_expiry_date_value,
                         decimalFormat.format(month.number),

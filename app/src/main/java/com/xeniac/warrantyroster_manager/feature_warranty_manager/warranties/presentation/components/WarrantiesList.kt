@@ -235,7 +235,7 @@ private fun WarrantyInfo(
 private fun TitleAndExpiryStatus(
     title: String,
     isLifetime: Boolean,
-    expiryDate: LocalDate,
+    expiryDate: LocalDate?,
     modifier: Modifier = Modifier,
     titleStyle: TextStyle = LocalTextStyle.current.copy(
         fontSize = 16.sp,
@@ -303,7 +303,7 @@ private fun ExpiryStatus(
 @Composable
 private fun ExpiryDateAndCategoryTitle(
     isLifetime: Boolean,
-    expiryDate: LocalDate,
+    expiryDate: LocalDate?,
     category: WarrantyCategory,
     modifier: Modifier = Modifier,
     currentAppLocale: AppLocale = requireCurrentAppLocale(),
@@ -331,7 +331,7 @@ private fun ExpiryDateAndCategoryTitle(
         Text(
             text = when {
                 isLifetime -> stringResource(id = R.string.warranties_expiry_lifetime)
-                else -> with(expiryDate) {
+                else -> with(expiryDate!!) {
                     val monthName = stringArrayResource(
                         id = R.array.warranties_month_name
                     )[month.number - 1]
