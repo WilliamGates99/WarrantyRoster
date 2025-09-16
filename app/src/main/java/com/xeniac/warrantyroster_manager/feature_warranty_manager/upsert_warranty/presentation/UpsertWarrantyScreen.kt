@@ -35,6 +35,8 @@ import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.ObserverAsEvent
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiEvent
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.domain.models.Warranty
+import com.xeniac.warrantyroster_manager.feature_warranty_manager.upsert_warranty.presentation.components.CategoriesBottomSheet
+import com.xeniac.warrantyroster_manager.feature_warranty_manager.upsert_warranty.presentation.components.CategoryAndDescriptionSection
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.upsert_warranty.presentation.components.DeviceSection
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.upsert_warranty.presentation.components.UpsertWarrantyButton
 
@@ -157,7 +159,26 @@ fun UpsertWarrantyScreen(
                 onAction = viewModel::onAction
             )
 
-            // TODO: DESCRIPTION
+            CategoryAndDescriptionSection(
+                isLoading = state.isUpsertLoading,
+                selectedCategory = state.selectedCategory,
+                selectedCategoryError = state.selectedCategoryError,
+                descriptionState = state.descriptionState,
+                onAction = viewModel::onAction
+            )
         }
     }
+
+    CategoriesBottomSheet(
+        isVisible = state.isCategoriesBottomSheetVisible,
+        isCategoriesLoading = state.isCategoriesLoading,
+        categories = state.categories,
+        errorMessage = state.categoriesErrorMessage,
+        selectedCategory = state.selectedCategory,
+        onAction = viewModel::onAction
+    )
+
+    // TODO: STARTING DATE PICKER DIALOG
+
+    // TODO: EXPIRY DATE PICKER DIALOG
 }

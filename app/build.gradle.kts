@@ -46,6 +46,12 @@ android {
             name = "HTTP_BASE_URL",
             value = properties.getProperty("HTTP_BASE_URL")
         )
+
+        buildConfigField(
+            type = "String",
+            name = "DEFAULT_CATEGORY_ICON_URL",
+            value = properties.getProperty("DEFAULT_CATEGORY_ICON_URL")
+        )
     }
 
     androidResources {

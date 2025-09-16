@@ -90,8 +90,8 @@ class UpsertWarrantyViewModel @Inject constructor(
 
     fun onAction(action: UpsertWarrantyAction) {
         when (action) {
-            UpsertWarrantyAction.ShowWarrantiesBottomSheet -> showWarrantiesBottomSheet()
-            UpsertWarrantyAction.DismissWarrantiesBottomSheet -> dismissWarrantiesBottomSheet()
+            UpsertWarrantyAction.ShowCategoriesBottomSheet -> showCategoriesBottomSheet()
+            UpsertWarrantyAction.DismissCategoriesBottomSheet -> dismissCategoriesBottomSheet()
             UpsertWarrantyAction.ShowStartingDatePickerDialog -> showStartingDatePickerDialog()
             UpsertWarrantyAction.DismissStartingDatePickerDialog -> dismissStartingDatePickerDialog()
             UpsertWarrantyAction.ShowExpiryDatePickerDialog -> showExpiryDatePickerDialog()
@@ -132,15 +132,15 @@ class UpsertWarrantyViewModel @Inject constructor(
         }
     }
 
-    private fun showWarrantiesBottomSheet() = viewModelScope.launch {
+    private fun showCategoriesBottomSheet() = viewModelScope.launch {
         _state.update {
-            it.copy(isWarrantiesBottomSheetVisible = true)
+            it.copy(isCategoriesBottomSheetVisible = true)
         }
     }
 
-    private fun dismissWarrantiesBottomSheet() = viewModelScope.launch {
+    private fun dismissCategoriesBottomSheet() = viewModelScope.launch {
         _state.update {
-            it.copy(isWarrantiesBottomSheetVisible = false)
+            it.copy(isCategoriesBottomSheetVisible = false)
         }
     }
 

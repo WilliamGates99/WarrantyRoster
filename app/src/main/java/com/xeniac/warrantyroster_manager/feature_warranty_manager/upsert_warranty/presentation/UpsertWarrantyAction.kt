@@ -4,8 +4,8 @@ import androidx.compose.ui.text.input.TextFieldValue
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.domain.models.WarrantyCategory
 
 sealed interface UpsertWarrantyAction {
-    data object ShowWarrantiesBottomSheet : UpsertWarrantyAction
-    data object DismissWarrantiesBottomSheet : UpsertWarrantyAction
+    data object ShowCategoriesBottomSheet : UpsertWarrantyAction
+    data object DismissCategoriesBottomSheet : UpsertWarrantyAction
 
     data object ShowStartingDatePickerDialog : UpsertWarrantyAction
     data object DismissStartingDatePickerDialog : UpsertWarrantyAction

@@ -27,7 +27,7 @@ data class UpsertWarrantyState(
     val selectedStartingDate: Instant? = null,
     val selectedExpiryDate: Instant? = null,
     val selectedStartingAndExpiryDatesError: UiText? = null,
-    val isWarrantiesBottomSheetVisible: Boolean = false,
+    val isCategoriesBottomSheetVisible: Boolean = false,
     val isStartingDatePickerDialogVisible: Boolean = false,
     val isExpiryDatePickerDialogVisible: Boolean = false,
     val isCategoriesLoading: Boolean = true,
