@@ -7,13 +7,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
@@ -24,7 +22,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -38,10 +35,10 @@ import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.ObserverAsEvent
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiEvent
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.domain.models.Warranty
+import com.xeniac.warrantyroster_manager.feature_warranty_manager.upsert_warranty.presentation.components.DeviceSection
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.upsert_warranty.presentation.components.UpsertWarrantyButton
-import kotlin.time.ExperimentalTime
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalTime::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UpsertWarrantyScreen(
     userViewModel: UserViewModel,
@@ -54,8 +51,8 @@ fun UpsertWarrantyScreen(
     val snackbarHostState = remember { SnackbarHostState() }
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-    val horizontalPadding by remember { derivedStateOf { 16.dp } }
-    val verticalPadding by remember { derivedStateOf { 16.dp } }
+    val horizontalPadding by remember { derivedStateOf { 8.dp } }
+    val verticalPadding by remember { derivedStateOf { 8.dp } }
 
     val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -138,7 +135,7 @@ fun UpsertWarrantyScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection)
     ) { innerPadding ->
         Column(
-            verticalArrangement = Arrangement.spacedBy(space = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(space = 8.dp),
             modifier = Modifier
                 .fillMaxSize()
                 .windowInsetsPadding(WindowInsets(top = innerPadding.calculateTopPadding()))
@@ -150,15 +147,17 @@ fun UpsertWarrantyScreen(
                     vertical = verticalPadding
                 )
         ) {
-            Text(
-                text = """
-            Warranty = ${state.updatingWarranty}
-        """.trimIndent(),
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .wrapContentSize()
+            // TODO: TOP
+
+            DeviceSection(
+                isLoading = state.isUpsertLoading,
+                brandState = state.brandState,
+                modelState = state.modelState,
+                serialNumberState = state.serialNumberState,
+                onAction = viewModel::onAction
             )
+
+            // TODO: DESCRIPTION
         }
     }
 }

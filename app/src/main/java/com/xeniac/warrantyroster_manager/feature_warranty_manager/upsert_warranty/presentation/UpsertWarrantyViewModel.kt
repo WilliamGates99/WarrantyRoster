@@ -60,10 +60,10 @@ class UpsertWarrantyViewModel @Inject constructor(
     )
     val state = _state.onStart {
         val shouldSetUpdatingWarrantyData = with(_state.value) {
-            !isUpdatingWarrantyDataSet && updatingWarranty != null
+            !isUpdatingWarrantyDataInitialized && updatingWarranty != null
         }
         if (shouldSetUpdatingWarrantyData) {
-            setUpdatingWarrantyData()
+            initializedUpdatingWarrantyData()
         }
         getCategories()
     }.stateIn(
@@ -111,7 +111,7 @@ class UpsertWarrantyViewModel @Inject constructor(
         }
     }
 
-    private fun setUpdatingWarrantyData(
+    private fun initializedUpdatingWarrantyData(
         timeZone: TimeZone = TimeZone.currentSystemDefault()
     ) = viewModelScope.launch {
         _state.update { state ->
@@ -126,7 +126,7 @@ class UpsertWarrantyViewModel @Inject constructor(
                     isLifetimeWarranty = it.isLifetime,
                     selectedStartingDate = it.startingDate.atStartOfDayIn(timeZone = timeZone),
                     selectedExpiryDate = it.expiryDate.atStartOfDayIn(timeZone = timeZone),
-                    isUpdatingWarrantyDataSet = true
+                    isUpdatingWarrantyDataInitialized = true,
                 )
             } ?: state
         }

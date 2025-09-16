@@ -13,7 +13,7 @@ import kotlin.time.Instant
 @Parcelize
 data class UpsertWarrantyState(
     val updatingWarranty: Warranty?,
-    val isUpdatingWarrantyDataSet: Boolean = false,
+    val isUpdatingWarrantyDataInitialized: Boolean = false,
     val categories: List<WarrantyCategory>? = null,
     val categoriesErrorMessage: UiText? = null,
     val titleState: CustomTextFieldState = CustomTextFieldState(),
