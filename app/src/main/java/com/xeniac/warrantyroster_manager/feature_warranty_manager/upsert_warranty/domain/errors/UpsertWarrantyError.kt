@@ -4,11 +4,13 @@ import com.xeniac.warrantyroster_manager.core.domain.errors.Error
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiText
 
 sealed class UpsertWarrantyError : Error() {
+    data object InvalidWarranty : UpsertWarrantyError()
+
     data object BlankTitle : UpsertWarrantyError()
 
+    data object BlankStartingAndExpiryDate : UpsertWarrantyError()
     data object BlankStartingDate : UpsertWarrantyError()
     data object BlankExpiryDate : UpsertWarrantyError()
-    data object BlankStartingAndExpiryDate : UpsertWarrantyError()
     data object InvalidExpiryDate : UpsertWarrantyError()
 
     sealed class Network : UpsertWarrantyError() {

@@ -5,6 +5,6 @@ import dagger.Lazy
 
 data class UpsertWarrantyUseCases(
     val observeCategoriesUseCase: Lazy<ObserveCategoriesUseCase>,
-//    val addWarrantyUseCase: Lazy<AddWarrantyUseCase>,
-//    val editWarrantyUseCase: Lazy<editWarrantyUseCase>,
+    val addWarrantyUseCase: Lazy<AddWarrantyUseCase>,
+    val editWarrantyUseCase: Lazy<EditWarrantyUseCase>
 )

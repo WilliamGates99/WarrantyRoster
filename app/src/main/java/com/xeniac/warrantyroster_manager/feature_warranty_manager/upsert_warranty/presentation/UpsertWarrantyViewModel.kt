@@ -249,7 +249,11 @@ class UpsertWarrantyViewModel @Inject constructor(
         isChecked: Boolean
     ) = viewModelScope.launch {
         _state.update {
-            it.copy(isLifetimeWarranty = isChecked)
+            it.copy(
+                isLifetimeWarranty = isChecked,
+                selectedExpiryDate = null,
+                selectedExpiryDateError = null
+            )
         }
     }
 

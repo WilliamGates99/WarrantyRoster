@@ -365,6 +365,7 @@
     <string name="upsert_warranty_checkbox_lifetime">Lifetime Warranty</string>
     <string name="upsert_warranty_starting_date_picker_title">Select Starting Date</string>
     <string name="upsert_warranty_expiry_date_picker_title">Select Expiry Date</string>
+    <string name="upsert_warranty_error_invalid_warranty">Invalid warranty!</string>
     <string name="upsert_warranty_error_blank_title">Enter the title!</string>
     <string name="upsert_warranty_error_blank_starting_date">Select the starting date!</string>
     <string name="upsert_warranty_error_blank_expiry_date">Select the expiry date!</string>

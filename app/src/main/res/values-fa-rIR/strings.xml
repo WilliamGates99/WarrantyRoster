@@ -365,6 +365,7 @@
     <string name="upsert_warranty_checkbox_lifetime">گارانتی مادام‌العمر</string>
     <string name="upsert_warranty_starting_date_picker_title">تاریخ شروع را انتخاب کنید</string>
     <string name="upsert_warranty_expiry_date_picker_title">تاریخ اتمام را انتخاب کنید</string>
+    <string name="upsert_warranty_error_invalid_warranty">گارانتی نا‌معتبر!</string>
     <string name="upsert_warranty_error_blank_title">عنوان را وارد کنید!</string>
     <string name="upsert_warranty_error_blank_starting_date">تاریخ شروع را انتخاب کنید!</string>
     <string name="upsert_warranty_error_blank_expiry_date">تاریخ اتمام را انتخاب کنید!</string>
