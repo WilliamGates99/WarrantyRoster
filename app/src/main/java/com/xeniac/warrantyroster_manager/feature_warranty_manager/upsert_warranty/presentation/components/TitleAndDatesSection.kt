@@ -21,6 +21,7 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.dropShadow
@@ -39,6 +40,7 @@ import androidx.compose.ui.unit.sp
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.core.di.entrypoints.requireDecimalFormat
 import com.xeniac.warrantyroster_manager.core.presentation.common.states.CustomTextFieldState
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.CustomCheckbox
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.CustomClickableOutlinedTextField
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.CustomOutlinedTextField
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.Black
@@ -127,7 +129,7 @@ private fun DatesSection(
     onAction: (action: UpsertWarrantyAction) -> Unit
 ) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(space = 8.dp),
+        verticalArrangement = Arrangement.spacedBy(space = 4.dp),
         modifier = modifier.fillMaxWidth()
     ) {
         StartingAndExpiryDatesSection(
@@ -139,7 +141,17 @@ private fun DatesSection(
             onAction = onAction
         )
 
-        // todo: LIFETIME
+        CustomCheckbox(
+            isLoading = isLoading,
+            isChecked = isLifetimeWarranty,
+            text = stringResource(id = R.string.upsert_warranty_checkbox_lifetime),
+            onCheckedChange = { isChecked ->
+                onAction(UpsertWarrantyAction.IsLifetimeWarrantyChanged(isChecked = isChecked))
+            },
+            modifier = Modifier
+                .align(Alignment.End)
+                .padding(horizontal = 4.dp)
+        )
     }
 }
 
