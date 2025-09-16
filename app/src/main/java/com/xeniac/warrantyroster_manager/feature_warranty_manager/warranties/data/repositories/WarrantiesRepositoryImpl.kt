@@ -6,6 +6,7 @@ import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.Query
 import com.xeniac.warrantyroster_manager.core.data.utils.FirebaseErrorsHelper.isFirebase403Error
 import com.xeniac.warrantyroster_manager.core.di.WarrantiesCollection
@@ -40,8 +41,10 @@ class WarrantiesRepositoryImpl @Inject constructor(
     override fun observeWarranties(
         fetchedCategories: List<WarrantyCategory>?
     ): Flow<Result<List<Warranty>, ObserveWarrantiesError>> = callbackFlow {
+        var warrantiesListenerRegistration: ListenerRegistration? = null
+
         try {
-            warrantiesCollectionRef.get().whereEqualTo(
+            warrantiesListenerRegistration = warrantiesCollectionRef.get().whereEqualTo(
                 /* field = */ WARRANTIES_UUID,
                 /* value = */ firebaseAuth.get().currentUser?.uid
             ).orderBy(
@@ -134,7 +137,9 @@ class WarrantiesRepositoryImpl @Inject constructor(
             trySend(Result.Error(ObserveWarrantiesError.Network.SomethingWentWrong))
         }
 
-        awaitClose { }
+        awaitClose {
+            warrantiesListenerRegistration?.remove()
+        }
     }
 
     override suspend fun searchWarranties(

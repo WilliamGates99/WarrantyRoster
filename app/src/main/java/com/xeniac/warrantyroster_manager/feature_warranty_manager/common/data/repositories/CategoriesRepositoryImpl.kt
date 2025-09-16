@@ -5,6 +5,7 @@ import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.ListenerRegistration
 import com.xeniac.warrantyroster_manager.core.data.utils.FirebaseErrorsHelper.isFirebase403Error
 import com.xeniac.warrantyroster_manager.core.di.CategoriesCollection
 import com.xeniac.warrantyroster_manager.core.domain.models.Result
@@ -31,56 +32,59 @@ class CategoriesRepositoryImpl @Inject constructor(
 
     override fun observeCategories(
     ): Flow<Result<List<WarrantyCategory>, ObserveCategoriesError>> = callbackFlow {
+        var categoriesListenerRegistration: ListenerRegistration? = null
+
         try {
-            categoriesCollectionRef.get().addSnapshotListener { querySnapshot, exception ->
-                launch {
-                    exception?.let { e ->
-                        coroutineContext.ensureActive()
-                        Timber.e("Observe categories FirebaseFirestoreException:")
-                        e.printStackTrace()
-                        send(
-                            Result.Error(
-                                ObserveCategoriesError.Network.FirebaseFirestoreException(
-                                    message = UiText.DynamicString(
-                                        e.localizedMessage ?: e.message.orEmpty()
+            categoriesListenerRegistration = categoriesCollectionRef.get()
+                .addSnapshotListener { querySnapshot, exception ->
+                    launch {
+                        exception?.let { e ->
+                            coroutineContext.ensureActive()
+                            Timber.e("Observe categories FirebaseFirestoreException:")
+                            e.printStackTrace()
+                            send(
+                                Result.Error(
+                                    ObserveCategoriesError.Network.FirebaseFirestoreException(
+                                        message = UiText.DynamicString(
+                                            e.localizedMessage ?: e.message.orEmpty()
+                                        )
                                     )
                                 )
                             )
-                        )
-                        close()
-                    }
+                            close()
+                        }
 
-                    querySnapshot?.let {
-                        try {
-                            val categories = mutableListOf<WarrantyCategory>()
+                        querySnapshot?.let {
+                            try {
+                                val categories = mutableListOf<WarrantyCategory>()
 
-                            querySnapshot.documents.forEach { document ->
-                                val categoryDto = document.toObject(
-                                    /* valueType = */ WarrantyCategoryDto::class.java
-                                )?.copy(id = document.id)
+                                querySnapshot.documents.forEach { document ->
+                                    val categoryDto = document.toObject(
+                                        /* valueType = */ WarrantyCategoryDto::class.java
+                                    )?.copy(id = document.id)
 
-                                categoryDto?.let {
-                                    categories.add(it.toWarrantyCategory())
+                                    categoryDto?.let {
+                                        categories.add(it.toWarrantyCategory())
+                                    }
                                 }
-                            }
 
-                            categories.sortBy {
-                                val currentAppLanguageTag = settingsDataStoreRepository.get()
-                                    .getCurrentAppLocale()
-                                    .languageTag
-                                it.title[currentAppLanguageTag]
-                            }
+                                categories.sortBy {
+                                    val currentAppLanguageTag = settingsDataStoreRepository.get()
+                                        .getCurrentAppLocale()
+                                        .languageTag
+                                    it.title[currentAppLanguageTag]
+                                }
 
-                            send(Result.Success(categories))
-                        } catch (e: Exception) {
-                            coroutineContext.ensureActive()
-                            Timber.e("Observe categories query snapshot Exception:")
-                            e.printStackTrace()
-                            trySend(Result.Error(ObserveCategoriesError.Network.SomethingWentWrong))
+                                send(Result.Success(categories))
+                            } catch (e: Exception) {
+                                coroutineContext.ensureActive()
+                                Timber.e("Observe categories query snapshot Exception:")
+                                e.printStackTrace()
+                                trySend(Result.Error(ObserveCategoriesError.Network.SomethingWentWrong))
+                            }
                         }
                     }
                 }
-            }
         } catch (e: FirebaseAuthInvalidUserException) {
             Timber.e("Observe categories FirebaseAuthInvalidUserException:")
             e.printStackTrace()
@@ -107,6 +111,8 @@ class CategoriesRepositoryImpl @Inject constructor(
             trySend(Result.Error(ObserveCategoriesError.Network.SomethingWentWrong))
         }
 
-        awaitClose { }
+        awaitClose {
+            categoriesListenerRegistration?.remove()
+        }
     }
 }
