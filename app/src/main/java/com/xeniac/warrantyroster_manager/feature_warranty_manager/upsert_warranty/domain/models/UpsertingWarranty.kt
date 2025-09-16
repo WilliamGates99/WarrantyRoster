@@ -7,13 +7,12 @@ import kotlin.time.Instant
 @OptIn(ExperimentalTime::class)
 data class UpsertingWarranty(
     val title: String,
-    val brand: String,
-    val model: String,
-    val serialNumber: String,
-    val description: String,
+    val brand: String?,
+    val model: String?,
+    val serialNumber: String?,
+    val description: String?,
     val selectedCategory: WarrantyCategory?,
     val isLifetime: Boolean,
     val selectedStartingDate: Instant,
-    val selectedExpiryDate: Instant?,
-    val id: String? = null
+    val selectedExpiryDate: Instant?
 )

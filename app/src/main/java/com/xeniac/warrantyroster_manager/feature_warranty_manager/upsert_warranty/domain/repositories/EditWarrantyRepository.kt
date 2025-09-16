@@ -7,6 +7,7 @@ import com.xeniac.warrantyroster_manager.feature_warranty_manager.upsert_warrant
 interface EditWarrantyRepository {
 
     suspend fun editWarranty(
+        warrantyId: String,
         editingWarranty: UpsertingWarranty
     ): Result<Unit, UpsertWarrantyError>
 }
