@@ -8,9 +8,6 @@ import com.google.firebase.firestore.PropertyName
 data class WarrantyDto(
     @get:Exclude
     val id: String? = null,
-    @get:PropertyName("uuid")
-    @set:PropertyName("uuid")
-    var uuid: String? = null,
     @get:PropertyName("title")
     @set:PropertyName("title")
     var title: String? = null,
@@ -41,7 +38,6 @@ data class WarrantyDto(
 ) {
     constructor() : this(
         id = null,
-        uuid = null,
         title = null,
         brand = null,
         model = null,
