@@ -43,7 +43,12 @@ fun UpsertWarrantyButton(
     IconButton(
         enabled = !isLoading,
         colors = colors,
-        onClick = { onAction(UpsertWarrantyAction.UpsertWarranty) },
+        onClick = {
+            when {
+                isUpdatingWarranty -> onAction(UpsertWarrantyAction.EditWarranty)
+                else -> onAction(UpsertWarrantyAction.AddWarranty)
+            }
+        },
         modifier = modifier
     ) {
         when {
