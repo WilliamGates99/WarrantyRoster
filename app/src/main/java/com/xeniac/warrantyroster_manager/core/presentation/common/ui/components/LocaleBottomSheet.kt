@@ -62,9 +62,9 @@ fun LocaleBottomSheet(
     onDismiss: () -> Unit,
     onLocaleItemClick: (newAppLocale: AppLocale) -> Unit
 ) {
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
-
     if (isVisible) {
+        val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
+
         ModalBottomSheet(
             sheetState = sheetState,
             properties = sheetProperties,

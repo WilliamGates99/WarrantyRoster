@@ -60,9 +60,9 @@ fun ThemeBottomSheet(
     ),
     onAction: (action: SettingsAction) -> Unit
 ) {
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
-
     if (isVisible) {
+        val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
+
         ModalBottomSheet(
             sheetState = sheetState,
             properties = sheetProperties,
