@@ -5,7 +5,6 @@ import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.domain.
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.domain.models.WarrantyCategory
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
-import kotlinx.datetime.format
 import kotlinx.datetime.format.DateTimeFormat
 import kotlinx.datetime.toLocalDateTime
 import kotlin.time.Clock
@@ -43,19 +42,4 @@ fun WarrantyDto.toWarranty(
             format = dateFormat
         )
     } ?: Clock.System.now().toLocalDateTime(timeZone = timeZone).date
-)
-
-fun Warranty.toWarrantyDto(
-    dateFormat: DateTimeFormat<LocalDate> = LocalDate.Formats.ISO
-): WarrantyDto = WarrantyDto(
-    id = id,
-    title = title,
-    brand = brand,
-    model = model,
-    serialNumber = serialNumber,
-    description = description,
-    isLifetime = isLifetime,
-    categoryId = category.id,
-    startingDate = startingDate.format(format = dateFormat),
-    expiryDate = expiryDate.format(format = dateFormat)
 )

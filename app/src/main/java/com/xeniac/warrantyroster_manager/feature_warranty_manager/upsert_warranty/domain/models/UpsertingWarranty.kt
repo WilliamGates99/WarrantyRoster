@@ -13,7 +13,7 @@ data class UpsertingWarranty(
     val description: String,
     val selectedCategory: WarrantyCategory?,
     val isLifetime: Boolean,
-    val selectedStartingDate: Instant?,
+    val selectedStartingDate: Instant,
     val selectedExpiryDate: Instant?,
     val id: String? = null
 )
