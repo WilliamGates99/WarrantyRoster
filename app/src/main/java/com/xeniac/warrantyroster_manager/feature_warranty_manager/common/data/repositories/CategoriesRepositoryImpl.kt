@@ -81,6 +81,7 @@ class CategoriesRepositoryImpl @Inject constructor(
                                 Timber.e("Observe categories query snapshot Exception:")
                                 e.printStackTrace()
                                 trySend(Result.Error(ObserveCategoriesError.Network.SomethingWentWrong))
+                                close()
                             }
                         }
                     }
@@ -89,14 +90,17 @@ class CategoriesRepositoryImpl @Inject constructor(
             Timber.e("Observe categories FirebaseAuthInvalidUserException:")
             e.printStackTrace()
             trySend(Result.Error(ObserveCategoriesError.Network.FirebaseAuthUnauthorizedUser))
+            close()
         } catch (e: FirebaseNetworkException) {
             Timber.e("Observe categories FirebaseNetworkException:")
             e.printStackTrace()
             trySend(Result.Error(ObserveCategoriesError.Network.FirebaseNetworkException))
+            close()
         } catch (e: FirebaseTooManyRequestsException) {
             Timber.e("Observe categories FirebaseNetworkException:")
             e.printStackTrace()
             trySend(Result.Error(ObserveCategoriesError.Network.FirebaseTooManyRequestsException))
+            close()
         } catch (e: FirebaseException) {
             Timber.e("Observe categories FirebaseException:")
             e.printStackTrace()
@@ -104,11 +108,13 @@ class CategoriesRepositoryImpl @Inject constructor(
                 isFirebase403Error(e.message) -> trySend(Result.Error(ObserveCategoriesError.Network.Firebase403))
                 else -> trySend(Result.Error(ObserveCategoriesError.Network.SomethingWentWrong))
             }
+            close()
         } catch (e: Exception) {
             coroutineContext.ensureActive()
             Timber.e("Observe categories Exception:")
             e.printStackTrace()
             trySend(Result.Error(ObserveCategoriesError.Network.SomethingWentWrong))
+            close()
         }
 
         awaitClose {

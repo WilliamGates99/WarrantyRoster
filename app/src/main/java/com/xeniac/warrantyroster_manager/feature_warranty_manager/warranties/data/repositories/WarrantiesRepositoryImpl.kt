@@ -107,6 +107,7 @@ class WarrantiesRepositoryImpl @Inject constructor(
                             Timber.e("Observe warranties query snapshot Exception:")
                             e.printStackTrace()
                             trySend(Result.Error(ObserveWarrantiesError.Network.SomethingWentWrong))
+                            close()
                         }
                     }
                 }
@@ -115,14 +116,17 @@ class WarrantiesRepositoryImpl @Inject constructor(
             Timber.e("Observe warranties FirebaseAuthInvalidUserException:")
             e.printStackTrace()
             trySend(Result.Error(ObserveWarrantiesError.Network.FirebaseAuthUnauthorizedUser))
+            close()
         } catch (e: FirebaseNetworkException) {
             Timber.e("Observe warranties FirebaseNetworkException:")
             e.printStackTrace()
             trySend(Result.Error(ObserveWarrantiesError.Network.FirebaseNetworkException))
+            close()
         } catch (e: FirebaseTooManyRequestsException) {
             Timber.e("Observe warranties FirebaseNetworkException:")
             e.printStackTrace()
             trySend(Result.Error(ObserveWarrantiesError.Network.FirebaseTooManyRequestsException))
+            close()
         } catch (e: FirebaseException) {
             Timber.e("Observe warranties FirebaseException:")
             e.printStackTrace()
@@ -130,11 +134,13 @@ class WarrantiesRepositoryImpl @Inject constructor(
                 isFirebase403Error(e.message) -> trySend(Result.Error(ObserveWarrantiesError.Network.Firebase403))
                 else -> trySend(Result.Error(ObserveWarrantiesError.Network.SomethingWentWrong))
             }
+            close()
         } catch (e: Exception) {
             coroutineContext.ensureActive()
             Timber.e("Observe warranties Exception:")
             e.printStackTrace()
             trySend(Result.Error(ObserveWarrantiesError.Network.SomethingWentWrong))
+            close()
         }
 
         awaitClose {

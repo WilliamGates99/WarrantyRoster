@@ -8,6 +8,9 @@ import com.google.firebase.firestore.PropertyName
 data class WarrantyDto(
     @get:Exclude
     val id: String? = null,
+    @get:PropertyName("uuid")
+    @set:PropertyName("uuid")
+    var uuid: String? = null,
     @get:PropertyName("title")
     @set:PropertyName("title")
     var title: String? = null,
@@ -26,8 +29,8 @@ data class WarrantyDto(
     @get:PropertyName("categoryId")
     @set:PropertyName("categoryId")
     var categoryId: String? = null,
-    @get:PropertyName("isLifetime")
-    @set:PropertyName("isLifetime")
+    @get:PropertyName("lifetime")
+    @set:PropertyName("lifetime")
     var isLifetime: Boolean? = null,
     @get:PropertyName("startingDate")
     @set:PropertyName("startingDate")
@@ -35,4 +38,18 @@ data class WarrantyDto(
     @get:PropertyName("expiryDate")
     @set:PropertyName("expiryDate")
     var expiryDate: String? = null
-)
+) {
+    constructor() : this(
+        id = null,
+        uuid = null,
+        title = null,
+        brand = null,
+        model = null,
+        serialNumber = null,
+        description = null,
+        categoryId = null,
+        isLifetime = null,
+        startingDate = null,
+        expiryDate = null
+    )
+}

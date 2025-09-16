@@ -129,7 +129,10 @@ class WarrantiesViewModel @Inject constructor(
             when (result) {
                 is Result.Success -> {
                     _state.update {
-                        it.copy(categories = result.data)
+                        it.copy(
+                            categories = result.data,
+                            isCategoriesLoading = false
+                        )
                     }
                     getWarranties()
                 }
@@ -174,7 +177,6 @@ class WarrantiesViewModel @Inject constructor(
                     _state.update {
                         it.copy(
                             warranties = result.data,
-                            isCategoriesLoading = false,
                             isWarrantiesLoading = false
                         )
                     }
