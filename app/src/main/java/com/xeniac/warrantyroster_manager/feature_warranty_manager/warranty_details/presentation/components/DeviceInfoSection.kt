@@ -115,6 +115,7 @@ private fun DeviceInfoItem(
         color = MaterialTheme.colorScheme.dynamicGray400
     ),
     titleMaxLines: Int = 1,
+    titleOverflow: TextOverflow = TextOverflow.StartEllipsis,
     valueStyle: TextStyle = LocalTextStyle.current.copy(
         fontSize = 16.sp,
         lineHeight = 20.sp,
@@ -126,8 +127,7 @@ private fun DeviceInfoItem(
             else -> MaterialTheme.colorScheme.dynamicBlack
         }
     ),
-    valueMaxLines: Int = 1,
-    valueOverflow: TextOverflow = TextOverflow.MiddleEllipsis
+    valueMaxLines: Int = 1
 ) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(space = 8.dp),
@@ -137,7 +137,10 @@ private fun DeviceInfoItem(
         Text(
             text = title,
             style = titleStyle,
-            maxLines = titleMaxLines
+            maxLines = titleMaxLines,
+            overflow = titleOverflow,
+            softWrap = false,
+            modifier = modifier.weight(1f)
         )
 
         Text(
@@ -147,9 +150,6 @@ private fun DeviceInfoItem(
             },
             style = valueStyle,
             maxLines = valueMaxLines,
-            overflow = valueOverflow,
-            softWrap = false,
-            modifier = modifier.weight(1f)
         )
     }
 }

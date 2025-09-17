@@ -26,7 +26,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -171,16 +170,15 @@ private fun DateSection(
         color = MaterialTheme.colorScheme.dynamicGray400
     ),
     titleMaxLines: Int = 1,
+    titleOverflow: TextOverflow = TextOverflow.StartEllipsis,
     valueStyle: TextStyle = LocalTextStyle.current.copy(
         fontSize = 14.sp,
         lineHeight = 18.sp,
         fontWeight = FontWeight.Bold,
-        textDirection = TextDirection.Ltr,
         textAlign = TextAlign.End,
         color = MaterialTheme.colorScheme.dynamicBlack
     ),
-    valueMaxLines: Int = 1,
-    valueOverflow: TextOverflow = TextOverflow.MiddleEllipsis
+    valueMaxLines: Int = 1
 ) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(space = 4.dp),
@@ -197,16 +195,16 @@ private fun DateSection(
         Text(
             text = title,
             style = titleStyle,
-            maxLines = titleMaxLines
+            maxLines = titleMaxLines,
+            overflow = titleOverflow,
+            softWrap = false,
+            modifier = modifier.weight(1f)
         )
 
         Text(
             text = value,
             style = valueStyle,
-            maxLines = valueMaxLines,
-            overflow = valueOverflow,
-            softWrap = false,
-            modifier = modifier.weight(1f)
+            maxLines = valueMaxLines
         )
     }
 }

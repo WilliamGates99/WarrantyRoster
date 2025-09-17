@@ -213,7 +213,9 @@ fun UpsertWarrantyScreen(
 
     CustomDatePickerDialog(
         isVisible = state.isExpiryDatePickerDialogVisible,
-        initialSelectedDateMillis = state.selectedExpiryDate?.toEpochMilliseconds(),
+        initialSelectedDateMillis = with(state) {
+            selectedExpiryDate?.toEpochMilliseconds() ?: selectedStartingDate?.toEpochMilliseconds()
+        },
         title = stringResource(id = R.string.upsert_warranty_expiry_date_picker_title),
         onDismissRequest = {
             viewModel.onAction(UpsertWarrantyAction.DismissExpiryDatePickerDialog)

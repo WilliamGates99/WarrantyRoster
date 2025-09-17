@@ -35,7 +35,9 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.TimeZone
-import kotlinx.datetime.atStartOfDayIn
+import kotlinx.datetime.UtcOffset
+import kotlinx.datetime.atTime
+import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 import javax.inject.Inject
 import kotlin.reflect.typeOf
@@ -114,9 +116,7 @@ class UpsertWarrantyViewModel @Inject constructor(
         }
     }
 
-    private fun initializedUpdatingWarrantyData(
-        timeZone: TimeZone = TimeZone.currentSystemDefault()
-    ) = viewModelScope.launch {
+    private fun initializedUpdatingWarrantyData() = viewModelScope.launch {
         _state.update { state ->
             state.updatingWarranty?.let {
                 state.copy(
@@ -127,8 +127,14 @@ class UpsertWarrantyViewModel @Inject constructor(
                     descriptionState = CustomTextFieldState(value = TextFieldValue(text = it.description)),
                     selectedCategory = it.category,
                     isLifetimeWarranty = it.isLifetime,
-                    selectedStartingDate = it.startingDate.atStartOfDayIn(timeZone = timeZone),
-                    selectedExpiryDate = it.expiryDate?.atStartOfDayIn(timeZone = timeZone),
+                    selectedStartingDate = it.startingDate.atTime(
+                        hour = 0,
+                        minute = 0
+                    ).toInstant(offset = UtcOffset.ZERO),
+                    selectedExpiryDate = it.expiryDate?.atTime(
+                        hour = 0,
+                        minute = 0
+                    )?.toInstant(offset = UtcOffset.ZERO),
                     isUpdatingWarrantyDataInitialized = true,
                 )
             } ?: state
@@ -239,7 +245,7 @@ class UpsertWarrantyViewModel @Inject constructor(
     ) = viewModelScope.launch {
         _state.update {
             it.copy(
-                brandState = it.brandState.copy(
+                descriptionState = it.descriptionState.copy(
                     value = newValue.copy(
                         text = newValue.text.convertDigitsToEnglish(shouldTrim = false)
                     ),

@@ -1,6 +1,7 @@
 package com.xeniac.warrantyroster_manager.core.presentation.common.ui.components
 
 import androidx.compose.foundation.focusable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -87,6 +88,13 @@ internal fun outlinedTextFieldColors(): TextFieldColors = OutlinedTextFieldDefau
     unfocusedSupportingTextColor = MaterialTheme.colorScheme.dynamicGray400,
     disabledSupportingTextColor = (MaterialTheme.colorScheme.dynamicGray400).copy(alpha = 0.38f),
     errorSupportingTextColor = Red
+)
+
+@Composable
+internal fun clickableOutlinedTextFieldColors(): TextFieldColors = outlinedTextFieldColors().copy(
+    disabledTextColor = MaterialTheme.colorScheme.onSurface,
+    disabledIndicatorColor = MaterialTheme.colorScheme.dynamicGray100,
+    disabledSupportingTextColor = (MaterialTheme.colorScheme.dynamicGray400)
 )
 
 @Composable
@@ -338,12 +346,12 @@ fun CustomClickableOutlinedTextField(
     modifier: Modifier = Modifier,
     testTag: String? = null,
     enabled: Boolean = true,
-    readOnly: Boolean = false,
+    readOnly: Boolean = true,
     singleLine: Boolean = true,
     minLines: Int = 1,
     maxLines: Int = if (singleLine) 1 else Int.MAX_VALUE,
     shape: Shape = RoundedCornerShape(12.dp),
-    colors: TextFieldColors = outlinedTextFieldColors(),
+    colors: TextFieldColors = clickableOutlinedTextFieldColors(),
     errorText: UiText? = null,
     title: String? = null,
     titleFontSize: TextUnit = 14.sp,
@@ -407,6 +415,7 @@ fun CustomClickableOutlinedTextField(
     onTextFieldFocused: () -> Unit
 ) {
     val focusManager = LocalFocusManager.current
+    val interactionSource = remember { MutableInteractionSource() }
 
     Column(
         horizontalAlignment = Alignment.Start,
@@ -428,8 +437,8 @@ fun CustomClickableOutlinedTextField(
         OutlinedTextField(
             value = value.orEmpty(),
             onValueChange = {},
-            enabled = enabled,
-            readOnly = readOnly || isLoading,
+            enabled = enabled || !isLoading,
+            readOnly = readOnly,
             isError = errorText != null,
             singleLine = singleLine,
             minLines = minLines,
@@ -440,6 +449,7 @@ fun CustomClickableOutlinedTextField(
             label = null,
             prefix = prefix,
             suffix = suffix,
+            interactionSource = interactionSource,
             placeholder = when {
                 placeholder != null -> {
                     {
@@ -507,10 +517,13 @@ fun CustomClickableOutlinedTextField(
                 .fillMaxWidth()
                 .addTextFieldContentType(contentType = contentType)
                 .addTestTag(tag = testTag)
-                .focusable()
+                .focusable(
+                    enabled = enabled && !isLoading,
+                    interactionSource = interactionSource
+                )
                 .onFocusChanged {
                     when {
-                        readOnly || isLoading -> focusManager.clearFocus()
+                        !enabled || isLoading -> focusManager.clearFocus()
                         else -> if (it.isFocused) {
                             onTextFieldFocused()
                         }
