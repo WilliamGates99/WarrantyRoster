@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
@@ -27,6 +28,7 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.window.SecureFlagPolicy
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.isAppInstalledFromPlayStore
+import com.xeniac.warrantyroster_manager.core.presentation.common.utils.openAppPageInStore
 import com.xeniac.warrantyroster_manager.feature_base.presentation.BaseAction
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -60,10 +62,11 @@ fun AppReviewDialog(
     rateNowButtonText: String = stringResource(id = R.string.base_app_review_dialog_btn_rate_now),
     askLaterButtonText: String = stringResource(id = R.string.base_app_review_dialog_btn_remind_later),
     noThanksButtonText: String = stringResource(id = R.string.base_app_review_dialog_btn_never),
-    onAction: (action: BaseAction) -> Unit,
-    openAppPageInStore: () -> Unit
+    onAction: (action: BaseAction) -> Unit
 ) {
     if (isVisible) {
+        val context = LocalContext.current
+
         BasicAlertDialog(
             onDismissRequest = { onAction(BaseAction.DismissAppReviewDialog) },
             properties = dialogProperties,
@@ -107,7 +110,7 @@ fun AppReviewDialog(
                                 onClick = {
                                     when {
                                         isAppInstalledFromPlayStore() -> onAction(BaseAction.LaunchInAppReview)
-                                        else -> openAppPageInStore()
+                                        else -> context.openAppPageInStore()
                                     }
                                     onAction(BaseAction.SetSelectedRateAppOptionToNever)
                                     onAction(BaseAction.DismissAppReviewDialog)

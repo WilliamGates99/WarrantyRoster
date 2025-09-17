@@ -38,8 +38,6 @@ import com.xeniac.warrantyroster_manager.core.presentation.common.utils.Observer
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiEvent
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiText
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.findActivity
-import com.xeniac.warrantyroster_manager.core.presentation.common.utils.openAppPageInStore
-import com.xeniac.warrantyroster_manager.core.presentation.common.utils.openAppUpdatePageInStore
 import com.xeniac.warrantyroster_manager.feature_base.presentation.components.AppReviewDialog
 import com.xeniac.warrantyroster_manager.feature_base.presentation.components.AppUpdateBottomSheet
 import com.xeniac.warrantyroster_manager.feature_base.presentation.components.CustomNavigationBar
@@ -205,13 +203,11 @@ fun BaseScreen(
 
     AppUpdateBottomSheet(
         isVisible = state.latestAppUpdateInfo != null,
-        onAction = viewModel::onAction,
-        openAppUpdatePageInStore = { context.openAppUpdatePageInStore() }
+        onAction = viewModel::onAction
     )
 
     AppReviewDialog(
         isVisible = state.isAppReviewDialogVisible,
-        onAction = viewModel::onAction,
-        openAppPageInStore = { context.openAppPageInStore() }
+        onAction = viewModel::onAction
     )
 }

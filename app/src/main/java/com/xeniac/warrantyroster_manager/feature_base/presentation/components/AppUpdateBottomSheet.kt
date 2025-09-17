@@ -22,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -39,6 +40,7 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGray800
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicNavyBlue
+import com.xeniac.warrantyroster_manager.core.presentation.common.utils.openAppUpdatePageInStore
 import com.xeniac.warrantyroster_manager.feature_base.presentation.BaseAction
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -77,12 +79,12 @@ fun AppUpdateBottomSheet(
     messageFontWeight: FontWeight = FontWeight.Medium,
     messageTextAlign: TextAlign = TextAlign.Center,
     messageColor: Color = MaterialTheme.colorScheme.onSurface,
-    onAction: (action: BaseAction) -> Unit,
-    openAppUpdatePageInStore: () -> Unit
+    onAction: (action: BaseAction) -> Unit
 ) {
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-
     if (isVisible) {
+        val context = LocalContext.current
+        val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+
         ModalBottomSheet(
             sheetState = sheetState,
             properties = sheetProperties,
@@ -138,7 +140,7 @@ fun AppUpdateBottomSheet(
                 UpdateButton(
                     onClick = {
                         onAction(BaseAction.DismissAppUpdateSheet)
-                        openAppUpdatePageInStore()
+                        context.openAppUpdatePageInStore()
                     }
                 )
 

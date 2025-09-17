@@ -1,7 +1,5 @@
 package com.xeniac.warrantyroster_manager.feature_base.presentation
 
-import com.xeniac.warrantyroster_manager.core.domain.models.RateAppOption
-
 sealed interface BaseAction {
     data object CheckIsAppUpdateStalled : BaseAction
     data object CheckFlexibleUpdateDownloadState : BaseAction
@@ -10,7 +8,6 @@ sealed interface BaseAction {
     data object DismissAppUpdateSheet : BaseAction
 
     data object RequestInAppReviews : BaseAction
-    data class CheckSelectedRateAppOption(val selectedRateAppOption: RateAppOption) : BaseAction
     data object LaunchInAppReview : BaseAction
     data object SetSelectedRateAppOptionToNever : BaseAction
     data object SetSelectedRateAppOptionToRemindLater : BaseAction
