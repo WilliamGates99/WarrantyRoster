@@ -146,7 +146,7 @@ private fun RetryButton(
     text: String = stringResource(id = R.string.error_btn_retry),
     textStyle: TextStyle = LocalTextStyle.current.copy(
         fontSize = 16.sp,
-        lineHeight = 20.sp,
+        lineHeight = 16.sp,
         fontWeight = FontWeight.Bold
     ),
     onClick: () -> Unit
