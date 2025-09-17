@@ -252,6 +252,8 @@ class UpsertWarrantyViewModel @Inject constructor(
                 selectedCategoryError = null
             )
         }
+
+        _getCategoriesEventChannel.send(UiEvent.ClearFocus)
     }
 
     private fun isLifetimeWarrantyChanged(
@@ -306,7 +308,10 @@ class UpsertWarrantyViewModel @Inject constructor(
             when (result) {
                 is Result.Success -> {
                     _state.update {
-                        it.copy(categories = result.data)
+                        it.copy(
+                            categories = result.data,
+                            isCategoriesLoading = false
+                        )
                     }
                 }
                 is Result.Error -> {

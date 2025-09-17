@@ -21,6 +21,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -54,6 +55,7 @@ fun UpsertWarrantyScreen(
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
+    val focusManager = LocalFocusManager.current
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val horizontalPadding by remember { derivedStateOf { 8.dp } }
     val verticalPadding by remember { derivedStateOf { 8.dp } }
@@ -62,6 +64,7 @@ fun UpsertWarrantyScreen(
 
     ObserverAsEvent(flow = viewModel.getCategoriesEventChannel) { event ->
         when (event) {
+            UiEvent.ClearFocus -> focusManager.clearFocus()
             UiEvent.ForceLogoutUnauthorizedUser -> {
                 userViewModel.onAction(UserAction.Logout)
             }

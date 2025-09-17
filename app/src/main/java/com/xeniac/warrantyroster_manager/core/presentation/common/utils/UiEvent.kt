@@ -16,6 +16,8 @@ sealed class UiEvent : Event() {
     data class Navigate(val destination: Any) : UiEvent()
     data object NavigateUp : UiEvent()
 
+    data object ClearFocus : UiEvent()
+
     data object ForceLogoutUnauthorizedUser : UiEvent()
 
     data object ClearCoilCache : UiEvent()
