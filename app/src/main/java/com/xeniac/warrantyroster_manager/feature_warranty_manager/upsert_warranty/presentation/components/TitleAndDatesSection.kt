@@ -268,7 +268,7 @@ private fun ExpiryDateTextField(
         title = stringResource(id = R.string.upsert_warranty_textfield_expiry_date_title),
         placeholder = stringResource(id = R.string.upsert_warranty_textfield_expiry_date_hint),
         onTextFieldFocused = {
-            onAction(UpsertWarrantyAction.ShowStartingDatePickerDialog)
+            onAction(UpsertWarrantyAction.ShowExpiryDatePickerDialog)
         },
         modifier = modifier
     )
