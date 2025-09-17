@@ -30,6 +30,7 @@ import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.core.presentation.common.UserAction
 import com.xeniac.warrantyroster_manager.core.presentation.common.UserViewModel
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.CustomCenterAlignedTopAppBar
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.CustomDatePickerDialog
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.SwipeableSnackbar
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.showLongSnackbar
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.showOfflineSnackbar
@@ -62,9 +63,15 @@ fun UpsertWarrantyScreen(
 
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    ObserverAsEvent(flow = viewModel.getCategoriesEventChannel) { event ->
+    ObserverAsEvent(flow = viewModel.focusManagerEventChannel) { event ->
         when (event) {
             UiEvent.ClearFocus -> focusManager.clearFocus()
+            else -> Unit
+        }
+    }
+
+    ObserverAsEvent(flow = viewModel.getCategoriesEventChannel) { event ->
+        when (event) {
             UiEvent.ForceLogoutUnauthorizedUser -> {
                 userViewModel.onAction(UserAction.Logout)
             }
@@ -190,7 +197,31 @@ fun UpsertWarrantyScreen(
         onAction = viewModel::onAction
     )
 
-    // TODO: STARTING DATE PICKER DIALOG
+    CustomDatePickerDialog(
+        isVisible = state.isStartingDatePickerDialogVisible,
+        initialSelectedDateMillis = state.selectedStartingDate?.toEpochMilliseconds(),
+        title = stringResource(id = R.string.upsert_warranty_starting_date_picker_title),
+        onDismissRequest = {
+            viewModel.onAction(UpsertWarrantyAction.DismissStartingDatePickerDialog)
+        },
+        onConfirmClick = { selectedDateMillis ->
+            viewModel.onAction(
+                UpsertWarrantyAction.StartingDateChanged(startingDateInMs = selectedDateMillis)
+            )
+        }
+    )
 
-    // TODO: EXPIRY DATE PICKER DIALOG
+    CustomDatePickerDialog(
+        isVisible = state.isExpiryDatePickerDialogVisible,
+        initialSelectedDateMillis = state.selectedExpiryDate?.toEpochMilliseconds(),
+        title = stringResource(id = R.string.upsert_warranty_expiry_date_picker_title),
+        onDismissRequest = {
+            viewModel.onAction(UpsertWarrantyAction.DismissExpiryDatePickerDialog)
+        },
+        onConfirmClick = { selectedDateMillis ->
+            viewModel.onAction(
+                UpsertWarrantyAction.ExpiryDateChanged(expiryDateInMs = selectedDateMillis)
+            )
+        }
+    )
 }

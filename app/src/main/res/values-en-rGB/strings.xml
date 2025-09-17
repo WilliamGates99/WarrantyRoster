@@ -33,6 +33,8 @@
     <string name="core_textfield_content_description_password_toggle_show">Show Password</string>
     <string name="core_textfield_content_description_password_toggle_hide">Hide Password</string>
     <string name="core_textfield_helper_optional">Optional</string>
+    <string name="core_date_picker_btn_confirm">OK</string>
+    <string name="core_date_picker_btn_cancel">Cancel</string>
     <string name="core_search_content_description_show">Show search bar</string>
     <string name="core_search_content_description_hide">Hide search bar</string>
     <string name="core_locale_bottom_sheet_title">Language</string>

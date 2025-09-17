@@ -11,51 +11,6 @@
 
 </resources>
 
-
-    <!--<resources xmlns:tools="http://schemas.android.com/tools">-->
-    <!--    <style name="Theme.WarrantyRoster.DatePicker" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">-->
-    <!--        <item name="materialCalendarStyle">-->
-    <!--            @style/Theme.WarrantyRoster.DatePicker.CalendarStyle-->
-    <!--        </item>-->
-    <!--        <item name="materialCalendarHeaderTitle">@style/Theme.WarrantyRoster.DatePicker.Title</item>-->
-    <!--        <item name="materialCalendarHeaderSelection">-->
-    <!--            @style/Theme.WarrantyRoster.DatePicker.Selection-->
-    <!--        </item>-->
-    <!--        <item name="materialCalendarYearNavigationButton">-->
-    <!--            @style/Theme.WarrantyRoster.DatePicker.YearButton-->
-    <!--        </item>-->
-    <!--        <item name="buttonBarPositiveButtonStyle">-->
-    <!--            @style/Theme.WarrantyRoster.DatePicker.ConfirmButton-->
-    <!--        </item>-->
-    <!--        <item name="buttonBarNegativeButtonStyle">-->
-    <!--            @style/Theme.WarrantyRoster.DatePicker.CancelButton-->
-    <!--        </item>-->
-    <!--    </style>-->
-
-    <!--    <style name="Theme.WarrantyRoster.DatePicker.CalendarStyle" parent="Widget.MaterialComponents.MaterialCalendar">-->
-    <!--        <item name="shapeAppearance">@style/Theme.WarrantyRoster.DatePicker.Appearance</item>-->
-    <!--    </style>-->
-
-    <!--    <style name="Theme.WarrantyRoster.DatePicker.Appearance" parent="ShapeAppearance.MaterialComponents">-->
-    <!--        <item name="cornerFamily">rounded</item>-->
-    <!--        <item name="cornerSize">@dimen/radius_12dp</item>-->
-    <!--    </style>-->
-
-    <!--    <style name="Theme.WarrantyRoster.DatePicker.Title" parent="Widget.MaterialComponents.MaterialCalendar.HeaderTitle">-->
-    <!--        <item name="android:textAllCaps">false</item>-->
-    <!--        <item name="android:fontFamily">@font/localized_bold</item>-->
-    <!--    </style>-->
-
-    <!--    <style name="Theme.WarrantyRoster.DatePicker.Selection" parent="Widget.MaterialComponents.MaterialCalendar.HeaderSelection">-->
-    <!--        <item name="android:fontFamily">@font/localized_bold</item>-->
-    <!--    </style>-->
-
-    <!--    <style name="Theme.WarrantyRoster.DatePicker.YearButton" parent="Widget.MaterialComponents.MaterialCalendar.YearNavigationButton">-->
-    <!--        <item name="android:textAllCaps">false</item>-->
-    <!--        <item name="android:fontFamily">@font/localized_bold</item>-->
-    <!--        <item name="android:letterSpacing">0</item>-->
-    <!--    </style>-->
-
     <!--    <style name="Theme.WarrantyRoster.DatePicker.ConfirmButton" parent="Widget.MaterialComponents.Button.TextButton.Dialog">-->
     <!--        <item name="shapeAppearance">@style/Theme.WarrantyRoster.TextButton.Appearance</item>-->
     <!--        <item name="android:textColor">@color/dialogButton</item>-->

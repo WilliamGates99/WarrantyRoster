@@ -33,6 +33,8 @@
     <string name="core_textfield_content_description_password_toggle_show">نمایش کلمه عبور</string>
     <string name="core_textfield_content_description_password_toggle_hide">پنهان کردن کلمه عبور</string>
     <string name="core_textfield_helper_optional">اختیاری</string>
+    <string name="core_date_picker_btn_confirm">تایید</string>
+    <string name="core_date_picker_btn_cancel">لغو</string>
     <string name="core_search_content_description_show">نمایش نوار جستجو</string>
     <string name="core_search_content_description_hide">پنهان کردن نوار جستجو</string>
     <string name="core_locale_bottom_sheet_title">زبان</string>

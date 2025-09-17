@@ -72,6 +72,9 @@ class UpsertWarrantyViewModel @Inject constructor(
         initialValue = _state.value
     )
 
+    private val _focusManagerEventChannel = Channel<UiEvent>()
+    val focusManagerEventChannel = _focusManagerEventChannel.receiveAsFlow()
+
     private val _getCategoriesEventChannel = Channel<UiEvent>()
     val getCategoriesEventChannel = _getCategoriesEventChannel.receiveAsFlow()
 
@@ -142,6 +145,7 @@ class UpsertWarrantyViewModel @Inject constructor(
         _state.update {
             it.copy(isCategoriesBottomSheetVisible = false)
         }
+        _focusManagerEventChannel.send(UiEvent.ClearFocus)
     }
 
     private fun showStartingDatePickerDialog() = viewModelScope.launch {
@@ -154,6 +158,7 @@ class UpsertWarrantyViewModel @Inject constructor(
         _state.update {
             it.copy(isStartingDatePickerDialogVisible = false)
         }
+        _focusManagerEventChannel.send(UiEvent.ClearFocus)
     }
 
     private fun showExpiryDatePickerDialog() = viewModelScope.launch {
@@ -166,6 +171,7 @@ class UpsertWarrantyViewModel @Inject constructor(
         _state.update {
             it.copy(isExpiryDatePickerDialogVisible = false)
         }
+        _focusManagerEventChannel.send(UiEvent.ClearFocus)
     }
 
     private fun titleChanged(
@@ -252,8 +258,6 @@ class UpsertWarrantyViewModel @Inject constructor(
                 selectedCategoryError = null
             )
         }
-
-        _getCategoriesEventChannel.send(UiEvent.ClearFocus)
     }
 
     private fun isLifetimeWarrantyChanged(
