@@ -187,7 +187,6 @@ fun UpsertWarrantyScreen(
         isCategoriesLoading = state.isCategoriesLoading,
         categories = state.categories,
         errorMessage = state.categoriesErrorMessage,
-        selectedCategory = state.selectedCategory,
         onAction = viewModel::onAction
     )
 
