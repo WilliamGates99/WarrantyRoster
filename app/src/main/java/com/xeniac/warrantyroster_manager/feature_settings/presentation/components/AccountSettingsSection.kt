@@ -50,8 +50,8 @@ import com.xeniac.warrantyroster_manager.feature_settings.presentation.SettingsA
 
 enum class AccountSettingsItems(
     val destinationScreen: Any,
-    @StringRes val titleId: Int,
-    @DrawableRes val iconId: Int
+    @param:StringRes val titleId: Int,
+    @param:DrawableRes val iconId: Int
 ) {
     LINKED_ACCOUNTS(
         destinationScreen = LinkedAccountsScreen,
