@@ -1,7 +1,3 @@
 files:
   - source: values/strings.xml
-<<<<<<< HEAD
     translation: '%original_file_name%'
-=======
-    translation: '%original_file_name%'
->>>>>>> a0fb2f303d7802589bb547f4fefa2334e88e50d7
