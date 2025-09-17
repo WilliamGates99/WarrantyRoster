@@ -40,8 +40,8 @@ import com.xeniac.warrantyroster_manager.core.domain.models.AppLocale
 import com.xeniac.warrantyroster_manager.core.domain.models.AppTheme
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.Black
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicBlack
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGrayDark
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGrayLight
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGray400
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGray50
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicNavyBlue
 import com.xeniac.warrantyroster_manager.feature_settings.presentation.SettingsAction
 
@@ -87,7 +87,7 @@ private fun SettingsCard(
     shape: Shape = RoundedCornerShape(12.dp),
     background: Color = MaterialTheme.colorScheme.surface,
     dividerThickness: Dp = 1.dp,
-    dividerColor: Color = MaterialTheme.colorScheme.dynamicGrayLight,
+    dividerColor: Color = MaterialTheme.colorScheme.dynamicGray50,
     onAction: (action: SettingsAction) -> Unit
 ) {
     Column(
@@ -151,7 +151,7 @@ private fun SettingsItem(
         fontSize = 12.sp,
         lineHeight = 16.sp,
         fontWeight = FontWeight.Bold,
-        color = MaterialTheme.colorScheme.dynamicGrayDark
+        color = MaterialTheme.colorScheme.dynamicGray400
     ),
     currentValueMaxLines: Int = 1,
     onClick: () -> Unit

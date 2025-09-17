@@ -17,34 +17,33 @@ val Green = Color(0xFF00BD62)
 val Red = Color(0xFFFF3442)
 val Orange = Color(0xFFFF9100)
 
-// TODO: RENAME GRAY COLORS
-val GrayLight = Color(0xFFF3F3F3)
-val GrayMedium = Color(0xFFE9E9E9)
-val GrayDark = Color(0xFF959595)
-val GrayDarkest = Color(0xFF666666)
-val GrayDarkest2 = Color(0xFF404040)
+val Gray50 = Color(0xFFF3F3F3)
+val Gray100 = Color(0xFFE9E9E9)
+val Gray400 = Color(0xFF959595)
+val Gray600 = Color(0xFF666666)
+val Gray800 = Color(0xFF404040)
 
 val NavyBlueDark = Color(0xFFDEF4FD)
 val SkyBlueDark = Color(0xFF01040F)
-val GrayLightDark = Color(0xFF1F1F1F)
-val GrayMediumDark = Color(0xFF2E2E2E)
-val GrayDarkDark = Color(0xFF808080)
-val GrayDarkestDark = Color(0xFFA6A6A6)
-val GrayDarkest2Dark = Color(0xFFCCCCCC)
+val Gray50Dark = Color(0xFF1F1F1F)
+val Gray100Dark = Color(0xFF2E2E2E)
+val Gray400Dark = Color(0xFF808080)
+val Gray600Dark = Color(0xFFA6A6A6)
+val Gray800Dark = Color(0xFFCCCCCC)
 
 val ColorScheme.shimmerEffectColors: List<Color>
     @Composable get() = listOf(
         dynamicColor(
-            lightColor = GrayDark,
-            darkColor = GrayDarkDark
+            lightColor = Gray400,
+            darkColor = Gray400Dark
         ),
         dynamicColor(
-            lightColor = GrayMedium,
-            darkColor = GrayMediumDark
+            lightColor = Gray100,
+            darkColor = Gray100Dark
         ),
         dynamicColor(
-            lightColor = GrayLight,
-            darkColor = GrayLightDark
+            lightColor = Gray50,
+            darkColor = Gray50Dark
         )
     )
 
@@ -66,34 +65,34 @@ val ColorScheme.dynamicSkyBlue: Color
         darkColor = SkyBlueDark
     )
 
-val ColorScheme.dynamicGrayLight: Color
+val ColorScheme.dynamicGray50: Color
     @Composable get() = dynamicColor(
-        lightColor = GrayLight,
-        darkColor = GrayLightDark
+        lightColor = Gray50,
+        darkColor = Gray50Dark
     )
 
-val ColorScheme.dynamicGrayMedium: Color
+val ColorScheme.dynamicGray100: Color
     @Composable get() = dynamicColor(
-        lightColor = GrayMedium,
-        darkColor = GrayMediumDark
+        lightColor = Gray100,
+        darkColor = Gray100Dark
     )
 
-val ColorScheme.dynamicGrayDark: Color
+val ColorScheme.dynamicGray400: Color
     @Composable get() = dynamicColor(
-        lightColor = GrayDark,
-        darkColor = GrayDarkDark
+        lightColor = Gray400,
+        darkColor = Gray400Dark
     )
 
-val ColorScheme.dynamicGrayDarkest: Color
+val ColorScheme.dynamicGray600: Color
     @Composable get() = dynamicColor(
-        lightColor = GrayDarkest,
-        darkColor = GrayDarkestDark
+        lightColor = Gray600,
+        darkColor = Gray600Dark
     )
 
-val ColorScheme.dynamicGrayDarkest2: Color
+val ColorScheme.dynamicGray800: Color
     @Composable get() = dynamicColor(
-        lightColor = GrayDarkest2,
-        darkColor = GrayDarkest2Dark
+        lightColor = Gray800,
+        darkColor = Gray800Dark
     )
 
 val primaryLight = Blue

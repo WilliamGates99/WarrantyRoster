@@ -35,7 +35,7 @@ import androidx.compose.ui.unit.sp
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.Green
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicBlack
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGrayDark
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGray400
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiText
 import com.xeniac.warrantyroster_manager.feature_auth.forgot_password.presentation.common.ForgotPasswordAction
 
@@ -130,7 +130,7 @@ private fun ResendEmailTitle(
         lineHeight = 16.sp,
         fontWeight = FontWeight.SemiBold,
         textAlign = TextAlign.Center,
-        color = MaterialTheme.colorScheme.dynamicGrayDark
+        color = MaterialTheme.colorScheme.dynamicGray400
     )
 ) {
     Text(

@@ -34,7 +34,7 @@ import androidx.compose.ui.unit.sp
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.core.di.entrypoints.requireDecimalFormat
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicBlack
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGrayDark
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGray400
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.domain.models.WarrantyCategory
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.presentation.states.WarrantyExpiryStatus
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.presentation.utils.calculateWarrantyExpiryStatus
@@ -162,13 +162,13 @@ private fun DateSection(
     value: String,
     modifier: Modifier = Modifier,
     icon: Painter = painterResource(id = R.drawable.ic_warranties_calendar),
-    iconColor: Color = MaterialTheme.colorScheme.dynamicGrayDark,
+    iconColor: Color = MaterialTheme.colorScheme.dynamicGray400,
     iconSize: Dp = 14.dp,
     titleStyle: TextStyle = LocalTextStyle.current.copy(
         fontSize = 14.sp,
         lineHeight = 18.sp,
         fontWeight = FontWeight.Normal,
-        color = MaterialTheme.colorScheme.dynamicGrayDark
+        color = MaterialTheme.colorScheme.dynamicGray400
     ),
     titleMaxLines: Int = 1,
     valueStyle: TextStyle = LocalTextStyle.current.copy(

@@ -31,8 +31,8 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.core.presentation.common.states.CustomTextFieldState
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGrayDark
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGrayDarkest
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGray400
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGray600
 
 @Composable
 fun EmptySearchResultMessage(
@@ -44,9 +44,9 @@ fun EmptySearchResultMessage(
         lineHeight = 24.sp,
         fontWeight = FontWeight.Medium,
         textAlign = TextAlign.Center,
-        color = MaterialTheme.colorScheme.dynamicGrayDark
+        color = MaterialTheme.colorScheme.dynamicGray400
     ),
-    queryColorHex: String = MaterialTheme.colorScheme.dynamicGrayDarkest.toArgb()
+    queryColorHex: String = MaterialTheme.colorScheme.dynamicGray600.toArgb()
         .toHexString(HexFormat.UpperCase)
         .removeRange(0, 2),
     addBtnColorHex: String = MaterialTheme.colorScheme.primary.toArgb()

@@ -59,7 +59,7 @@ import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.Black
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.Red
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicBlack
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGrayLight
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGray50
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.utils.toDp
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiText
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.domain.models.WarrantyCategory
@@ -212,7 +212,7 @@ private fun CategoryIcon(
     size: Dp,
     modifier: Modifier = Modifier,
     shape: Shape = RoundedCornerShape(12.dp),
-    background: Color = MaterialTheme.colorScheme.dynamicGrayLight,
+    background: Color = MaterialTheme.colorScheme.dynamicGray50,
     contentPadding: PaddingValues = PaddingValues(all = 12.dp),
     placeholder: Painter = painterResource(id = R.drawable.ic_core_warranty_category_placeholder),
     placeholderColor: Color = Red

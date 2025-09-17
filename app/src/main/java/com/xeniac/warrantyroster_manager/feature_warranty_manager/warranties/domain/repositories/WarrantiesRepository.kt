@@ -18,11 +18,4 @@ interface WarrantiesRepository {
         query: String,
         delayInMillis: Long = 500L
     ): Result<List<Warranty>, SearchWarrantiesError>
-
-    /** TODO: REMOVE AFTER IMPLEMENTING
-     *     suspend fun addWarrantyToFirestore(warrantyInput: WarrantyInput)
-     *     suspend fun updateWarrantyInFirestore(warrantyId: String, warrantyInput: WarrantyInput)
-     *
-     *     suspend fun getUpdatedWarrantyFromFirestore(warrantyId: String): Warranty
-     */
 }

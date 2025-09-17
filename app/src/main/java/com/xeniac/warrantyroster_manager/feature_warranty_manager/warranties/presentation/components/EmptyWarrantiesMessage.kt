@@ -30,7 +30,7 @@ import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.xeniac.warrantyroster_manager.R
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGrayDark
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGray400
 
 @Composable
 fun EmptyWarrantiesMessage(
@@ -41,7 +41,7 @@ fun EmptyWarrantiesMessage(
         lineHeight = 24.sp,
         fontWeight = FontWeight.Medium,
         textAlign = TextAlign.Center,
-        color = MaterialTheme.colorScheme.dynamicGrayDark
+        color = MaterialTheme.colorScheme.dynamicGray400
     ),
     primaryColorHex: String = MaterialTheme.colorScheme.primary.toArgb()
         .toHexString(HexFormat.UpperCase)

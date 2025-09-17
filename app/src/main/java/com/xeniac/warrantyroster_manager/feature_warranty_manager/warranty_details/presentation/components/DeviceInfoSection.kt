@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicBlack
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGrayDark
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGray400
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicNavyBlue
 
 @Composable
@@ -112,7 +112,7 @@ private fun DeviceInfoItem(
         fontSize = 16.sp,
         lineHeight = 20.sp,
         fontWeight = FontWeight.Normal,
-        color = MaterialTheme.colorScheme.dynamicGrayDark
+        color = MaterialTheme.colorScheme.dynamicGray400
     ),
     titleMaxLines: Int = 1,
     valueStyle: TextStyle = LocalTextStyle.current.copy(
@@ -122,7 +122,7 @@ private fun DeviceInfoItem(
         textDirection = TextDirection.Content,
         textAlign = TextAlign.End,
         color = when {
-            value.isBlank() -> MaterialTheme.colorScheme.dynamicGrayDark
+            value.isBlank() -> MaterialTheme.colorScheme.dynamicGray400
             else -> MaterialTheme.colorScheme.dynamicBlack
         }
     ),

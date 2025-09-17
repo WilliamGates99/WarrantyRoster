@@ -58,10 +58,10 @@ import androidx.compose.ui.unit.sp
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.Red
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicBlack
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGrayDark
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGrayDarkest
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGrayLight
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGrayMedium
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGray100
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGray400
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGray50
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGray600
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.utils.addTestTag
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.utils.addTextFieldContentType
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiText
@@ -69,23 +69,23 @@ import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiText
 @Composable
 internal fun outlinedTextFieldColors(): TextFieldColors = OutlinedTextFieldDefaults.colors().copy(
     focusedContainerColor = Color.Transparent,
-    unfocusedContainerColor = MaterialTheme.colorScheme.dynamicGrayLight,
-    disabledContainerColor = MaterialTheme.colorScheme.dynamicGrayLight,
-    errorContainerColor = MaterialTheme.colorScheme.dynamicGrayLight,
+    unfocusedContainerColor = MaterialTheme.colorScheme.dynamicGray50,
+    disabledContainerColor = MaterialTheme.colorScheme.dynamicGray50,
+    errorContainerColor = MaterialTheme.colorScheme.dynamicGray50,
     focusedIndicatorColor = MaterialTheme.colorScheme.primary,
-    unfocusedIndicatorColor = MaterialTheme.colorScheme.dynamicGrayMedium,
-    disabledIndicatorColor = MaterialTheme.colorScheme.dynamicGrayMedium.copy(alpha = 0.12f),
+    unfocusedIndicatorColor = MaterialTheme.colorScheme.dynamicGray100,
+    disabledIndicatorColor = MaterialTheme.colorScheme.dynamicGray100.copy(alpha = 0.12f),
     errorIndicatorColor = Red,
-    focusedTrailingIconColor = MaterialTheme.colorScheme.dynamicGrayDarkest,
-    unfocusedTrailingIconColor = MaterialTheme.colorScheme.dynamicGrayDarkest,
+    focusedTrailingIconColor = MaterialTheme.colorScheme.dynamicGray600,
+    unfocusedTrailingIconColor = MaterialTheme.colorScheme.dynamicGray600,
     errorTrailingIconColor = MaterialTheme.colorScheme.error,
-    focusedPlaceholderColor = MaterialTheme.colorScheme.dynamicGrayDark,
-    unfocusedPlaceholderColor = MaterialTheme.colorScheme.dynamicGrayDark,
-    disabledPlaceholderColor = MaterialTheme.colorScheme.dynamicGrayDark,
-    errorPlaceholderColor = MaterialTheme.colorScheme.dynamicGrayDark,
-    focusedSupportingTextColor = MaterialTheme.colorScheme.dynamicGrayDark,
-    unfocusedSupportingTextColor = MaterialTheme.colorScheme.dynamicGrayDark,
-    disabledSupportingTextColor = (MaterialTheme.colorScheme.dynamicGrayDark).copy(alpha = 0.38f),
+    focusedPlaceholderColor = MaterialTheme.colorScheme.dynamicGray400,
+    unfocusedPlaceholderColor = MaterialTheme.colorScheme.dynamicGray400,
+    disabledPlaceholderColor = MaterialTheme.colorScheme.dynamicGray400,
+    errorPlaceholderColor = MaterialTheme.colorScheme.dynamicGray400,
+    focusedSupportingTextColor = MaterialTheme.colorScheme.dynamicGray400,
+    unfocusedSupportingTextColor = MaterialTheme.colorScheme.dynamicGray400,
+    disabledSupportingTextColor = (MaterialTheme.colorScheme.dynamicGray400).copy(alpha = 0.38f),
     errorSupportingTextColor = Red
 )
 
@@ -99,17 +99,17 @@ internal fun searchTextFieldColors(): TextFieldColors = TextFieldDefaults.colors
     unfocusedIndicatorColor = Color.Transparent,
     disabledIndicatorColor = Color.Transparent,
     errorIndicatorColor = Color.Transparent,
-    focusedLeadingIconColor = MaterialTheme.colorScheme.dynamicGrayDark,
-    unfocusedLeadingIconColor = MaterialTheme.colorScheme.dynamicGrayDark,
-    disabledLeadingIconColor = MaterialTheme.colorScheme.dynamicGrayDark,
-    errorLeadingIconColor = MaterialTheme.colorScheme.dynamicGrayDark,
-    focusedTrailingIconColor = MaterialTheme.colorScheme.dynamicGrayDarkest,
-    unfocusedTrailingIconColor = MaterialTheme.colorScheme.dynamicGrayDarkest,
+    focusedLeadingIconColor = MaterialTheme.colorScheme.dynamicGray400,
+    unfocusedLeadingIconColor = MaterialTheme.colorScheme.dynamicGray400,
+    disabledLeadingIconColor = MaterialTheme.colorScheme.dynamicGray400,
+    errorLeadingIconColor = MaterialTheme.colorScheme.dynamicGray400,
+    focusedTrailingIconColor = MaterialTheme.colorScheme.dynamicGray600,
+    unfocusedTrailingIconColor = MaterialTheme.colorScheme.dynamicGray600,
     errorTrailingIconColor = MaterialTheme.colorScheme.error,
-    focusedPlaceholderColor = MaterialTheme.colorScheme.dynamicGrayDark,
-    unfocusedPlaceholderColor = MaterialTheme.colorScheme.dynamicGrayDark,
-    disabledPlaceholderColor = MaterialTheme.colorScheme.dynamicGrayDark,
-    errorPlaceholderColor = MaterialTheme.colorScheme.dynamicGrayDark
+    focusedPlaceholderColor = MaterialTheme.colorScheme.dynamicGray400,
+    unfocusedPlaceholderColor = MaterialTheme.colorScheme.dynamicGray400,
+    disabledPlaceholderColor = MaterialTheme.colorScheme.dynamicGray400,
+    errorPlaceholderColor = MaterialTheme.colorScheme.dynamicGray400
 )
 
 @Composable

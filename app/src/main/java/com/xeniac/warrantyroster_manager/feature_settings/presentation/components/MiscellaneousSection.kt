@@ -41,7 +41,7 @@ import androidx.compose.ui.unit.sp
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.Black
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicBlack
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGrayLight
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGray50
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicNavyBlue
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.Constants.URL_PRIVACY_POLICY
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.isAppInstalledFromMyket
@@ -110,7 +110,7 @@ private fun MiscellaneousCard(
     shape: Shape = RoundedCornerShape(12.dp),
     background: Color = MaterialTheme.colorScheme.surface,
     dividerThickness: Dp = 1.dp,
-    dividerColor: Color = MaterialTheme.colorScheme.dynamicGrayLight
+    dividerColor: Color = MaterialTheme.colorScheme.dynamicGray50
 ) {
     val context = LocalContext.current
 

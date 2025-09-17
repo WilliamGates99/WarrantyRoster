@@ -36,8 +36,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.xeniac.warrantyroster_manager.R
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGrayDark
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGrayMedium
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGray100
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGray400
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicNavyBlue
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.utils.addBorder
 import com.xeniac.warrantyroster_manager.feature_auth.common.presentation.states.OtherLoginMethods
@@ -55,12 +55,12 @@ fun OtherLoginMethodsDividerCompactWidth(
         lineHeight = 12.sp,
         fontWeight = FontWeight.Light,
         textAlign = TextAlign.Center,
-        color = MaterialTheme.colorScheme.dynamicGrayDark
+        color = MaterialTheme.colorScheme.dynamicGray400
     ),
     titleMaxLines: Int = 1,
     dividerThickness: Dp = 1.dp,
     dividerShape: Shape = CircleShape,
-    dividerColor: Color = MaterialTheme.colorScheme.dynamicGrayMedium
+    dividerColor: Color = MaterialTheme.colorScheme.dynamicGray100
 ) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(space = 16.dp),
@@ -135,7 +135,7 @@ private fun OtherLoginMethodButton(
     shape: Shape = RoundedCornerShape(12.dp),
     border: BorderStroke = BorderStroke(
         width = 1.dp,
-        color = MaterialTheme.colorScheme.dynamicGrayMedium
+        color = MaterialTheme.colorScheme.dynamicGray100
     ),
     contentPadding: PaddingValues = PaddingValues(all = 12.dp),
     contentSize: Dp = 32.dp,

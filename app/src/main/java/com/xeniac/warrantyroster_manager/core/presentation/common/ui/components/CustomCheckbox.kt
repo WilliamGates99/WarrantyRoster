@@ -33,7 +33,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicBlack
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGrayDark
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGray400
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.utils.addTestTag
 
 @Composable
@@ -49,7 +49,7 @@ fun CustomCheckbox(
     ),
     colors: CheckboxColors = CheckboxDefaults.colors(
         checkedColor = MaterialTheme.colorScheme.primary,
-        uncheckedColor = MaterialTheme.colorScheme.dynamicGrayDark,
+        uncheckedColor = MaterialTheme.colorScheme.dynamicGray400,
         checkmarkColor = MaterialTheme.colorScheme.onPrimary
     ),
     textColor: Color = MaterialTheme.colorScheme.dynamicBlack,

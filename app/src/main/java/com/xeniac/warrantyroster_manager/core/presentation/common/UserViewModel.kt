@@ -46,7 +46,6 @@ class UserViewModel @Inject constructor(
     fun onAction(action: UserAction) {
         when (action) {
             UserAction.GetUserProfile -> getUserProfile()
-            UserAction.GetUpdatedUserProfile -> getUpdatedUserProfile()
             UserAction.Logout -> logout()
             UserAction.ForceLogoutUnauthorizedUser -> forceLogoutUnauthorizedUser()
         }
@@ -81,10 +80,6 @@ class UserViewModel @Inject constructor(
                 it.copy(isUserProfileLoading = false)
             }
         }.launchIn(scope = viewModelScope)
-    }
-
-    private fun getUpdatedUserProfile() {
-
     }
 
     private fun logout() {

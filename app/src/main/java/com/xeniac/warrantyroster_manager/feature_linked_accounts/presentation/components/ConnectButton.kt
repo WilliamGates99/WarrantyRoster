@@ -31,8 +31,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.xeniac.warrantyroster_manager.R
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGrayDark
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGrayMedium
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGray100
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGray400
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.utils.addBorder
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.utils.toDp
 
@@ -43,7 +43,7 @@ fun ConnectButton(
     shape: Shape = RoundedCornerShape(4.dp),
     border: BorderStroke = BorderStroke(
         width = 1.dp,
-        color = MaterialTheme.colorScheme.dynamicGrayMedium
+        color = MaterialTheme.colorScheme.dynamicGray100
     ),
     contentPadding: PaddingValues = PaddingValues(
         horizontal = 8.dp,
@@ -55,7 +55,7 @@ fun ConnectButton(
         lineHeight = 10.sp,
         fontWeight = FontWeight.Black,
         textAlign = TextAlign.Center,
-        color = MaterialTheme.colorScheme.dynamicGrayDark
+        color = MaterialTheme.colorScheme.dynamicGray400
     ),
     maxLines: Int = 1,
     progressIndicatorColor: Color = textStyle.color,

@@ -37,7 +37,7 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.xeniac.warrantyroster_manager.R
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGrayDarkest2
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGray800
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicNavyBlue
 import com.xeniac.warrantyroster_manager.feature_base.presentation.BaseAction
 
@@ -183,7 +183,7 @@ private fun DismissButton(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(vertical = 12.dp),
     colors: ButtonColors = ButtonDefaults.outlinedButtonColors().copy(
-        contentColor = MaterialTheme.colorScheme.dynamicGrayDarkest2,
+        contentColor = MaterialTheme.colorScheme.dynamicGray800,
         disabledContentColor = MaterialTheme.colorScheme.dynamicNavyBlue.copy(alpha = 0.38f)
     ),
     text: String = stringResource(id = R.string.base_app_update_sheet_btn_dismiss),

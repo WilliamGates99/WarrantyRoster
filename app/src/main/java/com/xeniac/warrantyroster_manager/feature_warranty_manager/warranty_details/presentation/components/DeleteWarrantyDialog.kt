@@ -39,7 +39,7 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.compose.ui.window.SecureFlagPolicy
 import com.xeniac.warrantyroster_manager.R
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.Red
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGrayDarkest
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGray600
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicNavyBlue
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.warranty_details.presentation.WarrantyDetailsAction
 
@@ -196,7 +196,7 @@ private fun DismissButton(
         lineHeight = 24.sp,
         fontWeight = FontWeight.Bold,
         textAlign = TextAlign.Center,
-        color = MaterialTheme.colorScheme.dynamicGrayDarkest
+        color = MaterialTheme.colorScheme.dynamicGray600
     ),
     onClick: () -> Unit
 ) {

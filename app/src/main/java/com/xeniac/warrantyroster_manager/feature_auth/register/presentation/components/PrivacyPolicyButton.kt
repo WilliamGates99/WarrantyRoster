@@ -25,7 +25,7 @@ import androidx.compose.ui.text.fromHtml
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.xeniac.warrantyroster_manager.R
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGrayDark
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGray400
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.Constants
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.openLinkInInAppBrowser
 
@@ -39,7 +39,7 @@ fun PrivacyPolicyButton(
         fontSize = 12.sp,
         lineHeight = 16.sp,
         fontWeight = FontWeight.Light,
-        color = MaterialTheme.colorScheme.dynamicGrayDark
+        color = MaterialTheme.colorScheme.dynamicGray400
     ),
     primaryColorHex: String = MaterialTheme.colorScheme.primary.toArgb()
         .toHexString(HexFormat.UpperCase)

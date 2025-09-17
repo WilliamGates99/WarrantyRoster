@@ -39,7 +39,7 @@ import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.showLongSnackbar
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.showLongToast
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.showOfflineSnackbar
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGrayMedium
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGray100
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.ObserverAsEvent
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiEvent
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.domain.models.Warranty
@@ -143,7 +143,7 @@ fun WarrantyDetailsScreen(
 
             HorizontalDivider(
                 thickness = 1.dp,
-                color = MaterialTheme.colorScheme.dynamicGrayMedium,
+                color = MaterialTheme.colorScheme.dynamicGray100,
                 modifier = Modifier.clip(CircleShape)
             )
 
@@ -155,7 +155,7 @@ fun WarrantyDetailsScreen(
 
             HorizontalDivider(
                 thickness = 1.dp,
-                color = MaterialTheme.colorScheme.dynamicGrayMedium,
+                color = MaterialTheme.colorScheme.dynamicGray100,
                 modifier = Modifier.clip(CircleShape)
             )
 

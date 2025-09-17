@@ -24,7 +24,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.xeniac.warrantyroster_manager.R
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGrayDark
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGray400
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiText
 
 @Composable
@@ -37,7 +37,7 @@ fun OfflineErrorMessage(
         lineHeight = 24.sp,
         fontWeight = FontWeight.SemiBold,
         textAlign = TextAlign.Center,
-        color = MaterialTheme.colorScheme.dynamicGrayDark
+        color = MaterialTheme.colorScheme.dynamicGray400
     ),
     onRetryClick: (() -> Unit)? = null
 ) {
@@ -72,7 +72,7 @@ fun NetworkErrorMessage(
         lineHeight = 24.sp,
         fontWeight = FontWeight.SemiBold,
         textAlign = TextAlign.Center,
-        color = MaterialTheme.colorScheme.dynamicGrayDark
+        color = MaterialTheme.colorScheme.dynamicGray400
     ),
     onRetryClick: (() -> Unit)? = null
 ) {
@@ -107,7 +107,7 @@ fun NetworkErrorMessage(
         lineHeight = 24.sp,
         fontWeight = FontWeight.SemiBold,
         textAlign = TextAlign.Center,
-        color = MaterialTheme.colorScheme.dynamicGrayDark
+        color = MaterialTheme.colorScheme.dynamicGray400
     ),
     onRetryClick: (() -> Unit)? = null
 ) {

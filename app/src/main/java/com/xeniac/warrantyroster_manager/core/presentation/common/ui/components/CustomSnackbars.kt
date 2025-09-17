@@ -18,7 +18,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.xeniac.warrantyroster_manager.R
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGrayLight
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGray50
 import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiText
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -60,8 +60,8 @@ fun SwipeableSnackbar(
                         snackbarData = snackbarData,
                         containerColor = MaterialTheme.colorScheme.error,
                         contentColor = MaterialTheme.colorScheme.onError,
-                        actionColor = MaterialTheme.colorScheme.dynamicGrayLight,
-                        actionContentColor = MaterialTheme.colorScheme.dynamicGrayLight
+                        actionColor = MaterialTheme.colorScheme.dynamicGray50,
+                        actionContentColor = MaterialTheme.colorScheme.dynamicGray50
                     )
                 }
             )

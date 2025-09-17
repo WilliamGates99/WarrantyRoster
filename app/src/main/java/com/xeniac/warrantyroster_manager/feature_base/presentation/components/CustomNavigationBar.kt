@@ -61,7 +61,7 @@ import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.navigation.screens.WarrantiesScreen
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.Black
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicBlack
-import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGrayDark
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGray400
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.utils.toDp
 import com.xeniac.warrantyroster_manager.core.presentation.common.ui.utils.toPx
 
@@ -203,10 +203,10 @@ private fun RowScope.NavigationBarItemsRow(
         selectedIndicatorColor = Color.Transparent,
         selectedIconColor = MaterialTheme.colorScheme.dynamicBlack,
         selectedTextColor = MaterialTheme.colorScheme.dynamicBlack,
-        unselectedIconColor = MaterialTheme.colorScheme.dynamicGrayDark,
-        unselectedTextColor = MaterialTheme.colorScheme.dynamicGrayDark,
-        disabledIconColor = MaterialTheme.colorScheme.dynamicGrayDark.copy(alpha = 0.38f),
-        disabledTextColor = MaterialTheme.colorScheme.dynamicGrayDark.copy(alpha = 0.38f)
+        unselectedIconColor = MaterialTheme.colorScheme.dynamicGray400,
+        unselectedTextColor = MaterialTheme.colorScheme.dynamicGray400,
+        disabledIconColor = MaterialTheme.colorScheme.dynamicGray400.copy(alpha = 0.38f),
+        disabledTextColor = MaterialTheme.colorScheme.dynamicGray400.copy(alpha = 0.38f)
 
     ),
     onItemClick: (destinationScreen: Any) -> Unit
