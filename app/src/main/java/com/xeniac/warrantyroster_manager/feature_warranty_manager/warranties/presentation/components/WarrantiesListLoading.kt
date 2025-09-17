@@ -32,6 +32,7 @@ fun WarrantiesListLoading(
     val verticalPadding by remember { derivedStateOf { 8.dp } }
 
     LazyColumn(
+        userScrollEnabled = false,
         verticalArrangement = Arrangement.spacedBy(space = 8.dp),
         contentPadding = PaddingValues(
             bottom = when {
