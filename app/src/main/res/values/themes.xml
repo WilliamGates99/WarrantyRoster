@@ -10,35 +10,3 @@
     </style>
 
 </resources>
-
-    <!--    <style name="Theme.WarrantyRoster.DatePicker.ConfirmButton" parent="Widget.MaterialComponents.Button.TextButton.Dialog">-->
-    <!--        <item name="shapeAppearance">@style/Theme.WarrantyRoster.TextButton.Appearance</item>-->
-    <!--        <item name="android:textColor">@color/dialogButton</item>-->
-    <!--        <item name="android:textSize">@dimen/text_size_14sp</item>-->
-    <!--        <item name="android:fontFamily">@font/localized_bold</item>-->
-    <!--        <item name="textAllCaps">true</item>-->
-    <!--        <item name="android:letterSpacing">0</item>-->
-    <!--        <item name="android:ellipsize">end</item>-->
-    <!--        <item name="android:maxLines">1</item>-->
-    <!--        <item name="android:paddingTop">@dimen/padding_4dp</item>-->
-    <!--        <item name="android:paddingBottom">@dimen/padding_4dp</item>-->
-    <!--        <item name="android:paddingStart">@dimen/padding_8dp</item>-->
-    <!--        <item name="android:paddingEnd">@dimen/padding_8dp</item>-->
-    <!--    </style>-->
-
-    <!--    <style name="Theme.WarrantyRoster.DatePicker.CancelButton" parent="Widget.MaterialComponents.Button.TextButton.Dialog">-->
-    <!--        <item name="shapeAppearance">@style/Theme.WarrantyRoster.TextButton.Appearance</item>-->
-    <!--        <item name="android:textColor">@color/dialogButton</item>-->
-    <!--        <item name="android:textSize">@dimen/text_size_14sp</item>-->
-    <!--        <item name="android:fontFamily">@font/localized_bold</item>-->
-    <!--        <item name="textAllCaps">true</item>-->
-    <!--        <item name="android:letterSpacing">0</item>-->
-    <!--        <item name="android:ellipsize">end</item>-->
-    <!--        <item name="android:maxLines">1</item>-->
-    <!--        <item name="android:paddingTop">@dimen/padding_4dp</item>-->
-    <!--        <item name="android:paddingBottom">@dimen/padding_4dp</item>-->
-    <!--        <item name="android:paddingStart">@dimen/padding_8dp</item>-->
-    <!--        <item name="android:paddingEnd">@dimen/padding_8dp</item>-->
-    <!--    </style>-->
-
-    <!--</resources>-->
