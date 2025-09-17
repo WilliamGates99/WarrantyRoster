@@ -1,3 +1,0 @@
-files:
-  - source: values/strings.xml
-    translation: translated_%original_file_name%

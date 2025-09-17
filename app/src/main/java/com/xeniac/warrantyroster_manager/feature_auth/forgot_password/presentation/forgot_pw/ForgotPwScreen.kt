@@ -1,0 +1,76 @@
+package com.xeniac.warrantyroster_manager.feature_auth.forgot_password.presentation.forgot_pw
+
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.SwipeableSnackbar
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.showLongSnackbar
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.showOfflineSnackbar
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.utils.isWindowWidthSizeCompact
+import com.xeniac.warrantyroster_manager.core.presentation.common.utils.ObserverAsEvent
+import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiEvent
+import com.xeniac.warrantyroster_manager.feature_auth.forgot_password.presentation.common.ForgotPasswordAction
+import com.xeniac.warrantyroster_manager.feature_auth.forgot_password.presentation.common.ForgotPasswordUiEvent
+import com.xeniac.warrantyroster_manager.feature_auth.forgot_password.presentation.common.ForgotPasswordViewModel
+import com.xeniac.warrantyroster_manager.feature_auth.forgot_password.presentation.forgot_pw.components.CompactScreenWidthForgotPwContent
+import com.xeniac.warrantyroster_manager.feature_auth.forgot_password.presentation.forgot_pw.components.MediumScreenWidthForgotPwContent
+
+@Composable
+fun ForgotPwScreen(
+    viewModel: ForgotPasswordViewModel,
+    onNavigateUp: () -> Unit,
+    onNavigateToResetPwInstructionScreen: (email: String) -> Unit
+) {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    val state by viewModel.state.collectAsStateWithLifecycle()
+
+    ObserverAsEvent(flow = viewModel.sendResetPasswordEmailEventChannel) { event ->
+        when (event) {
+            ForgotPasswordUiEvent.NavigateToResetPwInstructionScreen -> onNavigateToResetPwInstructionScreen(
+                state.emailState.value.text
+            )
+            UiEvent.ShowOfflineSnackbar -> context.showOfflineSnackbar(
+                scope = scope,
+                snackbarHostState = snackbarHostState,
+                onAction = { viewModel.onAction(ForgotPasswordAction.SendResetPasswordEmail) }
+            )
+            is UiEvent.ShowLongSnackbar -> context.showLongSnackbar(
+                message = event.message,
+                scope = scope,
+                snackbarHostState = snackbarHostState
+            )
+        }
+    }
+
+    Scaffold(
+        snackbarHost = { SwipeableSnackbar(hostState = snackbarHostState) },
+        modifier = Modifier.fillMaxSize()
+    ) { innerPadding ->
+        when (isWindowWidthSizeCompact()) {
+            true -> CompactScreenWidthForgotPwContent(
+                emailState = state.emailState,
+                isSendResetPasswordEmailLoading = state.isSendResetPasswordEmailLoading,
+                bottomPadding = innerPadding.calculateBottomPadding(),
+                onAction = viewModel::onAction,
+                onNavigateUp = onNavigateUp
+            )
+            false -> MediumScreenWidthForgotPwContent(
+                emailState = state.emailState,
+                isSendResetPasswordEmailLoading = state.isSendResetPasswordEmailLoading,
+                bottomPadding = innerPadding.calculateBottomPadding(),
+                onAction = viewModel::onAction,
+                onNavigateUp = onNavigateUp
+            )
+        }
+    }
+}

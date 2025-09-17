@@ -332,7 +332,7 @@ class RegisterFragmentTest {
             pressImeActionButton()
         )
 
-        onView(withText(context.getString(R.string.register_error_account_exists)))
+        onView(withText(context.getString(R.string.register_error_account_with_same_email_exists)))
             .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
     }
 
@@ -514,7 +514,7 @@ class RegisterFragmentTest {
             click()
         )
 
-        onView(withText(context.getString(R.string.register_error_account_exists)))
+        onView(withText(context.getString(R.string.register_error_account_with_same_email_exists)))
             .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
     }
 

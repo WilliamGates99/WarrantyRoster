@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="Theme.WarrantyRoster.SplashScreen" parent="Theme.SplashScreen">
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="windowSplashScreenBackground">@color/appIconBackground</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/avd_splash_icon</item>
+        <item name="windowSplashScreenAnimationDuration">1000</item>
+        <item name="android:windowSplashScreenBrandingImage" tools:targetApi="s">
+            @drawable/ic_splash_brand_logo
+        </item>
+        <item name="android:windowSplashScreenBehavior" tools:targetApi="tiramisu">
+            icon_preferred
+        </item>
+        <item name="postSplashScreenTheme">@style/Theme.WarrantyRoster</item>
+    </style>
+
+</resources>

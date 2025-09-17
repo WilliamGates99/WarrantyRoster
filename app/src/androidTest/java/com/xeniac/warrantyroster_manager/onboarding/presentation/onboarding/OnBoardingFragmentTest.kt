@@ -68,7 +68,7 @@ class OnBoardingFragmentTest {
     fun launchingOnBoardingFragment_shows1stOnBoardingFragment() {
         onView(withId(testBinding.viewpager.id)).check(matches(isDisplayed()))
 
-        onView(withText(context.getString(R.string.onboarding_1st_title)))
+        onView(withText(context.getString(R.string.onboarding_1st_description)))
             .check(matches(isDisplayed()))
         assertThat(testBinding.viewpager.currentItem).isEqualTo(ONBOARDING_1ST_INDEX)
     }
@@ -79,7 +79,7 @@ class OnBoardingFragmentTest {
 
         onView(withId(R.id.btn_onboarding_1st_next)).perform(click())
 
-        onView(withText(context.getString(R.string.onboarding_2nd_title)))
+        onView(withText(context.getString(R.string.onboarding_2nd_description)))
             .check(matches(isDisplayed()))
         assertThat(testBinding.viewpager.currentItem).isEqualTo(ONBOARDING_2ND_INDEX)
     }
@@ -90,7 +90,7 @@ class OnBoardingFragmentTest {
 
         onView(withId(R.id.btn_onboarding_1st_skip)).perform(click())
 
-        onView(withText(context.getString(R.string.onboarding_4th_title)))
+        onView(withText(context.getString(R.string.onboarding_4th_description)))
             .check(matches(isDisplayed()))
         assertThat(testBinding.viewpager.currentItem).isEqualTo(ONBOARDING_4TH_INDEX)
     }
@@ -105,7 +105,7 @@ class OnBoardingFragmentTest {
         // Click on Next button
         onView(withId(R.id.btn_onboarding_2nd_next)).perform(click())
 
-        onView(withText(context.getString(R.string.onboarding_3rd_title)))
+        onView(withText(context.getString(R.string.onboarding_3rd_description)))
             .check(matches(isDisplayed()))
         assertThat(testBinding.viewpager.currentItem).isEqualTo(ONBOARDING_3RD_INDEX)
     }
@@ -120,7 +120,7 @@ class OnBoardingFragmentTest {
         // Click on Back button
         onView(withId(R.id.btn_onboarding_2nd_back)).perform(click())
 
-        onView(withText(context.getString(R.string.onboarding_1st_title)))
+        onView(withText(context.getString(R.string.onboarding_1st_description)))
             .check(matches(isDisplayed()))
         assertThat(testBinding.viewpager.currentItem).isEqualTo(ONBOARDING_1ST_INDEX)
     }
@@ -136,7 +136,7 @@ class OnBoardingFragmentTest {
         // Click on Next button
         onView(withId(R.id.btn_onboarding_3rd_next)).perform(click())
 
-        onView(withText(context.getString(R.string.onboarding_4th_title)))
+        onView(withText(context.getString(R.string.onboarding_4th_description)))
             .check(matches(isDisplayed()))
         assertThat(testBinding.viewpager.currentItem).isEqualTo(ONBOARDING_4TH_INDEX)
     }
@@ -152,7 +152,7 @@ class OnBoardingFragmentTest {
         // Click on Back button
         onView(withId(R.id.btn_onboarding_3rd_back)).perform(click())
 
-        onView(withText(context.getString(R.string.onboarding_2nd_title)))
+        onView(withText(context.getString(R.string.onboarding_2nd_description)))
             .check(matches(isDisplayed()))
         assertThat(testBinding.viewpager.currentItem).isEqualTo(ONBOARDING_2ND_INDEX)
     }
@@ -181,7 +181,7 @@ class OnBoardingFragmentTest {
 
         pressBackUnconditionally()
 
-        onView(withText(context.getString(R.string.onboarding_1st_title)))
+        onView(withText(context.getString(R.string.onboarding_1st_description)))
             .check(matches(isDisplayed()))
         assertThat(testBinding.viewpager.currentItem).isEqualTo(ONBOARDING_1ST_INDEX)
     }
@@ -196,7 +196,7 @@ class OnBoardingFragmentTest {
 
         pressBackUnconditionally()
 
-        onView(withText(context.getString(R.string.onboarding_2nd_title)))
+        onView(withText(context.getString(R.string.onboarding_2nd_description)))
             .check(matches(isDisplayed()))
         assertThat(testBinding.viewpager.currentItem).isEqualTo(ONBOARDING_2ND_INDEX)
     }
@@ -212,7 +212,7 @@ class OnBoardingFragmentTest {
 
         pressBackUnconditionally()
 
-        onView(withText(context.getString(R.string.onboarding_3rd_title)))
+        onView(withText(context.getString(R.string.onboarding_3rd_description)))
             .check(matches(isDisplayed()))
         assertThat(testBinding.viewpager.currentItem).isEqualTo(ONBOARDING_3RD_INDEX)
     }

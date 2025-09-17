@@ -5,7 +5,6 @@ pluginManagement {
         google()
         mavenCentral()
         gradlePluginPortal()
-        maven { url = uri("https://artifacts.applovin.com/android") } // Applovin Ad Review Repo
     }
 }
 

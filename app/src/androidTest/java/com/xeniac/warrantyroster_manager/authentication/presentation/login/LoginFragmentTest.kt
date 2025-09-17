@@ -203,7 +203,7 @@ class LoginFragmentTest {
             pressImeActionButton()
         )
 
-        onView(withText(context.getString(R.string.login_error_credentials)))
+        onView(withText(context.getString(R.string.login_error_invalid_credentials)))
             .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
     }
 
@@ -297,7 +297,7 @@ class LoginFragmentTest {
             click()
         )
 
-        onView(withText(context.getString(R.string.login_error_credentials)))
+        onView(withText(context.getString(R.string.login_error_invalid_credentials)))
             .check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
     }
 

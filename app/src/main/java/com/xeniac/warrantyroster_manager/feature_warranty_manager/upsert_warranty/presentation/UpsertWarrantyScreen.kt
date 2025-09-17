@@ -1,0 +1,227 @@
+package com.xeniac.warrantyroster_manager.feature_warranty_manager.upsert_warranty.presentation
+
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.xeniac.warrantyroster_manager.R
+import com.xeniac.warrantyroster_manager.core.presentation.common.UserAction
+import com.xeniac.warrantyroster_manager.core.presentation.common.UserViewModel
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.CustomCenterAlignedTopAppBar
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.CustomDatePickerDialog
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.SwipeableSnackbar
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.showLongSnackbar
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.showOfflineSnackbar
+import com.xeniac.warrantyroster_manager.core.presentation.common.utils.ObserverAsEvent
+import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiEvent
+import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.domain.models.Warranty
+import com.xeniac.warrantyroster_manager.feature_warranty_manager.upsert_warranty.presentation.components.CategoriesBottomSheet
+import com.xeniac.warrantyroster_manager.feature_warranty_manager.upsert_warranty.presentation.components.CategoryAndDescriptionSection
+import com.xeniac.warrantyroster_manager.feature_warranty_manager.upsert_warranty.presentation.components.DeviceSection
+import com.xeniac.warrantyroster_manager.feature_warranty_manager.upsert_warranty.presentation.components.TitleAndDatesSection
+import com.xeniac.warrantyroster_manager.feature_warranty_manager.upsert_warranty.presentation.components.UpsertWarrantyButton
+import kotlin.time.ExperimentalTime
+
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalTime::class)
+@Composable
+fun UpsertWarrantyScreen(
+    userViewModel: UserViewModel,
+    onNavigateUp: () -> Unit,
+    onNavigateToWarrantyDetailsScreen: (warranty: Warranty) -> Unit,
+    viewModel: UpsertWarrantyViewModel = hiltViewModel()
+) {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    val focusManager = LocalFocusManager.current
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    val horizontalPadding by remember { derivedStateOf { 8.dp } }
+    val verticalPadding by remember { derivedStateOf { 8.dp } }
+
+    val state by viewModel.state.collectAsStateWithLifecycle()
+
+    ObserverAsEvent(flow = viewModel.focusManagerEventChannel) { event ->
+        when (event) {
+            UiEvent.ClearFocus -> focusManager.clearFocus()
+            else -> Unit
+        }
+    }
+
+    ObserverAsEvent(flow = viewModel.getCategoriesEventChannel) { event ->
+        when (event) {
+            UiEvent.ForceLogoutUnauthorizedUser -> {
+                userViewModel.onAction(UserAction.Logout)
+            }
+            is UiEvent.ShowLongSnackbar -> context.showLongSnackbar(
+                message = event.message,
+                scope = scope,
+                snackbarHostState = snackbarHostState
+            )
+            else -> Unit
+        }
+    }
+
+    ObserverAsEvent(flow = viewModel.addWarrantyEventChannel) { event ->
+        when (event) {
+            UiEvent.NavigateUp -> onNavigateUp()
+            UiEvent.ForceLogoutUnauthorizedUser -> {
+                userViewModel.onAction(UserAction.Logout)
+            }
+            UiEvent.ShowOfflineSnackbar -> context.showOfflineSnackbar(
+                scope = scope,
+                snackbarHostState = snackbarHostState,
+                onAction = { viewModel.onAction(UpsertWarrantyAction.AddWarranty) }
+            )
+            is UiEvent.ShowLongSnackbar -> context.showLongSnackbar(
+                message = event.message,
+                scope = scope,
+                snackbarHostState = snackbarHostState
+            )
+            else -> Unit
+        }
+    }
+
+    ObserverAsEvent(flow = viewModel.editWarrantyEventChannel) { event ->
+        when (event) {
+            is UpsertWarrantyUiEvent.NavigateToWarrantyDetailsScreen -> {
+                onNavigateToWarrantyDetailsScreen(event.updatedWarranty)
+            }
+            UiEvent.ForceLogoutUnauthorizedUser -> {
+                userViewModel.onAction(UserAction.Logout)
+            }
+            UiEvent.ShowOfflineSnackbar -> context.showOfflineSnackbar(
+                scope = scope,
+                snackbarHostState = snackbarHostState,
+                onAction = { viewModel.onAction(UpsertWarrantyAction.AddWarranty) }
+            )
+            is UiEvent.ShowLongSnackbar -> context.showLongSnackbar(
+                message = event.message,
+                scope = scope,
+                snackbarHostState = snackbarHostState
+            )
+        }
+    }
+
+    Scaffold(
+        snackbarHost = { SwipeableSnackbar(hostState = snackbarHostState) },
+        topBar = {
+            CustomCenterAlignedTopAppBar(
+                title = when (state.updatingWarranty) {
+                    null -> stringResource(id = R.string.upsert_warranty_app_bar_title_add)
+                    else -> stringResource(id = R.string.upsert_warranty_app_bar_title_edit)
+                },
+                scrollBehavior = scrollBehavior,
+                onNavigateUpClick = onNavigateUp,
+                actions = {
+                    UpsertWarrantyButton(
+                        isLoading = state.isUpsertLoading,
+                        isUpdatingWarranty = state.updatingWarranty != null,
+                        onAction = viewModel::onAction
+                    )
+                }
+            )
+        },
+        modifier = Modifier
+            .fillMaxSize()
+            .nestedScroll(scrollBehavior.nestedScrollConnection)
+    ) { innerPadding ->
+        Column(
+            verticalArrangement = Arrangement.spacedBy(space = 8.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .windowInsetsPadding(WindowInsets(top = innerPadding.calculateTopPadding()))
+                .verticalScroll(rememberScrollState())
+                .windowInsetsPadding(WindowInsets(bottom = innerPadding.calculateBottomPadding()))
+                .safeDrawingPadding()
+                .padding(
+                    horizontal = horizontalPadding,
+                    vertical = verticalPadding
+                )
+        ) {
+            TitleAndDatesSection(
+                isLoading = state.isUpsertLoading,
+                titleState = state.titleState,
+                isLifetimeWarranty = state.isLifetimeWarranty,
+                selectedStartingDate = state.selectedStartingDate,
+                selectedExpiryDate = state.selectedExpiryDate,
+                selectedStartingAndExpiryDatesError = state.selectedStartingAndExpiryDatesError,
+                onAction = viewModel::onAction
+            )
+
+            DeviceSection(
+                isLoading = state.isUpsertLoading,
+                brandState = state.brandState,
+                modelState = state.modelState,
+                serialNumberState = state.serialNumberState,
+                onAction = viewModel::onAction
+            )
+
+            CategoryAndDescriptionSection(
+                isLoading = state.isUpsertLoading,
+                selectedCategory = state.selectedCategory,
+                selectedCategoryError = state.selectedCategoryError,
+                descriptionState = state.descriptionState,
+                onAction = viewModel::onAction
+            )
+        }
+    }
+
+    CategoriesBottomSheet(
+        isVisible = state.isCategoriesBottomSheetVisible,
+        isCategoriesLoading = state.isCategoriesLoading,
+        categories = state.categories,
+        errorMessage = state.categoriesErrorMessage,
+        onAction = viewModel::onAction
+    )
+
+    CustomDatePickerDialog(
+        isVisible = state.isStartingDatePickerDialogVisible,
+        initialSelectedDateMillis = state.selectedStartingDate?.toEpochMilliseconds(),
+        title = stringResource(id = R.string.upsert_warranty_starting_date_picker_title),
+        onDismissRequest = {
+            viewModel.onAction(UpsertWarrantyAction.DismissStartingDatePickerDialog)
+        },
+        onConfirmClick = { selectedDateMillis ->
+            viewModel.onAction(
+                UpsertWarrantyAction.StartingDateChanged(startingDateInMs = selectedDateMillis)
+            )
+        }
+    )
+
+    CustomDatePickerDialog(
+        isVisible = state.isExpiryDatePickerDialogVisible,
+        initialSelectedDateMillis = state.selectedExpiryDate?.toEpochMilliseconds(),
+        title = stringResource(id = R.string.upsert_warranty_expiry_date_picker_title),
+        onDismissRequest = {
+            viewModel.onAction(UpsertWarrantyAction.DismissExpiryDatePickerDialog)
+        },
+        onConfirmClick = { selectedDateMillis ->
+            viewModel.onAction(
+                UpsertWarrantyAction.ExpiryDateChanged(expiryDateInMs = selectedDateMillis)
+            )
+        }
+    )
+}

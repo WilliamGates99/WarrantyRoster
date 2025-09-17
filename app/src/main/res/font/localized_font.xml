@@ -3,6 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <font
+        android:font="@font/localized_thin"
+        android:fontStyle="normal"
+        android:fontWeight="100"
+        tools:targetApi="o" />
+
+    <font
         android:font="@font/localized_extra_light"
         android:fontStyle="normal"
         android:fontWeight="200"
@@ -15,9 +21,15 @@
         tools:targetApi="o" />
 
     <font
-        android:font="@font/localized_regular"
+        android:font="@font/localized_normal"
         android:fontStyle="normal"
         android:fontWeight="400"
+        tools:targetApi="o" />
+
+    <font
+        android:font="@font/localized_medium"
+        android:fontStyle="normal"
+        android:fontWeight="500"
         tools:targetApi="o" />
 
     <font

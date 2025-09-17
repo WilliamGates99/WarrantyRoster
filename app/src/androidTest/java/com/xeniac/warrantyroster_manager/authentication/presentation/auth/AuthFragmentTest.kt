@@ -62,7 +62,7 @@ class AuthFragmentTest {
 
     @Test
     fun navigateToAuthFragment_showsLoginTitle() {
-        val loginTitle = context.getString(R.string.login_text_title)
+        val loginTitle = context.getString(R.string.auth_title_login)
         val currentTitle = testBinding.tvTitle.text
 
         onView(withId(testBinding.tvTitle.id)).check(matches(isDisplayed()))
@@ -75,7 +75,7 @@ class AuthFragmentTest {
             .perform(scrollTo())
             .perform(click())
 
-        val loginTitle = context.getString(R.string.register_text_title)
+        val loginTitle = context.getString(R.string.auth_title_register)
         val currentTitle = testBinding.tvTitle.text
 
         onView(withId(testBinding.tvTitle.id)).check(matches(isDisplayed()))
@@ -88,7 +88,7 @@ class AuthFragmentTest {
             .perform(scrollTo())
             .perform(click())
 
-        val forgotPwTitle = context.getString(R.string.forgot_pw_text_title)
+        val forgotPwTitle = context.getString(R.string.auth_title_forgot_pw)
         val currentTitle = testBinding.tvTitle.text
 
         onView(withId(testBinding.tvTitle.id)).check(matches(isDisplayed()))

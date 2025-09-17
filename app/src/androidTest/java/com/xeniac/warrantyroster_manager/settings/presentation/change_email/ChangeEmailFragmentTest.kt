@@ -252,7 +252,7 @@ class ChangeEmailFragmentTest {
             )
         }
 
-        onView(withText(context.getString(R.string.change_email_dialog_message)))
+        onView(withText(context.getString(R.string.change_email_success_dialog_message)))
             .inRoot(isDialog())
             .check(matches(isDisplayed()))
     }
@@ -375,7 +375,7 @@ class ChangeEmailFragmentTest {
             )
         }
 
-        onView(withText(context.getString(R.string.change_email_dialog_message)))
+        onView(withText(context.getString(R.string.change_email_success_dialog_message)))
             .inRoot(isDialog())
             .check(matches(isDisplayed()))
     }

@@ -1,0 +1,173 @@
+package com.xeniac.warrantyroster_manager.feature_warranty_manager.warranty_details.presentation
+
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FabPosition
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.xeniac.warrantyroster_manager.core.presentation.common.UserAction
+import com.xeniac.warrantyroster_manager.core.presentation.common.UserViewModel
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.CustomCenterAlignedTopAppBar
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.SwipeableSnackbar
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.showLongSnackbar
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.showLongToast
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.components.showOfflineSnackbar
+import com.xeniac.warrantyroster_manager.core.presentation.common.ui.theme.dynamicGray100
+import com.xeniac.warrantyroster_manager.core.presentation.common.utils.ObserverAsEvent
+import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiEvent
+import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.domain.models.Warranty
+import com.xeniac.warrantyroster_manager.feature_warranty_manager.warranty_details.presentation.components.DeleteWarrantyButton
+import com.xeniac.warrantyroster_manager.feature_warranty_manager.warranty_details.presentation.components.DeleteWarrantyDialog
+import com.xeniac.warrantyroster_manager.feature_warranty_manager.warranty_details.presentation.components.DescriptionSection
+import com.xeniac.warrantyroster_manager.feature_warranty_manager.warranty_details.presentation.components.DeviceInfoSection
+import com.xeniac.warrantyroster_manager.feature_warranty_manager.warranty_details.presentation.components.EditWarrantyFab
+import com.xeniac.warrantyroster_manager.feature_warranty_manager.warranty_details.presentation.components.HeaderSection
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun WarrantyDetailsScreen(
+    userViewModel: UserViewModel,
+    onNavigateUp: () -> Unit,
+    onNavigateToUpsertWarrantyScreen: (warranty: Warranty) -> Unit,
+    viewModel: WarrantyDetailsViewModel = hiltViewModel()
+) {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    val scrollState = rememberScrollState()
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    var isFabExpanded by remember { mutableStateOf(true) }
+    val horizontalPadding by remember { derivedStateOf { 16.dp } }
+    val verticalPadding by remember { derivedStateOf { 16.dp } }
+
+    val state by viewModel.state.collectAsStateWithLifecycle()
+
+    ObserverAsEvent(flow = viewModel.deleteWarrantyEventChannel) { event ->
+        when (event) {
+            UiEvent.NavigateUp -> onNavigateUp()
+            UiEvent.ForceLogoutUnauthorizedUser -> {
+                userViewModel.onAction(UserAction.Logout)
+            }
+            UiEvent.ShowOfflineSnackbar -> context.showOfflineSnackbar(
+                scope = scope,
+                snackbarHostState = snackbarHostState,
+                onAction = { viewModel.onAction(WarrantyDetailsAction.DeleteWarranty) }
+            )
+            is UiEvent.ShowLongSnackbar -> context.showLongSnackbar(
+                message = event.message,
+                scope = scope,
+                snackbarHostState = snackbarHostState
+            )
+            is UiEvent.ShowLongToast -> context.showLongToast(message = event.message)
+            else -> Unit
+        }
+    }
+
+    LaunchedEffect(key1 = scrollState.value) {
+        isFabExpanded = scrollState.value <= 0
+    }
+
+    Scaffold(
+        snackbarHost = { SwipeableSnackbar(hostState = snackbarHostState) },
+        topBar = {
+            CustomCenterAlignedTopAppBar(
+                title = state.warranty.title,
+                scrollBehavior = scrollBehavior,
+                onNavigateUpClick = onNavigateUp,
+                actions = {
+                    DeleteWarrantyButton(
+                        isLoading = state.isDeleteLoading,
+                        onAction = viewModel::onAction
+                    )
+                }
+            )
+        },
+        floatingActionButton = {
+            EditWarrantyFab(
+                isExpanded = isFabExpanded,
+                onClick = { onNavigateToUpsertWarrantyScreen(state.warranty) }
+            )
+        },
+        floatingActionButtonPosition = FabPosition.End,
+        modifier = Modifier
+            .fillMaxSize()
+            .nestedScroll(scrollBehavior.nestedScrollConnection)
+    ) { innerPadding ->
+        Column(
+            verticalArrangement = Arrangement.spacedBy(space = 16.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .windowInsetsPadding(WindowInsets(top = innerPadding.calculateTopPadding()))
+                .verticalScroll(scrollState)
+                .windowInsetsPadding(WindowInsets(bottom = innerPadding.calculateBottomPadding()))
+                .safeDrawingPadding()
+                .padding(
+                    horizontal = horizontalPadding,
+                    vertical = verticalPadding
+                )
+        ) {
+            HeaderSection(
+                category = state.warranty.category,
+                isLifetime = state.warranty.isLifetime,
+                startingDate = state.warranty.startingDate,
+                expiryDate = state.warranty.expiryDate
+            )
+
+            HorizontalDivider(
+                thickness = 1.dp,
+                color = MaterialTheme.colorScheme.dynamicGray100,
+                modifier = Modifier.clip(CircleShape)
+            )
+
+            DeviceInfoSection(
+                brand = state.warranty.brand,
+                model = state.warranty.model,
+                serialNumber = state.warranty.serialNumber
+            )
+
+            HorizontalDivider(
+                thickness = 1.dp,
+                color = MaterialTheme.colorScheme.dynamicGray100,
+                modifier = Modifier.clip(CircleShape)
+            )
+
+            DescriptionSection(
+                description = state.warranty.description
+            )
+        }
+    }
+
+    DeleteWarrantyDialog(
+        isVisible = state.isDeleteWarrantyDialogVisible,
+        warrantyTitle = state.warranty.title,
+        onAction = viewModel::onAction
+    )
+}

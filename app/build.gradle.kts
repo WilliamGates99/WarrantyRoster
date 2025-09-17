@@ -1,177 +1,215 @@
 @file:Suppress("UnstableApiUsage")
 
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
-    id("kotlin-kapt")
-    id("kotlin-parcelize")
-    id("androidx.navigation.safeargs.kotlin")
-    id("dagger.hilt.android.plugin")
-    id("com.google.gms.google-services") // Google Services plugin
-    id("com.google.firebase.crashlytics")
-    id("com.google.firebase.firebase-perf")
-    id("applovin-quality-service")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin)
+    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.google.services) // Google Services plugin
+    alias(libs.plugins.firebase.crashlytics)
+    alias(libs.plugins.firebase.perf)
 }
 
-val properties = gradleLocalProperties(rootDir)
-
-applovin {
-    apiKey =
-        "wPNW70TAHp3xrcTl2HOeZEpvt5kn19fKosui1hEugVWrFDKCh_411hghugSX5ln5ewRrMMRB8W1Ce_S3hcPh4c"
-}
+val properties = gradleLocalProperties(
+    projectRootDir = rootDir,
+    providers = providers
+)
 
 android {
     namespace = "com.xeniac.warrantyroster_manager"
-    compileSdk = 34
-    buildToolsVersion = "34.0.0"
+    compileSdk = 36
+    buildToolsVersion = "36.0.0"
 
     defaultConfig {
         applicationId = "com.xeniac.warrantyroster_manager"
-        minSdk = 21
-        targetSdk = 34
-        versionCode = 22 // TODO UPGRADE AFTER EACH RELEASE
-        versionName = "2.1.2" // TODO UPGRADE AFTER EACH RELEASE
-
-        /**
-         * Keeps language resources for only the locales specified below.
-         */
-        resourceConfigurations.addAll(listOf("en-rUS", "en-rGB", "fa-rIR"))
-
-        resValue(
-            "string",
-            "fb_login_protocol_scheme",
-            properties.getProperty("FACEBOOK_AUTH_LOGIN_PROTOCOL_SCHEME")
-        )
-
-        resValue(
-            "string",
-            "facebook_app_id",
-            properties.getProperty("FACEBOOK_AUTH_APP_ID")
-        )
-
-        resValue(
-            "string",
-            "facebook_client_token",
-            properties.getProperty("FACEBOOK_AUTH_CLIENT_TOKEN")
-        )
-
-        buildConfigField(
-            "String",
-            "GOOGLE_AUTH_SERVER_CLIENT_ID",
-            properties.getProperty("GOOGLE_AUTH_SERVER_CLIENT_ID")
-        )
-
-        buildConfigField(
-            "String",
-            "CATEGORY_MISCELLANEOUS_ICON",
-            properties.getProperty("CATEGORY_MISCELLANEOUS_ICON")
-        )
+        minSdk = 23
+        targetSdk = 36
+        versionCode = 24
+        versionName = "2.2.0"
 
         testInstrumentationRunner = "com.xeniac.warrantyroster_manager.HiltTestRunner"
+
+        buildConfigField(
+            type = "String",
+            name = "AUTH_GOOGLE_SERVER_CLIENT_ID",
+            value = properties.getProperty("AUTH_GOOGLE_SERVER_CLIENT_ID")
+        )
+
+        buildConfigField(
+            type = "String",
+            name = "HTTP_BASE_URL",
+            value = properties.getProperty("HTTP_BASE_URL")
+        )
+
+        buildConfigField(
+            type = "String",
+            name = "DEFAULT_CATEGORY_ICON_URL",
+            value = properties.getProperty("DEFAULT_CATEGORY_ICON_URL")
+        )
+    }
+
+    androidResources {
+        generateLocaleConfig = true
+
+        // Keeps language resources for only the locales specified below.
+        localeFilters.addAll(listOf("en-rUS", "en-rGB", "fa-rIR"))
+    }
+
+    signingConfigs {
+        create("release") {
+            storeFile = file(path = properties.getProperty("KEY_STORE_PATH"))
+            storePassword = properties.getProperty("KEY_STORE_PASSWORD")
+            keyAlias = properties.getProperty("KEY_ALIAS")
+            keyPassword = properties.getProperty("KEY_PASSWORD")
+        }
     }
 
     buildTypes {
-        getByName("debug") {
-            versionNameSuffix = " - debug"
-            applicationIdSuffix = ".debug"
+        debug {
+            versionNameSuffix = " - Debug"
+            applicationIdSuffix = ".dev.debug"
 
-            resValue("color", "appIconBackground", "#FF9100") // Orange
+            resValue(
+                type = "color",
+                name = "appIconBackground",
+                value = "#FFFF9100" // Orange
+            )
         }
 
-        getByName("release") {
-            /**
-             * Enables code shrinking, obfuscation, and optimization for only
-             * your project's release build type.
-             */
+        create("dev") {
+            versionNameSuffix = " - Developer Preview"
+            applicationIdSuffix = ".dev"
+
             isMinifyEnabled = true
-
-            /**
-             * Enables resource shrinking, which is performed by the Android Gradle plugin.
-             */
             isShrinkResources = true
+            signingConfig = signingConfigs.getByName("release")
+            ndk.debugSymbolLevel = "FULL" // Include native debug symbols file in app bundle
 
-            /**
-             * Includes the default ProGuard rules files that are packaged with the Android Gradle plugin.
-             */
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+
+            resValue(
+                type = "color",
+                name = "appIconBackground",
+                value = "#FFFF0011" // Red
+            )
+        }
+
+        release {
+            isMinifyEnabled = true
+            isShrinkResources = true
+            signingConfig = signingConfigs.getByName("release")
+            ndk.debugSymbolLevel = "FULL" // Include native debug symbols file in app bundle
+
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+
+            resValue(
+                type = "color",
+                name = "appIconBackground",
+                value = "#FF1C53F4" // Blue
+            )
         }
     }
 
-    flavorDimensions += listOf("build", "market")
+    flavorDimensions += listOf("market")
     productFlavors {
-        create("dev") {
-            dimension = "build"
-            versionNameSuffix = " - Developer Preview"
-            applicationIdSuffix = ".dev"
-            resValue("color", "appIconBackground", "#FF0011") // Red
-        }
-
-        create("prod") {
-            dimension = "build"
-            resValue("color", "appIconBackground", "#1C53F4") // Blue
-        }
-
         create("playStore") {
             dimension = "market"
+            isDefault = true
+
             buildConfigField(
-                "String",
-                "URL_APP_STORE",
-                "\"https://play.google.com/store/apps/details?id=com.xeniac.warrantyroster_manager\""
+                type = "String",
+                name = "URL_APP_STORE",
+                value = "\"https://play.google.com/store/apps/details?id=com.xeniac.warrantyroster_manager\""
             )
+
             buildConfigField(
-                "String",
-                "PACKAGE_NAME_APP_STORE",
-                "\"com.android.vending\""
+                type = "String",
+                name = "PACKAGE_NAME_APP_STORE",
+                value = "\"com.android.vending\""
             )
         }
 
-        create("amazon") {
+        create("gitHub") {
             dimension = "market"
+
             buildConfigField(
-                "String",
-                "URL_APP_STORE",
-                "\"https://www.amazon.com/gp/product/B09PSK6W9Z\""
+                type = "String",
+                name = "URL_APP_STORE",
+                value = "\"https://github.com/WilliamGates99/WarrantyRoster\""
             )
+
             buildConfigField(
-                "String",
-                "PACKAGE_NAME_APP_STORE",
-                "\"com.amazon.venezia\""
+                type = "String",
+                name = "PACKAGE_NAME_APP_STORE",
+                value = "\"\""
             )
         }
 
         create("cafeBazaar") {
             dimension = "market"
+
             buildConfigField(
-                "String",
-                "URL_APP_STORE",
-                "\"https://cafebazaar.ir/app/com.xeniac.warrantyroster_manager\""
+                type = "String",
+                name = "URL_APP_STORE",
+                value = "\"https://cafebazaar.ir/app/com.xeniac.warrantyroster_manager\""
             )
+
             buildConfigField(
-                "String",
-                "PACKAGE_NAME_APP_STORE",
-                "\"com.farsitel.bazaar\""
+                type = "String",
+                name = "PACKAGE_NAME_APP_STORE",
+                value = "\"com.farsitel.bazaar\""
+            )
+        }
+
+        create("myket") {
+            dimension = "market"
+
+            buildConfigField(
+                type = "String",
+                name = "URL_APP_STORE",
+                value = "\"https://myket.ir/app/com.xeniac.warrantyroster_manager\""
+            )
+
+            buildConfigField(
+                type = "String",
+                name = "PACKAGE_NAME_APP_STORE",
+                value = "\"ir.mservices.market\""
             )
         }
     }
 
     buildFeatures {
         buildConfig = true
-        viewBinding = true
-        dataBinding = true
+        compose = true
     }
 
     compileOptions {
+        // Java 8+ API Desugaring Support
+        isCoreLibraryDesugaringEnabled = true
+
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-    kotlinOptions {
-        jvmTarget = "17"
+    kotlin {
+        compilerOptions {
+            jvmTarget = JvmTarget.fromTarget(target = "17")
+
+            // Enable Context-Sensitive Resolution in Kotlin 2.2
+            freeCompilerArgs.add("-Xcontext-sensitive-resolution")
+        }
     }
 
     packaging {
@@ -182,198 +220,177 @@ android {
 
     bundle {
         language {
-            /**
-             * Specifies that the app bundle should not support configuration APKs for language resources.
-             * These resources are instead packaged with each base and dynamic feature APK.
+            /*
+            Specifies that the app bundle should not support configuration APKs for language resources.
+            These resources are instead packaged with each base and dynamic feature APK.
              */
             enableSplit = false
         }
     }
 }
 
+hilt {
+    enableAggregatingTask = true
+}
+
 androidComponents {
     beforeVariants { variantBuilder ->
-        /**
-         * Gradle ignores any variants that satisfy the conditions below.
-         */
-        if (variantBuilder.buildType == "debug") {
-            variantBuilder.productFlavors.let {
-                variantBuilder.enable = when {
-                    it.containsAll(listOf("build" to "dev", "market" to "amazon")) -> false
-                    it.containsAll(listOf("build" to "dev", "market" to "cafeBazaar")) -> false
-                    it.containsAll(listOf("build" to "prod", "market" to "amazon")) -> false
-                    it.containsAll(listOf("build" to "prod", "market" to "cafeBazaar")) -> false
-                    it.containsAll(listOf("build" to "prod", "market" to "playStore")) -> false
-                    else -> true
+        variantBuilder.apply {
+            // Gradle ignores any variants that satisfy the conditions below.
+            if (buildType == "debug") {
+                productFlavors.let {
+                    enable = when {
+                        it.containsAll(listOf("market" to "gitHub")) -> false
+                        it.containsAll(listOf("market" to "cafeBazaar")) -> false
+                        it.containsAll(listOf("market" to "myket")) -> false
+                        else -> true
+                    }
                 }
             }
-        }
 
-        if (variantBuilder.buildType == "release") {
-            variantBuilder.productFlavors.let {
-                variantBuilder.enable = when {
-                    it.containsAll(listOf("build" to "dev", "market" to "amazon")) -> false
-                    it.containsAll(listOf("build" to "dev", "market" to "cafeBazaar")) -> false
-                    else -> true
+            if (buildType == "dev") {
+                productFlavors.let {
+                    enable = when {
+                        it.containsAll(listOf("market" to "gitHub")) -> false
+                        it.containsAll(listOf("market" to "cafeBazaar")) -> false
+                        it.containsAll(listOf("market" to "myket")) -> false
+                        else -> true
+                    }
                 }
+            }
+
+            if (buildType == "release") {
+                enable = true
             }
         }
     }
 }
 
-kapt {
-    /**
-     * Allow references to generated code
-     */
-    correctErrorTypes = true
-}
-
 dependencies {
-    implementation("androidx.core:core-ktx:1.10.1")
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.9.0")
-    implementation("androidx.core:core-splashscreen:1.0.1")
+    // Java 8+ API Desugaring Support
+    coreLibraryDesugaring(libs.desugar.jdk.libs)
 
-    // Navigation Component
-    implementation("androidx.navigation:navigation-fragment-ktx:2.7.1")
-    implementation("androidx.navigation:navigation-ui-ktx:2.7.1")
+    implementation(libs.bundles.essentials)
 
-    // Dagger - Hilt
-    implementation("com.google.dagger:hilt-android:2.47")
-    kapt("com.google.dagger:hilt-compiler:2.47")
-
-    // Activity KTX for Injecting ViewModels into Fragments
-    implementation("androidx.activity:activity-ktx:1.7.2")
+    // Jetpack Compose
+    implementation(platform(libs.compose.bom))
+    implementation(libs.bundles.compose)
 
     // Architectural Components
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
+    implementation(libs.bundles.architectural.components)
+
+    // Dagger - Hilt
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.android.compiler)
 
     // Coroutines
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+    implementation(libs.bundles.coroutines)
 
-    // Coroutines Support for Firebase
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3")
+    // Ktor Client Library
+    implementation(libs.bundles.ktor)
 
     // Preferences DataStore
-    implementation("androidx.datastore:datastore-preferences:1.0.0")
+    implementation(libs.datastore.preferences)
 
-    // Firebase BoM and Analytics
-    implementation(platform("com.google.firebase:firebase-bom:32.2.3"))
-    implementation("com.google.firebase:firebase-analytics-ktx")
+    // Firebase
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.bundles.firebase)
 
-    // Firebase App Check
-    implementation("com.google.firebase:firebase-appcheck-playintegrity")
-    implementation("com.google.firebase:firebase-appcheck-debug")
+    // Credential Manager Library for Login with Google
+    implementation(libs.bundles.credential.manager)
 
-    // Firebase Release & Monitor
-    implementation("com.google.firebase:firebase-crashlytics-ktx")
-    implementation("com.google.firebase:firebase-perf-ktx")
-
-    // Firebase Auth
-    implementation("com.google.firebase:firebase-auth-ktx")
-    implementation("com.google.android.gms:play-services-auth:20.6.0")
-    implementation("com.facebook.android:facebook-login:16.2.0")
-
-    // Firebase Firestore, Storage
-    implementation("com.google.firebase:firebase-firestore-ktx")
-    implementation("com.google.firebase:firebase-storage-ktx")
+    // In-App Browser
+    implementation(libs.browser)
 
     // Timber Library
-    implementation("com.jakewharton.timber:timber:5.0.1")
+    implementation(libs.timber)
 
     // Lottie Library
-    implementation("com.airbnb.android:lottie:6.1.0")
+    implementation(libs.lottie.compose)
 
     // Coil Library
-    implementation("io.coil-kt:coil:2.4.0")
-    implementation("io.coil-kt:coil-svg:2.4.0")
+    implementation(platform(libs.coil.bom))
+    implementation(libs.bundles.coil)
 
-    // Dots Indicator Library
-    implementation("com.tbuonomo:dotsindicator:5.0")
-
-    // Google Play In-App Reviews API
-    implementation("com.google.android.play:review-ktx:2.0.1")
-
-    // AppLovin Libraries
-    implementation("com.applovin:applovin-sdk:11.11.3")
-    implementation("com.google.android.gms:play-services-ads-identifier:18.0.1")
-    implementation("com.applovin.mediation:google-adapter:22.3.0.0")
-
-    // Google AdMob Library
-    implementation("com.google.android.gms:play-services-ads:22.3.0")
-
-    // Tapsell Library
-    implementation("ir.tapsell.plus:tapsell-plus-sdk-android:2.2.0")
+    // Google Play In-App APIs
+    implementation(libs.bundles.google.play.inapp.apis)
 
     // Local Unit Test Libraries
-    testImplementation("com.google.truth:truth:1.1.5")
-    testImplementation("junit:junit:4.13.2")
-    testImplementation("androidx.arch.core:core-testing:2.2.0")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+    testImplementation(libs.bundles.local.unit.tests)
 
     // Instrumentation Test Libraries
-    androidTestImplementation("com.google.truth:truth:1.1.5")
-    androidTestImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test:core:1.4.0") // DO NOT UPGRADE
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.arch.core:core-testing:2.2.0")
-    androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
-    androidTestImplementation("com.google.dagger:hilt-android-testing:2.47")
-    kaptAndroidTest("com.google.dagger:hilt-compiler:2.47")
+    androidTestImplementation(libs.bundles.instrumentation.tests)
+    kspAndroidTest(libs.hilt.android.compiler)
 
     // UI Test Libraries
-    androidTestImplementation("androidx.navigation:navigation-testing:2.7.1")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.3.0") // DO NOT UPGRADE
-    androidTestImplementation("androidx.test.espresso:espresso-contrib:3.3.0") // DO NOT UPGRADE
-    androidTestImplementation("androidx.test.espresso:espresso-intents:3.3.0") // DO NOT UPGRADE
-    debugImplementation("androidx.fragment:fragment-testing:1.6.1")
+    androidTestImplementation(libs.bundles.ui.tests)
+    androidTestImplementation(platform(libs.compose.bom))
+    debugImplementation(libs.compose.ui.test.manifest)
 }
 
+
 val releaseRootDir = "${rootDir}/app"
-val destDir: String = properties.getProperty("DESTINATION_DIR")
+val apkDestDir: String = properties.getProperty("APK_DESTINATION_DIR")
+val bundleDestDir: String = properties.getProperty("BUNDLE_DESTINATION_DIR")
 val obfuscationDestDir: String = properties.getProperty("OBFUSCATION_DESTINATION_DIR")
 
 val versionName = "${android.defaultConfig.versionName}"
 val renamedFileName = "Warranty Roster $versionName"
 
-tasks.register<Copy>("copyDevPreviewBundle") {
-    val bundleFile = "app-dev-playStore-release.aab"
-    val bundleSourceDir = "${releaseRootDir}/devPlayStore/release/${bundleFile}"
+tasks.register<Copy>(name = "copyDevPreviewBundle") {
+    val bundleFile = "app-playStore-dev.aab"
+    val bundleSourceDir = "${releaseRootDir}/playStore/dev/${bundleFile}"
 
     from(bundleSourceDir)
-    into(destDir)
+    into(bundleDestDir)
+
     rename(bundleFile, "$renamedFileName (Developer Preview).aab")
 }
 
-tasks.register<Copy>("copyReleaseApk") {
-    val amazonApkFile = "app-prod-amazon-release.apk"
-    val cafeBazaarApkFile = "app-prod-cafeBazaar-release.apk"
+tasks.register<Copy>("copyDevPreviewApk") {
+    val apkFile = "app-playStore-dev.apk"
+    val apkSourceDir = "${releaseRootDir}/playStore/dev/${apkFile}"
 
-    val amazonApkSourceDir = "${releaseRootDir}/prodAmazon/release/${amazonApkFile}"
-    val cafeBazaarApkSourceDir = "${releaseRootDir}/prodCafeBazaar/release/${cafeBazaarApkFile}"
+    from(apkSourceDir)
+    into(apkDestDir)
 
-    from(amazonApkSourceDir)
-    into(destDir)
-
-    from(cafeBazaarApkSourceDir)
-    into(destDir)
-
-    rename(amazonApkFile, "$renamedFileName - Amazon.apk")
-    rename(cafeBazaarApkFile, "$renamedFileName - CafeBazaar.apk")
+    rename(apkFile, "$renamedFileName (Developer Preview).aab")
 }
 
-tasks.register<Copy>("copyReleaseBundle") {
-    val playStoreBundleFile = "app-prod-playStore-release.aab"
-    val playStoreBundleSourceDir = "${releaseRootDir}/prodPlayStore/release/${playStoreBundleFile}"
+tasks.register<Copy>(name = "copyReleaseApk") {
+    val gitHubApkFile = "app-gitHub-release.apk"
+    val cafeBazaarApkFile = "app-cafeBazaar-release.apk"
+    val myketApkFile = "app-myket-release.apk"
+
+    val gitHubApkSourceDir = "${releaseRootDir}/gitHub/release/${gitHubApkFile}"
+    val cafeBazaarApkSourceDir = "${releaseRootDir}/cafeBazaar/release/${cafeBazaarApkFile}"
+    val myketApkSourceDir = "${releaseRootDir}/myket/release/${myketApkFile}"
+
+    from(gitHubApkSourceDir)
+    into(apkDestDir)
+
+    from(cafeBazaarApkSourceDir)
+    into(apkDestDir)
+
+    from(myketApkSourceDir)
+    into(apkDestDir)
+
+    rename(gitHubApkFile, "$renamedFileName - GitHub.apk")
+    rename(cafeBazaarApkFile, "$renamedFileName - CafeBazaar.apk")
+    rename(myketApkFile, "$renamedFileName - Myket.apk")
+}
+
+tasks.register<Copy>(name = "copyReleaseBundle") {
+    val playStoreBundleFile = "app-playStore-release.aab"
+    val playStoreBundleSourceDir = "${releaseRootDir}/playStore/release/${playStoreBundleFile}"
 
     from(playStoreBundleSourceDir)
-    into(destDir)
+    into(bundleDestDir)
+
     rename(playStoreBundleFile, "${renamedFileName}.aab")
 }
 
-tasks.register<Copy>("copyObfuscationFolder") {
+tasks.register<Copy>(name = "copyObfuscationFolder") {
     val obfuscationSourceDir = "${rootDir}/app/obfuscation"
 
     from(obfuscationSourceDir)
