@@ -245,7 +245,7 @@ class UpsertWarrantyViewModel @Inject constructor(
     ) = viewModelScope.launch {
         _state.update {
             it.copy(
-                brandState = it.brandState.copy(
+                descriptionState = it.descriptionState.copy(
                     value = newValue.copy(
                         text = newValue.text.convertDigitsToEnglish(shouldTrim = false)
                     ),
