@@ -1,124 +1,176 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Warranty Roster</string>
+    <string name="notification_fcm_channel_group_name">Other</string>
+    <string name="notification_fcm_channel_name_miscellaneous">Miscellaneous</string>
+    <string name="permissions_error_notification_declined">This app requires notifications permission to receive notifications.</string>
+    <string name="permissions_error_notification_declined_permanently">It looks like you\'ve permanently denied notifications permission. You can go to the app settings to grant it.</string>
+    <string name="permissions_error_btn_open_settings">App Settings</string>
+    <string name="permissions_error_btn_confirm">Confirm</string>
     <string name="error_something_went_wrong">Something went wrong. Please try again later.</string>
     <string name="error_network_connection_unavailable">Unable to connect to the internet.</string>
+    <string name="error_network_too_many_requests">You\'ve sent too many requests in a short time. Please wait before trying again.</string>
     <string name="error_network_failure">You\'re having network issues. Please try again later.</string>
+    <string name="error_network_serialization">Something went wrong while trying to process the data.</string>
+    <string name="error_network_json_conversion">Something went wrong while trying to process the data.</string>
+    <string name="error_network_ssl_handshake">Unable to establish a secure connection. Please ensure your device\'s date and time are set correctly and try again.</string>
+    <string name="error_network_cert_path_validator">Unable to establish a secure connection due to a server issue.</string>
     <string name="error_firebase_403">This service is not available in your region. Please consider changing your IP address by using a VPN.</string>
     <string name="error_firebase_device_blocked">We have blocked all requests from this device due to unusual activity. Please try again later.</string>
+    <string name="error_firebase_unauthorized_user">You\'re not authorised to access this section of the app.</string>
     <string name="error_intent_app_not_found">There is no app on the phone to handle this action.</string>
     <string name="error_btn_retry">Retry</string>
     <string name="error_btn_confirm">Confirm</string>
-    <string name="onboarding_dialog_title_language">Language</string>
-    <string name="onboarding_dialog_item_language_english_us">English (United States)</string>
-    <string name="onboarding_dialog_item_language_english_gb">English (United Kingdom)</string>
-    <string name="onboarding_dialog_item_language_persian_ir">Persian</string>
+    <string name="core_content_description_navigate_up">Return</string>
+    <string name="core_textfield_content_description_password_toggle_show">Show Password</string>
+    <string name="core_textfield_content_description_password_toggle_hide">Hide Password</string>
+    <string name="core_textfield_helper_optional">Optional</string>
+    <string name="core_date_picker_btn_confirm">OK</string>
+    <string name="core_date_picker_btn_cancel">Cancel</string>
+    <string name="core_search_content_description_show">Show search bar</string>
+    <string name="core_search_content_description_hide">Hide search bar</string>
+    <string name="core_locale_bottom_sheet_title">Language</string>
+    <string name="core_locale_title_default">System Default</string>
+    <string name="core_locale_title_english_us">English (US)</string>
+    <string name="core_locale_title_english_gb">English (UK)</string>
+    <string name="core_locale_title_farsi_ir">Persian</string>
+    <string name="core_locale_title_full_default">System Default</string>
+    <string name="core_locale_title_full_english_us">English (United States)</string>
+    <string name="core_locale_title_full_english_gb">English (United Kingdom)</string>
+    <string name="core_locale_title_full_farsi_ir">Persian</string>
+    <string name="core_theme_bottom_sheet_title">Theme</string>
+    <string name="core_theme_title_default">System Default</string>
+    <string name="core_theme_title_light">Light</string>
+    <string name="core_theme_title_dark">Dark</string>
+    <string name="core_password_strength_short">Password should be at least %d characters!</string>
+    <string name="core_password_strength_weak">Weak</string>
+    <string name="core_password_strength_mediocre">Mediocre</string>
+    <string name="core_password_strength_strong">Strong</string>
     <string name="onboarding_btn_skip">Skip</string>
     <string name="onboarding_btn_back">Back</string>
     <string name="onboarding_btn_next">Next</string>
-    <string name="onboarding_1st_title">Never lose track of your product warranties anymore.</string>
-    <string name="onboarding_2nd_title">Keep track if a warranty is about to expire.</string>
-    <string name="onboarding_3rd_title">Save money by using warranties before their expiry date.</string>
-    <string name="onboarding_4th_title">All data are automatically backed up to the cloud.</string>
-    <string name="onboarding_4th_btn_start">Get Started</string>
-    <string name="auth_dialog_title_language">Language</string>
-    <string name="auth_dialog_item_language_english_us">English (United States)</string>
-    <string name="auth_dialog_item_language_english_gb">English (United Kingdom)</string>
-    <string name="auth_dialog_item_language_persian_ir">Persian</string>
-    <string name="login_text_title">Login</string>
-    <string name="login_text_description">Let\'s log you in.</string>
-    <string name="login_title_email">Email Address</string>
-    <string name="login_hint_email">Enter your email address</string>
-    <string name="login_title_password">Password</string>
-    <string name="login_hint_password">Enter your password</string>
+    <string name="onboarding_btn_start">Get Started</string>
+    <string name="onboarding_1st_description">Never lose track of your product warranties anymore.</string>
+    <string name="onboarding_2nd_description">Keep track if a warranty is about to expire.</string>
+    <string name="onboarding_3rd_description">Save money by using warranties before their expiry date.</string>
+    <string name="onboarding_4th_description">All data are automatically backed up to the cloud.</string>
+    <string name="auth_title_login">Login</string>
+    <string name="auth_title_register">Register</string>
+    <string name="auth_title_forgot_pw">Reset\nPassword</string>
+    <string name="auth_title_forgot_pw_instruction">Reset\nPassword</string>
+    <string name="auth_other_login_methods_title_compact_width">Or continue with</string>
+    <string name="auth_other_login_methods_title_medium_width">Or</string>
+    <string name="auth_other_login_methods_google">Login with Google</string>
+    <string name="auth_other_login_methods_x">Login with X</string>
+    <string name="auth_other_login_methods_github">Login with GitHub</string>
+    <string name="auth_method_google_error_access_credential_manager">Unable to access the Credential Manager.</string>
+    <string name="auth_method_google_error_corrupted_or_expired_credential">The provided credential is corrupted or has expired.</string>
+    <string name="auth_method_google_error_unexpected_credential_type">Credential is not of type Google ID!</string>
+    <string name="auth_method_google_error_invalid_google_id_token">Received an invalid Google ID token response.</string>
+    <string name="auth_other_methods_error_another_operation_is_in_progress">Another operation is already in progress. Please wait for that to finish.</string>
+    <string name="auth_other_methods_error_account_not_exist">The account with the provided email does not exist.</string>
+    <string name="auth_other_methods_error_corrupted_or_expired_credential">The provided credential is corrupted or has expired.</string>
+    <string name="auth_other_methods_error_email_exists_with_different_credentials">An account already exists with the same email address but different sign-in credentials.</string>
+    <string name="login_description">Let\'s log you in.</string>
+    <string name="login_textfield_email_title">Email Address</string>
+    <string name="login_textfield_email_hint">Enter your email address</string>
+    <string name="login_textfield_password_title">Password</string>
+    <string name="login_textfield_password_hint">Enter your password</string>
     <string name="login_btn_forgot_pw">Forgot Password?</string>
     <string name="login_btn_login">Login</string>
-    <string name="login_text_other_methods">Or continue with</string>
-    <string name="login_text_other_methods_landscape">Or</string>
-    <string name="login_text_register_title">Don’t have an account?</string>
+    <string name="login_btn_register_title">Don’t have an account?</string>
     <string name="login_btn_register">Register</string>
     <string name="login_error_blank_email">Enter your email address!</string>
+    <string name="login_error_invalid_email">The entered email address is not valid!</string>
     <string name="login_error_blank_password">Enter your password!</string>
-    <string name="login_error_email">The entered email address is not valid!</string>
-    <string name="login_error_not_found">The account with the provided email does not exist.</string>
-    <string name="login_error_credentials">The provided credentials are incorrect.</string>
+    <string name="login_error_account_not_exist">The account with the provided email does not exist.</string>
+    <string name="login_error_invalid_credentials">The provided credentials are incorrect.</string>
     <string name="login_error_email_exists_with_different_credentials">An account already exists with the same email address but different sign-in credentials.</string>
-    <string name="register_text_title">Register</string>
-    <string name="register_text_description">Enter your information below.</string>
-    <string name="register_text_agreement">By registering, you agree to our <font fgcolor="#1C53F4"><b>Privacy Policy</b></font>.</string>
-    <string name="register_title_email">Email Address</string>
-    <string name="register_hint_email">Enter your email address</string>
-    <string name="register_title_password">Password</string>
-    <string name="register_hint_password">Enter your password</string>
-    <string name="register_title_confirm_password">Confirm Password</string>
-    <string name="register_hint_confirm_password">Re-enter your password</string>
+    <string name="register_description">Enter your information below.</string>
+    <string name="register_textfield_email_title">Email Address</string>
+    <string name="register_textfield_email_hint">Enter your email address</string>
+    <string name="register_textfield_password_title">Password</string>
+    <string name="register_textfield_password_hint">Enter your password</string>
+    <string name="register_textfield_confirm_password_title">Confirm Password</string>
+    <string name="register_textfield_confirm_password_hint">Re-enter your password</string>
+    <!--Placeholder is for the color value-->
+    <string name="register_btn_privacy_policy"><![CDATA[By registering, you agree to our <font color="#%s"><b>Privacy Policy</b></font>.]]></string>
     <string name="register_btn_register">Register</string>
-    <string name="register_text_other_methods">Or continue with</string>
-    <string name="register_text_other_methods_landscape">Or</string>
-    <string name="register_text_login_title">Already have an account?</string>
+    <string name="register_btn_login_title">Already have an account?</string>
     <string name="register_btn_login">Login</string>
-    <string name="register_helper_password_weak">Weak</string>
-    <string name="register_helper_password_mediocre">Mediocre</string>
-    <string name="register_helper_password_strong">Strong</string>
     <string name="register_error_blank_email">Enter your email address!</string>
+    <string name="register_error_invalid_email">The entered email address is not valid!</string>
     <string name="register_error_blank_password">Enter your password!</string>
+    <string name="register_error_short_password">Password should be at least %d characters!</string>
     <string name="register_error_blank_confirm_password">Re-enter your password!</string>
-    <string name="register_error_email">The entered email address is not valid!</string>
-    <string name="register_error_password_short">Password should be at least 6 characters!</string>
-    <string name="register_error_password_not_match">Your password and confirm password do not match!</string>
-    <string name="register_error_account_exists">An account with the provided email already exists.</string>
-    <string name="register_error_email_exists_with_different_credentials">An account already exists with the same email address but different sign-in credentials.</string>
-    <string name="forgot_pw_text_title">Reset\nPassword</string>
-    <string name="forgot_pw_text_description">Enter your verified email to receive password reset instructions.</string>
-    <string name="forgot_pw_title_email">Email Address</string>
-    <string name="forgot_pw_hint_email">Enter your email address</string>
-    <string name="forgot_pw_btn_send">Send Email</string>
+    <string name="register_error_not_matching_passwords">Your password and confirm password do not match!</string>
+    <string name="register_error_account_with_same_email_exists">An account with the provided email already exists.</string>
+    <string name="forgot_pw_description">Enter your verified email to receive password reset instructions.</string>
+    <string name="forgot_pw_textfield_email_title">Email Address</string>
+    <string name="forgot_pw_textfield_email_hint">Enter your email address</string>
+    <string name="forgot_pw_btn_send_email">Send Email</string>
     <string name="forgot_pw_btn_return">Return To Login</string>
-    <string name="forgot_pw_error_blank_email">Enter your email address!</string>
-    <!--Placeholder is for the remaining waiting time-->
-    <string name="forgot_pw_error_timer_is_not_zero_zero">Please wait for %d seconds before requesting again.</string>
-    <!--Placeholder is for the remaining waiting time-->
-    <string name="forgot_pw_error_timer_is_not_zero_one">Please wait for %d second before requesting again.</string>
-    <!--Placeholder is for the remaining waiting time-->
-    <string name="forgot_pw_error_timer_is_not_zero_two">Please wait for %d seconds before requesting again.</string>
-    <!--Placeholder is for the remaining waiting time-->
-    <string name="forgot_pw_error_timer_is_not_zero_few">Please wait for %d seconds before requesting again.</string>
-    <!--Placeholder is for the remaining waiting time-->
-    <string name="forgot_pw_error_timer_is_not_zero_many">Please wait for %d seconds before requesting again.</string>
-    <!--Placeholder is for the remaining waiting time-->
-    <string name="forgot_pw_error_timer_is_not_zero_other">Please wait for %d seconds before requesting again.</string>
-    <string name="forgot_pw_error_email">The entered email address is not valid!</string>
-    <string name="forgot_pw_error_not_found">The account with the provided email does not exist.</string>
-    <string name="forgot_pw_sent_text_title">Reset\nPassword</string>
-    <string name="forgot_pw_sent_text_description">Please check your inbox and click on the received link to reset your password.</string>
-    <string name="forgot_pw_sent_text_resend">Didn\'t receive the link?</string>
-    <string name="forgot_pw_sent_btn_resend">Resend</string>
-    <string name="forgot_pw_sent_text_first_time">The email has been sent.</string>
-    <string name="forgot_pw_sent_text_resent">A new email has been sent.</string>
     <!--
     Placeholders:
     • %1$s: Minute
     • %2$s: Seconds
     Sample: 02:52
     -->
-    <string name="forgot_pw_sent_btn_return">Return To Login</string>
-    <string name="main_menu_title_warranties">Warranty List</string>
-    <string name="main_menu_title_settings">Settings</string>
-    <string name="main_text_content_description">Add Warranty</string>
+    <string name="forgot_pw_timer">(%1$s:%2$s)</string>
+    <string name="forgot_pw_error_blank_email">Enter your email address!</string>
+    <string name="forgot_pw_error_invalid_email">The entered email address is not valid!</string>
+    <!--Placeholder is for the remaining timer time-->
+    <string name="forgot_pw_error_timer_is_not_zero_zero">Please wait for %d seconds before requesting again.</string>
+    <!--Placeholder is for the remaining timer time-->
+    <string name="forgot_pw_error_timer_is_not_zero_one">Please wait for %d second before requesting again.</string>
+    <!--Placeholder is for the remaining timer time-->
+    <string name="forgot_pw_error_timer_is_not_zero_two">Please wait for %d seconds before requesting again.</string>
+    <!--Placeholder is for the remaining timer time-->
+    <string name="forgot_pw_error_timer_is_not_zero_few">Please wait for %d seconds before requesting again.</string>
+    <!--Placeholder is for the remaining timer time-->
+    <string name="forgot_pw_error_timer_is_not_zero_many">Please wait for %d seconds before requesting again.</string>
+    <!--Placeholder is for the remaining timer time-->
+    <string name="forgot_pw_error_timer_is_not_zero_other">Please wait for %d seconds before requesting again.</string>
+    <string name="reset_pw_instruction_description">Please check your inbox and click on the received link to reset your password.</string>
+    <string name="reset_pw_instruction_resend_title">Didn\'t receive the link?</string>
+    <string name="reset_pw_instruction_email_sent_first_time">The email has been sent.</string>
+    <string name="reset_pw_instruction_email_sent">A new email has been sent.</string>
+    <string name="reset_pw_instruction_btn_resend">Resend</string>
+    <string name="reset_pw_instruction_btn_return">Return To Login</string>
+    <string name="base_nav_warranties">Warranty List</string>
+    <string name="base_nav_settings">Settings</string>
+    <string name="base_fab_add_warranty">Add Warranty</string>
+    <string name="base_app_update_sheet_title">New update available</string>
     <!--Placeholder is for the App Name-->
-    <string name="main_rate_app_dialog_title">Rate %s?</string>
-    <string name="main_rate_app_dialog_message">If you enjoy using this app, would you mind taking a moment to rate it? It won\'t take more than a minute. Thanks for your support!</string>
-    <string name="main_rate_app_dialog_positive">Rate now</string>
-    <string name="main_rate_app_dialog_negative">No, Thanks</string>
-    <string name="main_rate_app_dialog_neutral">Remind me later</string>
-    <string name="warranties_text_title">Warranty List</string>
-    <string name="warranties_menu_hint_search">Search by title…</string>
-    <string name="warranties_text_empty_warranties_list">There is currently no warranty on your list. You can add a warranty by clicking on the <font fgcolor="#1C53F4">Add Button</font>.</string>
-    <string name="warranties_text_empty_search_result_list">We couldn\'t find any warranty that matches your search for <font fgcolor="#1C53F4">%s</font>.</string>
-    <string name="warranties_list_status_valid">Valid</string>
-    <string name="warranties_list_status_soon">Soon</string>
-    <string name="warranties_list_status_expired">Expired</string>
-    <string name="warranties_list_is_lifetime">Lifetime Warranty</string>
+    <string name="base_app_update_sheet_message">We recommend updating %s to the latest version for a more enjoyable experience.</string>
+    <string name="base_app_update_sheet_btn_update">Update</string>
+    <string name="base_app_update_sheet_btn_dismiss">Not now</string>
+    <string name="base_app_update_message">Update downloaded successfully! To complete the installation, please restart the app.</string>
+    <string name="base_app_update_action">Restart</string>
+    <!--Placeholder is for the App Name-->
+    <string name="base_app_review_dialog_title">Rate %s?</string>
+    <string name="base_app_review_dialog_message">If you enjoy using this app, would you mind taking a moment to rate it? It won\'t take more than a minute. Thanks for your support!</string>
+    <string name="base_app_review_dialog_btn_rate_now">Rate now</string>
+    <string name="base_app_review_dialog_btn_remind_later">Remind me later</string>
+    <string name="base_app_review_dialog_btn_never">No, Thanks</string>
+    <string name="warranties_app_bar_title">Warranty List</string>
+    <string name="warranties_search_textfield_hint">Search by title…</string>
+    <!--Placeholder is for the color value-->
+    <string name="warranties_error_empty_list"><![CDATA[Your warranty list is empty right now. To get started, click <font color="#%s"><b>Add Warranty</b></font> button.]]></string>
+    <!--
+    Placeholders:
+    • %1$s: Search Phrase Color
+    • %2$s: Search Phrase
+    • %3$s: Add Warranty Button Color
+    -->
+    <string name="warranties_search_error_empty_result"><![CDATA[No warranties match <font color="#%1$s"><b>%2$s</b></font> right now.<br>Try adjusting your search or adding a new one with the <font color="#%3$s"><b>Add Warranty</b></font> button.]]></string>
+    <string name="warranties_expiration_status_valid_title">Valid</string>
+    <string name="warranties_expiration_status_soon_title">Soon</string>
+    <string name="warranties_expiration_status_expired_title">Expired</string>
+    <string name="warranties_expiration_status_valid_description">Warranty is valid</string>
+    <string name="warranties_expiration_status_soon_description">Warranty will expire soon</string>
+    <string name="warranties_expiration_status_expired_description">Warranty is expired</string>
+    <string name="warranties_expiry_lifetime">Lifetime Warranty</string>
     <!--
     Placeholders:
     • %1$s: Month Name
@@ -130,8 +182,8 @@
     • en-GB: 25th of December, 2022
     • fa-IR: بیست و پنجم دسامبر، ۲۰۲۲
     -->
-    <string name="warranties_list_format_date">%2$s of %1$s, %3$d</string>
-    <string-array name="warranties_list_day_with_suffix">
+    <string name="warranties_expiry_date">%2$s of %1$s, %3$d</string>
+    <string-array name="warranties_day_with_suffix">
         <item>1st</item>
         <item>2nd</item>
         <item>3rd</item>
@@ -164,7 +216,7 @@
         <item>30th</item>
         <item>31st</item>
     </string-array>
-    <string-array name="warranties_list_month_name">
+    <string-array name="warranties_month_name">
         <item>January</item>
         <item>February</item>
         <item>March</item>
@@ -178,39 +230,9 @@
         <item>November</item>
         <item>December</item>
     </string-array>
-    <string name="add_warranty_text_title">Add Warranty</string>
-    <string name="add_warranty_menu_title_add">Add Warranty</string>
-    <string name="add_warranty_title_title">Title</string>
-    <string name="add_warranty_hint_title">Enter the title</string>
-    <string name="add_warranty_title_category">Category</string>
-    <string name="add_warranty_hint_category">Select category</string>
-    <string name="add_warranty_title_brand">Device Brand</string>
-    <string name="add_warranty_hint_brand">Enter the device brand</string>
-    <string name="add_warranty_title_model">Device Model</string>
-    <string name="add_warranty_hint_model">Enter the device model</string>
-    <string name="add_warranty_title_serial">Serial Number</string>
-    <string name="add_warranty_hint_serial">Enter the device serial number</string>
-    <string name="add_warranty_title_description">Description</string>
-    <string name="add_warranty_hint_description">Enter description</string>
-    <string name="add_warranty_title_date_starting">Starting Date</string>
-    <string name="add_warranty_title_date_expiry">Expiry Date</string>
-    <!--
-    dd: Day
-    mm: Month
-    yyyy: Year
-
-    Samples:
-    • en-US: mm/dd/yyyy
-    • en-GB: dd/mm/yyyy
-    • fa-IR: روز/ماه/سال
-    -->
-    <string name="add_warranty_hint_date">dd/mm/yyyy</string>
-    <string name="add_warranty_helper_optional">Optional</string>
-    <string name="add_warranty_title_date_picker_starting">Select Starting Date</string>
-    <string name="add_warranty_title_date_picker_expiry">Select Expiry Date</string>
-    <string name="add_warranty_error_blank_title">Enter the title!</string>
-    <string name="add_warranty_error_date">Starting Date can\'t be after the Expiry Date!</string>
-    <string name="add_warranty_checkbox_lifetime">Lifetime Warranty</string>
+    <string name="warranty_details_fab_edit">Edit</string>
+    <string name="warranty_details_content_description_delete">Delete Warranty</string>
+    <string name="warranty_details_starting_date_title">Starting Date:</string>
     <!--
     Placeholders:
     • %1$s: Month (mm)
@@ -222,56 +244,51 @@
     • en-GB: 25/12/2022
     • fa-IR: 2022/12/25
     -->
-    <string name="add_warranty_format_date">%2$s/%1$s/%3$d</string>
-    <string name="warranty_details_fab_edit">Edit</string>
-    <string name="warranty_details_menu_title_delete">Delete Warranty</string>
-    <string name="warranty_details_title_date_starting">Starting Date</string>
-    <string name="warranty_details_title_date_expiry">Expiry Date</string>
-    <string name="warranty_details_title_device">Device Info</string>
-    <string name="warranty_details_title_device_brand">Brand</string>
-    <string name="warranty_details_title_device_model">Model</string>
-    <string name="warranty_details_title_device_serial">Serial Number</string>
-    <string name="warranty_details_title_description">Description</string>
-    <string name="warranty_details_status_valid">Warranty is valid</string>
-    <string name="warranty_details_status_soon">Warranty will expire soon</string>
-    <string name="warranty_details_status_expired">Warranty is expired</string>
-    <string name="warranty_details_is_lifetime">Lifetime</string>
-    <string name="warranty_details_empty_description">No description is provided.</string>
+    <string name="warranty_details_starting_date_value">%2$s/%1$s/%3$d</string>
+    <string name="warranty_details_expiry_date_title">Expiry Date:</string>
+    <string name="warranty_details_expiry_date_lifetime">Lifetime</string>
+    <!--
+    Placeholders:
+    • %1$s: Month (mm)
+    • %2$s: Day (dd)
+    • %3$d: Year (yyyy)
+
+    Samples:
+    • en-US: 12/25/2022
+    • en-GB: 25/12/2022
+    • fa-IR: 2022/12/25
+    -->
+    <string name="warranty_details_expiry_date_value">%2$s/%1$s/%3$d</string>
+    <string name="warranty_details_device_info_title">Device Info</string>
+    <string name="warranty_details_device_info_brand_title">Brand:</string>
+    <string name="warranty_details_device_info_model_title">Model:</string>
+    <string name="warranty_details_device_info_serial_number_title">Serial Number:</string>
+    <string name="warranty_details_description_title">Description</string>
+    <string name="warranty_details_description_placeholder">No description is provided.</string>
     <string name="warranty_details_delete_dialog_title">Delete Warranty?</string>
     <!--Placeholder is for the Warranty Title-->
     <string name="warranty_details_delete_dialog_message">Are you sure you want to delete %s?</string>
-    <string name="warranty_details_delete_dialog_positive">Delete</string>
-    <string name="warranty_details_delete_dialog_negative">Cancel</string>
+    <string name="warranty_details_delete_dialog_btn_delete">Delete</string>
+    <string name="warranty_details_delete_dialog_btn_cancel">Cancel</string>
     <!--Placeholder is for the Warranty Title-->
-    <string name="warranty_details_delete_success">%s has been successfully deleted.</string>
-    <!--
-    Placeholders:
-    • %1$s: Month (mm)
-    • %2$s: Day (dd)
-    • %3$d: Year (yyyy)
-
-    Samples:
-    • en-US: 12/25/2022
-    • en-GB: 25/12/2022
-    • fa-IR: 2022/12/25
-    -->
-    <string name="warranty_details_format_date">%2$s/%1$s/%3$d</string>
-    <string name="edit_warranty_text_title">Edit Warranty</string>
-    <string name="edit_warranty_menu_title_edit">Edit Warranty</string>
-    <string name="edit_warranty_title_title">Title</string>
-    <string name="edit_warranty_hint_title">Enter the title</string>
-    <string name="edit_warranty_title_category">Category</string>
-    <string name="edit_warranty_hint_category">Select category</string>
-    <string name="edit_warranty_title_brand">Device Brand</string>
-    <string name="edit_warranty_hint_brand">Enter the device brand</string>
-    <string name="edit_warranty_title_model">Device Model</string>
-    <string name="edit_warranty_hint_model">Enter the device model</string>
-    <string name="edit_warranty_title_serial">Serial Number</string>
-    <string name="edit_warranty_hint_serial">Enter the device serial number</string>
-    <string name="edit_warranty_title_description">Description</string>
-    <string name="edit_warranty_hint_description">Enter description</string>
-    <string name="edit_warranty_title_date_starting">Starting Date</string>
-    <string name="edit_warranty_title_date_expiry">Expiry Date</string>
+    <string name="warranty_details_delete_message_success">%s has been successfully deleted.</string>
+    <string name="upsert_warranty_app_bar_title_add">Add Warranty</string>
+    <string name="upsert_warranty_app_bar_title_edit">Add Warranty</string>
+    <string name="upsert_warranty_content_description_add">Edit Warranty</string>
+    <string name="upsert_warranty_content_description_edit">Edit Warranty</string>
+    <string name="upsert_warranty_textfield_title_title">Title</string>
+    <string name="upsert_warranty_textfield_title_hint">Enter the title</string>
+    <string name="upsert_warranty_textfield_brand_title">Device Brand</string>
+    <string name="upsert_warranty_textfield_brand_hint">Enter the device brand</string>
+    <string name="upsert_warranty_textfield_model_title">Device Model</string>
+    <string name="upsert_warranty_textfield_model_hint">Enter the device model</string>
+    <string name="upsert_warranty_textfield_serial_number_title">Serial Number</string>
+    <string name="upsert_warranty_textfield_serial_number_hint">Enter the device serial number</string>
+    <string name="upsert_warranty_textfield_description_title">Description</string>
+    <string name="upsert_warranty_textfield_description_hint">Enter description</string>
+    <string name="upsert_warranty_textfield_category_title">Category</string>
+    <string name="upsert_warranty_textfield_category_hint">Select category</string>
+    <string name="upsert_warranty_textfield_starting_date_title">Starting Date</string>
     <!--
     dd: Day
     mm: Month
@@ -282,13 +299,7 @@
     • en-GB: dd/mm/yyyy
     • fa-IR: روز/ماه/سال
     -->
-    <string name="edit_warranty_hint_date">dd/mm/yyyy</string>
-    <string name="edit_warranty_helper_optional">Optional</string>
-    <string name="edit_warranty_title_date_picker_starting">Select Starting Date</string>
-    <string name="edit_warranty_title_date_picker_expiry">Select Expiry Date</string>
-    <string name="edit_warranty_error_blank_title">Enter the title!</string>
-    <string name="edit_warranty_error_date">Starting Date can\'t be after the Expiry Date!</string>
-    <string name="edit_warranty_checkbox_lifetime">Lifetime Warranty</string>
+    <string name="upsert_warranty_textfield_starting_date_hint">dd/mm/yyyy</string>
     <!--
     Placeholders:
     • %1$s: Month (mm)
@@ -300,78 +311,100 @@
     • en-GB: 25/12/2022
     • fa-IR: 2022/12/25
     -->
-    <string name="edit_warranty_format_date">%2$s/%1$s/%3$d</string>
-    <string name="settings_text_title">Settings</string>
-    <string name="settings_title_account">Account</string>
-    <string name="settings_title_settings">Settings</string>
-    <string name="settings_btn_account_verify">Verify Email</string>
-    <string name="settings_btn_account_verified">Verified</string>
-    <string name="settings_text_account_linked_accounts">Linked Accounts</string>
-    <string name="settings_text_account_change_email">Change Email Address</string>
-    <string name="settings_text_account_change_password">Change Password</string>
-    <string name="settings_text_settings_language">Language</string>
-    <string name="settings_text_settings_language_english_us">English (US)</string>
-    <string name="settings_text_settings_language_english_gb">English (UK)</string>
-    <string name="settings_text_settings_language_persian_ir">Persian</string>
-    <string name="settings_text_settings_theme">Theme</string>
-    <string name="settings_text_settings_theme_default">System Default</string>
-    <string name="settings_text_settings_theme_light">Light</string>
-    <string name="settings_text_settings_theme_dark">Dark</string>
-    <string name="settings_text_settings_donate">Donate</string>
-    <string name="settings_text_settings_improve_translations">Improve Translations</string>
-    <string name="settings_text_settings_rate_us">Rate Us</string>
-    <string name="settings_text_settings_privacy_policy">Privacy Policy</string>
+    <string name="upsert_warranty_textfield_starting_date_value">%2$s/%1$s/%3$d</string>
+    <string name="upsert_warranty_textfield_expiry_date_title">Expiry Date</string>
+    <!--
+    dd: Day
+    mm: Month
+    yyyy: Year
+
+    Samples:
+    • en-US: mm/dd/yyyy
+    • en-GB: dd/mm/yyyy
+    • fa-IR: روز/ماه/سال
+    -->
+    <string name="upsert_warranty_textfield_expiry_date_hint">dd/mm/yyyy</string>
+    <!--
+    Placeholders:
+    • %1$s: Month (mm)
+    • %2$s: Day (dd)
+    • %3$d: Year (yyyy)
+
+    Samples:
+    • en-US: 12/25/2022
+    • en-GB: 25/12/2022
+    • fa-IR: 2022/12/25
+    -->
+    <string name="upsert_warranty_textfield_expiry_date_value">%2$s/%1$s/%3$d</string>
+    <string name="upsert_warranty_checkbox_lifetime">Lifetime Warranty</string>
+    <string name="upsert_warranty_starting_date_picker_title">Select Starting Date</string>
+    <string name="upsert_warranty_expiry_date_picker_title">Select Expiry Date</string>
+    <string name="upsert_warranty_error_invalid_warranty">Invalid warranty!</string>
+    <string name="upsert_warranty_error_blank_title">Enter the title!</string>
+    <string name="upsert_warranty_error_blank_starting_date">Select the starting date!</string>
+    <string name="upsert_warranty_error_blank_expiry_date">Select the expiry date!</string>
+    <string name="upsert_warranty_error_blank_starting_and_expiry_date">Select the starting and expiry dates!</string>
+    <string name="upsert_warranty_error_invalid_expiry_date">Expiry date can\'t be before the starting date!</string>
+    <string name="settings_app_bar_title">Settings</string>
+    <string name="settings_account_settings_title">Account</string>
+    <string name="settings_account_settings_status_verified">Verify Email</string>
+    <string name="settings_account_settings_status_verify">Verified</string>
+    <string name="settings_account_settings_linked_accounts_title">Linked Accounts</string>
+    <string name="settings_account_settings_change_email_title">Change Email Address</string>
+    <string name="settings_account_settings_change_password_title">Change Password</string>
+    <string name="settings_settings_title">Settings</string>
+    <string name="settings_settings_locale_title">Language</string>
+    <string name="settings_settings_theme_title">Theme</string>
+    <string name="settings_miscellaneous_title">Miscellaneous</string>
+    <string name="settings_miscellaneous_donate_title">Donate</string>
+    <string name="settings_miscellaneous_improve_translations_title">Improve Translations</string>
+    <string name="settings_miscellaneous_rate_us_title">Rate Us</string>
+    <string name="settings_miscellaneous_privacy_policy_title">Privacy Policy</string>
     <string name="settings_btn_logout">Logout</string>
-    <string name="settings_dialog_title_language">Language</string>
-    <string name="settings_dialog_item_language_english_us">English (United States)</string>
-    <string name="settings_dialog_item_language_english_gb">English (United Kingdom)</string>
-    <string name="settings_dialog_item_language_persian_ir">Persian</string>
-    <string name="settings_dialog_title_theme">Theme</string>
-    <string name="settings_dialog_item_theme_default">System Default</string>
-    <string name="settings_dialog_item_theme_light">Light</string>
-    <string name="settings_dialog_item_theme_dark">Dark</string>
-    <string name="settings_dialog_message_verification_email_sent">The verification email has been successfully sent to your inbox.</string>
-    <string name="settings_dialog_btn_positive_verification_email_sent">Confirm</string>
-    <string name="settings_error_email_verification_email_not_provided">An email address must be provided.</string>
-    <string name="linked_accounts_text_title">Linked Accounts</string>
-    <string name="linked_accounts_title_google">Google</string>
-    <string name="linked_accounts_title_twitter">Twitter</string>
-    <string name="linked_accounts_title_facebook">Facebook</string>
-    <string name="linked_accounts_status_connect">Connect</string>
-    <string name="linked_accounts_status_disconnect">Disconnect</string>
+    <string name="settings_verification_email_sent_dialog_message">The verification email has been successfully sent to your inbox.</string>
+    <string name="settings_verification_email_sent_dialog_btn_confirm">Confirm</string>
+    <string name="settings_send_verification_email_error_email_not_provided">An email address must be provided.</string>
+    <string name="linked_accounts_app_bar_title">Linked Accounts</string>
+    <string name="linked_accounts_providers_google_title">Google</string>
+    <string name="linked_accounts_providers_x_title">X</string>
+    <string name="linked_accounts_providers_github_title">GitHub</string>
+    <string name="linked_accounts_provider_action_connect">Connect</string>
+    <string name="linked_accounts_provider_action_disconnect">Disconnect</string>
+    <string name="linked_accounts_google_error_access_credential_manager">Unable to access the Credential Manager.</string>
+    <string name="linked_accounts_google_error_corrupted_or_expired_credential">The provided credential is corrupted or has expired.</string>
+    <string name="linked_accounts_google_error_unexpected_credential_type">Credential is not of type Google ID!</string>
+    <string name="linked_accounts_google_error_invalid_google_id_token">Received an invalid Google ID token response.</string>
+    <string name="linked_accounts_error_another_operation_is_in_progress">Another operation is already in progress. Please wait for that to finish.</string>
+    <string name="linked_accounts_error_corrupted_or_expired_credential">The provided credential is corrupted or has expired.</string>
     <string name="linked_accounts_error_email_exists_with_different_credentials">An account already exists with the same email address but different sign-in credentials.</string>
-    <string name="linked_accounts_error_email_exists">An account with the provided email already exists.</string>
-    <string name="change_password_text_title">Change Password</string>
-    <string name="change_password_title_current_password">Current Password</string>
-    <string name="change_password_hint_current_password">Enter your current password</string>
-    <string name="change_password_title_new_password">New Password</string>
-    <string name="change_password_hint_new_password">Enter a new password</string>
-    <string name="change_password_title_confirm_new_password">Confirm New Password</string>
-    <string name="change_password_hint_confirm_new_password">Re-enter the new password</string>
-    <string name="change_password_btn_change">Change Password</string>
-    <string name="change_password_helper_password_weak">Weak</string>
-    <string name="change_password_helper_password_mediocre">Mediocre</string>
-    <string name="change_password_helper_password_strong">Strong</string>
-    <string name="change_password_error_blank_current">Enter your current password!</string>
-    <string name="change_password_error_blank_new">Enter a new password!</string>
-    <string name="change_password_error_blank_confirm">Re-enter the new password!</string>
-    <string name="change_password_error_password_short">Password should be at least 6 characters!</string>
-    <string name="change_password_error_match">New password and confirm new password do not match!</string>
-    <string name="change_password_error_credentials">The provided credentials are incorrect.</string>
-    <string name="change_password_dialog_message">Your password has been successfully changed.</string>
-    <string name="change_password_dialog_positive">Confirm</string>
-    <string name="change_email_text_title">Change Email Address</string>
-    <string name="change_email_title_password">Password</string>
-    <string name="change_email_hint_password">Enter your password</string>
-    <string name="change_email_title_new_email">New Email Address</string>
-    <string name="change_email_hint_new_email">Enter a new email address</string>
+    <string name="change_email_app_bar_title">Change Email Address</string>
+    <string name="change_email_textfield_password_title">Password</string>
+    <string name="change_email_textfield_password_hint">Enter your password</string>
+    <string name="change_email_textfield_new_email_title">New Email Address</string>
+    <string name="change_email_textfield_new_email_hint">Enter a new email address</string>
     <string name="change_email_btn_change">Change Email</string>
     <string name="change_email_error_blank_password">Enter your password!</string>
     <string name="change_email_error_blank_new_email">Enter a new email address!</string>
-    <string name="change_email_error_new_email">The entered new email address is not valid!</string>
-    <string name="change_email_error_credentials">The provided credentials are incorrect.</string>
-    <string name="change_email_error_email_same">The new email address cannot be the same as your current email!</string>
-    <string name="change_email_error_email_exists">An account with the provided email already exists.</string>
-    <string name="change_email_dialog_message">Your email address has been successfully changed.</string>
-    <string name="change_email_dialog_positive">Confirm</string>
+    <string name="change_email_error_invalid_new_email">The entered new email address is not valid!</string>
+    <string name="change_email_invalid_credentials">The provided credentials are incorrect.</string>
+    <string name="change_email_error_same_email_as_current">The new email address cannot be the same as your current email!</string>
+    <string name="change_email_error_account_with_same_email_exists">An account with the provided email already exists.</string>
+    <string name="change_email_success_dialog_message">A verification link has been sent to your new email address. Please click the link to update your email.</string>
+    <string name="change_email_success_dialog_btn_confirm">Confirm</string>
+    <string name="change_password_app_bar_title">Change Password</string>
+    <string name="change_password_textfield_current_password_title">Current Password</string>
+    <string name="change_password_textfield_current_password_hint">Enter your current password</string>
+    <string name="change_password_textfield_new_password_title">New Password</string>
+    <string name="change_password_textfield_new_password_hint">Enter a new password</string>
+    <string name="change_password_textfield_confirm_new_password_title">Confirm New Password</string>
+    <string name="change_password_textfield_confirm_new_password_hint">Re-enter the new password</string>
+    <string name="change_password_btn_change">Change Password</string>
+    <string name="change_password_error_blank_current_password">Enter your current password!</string>
+    <string name="change_password_error_blank_new_password">Enter a new password!</string>
+    <string name="change_password_error_short_new_password">New password should be at least %d characters!</string>
+    <string name="change_password_error_blank_confirm_new_password">Re-enter the new password!</string>
+    <string name="change_password_error_not_matching_new_passwords">New password and confirm new password do not match!</string>
+    <string name="change_password_invalid_credentials">The provided credentials are incorrect.</string>
+    <string name="change_password_success_dialog_message">Your password has been successfully changed.</string>
+    <string name="change_password_success_dialog_btn_confirm">Confirm</string>
 </resources>
