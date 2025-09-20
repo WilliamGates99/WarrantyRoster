@@ -2,11 +2,11 @@
 ![platform](https://img.shields.io/badge/platform-android-success)&nbsp;![GitHub release (latest by date)](https://img.shields.io/github/v/release/WilliamGates99/WarrantyRoster)&nbsp;![GitHub](https://img.shields.io/github/license/WilliamGates99/WarrantyRoster)
 
 ## Download
-<a href="https://play.google.com/store/apps/details?id=com.xeniac.warrantyroster_manager&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1" target="_blank"><img alt="Get it on Google Play" height="60" align="center" src="/resources/badges/google-play-badge.svg"/></a>
-&nbsp;
-<a href="https://www.amazon.com/gp/product/B09PSK6W9Z" target="_blank"><img alt="Get it on Amazon Appstore" height="60" align="center" src="/resources/badges/amazon-appstore-badge.svg"/></a>
+<a href="https://play.google.com/store/apps/details?id=com.xeniac.warrantyroster_manager" target="_blank"><img alt="Get it on Google Play" height="60" align="center" src="/resources/badges/google-play-badge.svg"/></a>
 &nbsp;
 <a href="https://cafebazaar.ir/app/com.xeniac.warrantyroster_manager" target="_blank"><img alt="Get it on Bazaar" height="60" align="center" src="/resources/badges/cafebazaar-badge.svg"/></a>
+&nbsp;
+<a href="https://myket.ir/app/com.xeniac.warrantyroster_manager" target="_blank"><img alt="Get it on Bazaar" height="60" align="center" src="/resources/badges/myket-badge.svg"/></a>
 
 ## Description
 ![Feature Cover](/resources/feature-graphic.jpg)
