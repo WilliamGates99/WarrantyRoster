@@ -30,8 +30,8 @@ android {
         applicationId = "com.xeniac.warrantyroster_manager"
         minSdk = 23
         targetSdk = 36
-        versionCode = 24
-        versionName = "2.2.0"
+        versionCode = 25
+        versionName = "2.2.1"
 
         testInstrumentationRunner = "com.xeniac.warrantyroster_manager.HiltTestRunner"
 
