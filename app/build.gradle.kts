@@ -347,7 +347,7 @@ tasks.register<Copy>(name = "copyDevPreviewBundle") {
     rename(bundleFile, "$renamedFileName (Developer Preview).aab")
 }
 
-tasks.register<Copy>("copyDevPreviewApk") {
+tasks.register<Copy>(name = "copyDevPreviewApk") {
     val apkFile = "app-playStore-dev.apk"
     val apkSourceDir = "${releaseRootDir}/playStore/dev/${apkFile}"
 
