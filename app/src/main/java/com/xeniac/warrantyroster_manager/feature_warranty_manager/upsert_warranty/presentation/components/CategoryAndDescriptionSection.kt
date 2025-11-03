@@ -112,9 +112,11 @@ fun CategoryAndDescriptionSection(
             placeholder = stringResource(id = R.string.upsert_warranty_textfield_description_hint),
             supportingText = stringResource(id = R.string.core_textfield_helper_optional),
             errorText = descriptionState.errorText,
+            singleLine = false,
+            maxLines = 10,
             keyboardType = KeyboardType.Text,
             keyboardCapitalization = KeyboardCapitalization.Sentences,
-            imeAction = ImeAction.Done,
+            imeAction = ImeAction.Default,
             onValueChange = { newValue ->
                 onAction(UpsertWarrantyAction.DescriptionChanged(newValue))
             },
