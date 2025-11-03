@@ -17,10 +17,10 @@ import com.xeniac.warrantyroster_manager.core.domain.models.UserProfile
 import com.xeniac.warrantyroster_manager.core.domain.repositories.UserRepository
 import com.xeniac.warrantyroster_manager.core.domain.repositories.WarrantyRosterDataStoreRepository
 import dagger.Lazy
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import timber.log.Timber
 import javax.inject.Inject
-import kotlin.coroutines.coroutineContext
 
 class UserRepositoryImpl @Inject constructor(
     private val credentialManager: Lazy<CredentialManager>,
@@ -55,7 +55,7 @@ class UserRepositoryImpl @Inject constructor(
                 else -> Result.Error(GetUserProfileError.Network.SomethingWentWrong)
             }
         } catch (e: Exception) {
-            coroutineContext.ensureActive()
+            currentCoroutineContext().ensureActive()
             Timber.e("Get user profile Exception:")
             e.printStackTrace()
             Result.Error(GetUserProfileError.Network.SomethingWentWrong)
@@ -78,7 +78,7 @@ class UserRepositoryImpl @Inject constructor(
             e.printStackTrace()
             Result.Error(LogoutUserError.Network.SomethingWentWrong)
         } catch (e: Exception) {
-            coroutineContext.ensureActive()
+            currentCoroutineContext().ensureActive()
             Timber.e("Logout user Exception:")
             e.printStackTrace()
             Result.Error(LogoutUserError.Network.SomethingWentWrong)
@@ -91,7 +91,7 @@ class UserRepositoryImpl @Inject constructor(
             warrantyRosterDataStoreRepository.get().isUserLoggedIn(isLoggedIn = false)
             Result.Success(Unit)
         } catch (e: Exception) {
-            coroutineContext.ensureActive()
+            currentCoroutineContext().ensureActive()
             Timber.e("Force logout unauthorized user Exception:")
             e.printStackTrace()
             Result.Error(LogoutUserError.Local.SomethingWentWrong)

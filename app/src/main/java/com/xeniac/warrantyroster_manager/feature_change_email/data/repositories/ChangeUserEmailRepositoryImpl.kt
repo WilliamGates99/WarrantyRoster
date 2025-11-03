@@ -14,13 +14,13 @@ import com.xeniac.warrantyroster_manager.feature_change_email.domain.errors.Chan
 import com.xeniac.warrantyroster_manager.feature_change_email.domain.models.ChangeUserEmailResult
 import com.xeniac.warrantyroster_manager.feature_change_email.domain.repositories.ChangeUserEmailRepository
 import dagger.Lazy
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 import java.security.cert.CertPathValidatorException
 import javax.inject.Inject
 import javax.net.ssl.SSLHandshakeException
-import kotlin.coroutines.coroutineContext
 
 class ChangeUserEmailRepositoryImpl @Inject constructor(
     private val firebaseAuth: Lazy<FirebaseAuth>
@@ -92,7 +92,7 @@ class ChangeUserEmailRepositoryImpl @Inject constructor(
                 else -> ChangeUserEmailResult(result = Result.Error(ChangeUserEmailError.Network.SomethingWentWrong))
             }
         } catch (e: Exception) {
-            coroutineContext.ensureActive()
+            currentCoroutineContext().ensureActive()
             Timber.e("Change user email Exception:")
             e.printStackTrace()
             ChangeUserEmailResult(result = Result.Error(ChangeUserEmailError.Network.SomethingWentWrong))

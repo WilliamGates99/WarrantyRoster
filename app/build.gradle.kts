@@ -24,14 +24,14 @@ val properties = gradleLocalProperties(
 android {
     namespace = "com.xeniac.warrantyroster_manager"
     compileSdk = 36
-    buildToolsVersion = "36.0.0"
+    buildToolsVersion = "36.1.0"
 
     defaultConfig {
         applicationId = "com.xeniac.warrantyroster_manager"
         minSdk = 23
         targetSdk = 36
-        versionCode = 24
-        versionName = "2.2.0"
+        versionCode = 25
+        versionName = "2.2.1"
 
         testInstrumentationRunner = "com.xeniac.warrantyroster_manager.HiltTestRunner"
 
@@ -347,7 +347,7 @@ tasks.register<Copy>(name = "copyDevPreviewBundle") {
     rename(bundleFile, "$renamedFileName (Developer Preview).aab")
 }
 
-tasks.register<Copy>("copyDevPreviewApk") {
+tasks.register<Copy>(name = "copyDevPreviewApk") {
     val apkFile = "app-playStore-dev.apk"
     val apkSourceDir = "${releaseRootDir}/playStore/dev/${apkFile}"
 

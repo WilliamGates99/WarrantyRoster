@@ -24,6 +24,7 @@ import com.xeniac.warrantyroster_manager.feature_warranty_manager.warranties.dom
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.warranties.domain.repositories.WarrantiesRepository
 import dagger.Lazy
 import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.Flow
@@ -31,7 +32,6 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
-import kotlin.coroutines.coroutineContext
 
 class WarrantiesRepositoryImpl @Inject constructor(
     private val firebaseAuth: Lazy<FirebaseAuth>,
@@ -165,7 +165,7 @@ class WarrantiesRepositoryImpl @Inject constructor(
 
             Result.Success(filteredWarranties)
         } catch (e: Exception) {
-            coroutineContext.ensureActive()
+            currentCoroutineContext().ensureActive()
             Timber.e("Search warranties Exception:")
             e.printStackTrace()
             Result.Error(SearchWarrantiesError.SomethingWentWrong)

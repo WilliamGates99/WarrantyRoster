@@ -10,13 +10,13 @@ import com.xeniac.warrantyroster_manager.core.domain.models.Result
 import com.xeniac.warrantyroster_manager.feature_settings.domain.errors.SendVerificationEmailError
 import com.xeniac.warrantyroster_manager.feature_settings.domain.repositories.AccountVerificationRepository
 import dagger.Lazy
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 import java.security.cert.CertPathValidatorException
 import javax.inject.Inject
 import javax.net.ssl.SSLHandshakeException
-import kotlin.coroutines.coroutineContext
 
 class AccountVerificationRepositoryImpl @Inject constructor(
     private val firebaseAuth: Lazy<FirebaseAuth>
@@ -60,7 +60,7 @@ class AccountVerificationRepositoryImpl @Inject constructor(
                 else -> Result.Error(SendVerificationEmailError.Network.SomethingWentWrong)
             }
         } catch (e: Exception) {
-            coroutineContext.ensureActive()
+            currentCoroutineContext().ensureActive()
             Timber.e("Send verification email Exception:")
             e.printStackTrace()
             Result.Error(SendVerificationEmailError.Network.SomethingWentWrong)

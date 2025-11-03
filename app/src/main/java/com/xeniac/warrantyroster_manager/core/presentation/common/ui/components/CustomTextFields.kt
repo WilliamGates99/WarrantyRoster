@@ -152,7 +152,7 @@ fun CustomOutlinedTextField(
     textLineHeight: TextUnit = TextUnit.Unspecified,
     textFontWeight: FontWeight = FontWeight.Normal,
     textAlign: TextAlign = TextAlign.Unspecified,
-    textDirection: TextDirection = TextDirection.Unspecified,
+    textDirection: TextDirection = TextDirection.Content,
     textStyle: TextStyle = LocalTextStyle.current.copy(
         fontSize = textFontSize,
         lineHeight = textLineHeight,
@@ -165,7 +165,7 @@ fun CustomOutlinedTextField(
     placeholderLineHeight: TextUnit = TextUnit.Unspecified,
     placeholderFontWeight: FontWeight = FontWeight.Normal,
     placeholderTextAlign: TextAlign = TextAlign.Unspecified,
-    placeholderTextDirection: TextDirection = TextDirection.Unspecified,
+    placeholderTextDirection: TextDirection = TextDirection.Content,
     placeholderMaxLines: Int = 1,
     placeholderStyle: TextStyle = LocalTextStyle.current.copy(
         fontSize = placeholderFontSize,
@@ -369,7 +369,7 @@ fun CustomClickableOutlinedTextField(
     textLineHeight: TextUnit = TextUnit.Unspecified,
     textFontWeight: FontWeight = FontWeight.Normal,
     textAlign: TextAlign = TextAlign.Unspecified,
-    textDirection: TextDirection = TextDirection.Unspecified,
+    textDirection: TextDirection = TextDirection.Content,
     textStyle: TextStyle = LocalTextStyle.current.copy(
         fontSize = textFontSize,
         lineHeight = textLineHeight,
@@ -382,7 +382,7 @@ fun CustomClickableOutlinedTextField(
     placeholderLineHeight: TextUnit = TextUnit.Unspecified,
     placeholderFontWeight: FontWeight = FontWeight.Normal,
     placeholderTextAlign: TextAlign = TextAlign.Unspecified,
-    placeholderTextDirection: TextDirection = TextDirection.Unspecified,
+    placeholderTextDirection: TextDirection = TextDirection.Content,
     placeholderMaxLines: Int = 1,
     placeholderStyle: TextStyle = LocalTextStyle.current.copy(
         fontSize = placeholderFontSize,
@@ -551,7 +551,7 @@ fun CustomSearchBarTextField(
     textLineHeight: TextUnit = TextUnit.Unspecified,
     textFontWeight: FontWeight = FontWeight.Normal,
     textAlign: TextAlign = TextAlign.Unspecified,
-    textDirection: TextDirection = TextDirection.Unspecified,
+    textDirection: TextDirection = TextDirection.Content,
     textStyle: TextStyle = LocalTextStyle.current.copy(
         fontSize = textFontSize,
         lineHeight = textLineHeight,
@@ -564,7 +564,7 @@ fun CustomSearchBarTextField(
     placeholderLineHeight: TextUnit = TextUnit.Unspecified,
     placeholderFontWeight: FontWeight = FontWeight.Normal,
     placeholderTextAlign: TextAlign = TextAlign.Unspecified,
-    placeholderTextDirection: TextDirection = TextDirection.Unspecified,
+    placeholderTextDirection: TextDirection = TextDirection.Content,
     placeholderMaxLines: Int = 1,
     placeholderStyle: TextStyle = LocalTextStyle.current.copy(
         fontSize = placeholderFontSize,

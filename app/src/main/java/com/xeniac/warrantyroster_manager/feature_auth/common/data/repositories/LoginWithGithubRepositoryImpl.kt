@@ -18,13 +18,13 @@ import com.xeniac.warrantyroster_manager.core.domain.repositories.WarrantyRoster
 import com.xeniac.warrantyroster_manager.feature_auth.common.domain.errors.LoginWithGithubError
 import com.xeniac.warrantyroster_manager.feature_auth.common.domain.repositories.LoginWithGithubRepository
 import dagger.Lazy
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 import java.security.cert.CertPathValidatorException
 import javax.inject.Inject
 import javax.net.ssl.SSLHandshakeException
-import kotlin.coroutines.coroutineContext
 
 class LoginWithGithubRepositoryImpl @Inject constructor(
     private val firebaseAuth: Lazy<FirebaseAuth>,
@@ -39,7 +39,7 @@ class LoginWithGithubRepositoryImpl @Inject constructor(
 
             Result.Success(null)
         } catch (e: Exception) {
-            coroutineContext.ensureActive()
+            currentCoroutineContext().ensureActive()
             Timber.e("Check pending login with Github Exception:")
             e.printStackTrace()
             Result.Error(LoginWithGithubError.Network.SomethingWentWrong)
@@ -113,7 +113,7 @@ class LoginWithGithubRepositoryImpl @Inject constructor(
                 else -> Result.Error(LoginWithGithubError.Network.SomethingWentWrong)
             }
         } catch (e: Exception) {
-            coroutineContext.ensureActive()
+            currentCoroutineContext().ensureActive()
             Timber.e("Login with Github Exception:")
             e.printStackTrace()
             Result.Error(LoginWithGithubError.Network.SomethingWentWrong)

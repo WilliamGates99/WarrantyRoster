@@ -155,7 +155,6 @@ class BaseViewModel @Inject constructor(
                         _state.update {
                             it.copy(latestAppUpdateInfo = latestAppUpdateInfo)
                         }
-                        checkSelectedRateAppOption()
                     }
                     is Result.Error -> Unit
                 }
@@ -174,11 +173,13 @@ class BaseViewModel @Inject constructor(
             _state.update {
                 it.copy(inAppReviewInfo = reviewInfo)
             }
-            delay(timeMillis = 100) // Wait for the state to be updated
+            checkSelectedRateAppOption()
         }.launchIn(scope = viewModelScope)
     }
 
     private fun checkSelectedRateAppOption() = viewModelScope.launch {
+        delay(timeMillis = 100) // Wait for the state to be updated
+
         when (_state.value.selectedRateAppOption) {
             RateAppOption.NOT_SHOWN_YET, RateAppOption.RATE_NOW -> checkDaysFromFirstInstallTime()
             RateAppOption.REMIND_LATER -> checkDaysFromPreviousRequestTime()

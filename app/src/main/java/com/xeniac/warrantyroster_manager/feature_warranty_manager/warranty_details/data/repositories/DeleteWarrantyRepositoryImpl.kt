@@ -13,11 +13,11 @@ import com.xeniac.warrantyroster_manager.core.presentation.common.utils.UiText
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.warranty_details.domain.errors.DeleteWarrantyError
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.warranty_details.domain.repositories.DeleteWarrantyRepository
 import dagger.Lazy
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 import javax.inject.Inject
-import kotlin.coroutines.coroutineContext
 
 class DeleteWarrantyRepositoryImpl @Inject constructor(
     @WarrantiesCollection private val warrantiesCollectionRef: Lazy<CollectionReference>
@@ -59,7 +59,7 @@ class DeleteWarrantyRepositoryImpl @Inject constructor(
                 else -> Result.Error(DeleteWarrantyError.Network.SomethingWentWrong)
             }
         } catch (e: Exception) {
-            coroutineContext.ensureActive()
+            currentCoroutineContext().ensureActive()
             Timber.e("Delete warranty Exception:")
             e.printStackTrace()
             Result.Error(DeleteWarrantyError.Network.SomethingWentWrong)

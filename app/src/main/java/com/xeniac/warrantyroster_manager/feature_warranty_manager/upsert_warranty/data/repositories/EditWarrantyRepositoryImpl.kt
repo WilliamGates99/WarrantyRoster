@@ -16,11 +16,11 @@ import com.xeniac.warrantyroster_manager.feature_warranty_manager.upsert_warrant
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.upsert_warranty.domain.models.UpsertingWarranty
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.upsert_warranty.domain.repositories.EditWarrantyRepository
 import dagger.Lazy
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 import javax.inject.Inject
-import kotlin.coroutines.coroutineContext
 
 class EditWarrantyRepositoryImpl @Inject constructor(
     private val firebaseAuth: Lazy<FirebaseAuth>,
@@ -73,7 +73,7 @@ class EditWarrantyRepositoryImpl @Inject constructor(
                 else -> Result.Error(UpsertWarrantyError.Network.SomethingWentWrong)
             }
         } catch (e: Exception) {
-            coroutineContext.ensureActive()
+            currentCoroutineContext().ensureActive()
             Timber.e("Edit warranty Exception:")
             e.printStackTrace()
             Result.Error(UpsertWarrantyError.Network.SomethingWentWrong)

@@ -17,13 +17,13 @@ import com.xeniac.warrantyroster_manager.core.domain.models.Result
 import com.xeniac.warrantyroster_manager.feature_linked_accounts.domain.errors.LinkXAccountError
 import com.xeniac.warrantyroster_manager.feature_linked_accounts.domain.repositories.LinkXAccountRepository
 import dagger.Lazy
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 import java.security.cert.CertPathValidatorException
 import javax.inject.Inject
 import javax.net.ssl.SSLHandshakeException
-import kotlin.coroutines.coroutineContext
 
 class LinkXAccountRepositoryImpl @Inject constructor(
     private val firebaseAuth: Lazy<FirebaseAuth>
@@ -37,7 +37,7 @@ class LinkXAccountRepositoryImpl @Inject constructor(
 
             Result.Success(null)
         } catch (e: Exception) {
-            coroutineContext.ensureActive()
+            currentCoroutineContext().ensureActive()
             Timber.e("Check pending link X account Exception:")
             e.printStackTrace()
             Result.Error(LinkXAccountError.Network.SomethingWentWrong)
@@ -113,7 +113,7 @@ class LinkXAccountRepositoryImpl @Inject constructor(
                 else -> Result.Error(LinkXAccountError.Network.SomethingWentWrong)
             }
         } catch (e: Exception) {
-            coroutineContext.ensureActive()
+            currentCoroutineContext().ensureActive()
             Timber.e("Link X account Exception:")
             e.printStackTrace()
             Result.Error(LinkXAccountError.Network.SomethingWentWrong)
