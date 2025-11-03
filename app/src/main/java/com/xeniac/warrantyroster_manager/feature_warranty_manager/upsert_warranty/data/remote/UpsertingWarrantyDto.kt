@@ -1,7 +1,9 @@
 package com.xeniac.warrantyroster_manager.feature_warranty_manager.upsert_warranty.data.remote
 
+import androidx.annotation.Keep
 import com.google.firebase.firestore.PropertyName
 
+@Keep
 data class UpsertingWarrantyDto(
     @get:PropertyName("uuid")
     val uuid: String,
