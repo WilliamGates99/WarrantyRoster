@@ -28,13 +28,13 @@ import com.xeniac.warrantyroster_manager.feature_linked_accounts.domain.errors.L
 import com.xeniac.warrantyroster_manager.feature_linked_accounts.domain.repositories.LinkGoogleAccountRepository
 import dagger.Lazy
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 import java.security.cert.CertPathValidatorException
 import javax.inject.Inject
 import javax.net.ssl.SSLHandshakeException
-import kotlin.coroutines.coroutineContext
 
 class LinkGoogleAccountRepositoryImpl @Inject constructor(
     @ApplicationContext private val context: Context,
@@ -68,7 +68,7 @@ class LinkGoogleAccountRepositoryImpl @Inject constructor(
             e.printStackTrace()
             Result.Error(GetGoogleCredentialError.Network.AccessCredentialManagerFailed)
         } catch (e: Exception) {
-            coroutineContext.ensureActive()
+            currentCoroutineContext().ensureActive()
             Timber.e("Get Google credential Exception:")
             e.printStackTrace()
             Result.Error(GetGoogleCredentialError.Network.SomethingWentWrong)
@@ -111,6 +111,7 @@ class LinkGoogleAccountRepositoryImpl @Inject constructor(
             }
         } catch (e: GoogleIdTokenParsingException) {
             Timber.e("Link Google account GoogleIdTokenParsingException:")
+            e.printStackTrace()
             Result.Error(LinkGoogleAccountError.Network.GoogleIdTokenParsingException)
         } catch (e: SSLHandshakeException) {
             Timber.e("Link Google account SSLHandshakeException:")
@@ -148,7 +149,7 @@ class LinkGoogleAccountRepositoryImpl @Inject constructor(
                 else -> Result.Error(LinkGoogleAccountError.Network.SomethingWentWrong)
             }
         } catch (e: Exception) {
-            coroutineContext.ensureActive()
+            currentCoroutineContext().ensureActive()
             Timber.e("Link Google account Exception:")
             e.printStackTrace()
             Result.Error(LinkGoogleAccountError.Network.SomethingWentWrong)

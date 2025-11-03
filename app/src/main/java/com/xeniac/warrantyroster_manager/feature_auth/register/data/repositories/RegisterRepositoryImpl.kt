@@ -12,13 +12,13 @@ import com.xeniac.warrantyroster_manager.feature_auth.register.domain.errors.Reg
 import com.xeniac.warrantyroster_manager.feature_auth.register.domain.models.RegisterWithEmailResult
 import com.xeniac.warrantyroster_manager.feature_auth.register.domain.repositories.RegisterRepository
 import dagger.Lazy
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 import java.security.cert.CertPathValidatorException
 import javax.inject.Inject
 import javax.net.ssl.SSLHandshakeException
-import kotlin.coroutines.coroutineContext
 
 class RegisterRepositoryImpl @Inject constructor(
     private val firebaseAuth: Lazy<FirebaseAuth>,
@@ -83,7 +83,7 @@ class RegisterRepositoryImpl @Inject constructor(
                 else -> RegisterWithEmailResult(result = Result.Error(RegisterWithEmailError.Network.SomethingWentWrong))
             }
         } catch (e: Exception) {
-            coroutineContext.ensureActive()
+            currentCoroutineContext().ensureActive()
             Timber.e("Register with email Exception:")
             e.printStackTrace()
             RegisterWithEmailResult(result = Result.Error(RegisterWithEmailError.Network.SomethingWentWrong))

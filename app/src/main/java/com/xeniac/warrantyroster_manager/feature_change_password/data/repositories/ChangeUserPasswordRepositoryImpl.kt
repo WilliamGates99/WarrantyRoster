@@ -13,13 +13,13 @@ import com.xeniac.warrantyroster_manager.feature_change_password.domain.errors.C
 import com.xeniac.warrantyroster_manager.feature_change_password.domain.models.ChangeUserPasswordResult
 import com.xeniac.warrantyroster_manager.feature_change_password.domain.repositories.ChangeUserPasswordRepository
 import dagger.Lazy
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 import java.security.cert.CertPathValidatorException
 import javax.inject.Inject
 import javax.net.ssl.SSLHandshakeException
-import kotlin.coroutines.coroutineContext
 
 class ChangeUserPasswordRepositoryImpl @Inject constructor(
     private val firebaseAuth: Lazy<FirebaseAuth>
@@ -83,7 +83,7 @@ class ChangeUserPasswordRepositoryImpl @Inject constructor(
                 else -> ChangeUserPasswordResult(result = Result.Error(ChangeUserPasswordError.Network.SomethingWentWrong))
             }
         } catch (e: Exception) {
-            coroutineContext.ensureActive()
+            currentCoroutineContext().ensureActive()
             Timber.e("Change user password Exception:")
             e.printStackTrace()
             ChangeUserPasswordResult(result = Result.Error(ChangeUserPasswordError.Network.SomethingWentWrong))

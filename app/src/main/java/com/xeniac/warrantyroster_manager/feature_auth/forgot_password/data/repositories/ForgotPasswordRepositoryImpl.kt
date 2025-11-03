@@ -10,13 +10,13 @@ import com.xeniac.warrantyroster_manager.feature_auth.forgot_password.domain.err
 import com.xeniac.warrantyroster_manager.feature_auth.forgot_password.domain.models.SendResetPasswordEmailResult
 import com.xeniac.warrantyroster_manager.feature_auth.forgot_password.domain.repositories.ForgotPasswordRepository
 import dagger.Lazy
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 import java.security.cert.CertPathValidatorException
 import javax.inject.Inject
 import javax.net.ssl.SSLHandshakeException
-import kotlin.coroutines.coroutineContext
 
 class ForgotPasswordRepositoryImpl @Inject constructor(
     private val firebaseAuth: Lazy<FirebaseAuth>
@@ -68,7 +68,7 @@ class ForgotPasswordRepositoryImpl @Inject constructor(
                 )
             }
         } catch (e: Exception) {
-            coroutineContext.ensureActive()
+            currentCoroutineContext().ensureActive()
             Timber.e("Send reset password email Exception:")
             e.printStackTrace()
             SendResetPasswordEmailResult(result = Result.Error(SendResetPasswordEmailError.Network.SomethingWentWrong))

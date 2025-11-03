@@ -37,6 +37,7 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.JsonConvertException
 import io.ktor.util.network.UnresolvedAddressException
 import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -49,7 +50,6 @@ import java.net.UnknownHostException
 import java.security.cert.CertPathValidatorException
 import javax.inject.Inject
 import javax.net.ssl.SSLHandshakeException
-import kotlin.coroutines.coroutineContext
 
 class AppUpdateRepositoryImpl @Inject constructor(
     private val appUpdateType: Lazy<UpdateType>,
@@ -264,7 +264,7 @@ class AppUpdateRepositoryImpl @Inject constructor(
             e.printStackTrace()
             Result.Error(GetLatestAppVersionError.Network.CertPathValidatorException)
         } catch (e: Exception) {
-            coroutineContext.ensureActive()
+            currentCoroutineContext().ensureActive()
             Timber.e("Get latest app version Exception:")
             e.printStackTrace()
             Result.Error(GetLatestAppVersionError.Network.SomethingWentWrong)

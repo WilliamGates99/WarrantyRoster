@@ -14,13 +14,13 @@ import com.xeniac.warrantyroster_manager.feature_auth.login.domain.errors.LoginW
 import com.xeniac.warrantyroster_manager.feature_auth.login.domain.models.LoginWithEmailResult
 import com.xeniac.warrantyroster_manager.feature_auth.login.domain.repositories.LoginWithEmailRepository
 import dagger.Lazy
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 import java.security.cert.CertPathValidatorException
 import javax.inject.Inject
 import javax.net.ssl.SSLHandshakeException
-import kotlin.coroutines.coroutineContext
 
 class LoginWithEmailRepositoryImpl @Inject constructor(
     private val firebaseAuth: Lazy<FirebaseAuth>,
@@ -89,7 +89,7 @@ class LoginWithEmailRepositoryImpl @Inject constructor(
                 else -> LoginWithEmailResult(result = Result.Error(LoginWithEmailError.Network.SomethingWentWrong))
             }
         } catch (e: Exception) {
-            coroutineContext.ensureActive()
+            currentCoroutineContext().ensureActive()
             Timber.e("Login with email Exception:")
             e.printStackTrace()
             LoginWithEmailResult(result = Result.Error(LoginWithEmailError.Network.SomethingWentWrong))

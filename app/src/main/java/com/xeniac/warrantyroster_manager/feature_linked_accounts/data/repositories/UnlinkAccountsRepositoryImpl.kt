@@ -13,11 +13,11 @@ import com.xeniac.warrantyroster_manager.feature_linked_accounts.domain.errors.U
 import com.xeniac.warrantyroster_manager.feature_linked_accounts.domain.models.AccountProviders
 import com.xeniac.warrantyroster_manager.feature_linked_accounts.domain.repositories.UnlinkAccountsRepository
 import dagger.Lazy
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 import javax.inject.Inject
-import kotlin.coroutines.coroutineContext
 
 class UnlinkAccountsRepositoryImpl @Inject constructor(
     private val firebaseAuth: Lazy<FirebaseAuth>
@@ -51,7 +51,7 @@ class UnlinkAccountsRepositoryImpl @Inject constructor(
                 else -> Result.Error(UnlinkGoogleAccountError.Network.SomethingWentWrong)
             }
         } catch (e: Exception) {
-            coroutineContext.ensureActive()
+            currentCoroutineContext().ensureActive()
             Timber.e("Unlink Google account Exception:")
             e.printStackTrace()
             Result.Error(UnlinkGoogleAccountError.Network.SomethingWentWrong)
@@ -86,7 +86,7 @@ class UnlinkAccountsRepositoryImpl @Inject constructor(
                 else -> Result.Error(UnlinkXAccountError.Network.SomethingWentWrong)
             }
         } catch (e: Exception) {
-            coroutineContext.ensureActive()
+            currentCoroutineContext().ensureActive()
             Timber.e("Unlink X account Exception:")
             e.printStackTrace()
             Result.Error(UnlinkXAccountError.Network.SomethingWentWrong)
@@ -121,7 +121,7 @@ class UnlinkAccountsRepositoryImpl @Inject constructor(
                 else -> Result.Error(UnlinkGithubAccountError.Network.SomethingWentWrong)
             }
         } catch (e: Exception) {
-            coroutineContext.ensureActive()
+            currentCoroutineContext().ensureActive()
             Timber.e("Unlink Github account Exception:")
             e.printStackTrace()
             Result.Error(UnlinkGithubAccountError.Network.SomethingWentWrong)

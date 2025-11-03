@@ -29,13 +29,13 @@ import com.xeniac.warrantyroster_manager.feature_auth.common.domain.errors.Login
 import com.xeniac.warrantyroster_manager.feature_auth.common.domain.repositories.LoginWithGoogleRepository
 import dagger.Lazy
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 import java.security.cert.CertPathValidatorException
 import javax.inject.Inject
 import javax.net.ssl.SSLHandshakeException
-import kotlin.coroutines.coroutineContext
 
 class LoginWithGoogleRepositoryImpl @Inject constructor(
     @ApplicationContext private val context: Context,
@@ -70,7 +70,7 @@ class LoginWithGoogleRepositoryImpl @Inject constructor(
             e.printStackTrace()
             Result.Error(GetGoogleCredentialError.Network.AccessCredentialManagerFailed)
         } catch (e: Exception) {
-            coroutineContext.ensureActive()
+            currentCoroutineContext().ensureActive()
             Timber.e("Get Google credential Exception:")
             e.printStackTrace()
             Result.Error(GetGoogleCredentialError.Network.SomethingWentWrong)
@@ -120,6 +120,7 @@ class LoginWithGoogleRepositoryImpl @Inject constructor(
             }
         } catch (e: GoogleIdTokenParsingException) {
             Timber.e("Login with Google GoogleIdTokenParsingException:")
+            e.printStackTrace()
             Result.Error(LoginWithGoogleError.Network.GoogleIdTokenParsingException)
         } catch (e: SSLHandshakeException) {
             Timber.e("Login with Google SSLHandshakeException:")
@@ -157,7 +158,7 @@ class LoginWithGoogleRepositoryImpl @Inject constructor(
                 else -> Result.Error(LoginWithGoogleError.Network.SomethingWentWrong)
             }
         } catch (e: Exception) {
-            coroutineContext.ensureActive()
+            currentCoroutineContext().ensureActive()
             Timber.e("Login with Google Exception:")
             e.printStackTrace()
             Result.Error(LoginWithGoogleError.Network.SomethingWentWrong)
