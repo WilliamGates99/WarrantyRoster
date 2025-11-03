@@ -196,8 +196,8 @@ fun BaseScreen(
     }
 
     PostNotificationPermissionHandler(
-        isPermissionDialogVisible = true,
-        permissionDialogQueue = listOf(""),
+        isPermissionDialogVisible = state.isPermissionDialogVisible,
+        permissionDialogQueue = state.permissionDialogQueue,
         onAction = viewModel::onAction
     )
 
