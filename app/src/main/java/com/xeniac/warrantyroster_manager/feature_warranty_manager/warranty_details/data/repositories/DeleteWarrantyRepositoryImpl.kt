@@ -20,7 +20,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class DeleteWarrantyRepositoryImpl @Inject constructor(
-    @WarrantiesCollection private val warrantiesCollectionRef: Lazy<CollectionReference>
+    @param:WarrantiesCollection private val warrantiesCollectionRef: Lazy<CollectionReference>
 ) : DeleteWarrantyRepository {
 
     override suspend fun deleteWarranty(

@@ -24,7 +24,7 @@ import javax.inject.Inject
 
 class AddWarrantyRepositoryImpl @Inject constructor(
     private val firebaseAuth: Lazy<FirebaseAuth>,
-    @WarrantiesCollection private val warrantiesCollectionRef: Lazy<CollectionReference>
+    @param:WarrantiesCollection private val warrantiesCollectionRef: Lazy<CollectionReference>
 ) : AddWarrantyRepository {
 
     override suspend fun addWarranty(
