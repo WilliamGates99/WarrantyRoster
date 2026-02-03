@@ -6,7 +6,6 @@ import android.app.NotificationChannel
 import android.app.NotificationChannelGroup
 import android.app.NotificationManager
 import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composer
 import androidx.compose.runtime.tooling.ComposeStackTraceMode
 import androidx.compose.ui.graphics.toArgb
@@ -61,10 +60,8 @@ class BaseApplication : Application(), SingletonImageLoader.Factory {
         enableComposeStackTraces()
         initFirebaseAppCheck()
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            createFcmNotificationChannelGroup()
-            createMiscellaneousFcmNotificationChannel()
-        }
+        createFcmNotificationChannelGroup()
+        createMiscellaneousFcmNotificationChannel()
     }
 
     private fun setupTimber() = Timber.plant(Timber.DebugTree())
@@ -89,30 +86,32 @@ class BaseApplication : Application(), SingletonImageLoader.Factory {
         )
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun createFcmNotificationChannelGroup() {
-        val notificationChannelGroup = NotificationChannelGroup(
-            /* id = */ NOTIFICATION_CHANNEL_GROUP_ID_FCM,
-            /* name = */ getString(R.string.notification_fcm_channel_group_name)
-        )
-
-        notificationManager.createNotificationChannelGroup(notificationChannelGroup)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannelGroup(
+                /* id = */ NOTIFICATION_CHANNEL_GROUP_ID_FCM,
+                /* name = */ getString(R.string.notification_fcm_channel_group_name)
+            ).also { fcmChannelGroup ->
+                notificationManager.createNotificationChannelGroup(fcmChannelGroup)
+            }
+        }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun createMiscellaneousFcmNotificationChannel() {
-        val miscellaneousNotificationChannel = NotificationChannel(
-            /* id = */ NOTIFICATION_CHANNEL_ID_FCM_MISCELLANEOUS,
-            /* name = */ getString(R.string.notification_fcm_channel_name_miscellaneous),
-            /* importance = */ NotificationManager.IMPORTANCE_DEFAULT
-        ).apply {
-            group = NOTIFICATION_CHANNEL_GROUP_ID_FCM
-            lockscreenVisibility = Notification.VISIBILITY_PUBLIC
-            lightColor = BlueNotificationLight.toArgb()
-            enableLights(true)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel(
+                /* id = */ NOTIFICATION_CHANNEL_ID_FCM_MISCELLANEOUS,
+                /* name = */ getString(R.string.notification_fcm_channel_name_miscellaneous),
+                /* importance = */ NotificationManager.IMPORTANCE_DEFAULT
+            ).apply {
+                group = NOTIFICATION_CHANNEL_GROUP_ID_FCM
+                lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+                lightColor = BlueNotificationLight.toArgb()
+                enableLights(true)
+            }.also { miscellaneousChannel ->
+                notificationManager.createNotificationChannel(miscellaneousChannel)
+            }
         }
-
-        notificationManager.createNotificationChannel(miscellaneousNotificationChannel)
     }
 
     override fun newImageLoader(
