@@ -11,13 +11,16 @@ import com.xeniac.warrantyroster_manager.feature_warranty_manager.upsert_warrant
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.upsert_warranty.domain.validation.ValidateSerialNumber
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.upsert_warranty.domain.validation.ValidateStartingAndExpiryDates
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.upsert_warranty.domain.validation.ValidateTitle
+import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
 import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 
 @OptIn(ExperimentalTime::class)
-class AddWarrantyUseCase(
+@ViewModelScoped
+class AddWarrantyUseCase @Inject constructor(
     private val addWarrantyRepository: AddWarrantyRepository,
     private val validateTitle: ValidateTitle,
     private val validateBrand: ValidateBrand,

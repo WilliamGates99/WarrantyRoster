@@ -5,10 +5,13 @@ import com.xeniac.warrantyroster_manager.feature_change_password.domain.reposito
 import com.xeniac.warrantyroster_manager.feature_change_password.domain.validation.ValidateConfirmNewPassword
 import com.xeniac.warrantyroster_manager.feature_change_password.domain.validation.ValidateCurrentPassword
 import com.xeniac.warrantyroster_manager.feature_change_password.domain.validation.ValidateNewPassword
+import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
 
-class ChangeUserPasswordUseCase(
+@ViewModelScoped
+class ChangeUserPasswordUseCase @Inject constructor(
     private val changeUserPasswordRepository: ChangeUserPasswordRepository,
     private val validateCurrentPassword: ValidateCurrentPassword,
     private val validateNewPassword: ValidateNewPassword,

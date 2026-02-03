@@ -43,8 +43,8 @@ import kotlin.time.Duration.Companion.seconds
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val loginUseCases: LoginUseCases,
-    @XQualifier val xOAuthProvider: Lazy<OAuthProvider>,
-    @GithubQualifier val githubOAuthProvider: Lazy<OAuthProvider>,
+    @param:XQualifier val xOAuthProvider: Lazy<OAuthProvider>,
+    @param:GithubQualifier val githubOAuthProvider: Lazy<OAuthProvider>,
     val firebaseAuth: Lazy<FirebaseAuth>,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {

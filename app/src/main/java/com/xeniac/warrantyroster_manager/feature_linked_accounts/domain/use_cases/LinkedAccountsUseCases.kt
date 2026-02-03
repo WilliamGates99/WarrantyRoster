@@ -1,8 +1,11 @@
 package com.xeniac.warrantyroster_manager.feature_linked_accounts.domain.use_cases
 
 import dagger.Lazy
+import dagger.hilt.android.scopes.ViewModelScoped
+import javax.inject.Inject
 
-data class LinkedAccountsUseCases(
+@ViewModelScoped
+data class LinkedAccountsUseCases @Inject constructor(
     val getLinkedAccountProvidersUseCase: Lazy<GetLinkedAccountProvidersUseCase>,
     val getGoogleCredentialUseCase: Lazy<GetGoogleCredentialUseCase>,
     val linkGoogleAccountUseCase: Lazy<LinkGoogleAccountUseCase>,

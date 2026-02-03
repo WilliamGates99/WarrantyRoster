@@ -1,8 +1,11 @@
 package com.xeniac.warrantyroster_manager.feature_auth.forgot_password.domain.validation
 
 import com.xeniac.warrantyroster_manager.feature_auth.forgot_password.domain.errors.SendResetPasswordEmailError
+import dagger.hilt.android.scopes.ViewModelScoped
+import javax.inject.Inject
 
-class ValidateTimerValue {
+@ViewModelScoped
+class ValidateTimerValue @Inject constructor() {
     operator fun invoke(
         timerValueInSeconds: Int
     ): SendResetPasswordEmailError? {

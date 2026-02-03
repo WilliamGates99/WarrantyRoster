@@ -7,8 +7,11 @@ import com.xeniac.warrantyroster_manager.feature_auth.common.domain.use_cases.Lo
 import com.xeniac.warrantyroster_manager.feature_auth.common.domain.use_cases.LoginWithGoogleUseCase
 import com.xeniac.warrantyroster_manager.feature_auth.common.domain.use_cases.LoginWithXUseCase
 import dagger.Lazy
+import dagger.hilt.android.scopes.ViewModelScoped
+import javax.inject.Inject
 
-data class RegisterUseCases(
+@ViewModelScoped
+data class RegisterUseCases @Inject constructor(
     val registerWithEmailUseCase: Lazy<RegisterWithEmailUseCase>,
     val getGoogleCredentialUseCase: Lazy<GetGoogleCredentialUseCase>,
     val loginWithGoogleUseCase: Lazy<LoginWithGoogleUseCase>,

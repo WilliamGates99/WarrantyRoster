@@ -51,8 +51,8 @@ class RegisterViewModel @Inject constructor(
     private val registerUseCases: RegisterUseCases,
     private val passwordStrengthCalculator: Lazy<PasswordStrengthCalculator>,
     private val confirmPasswordChecker: Lazy<ConfirmPasswordChecker>,
-    @XQualifier val xOAuthProvider: Lazy<OAuthProvider>,
-    @GithubQualifier val githubOAuthProvider: Lazy<OAuthProvider>,
+    @param:XQualifier val xOAuthProvider: Lazy<OAuthProvider>,
+    @param:GithubQualifier val githubOAuthProvider: Lazy<OAuthProvider>,
     val firebaseAuth: Lazy<FirebaseAuth>,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {

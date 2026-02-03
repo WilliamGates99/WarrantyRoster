@@ -44,8 +44,8 @@ import kotlin.time.Duration.Companion.seconds
 @HiltViewModel
 class LinkedAccountsViewModel @Inject constructor(
     private val linkedAccountsUseCases: LinkedAccountsUseCases,
-    @XQualifier val xOAuthProvider: Lazy<OAuthProvider>,
-    @GithubQualifier val githubOAuthProvider: Lazy<OAuthProvider>,
+    @param:XQualifier val xOAuthProvider: Lazy<OAuthProvider>,
+    @param:GithubQualifier val githubOAuthProvider: Lazy<OAuthProvider>,
     val firebaseAuth: Lazy<FirebaseAuth>,
 ) : ViewModel() {
 

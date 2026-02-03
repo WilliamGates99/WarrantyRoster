@@ -1,11 +1,14 @@
 package com.xeniac.warrantyroster_manager.feature_warranty_manager.upsert_warranty.domain.validation
 
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.upsert_warranty.domain.errors.UpsertWarrantyError
+import dagger.hilt.android.scopes.ViewModelScoped
+import javax.inject.Inject
 import kotlin.time.ExperimentalTime
 import kotlin.time.Instant
 
 @OptIn(ExperimentalTime::class)
-class ValidateStartingAndExpiryDates {
+@ViewModelScoped
+class ValidateStartingAndExpiryDates @Inject constructor() {
     operator fun invoke(
         isLifetime: Boolean,
         startingDate: Instant?,

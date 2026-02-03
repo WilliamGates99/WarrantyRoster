@@ -38,7 +38,7 @@ import javax.inject.Inject
 import javax.net.ssl.SSLHandshakeException
 
 class LoginWithGoogleRepositoryImpl @Inject constructor(
-    @ApplicationContext private val context: Context,
+    @param:ApplicationContext private val context: Context,
     private val credentialManager: Lazy<CredentialManager>,
     private val googleIdOption: Lazy<GetGoogleIdOption>,
     private val firebaseAuth: Lazy<FirebaseAuth>,

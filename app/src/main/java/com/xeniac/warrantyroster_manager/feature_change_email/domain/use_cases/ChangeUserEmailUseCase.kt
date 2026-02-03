@@ -4,10 +4,13 @@ import com.xeniac.warrantyroster_manager.feature_change_email.domain.models.Chan
 import com.xeniac.warrantyroster_manager.feature_change_email.domain.repositories.ChangeUserEmailRepository
 import com.xeniac.warrantyroster_manager.feature_change_email.domain.validation.ValidateNewEmail
 import com.xeniac.warrantyroster_manager.feature_change_email.domain.validation.ValidatePassword
+import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
 
-class ChangeUserEmailUseCase(
+@ViewModelScoped
+class ChangeUserEmailUseCase @Inject constructor(
     private val changeUserEmailRepository: ChangeUserEmailRepository,
     private val validatePassword: ValidatePassword,
     private val validateNewEmail: ValidateNewEmail

@@ -18,6 +18,7 @@ import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.domain.
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.domain.repositories.CategoriesRepository
 import dagger.Lazy
 import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -26,7 +27,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class CategoriesRepositoryImpl @Inject constructor(
-    @CategoriesCollection private val categoriesCollectionRef: Lazy<CollectionReference>,
+    @param:CategoriesCollection private val categoriesCollectionRef: Lazy<CollectionReference>,
     private val settingsDataStoreRepository: Lazy<SettingsDataStoreRepository>
 ) : CategoriesRepository {
 
@@ -39,7 +40,7 @@ class CategoriesRepositoryImpl @Inject constructor(
                 .addSnapshotListener { querySnapshot, exception ->
                     launch {
                         exception?.let { e ->
-                            coroutineContext.ensureActive()
+                            currentCoroutineContext().ensureActive()
                             Timber.e("Observe categories FirebaseFirestoreException:")
                             e.printStackTrace()
                             send(
@@ -77,7 +78,7 @@ class CategoriesRepositoryImpl @Inject constructor(
 
                                 send(Result.Success(categories))
                             } catch (e: Exception) {
-                                coroutineContext.ensureActive()
+                                currentCoroutineContext().ensureActive()
                                 Timber.e("Observe categories query snapshot Exception:")
                                 e.printStackTrace()
                                 trySend(Result.Error(ObserveCategoriesError.Network.SomethingWentWrong))
@@ -110,7 +111,7 @@ class CategoriesRepositoryImpl @Inject constructor(
             }
             close()
         } catch (e: Exception) {
-            coroutineContext.ensureActive()
+            currentCoroutineContext().ensureActive()
             Timber.e("Observe categories Exception:")
             e.printStackTrace()
             trySend(Result.Error(ObserveCategoriesError.Network.SomethingWentWrong))

@@ -35,7 +35,6 @@ fun Activity.openAppSettings() {
     } catch (e: Exception) {
         Timber.e("Open app settings Exception:")
         e.printStackTrace()
-
         showIntentAppNotFoundToast()
     }
 }

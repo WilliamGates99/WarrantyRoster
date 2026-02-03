@@ -10,7 +10,6 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.SwipeToDismissBox
-import androidx.compose.material3.SwipeToDismissBoxState
 import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
@@ -26,21 +25,19 @@ import kotlinx.coroutines.launch
 @Composable
 fun SwipeableSnackbar(
     hostState: SnackbarHostState,
-    modifier: Modifier = Modifier,
-    dismissSnackbarState: SwipeToDismissBoxState = rememberSwipeToDismissBoxState(
-        confirmValueChange = { value ->
-            if (value != SwipeToDismissBoxValue.Settled) {
-                hostState.currentSnackbarData?.dismiss()
-                true
-            } else false
-        }
-    )
+    modifier: Modifier = Modifier
 ) {
-    LaunchedEffect(
-        key1 = dismissSnackbarState.currentValue
-    ) {
+    val dismissSnackbarState = rememberSwipeToDismissBoxState()
+
+    LaunchedEffect(key1 = hostState.currentSnackbarData) {
         if (dismissSnackbarState.currentValue != SwipeToDismissBoxValue.Settled) {
             dismissSnackbarState.reset()
+        }
+    }
+
+    LaunchedEffect(key1 = dismissSnackbarState.currentValue) {
+        if (dismissSnackbarState.currentValue != SwipeToDismissBoxValue.Settled) {
+            hostState.currentSnackbarData?.dismiss()
         }
     }
 

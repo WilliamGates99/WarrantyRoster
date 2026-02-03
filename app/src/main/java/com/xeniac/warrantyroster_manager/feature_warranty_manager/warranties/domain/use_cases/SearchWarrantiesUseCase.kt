@@ -4,10 +4,13 @@ import com.xeniac.warrantyroster_manager.core.domain.models.Result
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.domain.models.Warranty
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.warranties.domain.errors.SearchWarrantiesError
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.warranties.domain.repositories.WarrantiesRepository
+import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
 
-class SearchWarrantiesUseCase(
+@ViewModelScoped
+class SearchWarrantiesUseCase @Inject constructor(
     private val warrantiesRepository: WarrantiesRepository
 ) {
     operator fun invoke(

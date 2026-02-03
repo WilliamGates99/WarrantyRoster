@@ -5,10 +5,13 @@ import com.xeniac.warrantyroster_manager.feature_auth.register.domain.repositori
 import com.xeniac.warrantyroster_manager.feature_auth.register.domain.validation.ValidateConfirmPassword
 import com.xeniac.warrantyroster_manager.feature_auth.register.domain.validation.ValidateEmail
 import com.xeniac.warrantyroster_manager.feature_auth.register.domain.validation.ValidatePassword
+import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
 
-class RegisterWithEmailUseCase(
+@ViewModelScoped
+class RegisterWithEmailUseCase @Inject constructor(
     private val registerRepository: RegisterRepository,
     private val validateEmail: ValidateEmail,
     private val validatePassword: ValidatePassword,

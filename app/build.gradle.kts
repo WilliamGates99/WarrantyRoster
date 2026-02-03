@@ -1,11 +1,10 @@
 @file:Suppress("UnstableApiUsage")
 
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import com.google.firebase.crashlytics.buildtools.gradle.CrashlyticsExtension
 
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.kotlin.parcelize)
@@ -30,8 +29,8 @@ android {
         applicationId = "com.xeniac.warrantyroster_manager"
         minSdk = 23
         targetSdk = 36
-        versionCode = 25
-        versionName = "2.2.1"
+        versionCode = 26
+        versionName = "2.2.2"
 
         testInstrumentationRunner = "com.xeniac.warrantyroster_manager.HiltTestRunner"
 
@@ -90,6 +89,16 @@ android {
             isShrinkResources = true
             signingConfig = signingConfigs.getByName("release")
             ndk.debugSymbolLevel = "FULL" // Include native debug symbols file in app bundle
+
+            configure<CrashlyticsExtension> {
+                /*
+                Enable processing and uploading of native symbols to Firebase servers.
+                By default, this is disabled to improve build speeds.
+                This flag must be enabled to see properly-symbolicated native
+                stack traces in the Crashlytics dashboard.
+                 */
+                nativeSymbolUploadEnabled = true
+            }
 
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -193,6 +202,7 @@ android {
     buildFeatures {
         buildConfig = true
         compose = true
+        resValues = true
     }
 
     compileOptions {
@@ -201,15 +211,6 @@ android {
 
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
-    }
-
-    kotlin {
-        compilerOptions {
-            jvmTarget = JvmTarget.fromTarget(target = "17")
-
-            // Enable Context-Sensitive Resolution in Kotlin 2.2
-            freeCompilerArgs.add("-Xcontext-sensitive-resolution")
-        }
     }
 
     packaging {
@@ -226,6 +227,13 @@ android {
              */
             enableSplit = false
         }
+    }
+}
+
+kotlin {
+    compilerOptions {
+        // Enable Context-Sensitive Resolution in Kotlin 2.2
+        freeCompilerArgs.add("-Xcontext-sensitive-resolution")
     }
 }
 

@@ -67,8 +67,8 @@ import com.xeniac.warrantyroster_manager.core.presentation.common.ui.utils.toPx
 
 enum class NavigationBarItems(
     val destinationScreen: Any,
-    @StringRes val titleId: Int,
-    @DrawableRes val iconId: Int
+    @param:StringRes val titleId: Int,
+    @param:DrawableRes val iconId: Int
 ) {
     WARRANTIES(
         destinationScreen = WarrantiesScreen,

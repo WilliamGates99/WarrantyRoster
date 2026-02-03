@@ -10,33 +10,15 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun PaddingValues.addPaddingValues(
-    paddingValues: PaddingValues
-): PaddingValues {
-    val layoutDirection = LocalLayoutDirection.current
-
-    return PaddingValues(
-        start = this.calculateStartPadding(
-            layoutDirection = layoutDirection
-        ) + paddingValues.calculateStartPadding(layoutDirection = layoutDirection),
-        end = this.calculateEndPadding(
-            layoutDirection = layoutDirection
-        ) + paddingValues.calculateEndPadding(layoutDirection = layoutDirection),
-        top = this.calculateTopPadding() + paddingValues.calculateTopPadding(),
-        bottom = this.calculateBottomPadding() + paddingValues.calculateBottomPadding()
-    )
-}
-
-@Composable
-fun PaddingValues.addPaddingValues(
     all: Dp
 ): PaddingValues {
     val layoutDirection = LocalLayoutDirection.current
 
     return PaddingValues(
-        start = this.calculateStartPadding(layoutDirection) + all,
-        end = this.calculateEndPadding(layoutDirection) + all,
-        top = this.calculateTopPadding() + all,
-        bottom = this.calculateBottomPadding() + all
+        start = this.calculateStartPadding(layoutDirection) + all.coerceAtLeast(minimumValue = 0.dp),
+        end = this.calculateEndPadding(layoutDirection) + all.coerceAtLeast(minimumValue = 0.dp),
+        top = this.calculateTopPadding() + all.coerceAtLeast(minimumValue = 0.dp),
+        bottom = this.calculateBottomPadding() + all.coerceAtLeast(minimumValue = 0.dp)
     )
 }
 
@@ -48,10 +30,10 @@ fun PaddingValues.addPaddingValues(
     val layoutDirection = LocalLayoutDirection.current
 
     return PaddingValues(
-        start = this.calculateStartPadding(layoutDirection) + horizontal,
-        end = this.calculateEndPadding(layoutDirection) + horizontal,
-        top = this.calculateTopPadding() + vertical,
-        bottom = this.calculateBottomPadding() + vertical
+        start = this.calculateStartPadding(layoutDirection) + horizontal.coerceAtLeast(minimumValue = 0.dp),
+        end = this.calculateEndPadding(layoutDirection) + horizontal.coerceAtLeast(minimumValue = 0.dp),
+        top = this.calculateTopPadding() + vertical.coerceAtLeast(minimumValue = 0.dp),
+        bottom = this.calculateBottomPadding() + vertical.coerceAtLeast(minimumValue = 0.dp)
     )
 }
 
@@ -65,9 +47,36 @@ fun PaddingValues.addPaddingValues(
     val layoutDirection = LocalLayoutDirection.current
 
     return PaddingValues(
-        start = this.calculateStartPadding(layoutDirection) + start,
-        end = this.calculateEndPadding(layoutDirection) + end,
-        top = this.calculateTopPadding() + top,
-        bottom = this.calculateBottomPadding() + bottom
+        start = this.calculateStartPadding(layoutDirection) + start.coerceAtLeast(minimumValue = 0.dp),
+        end = this.calculateEndPadding(layoutDirection) + end.coerceAtLeast(minimumValue = 0.dp),
+        top = this.calculateTopPadding() + top.coerceAtLeast(minimumValue = 0.dp),
+        bottom = this.calculateBottomPadding() + bottom.coerceAtLeast(minimumValue = 0.dp)
+    )
+}
+
+@Composable
+fun PaddingValues.addPaddingValues(
+    paddingValues: PaddingValues
+): PaddingValues {
+    val layoutDirection = LocalLayoutDirection.current
+
+    return PaddingValues(
+        start = this.calculateStartPadding(
+            layoutDirection = layoutDirection
+        ) + paddingValues.calculateStartPadding(
+            layoutDirection = layoutDirection
+        ).coerceAtLeast(minimumValue = 0.dp),
+        end = this.calculateEndPadding(
+            layoutDirection = layoutDirection
+        ) + paddingValues.calculateEndPadding(
+            layoutDirection = layoutDirection
+        ).coerceAtLeast(minimumValue = 0.dp),
+        top = this.calculateTopPadding() + paddingValues.calculateTopPadding().coerceAtLeast(
+            minimumValue = 0.dp
+        ),
+        bottom = this.calculateBottomPadding() + paddingValues.calculateBottomPadding()
+            .coerceAtLeast(
+                minimumValue = 0.dp
+            )
     )
 }

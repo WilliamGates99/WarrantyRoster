@@ -2,8 +2,11 @@ package com.xeniac.warrantyroster_manager.core.presentation.common.utils
 
 import com.xeniac.warrantyroster_manager.core.domain.utils.Constants
 import com.xeniac.warrantyroster_manager.core.presentation.common.states.PasswordStrength
+import dagger.hilt.android.scopes.ViewModelScoped
+import javax.inject.Inject
 
-class PasswordStrengthCalculator {
+@ViewModelScoped
+class PasswordStrengthCalculator @Inject constructor() {
     operator fun invoke(
         password: String?
     ): PasswordStrength? {

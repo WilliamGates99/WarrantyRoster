@@ -32,6 +32,7 @@ import com.xeniac.warrantyroster_manager.core.presentation.common.utils.restartA
 import com.xeniac.warrantyroster_manager.feature_onboarding.presentation.components.CompactScreenWidthPager
 import com.xeniac.warrantyroster_manager.feature_onboarding.presentation.components.MediumScreenWidthPager
 import com.xeniac.warrantyroster_manager.feature_onboarding.presentation.components.OnboardingTopBar
+import com.xeniac.warrantyroster_manager.feature_onboarding.presentation.states.OnboardingPagerItem
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -48,7 +49,10 @@ fun OnboardingScreen(
 
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    val pagerState = rememberPagerState(pageCount = { 4 })
+    val pagerState = rememberPagerState(
+        pageCount = { OnboardingPagerItem.entries.size },
+        initialPage = OnboardingPagerItem.PAGE_ONE.index
+    )
 
     DisposableEffect(key1 = Unit) {
         // Set "windowLightStatusBar" to false
@@ -74,7 +78,7 @@ fun OnboardingScreen(
     }
 
     BackHandler(
-        enabled = pagerState.settledPage != 0,
+        enabled = pagerState.settledPage != OnboardingPagerItem.PAGE_ONE.index,
         onBack = {
             scope.launch {
                 pagerState.animateScrollToPage(page = pagerState.settledPage - 1)

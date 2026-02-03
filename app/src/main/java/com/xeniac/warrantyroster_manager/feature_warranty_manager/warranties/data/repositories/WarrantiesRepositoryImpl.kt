@@ -35,7 +35,7 @@ import javax.inject.Inject
 
 class WarrantiesRepositoryImpl @Inject constructor(
     private val firebaseAuth: Lazy<FirebaseAuth>,
-    @WarrantiesCollection private val warrantiesCollectionRef: Lazy<CollectionReference>
+    @param:WarrantiesCollection private val warrantiesCollectionRef: Lazy<CollectionReference>
 ) : WarrantiesRepository {
 
     override fun observeWarranties(
@@ -53,7 +53,7 @@ class WarrantiesRepositoryImpl @Inject constructor(
             ).addSnapshotListener { querySnapshot, exception ->
                 launch {
                     exception?.let { e ->
-                        coroutineContext.ensureActive()
+                        currentCoroutineContext().ensureActive()
                         Timber.e("Observe warranties FirebaseFirestoreException:")
                         e.printStackTrace()
                         send(
@@ -103,7 +103,7 @@ class WarrantiesRepositoryImpl @Inject constructor(
 
                             send(Result.Success(warranties))
                         } catch (e: Exception) {
-                            coroutineContext.ensureActive()
+                            currentCoroutineContext().ensureActive()
                             Timber.e("Observe warranties query snapshot Exception:")
                             e.printStackTrace()
                             trySend(Result.Error(ObserveWarrantiesError.Network.SomethingWentWrong))
@@ -136,7 +136,7 @@ class WarrantiesRepositoryImpl @Inject constructor(
             }
             close()
         } catch (e: Exception) {
-            coroutineContext.ensureActive()
+            currentCoroutineContext().ensureActive()
             Timber.e("Observe warranties Exception:")
             e.printStackTrace()
             trySend(Result.Error(ObserveWarrantiesError.Network.SomethingWentWrong))
