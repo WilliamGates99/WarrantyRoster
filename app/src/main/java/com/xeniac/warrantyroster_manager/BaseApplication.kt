@@ -7,6 +7,8 @@ import android.app.NotificationChannelGroup
 import android.app.NotificationManager
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.runtime.Composer
+import androidx.compose.runtime.tooling.ComposeStackTraceMode
 import androidx.compose.ui.graphics.toArgb
 import coil3.ImageLoader
 import coil3.PlatformContext
@@ -56,6 +58,7 @@ class BaseApplication : Application(), SingletonImageLoader.Factory {
         setupTimber()
         setAppTheme()
         observeNetworkConnection()
+        enableComposeStackTraces()
         initFirebaseAppCheck()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -70,6 +73,10 @@ class BaseApplication : Application(), SingletonImageLoader.Factory {
 
     private fun observeNetworkConnection() {
         NetworkObserverHelper.observeNetworkConnection(connectivityObserver)
+    }
+
+    private fun enableComposeStackTraces() {
+        Composer.setDiagnosticStackTraceMode(mode = ComposeStackTraceMode.Auto)
     }
 
     private fun initFirebaseAppCheck() {
