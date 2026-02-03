@@ -28,7 +28,10 @@ object CryptoHelper {
         return existingKey?.secretKey ?: createSecretKey()
     }
 
-    private fun createSecretKey(): SecretKey = KeyGenerator.getInstance(ALGORITHM).apply {
+    private fun createSecretKey(): SecretKey = KeyGenerator.getInstance(
+        /* algorithm = */ ALGORITHM,
+        /* provider = */ "AndroidKeyStore"
+    ).apply {
         init(
             KeyGenParameterSpec.Builder(
                 /* keystoreAlias = */ KEY_ALIAS,
@@ -42,28 +45,36 @@ object CryptoHelper {
         )
     }.generateKey()
 
-    fun encrypt(bytes: ByteArray): ByteArray {
-        cipher.init(
-            /* opmode = */ Cipher.ENCRYPT_MODE,
-            /* key = */ getSecretKey()
-        )
+    fun encrypt(
+        bytes: ByteArray
+    ): ByteArray {
+        synchronized(lock = cipher) {
+            cipher.init(
+                /* opmode = */ Cipher.ENCRYPT_MODE,
+                /* key = */ getSecretKey()
+            )
 
-        val iv = cipher.iv
-        val encrypted = cipher.doFinal(/* input = */ bytes)
+            val iv = cipher.iv
+            val encrypted = cipher.doFinal(/* input = */ bytes)
 
-        return iv + encrypted
+            return iv + encrypted
+        }
     }
 
-    fun decrypt(bytes: ByteArray): ByteArray {
-        val iv = bytes.copyOfRange(fromIndex = 0, toIndex = cipher.blockSize)
-        val data = bytes.copyOfRange(fromIndex = cipher.blockSize, toIndex = bytes.size)
+    fun decrypt(
+        bytes: ByteArray
+    ): ByteArray {
+        synchronized(lock = cipher) {
+            val iv = bytes.copyOfRange(fromIndex = 0, toIndex = cipher.blockSize)
+            val data = bytes.copyOfRange(fromIndex = cipher.blockSize, toIndex = bytes.size)
 
-        cipher.init(
-            /* opmode = */ Cipher.DECRYPT_MODE,
-            /* key = */ getSecretKey(),
-            /* params = */ IvParameterSpec(iv)
-        )
+            cipher.init(
+                /* opmode = */ Cipher.DECRYPT_MODE,
+                /* key = */ getSecretKey(),
+                /* params = */ IvParameterSpec(iv)
+            )
 
-        return cipher.doFinal(data)
+            return cipher.doFinal(data)
+        }
     }
 }
