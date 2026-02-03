@@ -35,7 +35,7 @@ espresso = "3.7.0"
 
 # Plugins
 agp = "8.13.0"
-kotlin = "2.2.21"
+kotlin = "2.3.0"
 ksp = "2.3.0"
 googleServices = "4.4.4"
 firebaseCrashlytics = "3.0.6"
