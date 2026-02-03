@@ -1,6 +1,7 @@
 @file:Suppress("UnstableApiUsage")
 
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+import com.google.firebase.crashlytics.buildtools.gradle.CrashlyticsExtension
 
 plugins {
     alias(libs.plugins.android.application)
@@ -88,6 +89,16 @@ android {
             isShrinkResources = true
             signingConfig = signingConfigs.getByName("release")
             ndk.debugSymbolLevel = "FULL" // Include native debug symbols file in app bundle
+
+            configure<CrashlyticsExtension> {
+                /*
+                Enable processing and uploading of native symbols to Firebase servers.
+                By default, this is disabled to improve build speeds.
+                This flag must be enabled to see properly-symbolicated native
+                stack traces in the Crashlytics dashboard.
+                 */
+                nativeSymbolUploadEnabled = true
+            }
 
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
