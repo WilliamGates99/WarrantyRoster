@@ -89,7 +89,7 @@ private fun PagerButtons(
     val scope = rememberCoroutineScope()
 
     AnimatedContent(
-        targetState = pagerState.currentPage == pagerState.pageCount - 1,
+        targetState = pagerState.currentPage == OnboardingPagerItem.PAGE_FOUR.index,
         transitionSpec = { (enterTransition).togetherWith(exit = exitTransition) },
         modifier = modifier.fillMaxWidth()
     ) { isLastPage ->
@@ -104,26 +104,40 @@ private fun PagerButtons(
                 isLastPage -> StartButton(onClick = onNavigateToAuthScreen)
                 else -> {
                     when (val currentPage = pagerState.currentPage) {
-                        0 -> SkipButton(
-                            onClick = {
-                                scope.launch {
-                                    pagerState.animateScrollToPage(page = pagerState.pageCount - 1)
+                        OnboardingPagerItem.PAGE_ONE.index -> {
+                            SkipButton(
+                                onClick = {
+                                    scope.launch {
+                                        pagerState.animateScrollToPage(
+                                            page = OnboardingPagerItem.PAGE_FOUR.index
+                                        )
+                                    }
                                 }
-                            }
-                        )
-                        else -> BackButton(
-                            onClick = {
-                                scope.launch {
-                                    pagerState.animateScrollToPage(page = currentPage - 1)
+                            )
+                        }
+                        else -> {
+                            BackButton(
+                                onClick = {
+                                    scope.launch {
+                                        pagerState.animateScrollToPage(
+                                            page = (currentPage - 1).coerceAtLeast(
+                                                minimumValue = OnboardingPagerItem.PAGE_ONE.index
+                                            )
+                                        )
+                                    }
                                 }
-                            }
-                        )
+                            )
+                        }
                     }
 
                     NextButton(
                         onClick = {
                             scope.launch {
-                                pagerState.animateScrollToPage(page = pagerState.currentPage + 1)
+                                pagerState.animateScrollToPage(
+                                    page = (pagerState.currentPage + 1).coerceAtMost(
+                                        maximumValue = OnboardingPagerItem.PAGE_FOUR.index
+                                    )
+                                )
                             }
                         }
                     )

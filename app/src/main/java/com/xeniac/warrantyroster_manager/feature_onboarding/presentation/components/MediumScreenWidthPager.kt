@@ -134,14 +134,14 @@ private fun PagerButtons(
         modifier = modifier.fillMaxWidth()
     ) {
         when (val currentPage = pagerState.currentPage) {
-            pagerState.pageCount - 1 -> { // Last Page
+            OnboardingPagerItem.PAGE_FOUR.index -> { // Last Page
                 StartButton(onClick = onNavigateToAuthScreen)
             }
-            0 -> { // First Page
+            OnboardingPagerItem.PAGE_ONE.index -> { // First Page
                 SkipButton(
                     onClick = {
                         scope.launch {
-                            pagerState.scrollToPage(page = pagerState.pageCount - 1)
+                            pagerState.scrollToPage(page = OnboardingPagerItem.PAGE_FOUR.index)
                         }
                     }
                 )
@@ -149,7 +149,7 @@ private fun PagerButtons(
                 NextButton(
                     onClick = {
                         scope.launch {
-                            pagerState.animateScrollToPage(page = 1)
+                            pagerState.animateScrollToPage(page = OnboardingPagerItem.PAGE_TWO.index)
                         }
                     }
                 )
@@ -158,7 +158,11 @@ private fun PagerButtons(
                 BackButton(
                     onClick = {
                         scope.launch {
-                            pagerState.animateScrollToPage(page = currentPage - 1)
+                            pagerState.animateScrollToPage(
+                                page = (currentPage - 1).coerceAtLeast(
+                                    minimumValue = OnboardingPagerItem.PAGE_ONE.index
+                                )
+                            )
                         }
                     }
                 )
@@ -166,7 +170,11 @@ private fun PagerButtons(
                 NextButton(
                     onClick = {
                         scope.launch {
-                            pagerState.animateScrollToPage(page = currentPage + 1)
+                            pagerState.animateScrollToPage(
+                                page = (currentPage + 1).coerceAtMost(
+                                    maximumValue = OnboardingPagerItem.PAGE_FOUR.index
+                                )
+                            )
                         }
                     }
                 )
