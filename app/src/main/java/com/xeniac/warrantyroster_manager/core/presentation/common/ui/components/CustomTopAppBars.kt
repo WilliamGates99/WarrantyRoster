@@ -51,7 +51,7 @@ fun CustomCenterAlignedTopAppBar(
     title: String,
     modifier: Modifier = Modifier,
     scrollBehavior: TopAppBarScrollBehavior? = null,
-    colors: TopAppBarColors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+    colors: TopAppBarColors = TopAppBarDefaults.topAppBarColors(
         containerColor = MaterialTheme.colorScheme.surface,
         scrolledContainerColor = MaterialTheme.colorScheme.surface,
         titleContentColor = MaterialTheme.colorScheme.dynamicBlack,
@@ -103,7 +103,7 @@ fun CustomCenterAlignedTopAppBarWithSearchBar(
     searchBarPlaceholder: String?,
     modifier: Modifier = Modifier,
     scrollBehavior: TopAppBarScrollBehavior? = null,
-    colors: TopAppBarColors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+    colors: TopAppBarColors = TopAppBarDefaults.topAppBarColors(
         containerColor = MaterialTheme.colorScheme.surface,
         scrolledContainerColor = MaterialTheme.colorScheme.surface,
         titleContentColor = MaterialTheme.colorScheme.dynamicBlack,
