@@ -4,10 +4,13 @@ import com.xeniac.warrantyroster_manager.feature_auth.forgot_password.domain.mod
 import com.xeniac.warrantyroster_manager.feature_auth.forgot_password.domain.repositories.ForgotPasswordRepository
 import com.xeniac.warrantyroster_manager.feature_auth.forgot_password.domain.validation.ValidateEmail
 import com.xeniac.warrantyroster_manager.feature_auth.forgot_password.domain.validation.ValidateTimerValue
+import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
 
-class SendResetPasswordEmailUseCase(
+@ViewModelScoped
+class SendResetPasswordEmailUseCase @Inject constructor(
     private val forgotPasswordRepository: ForgotPasswordRepository,
     private val validateEmail: ValidateEmail,
     private val validateTimerValue: ValidateTimerValue

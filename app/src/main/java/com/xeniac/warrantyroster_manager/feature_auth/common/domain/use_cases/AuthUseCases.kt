@@ -3,8 +3,11 @@ package com.xeniac.warrantyroster_manager.feature_auth.common.domain.use_cases
 import com.xeniac.warrantyroster_manager.core.domain.use_cases.GetCurrentAppLocaleUseCase
 import com.xeniac.warrantyroster_manager.core.domain.use_cases.StoreCurrentAppLocaleUseCase
 import dagger.Lazy
+import dagger.hilt.android.scopes.ViewModelScoped
+import javax.inject.Inject
 
-data class AuthUseCases(
+@ViewModelScoped
+data class AuthUseCases @Inject constructor(
     val getCurrentAppLocaleUseCase: Lazy<GetCurrentAppLocaleUseCase>,
     val storeCurrentAppLocaleUseCase: Lazy<StoreCurrentAppLocaleUseCase>
 )

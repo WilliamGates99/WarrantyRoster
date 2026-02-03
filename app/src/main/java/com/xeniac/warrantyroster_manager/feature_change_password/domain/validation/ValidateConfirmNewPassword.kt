@@ -1,8 +1,11 @@
 package com.xeniac.warrantyroster_manager.feature_change_password.domain.validation
 
 import com.xeniac.warrantyroster_manager.feature_change_password.domain.errors.ChangeUserPasswordError
+import dagger.hilt.android.scopes.ViewModelScoped
+import javax.inject.Inject
 
-class ValidateConfirmNewPassword {
+@ViewModelScoped
+class ValidateConfirmNewPassword @Inject constructor() {
     operator fun invoke(
         newPassword: String?,
         confirmNewPassword: String?

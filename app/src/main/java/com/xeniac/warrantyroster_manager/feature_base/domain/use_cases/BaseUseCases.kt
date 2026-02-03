@@ -1,8 +1,11 @@
 package com.xeniac.warrantyroster_manager.feature_base.domain.use_cases
 
 import dagger.Lazy
+import dagger.hilt.android.scopes.ViewModelScoped
+import javax.inject.Inject
 
-data class BaseUseCases(
+@ViewModelScoped
+data class BaseUseCases @Inject constructor(
     val checkFlexibleUpdateDownloadStateUseCase: Lazy<CheckFlexibleUpdateDownloadStateUseCase>,
     val checkIsFlexibleUpdateStalledUseCase: Lazy<CheckIsFlexibleUpdateStalledUseCase>,
     val checkIsImmediateUpdateStalledUseCase: Lazy<CheckIsImmediateUpdateStalledUseCase>,

@@ -2,8 +2,11 @@ package com.xeniac.warrantyroster_manager.feature_warranty_manager.warranties.do
 
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.domain.use_cases.ObserveCategoriesUseCase
 import dagger.Lazy
+import dagger.hilt.android.scopes.ViewModelScoped
+import javax.inject.Inject
 
-data class WarrantiesUseCases(
+@ViewModelScoped
+data class WarrantiesUseCases @Inject constructor(
     val observeCategoriesUseCase: Lazy<ObserveCategoriesUseCase>,
     val observeWarrantiesUseCase: Lazy<ObserveWarrantiesUseCase>,
     val searchWarrantiesUseCase: Lazy<SearchWarrantiesUseCase>

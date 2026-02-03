@@ -4,10 +4,13 @@ import androidx.credentials.Credential
 import com.xeniac.warrantyroster_manager.core.domain.models.Result
 import com.xeniac.warrantyroster_manager.feature_linked_accounts.domain.errors.LinkGoogleAccountError
 import com.xeniac.warrantyroster_manager.feature_linked_accounts.domain.repositories.LinkGoogleAccountRepository
+import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
 
-class LinkGoogleAccountUseCase(
+@ViewModelScoped
+class LinkGoogleAccountUseCase @Inject constructor(
     private val linkGoogleAccountRepository: LinkGoogleAccountRepository
 ) {
     operator fun invoke(

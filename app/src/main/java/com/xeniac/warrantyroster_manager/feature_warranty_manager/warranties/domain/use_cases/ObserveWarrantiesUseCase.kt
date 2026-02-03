@@ -5,9 +5,12 @@ import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.domain.
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.domain.models.WarrantyCategory
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.warranties.domain.errors.ObserveWarrantiesError
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.warranties.domain.repositories.WarrantiesRepository
+import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class ObserveWarrantiesUseCase(
+@ViewModelScoped
+class ObserveWarrantiesUseCase @Inject constructor(
     private val warrantiesRepository: WarrantiesRepository
 ) {
     operator fun invoke(

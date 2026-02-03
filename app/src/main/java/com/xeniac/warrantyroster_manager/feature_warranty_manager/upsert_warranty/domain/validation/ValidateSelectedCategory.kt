@@ -2,8 +2,11 @@ package com.xeniac.warrantyroster_manager.feature_warranty_manager.upsert_warran
 
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.common.domain.models.WarrantyCategory
 import com.xeniac.warrantyroster_manager.feature_warranty_manager.upsert_warranty.domain.errors.UpsertWarrantyError
+import dagger.hilt.android.scopes.ViewModelScoped
+import javax.inject.Inject
 
-class ValidateSelectedCategory {
+@ViewModelScoped
+class ValidateSelectedCategory @Inject constructor() {
     operator fun invoke(
         selectedCategory: WarrantyCategory?
     ): UpsertWarrantyError? {
