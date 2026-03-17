@@ -13,7 +13,13 @@ import javax.inject.Inject
 class GetGoogleCredentialUseCase @Inject constructor(
     private val loginWithGoogleRepository: LoginWithGoogleRepository
 ) {
-    operator fun invoke(): Flow<Result<Credential, GetGoogleCredentialError>> = flow {
-        return@flow emit(loginWithGoogleRepository.getGoogleCredential())
+    operator fun invoke(
+        shouldUseFallbackAccountPicker: Boolean = false
+    ): Flow<Result<Credential, GetGoogleCredentialError>> = flow {
+        return@flow emit(
+            loginWithGoogleRepository.getGoogleCredential(
+                shouldUseFallbackAccountPicker = shouldUseFallbackAccountPicker
+            )
+        )
     }
 }

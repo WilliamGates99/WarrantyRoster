@@ -168,6 +168,48 @@ class LinkedAccountsViewModel @Inject constructor(
 
                     when (val error = result.error) {
                         GetGoogleCredentialError.CancellationException -> Unit
+                        GetGoogleCredentialError.Network.AccessCredentialManagerFailed -> getFallbackGoogleCredential()
+                        else -> _linkGoogleEventChannel.send(UiEvent.ShowLongSnackbar(error.asUiText()))
+                    }
+                }
+            }
+        }.launchIn(scope = viewModelScope)
+    }
+
+    private fun getFallbackGoogleCredential() {
+        if (!hasNetworkConnection()) {
+            _linkGoogleEventChannel.trySend(UiEvent.ShowOfflineSnackbar)
+            return
+        }
+
+        linkedAccountsUseCases.getGoogleCredentialUseCase.get()(
+            shouldUseFallbackAccountPicker = true
+        ).onStart {
+            _state.update {
+                it.copy(
+                    uiAccountProviders = it.uiAccountProviders.map { uiAccountProvider ->
+                        if (uiAccountProvider.accountProvider == AccountProviders.GOOGLE) {
+                            uiAccountProvider.copy(isLoading = true)
+                        } else uiAccountProvider
+                    }
+                )
+            }
+        }.onEach { result ->
+            when (result) {
+                is Result.Success -> linkGoogleAccount(credential = result.data)
+                is Result.Error -> {
+                    _state.update {
+                        it.copy(
+                            uiAccountProviders = it.uiAccountProviders.map { uiAccountProvider ->
+                                if (uiAccountProvider.accountProvider == AccountProviders.GOOGLE) {
+                                    uiAccountProvider.copy(isLoading = false)
+                                } else uiAccountProvider
+                            }
+                        )
+                    }
+
+                    when (val error = result.error) {
+                        GetGoogleCredentialError.CancellationException -> Unit
                         else -> _linkGoogleEventChannel.send(UiEvent.ShowLongSnackbar(error.asUiText()))
                     }
                 }
