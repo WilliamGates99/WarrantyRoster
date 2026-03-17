@@ -295,6 +295,7 @@ dependencies {
     implementation(libs.bundles.coroutines)
 
     // Ktor Client Library
+    implementation(platform(libs.ktor.bom))
     implementation(libs.bundles.ktor)
 
     // Preferences DataStore
@@ -324,9 +325,12 @@ dependencies {
     implementation(libs.bundles.google.play.inapp.apis)
 
     // Local Unit Test Libraries
+    testImplementation(platform(libs.ktor.bom))
     testImplementation(libs.bundles.local.unit.tests)
 
     // Instrumentation Test Libraries
+    androidTestImplementation(platform(libs.ktor.bom))
+
     androidTestImplementation(libs.bundles.instrumentation.tests)
     kspAndroidTest(libs.hilt.android.compiler)
 
