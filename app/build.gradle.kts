@@ -361,7 +361,6 @@ dependencies {
     debugImplementation(libs.compose.ui.test.manifest)
 }
 
-
 val releaseRootDir = "${rootDir}/app"
 val apkDestDir: String = properties.getProperty("APK_DESTINATION_DIR")
 val bundleDestDir: String = properties.getProperty("BUNDLE_DESTINATION_DIR")
