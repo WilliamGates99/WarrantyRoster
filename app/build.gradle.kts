@@ -34,6 +34,10 @@ android {
 
         testInstrumentationRunner = "com.xeniac.warrantyroster_manager.HiltTestRunner"
 
+        vectorDrawables {
+            useSupportLibrary = true
+        }
+
         buildConfigField(
             type = "String",
             name = "AUTH_GOOGLE_SERVER_CLIENT_ID",
@@ -43,13 +47,13 @@ android {
         buildConfigField(
             type = "String",
             name = "HTTP_BASE_URL",
-            value = properties.getProperty("HTTP_BASE_URL")
+            value = "\"https://raw.githubusercontent.com/XeniacDev/WarrantyRoster/main/data\""
         )
 
         buildConfigField(
             type = "String",
             name = "DEFAULT_CATEGORY_ICON_URL",
-            value = properties.getProperty("DEFAULT_CATEGORY_ICON_URL")
+            value = "\"https://raw.githubusercontent.com/XeniacDev/warrantyroster/8126ce07cce4c05f93253491c4392e2240abd9c1/res/warranty_categories/ic_category_miscellaneous.svg\""
         )
     }
 
@@ -215,16 +219,34 @@ android {
 
     packaging {
         resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += setOf(
+                "/META-INF/{AL2.0,LGPL2.1}",
+                "/META-INF/DEPENDENCIES",
+                "/META-INF/LICENSE",
+                "/META-INF/LICENSE.txt",
+                "/META-INF/NOTICE"
+            )
         }
     }
 
     bundle {
         language {
-            /*
-            Specifies that the app bundle should not support configuration APKs for language resources.
-            These resources are instead packaged with each base and dynamic feature APK.
-             */
+            // Disables splitting of language-specific resources (e.g., strings for different languages).
+            enableSplit = false
+        }
+
+        density {
+            // Disables splitting of density-specific resources (e.g., drawables for different screen densities).
+            enableSplit = false
+        }
+
+        countrySet {
+            // Disables splitting of country-specific resources (e.g., drawables for different countries).
+            enableSplit = false
+        }
+
+        abi {
+            // Disables splitting of ABI-specific resources (e.g., native libraries for different architectures).
             enableSplit = false
         }
     }
