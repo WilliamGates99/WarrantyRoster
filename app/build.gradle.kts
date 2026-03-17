@@ -352,7 +352,6 @@ dependencies {
 
     // Instrumentation Test Libraries
     androidTestImplementation(platform(libs.ktor.bom))
-
     androidTestImplementation(libs.bundles.instrumentation.tests)
     kspAndroidTest(libs.hilt.android.compiler)
 
