@@ -36,7 +36,7 @@ espresso = "3.7.0"
 # Plugins
 agp = "9.1.0"
 kotlin = "2.3.10"
-ksp = "2.3.5"
+ksp = "2.3.6"
 googleServices = "4.4.4"
 firebaseCrashlytics = "3.0.6"
 firebasePerf = "2.0.2"
