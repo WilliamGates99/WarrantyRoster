@@ -22,13 +22,13 @@ val properties = gradleLocalProperties(
 
 android {
     namespace = "com.xeniac.warrantyroster_manager"
-    compileSdk = 36
-    buildToolsVersion = "36.1.0"
+    compileSdk = 37
+    buildToolsVersion = "37.0.0"
 
     defaultConfig {
         applicationId = "com.xeniac.warrantyroster_manager"
         minSdk = 23
-        targetSdk = 36
+        targetSdk = 37
         versionCode = 27
         versionName = "2.2.3-Alpha1"
 
