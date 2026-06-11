@@ -300,6 +300,9 @@ dependencies {
     // Java 8+ API Desugaring Support
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 
+    // Kotlin Metadata JVM library
+    ksp(libs.kotlin.metadata.jvm)
+
     implementation(libs.bundles.essentials)
 
     // Jetpack Compose
