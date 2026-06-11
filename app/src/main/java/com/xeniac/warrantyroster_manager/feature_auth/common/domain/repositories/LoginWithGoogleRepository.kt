@@ -7,7 +7,9 @@ import com.xeniac.warrantyroster_manager.feature_auth.common.domain.errors.Login
 
 interface LoginWithGoogleRepository {
 
-    suspend fun getGoogleCredential(): Result<Credential, GetGoogleCredentialError>
+    suspend fun getGoogleCredential(
+        shouldUseFallbackAccountPicker: Boolean
+    ): Result<Credential, GetGoogleCredentialError>
 
     suspend fun loginWithGoogle(
         credential: Credential

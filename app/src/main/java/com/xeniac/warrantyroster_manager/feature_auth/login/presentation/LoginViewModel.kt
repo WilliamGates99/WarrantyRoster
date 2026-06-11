@@ -186,6 +186,36 @@ class LoginViewModel @Inject constructor(
 
                     when (val error = result.error) {
                         GetGoogleCredentialError.CancellationException -> Unit
+                        GetGoogleCredentialError.Network.AccessCredentialManagerFailed -> getFallbackGoogleCredential()
+                        else -> _loginWithGoogleEventChannel.send(UiEvent.ShowLongSnackbar(error.asUiText()))
+                    }
+                }
+            }
+        }.launchIn(scope = viewModelScope)
+    }
+
+    private fun getFallbackGoogleCredential() {
+        if (!hasNetworkConnection()) {
+            _loginWithGoogleEventChannel.trySend(UiEvent.ShowOfflineSnackbar)
+            return
+        }
+
+        loginUseCases.getGoogleCredentialUseCase.get()(
+            shouldUseFallbackAccountPicker = true
+        ).onStart {
+            _state.update {
+                it.copy(isLoginWithGoogleLoading = true)
+            }
+        }.onEach { result ->
+            when (result) {
+                is Result.Success -> loginWithGoogle(credential = result.data)
+                is Result.Error -> {
+                    _state.update {
+                        it.copy(isLoginWithGoogleLoading = false)
+                    }
+
+                    when (val error = result.error) {
+                        GetGoogleCredentialError.CancellationException -> Unit
                         else -> _loginWithGoogleEventChannel.send(UiEvent.ShowLongSnackbar(error.asUiText()))
                     }
                 }

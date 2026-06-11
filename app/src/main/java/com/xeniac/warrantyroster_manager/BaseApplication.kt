@@ -79,7 +79,7 @@ class BaseApplication : Application(), SingletonImageLoader.Factory {
     private fun initFirebaseAppCheck() {
         FirebaseApp.initializeApp(this)
         Firebase.appCheck.installAppCheckProviderFactory(
-            /* factory = */ when {
+            when {
                 BuildConfig.DEBUG -> DebugAppCheckProviderFactory.getInstance()
                 else -> PlayIntegrityAppCheckProviderFactory.getInstance()
             }

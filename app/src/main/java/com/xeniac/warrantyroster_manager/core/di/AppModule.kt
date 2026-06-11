@@ -9,6 +9,7 @@ import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
 import androidx.datastore.preferences.preferencesDataStoreFile
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
+import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.OAuthProvider
@@ -211,6 +212,13 @@ internal object AppModule {
         setAutoSelectEnabled(false)
         setRequestVerifiedPhoneNumber(false)
     }.build()
+
+    @Provides
+    @Singleton
+    fun provideGetSignInWithGoogleOption(
+    ): GetSignInWithGoogleOption = GetSignInWithGoogleOption.Builder(
+        serverClientId = BuildConfig.AUTH_GOOGLE_SERVER_CLIENT_ID
+    ).build()
 
     @Provides
     @Singleton

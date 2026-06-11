@@ -11,6 +11,7 @@ import androidx.credentials.exceptions.GetCredentialCancellationException
 import androidx.credentials.exceptions.GetCredentialCustomException
 import androidx.credentials.exceptions.GetCredentialException
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
+import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
 import com.google.firebase.FirebaseException
@@ -41,14 +42,22 @@ class LoginWithGoogleRepositoryImpl @Inject constructor(
     @param:ApplicationContext private val context: Context,
     private val credentialManager: Lazy<CredentialManager>,
     private val googleIdOption: Lazy<GetGoogleIdOption>,
+    private val signInWithGoogleOption: Lazy<GetSignInWithGoogleOption>,
     private val firebaseAuth: Lazy<FirebaseAuth>,
     private val warrantyRosterDataStoreRepository: Lazy<WarrantyRosterDataStoreRepository>
 ) : LoginWithGoogleRepository {
 
-    override suspend fun getGoogleCredential(): Result<Credential, GetGoogleCredentialError> {
+    override suspend fun getGoogleCredential(
+        shouldUseFallbackAccountPicker: Boolean
+    ): Result<Credential, GetGoogleCredentialError> {
         return try {
             val getCredentialRequest = GetCredentialRequest.Builder().apply {
-                addCredentialOption(credentialOption = googleIdOption.get())
+                addCredentialOption(
+                    credentialOption = when {
+                        shouldUseFallbackAccountPicker -> signInWithGoogleOption.get()
+                        else -> googleIdOption.get()
+                    }
+                )
             }.build()
 
             val getCredentialResponse = credentialManager.get().getCredential(
