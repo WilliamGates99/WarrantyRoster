@@ -29,8 +29,8 @@ android {
         applicationId = "com.xeniac.warrantyroster_manager"
         minSdk = 23
         targetSdk = 37
-        versionCode = 27
-        versionName = "2.2.3"
+        versionCode = 28
+        versionName = "2.2.4"
 
         testInstrumentationRunner = "com.xeniac.warrantyroster_manager.HiltTestRunner"
 
@@ -160,7 +160,7 @@ android {
             buildConfigField(
                 type = "String",
                 name = "URL_APP_STORE",
-                value = "\"https://github.com/WilliamGates99/WarrantyRoster\""
+                value = "\"https://github.com/willliam99/WarrantyRoster\""
             )
 
             buildConfigField(
