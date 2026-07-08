@@ -1,5 +1,5 @@
 # Warranty Roster: Manage & Track 
-![platform](https://img.shields.io/badge/platform-android-success)&nbsp;![GitHub release (latest by date)](https://img.shields.io/github/v/release/WilliamGates99/WarrantyRoster)&nbsp;![GitHub](https://img.shields.io/github/license/WilliamGates99/WarrantyRoster)
+![platform](https://img.shields.io/badge/platform-android-success)&nbsp;![GitHub release (latest by date)](https://img.shields.io/github/v/release/willliam99/WarrantyRoster)&nbsp;![GitHub](https://img.shields.io/github/license/willliam99/WarrantyRoster)
 
 ## Download
 <a href="https://play.google.com/store/apps/details?id=com.xeniac.warrantyroster_manager" target="_blank"><img alt="Get it on Google Play" height="60" align="center" src="/resources/badges/google-play-badge.svg"/></a>
